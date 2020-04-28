@@ -35,3 +35,7 @@ To make the project work, follow these steps:
         * Under the Servers section > Project Url, set the correct URL according to your IIS configuration.
 1. Build the solution.
 1. Open the `/Config/ConnectionStrings.config` file to eventually adjust the connection string (in the same way as you did with the administration interface project).
+
+## Troubleshooting
+
+If you encounter a problem while going through the course, please let us know either through the course survey or by [filing an issue](https://github.com/Kentico/training-xperience-13/issues/new) here in GitHub.
