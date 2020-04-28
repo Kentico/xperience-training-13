@@ -11,8 +11,8 @@ What went wrong?
 ### Repro steps
 
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+2. Click on '...'
+3. Scroll down to '...'
 4. See error
 
 ### Expected behavior
@@ -21,14 +21,14 @@ What is the correct behavior?
 
 ### Test environment
 
- - Platform/OS: [e.g. .NET Core 2.1, iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+ - Platform/OS: [e.g. .NET Core 3.1, iOS, Windows]
+ - Browser [e.g. Chrome, Safari, Edge Chromium, Edge]
+ - Version [e.g. 81]
 
 ### Additional context
 
-Add any other context about the problem here.
+Add any other context about the problem here. If you found an issue where a similar bug has been reported, add a link here.
 
 ### Screenshots
 
-Add links to screenshots, if possible.
+Add links to screenshots, if you deem it appropriate.

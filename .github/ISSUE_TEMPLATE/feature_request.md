@@ -4,14 +4,26 @@ about: Suggest an idea for this project
 
 ---
 
-### Motivation
+### Who
 
-Why is this feature required? What problems does it solve?
+Who needs the new feature?
 
-### Proposed solution
+A user role or a system?
 
-An ideal solution for the above problems.
+Role/system name: 
 
-### Additional context
+### Needs what
 
-Add any other context, screenshots, or reference links about the feature request here.
+What is the intended feature?
+
+### Why
+
+Why is the feature needed?
+
+### Issue expands upon
+
+This issue expands upon another issue(s): #`issue number`
+
+### Blockers
+
+This issue is blocked by the following issue(s): #`issue number`
