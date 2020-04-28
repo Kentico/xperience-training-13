@@ -1,5 +1,7 @@
 # The Kentico Xperience 13 training website
 
+[![CircleCI](https://circleci.com/gh/JanLenoch/training-xperience-13.svg?style=shield)](https://circleci.com/gh/JanLenoch/training-xperience-13)
+
 ## About the repo
 
 The repo contains the Medio Clinic sample website developed throughout the Kentico [Xperience MVC for Developers course](https://www.kentico.com/services/training/). The codebase represents the final state of development.
