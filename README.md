@@ -1,5 +1,7 @@
 # The Kentico Xperience 13 training website
 
+[![CircleCI](https://circleci.com/gh/JanLenoch/training-xperience-13.svg?style=shield)](https://circleci.com/gh/JanLenoch/training-xperience-13)
+
 ## About the repo
 
 The repo contains the Medio Clinic sample website developed throughout the Kentico [Xperience MVC for Developers course](https://www.kentico.com/services/training/). The codebase represents the final state of development.
@@ -9,6 +11,8 @@ The repo contains code of all modules of the course:
 * Essentials
 * Builders
 * Identity
+
+The code of the modules is not separated into git branches or otherwise. It lives together as one working Visual Studio solution. When taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
 
 ## How to run the code
 
@@ -35,6 +39,10 @@ To make the project work, follow these steps:
         * Under the Servers section > Project Url, set the correct URL according to your IIS configuration.
 1. Build the solution.
 1. Open the `/Config/ConnectionStrings.config` file to eventually adjust the connection string (in the same way as you did with the administration interface project).
+
+## Coding conventions
+
+The code in this repo follows the standard [C# coding conventions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions) documented in the [C# programming guide](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/), and the [coding guidelines](https://github.com/dotnet/aspnetcore/wiki/Engineering-guidelines#coding-guidelines) held by the ASP.NET Core product team at Microsoft.
 
 ## Troubleshooting
 
