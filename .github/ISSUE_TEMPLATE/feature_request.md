@@ -6,11 +6,11 @@ about: Suggest an idea for this project
 
 ### Who
 
-[x] Anonymous visitor
-[ ] Doctor
-[ ] Content editor
-[ ] Marketer
-[ ] Administrator
+- [x] Anonymous visitor
+- [ ] Doctor
+- [ ] Content editor
+- [ ] Marketer
+- [ ] Administrator
 
 ### Needs what
 
