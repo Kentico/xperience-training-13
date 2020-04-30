@@ -6,7 +6,7 @@ about: Suggest an idea for this project
 
 ### Who
 
-[ ] Anonymous visitor
+[x] Anonymous visitor
 [ ] Doctor
 [ ] Content editor
 [ ] Marketer
