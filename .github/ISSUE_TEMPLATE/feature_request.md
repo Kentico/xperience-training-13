@@ -6,11 +6,11 @@ about: Suggest an idea for this project
 
 ### Who
 
-Who needs the new feature?
-
-A user role or a system?
-
-Role/system name: 
+[ ] Anonymous visitor
+[ ] Doctor
+[ ] Content editor
+[ ] Marketer
+[ ] Administrator
 
 ### Needs what
 
