@@ -1,6 +1,6 @@
 # The Kentico Xperience 13 training website
 
-[![CircleCI](https://circleci.com/gh/JanLenoch/training-xperience-13.svg?style=shield)](https://circleci.com/gh/JanLenoch/training-xperience-13)
+[![CircleCI](https://circleci.com/gh/JanLenoch/training-xperience-13.svg?style=svg)](https://circleci.com/gh/JanLenoch/training-xperience-13)
 
 ## About the repo
 
