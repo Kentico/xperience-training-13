@@ -1,0 +1,1751 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.AmazonStorage</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.AmazonStorage.AmazonHelper">
+            <summary>
+            Helper methods and properties for Amazon web services integration.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.AmazonHelper.AMAZON_FILE_PAGE">
+            <summary>
+            Path to azure file page.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AmazonHelper.PublicAccess">
+            <summary>
+            Returns whether Amazon S3 storage sets public read access to uploaded files and whether direct storage links are generated.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AmazonHelper.EndPoint">
+            <summary>
+            Returns Amazon S3 endpoint.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonHelper.GetDownloadPath(System.String)">
+            <summary>
+            Returns download path for given path.
+            </summary>
+            <param name="path">Path</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonHelper.GetEndPointAndAccess">
+            <summary>
+            Gets end point and public access from web.config and sets properties.
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.GetAmazonFileService">
+            <summary>
+            Service for retrieving Amazon S3 files.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.GetAmazonFileService.#ctor(CMS.Base.IWebPathMapper)">
+            <summary>
+            Initializes a new instance of a <see cref="T:CMS.AmazonStorage.GetAmazonFileService"/>.
+            </summary>
+            <param name="webPathMapper">Instance for mapping paths from the root of the web application.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.GetAmazonFileService.GetExternalFile(System.String)">
+            <summary>
+            Gets S3 object file from <paramref name="filePath"/>. If file does not exist then null is returned.
+            </summary>
+            <param name="filePath">Full physical file path for blob.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.Directory">
+            <summary>
+            Implementation of Directory class for Amazon S3.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.Directory.CurrentDirectory">
+            <summary>
+            Returns current directory. Value remains the same so it can be cached.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.Directory.Provider">
+            <summary>
+            Returns S3Object provider.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.Exists(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on disk.
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.CreateDirectory(System.String)">
+            <summary>
+            Creates all directories and subdirectories as specified by path.
+            </summary>
+            <param name="path">Path to create.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.EnumerateFiles(System.String,System.String)">
+            <summary>
+            Returns an enumerable collection of file names that match a search pattern in a specified path.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <returns>An enumerable collection of the full names (including paths) for the files in the directory specified by <paramref name="path"/> and that match the specified search pattern.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.EnumerateFilesCore(System.String,System.String)">
+            <summary>
+            Returns an enumerable collection of file names that match a search pattern in a specified path.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.GetFiles(System.String,System.String)">
+            <summary>
+            Returns the names of files (including their paths) that match the specified search pattern in the specified directory.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <returns>An array of the full names (including paths) for the files in the specified directory that match the specified search pattern, or an empty array if no files are found.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.EnumerateDirectories(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory names that match a search pattern in a specified path,
+            and optionally searches subdirectories.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or should include all subdirectories.</param>
+            <returns>An enumerable collection of the full names (including paths) for the directories in the directory specified by <paramref name="path"/> and that match the specified search pattern and option.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.EnumerateDirectoriesCore(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory names that match a search pattern in a specified path,
+            and optionally searches subdirectories.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.GetDirectories(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Gets the names of the subdirectories (including their paths) that match the specified search pattern in the current directory,
+            and optionally searches subdirectories.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include all subdirectories or only the current directory.</param>
+            <returns>An array of the full names (including paths) of the subdirectories that match the specified criteria, or an empty array if no directories are found.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.Delete(System.String,System.Boolean)">
+            <summary>
+            Deletes an empty directory and, if indicated, any subdirectories and files in the directory.
+            </summary>
+            <param name="path">Path to directory</param>
+            <param name="recursive">Deletes all sub directories in given path.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.Delete(System.String)">
+            <summary>
+            Deletes an empty directory.
+            </summary>
+            <param name="path">Path to directory</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.Move(System.String,System.String)">
+            <summary>
+            Moves directory.
+            </summary>
+            <param name="sourceDirName">Source directory name.</param>
+            <param name="destDirName">Destination directory name.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.GetAccessControl(System.String)">
+            <summary>
+            Gets a FileSecurity object that encapsulates the access control list (ACL) entries for a specified file.
+            </summary>
+            <param name="path">Path to directory.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.PrepareFilesForImport(System.String)">
+            <summary>
+            Prepares files for import. Converts them to lower case.
+            </summary>
+            <param name="path">Path.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.DeleteDirectoryStructure(System.String)">
+            <summary>
+            Deletes all files in the directory structure. It works also in a shared hosting environment.
+            </summary>
+            <param name="path">Full path of the directory to delete</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.ExistsInS3Storage(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on Amazon S3 storage.
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.ExistsInFileSystem(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on file system
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.CreateDiskDirectoryStructure(System.String)">
+            <summary>
+            Creates directory structure on disk for given path.
+            </summary>
+            <param name="path">Path with temporary file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.Move(System.String,System.String,System.Int32)">
+            <summary>
+            Moves directory.
+            </summary>
+            <param name="sourceDirName">Source directory name.</param>
+            <param name="destDirName">Destination directory name.</param>
+            <param name="level">Current nested level.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.Directory.DeleteInternal(System.String,System.Boolean)">
+            <summary>
+            Deletes files and optionally directories in given path.
+            </summary>
+            <param name="path">Path to delete.</param>
+            <param name="directories">Indicates, whether directories should be also deleted.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.DirectoryInfo">
+            <summary>
+            Directory info for Amazon storage provider
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="path">Path to directory</param>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.CreationTime">
+            <summary>
+            Creation time.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.Exists">
+            <summary>
+            Whether directory exists.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.FullName">
+            <summary>
+            Full name of directory (whole path).
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.LastWriteTime">
+            <summary>
+            Last write time to directory.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.Name">
+            <summary>
+            Name of directory (without path).
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.DirectoryInfo.Parent">
+            <summary>
+            Parent directory
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.CreateSubdirectoryInternal(System.String)">
+            <summary>
+            Creates subdirectory.
+            </summary>
+            <param name="subdir">Subdirectory to create.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.DeleteInternal">
+            <summary>
+            Deletes directory
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.EnumerateDirectoriesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of file information that matches a specified search pattern and search subdirectory option.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param>
+            <returns>An enumerable collection of files that matches <paramref name="searchPattern"/> and <paramref name="searchOption"/>.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.GetDirectoriesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an array of directories in the current DirectoryInfo matching the given search criteria and using a value
+            to determine whether to search subdirectories.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">Specifies whether to search the current directory, or the current directory and all subdirectories.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.EnumerateFilesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory information that matches a specified search pattern and search subdirectory option.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param>
+            <returns>An enumerable collection of directories that matches <paramref name="searchPattern"/> and <paramref name="searchOption"/>.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.GetFilesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns files of the current directory.
+            </summary>
+            <param name="searchPattern">Search pattern.</param> 
+            <param name="searchOption">Search option.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.InitCMSValues">
+            <summary>
+            Initializes CMS values by System.IO values
+            </summary>     
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.InitCMSValuesFromSystemDirectory">
+            <summary>
+            Initializes CMS values by System.IO values
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.DirectoryInfo.InitCMSValuesFromS3ObjectInfo">
+            <summary>
+            Initializes CMS values by S3 object. 
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.File">
+            <summary>
+            Implementation of File class for Amazon S3.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.File.Provider">
+            <summary>
+            Get or set S3ObjectInfoProvider.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Exists(System.String)">
+            <summary>
+            Determines whether the specified file exists.
+            </summary>
+            <param name="path">Path to file.</param> 
+        </member>
+        <member name="M:CMS.AmazonStorage.File.OpenText(System.String)">
+            <summary>
+            Opens an existing UTF-8 encoded text file for reading.
+            </summary>
+            <param name="path">Path to file</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Delete(System.String)">
+            <summary>
+            Deletes the specified file. An exception is not thrown if the specified file does not exist.
+            </summary>
+            <param name="path">Path to file</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Copy(System.String,System.String)">
+            <summary>
+            Copies an existing file to a new file. Overwriting a file of the same name is not allowed.
+            </summary>
+            <param name="sourceFileName">Path to source file.</param>
+            <param name="destFileName">Path to destination file.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Copy(System.String,System.String,System.Boolean)">
+            <summary>
+            Copies an existing file to a new file. Overwriting a file of the same name is allowed.
+            </summary>
+            <param name="sourceFileName">Path to source file.</param>
+            <param name="destFileName">Path to destination file.</param>
+            <param name="overwrite">If destination file should be overwritten.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ReadAllBytes(System.String)">
+            <summary>
+            Opens a binary file, reads the contents of the file into a byte array, and then closes the file.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Create(System.String)">
+            <summary>
+            Creates or overwrites a file in the specified path.
+            </summary>
+            <param name="path">Path to file.</param> 
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Move(System.String,System.String)">
+            <summary>
+            Moves a specified file to a new location, providing the option to specify a new file name.
+            </summary>
+            <param name="sourceFileName">Source file name.</param>
+            <param name="destFileName">Destination file name.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ReadAllText(System.String)">
+            <summary>
+            Opens a text file, reads all lines of the file, and then closes the file.
+            </summary>
+            <param name="path">Path to file.</param> 
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ReadAllText(System.String,System.Text.Encoding)">
+            <summary>
+            Opens a text file, reads all lines of the file, and then closes the file.
+            </summary>
+            <param name="path">Path to file</param> 
+            <param name="encoding">The character encoding to use</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.WriteAllText(System.String,System.String)">
+            <summary>
+            Creates a new file, write the contents to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file</param>
+            <param name="contents">Content to write.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.WriteAllText(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Creates a new file, write the contents to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file</param>
+            <param name="contents">Content to write</param>
+            <param name="encoding">The character encoding to use</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.AppendAllText(System.String,System.String)">
+            <summary>
+            Opens a file, appends the specified string to the file, and then closes the file. If the file does not exist, this method creates a file, writes the specified string to the file, then closes the file. 
+            </summary>
+            <param name="path">Path</param>
+            <param name="contents">Content to write.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.AppendAllText(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Opens a file, appends the specified string to the file, and then closes the file. If the file does not exist, this method creates a file, writes the specified string to the file, then closes the file. 
+            </summary>
+            <param name="path">Path</param>
+            <param name="contents">Content to write.</param>
+            <param name="encoding">The character encoding to use</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.WriteAllBytes(System.String,System.Byte[])">
+            <summary>
+            Creates a new file, writes the specified byte array to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="bytes">Bytes to write.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.OpenRead(System.String)">
+            <summary>
+            Opens an existing file for reading.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.SetAttributes(System.String,CMS.IO.FileAttributes)">
+            <summary>
+            Sets the specified FileAttributes  of the file on the specified path.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="fileAttributes">File attributes.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.Open(System.String,CMS.IO.FileMode,CMS.IO.FileAccess)">
+            <summary>
+            Opens a FileStream  on the specified path, with the specified mode and access.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.SetLastWriteTimeUtc(System.String,System.DateTime)">
+            <summary>
+            Sets the date and time, in coordinated universal time (UTC), that the specified file was last written to.
+            </summary>
+            <param name="path">Path.</param>
+            <param name="lastWriteTimeUtc">Specified time.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.CreateText(System.String)">
+            <summary>
+            Creates or opens a file for writing UTF-8 encoded text.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetAccessControl(System.String)">
+            <summary>
+            Gets a FileSecurity object that encapsulates the access control list (ACL) entries for a specified directory.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetLastWriteTime(System.String)">
+            <summary>
+            Returns the date and time the specified file or directory was last written to.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.SetLastWriteTime(System.String,System.DateTime)">
+            <summary>
+            Sets the date and time that the specified file was last written to.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="lastWriteTime">Last write time.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetFileUrl(System.String,System.String)">
+            <summary>
+            Returns URL to file. If can be accessed directly then direct URL is generated else URL with GetFile page is generated.
+            </summary>
+            <param name="path">Virtual path starting with ~ or absolute path.</param>
+            <param name="siteName">Site name.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ExistsInFileSystem(System.String)">
+            <summary>
+            Returns whether given file exist in file system.
+            </summary>
+            <param name="path">Path to given file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ExistsInS3Storage(System.String)">
+            <summary>
+            Returns whether given file exists in S3 storage.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetFileStream(System.String,CMS.IO.FileMode)">
+            <summary>
+            Returns new instance of FileStream class. 
+            </summary>
+            <param name="path">Path.</param>
+            <param name="mode">File mode.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetFileStream(System.String,CMS.IO.FileMode,CMS.IO.FileAccess)">
+            <summary>
+            Returns new instance of FileStream class. 
+            </summary>
+            <param name="path">Path.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.GetHashString(System.String)">
+            <summary>
+            Returns Hashed string from specified query string. Hashed string is not user specific.
+            </summary>
+            <param name="query">Query to hash.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.File.ResolveUrl(System.String)">
+            <summary>
+            Returns resolved URL.
+            </summary>
+            <param name="url">URL to resolve.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.FileInfo">
+            <summary>
+            Implementation of FileInfo class for Amazon S3 object.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Provider">
+            <summary>
+            Returns S3Object provider.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.#ctor(System.String)">
+            <summary>
+            Initializes new instance of FileInfo class.
+            </summary>
+            <param name="filename">File name.</param>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Length">
+            <summary>
+            Length of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Extension">
+            <summary>
+            File extension.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.FullName">
+            <summary>
+            Full name of file (with whole path).
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Name">
+            <summary>
+            File name of file (without path).
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.LastWriteTime">
+            <summary>
+            Last write time to file.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Exists">
+            <summary>
+            If file exists.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.CreationTime">
+            <summary>
+            Creation date of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Directory">
+            <summary>
+            Directory of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.IsReadOnly">
+            <summary>
+             If is read only.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.Attributes">
+            <summary>
+            File attributes.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.DirectoryName">
+            <summary>
+            Directory name.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileInfo.LastAccessTime">
+            <summary>
+            Last access time.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.CreateTextInternal">
+            <summary>
+            Creates or opens a file for writing UTF-8 encoded text.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.DeleteInternal">
+            <summary>
+            Deletes file.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.OpenReadInternal">
+            <summary>
+            Creates a read-only ICMSFileStream.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.CopyToInternal(System.String,System.Boolean)">
+            <summary>
+            Copies current file to destination.
+            </summary>
+            <param name="destFileName">Destination file name.</param>
+            <param name="overwrite">Specifies whether destination file is overwritten.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.MoveToInternal(System.String)">
+            <summary>
+            Moves an existing file to a new file.
+            </summary>
+            <param name="destFileName">Destination file name.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.OpenTextInternal">
+            <summary>
+            Creates a StreamReader with UTF8 encoding that reads from an existing text file.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.InitCMSValues">
+            <summary>
+            Sets values from System.IO.FileInfo to this file info
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileInfo.ToString">
+            <summary>
+            Converts current info to string.
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.FileStream">
+            <summary>
+            Implementation of FileStream class for Amazon simple storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.Provider">
+            <summary>
+            Returns S3Object provider.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.MultiPartUploader">
+            <summary>
+            Instance for uploading large files in smaller parts to Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.#ctor(System.String,CMS.IO.FileMode)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess,CMS.IO.FileShare)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>       
+            <param name="share">Sharing permissions.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess,CMS.IO.FileShare,System.Int32)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+            <param name="bSize">Buffer size.</param>
+            <param name="share">Sharing permissions.</param>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.CanRead">
+            <summary>
+            Gets a value indicating whether the current stream supports reading.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.CanSeek">
+            <summary>
+            Gets a value indicating whether the current stream supports seeking.
+            </summary>
+            <returns>True if the stream supports seeking, false otherwise.</returns>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.CanWrite">
+            <summary>
+            Gets a value indicating whether the current stream supports writing.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.Length">
+            <summary>
+            Length of stream.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.Position">
+            <summary>
+            Gets or sets position of current stream.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.MinimalPartSize">
+            <summary>
+            Returns minimal size of the part used in multipart upload process to Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.FileStream.MaximalPartSize">
+            <summary>
+            Maximal size of the part used in multipart upload process to Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads data from stream and stores them into array.
+            </summary>
+            <param name="array">Array where result is stored.</param>
+            <param name="offset">Offset from file begin.</param>
+            <param name="count">Number of characters which are read.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Close">
+            <summary>
+            Closes current stream.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Flush">
+            <summary>
+            Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes sequence of bytes to stream.
+            </summary>
+            <param name="buffer">Buffer.</param>
+            <param name="offset">Offset.</param>
+            <param name="count">Count.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream to the specified value.
+            </summary>
+            <param name="offset">Offset</param>
+            <param name="loc">Location</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.SetLength(System.Int64)">
+            <summary>
+            Set length to stream.
+            </summary>
+            <param name="value">Value to set.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.WriteByte(System.Byte)">
+            <summary>
+            Writes byte to the stream.
+            </summary>
+            <param name="value">Value to write.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.InitMultiPartUpload">
+            <summary>
+            Inits multipart upload for given path.
+            </summary>
+            <returns>
+            Upload ID, unique identifier for one multipart upload to Amazon S3 storage.
+            Returned upload ID is needed for each subsequent multipart upload operation.
+            </returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.UploadStreamContentAsMultiPart(System.String,System.Int32)">
+            <summary>
+            Uploads stream's content to Amazon S3 storage as one part of the file in multipart upload process
+            identified by <paramref name="uploadSessionId"/>.
+            </summary>
+            <remarks>
+            Always returns one ETag in collection. If stream's length is more than 5GB then exception is thrown.
+            </remarks>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.FileStream.InitMultiPartUpload"/>.</param>
+            <param name="nextPartNumber">Number that defines position of the data obtained by the stream in the whole multipart upload process.</param>
+            <returns>One unique identifier of the uploaded part in collection.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.CompleteMultiPartUploadProcess(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Uploads one large file to Amazon S3 storage in smaller parts.
+            </summary>
+            <remarks>Stream still needs to be disposed.</remarks>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.FileStream.InitMultiPartUpload"/> method.</param>
+            <param name="partIdentifiers">List of identifiers from Amazon S3 received after uploading each part by <see cref="M:CMS.AmazonStorage.FileStream.UploadStreamContentAsMultiPart(System.String,System.Int32)"/> method.</param>
+            <returns>ETag of the uploaded file.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.AbortMultiPartUpload(System.String)">
+            <summary>
+            Aborts multipart upload to Amazon S3 storage and removes all resources already uploaded.
+            </summary>
+            <param name="uploadSessionId">
+            Unique identifier for multipart upload process to external storage.
+            Is obtained by <see cref="M:CMS.AmazonStorage.FileStream.InitMultiPartUpload"/>.
+            </param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.Dispose(System.Boolean)">
+            <summary>
+            Releases all unmanaged and optionally managed resources.
+            </summary>
+            <param name="disposing">When true, managed resources are released.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.InitFileStream">
+            <summary>
+            Initializes file stream object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.FileStream.SetLastWriteTimeAndCreationTimeToS3Object">
+            <summary>
+            Sets last write time and creation time to S3 object.
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.AmazonStorageUsageDataSource">
+            <summary>
+            Module usage data for Amazon storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AmazonStorageUsageDataSource.Name">
+            <summary>
+            Amazon storage usage data source name.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonStorageUsageDataSource.GetData">
+            <summary>
+            Get Amazon storage usage data.
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.PathHelper">
+            <summary>
+            Contains helper methods for conversion between NTFS and Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.PathHelper.TempPath">
+            <summary>
+            Gets or sets path to local storage for temp.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.PathHelper.CachePath">
+            <summary>
+            Gets or sets path to local storage for cache.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.PathHelper.CurrentDirectory">
+            <summary>
+            Gets or sets current directory.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetPathToTempDirectory(System.String,System.String)">
+            <summary>
+            Returns absolute path to temp. Also ensures that the directory exists.
+            </summary>
+            <param name="tempAbsolutePath">Absolute path to temp.</param>
+            <param name="relativeDirectoryPath">Path to directory relative to default temp root.</param>
+            <remarks>Relative directory path is used only when absolute path is not specified.</remarks>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetValidPath(System.String)">
+            <summary>
+            Converts path to valid one (replaces slash to back slash) and lower the case in the path.
+            </summary>
+            <param name="path">Path</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetValidPath(System.String,System.Boolean)">
+            <summary>
+            Converts path to valid one (replaces slash to back slash) and optionally lower the case in the path.
+            </summary>
+            <param name="path">Path</param>
+            <param name="lower">Specifies whether path should be lowered inside method.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetPathFromObjectKey(System.String,System.Boolean)">
+            <summary>
+            Returns path from given object key.
+            </summary>
+            <param name="objectKey">Object key.</param>
+            <param name="absolute">Indicates whether returned path is absolute</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetPathFromObjectKey(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns path from given object key.
+            </summary>
+            <param name="objectKey">Object key.</param>
+            <param name="absolute">Indicates whether returned path is absolute</param>
+            <param name="directory">Specifies whether object is directory.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetPathFromObjectKey(System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns path from given object key.
+            </summary>
+            <param name="objectKey">Object key.</param>
+            <param name="absolute">Indicates whether returned path is absolute</param>
+            <param name="directory">Specifies whether object is directory.</param>
+            <param name="lower">Specifies whether path should be lowered inside method.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetObjectKeyFromPath(System.String)">
+            <summary>
+            Returns object key from given path.
+            </summary>
+            <param name="path">Path.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetObjectKeyFromPath(System.String,System.Boolean)">
+            <summary>
+            Returns object key from given path.
+            </summary>
+            <param name="path">Path.</param>
+            <param name="lower">Specifies whether path should be lowered inside method.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.PathHelper.GetRelativePath(System.String)">
+            <summary>
+            Returns relative path from absolute one. 
+            </summary>
+            <param name="absolute">Absolute path to process</param>        
+        </member>
+        <member name="T:CMS.AmazonStorage.AccountInfo">
+            <summary>
+            Represents Account of Amazon web services.
+            </summary>
+            <seealso cref="T:CMS.AmazonStorage.AmazonS3ClientConfiguration"/>
+        </member>
+        <member name="M:CMS.AmazonStorage.AccountInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AmazonStorage.AccountInfo"/> class using the credentials and bucket name
+            obtained from application configuration file.
+            </summary>
+            <seealso cref="T:CMS.AmazonStorage.AmazonS3ClientConfiguration"/>
+        </member>
+        <member name="M:CMS.AmazonStorage.AccountInfo.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AmazonStorage.AccountInfo"/> class using the credentials and bucket name provided.
+            </summary>
+            <param name="accessKeyID">Access key ID.</param>
+            <param name="accessKey">Access secret key.</param>
+            <param name="bucketName">Bucket name.</param>
+            <seealso cref="T:CMS.AmazonStorage.AmazonS3ClientConfiguration"/>
+        </member>
+        <member name="P:CMS.AmazonStorage.AccountInfo.Current">
+            <summary>
+            Returns instance of Account Info.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AccountInfo.BucketName">
+            <summary>
+            Sets or gets bucket name.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AccountInfo.AccessKeyID">
+            <summary>
+            Gets or sets access key id.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AccountInfo.AccessKey">
+            <summary>
+            Gets or sets secret access key.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.AccountInfo.S3Client">
+            <summary>
+            Gets instance of AmazonS3 class (main class providing operations with storage).
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.AmazonS3ClientConfiguration">
+            <summary>
+            Configuration class for Amazon S3 clients.
+            </summary>
+            <seealso cref="T:CMS.AmazonStorage.AccountInfo"/>
+        </member>
+        <member name="F:CMS.AmazonStorage.AmazonS3ClientConfiguration.DEFAULT_REST_API_END_POINT_URL">
+            <summary>
+            Default value of <see cref="P:CMS.AmazonStorage.AmazonS3ClientConfiguration.RestApiEndPointUrl"/> property.
+            </summary>
+            <remarks>
+            The default URL is <c>https://s3.amazonaws.com</c>.
+            </remarks>
+        </member>
+        <member name="P:CMS.AmazonStorage.AmazonS3ClientConfiguration.RestApiEndPointUrl">
+            <summary>
+            Gets or sets the URL of the Amazon REST API endpoint. The value is read from <c>CMSAmazonRestApiEndPoint</c> application configuration key, unless explicitly set.
+            Returns <see cref="F:CMS.AmazonStorage.AmazonS3ClientConfiguration.DEFAULT_REST_API_END_POINT_URL"/> if the application configuration does not specify any URL.
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.AmazonS3ClientFactory">
+            <summary>
+            Class that encapsulates creation of the <see cref="T:Amazon.S3.AmazonS3Client"/> instance.
+            </summary>
+            <seealso cref="T:CMS.AmazonStorage.AmazonS3ClientConfiguration"/>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonS3ClientFactory.Create(System.String,System.String,System.String)">
+            <summary>
+            Creates <see cref="T:Amazon.S3.AmazonS3Client"/> instance that can access Amazon S3 via REST interface.
+            </summary>
+            <param name="accessKeyID">It is alphanumeric text string that uniquely identifies the user who owns the account.</param>
+            <param name="accessKey">Password to the Amazon S3 storage.</param>
+            <param name="bucketName">Name of the bucket in Amazon S3 storage.</param>
+            <returns>Returns <see cref="T:Amazon.S3.AmazonS3Client"/> instance that can access Amazon S3 via REST interface.</returns>
+            <seealso cref="T:CMS.AmazonStorage.AmazonS3ClientConfiguration"/>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonS3ClientFactory.CreateInternal(System.String,System.String,System.String)">
+            <summary>
+            Creates <see cref="T:Amazon.S3.AmazonS3Client"/> instance that can access Amazon S3 via REST interface.
+            </summary>
+            <param name="accessKeyID">It is alphanumeric text string that uniquely identifies the user who owns the account.</param>
+            <param name="accessKey">Password to the Amazon S3 storage.</param>
+            <param name="bucketName">Name of the bucket in Amazon S3 storage.</param>
+            <returns>Returns <see cref="T:Amazon.S3.AmazonS3Client"/> instance that can access Amazon S3 via REST interface.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.AmazonS3ClientFactory.GetRegionEndpoint(System.String)">
+            <summary>
+            Gets existing <see cref="T:Amazon.RegionEndpoint"/> from <paramref name="location"/>.
+            </summary>
+            <param name="location">String value returned from Amazon S3 service that defines bucket location.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.IS3ObjectInfo">
+            <summary>
+            Interface of the S3ObjectInfo object.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.IS3ObjectInfo.Key">
+            <summary>
+            Gets or sets object key.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.IS3ObjectInfo.IsLocked">
+            <summary>
+            Returns whether current object is locked.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.IS3ObjectInfo.ETag">
+            <summary>
+            Gets or sets E-tag from the object.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.IS3ObjectInfo.IsDirectory">
+            <summary>
+            Gets whether current object is directory.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.IS3ObjectInfo.Length">
+            <summary>
+            Gets or sets content length of the object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.SetMetadata(System.String,System.String)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.SetMetadata(System.String,System.String,System.Boolean)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>        
+            <param name="update">Indicates whether data are updated in S3 storage.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.SetMetadata(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+            <param name="update">Indicates whether data are updated in S3 storage.</param>
+            <param name="log">Indicates whether is operation logged.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.GetMetadata(System.String)">
+            <summary>
+            Returns object meta data.  
+            </summary>
+            <param name="key">Metadata key.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.DeleteMetadataFile">
+            <summary>
+            Deletes metadata file.
+            </summary>        
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.Lock">
+            <summary>
+            Locks current object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.UnLock">
+            <summary>
+            Unlocks current object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfo.Exists">
+            <summary>
+            Returns whether object exists.
+            </summary>        
+        </member>
+        <member name="T:CMS.AmazonStorage.IS3ObjectInfoExtensionMethods">
+            <summary>
+            Extension methods for <see cref="T:CMS.AmazonStorage.IS3ObjectInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoExtensionMethods.GetBucketName(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Returns bucket name for current <see cref="T:CMS.AmazonStorage.IS3ObjectInfo"/>.
+            </summary>
+            <param name="obj">Representation of a file in Amazon S3 storage.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.IS3ObjectInfoProvider">
+            <summary>
+            Interface of the S3ObjectInfoProvider
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.GetObjectsList(System.String,CMS.AmazonStorage.ObjectTypeEnum,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns list with objects from given bucket and under given path. 
+            </summary>        
+            <param name="path">Path.</param>
+            <param name="type">Specifies which objects are returned (files, directories, both).</param>
+            <param name="useFlatListing">Whether flat listing is used (all files from all subdirectories all in the result).</param>
+            <param name="lower">Specifies whether path should be lowered inside method.</param>
+            <param name="useCache">Indicates if results should be primary taken from cache to get better performance</param>
+            <remarks>
+            In order to allow to distinguish between files and directories, directories are listed with a trailing backslash.
+            </remarks>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.ObjectExists(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Returns whether object exists.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.GetObjectContent(CMS.AmazonStorage.IS3ObjectInfo,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32)">
+            <summary>
+            Returns object content as a CMS.IO.Stream.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="fileMode">File mode.</param>
+            <param name="fileAccess">File access.</param>
+            <param name="fileShare">Sharing permissions.</param>
+            <param name="bufferSize">Buffer size.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.PutFileToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Puts file to Amazon S3 storage.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="pathToSource">Path to source file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.PutDataFromStreamToObject(CMS.AmazonStorage.IS3ObjectInfo,System.IO.Stream)">
+            <summary>
+            Puts data from stream to Amazon S3 storage.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="stream">Stream to upload.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.PutTextToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Puts text to Amazon S3 storage object.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="content">Content to add.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.AppendTextToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Appends text to Amazon S3 storage object.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="content">Content to append.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.DeleteObject(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Deletes object from Amazon S3 storage.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.CopyObjects(CMS.AmazonStorage.IS3ObjectInfo,CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Copies object to another.
+            </summary>
+            <param name="sourceObject">Source object info.</param>
+            <param name="destObject">Destination object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.CreateEmptyObject(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Creates empty object.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.GetInfo(System.String)">
+            <summary>
+            Returns new instance of S3ObjectInfo.
+            </summary>
+            <param name="path">Path with file name.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.IS3ObjectInfoProvider.GetInfo(System.String,System.Boolean)">
+            <summary>
+            Initializes new instance of S3 object info with specified bucket name.
+            </summary>        
+            <param name="path">Path with file name.</param>
+            <param name="key">Specifies that given path is already object key.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.ObjectTypeEnum">
+            <summary>
+            Defines which type of objects is returned by S3ObjectInfoProvider.GetObjectList
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.ObjectTypeEnum.Files">
+            <summary>
+            Files
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.ObjectTypeEnum.Directories">
+            <summary>
+            Directories
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.ObjectTypeEnum.FilesAndDirectories">
+            <summary>
+            Files and directories
+            </summary>
+        </member>
+        <member name="T:CMS.AmazonStorage.S3MultiPartUploader">
+            <summary>
+            Class for uploading large files to Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.#ctor(Amazon.S3.AmazonS3Client,System.Int64,System.Int64)">
+            <summary>
+            Creates utility for uploading large files in smaller parts to Amazon S3 storage.
+            </summary>
+            <param name="s3Client">Client for accessing the Amazon S3 storage.</param>
+            <param name="minimalPartSize">Minimal size of the part sent in one request to Amazon S3 storage.</param>
+            <param name="maximalPartSize">Maximal possible size of the part sent in one request to Amazon S3 storage.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.InitMultiPartUpload(System.String,System.String)">
+            <summary>
+            Inits multipart upload with given <paramref name="key"/> inside <paramref name="bucket"/> with Amazon S3 storage.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <returns>
+            Upload ID, unique identifier for one multipart upload to Amazon S3 storage.
+            Returned upload ID is needed for each subsequent multipart upload operation.
+            </returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.UploadPartFromStream(System.String,System.String,System.String,System.Int32,System.IO.Stream)">
+            <summary>
+            Uploads one part of a file to Amazon S3 storage.
+            </summary>
+            <remarks>
+            If some of the Amazon S3 policies about multipart upload is violated then exception will be thrown.
+            For example, if part smaller than 5 MB is uploaded and given part is not the last part of the multipart upload process.
+            </remarks>
+            <param name="uploadId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.S3MultiPartUploader.InitMultiPartUpload(System.String,System.String)"/> method.</param>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="partNumber">Number that defines position of the data obtained by the stream in the whole multipart upload process.</param>
+            <param name="stream">Stream with data to upload. Supplied stream has always it's position set to origin.</param>
+            <returns>Unique identifier of the uploaded part.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.UploadFromStream(System.String,System.String,System.IO.Stream)">
+            <summary>
+            Uploads one large file to Amazon S3 storage in smaller parts.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="stream">Stream with data to upload. Supplied stream has always it's position set to origin.</param>
+            <returns>
+            Response containing metadata of uploaded file.
+            </returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.UploadFromFilePath(System.String,System.String,System.String)">
+            <summary>
+            Uploads large file from local file system to Amazon S3 storage in smaller parts.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="filePath">Path to a local file.</param>
+            <returns>
+            Response contains metadata of uploaded file like ETag.
+            </returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.CompleteMultiPartUploadProcess(System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Amazon.S3.Model.UploadPartResponse})">
+            <summary>
+            Completes multiple part upload process.
+            Sends final request to Amazon S3 to merge all parts already sent to storage.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="uploadId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.S3MultiPartUploader.InitMultiPartUpload(System.String,System.String)"/> method.</param>
+            <param name="uploadedPartResponses">List of responses from Amazon S3 received after uploading each part.</param>
+            <returns>Response from Amazon S3 storage after finishing the multipart upload.</returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.AbortMultiPartUpload(System.String,System.String,System.String)">
+            <summary>
+            Aborts multipart upload, so Amazon S3 storage can delete uploaded parts.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="uploadId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.S3MultiPartUploader.InitMultiPartUpload(System.String,System.String)"/> method.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.MultiPartUploadFromStream(System.String,System.String,System.IO.Stream)">
+            <summary>
+            Uploads one large file stored in <paramref name="stream"/> to Amazon S3 storage in smaller parts.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="stream">Stream with data to upload. Supplied stream has always it's position set to origin.</param>
+            <returns>
+            Response from Amazon S3 storage after finishing the multipart upload.
+            Response contains metadata of the uploaded file.
+            </returns>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3MultiPartUploader.CreateUploadPartRequest(System.String,System.String,System.String)">
+            <summary>
+            Creates first request used for multipart upload.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+            <param name="uploadId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AmazonStorage.S3MultiPartUploader.InitMultiPartUpload(System.String,System.String)"/> method.</param>
+            <returns>Returns first request used for multipart upload.</returns>
+        </member>
+        <member name="T:CMS.AmazonStorage.S3ObjectFactory">
+            <summary>
+            Factory for creating S3ObjectInfo a S3ObjectInfoProvider.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectFactory.Provider">
+            <summary>
+            Get or set S3ObjectInfoProvider.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectFactory.GetInfo(System.String)">
+            <summary>
+            Returns new instance of IS3ObjectInfo object.
+            </summary>
+            <param name="path">Path with file name.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectFactory.GetInfo(System.String,System.Boolean)">
+            <summary>
+            Initializes new instance of S3 object info with specified bucket name.
+            </summary>        
+            <param name="path">Path with file name.</param>
+            <param name="key">Specifies that given path is already object key.</param>
+        </member>
+        <member name="T:CMS.AmazonStorage.S3ObjectInfo">
+            <summary>
+            Represents S3 object.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfo.METADATA_EXT">
+            <summary>
+            Extension for metadata objects.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfo.METADATA_FOLDER">
+            <summary>
+            Metadata folder.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfo.STORAGE_KEY">
+            <summary>
+            Storage key for Amazon storage objects.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.#ctor(System.String)">
+            <summary>
+            Initializes new instance of S3 object info with specified bucket name.
+            </summary>        
+            <param name="path">Path to the file name.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes new instance of S3 object info with specified bucket name.
+            </summary>        
+            <param name="path">Path with file name.</param>
+            <param name="key">Specifies that given path is already object key.</param>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.BucketName">
+            <summary>
+            Returns bucket name.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.S3Client">
+            <summary>
+            Returns S3 client instance.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.Provider">
+            <summary>
+            Returns provider object.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.Metadata">
+            <summary>
+            Gets or sets collection with metadata.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.Key">
+            <summary>
+            Gets or sets object key.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.IsLocked">
+            <summary>
+            Returns whether current object is locked.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.ETag">
+            <summary>
+            Returns E-tag from the object.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.IsDirectory">
+            <summary>
+            Gets whether current object is directory.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfo.Length">
+            <summary>
+            Gets or sets content length of the object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.SetMetadata(System.String,System.String)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.SetMetadata(System.String,System.String,System.Boolean)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+            <param name="update">Indicates whether data are updated in S3 storage.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.SetMetadata(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Sets meta data to object.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+            <param name="update">Indicates whether data are updated in S3 storage.</param>
+            <param name="log">Indicates whether is operation logged.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.GetMetadata(System.String)">
+            <summary>
+            Returns object meta data.  
+            </summary>
+            <param name="key">Metadata key.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.DeleteMetadataFile">
+            <summary>
+            Deletes metadata file.
+            </summary>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.Lock">
+            <summary>
+            Locks current object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.UnLock">
+            <summary>
+            Unlocks current object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.Exists">
+            <summary>
+            Returns whether object exists.
+            </summary>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.GetETag">
+            <summary>
+            Returns E-tag of the current object. 
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.GetLength">
+            <summary>
+            Returns content length of the current object.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.FetchMetadata">
+            <summary>
+            Downloads metadata from the cloud. It ensures that RequestStockHelper always contains the "Exists" key.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.SaveMetadata(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Saves metadata to special file into S3 storage.
+            </summary>
+            <param name="path">Path.</param>
+            <param name="metadata">Metadata.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfo.LoadMetadata(System.String)">
+            <summary>
+            Loads metadata from special file from S3 storage.
+            </summary>
+            <param name="path">Path.</param>        
+        </member>
+        <member name="T:CMS.AmazonStorage.S3ObjectInfoProvider">
+            <summary>
+            Performs operations over the S3 objects.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.LOCK">
+            <summary>
+            Property name which returns if file is locked for writing.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.LAST_WRITE_TIME">
+            <summary>
+            Last write time field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.CREATION_TIME">
+            <summary>
+            Creation time field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.ATTRIBUTES">
+            <summary>
+            Attributes field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.STORAGE_KEY">
+            <summary>
+            Storage key for Amazon storage directory objects.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.MAX_OBJECTS_PER_REQUEST">
+            <summary>
+            Indicates maximum number of items processed by one request.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.RECOMMENDED_SIZE_FOR_MULTIPART_UPLOAD">
+            <summary>
+            Recommended minimal size (15 MB) of the file in Bytes for which multipart upload to Amazon S3 storage should be used.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.MINIMAL_PART_SIZE">
+            <summary>
+            Minimal size (5 MB) of the parts used for multipart upload.
+            </summary>
+        </member>
+        <member name="F:CMS.AmazonStorage.S3ObjectInfoProvider.MAXIMAL_PART_SIZE">
+            <summary>
+            Maximal size (5 GB) of the parts used for multipart upload.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfoProvider.S3Client">
+            <summary>
+            Returns AmazonS3 class from account info.
+            </summary>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfoProvider.MultiPartUploader">
+            <summary>
+            Utility for uploading large files in smaller parts to Amazon S3 storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetBucketName(System.String)">
+            <summary>
+            Returns bucket name from account info.
+            </summary>
+            <param name="path">Path for which is bucket name returned.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.IsPublicAccess(System.String)">
+            <summary>
+            Returns whether is access public.
+            </summary>
+            <param name="path">Path to check.</param>
+        </member>
+        <member name="P:CMS.AmazonStorage.S3ObjectInfoProvider.Current">
+            <summary>
+            Returns current instance of S3ObjectInfo provider.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.#ctor">
+            <summary>
+            Creates instance of S3ObjectInfoProvider. Default constructor is private, object is singleton.
+            </summary>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetObjectsList(System.String,CMS.AmazonStorage.ObjectTypeEnum,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns list with objects from given bucket and under given path. 
+            </summary>        
+            <param name="path">Path.</param>
+            <param name="type">Specifies which objects are returned (files, directories, both).</param>
+            <param name="useFlatListing">Whether flat listing is used (all files from all subdirectories all in the result).</param>
+            <param name="lower">Specifies whether path should be lowered inside method.</param>
+            <param name="useCache">Indicates if results should be primary taken from cache to get better performance</param>
+            <remarks>
+            In order to allow to distinguish between files and directories, directories are listed with a trailing backslash.
+            </remarks>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.ObjectExists(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Returns whether object exists.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetObjectContent(CMS.AmazonStorage.IS3ObjectInfo,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32)">
+            <summary>
+            Returns object content as a stream.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="fileMode">File mode.</param>
+            <param name="fileAccess">File access.</param>
+            <param name="fileShare">Sharing permissions.</param>
+            <param name="bufferSize">Buffer size.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.PutFileToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Puts local file to Amazon S3 storage.
+            </summary>
+            <remarks>
+            For uploading a file from different file system other than local file system to Amazon S3 storage,
+            <see cref="M:CMS.AmazonStorage.S3ObjectInfoProvider.PutDataFromStreamToObject(CMS.AmazonStorage.IS3ObjectInfo,System.IO.Stream)"/> method should be used.
+            </remarks>
+            <param name="obj">Object info.</param>
+            <param name="pathToSource">Path to local file.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.PutDataFromStreamToObject(CMS.AmazonStorage.IS3ObjectInfo,System.IO.Stream)">
+            <summary>
+            Puts data from stream to Amazon S3 storage.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="stream">Stream to upload.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.PutTextToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Puts text to Amazon S3 storage object.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="content">Content to add.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.AppendTextToObject(CMS.AmazonStorage.IS3ObjectInfo,System.String)">
+            <summary>
+            Appends text to Amazon S3 storage object.
+            </summary>
+            <param name="obj">Object info.</param>
+            <param name="content">Content to append.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.DeleteObject(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Deletes object from Amazon S3 storage.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.CopyObjects(CMS.AmazonStorage.IS3ObjectInfo,CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Copies object to another.
+            </summary>
+            <param name="sourceObject">Source object info.</param>
+            <param name="destObject">Destination object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.CreateEmptyObject(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Creates empty object.
+            </summary>
+            <param name="obj">Object info.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetInfo(System.String)">
+            <summary>
+            Returns new instance of IS3ObjectInfo.
+            </summary>
+            <param name="path">Path with file name.</param>        
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetInfo(System.String,System.Boolean)">
+            <summary>
+            Initializes new instance of S3 object info with specified bucket name.
+            </summary>        
+            <param name="path">Path with file name.</param>
+            <param name="key">Specifies that given path is already object key.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.RemoveRequestCache(System.String)">
+            <summary>
+            Removes cached object's items from request cache.
+            </summary>
+            <param name="objectKey">Object key.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.RemoveFromTemp(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Remove S3 file from temporary local storage.
+            </summary>
+            <param name="obj">S3 object to be removed from temporary local storage</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.RemoveFromCache(CMS.AmazonStorage.IS3ObjectInfo)">
+            <summary>
+            Remove S3 file from cache local storage.
+            </summary>
+            <param name="obj">S3 object to be removed from cache local storage</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.DeleteFileFromLocalPath(System.String)">
+            <summary>
+            Delete file from local filesystem
+            </summary>
+            <param name="path">Path to the file to be deleted</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.CreatePutRequest(System.String,System.String)">
+            <summary>
+            Creates request for uploading data to Amazon S3 storage.
+            </summary>
+            <param name="key">Unique identifier for an object within a bucket.</param>
+            <param name="bucket">Existing Amazon S3 bucket.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.SetS3ObjectMetadaFromResponse(CMS.AmazonStorage.IS3ObjectInfo,System.String,Amazon.Runtime.AmazonWebServiceResponse,System.Int64)">
+            <summary>
+            Sets metadata from response acquired from Amazon S3 storage to S3ObjectInfo.
+            </summary>
+            <param name="obj">Representation of the file on Amazon S3 storage.</param>
+            <param name="eTag">ETag assigned to file uploaded to Amazon S3 storage.</param>
+            <param name="response">Response acquired from Amazon S3 storage after uploading file.</param>
+            <param name="length">
+            Amazon S3 storage does not return length of the uploaded file in <paramref name="response"/>, 
+            if the file was uploaded via multipart upload. In case of multipart upload is <see cref="P:CMS.AmazonStorage.IS3ObjectInfo.Length"/>
+            of the <paramref name="obj"/> set via this parameter.
+            </param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.SetS3ObjectMetadaFromResponse(CMS.AmazonStorage.IS3ObjectInfo,Amazon.S3.Model.PutObjectResponse,System.Int64)">
+            <summary>
+            Sets metadata from response acquired from Amazon S3 storage to S3ObjectInfo.
+            </summary>
+            <param name="obj">Representation of the file on Amazon S3 storage.</param>
+            <param name="response">Response acquired from Amazon S3 storage after uploading file.</param>
+            <param name="length">
+            Amazon S3 storage does not return length of the uploaded file in <paramref name="response"/>, 
+            if the file was uploaded via multipart upload. In case of multipart upload is <see cref="P:CMS.AmazonStorage.IS3ObjectInfo.Length"/>
+            of the <paramref name="obj"/> set via this parameter.
+            </param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.SetS3ObjectMetadaFromResponse(CMS.AmazonStorage.IS3ObjectInfo,Amazon.S3.Model.CompleteMultipartUploadResponse,System.Int64)">
+            <summary>
+            Sets metadata from response acquired from Amazon S3 storage to S3ObjectInfo.
+            </summary>
+            <param name="obj">Representation of the file on Amazon S3 storage.</param>
+            <param name="response">Response acquired from Amazon S3 storage after uploading file.</param>
+            <param name="length">
+            Amazon S3 storage does not return length of the uploaded file in <paramref name="response"/>, 
+            if the file was uploaded via multipart upload. In case of multipart upload is <see cref="P:CMS.AmazonStorage.IS3ObjectInfo.Length"/>
+            of the <paramref name="obj"/> set via this parameter.
+            </param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetDateTimeString(System.DateTime)">
+            <summary>
+            Returns date time as a string type in english culture.
+            </summary>
+            <param name="datetime">Date time.</param>
+        </member>
+        <member name="M:CMS.AmazonStorage.S3ObjectInfoProvider.GetStringDateTime(System.String)">
+            <summary>
+            Returns date time as a DateTime type converted using english culture.
+            </summary>
+            <param name="datetime">String date time.</param>        
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="FacebookPostID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$sm.facebook.posts.confirmation.delete$" />
+  </actions>
+  <columns>
+    <column source="FacebookPostID" caption="$sm.facebook.posts.content$" wrap="false" localize="false" externalsourcename="facebookpostdetail" />
+    <column source="FacebookPostFacebookAccountID" caption="$sm.facebook.posts.account$" externalsourcename="#transform: sm.facebookaccount : {%FacebookAccountDisplayName%}" wrap="false">
+      <filter source="FacebookAccountDisplayName" type="text" format="[FacebookPostFacebookAccountID] IN (SELECT [FacebookAccountID] FROM [SM_FacebookAccount] WHERE {3})" />
+    </column>
+    <column source="##ALL##" caption="$sm.facebook.posts.document$" wrap="false" externalsourcename="documentguid" />
+    <column source="FacebookPostCampaignID" caption="$sm.facebook.posts.campaign$" wrap="false" externalsourcename="#transform: analytics.campaign : {%CampaignDisplayName%}">
+      <!-- Third parameter contains the original generated condition, which takes care of proper encapsulation of LIKE clause within percent symbols -->
+      <filter source="CampaignDisplayName" type="text" format="[FacebookPostCampaignID] IN (SELECT [CampaignID] FROM [Analytics_Campaign] WHERE {3}) OR (('{1}' = 'NOT LIKE' OR '{1}' = '&lt;&gt;') AND ([FacebookPostCampaignID] IS NULL))" />
+    </column>
+    <column source="FacebookPostID" caption="$sm.facebook.posts.state$" wrap="false" externalsourcename="state" allowsorting="false" />
+    <column source="FacebookPostInsightPeopleReached" caption="$sm.facebook.posts.ins.reach$" wrap="false" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="sm.facebookpost" columns="FacebookPostID, FacebookPostText, FacebookPostFacebookAccountID, FacebookPostCampaignID, FacebookPostLastModified, FacebookPostDocumentGUID, FacebookPostInsightPeopleReached, FacebookPostSiteID" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

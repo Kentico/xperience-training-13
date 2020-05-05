@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="PersonaID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="#delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$general.confirmdelete$" />
+  </actions>
+  <columns>
+    <column source="PersonaID" externalsourcename="PersonaNameAndImage" caption="$general.name$" wrap="false" sort="PersonaDisplayName">
+      <filter type="text" source="PersonaDisplayName" />
+      <tooltip source="PersonaDescription" />
+    </column>
+    <column source="PersonaEnabled" caption="$general.enabled$" externalsourcename="#yesno">
+      <filter type="bool" />
+    </column>
+    <column source="ContactCount" caption="$personas.contactscount$" allowsorting="false" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="personas.persona" columns="PersonaID, PersonaDisplayName, PersonaEnabled, PersonaDescription, (SELECT COUNT(*) FROM OM_Contact WHERE ContactPersonaID = PersonaID) AS ContactCount" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

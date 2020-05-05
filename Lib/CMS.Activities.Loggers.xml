@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Activities.Loggers</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Activities.Loggers.IMembershipActivityLogger">
+            <summary>
+            Provides methods for membership activities logging.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Loggers.IMembershipActivityLogger.LogLogin(System.String)">
+            <summary>
+            Logs login activity for given user.
+            </summary>
+            <remarks>
+            This method should be called whenever the user is authenticated to ensure logging of correct <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </remarks>
+            <param name="userName">User name of the authenticated user.</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.IMembershipActivityLogger.LogLogin(System.String,CMS.Base.ITreeNode)">
+            <summary>
+            Logs login activity for given user.
+            </summary>
+            <remarks>
+            This method should be called whenever the user is authenticated to ensure logging of correct <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </remarks>
+            <param name="userName">User name of the authenticated user.</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null.</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.IMembershipActivityLogger.LogRegistration(System.String)">
+            <summary>
+            Logs user registration activity for given user.
+            </summary>
+            <remarks>
+            This method should be called whenever the user is registered to ensure logging of correct <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </remarks>
+            <param name="userName">User name of the registered user.</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.IMembershipActivityLogger.LogRegistration(System.String,CMS.Base.ITreeNode)">
+            <summary>
+            Logs user registration activity for given user.
+            </summary>
+            <remarks>
+            This method should be called whenever the user is registered to ensure logging of correct <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </remarks>
+            <param name="userName">User name of the registered user.</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.IMembershipActivityLogger.LogRegistration(System.String,CMS.Base.ITreeNode,System.Boolean)">
+            <summary>
+            Logs user registration activity for given user.
+            </summary>
+            <remarks>
+            This method should be called whenever the user is registered to ensure logging of correct <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </remarks>
+            <param name="userName">User name of the registered user.</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null</param>
+            <param name="checkViewModel"><c>True</c> if activities should not be logged in administration</param>
+        </member>
+        <member name="T:CMS.Activities.Loggers.MembershipActivityLogger">
+            <summary>
+            Provides methods for logging membership activities.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.#ctor(CMS.Activities.IActivityLogService)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.Activities.Loggers.MembershipActivityLogger"/>.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="activityLogService"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.CMS#Activities#Loggers#IMembershipActivityLogger#LogLogin(System.String)">
+            <summary>
+            Logs login activity.
+            </summary>
+            <param name="userName">User name of current user</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.CMS#Activities#Loggers#IMembershipActivityLogger#LogLogin(System.String,CMS.Base.ITreeNode)">
+            <summary>
+            Logs login activity.
+            </summary>
+            <param name="userName">User name of current user</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.CMS#Activities#Loggers#IMembershipActivityLogger#LogRegistration(System.String)">
+            <summary>
+            Logs registration activity.
+            </summary>
+            <param name="userName">User name of current user</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.CMS#Activities#Loggers#IMembershipActivityLogger#LogRegistration(System.String,CMS.Base.ITreeNode)">
+            <summary>
+            Logs registration activity.
+            </summary>
+            <param name="userName">User name of current user</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.MembershipActivityLogger.CMS#Activities#Loggers#IMembershipActivityLogger#LogRegistration(System.String,CMS.Base.ITreeNode,System.Boolean)">
+            <summary>
+            Logs registration activity.
+            </summary>
+            <param name="userName">User name of current user</param>
+            <param name="currentDocument">Current document tree representation, for MVC should be null</param>
+            <param name="checkViewModel"><c>True</c> if activities should not be logged in administration</param>
+        </member>
+        <member name="T:CMS.Activities.Loggers.RegistrationActivityInitializer">
+            <summary>
+            Activity registration.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Loggers.RegistrationActivityInitializer.#ctor(CMS.Base.IUserInfo,CMS.Base.ITreeNode,System.Int32)">
+            <summary>
+            Default constructor.
+            </summary>
+            <param name="userInfo">Info of current user</param>
+            <param name="currentDocument">Current document in tree (can be null)</param>
+            <param name="currentContactId">Current contact ID</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.RegistrationActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Sets <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Builder for activity</param>
+        </member>
+        <member name="P:CMS.Activities.Loggers.RegistrationActivityInitializer.ActivityType">
+            <summary>
+            Registration activity type
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Loggers.RegistrationActivityInitializer.SettingsKeyName">
+            <summary>
+            Registration activity settings key
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.Loggers.UserLoginActivityInitializer">
+            <summary>
+            Activity user login.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Loggers.UserLoginActivityInitializer.#ctor(CMS.Base.IUserInfo,CMS.Base.ITreeNode,System.Int32)">
+            <summary>
+            Default constructor.
+            </summary>
+            <param name="userInfo">Info of current user</param>
+            <param name="currentDocument">Current document in tree (can be null)</param>
+            <param name="currentContactId">Current contact ID</param>
+        </member>
+        <member name="M:CMS.Activities.Loggers.UserLoginActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Sets <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Builder for activity</param>
+            <returns>New <see cref="T:CMS.Activities.IActivityInfo"/></returns>
+        </member>
+        <member name="P:CMS.Activities.Loggers.UserLoginActivityInitializer.ActivityType">
+            <summary>
+            User login activity type
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Loggers.UserLoginActivityInitializer.SettingsKeyName">
+            <summary>
+            User login activity settings key
+            </summary>
+        </member>
+    </members>
+</doc>

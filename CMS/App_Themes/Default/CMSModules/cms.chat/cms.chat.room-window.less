@@ -1,0 +1,370 @@
+﻿// Stylesheet for support chat window opened from Desk.
+.SupportChatWindow {
+    // Dialog window content
+    .ChatRoomWindow {
+        @chat-base-font-size: @font-size-base;
+        @user-status-icon-width: (0.6875 * @base-unit);
+        @user-status-icon-height: (0.6875 * @base-unit);
+
+        .ChatTop {
+            padding: @padding-large-vertical @padding-large-horizontal;
+            background-color: @panel-heading-bg;
+            overflow: hidden;
+
+            .ChatTopControls {
+                overflow: hidden;
+                vertical-align: middle;
+
+                .FloatLeft {
+                    padding-top: @padding-large-vertical;
+                }
+            }
+        }
+
+        .ChatBottom {
+            padding: @padding-large-vertical @padding-large-horizontal;
+            background-color: @panel-footer-bg;
+            clear: both;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+        }
+
+        .ChatWebpartContainer {
+            overflow: hidden;
+
+            .ChatCannedResponses {
+                padding-top: @padding-large-vertical;
+                padding-bottom: @padding-large-vertical;
+                display: inline-block;
+            }
+
+            a.ChatCannedResponsesHelpLink {
+                text-decoration: none;
+
+                &:hover, &:focus {
+                    text-decoration: none;
+                }
+
+                .ChatCannedResponsesHelpIcon {
+                    .cms-icon-80;
+                    color: @chat-room-help-color;
+                }
+            }
+        }
+
+        .dialog-footer {
+            display: none;
+        }
+
+        .DisabledWebpart {
+            display: none;
+        }
+
+        .EnabledWebpart {
+            display: block;
+        }
+
+        .ChatRoomUsersWPLoading {
+            background: url('../../CMSPages/GetResource.ashx?image=CMSModules/CMS_Chat/preload20.gif') no-repeat left top;
+            padding-left: 25px;
+            min-height: 25px;
+        }
+
+        .ChatMessagesWPLoading {
+            background: url('../../CMSPages/GetResource.ashx?image=CMSModules/CMS_Chat/preload64.gif') no-repeat center top;
+            padding-top: 70px;
+            min-height: 90px;
+            text-align: center;
+        }
+        // Dialog appears when something goes wrong
+        .ChatDialogBody {
+            border: 1px solid @panel-default-border;
+            background-color: @panel-bg;
+            display: none;
+            text-align: left;
+
+            .ChatDialogFooterButtons .SubmitButton {
+                .btn;
+                .btn-default;
+            }
+
+            .ChatDialogContent {
+                background-color: @panel-bg;
+                min-height: @base-unit;
+                font-size: @font-size-base;
+            }
+
+            .ChatDialogHeader {
+                font-size: @font-size-large;
+
+                img {
+                    margin-right: (@base-unit * 0.5);
+                }
+
+                span {
+                    font-family: @font-family-base;
+                    font-size: @font-size-base;
+                }
+            }
+        }
+        // Chat design
+        .LiveSiteDialog .ChatWebpartContainerRoomUsers, .LiveSiteDialog .ChatWebpartContainerRooms {
+            padding-bottom: (@base-unit * 0.5);
+        }
+
+        .ChatDialogBody, .ChatDialogBody span {
+            color: @text-color;
+        }
+
+            .ChatDialogBody span {
+                display: inline;
+                text-align: left;
+                float: none;
+                padding: 0;
+            }
+
+        .ChatRoomUser {
+            font-size: @chat-base-font-size;
+            padding-left: @padding-large-horizontal;
+        }
+
+        .ChatWebpartContainerRoomUsers, .ChatWebpartContainerRooms {
+            line-height: @line-height-100; // ~20px
+            font-size: @chat-base-font-size;
+        }
+
+        .ChatWebpartContainerRoomMessages {
+            font-size: @chat-base-font-size;
+            padding: 0 @padding-large-horizontal;
+            overflow: auto;
+            word-wrap: break-word;
+
+            a {
+                text-decoration: underline;
+            }
+
+                a:hover {
+                    text-decoration: none;
+                }
+
+            & > div {
+                padding-top: @padding-large-vertical;
+                padding-bottom: @padding-large-vertical;
+
+                div:last-child .ChatMessage {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .ChatWebpartContainerMessageSend textarea {
+            margin-top: (@base-unit * 0.375); // ~6px
+            margin-bottom: 0;
+        }
+
+        .ChatTop .SubmitButton,
+        .ChatWebpartContainerMessageSend .ChatSendAreaButton .SubmitButton {
+            width: auto !important;
+            height: auto(2 * @base-unit);
+            min-height: (2 * @base-unit);
+            box-sizing: border-box;
+            .btn;
+        }
+
+        .ChatTop .SubmitButton {
+            .btn-default;
+        }
+
+        .ChatWebpartContainerMessageSend .ChatSendAreaButton .SubmitButton {
+            .btn-primary;
+            margin-bottom: 0;
+            margin-left: (@base-unit * 0.5);
+        }
+
+        .ChatWebpartEnvelopeNotification {
+            padding-right: (@base-unit * 0.625); // ~10px
+        }
+
+        .ChatWebpartContainerNotification a, .ChatWebpartContainerNotification {
+            color: @color-white;
+        }
+
+        .ChatMessageBody img.ChatBBCodeImg {
+            max-width: 300px;
+            max-height: 200px;
+        }
+
+        .ChatWebpartContainerRoomUsers {
+            .OnlineUser {
+                color: @text-color;
+            }
+
+            .OfflineUser {
+                color: @color-gray-100;
+            }
+
+            .OnlineUser:before {
+                background-color: @chat-online-color;
+            }
+
+            .OfflineUser:before {
+                background-color: @chat-offline-color;
+            }
+
+            .OnlineUser:before,
+            .OfflineUser:before {
+                .img-circle;
+                content: ' ';
+                position: absolute;
+                margin-left: (-@base-unit);
+                margin-top: (@base-unit/3);
+                width: @user-status-icon-width;
+                height: @user-status-icon-height;
+                display: block;
+            }
+        }
+
+            .ChatWebpartContainerRoomUsers .OfflineUser a {
+                color: @chat-room-offline-user;
+            }
+
+            .ChatWebpartContainerRoomUsers .CurrentUser {
+                color: @chat-room-current-user;
+            }
+
+            .ChatWebpartContainerRoomUsers .ChatRoomUserName {
+                word-wrap: break-word;
+            }
+
+        .ChatWebPartPaging {
+            word-wrap: break-word;
+
+            ul {
+                margin: 0 0 (@base-unit * 0.5) 0;
+                padding: 0;
+
+                li {
+                    padding: 0 @padding-small-horizontal;
+                    list-style: none;
+                    display: inline-block;
+
+                    a {
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    &.ActivePage {
+                        color: @chat-paging-active-color;
+                    }
+                }
+            }
+        }
+
+        .ChatWebpartEnvelope.ChatWebpartEnvelopeRoomMessages {
+            position: absolute;
+            top: 356px;
+            right: 0;
+            left: 0;
+            overflow: hidden;
+            background-color: @panel-bg;
+        }
+
+        &.IsOneToOne .ChatWebpartEnvelope.ChatWebpartEnvelopeRoomMessages {
+            top: 150px;
+            height: 530px;
+        }
+
+        .ChatWebpartContainer.ChatWebpartContainerRoomMessages {
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .ChatWebpartEnvelopeRoomMessages {
+            border: none;
+        }
+
+        .ChatWebpartContainerMessageSend {
+            textarea {
+                box-sizing: border-box;
+                .form-control;
+                // Three rows of text + 2 * small vertical padding
+                height: (@line-height-100 * 3) + @base-unit;
+                width: 100%;
+            }
+
+            button {
+                float: right;
+                margin-top: @base-unit * 0.5;
+            }
+        }
+
+        .ChatWebpartContainerRoomUsers {
+            display: inline-block;
+        }
+
+        .ChatError, .ChatDialogBody .ChatError, .ChatDialogBody span.ChatError {
+            color: @color-error;
+        }
+        // Chat message styling
+        .ChatMessage {
+            margin-bottom: 1em;
+
+            .ChatMessageBody .Modified {
+                color: @color-blue-70;
+            }
+
+            .ChatMessageBody .Rejected {
+                color: @color-error;
+            }
+
+            .MeSender {
+                color: @color-blue-70;
+            }
+
+            .Sender {
+                color: @color-gray-50;
+            }
+
+            .PostedTime {
+                padding-right: @base-unit * 0.25;
+            }
+
+            .System {
+                font-style: italic;
+                color: @color-gray-100;
+            }
+
+                .System.Greeting {
+                    color: @color-gray-100;
+                    font-weight: bold;
+                }
+
+            .Rejected {
+                color: @color-gray-100;
+            }
+
+            .RejectButton {
+                display: none;
+            }
+        }
+    }
+
+    .ChatMessageSendInformDialogBody {
+        padding: @base-unit;
+    }
+}
+
+//jQuery autocomplete
+.chat-canned-responses-item {
+    color: @text-color;
+
+    a, b {
+        color: @text-color;
+    }
+
+    &.ui-menu-item a.ui-state-focus, &.ui-menu-item a.ui-state-active {
+        margin: 0;
+    }
+}

@@ -1,0 +1,14 @@
+﻿<h4>{$ contactmanagement.contact.detail $}</h4>
+<p ng-if="$ctrl.fields && $ctrl.fields.length === 0">{$ contactmanagement.contact.detail.empty $}</p>
+
+<ul class="field-list" ng-if="$ctrl.fields && $ctrl.fields.length > 0">
+    <li ng-repeat="field in $ctrl.fields" ng-switch on="field.FieldType" class="row">
+        <span class="field-name col-xs-3 col-md-4">{{::field.FieldCaption}}</span>
+        
+        <cms-accounts ng-switch-when="List`1" field="field" class="col-xs-9 col-md-8" />
+        <cms-campaign ng-switch-when="ContactDetailsCampaignViewModel" field="field.FieldValue" class="col-xs-9 col-md-8" />
+
+        <span ng-switch-when="DateTime" class="col-xs-9 col-md-8 field-value">{{::field.FieldValue | date:'MMM d, yyyy'}}</span>
+        <span ng-switch-default class="col-xs-9 col-md-8 field-value">{{::field.FieldValue}}</span>
+    </li>
+</ul>

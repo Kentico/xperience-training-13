@@ -1,0 +1,47 @@
+﻿ <div>
+    <h4 class="control-label separator">{$ campaign.objective $}</h4>
+    <p>{$ campaign.objective.description $}</p>
+
+    <div class="campaign-list" ng-if="$ctrl.objective">
+        <div class="campaign-assetlist-item row">
+            <div class="campaign-assetlist-header">
+                <span class="campaign-assetlist-header-description">
+                    <span class="primary-description">
+                        {$ campaign.objective $}
+                    </span>
+                    <span>
+                        <br />
+                        {{ $ctrl.selectedConversionName }}
+                    </span>
+                </span>
+            </div>
+            <div class="campaign-assetlist-icons">                
+                <div>
+                    <button title="{$ general.remove $}"
+                            class="icon-only btn-icon btn"
+                            ng-disabled="$ctrl.campaign.isFinished()"
+                            ng-click="$ctrl.removeObjective()">
+                        <i aria-hidden="true" class="icon-bin"></i>
+                    </button>
+                </div>
+                <cms-edit-objective objective="$ctrl.objective"
+                                    objective-conversions="$ctrl.conversions"
+                                    enabled="!$ctrl.campaign.isFinished()"
+                                    on-updated="$ctrl.updateObjective">
+                </cms-edit-objective>
+                <div class="additional-info">
+                    <span class="primary-text">{{ $ctrl.objective.value | shortNumber }}</span>
+                    <br />
+                    <span>{$ campaign.objective.target $}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-block-50">
+        <cms-add-objective ng-if="!$ctrl.objective"
+                           enabled="$ctrl.canAddObjective()"
+                           objective-conversions="$ctrl.conversions"
+                           on-created="$ctrl.addObjective">
+        </cms-add-objective>
+    </div>
+</div>

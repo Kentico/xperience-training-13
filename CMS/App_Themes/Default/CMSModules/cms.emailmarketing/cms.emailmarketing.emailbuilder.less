@@ -1,0 +1,151 @@
+﻿@import (reference) "../../../Default/Bootstrap/variables.less";
+@import "./cms.emailmarketing.emailbuilder.common.less";
+@import "./cms.emailmarketing.emailbuilder.widgetproperties.less";
+@import "./cms.emailmarketing.emailbuilder.emailproperties.less";
+@import "./cms.emailmarketing.emailbuilder.abtesting.less";
+@import "./cms.emailmarketing.emailbuilder.tabs.less";
+@import "../cms.messages.less";
+
+@widget-properties-wrapper-width: @right-section-width + (7 * @base-unit);
+@widget-properties-width: @widget-properties-wrapper-width - (@base-unit / 2);
+@shadow-color: @color-gray-100;
+
+.email-builder {
+    height: 100vh;
+
+    .alert-absolute();
+
+    .alert-error-absolute,
+    .alert-success-absolute,
+    .alert-info-absolute {
+        margin-top: 4 * @base-unit;
+        max-width: 31.25 * @base-unit;
+    }
+
+    .alert-info-floating-right {
+        position: absolute;
+        margin: (4 * @base-unit) (2 * @base-unit) 0 0;
+        max-width: 32 * @base-unit;
+        right: @right-section-width;
+    }
+
+    .email-builder-content {
+        width: auto;
+        height: 100%;
+        overflow: hidden;
+
+        iframe {
+            width: 100%;
+            height: calc(~"100% - "(@header-actions-height));
+            border: 0;
+        }
+    }
+
+    .email-builder-right-section {
+        width: @right-section-width;
+        height: 100%;
+        float: right;
+        background-color: @color-gray-140;
+
+        .variant-selection {
+            display: table;
+            padding: @base-unit;
+            height: 2 * @base-unit;
+
+            .column {
+                display: table-cell;
+
+                &.variant-selector-label {
+                    padding-right: 0.5 * @base-unit;
+                    white-space: nowrap;
+                }
+
+                &.variant-selector {
+                    width: 100%;
+                }
+            }
+        }
+
+        .widget-listing-container {
+            height: 100%;
+            overflow-y: auto;
+
+            #widget-listing {
+                margin-top: @widget-listing-margin;
+                margin-left: @widget-listing-margin;
+
+                &.read-only .cms-email-widget {
+                    cursor: not-allowed;
+                    color: @color-gray-130;
+                }
+            }
+
+            .alert {
+                margin: @base-unit;
+            }
+
+            .cms-email-widget {
+                .email-widget;
+
+                &.focus {
+                    background: @color-blue-130;
+                }
+            }
+        }
+    }
+}
+
+.widget-properties {
+    position: absolute;
+    z-index: 12000;
+    height: 100%;
+    top: 0;
+    right: 0;
+
+    .widget-properties-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        width: 0;
+
+        &.widget-properties-wrapper-visible {
+            width: @widget-properties-wrapper-width;
+        }
+
+        .widget-properties-slidable {
+            position: absolute;
+            height: 100%;
+            width: @widget-properties-width;
+            background-color: @widget-properties-background-color;
+            right: -@widget-properties-width;
+            transition: right 0.2s ease;
+            box-shadow: 4px 0px 8px 4px @shadow-color;
+
+            &.widget-properties-slidable-visible {
+                right: 0;
+            }
+
+            .widget-properties-loader {
+                display: none;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                background-color: rgba(255,255,255,0.6);
+
+                .loader-general {
+                    position: absolute;
+                    display: inline-block;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            iframe {
+                height: 100%;
+                width: 100%;
+                border: none;
+            }
+        }
+    }
+}

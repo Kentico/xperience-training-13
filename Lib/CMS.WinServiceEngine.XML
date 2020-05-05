@@ -1,0 +1,691 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.WinServiceEngine</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.WinServiceEngine.BaseService">
+            <summary>
+            Base class for windows service.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.BaseService.DEFAULT_SLEEP_INTERVAL">
+            <summary>
+            Default sleep interval in seconds. Default value is 30 seconds.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Watcher">
+            <summary>
+            File watcher to indicate to clear the cache.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.WebApplicationPath">
+            <summary>
+            Web application path.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.BaseName">
+            <summary>
+            Service base name.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Error">
+            <summary>
+            Indicates that there is an service execution error.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Enabled">
+            <summary>
+            Indicates if service should be executed.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Running">
+            <summary>
+            Indicates that the service thread is running.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Cancel">
+            <summary>
+            Indicates that the service thread should be cancelled
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Interval">
+            <summary>
+            Service interval.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.MinInterval">
+            <summary>
+            Minimum service interval (in seconds). Default value is 0 second.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.MaxInterval">
+            <summary>
+            Maximum service interval (in seconds). Default value is maximum value of type Int32 in seconds.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.SleepInterval">
+            <summary>
+            Default sleep interval (in seconds).
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.Thread">
+            <summary>
+            Service thread.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.ServiceDefinition">
+            <summary>
+            Service definition.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseService.EventLogSourceName">
+            <summary>
+            Event log source name for current service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.#ctor(System.String,System.String)">
+            <summary>
+            Base constructor.
+            </summary>
+            <param name="webAppPath">Web application path</param>
+            <param name="baseServiceName">Service base name.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.OnStart(System.String[])">
+            <summary>
+            Starts service.
+            </summary>
+            <param name="args">Start arguments</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.OnStop">
+            <summary>
+            Stops service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.Execute">
+            <summary>
+            Method which is executed by the service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.ExecuteInternal">
+            <summary>
+            Executes service logging.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.CheckServiceSettings">
+            <summary>
+            Checks service settings
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.Watcher_Event(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles changed event of file system watcher.
+            </summary>
+            <param name="sender">File system watcher</param>
+            <param name="e">File system event argument</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseService.EnsureDiskPath(System.String,System.String)">
+            <summary>
+            Checks if all folders of the given path exist and if not, it creates them.
+            </summary>
+            <param name="path">Full disk path of the file including file name</param>
+            <param name="startingPath">Starting path where folders can be checked and created</param>
+        </member>
+        <member name="T:CMS.WinServiceEngine.DiscretionaryAclHelper">
+            <summary>
+            Contains method to set DACL permissions for a service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.DiscretionaryAclHelper.SetServicePermissions(System.String,System.String)">
+            <summary>
+            Sets DALC permissions for given <parameter name="serviceName"/> running under specified <paramref name="accountName"/>.
+            </summary>
+            <param name="serviceName">Service for which DACL permissions should be set.</param>
+            <param name="accountName">Name of an account for which DACL permissions should be set.</param>
+        </member>
+        <member name="T:CMS.WinServiceEngine.ApplicationSettings">
+            <summary>
+            Provides application settings from arbitrary configuration file.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ApplicationSettings.mConfigurationFilePath">
+            <summary>
+            The configuration file path.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ApplicationSettings.mApplicationConfiguration">
+            <summary>
+            The configuration file representation.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.ApplicationSettings.ApplicationConfiguration">
+            <summary>
+            Gets the configuration file representation.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.ApplicationSettings.Item(System.String)">
+            <summary>
+            Gets the application setting with the specified name.
+            </summary>
+            <param name="name">The name of the application setting to locate.</param>
+            <returns>A string that contains the value associated with the specified name, if found; otherwise, null.</returns>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ApplicationSettings.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ApplicationSettings class.
+            </summary>
+            <param name="configurationFilePath">The configuration file path.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ApplicationSettings.GetApplicationConfiguration(System.String)">
+            <summary>
+            Creates a representation of the configuration file with the specified path, and returns it.
+            </summary>
+            <param name="configurationFilePath">The configuration file path.</param>
+            <returns>The representation of the configuration file with the specified path.</returns>
+        </member>
+        <member name="T:CMS.WinServiceEngine.BaseServiceInstaller">
+            <summary>
+            Base class for windows service installer.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.ServiceInstaller">
+            <summary>
+            Service installer.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.ServiceProcessInstaller">
+            <summary>
+            Service process installer.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.ServiceDefinition">
+            <summary>
+            Service definition.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.ServiceAssemblyPath">
+            <summary>
+            Service assembly path.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.WebApplicationPath">
+            <summary>
+            Full path of the web application.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.BaseServiceInstaller.BaseName">
+            <summary>
+            Service base name.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.#ctor(System.String)">
+            <summary>
+            Base constructor.
+            </summary>
+            <param name="baseServiceName">Service base name.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.Install(System.Collections.IDictionary)">
+            <summary>
+            Installs service.
+            </summary>
+            <param name="stateSaver">Dictionary with the state of the computer</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.Uninstall(System.Collections.IDictionary)">
+            <summary>
+            Uninstalls service.
+            </summary>
+            <param name="savedState">Dictionary with the state of the computer</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:CMS.WinServiceEngine.BaseServiceInstaller" /> and optionally releases the managed resources.
+            </summary>
+            <param name="disposing">True to release both managed and unmanaged resource, false to release only managed resources.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.GetHelpText">
+            <summary>
+            Gets help text message.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.CheckParameters">
+            <summary>
+            Checks base input parameters from command line (Service assembly path and Web application path).
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.SetServiceParameters">
+            <summary>
+            Sets parameters of service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.Log(System.String)">
+            <summary>
+            Logs the message.
+            </summary>
+            <param name="message">Message</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.DisplayHelp">
+            <summary>
+            Displayes help text.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.BaseServiceInstaller.SetServiceNameParameters">
+            <summary>
+            Initializes properties related to the service name.
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.ServiceHelper">
+            <summary>
+            Help class for service.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ServiceHelper.WEB_PATH_PREFIX">
+            <summary>
+            Prefix of web path service parameter
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ServiceHelper.EVENT_LOG_NAME">
+            <summary>
+            Event Log name
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.CheckWebApplicationPath(System.String)">
+            <summary>
+            Check if directory of web application path exists.
+            </summary>
+            <param name="webAppPath">Web application path</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.RestartService(System.String)">
+            <summary>
+            Restarts windows service
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.LogMessage(System.String,System.String,System.Boolean)">
+            <summary>
+            Logs message to the console and windows event log.
+            </summary>
+            <param name="source">Event log source</param>
+            <param name="message">Message</param>
+            <param name="logToConsole">Indicates if message should be written to the console</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.LogMessage(System.String,System.String)">
+            <summary>
+            Logs message to the windows event log.
+            </summary>
+            <param name="source">Event log source</param>
+            <param name="message">Message to log</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.LogException(System.String,System.Exception)">
+            <summary>
+            Logs exceptions to the windows event log.
+            </summary>
+            <param name="source">Event log source</param>
+            <param name="ex">Exception to log</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.LogException(System.String,System.Exception,System.Boolean)">
+            <summary>
+            Logs exception to the windows event log.
+            </summary>
+            <param name="source">Event log source</param>
+            <param name="ex">Exception to log</param>
+            <param name="generalMessageInConsole">Indicates if general message for exception should be displayed in the console.
+            More details about occurred exception will be stored in event log.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceHelper.LogException(System.String,System.Exception,System.String,System.Boolean)">
+            <summary>
+            Logs exceptions to the windows event log.
+            </summary>
+            <param name="source">Event log source</param>
+            <param name="ex">Exception to log</param>
+            <param name="message">Custom additional message</param>
+            <param name="logToConsole">Indicates if message should be written to the console</param>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceEngineHandlers">
+            <summary>
+            Event handlers for the module WinServiceEngine
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceEngineHandlers.Init">
+            <summary>
+            Initialize the handlers
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceEngineHandlers.ClearServiceSettings(System.Object,CMS.DataEngine.SettingsKeyChangedEventArgs)">
+            <summary>
+            Settings key changed handler
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceEngineModuleMetadata">
+            <summary>
+            Represents the Windows service engine module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceEngineModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceEngineModule">
+            <summary>
+            Represents the Windows service engine module.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceEngineModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceEngineModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.ServiceManager">
+            <summary>
+            Windows services manager
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ServiceManager.LOCAL_MACHINE_NAME">
+            <summary>
+            Constant representing local machine string.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.ServiceManager.SERVICE_TIMEOUT_SECONDS">
+            <summary>
+            Service timeout (seconds). Default is 30 seconds.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.GetService(System.String)">
+            <summary>
+            Gets service with and service name for local machine.
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.GetService(System.String,System.String)">
+            <summary>
+            Gets service with specified machine name and service name.
+            </summary>
+            <param name="machineName">Machine name</param>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.GetServices">
+            <summary>
+            Gets services for local machine.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.GetServices(System.String)">
+            <summary>
+            Gets services for specified machine.
+            </summary>
+            <param name="machineName">Machine name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.StopService(System.String)">
+            <summary>
+            Stops service.
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.StopService(System.ServiceProcess.ServiceController)">
+            <summary>
+            Stops service.
+            </summary>
+            <param name="service">Service controller</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.StartService(System.String)">
+            <summary>
+            Starts service.
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.StartService(System.ServiceProcess.ServiceController)">
+            <summary>
+            Starts service.
+            </summary>
+            <param name="service">Service controller</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.RestartService(System.String)">
+            <summary>
+            Restarts service.
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.InstallOrUninstall(System.String,System.Boolean)">
+            <summary>
+            Installs or uninstalls service.
+            </summary>
+            <param name="assemblyName">Assembly name</param>
+            <param name="install">True, if install service. Otherwise uninstall service.</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.UninstallServices">
+            <summary>
+            Uninstalls all available services.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.InstallServices(System.Boolean)">
+            <summary>
+            Installs all available services.
+            </summary>
+            <param name="startServices">Start services</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.InstallServices(System.Collections.Generic.List{CMS.WinServiceEngine.WinServiceItem},System.Boolean)">
+            <summary>
+            Installs given services.
+            </summary>
+            <param name="services">List of services to install</param>
+            <param name="startServices">Start services</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.ServiceManager.ServicesInstalled">
+            <summary>
+            Indicates if at least one of the services is installed.
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceHelper">
+            <summary>
+            Win services helper class.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.WinServiceHelper.WATCHER_FILE_EXTENSION">
+            <summary>
+            Extesion of the watcher file.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.WinServiceHelper.SERVICES_FILE">
+            <summary>
+            Services definition file.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.WinServiceHelper.SERVICE_NAME_PREFIX">
+            <summary>
+            Prefix for services.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.WinServiceHelper.SCHEDULER_SERVICE_BASENAME">
+            <summary>
+            Scheduler service base name.
+            </summary>
+        </member>
+        <member name="F:CMS.WinServiceEngine.WinServiceHelper.HM_SERVICE_BASENAME">
+            <summary>
+            Health Monitoring service base name.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceHelper.ServicesDataPath">
+            <summary>
+            Physical path to the win services data folder
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceHelper.ServicesFilePath">
+            <summary>
+            Physical path to the file that contains available services.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceHelper.ServicesDefinition">
+            <summary>
+            List of services definition.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.GetServiceWatcherFileName(System.String)">
+            <summary>
+            Gets file name of the watcher file for given windows service.
+            </summary>
+            <param name="serviceName">Service name</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.GetServiceWatcherFilePath(System.String)">
+            <summary>
+            Gets path to the watcher file for given windows service.
+            </summary>
+            <param name="serviceName">Service name (If no service name given, service file watcher folder is returned.)</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.RestartService(System.String,System.Boolean)">
+            <summary>
+            Restarts given windows service(s).
+            </summary>
+            <param name="serviceDefinitionName">Service definition name (If no service name given, all services are restarted.)</param>
+            <param name="logTask">Indicates whether web farm task should be logged.</param>
+            <seealso cref="F:CMS.WinServiceEngine.WinServiceHelper.HM_SERVICE_BASENAME"/>
+            <seealso cref="F:CMS.WinServiceEngine.WinServiceHelper.SCHEDULER_SERVICE_BASENAME"/>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.RestartService(System.String)">
+            <summary>
+            Restarts given windows service(s).
+            </summary>
+            <param name="serviceName">Service name (If no service name given, all services are restarted.)</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.DeleteServiceFile(System.String,System.Boolean)">
+            <summary>
+            Deletes service restart file.
+            </summary>
+            <param name="serviceDefinitionName">Service definition name (If no service name given, all services are restarted.)</param>
+            <param name="logTask">Indicates whether web farm task should be logged.</param>
+            <seealso cref="F:CMS.WinServiceEngine.WinServiceHelper.HM_SERVICE_BASENAME"/>
+            <seealso cref="F:CMS.WinServiceEngine.WinServiceHelper.SCHEDULER_SERVICE_BASENAME"/>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.DeleteServiceFile(System.String)">
+            <summary>
+            Deletes service restart file.
+            </summary>
+            <param name="serviceName">Service name (If no service name given, all services are restarted.)</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.ServicesAvailable">
+            <summary>
+            Indicates if there is at least one service watcher file available
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.ClearServicesDefinition">
+            <summary>
+            Clears services definition.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.FormatServiceName(System.String,System.String,System.String)">
+            <summary>
+            Formats the Windows service name using the specified values.
+            </summary>
+            <param name="format">The string to format.</param>
+            <param name="applicationName">The application name.</param>
+            <param name="applicationIdentifier">The application identifier.</param>
+            <returns>The Windows service name.</returns>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.FormatServiceDisplayName(System.String,System.String)">
+            <summary>
+            Formats the Windows service display name using the specified values.
+            </summary>
+            <param name="format">The string to format.</param>
+            <param name="applicationName">The application name.</param>
+            <returns>The Windows service display name.</returns>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceHelper.GetServiceDefinition(System.String)">
+            <summary>
+            Gets sevice definition item by specific base name.
+            </summary>
+            <param name="baseName">Base name of service</param>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceItem">
+            <summary>
+            Class representing windows service definition item.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceItem.BaseName">
+            <summary>
+            Base name of service in definition file.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceItem.Name">
+            <summary>
+            Service name in definition file.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceItem.DisplayName">
+            <summary>
+            Display name of service in definition file.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceItem.Description">
+            <summary>
+            Description of the service in definition file.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.WinServiceItem.AssemblyName">
+            <summary>
+            Assembly name of service.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceItem.#ctor(System.Xml.XmlNode)">
+            <summary>
+            Creates instance and initializes properties from xml node.
+            </summary>
+            <param name="node">Node</param>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceItem.GetServiceName">
+            <summary>
+            Gets service name.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceItem.GetServiceDisplayName">
+            <summary>
+            Gets service display name.
+            </summary>
+        </member>
+        <member name="T:CMS.WinServiceEngine.DeleteServiceWebFarmTask">
+            <summary>
+            Web farm task for deleting external service.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.DeleteServiceWebFarmTask.ServiceDefinitionName">
+            <summary>
+            Name of the service definition to be deleted.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.DeleteServiceWebFarmTask.ExecuteTask">
+            <summary>
+            Deletes service restart file.
+            </summary>
+            <remarks>If no <see cref="P:CMS.WinServiceEngine.DeleteServiceWebFarmTask.ServiceDefinitionName"/> given, all services are deleted.</remarks>
+        </member>
+        <member name="T:CMS.WinServiceEngine.RestartServiceWebFarmTask">
+            <summary>
+            Web farm task for restarting external service.
+            </summary>
+        </member>
+        <member name="P:CMS.WinServiceEngine.RestartServiceWebFarmTask.ServiceDefinitionName">
+            <summary>
+            Name of the service definition to be restarted.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.RestartServiceWebFarmTask.ExecuteTask">
+            <summary>
+            Restarts given windows service(s).
+            </summary>
+            <remarks>If no <see cref="P:CMS.WinServiceEngine.RestartServiceWebFarmTask.ServiceDefinitionName"/> given, all services are restarted.</remarks>
+        </member>
+        <member name="T:CMS.WinServiceEngine.WinServiceSynchronization">
+            <summary>
+            Synchronization helper class for the windows service module.
+            </summary>
+        </member>
+        <member name="M:CMS.WinServiceEngine.WinServiceSynchronization.Init">
+            <summary>
+            Initializes the tasks for windows service synchronization.
+            </summary>
+        </member>
+    </members>
+</doc>

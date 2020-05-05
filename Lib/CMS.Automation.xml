@@ -1,0 +1,2348 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Automation</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Automation.AutomationAction">
+            <summary>
+            Base automation action
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationAction.AutomationManager">
+            <summary>
+            Automation manager
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationAction.RefreshObject">
+            <summary>
+            Refreshes object instance
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationAction.GetDefaultMacroResolver">
+            <summary>
+            Gets the default macro resolver.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationActionDataCollector">
+            <summary>
+            Class collecting additional data for automation actions.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataCollector.GetStepInformation(System.Int32)">
+            <summary>
+            Returns HTML representation of additional information that will be displayed in automation designer for given <paramref name="stepId"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataCollector.ProvidesStepInformation(System.Int32,System.Int32)">
+            <summary>
+            Returns <c>true</c> when step with given <paramref name="actionId"/> and <paramref name="workflowId"/> is capable of displaying additional step information.
+            If step is not capable of displaying additional step information returns <c>false</c>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataCollector.GetStepDescription(System.Int32)">
+            <summary>
+            Returns the HTML description of the automation step with given <paramref name="stepId"/>.
+            If the step does not provide any description, returns <c>null</c>.
+            </summary>
+            <param name="stepId">ID of the automation step <seealso cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/>.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataCollector.IsProcessRunning(System.Int32)">
+            <summary>
+            Returns <c>true</c> if there are any automation states for process given by <paramref name="processId"/>.
+            </summary>
+            <remarks>Result is cached for 1 minute.</remarks>
+        </member>
+        <member name="T:CMS.Automation.AutomationActionDataProvider">
+            <summary>
+            Base class for providing automation actions data that will be displayed in automation process designer.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationActionDataProvider.DisplayInformationIcon">
+            <summary>
+            Indicates whether a step should display icon for accessing additional step information which is provided by <see cref="M:CMS.Automation.AutomationActionDataProvider.GetStepInformation(System.Int32)"/> method.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataProvider.GetStepInformation(System.Int32)">
+            <summary>
+            Returns HTML representation of additional information that will be displayed in automation designer for a step specified by <paramref name="stepId"/>.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+            <remarks>
+            <para>Property <see cref="P:CMS.Automation.AutomationActionDataProvider.DisplayInformationIcon"/> must be set to <c>true</c> in the constructor to display information icon for specific action steps.</para>
+            <para>Use <seealso cref="M:CMS.Automation.AutomationActionDataProvider.GetStepInfo(System.Int32)"/> method to get step structure for specified <paramref name="stepId"/>
+            and use <seealso cref="M:CMS.Automation.AutomationActionDataProvider.GetStepParameterValue``1(CMS.WorkflowEngine.WorkflowStepInfo,System.String)"/> to get values of the step parameters.</para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataProvider.GetStepDescription(System.Int32)">
+            <summary>
+            Returns description in HTML format of the automation step specified by <paramref name="stepId"/>.
+            If the step does not provide any description, returns <c>null</c>.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+            <remarks>
+            Use <seealso cref="M:CMS.Automation.AutomationActionDataProvider.GetStepInfo(System.Int32)"/> method to get step structure for specified <paramref name="stepId"/>
+            and use <seealso cref="M:CMS.Automation.AutomationActionDataProvider.GetStepParameterValue``1(CMS.WorkflowEngine.WorkflowStepInfo,System.String)"/> to get values of the step parameters.
+            </remarks>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataProvider.GetStepInfo(System.Int32)">
+            <summary>
+            Returns <see cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/> structure based on given <paramref name="stepId"/>, <c>null</c> if not found.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionDataProvider.GetStepParameterValue``1(CMS.WorkflowEngine.WorkflowStepInfo,System.String)">
+            <summary>
+            Returns value of step parameter specified by <paramref name="stepInfo"/> and <paramref name="parameter"/> and converts it to specified type.
+            If the value is null, default value of the return type is returned.
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="stepInfo">Step object</param>
+            <param name="parameter">Parameter name</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if either of method parameters are null.</exception>
+        </member>
+        <member name="T:CMS.Automation.AutomationActionEnum">
+            <summary>
+            Automation action enumeration.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationActionEnum.Unknown">
+            <summary>
+            Unknown action.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationActionEnum.MoveToNextStep">
+            <summary>
+            Object is moved to next step.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationActionEnum.MoveToSpecificStep">
+            <summary>
+            Object is moved to specific step.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationActionEnum.MoveToPreviousStep">
+            <summary>
+            Object is moved to previous step.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.EmailAction">
+            <summary>
+            Class representing action to send e-mail
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.Recipients">
+            <summary>
+            Recipients of e-mail separated by ';' or ','.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.TemplateName">
+            <summary>
+            Template of e-mail.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.Sender">
+            <summary>
+            Sender of e-mail.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.Subject">
+            <summary>
+            Subject specifically defined for step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.Body">
+            <summary>
+            E-mail body specifically defined for step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.EmailAction.BasedOnTemplate">
+            <summary>
+            Whether is e-mail based or template or not 
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.EmailAction.Execute">
+            <summary>
+            Executes action
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.StartProcessAction">
+            <summary>
+            Class for starting automation process on contact.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.StartProcessAction.PROCESS_NAME_PARAMETER_NAME">
+            <summary>
+            Process name parameter name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.StartProcessAction.ProcessName">
+            <summary>
+            Activity title.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.StartProcessAction.Execute">
+            <summary>
+            Executes the action.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.StartProcessActionDataProvider">
+            <summary>
+            Class for providing additional data for <see cref="T:CMS.Automation.StartProcessAction"/> that will be displayed in automation process designer.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.StartProcessActionDataProvider.GetStepDescription(System.Int32)">
+            <summary>
+            Returns description in HTML format for "Start process" steps.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationActionContext">
+            <summary>
+            Automation action context. Ensures context for the automation actions block.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationActionContext.mCheckStepPermissions">
+            <summary>
+            Indicates if step permissions should be checked.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationActionContext.CheckStepPermissions">
+            <summary>
+            Indicates if step permissions should be checked.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationActionContext.CurrentCheckStepPermissions">
+            <summary>
+            Indicates if step permissions should be checked.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationActionContext.RestoreOriginalValues">
+            <summary>
+            Restores the original values to the context
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationHelper">
+            <summary>
+            Class for automation helper methods.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHelper.GetProcessStatus(CMS.WorkflowEngine.ProcessStatusEnum)">
+            <summary>
+            Returns formatted string with process status name and CSS class. Only 'Processing' status is returned without CSS class.
+            </summary>
+            <param name="processStatus">Process status</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHelper.GetTriggerName(CMS.WorkflowEngine.WorkflowTriggerTypeEnum,System.String)">
+            <summary>
+            Returns formatted trigger name.
+            </summary>
+            <param name="type">Type of trigger</param>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHelper.CreateEmptyWorkflow">
+            <summary>
+            Creates an empty workflow object with steps Start and Finished.
+            </summary>
+            <returns>Newly created instance of <see cref="T:CMS.WorkflowEngine.WorkflowInfo"/></returns>
+        </member>
+        <member name="T:CMS.Automation.AutomationLogSettings">
+            <summary>
+            Class for automation history log settings.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationLogSettings.StateObjectID">
+            <summary>
+            State object ID
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationLogSettings.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="objectType">Object type</param>
+            <param name="objectId">Object ID</param>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationTimer">
+            <summary>
+            Provides an ITask interface for the automation timing.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTimer.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Executes the automation timer.
+            </summary>
+            <param name="task">Task to process</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationValidationHelper">
+            <summary>
+            Validation methods for automation related objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationValidationHelper.ValidateHistory(CMS.Automation.AutomationHistoryInfo)">
+            <summary>
+            Performs validation for given <paramref name="history"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">When history has assigned note step.</exception>
+        </member>
+        <member name="M:CMS.Automation.AutomationValidationHelper.ValidateState(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Performs validation for given <paramref name="state"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">When state has assigned note step.</exception>
+        </member>
+        <member name="T:CMS.Automation.ObjectWorkflowTriggerProcessor">
+            <summary>
+            Custom processor for <see cref="T:CMS.Automation.ObjectWorkflowTriggerInfo"/> object type.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerProcessor.PostprocessSerializedObject(CMS.DataEngine.BaseInfo,System.String,System.Xml.XmlElement)">
+            <summary>
+            Amends <paramref name="serializedObject"/> after it was processed by <see cref="T:CMS.DataEngine.Serialization.InfoSerializer"/>.
+            </summary>
+            <param name="infoObject">Object that was serialized into <paramref name="serializedObject"/>.</param>
+            <param name="infoRelativePath">(Main) Path the <paramref name="serializedObject"/> will be stored in.</param>
+            <param name="serializedObject">Serialization form of the <paramref name="infoObject"/>.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerProcessor.PreprocessDeserializedDocument(CMS.ContinuousIntegration.Internal.CustomProcessorResult,System.Xml.XmlDocument,CMS.ContinuousIntegration.Internal.StructuredLocation)">
+            <summary>
+            Amends <paramref name="document"/> loaded from file system before it is processed by <see cref="T:CMS.DataEngine.Serialization.InfoDeserializer"/>.
+            </summary>
+            <param name="processorResult">Object carrying information of ongoing deserialization.</param>
+            <param name="document">XML file loaded from the file system.</param>
+            <param name="structuredLocation">Location of object's main file and its additional parts in repository.</param>
+        </member>
+        <member name="T:CMS.Automation.ProcessDisabledException">
+            <summary>
+            Exception which is thrown when process cannot be started because of its disabled state.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ProcessDisabledException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="message">Message</param>
+        </member>
+        <member name="T:CMS.Automation.ProcessRecurrenceException">
+            <summary>
+            Exception which is thrown when process recurrence check fails and process is not started.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ProcessRecurrenceException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="message">Message</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationActionHandler">
+            <summary>
+            Automation action handler
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationEventArgs">
+            <summary>
+            Automation event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationEventArgs.InfoObject">
+            <summary>
+            Edited version of the object
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationEventArgs.StateObject">
+            <summary>
+            State object
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationEventArgs.PreviousStep">
+            <summary>
+            Previous step
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationEvents">
+            <summary>
+            Automation events
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationEvents.MoveToNextStep">
+            <summary>
+            Fires when the object is moved to next step
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationEvents.MoveToPreviousStep">
+            <summary>
+            Fires when the object is moved to previous step
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationEvents.Action">
+            <summary>
+            Fires when an action is executed
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationEvents.ProcessTrigger">
+            <summary>
+            Fires when a trigger is processed
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationHandler">
+            <summary>
+            Automation handler
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHandler.StartEvent(CMS.DataEngine.BaseInfo,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationProcessTriggerEventArgs">
+            <summary>
+            Automation process trigger event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationProcessTriggerEventArgs.Options">
+            <summary>
+            Trigger options.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationProcessTriggerEventArgs.TriggerInfo">
+            <summary>
+            Trigger info object.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationProcessTriggerHandler">
+            <summary>
+            Automation process trigger handler
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationProcessTriggerHandler.StartEvent(CMS.Automation.ObjectWorkflowTriggerInfo,System.Collections.Generic.IEnumerable{CMS.Automation.TriggerOptions})">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="triggerInfo">Trigger info object</param>
+            <param name="options">Trigger options</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationMethods">
+            <summary>
+            Automation methods - wrapping methods for macro resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationMethods.PassedThroughActions(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if process passed through one/all of the selected automation actions in history.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationMethods.PassedThroughSteps(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if process passed through one/all of the selected automation steps in history.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationTransformationFunctions">
+            <summary>
+            Functions for automation macro methods.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTransformationFunctions.PassedThroughActions(System.Object,System.String,System.Boolean)">
+            <summary>
+            Returns true if process had passed through one/all selected automation actions.
+            </summary>
+            <param name="state">Process instance to check</param>
+            <param name="actions">Automation action names separated with a semicolon</param>
+            <param name="allActions">If true all actions must have been passed.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTransformationFunctions.PassedThroughSteps(System.Object,System.String,System.Boolean)">
+            <summary>
+            Returns true if process had passed through one/all specified automation steps.
+            </summary>
+            <param name="state">Process instance to check</param>
+            <param name="steps">Automation step names separated with a semicolon</param>
+            <param name="allSteps">If true all specified steps must have been passed.</param>
+        </member>
+        <member name="T:CMS.Automation.AbstractAutomationManager`1">
+            <summary>
+            Class for managing the marketing automation.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AbstractAutomationManager`1.CheckPermissions">
+            <summary>
+            Indicates if step permissions should be checked when the step is moved.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AbstractAutomationManager`1.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetFirstStep(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns start step for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetFinishedStep(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns finished step for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetObjectProcess(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns the process for the specified object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetStepInfo(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets step information for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousStepInfo(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns previous step information.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousStepInfo(`0,CMS.Automation.AutomationStateInfo,System.Boolean)">
+            <summary>
+            Returns previous step information.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="markAsUsed">Indicates if the history should be marked as used.</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousSteps(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns list of previous steps for current process
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetNextSteps(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns list of next steps.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.LogProcessHistory(CMS.Automation.AutomationLogSettings)">
+            <summary>
+            Logs specified action in the object workflow history record.
+            </summary>
+            <param name="settings">Log settings</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.StartProcess(`0,System.Int32,CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Starts process on given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="processId">Process ID</param>
+            <param name="trigger">Trigger which initiated the process</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.StartProcess(System.Collections.Generic.IEnumerable{CMS.Automation.AutomationProcessItem{`0}},System.Int32,CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Starts process on given objects.
+            </summary>
+            <param name="objects">Object instances</param>
+            <param name="processId">Process ID</param>
+            <param name="trigger">Trigger which initiated the process</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.RemoveProcess(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Removes process from given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToNextStep(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the next step and returns new step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToNextStep(System.Collections.Generic.IEnumerable{CMS.Automation.AutomationStateInfo{`0}})">
+            <summary>
+            Moves the specified object's collection to the next step.
+            </summary>
+            <param name="stateObjects">Collection of automation states to move to the next step</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToPreviousStep(`0,CMS.Automation.AutomationStateInfo,System.String)">
+            <summary>
+            Moves the specified object to the previous step and returns the step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToPreviousStep(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String)">
+            <summary>
+            Moves the specified object to the specified previous step and returns the step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Step to which should be specified object moved</param>
+            <param name="comment">Action comment</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToFirstStep(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the first step and returns the step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToFinishedStep(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves object directly to finished step. (Finishes the process without going through all the steps.)
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToSpecificStep(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the specified step and returns workflow step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Step to which should be specified object moved</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+            <remarks>The return step can be different than the original given step.</remarks>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToSpecificNextStep(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the specified next step and returns workflow step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Step to which should be specified object moved</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+            <remarks>The return step can be different than the original given step.</remarks>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.SetActionStatus(`0,CMS.Automation.AutomationStateInfo,System.String)">
+            <summary>
+            Sets action state
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="status">Status string</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetActionStatus(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets action state
+            </summary>
+            <param name="infoObj">Info object</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.CheckStepPermissions(`0,CMS.Automation.AutomationStateInfo,CMS.Automation.AutomationActionEnum)">
+            <summary>
+            Returns true if given user can move given object to the previous/next step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="action">Automation action</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetUsersWhoCanMove(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.Definitions.SourcePoint,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns list of users who can move object to the next step. Users who are approved due to generic roles are not included to the result.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="sourcePoint">Step source point (for steps with multiple outgoing transitions)</param>
+            <param name="where">Where condition</param>
+            <param name="orderBy">Order by clause</param>
+            <param name="topN">Top N items</param>
+            <param name="columns">List of columns to return</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetUsersWhoCanMove(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.Definitions.SourcePoint,System.Boolean,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns list of all the users who can move object to the next step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="sourcePoint">Step source point (for steps with multiple outgoing transitions)</param>
+            <param name="assigned">Indicates if users assigned to the workflow steps should be get. Users in the generic roles are not included</param>
+            <param name="managers">Indicates if users who have the manage workflow permission should be get</param>
+            <param name="administrators">Indicates if users who are global administrators should be get</param>
+            <param name="where">Where condition</param>
+            <param name="orderBy">Order by clause</param>
+            <param name="topN">Top N items</param>
+            <param name="columns">List of columns to return</param>
+            <returns>Returns defined role users, Global administrators and users who have the Manage processes permission for the object</returns>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetFirstStepInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns first step for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetFinishedStepInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns finished step for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetObjectProcessInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Returns the process for the specified object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetStepInfoInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets step information for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousStepInfoInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.Boolean)">
+            <summary>
+            Returns previous step information for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Current workflow step</param>
+            <param name="markAsUsed">Indicates if the history should be marked as used.</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousStepsInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo)">
+            <summary>
+            Returns list of previous steps for current cycle
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Current workflow step</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetPreviousStepInfoInternal(CMS.Automation.AutomationHistoryInfo,System.Int32,System.Boolean)">
+            <summary>
+            Gets previous workflow step
+            </summary>
+            <param name="history">History</param>
+            <param name="workflowId">Workflow ID</param>
+            <param name="markAsUsed">Indicates if the history should be marked as used.</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetForwardHistoriesInternal(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets histories between two given for specified object
+            </summary>
+            <param name="startHistoryId">Start history ID</param>
+            <param name="endHistoryId">End history ID</param>
+            <param name="stateId">State object ID</param>
+            <param name="topN">Top N results</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetNextStepInfoInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.Membership.UserInfo)">
+            <summary>
+            Returns list of next steps for given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Workflow step</param>
+            <param name="user">User</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.StartProcessInternal(System.Collections.Generic.IEnumerable{CMS.Automation.AutomationProcessItem{`0}},System.Int32,CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Starts process on given object.
+            </summary>
+            <param name="infoObjects">Object instances</param>
+            <param name="processId">Process ID</param>
+            <param name="trigger">Trigger which initiated the process</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.StartProcessInternal(`0,System.Int32,CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Starts process on given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="processId">Process ID</param>
+            <param name="trigger">Trigger which initiated the process</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.RemoveProcessInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Removes process from given object.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.CheckRecurrenceInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.ProcessRecurrenceTypeEnum)">
+            <summary>
+            Check automation process recurrence settings
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="type">Recurrence type</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToNextStepInternal(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the next step and returns new step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToPreviousStepInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String)">
+            <summary>
+            Moves the specified object to the previous step and returns the new step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Step to which should be specified object moved</param>
+            <param name="comment">Action comment</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MarkReverseHistoriesInternal(CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.Int32)">
+            <summary>
+            Marks workflow histories as used when moving to previous specific step.
+            </summary>
+            <param name="previousStep">Previous workflow step</param>
+            <param name="currentStep">Current workflow step</param>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToFirstStepInternal(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves the specified object to the first step and returns the step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToSpecificStepInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum,CMS.Automation.AutomationActionEnum)">
+            <summary>
+            Moves the specified object to the specified step and returns workflow step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="step">Step to which should be specified object moved</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+            <param name="action">Action context</param>
+            <remarks>The return step can be different than the original given step.</remarks>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToStepInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum,System.Boolean)">
+            <summary>
+            Moves the specified object to the specified step and returns the step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="currentStep">Current workflow step of the object</param>
+            <param name="step">Target workflow step of the object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+            <param name="handleActions">Indicates if step actions should be handled</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveStepInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowStepInfo,System.String)">
+            <summary>
+            Moves the specified object to the first step without automatic transition and returns the final step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="currentStep">Current workflow step of the object</param>
+            <param name="comment">Action comment</param>
+            <remarks>The return step can be different than the original target step.</remarks>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.MoveToFinishedStepInternal(`0,CMS.Automation.AutomationStateInfo,System.String,CMS.WorkflowEngine.WorkflowTransitionTypeEnum)">
+            <summary>
+            Moves object directly to finished step. (Finishes the process without going through all the steps.)
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="comment">Action comment</param>
+            <param name="transitionType">Type of transition (Use Manual when the action is performed by the user, not the process.)</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.CheckStepPermissionsInternal(`0,CMS.Automation.AutomationStateInfo,CMS.Automation.AutomationActionEnum)">
+            <summary>
+            Returns true if given user can move given object to previous/next step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="action">Automation action</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetUsersWhoCanMoveInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.Definitions.SourcePoint,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns list of users who can move object to the next step. Users who are approved due to generic roles are not included to the result.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="sourcePoint">Step source point (for steps with multiple outgoing transitions)</param>
+            <param name="where">Where condition</param>
+            <param name="orderBy">Order by clause</param>
+            <param name="topN">Top N items</param>
+            <param name="columns">List of columns to return</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetUsersWhoCanMoveInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.Definitions.SourcePoint,System.Boolean,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns list of all the users who can move object to the next step.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="sourcePoint">Step source point (for steps with multiple outgoing transitions)</param>
+            <param name="assigned">Indicates if users assigned to the workflow steps should be get. Users in the generic roles are not included</param>
+            <param name="managers">Indicates if users who have the manage permission should be get</param>
+            <param name="administrators">Indicates if users who are global administrators should be get</param>
+            <param name="where">Where condition</param>
+            <param name="orderBy">Order by clause</param>
+            <param name="topN">Top N items</param>
+            <param name="columns">List of columns to return</param>
+            <returns>Returns defined role users, Global administrators and users who have the Manage processes permission for the object</returns>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.SetActionStatusInternal(`0,CMS.Automation.AutomationStateInfo,System.String)">
+            <summary>
+            Sets action state
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="status">Status string</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetActionStatusInternal(`0,CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets action state
+            </summary>
+            <param name="infoObj">Info object</param>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetEvalResolverInternal(`0,CMS.Automation.AutomationStateInfo,CMS.WorkflowEngine.WorkflowInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.Membership.UserInfo)">
+            <summary>
+            Gets resolver for evaluation of transitions and source points
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="workflow">Workflow</param>
+            <param name="step">Workflow step</param>
+            <param name="user">User</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetEmailResolver(`0,CMS.Automation.AutomationStateInfo,CMS.Membership.UserInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowInfo,System.String,System.String)">
+            <summary>
+            Get resolver for e-mail sending.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="user">User</param>
+            <param name="originalStep">Original workflow step</param>
+            <param name="currentStep">Current workflow step</param>
+            <param name="workflow">Workflow</param>
+            <param name="action">Automation action string representation</param>
+            <param name="comment">Action comment</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.GetEmailResolverInternal(`0,CMS.Automation.AutomationStateInfo,CMS.Membership.UserInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowStepInfo,CMS.WorkflowEngine.WorkflowInfo,System.String,System.String)">
+            <summary>
+            Get resolver for e-mail sending.
+            </summary>
+            <param name="infoObj">Object instance</param>
+            <param name="stateObj">State object</param>
+            <param name="userInfo">User info that performed the action</param>
+            <param name="originalStep">Original workflow step</param>
+            <param name="currentStep">Current workflow step</param>
+            <param name="workflow">Workflow</param>
+            <param name="action">Workflow action string representation</param>
+            <param name="comment">Action comment</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.ProcessActionInternal(CMS.WorkflowEngine.WorkflowActionEventArgs{`0,CMS.Automation.AutomationStateInfo,CMS.Automation.AutomationActionEnum})">
+            <summary>
+            Processes action connected to given step.
+            </summary>
+            <param name="arguments">Action arguments</param>
+        </member>
+        <member name="M:CMS.Automation.AbstractAutomationManager`1.TrySetStateCustomData(System.String,CMS.Base.StringSafeDictionary{System.Object},CMS.Helpers.ContainerCustomData)">
+            <summary>
+            Copy data under specific key from triggerData to stateData. Null items or already existing ones will be ignored.
+            </summary>
+            <param name="key">Specific key</param>
+            <param name="triggerData">Trigger data</param>
+            <param name="stateData">State data</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationManager">
+            <summary>
+            Class for managing the marketing automation.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationManager.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationManager.#ctor(CMS.Membership.UserInfo)">
+            <summary>
+            Constructor - Creates automation manager.
+            </summary>
+            <param name="user">User</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationManager.Init(CMS.Membership.UserInfo)">
+            <summary>
+            Initializes the manager
+            </summary>
+            <param name="user">User to run with</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationManager.ChangeManagerTypeTo(System.Type)">
+            <summary>
+            Changes the manager type to the given type
+            </summary>
+            <param name="newType">New manager type</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationManager.GetInstance(CMS.Membership.UserInfo)">
+            <summary>
+            Gets the instance of the manager for the given user.
+            </summary>
+            <remarks>
+            When calling other methods of <see cref="T:CMS.Automation.AutomationManager"/> (for example <see cref="M:CMS.Automation.AbstractAutomationManager`1.StartProcess(`0,System.Int32,CMS.Automation.ObjectWorkflowTriggerInfo)"/>) permissions are checked for the given user.
+            If user is not granted required permissions automation process doesn't work correctly.
+            </remarks>
+            <param name="user">User whose context is used. See remarks for more information.</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationProcessItem`1">
+            <summary>
+            Wrapper for starting automation process for given <see cref="P:CMS.Automation.AutomationProcessItem`1.InfoObject"/> object with additional data <see cref="P:CMS.Automation.AutomationProcessItem`1.AdditionalData"/> collection
+            </summary>
+            <typeparam name="InfoType">Info object type</typeparam>
+        </member>
+        <member name="P:CMS.Automation.AutomationProcessItem`1.InfoObject">
+            <summary>
+            Gets or sets the object for which is automation started
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationProcessItem`1.AdditionalData">
+            <summary>
+            Gets or sets additional data for start automation
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationHandlers">
+            <summary>
+            Workflow handlers
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHandlers.Init">
+            <summary>
+            Initializes the marketing automation handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHandlers.ClearTriggersCache(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Removes all triggers from cache.      
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHandlers.Workflow_Update_Before(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Fires before workflow insert or update.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationModule">
+            <summary>
+            Represents the automation module.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationModule.AUTOMATION_EMAIL_TEMPLATE_TYPE_NAME">
+            <summary>
+            Name of email template type for automation.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationModuleMetadata">
+            <summary>
+            Represents the Automation module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationHistoryInfo">
+            <summary>
+            AutomationHistoryInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationHistoryInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationHistoryInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryID">
+            <summary>
+            ID of history record.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryStepID">
+            <summary>
+            Original step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryStepDisplayName">
+            <summary>
+            Original step display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryStepName">
+            <summary>
+            Original step name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryStepType">
+            <summary>
+            Original step type.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryTargetStepID">
+            <summary>
+            Target step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryTargetStepDisplayName">
+            <summary>
+            Target step display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryTargetStepName">
+            <summary>
+            Target step name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryTransitionType">
+            <summary>
+            Type of transition between original step and target step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryWorkflowID">
+            <summary>
+            Workflow identification.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryApprovedByUserID">
+            <summary>
+            User that approved the object.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryApprovedWhen">
+            <summary>
+            Date and time of approval.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryComment">
+            <summary>
+            Comment of approval.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryWasRejected">
+            <summary>
+            Whether the object was rejected.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryRejected">
+            <summary>
+            Whether history was rejected.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryTargetStepType">
+            <summary>
+            Target step type.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationHistoryInfo.HistoryStateID">
+            <summary>
+            Process state identification.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty AutomationHistoryInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new AutomationHistoryInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationHistoryInfoProvider">
+            <summary>
+            Class providing AutomationHistoryInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetAutomationHistories">
+            <summary>
+            Returns all automation history records.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetAutomationHistoryInfo(System.Int32)">
+            <summary>
+            Returns automation history with specified ID.
+            </summary>
+            <param name="historyId">Automation history ID.</param>        
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetAutomationHistoryInfo(System.String)">
+            <summary>
+            Returns automation history with specified name.
+            </summary>
+            <param name="historyName">Automation history name.</param>                
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.SetAutomationHistoryInfo(CMS.Automation.AutomationHistoryInfo)">
+            <summary>
+            Sets (updates or inserts) specified automation history.
+            </summary>
+            <param name="historyObj">Automation history to be set.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.DeleteAutomationHistoryInfo(CMS.Automation.AutomationHistoryInfo)">
+            <summary>
+            Deletes specified automation history.
+            </summary>
+            <param name="historyObj">Automation history to be deleted.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.DeleteAutomationHistoryInfo(System.Int32)">
+            <summary>
+            Deletes automation history with specified ID.
+            </summary>
+            <param name="historyId">Automation history ID.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetLastApprovalActionFromStep(System.Int32,System.Int32)">
+            <summary>
+            Gets last approval action from given step
+            </summary>
+            <param name="stepId">Step ID</param>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetLastApprovalActionToStep(System.Int32,System.Int32)">
+            <summary>
+            Gets last approval action to given step
+            </summary>
+            <param name="stepId">Step ID</param>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetLastApprovalActionFromFirstStep(System.Int32)">
+            <summary>
+            Gets last approval action from first step
+            </summary>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.MarkRejected(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Marks automation histories as used when rejecting to specific step.
+            </summary>
+            <param name="startHistoryId">Start history ID</param>
+            <param name="endHistoryId">End history ID</param>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.DeleteObjectsHistories(CMS.DataEngine.IWhereCondition)">
+            <summary>
+            Removes histories.
+            </summary>
+            <param name="where">Where condition</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetLastApprovalActionInternal(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Gets last approval action to/from given step
+            </summary>
+            <param name="stepId">Step ID</param>
+            <param name="stateId">State object ID</param>
+            <param name="startStep">Indicates if given step is start step</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationHistoryInfoProvider.GetLastApprovalActionFromFirstStepInternal(System.Int32)">
+            <summary>
+            Gets last approval action from first step
+            </summary>
+            <param name="stateId">State object ID</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationStateInfo`1">
+            <summary>
+            AutomationStateInfo data container class.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo`1.StateObject">
+            <summary>
+            Object to process automation
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.AutomationStateInfo">
+            <summary>
+            AutomationStateInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationStateInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationStateInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationStateInfo.mStateCustomData">
+            <summary>
+            State custom data.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationStateInfo.mStateStepTimeout">
+            <summary>
+            Workflow state step timeout
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateID">
+            <summary>
+            ID of state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateGUID">
+            <summary>
+            GUID of state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateStepID">
+            <summary>
+            Step of the state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateStepTimeout">
+            <summary>
+            Step timeout date (for steps with timeout).
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateObjectID">
+            <summary>
+            Object under state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateObjectType">
+            <summary>
+            Type of object under state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateWorkflowID">
+            <summary>
+            Workflow of the state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateSiteID">
+            <summary>
+            Site identifier of state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateActionStatus">
+            <summary>
+            Action status flag.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateStatus">
+            <summary>
+            Status of the state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateCreated">
+            <summary>
+            Creation time of the state.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateUserID">
+            <summary>
+            ID of the user who started automation process.
+            </summary>
+            <remarks>0 indicates process was started automatically.</remarks>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateLastModified">
+            <summary>
+            Time of the last modification.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationStateInfo.StateCustomData">
+            <summary>
+            State custom data.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.SetValue(System.String,System.Object)">
+            <summary>
+            Sets value of the specified column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Value</param>
+            <returns>Returns true if the operation was successful</returns>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.RegisterProperties">
+            <summary>
+            Registers properties of this object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty AutomationStateInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new AutomationStateInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationStateInfoProvider">
+            <summary>
+            Class providing AutomationStateInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetAutomationStates">
+            <summary>
+            Returns all automation states records.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetAutomationStateInfo(System.Int32)">
+            <summary>
+            Returns state with specified ID.
+            </summary>
+            <param name="stateId">State ID.</param>        
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetAutomationStateInfo(System.Guid)">
+            <summary>
+            Returns state with specified GUID.
+            </summary>
+            <param name="stateGuid">State GUID.</param>        
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.SetAutomationStateInfo(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Sets (updates or inserts) specified state.
+            </summary>
+            <param name="stateObj">state to be set.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.DeleteAutomationStateInfo(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Deletes specified state.
+            </summary>
+            <param name="stateObj">state to be deleted.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.DeleteAutomationStateInfo(System.Int32)">
+            <summary>
+            Deletes state with specified ID.
+            </summary>
+            <param name="stateId">state ID.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.DeleteAutomationStates(System.String,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Deletes automation states associated with specified object.
+            </summary>
+            <param name="objectType">Object type</param>
+            <param name="ids">List of IDs</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetProcessInstanceStatus(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets automation process instance status
+            </summary>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.ClearHashtables(System.Boolean)">
+            <summary>
+            Clear hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.ProcessWebFarmTask(System.String,System.String,System.Byte[])">
+            <summary>
+            Runs the processing of specific web farm task for current provider
+            </summary>
+            <param name="actionName">Action name</param>
+            <param name="data">Custom task data</param>
+            <param name="binary">Binary data</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.SetInfo(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.DeleteInfo(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.DeleteAutomationStatesInternal(System.String,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Deletes automation states associated with specified object. Also removes scheduled tasks associated to these automation states.
+            </summary>
+            <param name="objectType">Object type</param>
+            <param name="ids">List of IDs</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetProcessInstanceStatusInternal(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Gets automation process instance status.
+            </summary>
+            <param name="state">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.GetStatusKey(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets status key
+            </summary>
+            <param name="objectType">Object type</param>
+            <param name="objectId">Object ID</param>
+            <param name="processId">Process ID</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.RemoveProcessInstanceStatusInternal(CMS.Automation.AutomationStateInfo)">
+            <summary>
+            Removes status from hashtable
+            </summary>
+            <param name="stateObj">State object</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.BulkMoveAutomationStateToTargetContact(System.Int32,System.Int32)">
+            <summary>
+            Moves all automation states assigned to contact identified by given <paramref name="sourceContactID"/> to the state assigned to contact identified by <paramref name="targetContactID"/>.
+            </summary>
+            <remarks>
+            This method should be used only in the merging process. Note that there is no consistency check on whether the states with given IDs exist or not. 
+            Caller of this method should perform all the neccessary checks prior to the method invocation.
+            </remarks>
+            <param name="sourceContactID">Identifier of the contact the assigned state is moved from</param>
+            <param name="targetContactID">Identifier of the contact the assigned state is moved to</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationStateInfoProvider.BulkInsertAutomationState(System.Collections.Generic.IEnumerable{CMS.Automation.AutomationStateInfo})">
+            <summary>
+            Inserts all automation states given by <paramref name="states" /> collection into database.
+            <see cref="P:CMS.Automation.AutomationStateInfo.StateCreated"/> will be set to the insertion time.
+            </summary>
+            <param name="states">Collection of automation states to insert into database</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationTemplateInfo">
+            <summary>
+            Data container class for <see cref="T:CMS.Automation.AutomationTemplateInfo"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationTemplateInfo.OBJECT_TYPE">
+            <summary>
+            Object type.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.AutomationTemplateInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateID">
+            <summary>
+            Template ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateDisplayName">
+            <summary>
+            Template display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateDescription">
+            <summary>
+            Template description.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateIconClass">
+            <summary>
+            Template icon class.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateConfiguration">
+            <summary>
+            Template configuration.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateGuid">
+            <summary>
+            Template guid.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.AutomationTemplateInfo.TemplateLastModified">
+            <summary>
+            Template last modified.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfo.#ctor">
+            <summary>
+            Creates an empty instance of the <see cref="T:CMS.Automation.AutomationTemplateInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Creates a new instances of the <see cref="T:CMS.Automation.AutomationTemplateInfo"/> class from the given <see cref="T:System.Data.DataRow"/>.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationTemplateInfoProvider">
+            <summary>
+            Class providing <see cref="T:CMS.Automation.AutomationTemplateInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:CMS.Automation.AutomationTemplateInfoProvider"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.GetAutomationTemplates">
+            <summary>
+            Returns a query for all the <see cref="T:CMS.Automation.AutomationTemplateInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.GetAutomationTemplateInfo(System.Int32)">
+            <summary>
+            Returns <see cref="T:CMS.Automation.AutomationTemplateInfo"/> with specified ID.
+            </summary>
+            <param name="id"><see cref="T:CMS.Automation.AutomationTemplateInfo"/> ID.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.SetAutomationTemplateInfo(CMS.Automation.AutomationTemplateInfo)">
+            <summary>
+            Sets (updates or inserts) specified <see cref="T:CMS.Automation.AutomationTemplateInfo"/>.
+            </summary>
+            <param name="infoObj"><see cref="T:CMS.Automation.AutomationTemplateInfo"/> to be set.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.DeleteAutomationTemplateInfo(CMS.Automation.AutomationTemplateInfo)">
+            <summary>
+            Deletes specified <see cref="T:CMS.Automation.AutomationTemplateInfo"/>.
+            </summary>
+            <param name="infoObj"><see cref="T:CMS.Automation.AutomationTemplateInfo"/> to be deleted.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateInfoProvider.DeleteAutomationTemplateInfo(System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Automation.AutomationTemplateInfo"/> with specified ID.
+            </summary>
+            <param name="id"><see cref="T:CMS.Automation.AutomationTemplateInfo"/> ID.</param>
+        </member>
+        <member name="T:CMS.Automation.ObjectWorkflowTriggerInfo">
+            <summary>
+            ObjectWorkflowTriggerInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.ObjectWorkflowTriggerInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.ObjectWorkflowTriggerInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerID">
+            <summary>
+            Trigger ID
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerGUID">
+            <summary>
+            Trigger GUID
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerLastModified">
+            <summary>
+            Trigger last modified
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerDisplayName">
+            <summary>
+            Trigger display name
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerMacroCondition">
+            <summary>
+            Trigger macro condition
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerType">
+            <summary>
+            Trigger type
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerWorkflowID">
+            <summary>
+            Trigger workflow ID
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerObjectType">
+            <summary>
+            Object type trigger can be applied to.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerTargetObjectType">
+            <summary>
+            Type of concrete object of trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerTargetObjectID">
+            <summary>
+            ID of concrete object of trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.TriggerParameters">
+            <summary>
+            Parameters of trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.EncodedInterval">
+            <summary>
+            Gets string encoded interval for time based triggers.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.ObjectWorkflowTriggerInfo.Interval">
+            <summary>
+            Gets interval for time based triggers.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.UpdateData">
+            <summary>
+            Updates the object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.InsertData">
+            <summary>
+            Inserts the object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.DeleteData">
+            <summary>
+            Deletes the object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty ObjectWorkflowTriggerInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new ObjectWorkflowTriggerInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="T:CMS.Automation.ObjectWorkflowTriggerInfoProvider">
+            <summary>
+            Class providing ObjectWorkflowTriggerInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.GetObjectWorkflowTriggers">
+            <summary>
+            Returns all object workflow triggers.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.GetObjectWorkflowTriggerInfo(System.Int32)">
+            <summary>
+            Returns ObjectWorkflowTrigger with specified ID.
+            </summary>
+            <param name="objectWorkflowTriggerId">ObjectWorkflowTrigger ID.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.SetObjectWorkflowTriggerInfo(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Sets (updates or inserts) specified ObjectWorkflowTrigger.
+            </summary>
+            <param name="objectWorkflowTriggerObj">ObjectWorkflowTrigger to be set.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.DeleteObjectWorkflowTriggerInfo(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Deletes specified ObjectWorkflowTrigger.
+            </summary>
+            <param name="objectWorkflowTriggerObj">ObjectWorkflowTrigger to be deleted.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.DeleteObjectWorkflowTriggerInfo(System.Int32)">
+            <summary>
+            Deletes ObjectWorkflowTrigger with specified ID.
+            </summary>
+            <param name="objectWorkflowTriggerId">ObjectWorkflowTrigger ID.</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.DeleteObjectsTriggers(System.String,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Removes triggers associated to selected objects of given type.
+            </summary>
+            <param name="objectType">Object type</param>
+            <param name="ids">List of IDs</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.SetInfo(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.DeleteInfo(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.Clear(System.String,System.Boolean)">
+            <summary>
+            Clears hash tables.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectWorkflowTriggerInfoProvider.ProcessWebFarmTask(System.String,System.String,System.Byte[])">
+            <summary>
+            Runs the processing of specific web farm task for current provider.
+            </summary>
+            <param name="actionName">Action name</param>
+            <param name="data">Custom data</param>
+            <param name="binary">Binary data</param>
+        </member>
+        <member name="T:CMS.Automation.AutomationTemplateManager">
+            <summary>
+            Class for managing <see cref="T:CMS.Automation.AutomationTemplateInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.UpsertConfigurationFromWorkflow(CMS.Automation.AutomationTemplateInfo,CMS.WorkflowEngine.WorkflowInfo)">
+            <summary>
+            Creates configuration (steps, transitions and triggers) from given <paramref name="workflow"/> and inserts it to given <paramref name="template"/>.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="template"/> or <paramref name="workflow"/> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when given <paramref name="workflow"/> is not automation process.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of <see cref="T:CMS.Automation.AutomationTemplateInfo"/> failed.</exception>
+            <param name="template">Automation template where configuration is inserted.</param>
+            <param name="workflow">Workflow from which data are loaded.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateAutomationProcessFromTemplate(CMS.Automation.AutomationTemplateInfo,CMS.MacroEngine.MacroIdentityOption)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WorkflowEngine.WorkflowInfo"/> in database with same steps, transitions and triggers as in given <paramref name="template"/>.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="template"/> is <c>null</c>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of <see cref="T:CMS.WorkflowEngine.WorkflowInfo"/> or other objects failed.</exception>
+            <param name="template">Template from which data are loaded.</param>
+            <param name="macroIdentityOption">Identity option used for macro signing.</param>
+            <returns>Created instance of <see cref="T:CMS.WorkflowEngine.WorkflowInfo"/>.</returns>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateTemplateConfiguration(CMS.WorkflowEngine.WorkflowInfo)">
+            <summary>
+            Returns new <see cref="T:CMS.Automation.TemplateConfiguration"/> object with steps, transitions and triggers of given <paramref name="workflow"/>.
+            </summary>
+            <exception cref="T:System.ArgumentException">Thrown when data from <paramref name="workflow"/> can't be loaded to template configuration.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of template configuration failed.</exception>
+            <param name="workflow">Info object from which data is loaded.</param>
+            <returns>New template configuration with loaded data.</returns>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateTemplateConfigurationStep(CMS.WorkflowEngine.WorkflowStepInfo,CMS.Automation.TemplateConfigurationTranslator)">
+            <summary>
+            Returns new <see cref="T:CMS.Automation.TemplateConfigurationStep"/> with data from <paramref name="workflowStep"/>.
+            </summary>
+            <param name="workflowStep">Info object from which data are loaded.</param>
+            <param name="translator">Provides used translations between identifiers.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of <see cref="T:CMS.Automation.TemplateConfigurationStep"/> failed.</exception>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateTemplateConfigurationTransition(CMS.WorkflowEngine.WorkflowTransitionInfo,CMS.Automation.TemplateConfigurationTranslator)">
+            <summary>
+            Returns new <see cref="T:CMS.Automation.TemplateConfigurationTransition"/> with data from <paramref name="workflowTransition"/>.
+            </summary>
+            <param name="workflowTransition">Info object from which data are loaded.</param>
+            <param name="translator">Provides used translations between identifiers.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of <see cref="T:CMS.Automation.TemplateConfigurationTransition"/> failed.</exception>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateTemplateConfigurationTrigger(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Returns new <see cref="T:CMS.Automation.TemplateConfigurationTrigger"/> with data from <paramref name="workflowTrigger"/>.
+            </summary>
+            <param name="workflowTrigger">Info object from which data are loaded.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when loading of target object name from <paramref name="workflowTrigger"/> failed.</exception>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateWorkflowConfiguration(CMS.WorkflowEngine.WorkflowInfo,CMS.Automation.TemplateConfiguration,CMS.MacroEngine.MacroIdentityOption)">
+            <summary>
+            Creates steps, transitions and triggers representing given <paramref name="templateConfiguration"/> for given <paramref name="workflow"/>. All macros in created objects are signed using given <paramref name="macroIdentityOption"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of workflow configuration failed.</exception>
+            <param name="workflow">Workflow for which steps, transitions and triggers will be created.</param>
+            <param name="templateConfiguration">Containing configuration data to create.</param>
+            <param name="macroIdentityOption">Identity option used for macro signing.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateWorkflowStep(System.Int32,CMS.Automation.TemplateConfigurationStep,CMS.Automation.TemplateConfigurationTranslator,CMS.MacroEngine.MacroIdentityOption)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/> for workflow given by <paramref name="workflowId"/>, with data from given <paramref name="templateStep"/>. Macros in step are resigned using given <paramref name="macroIdentityOption"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of new <see cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/> instance failed.</exception>
+            <param name="workflowId">ID of workflow to which step belongs.</param>
+            <param name="templateStep">Containing step data to create.</param>
+            <param name="translator">Provides used translations between identifiers.</param>
+            <param name="macroIdentityOption">Identity option used for macro signing.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateWorkflowTransition(System.Int32,CMS.Automation.TemplateConfigurationTransition,CMS.Automation.TemplateConfigurationTranslator)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WorkflowEngine.WorkflowTransitionInfo"/> for workflow given by <paramref name="workflowId"/>, with data from given <paramref name="templateTransition"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of new <see cref="T:CMS.WorkflowEngine.WorkflowTransitionInfo"/> instance failed.</exception>
+            <param name="workflowId">ID of workflow to which transition belongs.</param>
+            <param name="templateTransition">Containing transition data to create.</param>
+            <param name="translator">Provides used translations between identifiers.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.CreateWorkflowTrigger(System.Int32,CMS.Automation.TemplateConfigurationTrigger,CMS.MacroEngine.MacroIdentityOption)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Automation.ObjectWorkflowTriggerInfo"/> for workflow given by <paramref name="workflowId"/>, with data from given <paramref name="templateTrigger"/>. Macros in step are resigned using given <paramref name="macroIdentityOption"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when creating of new <see cref="T:CMS.Automation.ObjectWorkflowTriggerInfo"/> instance failed.</exception>
+            <param name="workflowId">ID of workflow to which trigger belongs.</param>
+            <param name="templateTrigger">Containing trigger data to create.</param>
+            <param name="macroIdentityOption">Identity option used for macro signing.</param>
+        </member>
+        <member name="M:CMS.Automation.AutomationTemplateManager.TranslateStepDefinition(CMS.WorkflowEngine.Definitions.Step,CMS.Automation.TemplateConfigurationTranslator)">
+            <summary>
+            Translates identifiers of all source and definition points in given <paramref name="step"/> to new unique identifiers.
+            </summary>
+            <param name="step">Step definition.</param>
+            <param name="translator">Provides used translations between identifiers.</param>
+            <returns>Step definition with translated identifiers.</returns>
+        </member>
+        <member name="T:CMS.Automation.TemplateConfiguration">
+            <summary>
+            Represents configuration of a marketing automation template.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfiguration.RecurrenceType">
+            <summary>
+            Type of recurrence.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfiguration.Steps">
+            <summary>
+            Steps used in a marketing automation template.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfiguration.Transitions">
+            <summary>
+            Transitions used in a marketing automation template.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfiguration.Triggers">
+            <summary>
+            Triggers used in a marketing automation template.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.TemplateConfigurationStep">
+            <summary>
+            Represents single automation step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.DisplayName">
+            <summary>
+            Display name of a step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.CodeName">
+            <summary>
+            Code name of a step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.Id">
+            <summary>
+            ID of a step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.Type">
+            <summary>
+            Type of a step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.Definition">
+            <summary>
+            Step definition.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.ActionGuid">
+            <summary>
+            GUID of action performed in step.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationStep.ActionParameters">
+            <summary>
+            Parameters of action performed in step.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.TemplateConfigurationTransition">
+            <summary>
+            Represents transition between instances of <see cref="T:CMS.Automation.TemplateConfigurationStep"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTransition.Type">
+            <summary>
+            Type of a transition.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTransition.StartStepId">
+            <summary>
+            Start step ID of a transition.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTransition.EndStepId">
+            <summary>
+            End step ID of a transition.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTransition.SourcePointGuid">
+            <summary>
+            Source point of a start step from which transition starts.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.TemplateConfigurationTranslator">
+            <summary>
+            Class for managing translations of <see cref="T:CMS.Automation.TemplateConfigurationStep"/> and <see cref="T:CMS.WorkflowEngine.Definitions.SourcePoint"/> identifiers during serialization and deserialization of <see cref="T:CMS.Automation.TemplateConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.#ctor">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Automation.TemplateConfigurationTranslator"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.CreateStepIdentifierTranslation(System.Int32)">
+            <summary>
+            Returns new unique step ID and maps translation from given <paramref name="originalId"/> to it.
+            </summary>
+            <param name="originalId">Step ID which to translate.</param>
+            <returns>New step ID.</returns>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.CreateStepIdentifierTranslation(System.Int32,System.Int32)">
+            <summary>
+            Maps translation from given <paramref name="originalId"/> and given <paramref name="newId"/>.
+            </summary>
+            <param name="originalId">Step ID which to translate.</param>
+            <param name="newId">Step ID used as a translation.</param>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.CreateSourcePointTranslation(System.Guid)">
+            <summary>
+            Returns new unique source point GUID and maps translation from given <paramref name="originalGuid"/> to it.
+            </summary>
+            <param name="originalGuid">Source point GUID which to translate.</param>
+            <returns>New source point GUID.</returns>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.GetStepIdentifierTranslation(System.Int32)">
+            <summary>
+            Returns translation for given step <paramref name="originalId"/>.
+            </summary>
+            <param name="originalId">Step ID which translation to return.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when no translation exists for given <paramref name="originalId"/>.</exception>
+            <returns>Translated step ID.</returns>
+        </member>
+        <member name="M:CMS.Automation.TemplateConfigurationTranslator.GetSourcePointTranslation(System.Guid)">
+            <summary>
+            Returns translation for given source point <paramref name="originalGuid"/>.
+            </summary>
+            <param name="originalGuid">Source point GUID which translation to return.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when no translation exists for given <paramref name="originalGuid"/>.</exception>
+            <returns>Translated source point GUID.</returns>
+        </member>
+        <member name="T:CMS.Automation.TemplateConfigurationTrigger">
+            <summary>
+            Represents single trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.DisplayName">
+            <summary>
+            Display name of a trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.Type">
+            <summary>
+            Type of a trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.ObjectType">
+            <summary>
+            Object type trigger can be applied to.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.TargetObjectType">
+            <summary>
+            Type of concrete object of a trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.TargetObjectName">
+            <summary>
+            Name of concrete object of a trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.MacroCondition">
+            <summary>
+            Macro condition of a trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TemplateConfigurationTrigger.Parameters">
+            <summary>
+            Parameters of a trigger.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.ObjectParametersExtensions">
+            <summary>
+            Extension methods for <see cref="T:CMS.Helpers.ObjectParameters"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectParametersExtensions.GetDictionary(CMS.Helpers.ObjectParameters)">
+            <summary>
+            Returns <see cref="T:System.Collections.Generic.Dictionary`2"/> based on values contained in <see cref="T:CMS.Helpers.ObjectParameters"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ObjectParametersExtensions.LoadFromDictionary(CMS.Helpers.ObjectParameters,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Loads keys and values from given <paramref name="dictionary"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.ITrigger">
+            <summary>
+            Automation trigger interface.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.ITrigger.Process(System.Collections.Generic.IEnumerable{CMS.Automation.TriggerOptions})">
+            <summary>
+            Processes the given collection of trigger options.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.Internal.ITriggerScheduledTaskManager">
+            <summary>
+            Describes methods managing scheduled task related to <see cref="T:CMS.Automation.ObjectWorkflowTriggerInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.Internal.ITriggerScheduledTaskManager.EnsureScheduledTask(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Ensures existing <see cref="T:CMS.Scheduler.TaskInfo"/> for given <paramref name="trigger"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.Internal.ITriggerScheduledTaskManager.UpdateScheduledTask(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Updates existing <see cref="T:CMS.Scheduler.TaskInfo"/> based on  given <paramref name="trigger"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.Internal.ITriggerScheduledTaskManager.RemoveScheduledTask(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Removes existing <see cref="T:CMS.Scheduler.TaskInfo"/> for given <paramref name="trigger"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.Trigger">
+            <summary>
+            Implementation of IAutomationTrigger based on TriggerInfo.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.Trigger.#ctor(CMS.Automation.ObjectWorkflowTriggerInfo)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.Trigger.Process(System.Collections.Generic.IEnumerable{CMS.Automation.TriggerOptions})">
+            <summary>
+            Processes the given collection of trigger options and resolves trigger macro on given object and creates workflow process if successful.
+            </summary>
+            <param name="options">Collection of <see cref="T:CMS.Automation.TriggerOptions"/> objects to process</param>
+        </member>
+        <member name="T:CMS.Automation.TriggerDataConstants">
+            <summary>
+            Constants for trigger related issues
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA_ACTIVITY_ITEMID">
+            <summary>
+            The trigger activity item id dictionary key
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA_ACTIVITY_ITEM_DETAILID">
+            <summary>
+            The trigger activity detail item id dictionary key
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA_ACTIVITY_VALUE">
+            <summary>
+            The trigger activity value dictionary key
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA_ACTIVITY_SITEID">
+            <summary>
+            The trigger activity site id dictionary key
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA">
+            <summary>
+            The trigger data dictionary key
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerDataConstants.TRIGGER_DATA_INTERVAL">
+            <summary>
+            Time based trigger interval key.
+            </summary>
+        </member>
+        <member name="T:CMS.Automation.TriggerHelper">
+            <summary>
+            Class for managing automation triggers.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ProcessTriggers(CMS.Automation.TriggerOptions)">
+            <summary>
+            Processes all triggers of given type on given BaseInfo.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ProcessTriggers(System.Collections.Generic.IEnumerable{CMS.Automation.TriggerOptions})">
+            <summary>
+            Processes all triggers of given type on given options collection.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.RegisterCustomTrigger(CMS.Automation.ITrigger)">
+            <summary>
+            Registers custom trigger.
+            </summary>
+            <param name="trigger">Trigger to register</param>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.HasTriggerTypes(System.String)">
+            <summary>
+            Checks if triggers of given types are present.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.GetTriggers(System.String)">
+            <summary>
+            Gets all cached triggers.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ClearHashtable(System.String)">
+            <summary>
+            Clears cached triggers for given object type.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ClearHashtableInternal(System.String)">
+            <summary>
+            Clears cached triggers for given object type.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.RegisterCustomTriggerInternal(CMS.Automation.ITrigger)">
+            <summary>
+            Registers custom trigger.
+            </summary>
+            <param name="trigger">Trigger to register</param>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ProcessTriggersInternal(System.Collections.Generic.IEnumerable{CMS.Automation.TriggerOptions})">
+            <summary>
+            Processes all triggers of given type on given options collection.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.ProcessTriggersInternal(CMS.Automation.TriggerOptions)">
+            <summary>
+            Processes all triggers of given type on given BaseInfo.
+            </summary>
+        </member>
+        <member name="M:CMS.Automation.TriggerHelper.GetTriggersInternal(System.String)">
+            <summary>
+            Gets all cached triggers.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="T:CMS.Automation.TriggerOptions">
+            <summary>
+            Crate for passing variables needed by triggers.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.Info">
+            <summary>
+            Info to add to process. Required field.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.ObjectType">
+            <summary>
+            Allowed object type of workflow process that trigger would start. Required field.
+            </summary>
+        </member>
+        <member name="P:CMS.Automation.TriggerOptions.IgnoreProcesses">
+            <summary>
+            List of processes to ignore.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.Resolver">
+            <summary>
+            Resolver on which macros of triggers will be resolved.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.Types">
+            <summary>
+            Allowed types of triggers to be processed. Leave empty to process all types of triggers.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.PassFunction">
+            <summary>
+            Function that must be passed to process trigger.
+            </summary>
+        </member>
+        <member name="F:CMS.Automation.TriggerOptions.AdditionalData">
+            <summary>
+            The additional data for trigger that will be available in trigger via TriggerParameters[TRIGGER_DATA]
+            </summary>
+        </member>
+    </members>
+</doc>

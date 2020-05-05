@@ -1,0 +1,526 @@
+﻿// Core variables and mixins
+@import "../Default/Bootstrap/variables.less";
+@import "../Default/Bootstrap/mixins.less";
+
+// Variables related to the graph designer
+@icon-size: @base-unit * 1.875;
+@icon-size-smaller: @base-unit * 1.75;
+@icon-margin-top: (90 - @icon-size) / 2;
+@node-height: 90px;
+@node-radius: 3px;
+
+.GraphContainer {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    outline: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+.Graph {
+    width: 5000px;
+    height: 5000px;
+    position: relative;
+    padding: 40px;
+    overflow: hidden;
+    background: url("../../CMSPages/GetResource.ashx?image=Design/Controls/UniGraph/ma_bg.png") repeat;
+}
+
+.GraphProgress {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 6px 15px 6px 0;
+    background-color: #e5e5e5;
+    z-index: 1000;
+    -moz-user-select: none;
+}
+
+.GraphProgress span {
+    vertical-align: middle;
+}
+
+.GraphProgress img {
+    vertical-align: middle;
+    margin: 0 5px;
+}
+
+.GraphLegend {
+    z-index: 1200;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 11px 21px;
+    margin: 16px;
+    background: #fff;
+    -moz-user-select: none;
+
+    .ConnectorExample {
+        width: 25px;
+        height: 2px;
+        float: left;
+        margin-top: 10px;
+        margin-right: 10px;
+
+        &.Manual {
+            background-color: @color-blue-100;
+        }
+
+        &.Automatic {
+            background-color: @color-gray-130;
+        }
+    }
+}
+
+.UniGraph {
+    height: 300px;
+    font-family: @font-family-base;
+    font-size: 14px;
+}
+
+.UniGraph.Move *,
+.Graph.ReadOnly,
+.Graph.ReadOnly * {
+    cursor: move !important;
+}
+
+.tooltip {
+    max-width: 240px;
+    background-color: #e5e0cb;
+    padding: 3px;
+    z-index: 1001;
+}
+
+// Z-indexes
+.Node {
+    &.Dragging {
+        z-index: 1104 !important;
+    }
+
+    &.Front {
+        &:not(.Dragging) {
+            z-index: 1102 !important;
+        }
+
+        &.Selected {
+            z-index: 1103 !important;
+        }
+    }
+
+    &.NewConnection {
+        z-index: 1197 !important;
+    }
+
+    .LabelEdit {
+        z-index: 1100;
+    }
+}
+
+._jsPlumb_connector {
+    z-index: 20;
+
+    &.Selected {
+        z-index: 1102;
+    }
+
+    &.NewConnection {
+        z-index: 1198 !important;
+    }
+}
+
+._jsPlumb_endpoint {
+    &.Front {
+        z-index: 1103;
+    }
+
+    &.Selected {
+        z-index: 1103;
+    }
+
+    &.NewConnection {
+        z-index: 1199 !important;
+    }
+
+    &.ui-draggable {
+        cursor: move;
+    }
+}
+
+// Container representing a step in the workflow
+.Node {
+    position: absolute;
+    display: flex;
+    min-height: @node-height;
+    background-color: @color-gray-160;
+    border: 1px solid @color-gray-140;
+    border-radius: @node-radius;
+    cursor: move;
+    padding: 1px;
+
+    &.Selected,
+    &.Highlight {
+        border: 2px solid @color-blue-70;
+        padding: 0;
+
+        .header {
+            border-radius: 0 3px 3px 0;
+        }
+
+        .nodeDataIconPlaceholder,
+        .nodeErrorIconPlaceholder,
+        .nodeDataPlaceholder {
+            margin: -1px;
+        }
+    }
+
+    &.yellow {
+        background-color: @color-yellow-130;
+    }
+
+    &.Note {
+        .LabelEdit {
+            left: unset;
+            overflow: hidden;
+            background-color: #ffe99a;
+            width: 177px !important;
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .Editable {
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+    }
+
+    &.Note:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 1.5em;
+        bottom: -1.5em;
+        border: 1em solid @color-yellow-130;
+        box-shadow: 0px 1px @color-gray-140, -1px 0px @color-gray-140;
+    }
+
+    &.Note:before {
+        content: "";
+        position: absolute;
+        bottom: -1.5em;
+        right: 0;
+        border-width: 1.5em 1.5em 0 0;
+        border-style: solid;
+        border-color: @color-yellow-80 transparent;
+    }
+
+    .Editable {
+        cursor: text;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: block;
+    }
+
+    .LabelEdit {
+        position: absolute;
+        left: 0;
+        min-height: 18px;
+        border: 1px solid #bdbbbb;
+        padding: 3px 2px 0 2px;
+        margin: 3px 2px 0 2px;
+        resize: none;
+        -webkit-touch-callout: text;
+        -webkit-user-select: text;
+        outline: none;
+    }
+
+    .Localized .LabelEdit {
+        background-color: #efe;
+    }
+
+    .Placeholder {
+        color: @color-gray-95;
+        cursor: text;
+    }
+
+    // Left side of the box
+    .header {
+        width: 60px;
+        min-height: @node-height;
+        border-radius: @node-radius;
+        float: left;
+
+        &.black {
+            background-color: @color-gray-50;
+        }
+
+        &.red {
+            background-color: @color-red-70;
+        }
+
+        &.blue {
+            background-color: @color-blue-70;
+        }
+
+        &.undefined {
+            background-color: @color-gray-70;
+        }
+
+        &.rotated {
+            transform: rotate(45deg);
+            min-height: 66px;
+            height: 66px;
+            width: 66px;
+            margin: 12px 7px 0 -33px;
+
+            .cms-icon-container {
+                transform: rotate(-45deg);
+                margin: 18px;
+
+                .cms-icon-180 {
+                    font-size: @icon-size-smaller;
+                    width: @icon-size-smaller;
+                    height: @icon-size-smaller;
+                }
+            }
+        }
+
+        .cms-icon-container {
+            display: flex;
+            justify-content: center;
+            margin-top: @icon-margin-top;
+            color: #fff;
+
+            .cms-icon-180 {
+                font-size: @icon-size;
+                width: @icon-size;
+                height: @icon-size;
+            }
+        }
+
+        .icon {
+            width: 100%;
+            height: 100%;
+            background-size: @icon-size;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    // Right side of the box
+    .content {
+        width: 177px;
+        min-height: 74px;
+        padding: 8px 8px 8px 15px;
+        color: #000000;
+        float: left;
+        display: flex;
+        flex-direction: column;
+
+        .box {
+            position: relative;
+            padding: 0;
+            margin-bottom: 8px;
+            background: @color-white;
+            border: 1px solid @color-gray-100;
+            border-radius: 2px;
+
+            .inner {
+                cursor: text;
+                padding: 7px 40px 7px 7px;
+            }
+
+            i {
+                position: absolute;
+                top: 6px;
+                right: 9px;
+                width: 8px;
+                height: 8px;
+                color: @color-gray-90;
+                cursor: pointer;
+            }
+
+            i + i {
+                right: 25px;
+            }
+        }
+
+        .text {
+            font-size: @font-size-small;
+        }
+
+        .main {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .caption {
+            display: block;
+            padding-bottom: @line-height-50;
+            font-size: @font-size-base;
+            font-weight: bold;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        i.button {
+            float: right;
+            color: @color-gray-90;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .footer {
+            font-size: 90%;
+            margin: 5px 0;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+
+            .timeout {
+                font-weight: bold;
+                padding-right: 4px;
+            }
+        }
+    }
+
+    // Bottom right corner with step data
+    .nodeErrorIconPlaceholder,
+    .nodeDataIconPlaceholder {
+        cursor: pointer;
+        position: absolute;
+        right: -16px;
+        bottom: -16px;
+        background-color: @color-white;
+        border-radius: 16px;
+        display: inherit;
+        width: 32px;
+        height: 32px;
+
+        i {
+            padding: 0;
+            color: @color-gray-90;
+        }
+    }
+
+    .nodeErrorIconPlaceholder {
+        background-color: @color-warning;
+
+        i {
+            color: @color-white;
+            position: absolute;
+            top: 7px;
+            left: 8px;
+        }
+    }
+
+    .nodeDataPlaceholder {
+        position: absolute;
+        font-size: 80%;
+        background-color: @color-gray-160;
+        border: 1px solid @color-gray-150;
+        border-radius: @node-radius;
+        width: max-content;
+        display: -ms-grid; // IE & Edge width fix
+        -ms-grid-columns: max-content; // IE & Edge width fix
+        padding: 20px 20px 10px 20px;
+        cursor: auto;
+
+        .refresh-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin: 4px;
+
+            i.button {
+                color: @color-gray-90;
+                cursor: pointer;
+                padding: 4px;
+            }
+        }
+
+        .variant-statistics-container {
+            width: auto;
+
+            .variant-statistics-column {
+                max-width: 150px;
+                display: inline-block;
+
+                &:not(:first-child) {
+                    margin-left: @base-unit;
+                }
+            }
+
+            .more-variants-label {
+                margin-top: 5px;
+                font-weight: bold;
+            }
+        }
+
+        .variant-name {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .statistics-link {
+            margin-top: 5px;
+            grid-row: 2;
+            -ms-grid-row: 2;
+        }
+
+        &.hidden {
+            visibility: hidden;
+        }
+
+        // Box arrow
+        &:after,
+        &:before {
+            content: " ";
+            right: 100%;
+            top: 24px;
+            border: solid transparent;
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        &:after {
+            border-color: rgba(247, 247, 247, 0);
+            border-right-color: @color-gray-160;
+            border-width: 11px;
+            margin-top: -12px;
+        }
+
+        &:before {
+            border-color: rgba(229, 229, 229, 0);
+            border-right-color: @color-gray-150;
+            border-width: 13px;
+            margin-top: -14px;
+        }
+    }
+
+    ul.increased-space-between-items {
+        li:not(:first-child) {
+            margin-top: 0.75 * @base-unit;
+        }
+    }
+}
+
+.Node.Condition {
+    .content .inner {
+        padding: 7px;
+    }
+}
+
+// Graph view positioning
+.GraphContainer,
+.GraphWrapper,
+.UniGraph,
+._jsPlumb_connector {
+    direction: ltr !important;
+}

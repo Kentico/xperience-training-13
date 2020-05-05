@@ -1,0 +1,36 @@
+﻿<div class="cms-campaigns-edit form-horizontal" ng-cloak="cloak">
+    <cms-campaign-messages id="top"></cms-campaign-messages>
+    <cms-campaign-status-message> </cms-campaign-status-message>
+
+    <cms-campaign-description campaign="$ctrl.campaign">
+    </cms-campaign-description>
+
+    <div class="campaign-form-category">
+        <cms-campaign-inventory assets="$ctrl.inventoryItems"
+                                site-is-content-only="$ctrl.siteIsContentOnly"
+                                url-asset-target-regex="$ctrl.urlAssetTargetRegex"
+                                campaign="$ctrl.campaign">
+        </cms-campaign-inventory>
+    </div>
+    <div class="campaign-form-category">
+        <cms-campaign-promotion items="$ctrl.promotionItems"
+                                site-is-content-only="$ctrl.siteIsContentOnly"
+                                campaign="$ctrl.campaign">
+        </cms-campaign-promotion>
+        <div id="promotionSmartTip">
+            <cms-smart-tip-placeholder smart-tip="$ctrl.promotionSmartTip">
+            </cms-smart-tip-placeholder>
+        </div>
+    </div>
+    <div class="campaign-form-category">
+        <cms-campaign-report-setup conversions="$ctrl.conversions"
+                                   site-is-content-only="$ctrl.siteIsContentOnly"
+                                   campaign="$ctrl.campaign">
+        </cms-campaign-report-setup>
+    </div>
+
+    <div id="launchSmartTip" class="campaign-form-category" ng-show="$ctrl.campaign.isDraft() || $ctrl.campaign.isScheduled()">
+        <cms-smart-tip-placeholder smart-tip="$ctrl.launchSmartTip" on-ready="$ctrl.initLaunchLink()">
+        </cms-smart-tip-placeholder>
+    </div>
+</div>

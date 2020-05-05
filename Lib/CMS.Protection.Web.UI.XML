@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Protection.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Protection.Web.UI.CsrfException">
+            <summary>
+            Exception which is thrown when the CSRF attack is detected.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Protection.Web.UI.CsrfException"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Protection.Web.UI.CsrfException"/> class with a specified error message.
+            </summary>
+            <param name="message">Exception's message</param>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Protection.Web.UI.CsrfException"/> class with a specified error message and a reference to the inner exception that is the cause of the CSRF exception.
+            </summary>
+            <param name="message">Exception's message</param>
+            <param name="inner">The exception that is the cause of the CSRF exception</param>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Protection.Web.UI.CsrfException"/> class with serialized data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the CSRF exception.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:CMS.Protection.Web.UI.CsrfProtection">
+            <summary>
+            Implementation of the stateless CSRF defense based on comparing hidden field value with cookie value.
+            </summary>
+        </member>
+        <member name="F:CMS.Protection.Web.UI.CsrfProtection.HIDDEN_FIELD_NAME">
+            <summary>
+            Defines the name of the hidden field used to store CSRF token.
+            This constant is not intended for public use.
+            </summary>
+        </member>
+        <member name="F:CMS.Protection.Web.UI.CsrfProtection.PURPOSES">
+            <summary>
+            Defines the key derivation string used by MachineKey.Protect and MachineKey.Unprotect methods.
+            The 'purposes' parameter helps ensure that some protected data can be consumed only by the
+            component that originally generated it. Applications should take care to ensure that each
+            subsystem uses a unique 'purposes' list.
+            </summary>
+        </member>
+        <member name="P:CMS.Protection.Web.UI.CsrfProtection.Instance">
+            <summary>
+            Singleton instance of <see cref="T:CMS.Protection.Web.UI.CsrfProtection"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.IsProtectionEnabled">
+            <summary>
+            Returns <c>true</c> when CSRF protection is enabled by web.config key.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.PreInit">
+            <summary>
+            Registers event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.ValidateCsrfTokens(System.Byte[],System.Byte[])">
+            <summary>
+            Validates the hidden field and cookie tokens.
+            </summary>
+            <param name="cookieToken">Cookie token</param>
+            <param name="hiddenFieldToken">Hidden field token</param>
+            <exception cref="T:CMS.Protection.Web.UI.CsrfException">Thrown when <paramref name="cookieToken"/> or <paramref name="hiddenFieldToken"/> is null or tokens do not match.</exception>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.EnsureCsrfToken">
+            <summary>
+            Ensures the CSRF token exists. If not it will create a new one.
+            </summary>
+            <exception cref="T:CMS.Protection.Web.UI.CsrfException">Thrown when the current request is vulnerable and the CSRF cookie is missing or malformed.</exception> 
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.EnsureCsrfTokenInternal">
+            <summary>
+            Sets a newly created CSRF token into the corresponding cookie. Returns the CSRF token.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.CreateCsrfToken">
+            <summary>
+            Creates the CSRF token.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.IsVulnerableRequest(System.Web.HttpRequestBase)">
+            <summary>
+            Indicates whether specified request should be checked for CSRF attack vulnerability.
+            </summary>
+            <remarks>
+            Only POST requests which do not contain XMLHttpRequest HTTP header or PostBack requests detected by <see cref="P:System.Web.UI.Page.IsPostBack"/> are considered as vulnerable.
+            AJAX requests do not contain CSRF hidden field in the POST body therefore CSRF protection cannot be applied.
+            All modern browsers deny cross-domain AJAX requests due to CORS implementation - CSRF is not possible.
+            </remarks>
+            <param name="httpRequest"><see cref="T:System.Web.HttpRequestBase"/> instance.</param>
+            <returns>True if request should be checked; otherwise false.</returns>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.IsAjaxRequest(System.Web.HttpRequestBase)">
+            <summary>
+            Checks whether the current HTTP request is an AJAX request (contains "X-Requested-With: XMLHttpRequest" HTTP header).
+            </summary>
+            <param name="httpRequest"><see cref="T:System.Web.HttpRequestBase"/> instance.</param>
+            <returns>True if request is an AJAX request; otherwise false.</returns>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtection.IncludeTokenInPage(System.Web.UI.Page,System.Byte[])">
+            <summary>
+            Registers CSRF token in hidden field and includes it into page.
+            </summary>
+            <param name="page">Page the CSRF token should be includes to.</param>
+            <param name="csrfToken">CSRF token.</param>
+        </member>
+        <member name="T:CMS.Protection.Web.UI.CsrfProtectionHelper">
+            <summary>
+            Helper class for CSRF protection module.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtectionHelper.RegisterHiddenField(System.Web.UI.Page,System.String,System.String)">
+            <summary>
+            Register hidden field on the page.
+            </summary>
+            <param name="page">Page</param>
+            <param name="hiddenFieldName">Hidden field name</param>
+            <param name="hiddenFieldValue">Hidden field value</param>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.CsrfProtectionHelper.RegisterHiddenFieldInternal(System.Web.UI.Page,System.String,System.String)">
+            <summary>
+            Register hidden field on the page.
+            </summary>
+            <param name="page">Page</param>
+            <param name="hiddenFieldName">Hidden field name</param>
+            <param name="hiddenFieldValue">Hidden field value</param>
+        </member>
+        <member name="T:CMS.Protection.Web.UI.ProtectionWebUIModule">
+            <summary>
+            Represents the Protection Web UI module.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.ProtectionWebUIModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.ProtectionWebUIModule.OnPreInit">
+            <summary>
+            Module pre-initialization
+            </summary>
+        </member>
+        <member name="T:CMS.Protection.Web.UI.ProtectionWebUIModuleMetadata">
+            <summary>
+            Represents the Protection Web UI module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Protection.Web.UI.ProtectionWebUIModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+    </members>
+</doc>

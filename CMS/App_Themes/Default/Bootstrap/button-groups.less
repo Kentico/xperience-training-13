@@ -1,0 +1,157 @@
+//
+// Button groups
+// --------------------------------------------------
+
+// Button carets
+//
+// Match the button text color to the arrow/caret for indicating dropdown-ness.
+
+.caret {
+    .btn-default & {
+        border-top-color: @btn-default-color;
+    }
+
+    .btn-primary & {
+        border-top-color: @color-white;
+    }
+}
+
+.dropup {
+    & .btn-default .caret {
+        border-bottom-color: @btn-default-color;
+    }
+
+    .btn-primary {
+        .caret {
+            border-bottom-color: @color-white;
+        }
+    }
+}
+
+// Make the div behave like a button
+.btn-group {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle; // match .btn alignment given font-size hack above
+    > .btn {
+        position: relative;
+        float: left;
+        // Bring the "active" button to the front
+        &:hover,
+        &.active {
+            z-index: @zindex-btn-group-active;
+        }
+
+        &.active {
+            background: @btn-secondary-bg;
+            color: @btn-secondary-color;
+            box-shadow: @btn-secondary-box-shadow 0 -@btn-shadow-width 0 inset;
+
+            i, .badge {
+                color: @btn-secondary-color;
+            }
+        }
+
+        &:focus {
+            // Remove focus outline when dropdown JS adds it after closing the menu
+            outline: none;
+        }
+        // No space between buttons in the button group
+        & + .btn {
+            margin-left: -1px; // Win8 no border fix
+        }
+    }
+}
+
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+    border-radius: 0;
+}
+
+// Set corners individual because sometimes a single button can be in a .btn-group and we need :first-child and :last-child to both match
+.btn-group > .btn:first-child {
+    margin-left: 0;
+
+    &:not(:last-child):not(.dropdown-toggle) {
+        .border-right-radius(0);
+    }
+}
+// Need .dropdown-toggle since :last-child doesn't apply given a .dropdown-menu immediately after it
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+    .border-left-radius(0);
+}
+
+// Custom edits for including btn-groups within btn-groups (useful for including dropdown buttons within a btn-group)
+.btn-group > .btn-group {
+    float: left;
+}
+
+    .btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+        border-radius: 0;
+    }
+
+    .btn-group > .btn-group:first-child {
+        > .btn:last-child,
+        > .dropdown-toggle {
+            .border-right-radius(0);
+        }
+    }
+
+    .btn-group > .btn-group:last-child > .btn:first-child {
+        .border-left-radius(0);
+    }
+
+// On active and open, don't show outline
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+    outline: 0;
+}
+
+// Line between buttons in btn-group
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+    border-right: 1px solid @btn-default-border;
+
+    &.active {
+        border-right: 1px solid @btn-secondary-bg;
+    }
+}
+
+
+// Opened dropdown
+.btn-group-split.open > .btn.dropdown-toggle {
+    background-color: @btn-default-box-shadow;
+}
+
+// Negative space for dropdown toggle
+.btn-group > .btn + .dropdown-toggle {
+    padding: 0 (@base-unit * 0.5);
+    border-left: 1px solid @btn-default-border; // Win8 no border fix
+}
+
+.btn-group > .btn-lg + .dropdown-toggle {
+    padding: 0 (@base-unit * 0.75);
+}
+
+
+// Checkbox and radio options
+[data-toggle="buttons"] > .btn > input[type="radio"],
+[data-toggle="buttons"] > .btn > input[type="checkbox"] {
+    display: none;
+}
+
+
+// Vertical separated buttons
+// ----------------------
+
+.btns-vertical .btn {
+    margin-bottom: @base-unit * 0.5;
+    display: block;
+    // No horizontal space between buttons
+    + .btn {
+        margin-left: 0;
+    }
+    //
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

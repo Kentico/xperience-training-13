@@ -1,0 +1,30 @@
+<div id="js-page-selector-container">
+    <cms-dialog-header on-close="$ctrl.dismiss" header="{{ $ctrl.title }}"></cms-dialog-header>
+    <div class="dialog-content">
+        <div class="campaign-edit-dialog">
+            <form class="form-horizontal" name="$ctrl.form">
+                <cms-select value="$ctrl.objective.conversionID"
+                            options="$ctrl.objectiveConversions"
+                            title="{$ campaign.objective.conversion $}"
+                            label="{$ campaign.objective.conversion $}"
+                            required-error-text="{$ campaign.objective.conversion.errorText $}"
+                            id="selectConversion"
+                            required="true">
+                </cms-select>                
+
+                <cms-textbox value="$ctrl.objective.value" maxlength="9"
+                             title="{$ campaign.objective.target $}"
+                             label="{$ campaign.objective.target $}"
+                             required="true"
+                             pattern="$ctrl.targetRegexPattern"
+                             pattern-error="{$ campaign.objective.target.errorText $}"
+                             explanation-text="{$ campaign.objective.target.explanationText $}"
+                             id="targetValue">
+                </cms-textbox>
+            </form>
+        </div>
+    </div>
+    <cms-dialog-footer confirm-label="{$ general.save $}" on-confirm="$ctrl.confirm"
+                       dismiss-label="{$ general.cancel $}" on-dismiss="$ctrl.dismiss">        
+    </cms-dialog-footer>
+</div>

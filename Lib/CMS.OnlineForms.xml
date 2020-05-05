@@ -1,0 +1,2332 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.OnlineForms</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.OnlineForms.FormActivityGenerator">
+            <summary>
+            Contains methods for generating sample activities data.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.OnlineForms.FormActivityGenerator.GenerateFormSubmitActivity(CMS.OnlineForms.BizFormItem,CMS.Base.ITreeNode,System.Int32,System.Int32)">
+            <summary>
+            Generates form submit <see cref="T:CMS.Activities.IActivityInfo"/> for given <paramref name="formItem"/>.
+            </summary>
+            <param name="formItem">Form item to generate activity for</param>
+            <param name="document">Document to generate activity for</param>
+            <param name="contactID">ID of contact the activity is generated for</param>
+            <param name="siteId">Site to generate activity in</param>
+        </member>
+        <member name="T:CMS.OnlineForms.FormSubmitActivityInitializer">
+            <summary>
+            Represents implementation of <see cref="T:CMS.Activities.IActivityInitializer"/> for form submission activity.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormSubmitActivityInitializer.#ctor(CMS.OnlineForms.BizFormItem,CMS.Base.ITreeNode)">
+            <summary>
+            Instantiate new instance of <see cref="T:CMS.OnlineForms.FormSubmitActivityInitializer"/>.
+            </summary>
+            <param name="recordItem">Specifies the inserted record the activity is related to</param>
+            <param name="currentDocument">Specifies the document node the activity is logged for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="recordItem"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.OnlineForms.FormSubmitActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Activity info</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activity"/> is <c>null</c></exception>
+        </member>
+        <member name="P:CMS.OnlineForms.FormSubmitActivityInitializer.ActivityType">
+            <summary>
+            Gets string type of the activity (<see cref="F:CMS.Activities.PredefinedActivityType.BIZFORM_SUBMIT"/>).
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.FormSubmitActivityInitializer.SettingsKeyName">
+            <summary>
+            Activity settings key name, used to check whether activity logging is enabled.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormConstants">
+            <summary>
+            Contains biz form functionality related constants.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormConstants.BIZ_FORM_CLASS_NAMESPACE">
+            <summary>
+            Namespace for biz form classes.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormHelper">
+            <summary>
+            Provides helper methods for biz forms.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.Create(System.String,System.String,System.String,CMS.SiteProvider.SiteInfo)">
+            <summary>
+            <para>
+            Creates a new biz form by creating the underlying database table and setting the corresponding <see cref="T:CMS.OnlineForms.BizFormInfo"/> and <see cref="T:CMS.DataEngine.DataClassInfo"/>.
+            The database table name is prefixed using <see cref="M:CMS.OnlineForms.BizFormHelper.GetFormTablePrefix(System.String)"/> and processed by <see cref="M:CMS.OnlineForms.BizFormHelper.GetFullTableName(CMS.DataEngine.TableManager,System.String,System.String)"/>
+            which truncates excessive table names.
+            </para>
+            <para>
+            If <paramref name="formName"/> is not specified or its value equals <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/>,
+            a new code name is created based on display name.
+            </para>
+            <para>
+            The form name is sanitized via <see cref="M:CMS.Helpers.ValidationHelper.GetIdentifier(System.Object,System.String)"/>. The form name is used as table name
+            if <paramref name="tableName"/> is not specified or its value equals to <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/>.
+            </para>
+            </summary>
+            <param name="formDisplayName">Display name of the form.</param>
+            <param name="formName">Name of the form, or null.</param>
+            <param name="tableName">Table name to store form data, or null.</param>
+            <param name="siteInfo">Site of the form.</param>
+            <returns>Returns the new biz form.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="formDisplayName"/> or <paramref name="siteInfo"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="formDisplayName"/> is an empty string.</exception>
+            <exception cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException">Thrown when biz form table of specified name already exists.</exception>
+            <exception cref="T:CMS.OnlineForms.BizFormException">Thrown when an exception during database table creation, <see cref="T:CMS.OnlineForms.BizFormInfo"/> creation or <see cref="T:CMS.DataEngine.DataClassInfo"/> creation occurs. See the inner exception for details.</exception>
+            <remarks>
+            The resulting <see cref="T:CMS.OnlineForms.BizFormInfo"/> has <see cref="P:CMS.OnlineForms.BizFormInfo.FormEmailAttachUploadedDocs"/> and <see cref="P:CMS.OnlineForms.BizFormInfo.FormLogActivity"/> enabled by default.
+            </remarks>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.GetFormTablePrefix(System.String)">
+            <summary>
+            Gets prefix for biz form table name. The prefix is a string in format <c>Form_[siteName]_</c>.
+            The site name is sanitized via <see cref="M:CMS.Helpers.ValidationHelper.GetIdentifier(System.Object,System.String)"/>.
+            </summary>
+            <param name="siteName">Site name to derive the prefix from.</param>
+            <returns>Returns prefix for biz form table name.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="siteName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="siteName"/> is an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.GetFullTableName(CMS.DataEngine.TableManager,System.String,System.String)">
+            <summary>
+            <para>
+            Gets table name including prefix for biz form table. Both <paramref name="tableNamePrefix"/> and <paramref name="tableName"/> must be
+            sanitized strings suitable for a table name.
+            </para>
+            <para>
+            If the resulting table name is longer than 60 characters, it is truncated and appended an ordinal number to ensure uniqueness.
+            </para>
+            </summary>
+            <param name="tableManager">Table manager to be used for uniqueness testing when truncating table name.</param>
+            <param name="tableNamePrefix">Table name prefix from which to derive full table name.</param>
+            <param name="tableName">Table name from which to derive full table name.</param>
+            <returns>Returns full table name derived from a prefix and table name.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="tableManager"/>, <paramref name="tableNamePrefix"/> or <paramref name="tableName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tableNamePrefix"/> or <paramref name="tableName"/> is an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.CreateInternal(System.String,System.String,System.String,CMS.SiteProvider.SiteInfo)">
+            <summary>
+            <para>
+            Creates a new biz form by creating the underlying database table and setting the corresponding <see cref="T:CMS.OnlineForms.BizFormInfo"/> and <see cref="T:CMS.DataEngine.DataClassInfo"/>.
+            The database table name is prefixed using <see cref="M:CMS.OnlineForms.BizFormHelper.GetFormTablePrefix(System.String)"/> and processed by <see cref="M:CMS.OnlineForms.BizFormHelper.GetFullTableName(CMS.DataEngine.TableManager,System.String,System.String)"/>
+            which truncates excessive table names.
+            </para>
+            <para>
+            If <paramref name="formName"/> is not specified or its value equals <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/>,
+            a new code name is created based on display name.
+            </para>
+            <para>
+            The form name is sanitized via <see cref="M:CMS.Helpers.ValidationHelper.GetIdentifier(System.Object,System.String)"/>. The form name is used as table name
+            if <paramref name="tableName"/> is not specified or its value equals to <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/>.
+            </para>
+            </summary>
+            <param name="formDisplayName">Display name of the form.</param>
+            <param name="formName">Name of the form, or null.</param>
+            <param name="tableName">Table name to store form data, or null.</param>
+            <param name="siteInfo">Site of the form.</param>
+            <returns>Returns the new biz form.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="formDisplayName"/> or <paramref name="siteInfo"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="formDisplayName"/> is an empty string.</exception>
+            <exception cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException">Thrown when biz form table of specified name already exists.</exception>
+            <exception cref="T:CMS.OnlineForms.BizFormException">Thrown when an exception during database table creation, <see cref="T:CMS.OnlineForms.BizFormInfo"/> creation or <see cref="T:CMS.DataEngine.DataClassInfo"/> creation occurs. See the inner exception for details.</exception>
+            <remarks>
+            The resulting <see cref="T:CMS.OnlineForms.BizFormInfo"/> has <see cref="P:CMS.OnlineForms.BizFormInfo.FormEmailAttachUploadedDocs"/> and <see cref="P:CMS.OnlineForms.BizFormInfo.FormLogActivity"/> enabled by default.
+            </remarks>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.CreateBizFormInfo(System.String,System.String,CMS.SiteProvider.SiteInfo)">
+            <summary>
+            <para>
+            Creates a new <see cref="T:CMS.OnlineForms.BizFormInfo"/> and initializes it using given display name, name and site ID.
+            Does not set the info to the database.
+            The method is used by <see cref="M:CMS.OnlineForms.BizFormHelper.CreateInternal(System.String,System.String,System.String,CMS.SiteProvider.SiteInfo)"/> to supply the <see cref="T:CMS.OnlineForms.BizFormInfo"/> instance.
+            </para>
+            <para>
+            If <paramref name="formName"/> is not specified or its value equals <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/>,
+            a new code name is created based on display name.
+            </para>
+            <para>
+            The form name is sanitized via <see cref="M:CMS.Helpers.ValidationHelper.GetIdentifier(System.Object,System.String)"/> and can be safely used as part of the resulting table name.
+            </para>
+            </summary>
+            <param name="formDisplayName">Display name of the form.</param>
+            <param name="formName">Name of the form, or null.</param>
+            <param name="siteInfo">Site of the form.</param>
+            <returns>Returns a new <see cref="T:CMS.OnlineForms.BizFormInfo"/> instance initialized with given values.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="formDisplayName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="formDisplayName"/> is an empty string.</exception>
+            <remarks>
+            The resulting <see cref="T:CMS.OnlineForms.BizFormInfo"/> has <see cref="P:CMS.OnlineForms.BizFormInfo.FormEmailAttachUploadedDocs"/> and <see cref="P:CMS.OnlineForms.BizFormInfo.FormLogActivity"/> enabled by default.
+            </remarks>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.GetFormTablePrefixInternal(System.String)">
+            <summary>
+            Gets prefix for biz form table name. The prefix is a string in format <c>Form_[siteName]_</c>.
+            The site name is sanitized via <see cref="M:CMS.Helpers.ValidationHelper.GetIdentifier(System.Object,System.String)"/>.
+            </summary>
+            <param name="siteName">Site name to derive the prefix from.</param>
+            <returns>Returns prefix for biz form table name.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="siteName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="siteName"/> is an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormHelper.GetFullTableNameInternal(CMS.DataEngine.TableManager,System.String,System.String)">
+            <summary>
+            <para>
+            Gets table name including prefix for biz form table. Both <paramref name="tableNamePrefix"/> and <paramref name="tableName"/> must be
+            sanitized strings suitable for a table name.
+            </para>
+            <para>
+            If the resulting table name is longer than 60 characters, it is truncated and appended an ordinal number to ensure uniqueness.
+            </para>
+            </summary>
+            <param name="tableManager">Table manager to be used for uniqueness testing when truncating table name.</param>
+            <param name="tableNamePrefix">Table name prefix from which to derive full table name.</param>
+            <param name="tableName">Table name from which to derive full table name.</param>
+            <returns>Returns full table name derived from a prefix and table name.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="tableManager"/>, <paramref name="tableNamePrefix"/> or <paramref name="tableName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tableNamePrefix"/> or <paramref name="tableName"/> is an empty string.</exception>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormInfo">
+            <summary>
+            <see cref="T:CMS.OnlineForms.BizFormInfo"/> stores information about General, Autoresponder, Email notification and similar tabs.
+            <see cref="T:CMS.OnlineForms.FormClassInfo"/> stores the structure of the form. That means for example form definition (Fields tab) and search fields settings.
+            <see cref="T:CMS.OnlineForms.BizFormItem"/> stores the data that visitors fill on the website.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormInfo.BIZFORM_PREFIX">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.AuthorizedRoles">
+            <summary>
+            Hashtable of roles the form is allowed for.
+            RoleId is key and RoleName is value.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormItems">
+            <summary>
+            Gets or sets items count.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormDisplayName">
+            <summary>
+            Form display name.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormReportFields">
+            <summary>
+            Report fields.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormName">
+            <summary>
+            Form code name.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormID">
+            <summary>
+            Form id.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormRedirectToUrl">
+            <summary>
+            Redirect to url.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormClearAfterSave">
+            <summary>
+            Clear form.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormDisplayText">
+            <summary>
+            Display text.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormSendFromEmail">
+            <summary>
+            From E-mail.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormSendToEmail">
+            <summary>
+            To E-mail.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormEmailSubject">
+            <summary>
+            E-mail subject.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormEmailTemplate">
+            <summary>
+            Form notification e-mail template text.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormEmailAttachUploadedDocs">
+            <summary>
+            Attach uploaded documents to notification e-mail.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormClassID">
+            <summary>
+            Class id.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormSiteID">
+            <summary>
+            Site id.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormSubmitButtonText">
+            <summary>
+            Submit button text.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormSubmitButtonImage">
+            <summary>
+            Submit image button.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormConfirmationEmailField">
+            <summary>
+            Field name whose value is used as recipient email address the confirmation email is sent to.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormConfirmationTemplate">
+            <summary>
+            Form confirmation template text.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormConfirmationSendFromEmail">
+            <summary>
+            Form confirmation send from email.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormConfirmationEmailSubject">
+            <summary>
+            Form confirmation email subject.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormGUID">
+            <summary>
+            Form GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormLastModified">
+            <summary>
+            Object last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormAccess">
+            <summary>
+            Form access.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.Form">
+            <summary>
+            Form definition.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormLogActivity">
+            <summary>
+            Indicates if bizform activity is logged.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormInfo.FormBuilderLayout">
+            <summary>
+            MVC form builder layout serialized in JSON.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty BizFormInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new BizFormInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.IsFormAllowedForRole(System.Int32)">
+            <summary>
+            Indicates whether form is allowed for specified role.
+            </summary>
+            <param name="roleId">Role id</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.IsFormAllowedForUser(CMS.Membership.UserInfo,System.String)">
+            <summary>
+            Indicates whether specified user is authorized for specified form.
+            </summary>
+            <param name="user">User info</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.IsFormAllowedForUser(System.String,System.String)">
+            <summary>
+            Indicates whether specified user is authorized for specified form.
+            </summary>
+            <param name="userName">User name</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.ClearAuthorizedRoles">
+            <summary>
+            Sets Hashtable with authorized roles to NULL -> enforce hashtable reload next time the data are needed.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.GetPermissionName(CMS.DataEngine.PermissionsEnum)">
+            <summary>
+            Converts permissions enum to permission code name when CheckPermission() is called.
+            </summary>
+            <param name="permission">Permissions enum</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts cloned object to DB.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.RegisterProperties">
+            <summary>
+            Registers the properties of this object
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.RemoveObjectDependencies(System.Boolean,System.Boolean)">
+            <summary>
+            Removes object dependencies. First tries to execute removedependencies query, if not found, automatic process is executed.
+            </summary>
+            <param name="deleteAll">If false, only required dependencies are deleted, dependencies with default value are replaced with default value and nullable values are replaced with null</param>
+            <param name="clearHashtables">If true, hashtables of all objecttypes which were potentionally modified are cleared</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.DeleteOnLineFormIndex(System.String)">
+            <summary>
+            Removes given on-line form from all the On-Line form indexes.
+            </summary>
+            <param name="objectType">BizFrom object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.CheckLicense(CMS.DataEngine.ObjectActionEnum,System.String)">
+            <summary>
+            Checks the object license. Returns true if the licensing conditions for this object were matched
+            </summary>
+            <param name="action">Object action</param>
+            <param name="domainName">Domain name, if not set, uses current domain</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.GetAutomaticCodeName">
+            <summary>
+            Gets the automatic code name for the object
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfo.GetFormItems">
+            <summary>
+            Returns the form items. Result of this method is not cached.
+            Use <see cref="T:CMS.OnlineForms.BizFormItemProvider"/> if you need more advanced way for obtaining the form items.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormInfoProvider">
+            <summary>
+            Class providing BizFormInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfoForClass(System.Int32)">
+            <summary>
+            Returns the BizFormInfo structure for the specified class.
+            </summary>
+            <param name="classId">Class ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfoByGUID(System.Guid,System.Int32)">
+            <summary>
+            Returns object with specified GUID.
+            </summary>
+            <param name="guid">Object GUID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfo(System.Int32)">
+            <summary>
+            Returns the BizFormInfo structure for the specified bizForm.
+            </summary>
+            <param name="bizFormId">BizForm ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfo(System.String,System.Int32)">
+            <summary>
+            Returns the BizFormInfo structure for the specified form and site.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfo(System.String,System.String)">
+            <summary>
+            Returns the BizFormInfo structure for the specified form and site.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.SetBizFormInfo(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Sets (updates or inserts) specified bizForm.
+            </summary>
+            <param name="bizForm">BizForm to set</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.ClearBizHash">
+            <summary>
+            Clear hashtables.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormInfo(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Deletes specified bizForm.
+            </summary>
+            <param name="bizFormObj">BizForm object</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormInfo(System.Int32)">
+            <summary>
+            Deletes specified bizForm.
+            </summary>
+            <param name="bizFormId">BizForm ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizForms">
+            <summary>
+            Returns a query for all the BizFormInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizForms(System.Int32)">
+            <summary>
+            Returns a query for all the BizFormInfo objects specified by site ID.
+            </summary>
+            <param name="siteID">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.CreateBizFormDataClass(System.String,System.String,System.String,System.String,System.Collections.Generic.List{CMS.FormEngine.FormFieldInfo})">
+            <summary>
+            Creates bizform data class definition based on the given parameters.
+            </summary>
+            <param name="className">Form class name</param>
+            <param name="displayName">Form display name</param>
+            <param name="tableName">Form table name</param>
+            <param name="primaryKeyName">Table primary key column name</param>
+            <param name="fields">List of additional fields</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetDefinitionXML(System.String,System.Collections.Generic.IEnumerable{CMS.FormEngine.FormFieldInfo})">
+            <summary>
+            Gets form definition XML for given primary key and custom fields.
+            </summary>
+            <param name="primaryKeyName">Primary key name.</param>
+            <param name="fields">Custom fields.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetTimeField(System.String,System.String)">
+            <summary>
+            Returns new form field info of the datetime datatype indicating when form data were changed(inserted/updated).
+            </summary>
+            <param name="fieldName">Field name</param>
+            <param name="fieldCaption">Field caption</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetFormAuthorizedRoles(System.Int32)">
+            <summary>
+            Returns DataSet with roles that are allowed for specified form.
+            </summary>
+            <param name="formId">Form ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.LicenseVersionCheck(System.String,CMS.DataEngine.FeatureEnum,CMS.DataEngine.ObjectActionEnum)">
+            <summary>
+            License version check.
+            </summary>
+            <param name="domain">Domain name</param>
+            <param name="feature">Feature</param>
+            <param name="action">Action</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.CheckLicense(CMS.DataEngine.ObjectActionEnum,System.String)">
+            <summary>
+            Checks the license.
+            </summary>
+            <param name="action">Object action</param>
+            <param name="domainName">Domain name, if not set, current domain name is used</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.CheckLicense(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Checks the license for insert for a new bizform or for edit in other cases.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.RefreshDataCount(System.String,System.Int32)">
+            <summary>
+            Refresh bizform items count.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.RefreshDataCount(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Refresh bizform items count.
+            </summary>
+            <param name="bizForm">BizForm info object</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteData(System.String,System.Int32)">
+            <summary>
+            Delete all bizform data.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GenerateFormPrimaryKeyName(System.String)">
+            <summary>
+            Takes code name of the form and generates a primary key name from it. Generated primary key is safe to use in the
+            database. It does not contain forbidden characters, does not start with a number, etc.
+            </summary>
+            <param name="formCodeName">Code name of the FormInfo</param>
+            <returns>Primary key name of the form</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="formCodeName"/> is null or empty</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormRecordFiles(System.String,CMS.OnlineForms.BizFormItem,System.String)">
+            <summary>
+            Deletes all files of specified BizForm record.
+            </summary>
+            <param name="classFormDefinition">BizForm class form definition</param>
+            <param name="item">BizForm item</param>
+            <param name="siteName">SiteName</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormFiles(System.String,System.String,System.Int32)">
+            <summary>
+            Deletes all files of the specified BizForm.
+            </summary>
+            <param name="className">BizForm class name</param>
+            <param name="column">Name of the column where file information is stored, optional</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormFileColumns(System.String)">
+            <summary>
+            Returns names of the columns where BizForm file information is stored.
+            </summary>
+            <param name="classFormDefinition">BizForm's class form definition</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormFile(System.String,System.String,System.String)">
+            <summary>
+            Deletes uploaded file from file system.
+            </summary>
+            <param name="fileName">File name in format "[guid].[extension]/[originalfilename].[extension]"</param>
+            <param name="directoryPath">Directory path</param>
+            <param name="siteName">Name of the site to which is bizform assigned. Is used for web farms</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfoInternal(System.Guid,System.Int32)">
+            <summary>
+            Returns object with specified GUID.
+            </summary>
+            <param name="guid">Object GUID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfoInternal(System.Int32)">
+            <summary>
+            Returns the BizFormInfo structure for the specified bizForm.
+            </summary>
+            <param name="bizFormId">BizForm ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormInfoInternal(System.String,System.Int32)">
+            <summary>
+            Returns the BizFormInfo structure for the specified form and site.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.SetBizFormInfoInternal(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Sets (updates or inserts) specified bizForm.
+            </summary>
+            <param name="bizForm">BizForm to set</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormInfoInternal(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Deletes specified bizForm.
+            </summary>
+            <param name="bizFormObj">BizForm object</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetBizFormsInternal(System.Int32)">
+            <summary>
+            Returns a query for all the BizFormInfo objects specified by site ID.
+            </summary>
+            <param name="siteID">SiteId</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GetFormAuthorizedRolesInternal(System.Int32)">
+            <summary>
+            Returns DataSet with roles that are allowed for specified form.
+            </summary>
+            <param name="formId">Form ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.RefreshDataCountInternal(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Refresh bizform items count.
+            </summary>
+            <param name="bzi">BizFormInfo</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteDataInternal(System.String,System.Int32)">
+            <summary>
+            Delete all bizform data.
+            </summary>
+            <param name="formName">Form name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormFilesInternal(System.String,System.String,System.Int32)">
+            <summary>
+            Deletes all files of the specified BizForm.
+            </summary>
+            <param name="className">BizForm class name</param>
+            <param name="column">Name of the column where file information is stored, optional</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.GenerateFormPrimaryKeyNameInternal(System.String)">
+            <summary>
+            Takes code name of the form and generates a primary key name from it. Generated primary key is safe to use in the
+            database. It does not contain forbidden characters, does not start with a number, etc.
+            </summary>
+            <param name="formCodeName">Code name of the FormInfo</param>
+            <returns>Primary key name of the form</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="formCodeName"/> is null or empty</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.ProcessWebFarmTaskInternal(System.String,System.String,System.Byte[])">
+            <summary>
+            Runs the processing of specific web farm task for current provider
+            </summary>
+            <param name="actionName">Action name</param>
+            <param name="data">Custom task data</param>
+            <param name="binary">Binary data</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormUploadFile">
+            <summary>
+            Class represents a file uploaded via BizForm submission.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormUploadFile.DATATYPE_FORMFILE">
+            <summary>
+            Data type identifier. Used to identify related <see cref="T:CMS.DataEngine.DataType"/> in the <see cref="T:CMS.DataEngine.DataTypeManager"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormUploadFile.SystemFileName">
+            <summary>
+            Gets or sets the system file name of the uploaded file.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormUploadFile.OriginalFileName">
+            <summary>
+            Gets or sets the original file name of the uploaded file.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormUploadFileSerializer">
+            <summary>
+            Class responsible for serialization and deserialization of <see cref="T:CMS.OnlineForms.BizFormUploadFile"/> instances.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormUploadFileSerializer.Deserialize(System.String)">
+            <summary>
+            Deserializes <paramref name="text"/> into a <see cref="T:CMS.OnlineForms.BizFormUploadFile"/> instance.
+            </summary>
+            <param name="text">Text to be deserialized.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormUploadFileSerializer.Serialize(System.Object)">
+            <summary>
+            Serializes a <see cref="T:CMS.OnlineForms.BizFormUploadFile"/> object into string.
+            </summary>
+            <param name="value"><see cref="T:CMS.OnlineForms.BizFormUploadFile"/> instance to be serialized.</param>
+            <exception cref="T:System.ArgumentException">Thrown when value is not of <see cref="T:CMS.OnlineForms.BizFormUploadFile"/> type.</exception>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormException">
+            <summary>
+            Thrown when biz form operation fails.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormException"/> class with default values.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="inner">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormException"/> class with serialized data.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormTableNameNotUniqueException">
+            <summary>
+            Thrown when biz form table name is not unique.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormTableNameNotUniqueException.TableName">
+            <summary>
+            Gets the table name.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with default values.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with a specified error message and a table name that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="tableName">The table name that is the cause of this exception.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="inner">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with a specified error message, a table name and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="tableName">The table name that is the cause of this exception.</param>
+            <param name="inner">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormTableNameNotUniqueException"/> class with serialized data.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTableNameNotUniqueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The S<see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">Throw when <paramref name="info"/> is null.</exception>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormFileService">
+            <summary>
+            Contains uploaded file manipulation methods for forms.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.GetTempFileName(System.String)">
+            <summary>
+            Gets temporary file name for an identifier.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <returns>Returns the temporary file name based on <paramref name="tempFileIdentifier"/>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Saves uploaded form file as a temporary file to the file system. The file can be optionally resized if it is an image file.
+            The type of the file is determined from the <paramref name="uploadedFile"/>'s <see cref="P:CMS.Base.IUploadedFile.FileName"/>.
+            </summary>
+            <param name="uploadedFile">Posted file from a client.</param>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary form files are being saved.</param>
+            <param name="width">Required image width to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="height">Required image height to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="maxSideSize">Required image max side size to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="uploadedFile"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> or <paramref name="tempFilesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.SaveUploadedFileCore(CMS.Base.IUploadedFile,System.String,System.String,System.String,System.Int32,System.Int32,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Saves uploaded file to the file system. The file can be optionally resized if it is an image file.
+            The type of the file is determined from the <paramref name="originalFileExtension"/>.
+            </summary>
+            <param name="uploadedFile">Posted file from a client.</param>
+            <param name="fileName">File name to be used for <paramref name="uploadedFile"/>.</param>
+            <param name="filesFolderPath">Folder path where uploaded form files are being saved.</param>
+            <param name="originalFileExtension">Original file extension to determine whether file is an image file.</param>
+            <param name="width">Required image width to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="height">Required image height to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="maxSideSize">Required image max side size to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+            <param name="isTempFile">A value indicating whether file represents a temporary file.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.PromoteTempFile(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Saves temporary file previously saved via the <see cref="M:CMS.OnlineForms.BizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> method as a permanent form file.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <param name="fileName">File name to be used for the permanent file.</param>
+            <param name="filesFolderPath">Folder path where uploaded form files are being saved.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/>, <paramref name="tempFilesFolderPath"/>, <paramref name="fileName"/> or <paramref name="filesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.DeleteFile(System.String,System.String,System.String)">
+            <summary>
+            Deletes file previously saved via the <see cref="M:CMS.OnlineForms.BizFormFileService.PromoteTempFile(System.String,System.String,System.String,System.String,System.String)"/> method.
+            </summary>
+            <param name="fileName">File name to be used for the file.</param>
+            <param name="filesFolderPath">Folder path where uploaded form files are being saved.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="fileName"/> or <paramref name="filesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.DeleteTempFile(System.String,System.String)">
+            <summary>
+            Deletes temporary file previously saved via the <see cref="M:CMS.OnlineForms.BizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> method which was not promoted to a permanent file.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> or <paramref name="tempFilesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileService.TempFileExists(System.String,System.String)">
+            <summary>
+            Checks whether file previously saved via the <see cref="M:CMS.OnlineForms.BizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> still exists.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <returns>True if the file exists, otherwise false.</returns>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormFileServiceExtensions">
+            <summary>
+            Provides additional methods for <see cref="T:CMS.OnlineForms.IBizFormFileService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormFileServiceExtensions.SaveUploadedFileAsTempFile(CMS.OnlineForms.IBizFormFileService,System.Web.HttpPostedFileBase,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Saves uploaded form file as a temporary file to the file system. The file can be optionally resized if it is an image file.
+            The type of the file is determined from the <paramref name="postedFile"/>'s <see cref="P:System.Web.HttpPostedFileBase.FileName"/>.
+            </summary>
+            <param name="bizFormFileService">The <see cref="T:CMS.OnlineForms.IBizFormFileService"/>.</param>
+            <param name="postedFile">Posted file from a client.</param>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary form files are being saved.</param>
+            <param name="width">Required image width to resize the <paramref name="postedFile"/> to if the file is an image file, or 0.</param>
+            <param name="height">Required image height to resize the <paramref name="postedFile"/> to if the file is an image file, or 0.</param>
+            <param name="maxSideSize">Required image max side size to resize the <paramref name="postedFile"/> to if the file is an image file, or 0.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="postedFile"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> or <paramref name="tempFilesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="T:CMS.OnlineForms.IBizFormFileService">
+            <summary>
+            Defines manipulation methods for a file uploaded via forms.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.GetTempFileName(System.String)">
+            <summary>
+            Gets temporary file name for an identifier.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <returns>Returns the temporary file name based on <paramref name="tempFileIdentifier"/>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Saves uploaded form file as a temporary file to the file system. The file can be optionally resized if it is an image file.
+            The type of the file is determined from the <paramref name="uploadedFile"/>'s <see cref="P:CMS.Base.IUploadedFile.FileName"/>.
+            </summary>
+            <param name="uploadedFile">Posted file from a client.</param>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary form files are being saved.</param>
+            <param name="width">Required image width to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="height">Required image height to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <param name="maxSideSize">Required image max side size to resize the <paramref name="uploadedFile"/> to if the file is an image file, or 0.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="uploadedFile"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> or <paramref name="tempFilesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.PromoteTempFile(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Saves temporary file previously saved via the <see cref="M:CMS.OnlineForms.IBizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> method as a permanent form file.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <param name="fileName">File name to be used for temporary file.</param>
+            <param name="filesFolderPath">Folder path where uploaded form files are being saved.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/>, <paramref name="tempFilesFolderPath"/>, <paramref name="fileName"/> or <paramref name="filesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.DeleteTempFile(System.String,System.String)">
+            <summary>
+            Deletes temporary file previously saved via the <see cref="M:CMS.OnlineForms.IBizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> method which was not promoted to a permanent file.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="tempFileIdentifier"/> or <paramref name="tempFilesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.DeleteFile(System.String,System.String,System.String)">
+            <summary>
+            Deletes file previously saved via the <see cref="M:CMS.OnlineForms.IBizFormFileService.PromoteTempFile(System.String,System.String,System.String,System.String,System.String)"/> method.
+            </summary>
+            <param name="fileName">File name to be used for the file.</param>
+            <param name="filesFolderPath">Folder path where uploaded form files are being saved.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="fileName"/> or <paramref name="filesFolderPath"/> is null or an empty string.</exception>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormFileService.TempFileExists(System.String,System.String)">
+            <summary>
+            Checks whether file previously saved via the <see cref="M:CMS.OnlineForms.IBizFormFileService.SaveUploadedFileAsTempFile(CMS.Base.IUploadedFile,System.String,System.String,System.Int32,System.Int32,System.Int32)"/> still exists.
+            </summary>
+            <param name="tempFileIdentifier">Identifier of the temporary file to derive file name from.</param>
+            <param name="tempFilesFolderPath">Folder path where temporary files are being saved.</param>
+            <returns>True if the file exists, otherwise false.</returns>
+        </member>
+        <member name="T:CMS.OnlineForms.FormClassInfo">
+            <summary>
+            <see cref="T:CMS.OnlineForms.BizFormInfo"/> stores information about General, Autoresponder, Email notification and similar tabs. 
+            <see cref="T:CMS.OnlineForms.FormClassInfo"/> stores the structure of the form. That means for example form definition (Fields tab) and search fields settings.
+            <see cref="T:CMS.OnlineForms.BizFormItem"/> stores the data that visitors fill on the website.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.FormClassInfo.OBJECT_TYPE_FORM">
+            <summary>
+            Object type for form
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.FormClassInfo.TYPEINFOFORM">
+            <summary>
+            Type information for forms.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.FormClassInfo.TypeInfo">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.FormClassInfo.Items">
+            <summary>
+            Returns the items of this collection
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.FormClassInfo.RegisteredProperties">
+            <summary>
+            Local registered properties
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormClassInfo.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormClassInfo.RegisterProperties">
+            <summary>
+            Registers the properties of this object
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.Internal.GetBizFormFileServiceBase">
+            <summary>
+            Base handler class for serving biz form files.
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+        </member>
+        <member name="P:CMS.OnlineForms.Internal.GetBizFormFileServiceBase.AllowCache">
+            <summary>
+            Indicates whether caching is allowed. Returns false.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.Internal.GetBizFormFileServiceBase.GetFileServiceResultBase(System.String,System.String,System.String)">
+            <summary>
+            Processes biz form file request.
+            </summary>
+            <param name="fileName">File name (as originally provided by the <see cref="M:CMS.FormEngine.FormHelper.GetGuidFileName(System.String)"/> method).</param>
+            <param name="originalFileName">File name for download (as originally provided by the <see cref="M:CMS.FormEngine.FormHelper.GetOriginalFileName(System.String)"/> method).
+            If invalid or not provided, the content disposition will use <paramref name="fileName"/> value instead.</param>
+            <param name="siteName">Site name the corresponding form belongs to.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemEventArgs">
+            <summary>
+            BizForm item event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItemEventArgs.Item">
+            <summary>
+            Processed BizForm item
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemEvents">
+            <summary>
+            BizForm item events
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemEvents.Update">
+            <summary>
+            Fires when BizForm item is updated
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemEvents.Insert">
+            <summary>
+            Fires when BizForm item is inserted
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemEvents.Delete">
+            <summary>
+            Fires when BizForm item is deleted
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemHandler">
+            <summary>
+            BizForm item handler
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemHandler.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemHandler.#ctor(CMS.OnlineForms.BizFormItemHandler)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="parentHandler">Parent handler</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemHandler.StartEvent(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="item">Handled item</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemHandler.GetRecursionKey(CMS.OnlineForms.BizFormItemEventArgs)">
+            <summary>
+            Gets the recursion key of the class to identify recursion
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItem">
+            <summary>
+            <see cref="P:CMS.OnlineForms.BizFormItem.BizFormInfo"/> stores information about General, Autoresponder, Email notification and similar tabs.
+            <see cref="T:CMS.OnlineForms.FormClassInfo"/> stores the structure of the form. That means for example form definition (Fields tab) and search fields settings.
+            <see cref="T:CMS.OnlineForms.BizFormItem"/> stores the data that visitors fill on the website.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.DataClassInfo">
+            <summary>
+            DataClass info
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.BizFormInfo">
+            <summary>
+            BizForm which this item belongs to.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.BizFormClassName">
+            <summary>
+            Gets class name of BizForm item.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.ItemID">
+            <summary>
+            Gets or sets BizForm item ID.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.FormInserted">
+            <summary>
+            Gets or sets BizForm item insertion date.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.FormUpdated">
+            <summary>
+            Gets or sets date of modification of BizForm item.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItem.ObjectDisplayName">
+            <summary>
+            Object display name.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.Clone">
+            <summary>
+            Creates a clone of BizForm item
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.UpdateData">
+            <summary>
+            Update BizForm item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.InsertData">
+            <summary>
+            Insert BizForm item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.DeleteData">
+            <summary>
+            Delete BizForm item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.GetPermissionName(CMS.DataEngine.PermissionsEnum)">
+            <summary>
+            Converts permissions enum to permission code name when CheckPermission() is called.
+            </summary>
+            <param name="permission">Permissions enum</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.#ctor(System.String,System.Data.DataRow)">
+            <summary>
+            Base constructor for inherited classes and internal purposes
+            </summary>
+            <param name="className">Class name of the document</param>
+            <param name="dr">Data row with the data</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.NewObject(CMS.DataEngine.LoadDataSettings)">
+            <summary>
+            Creates a new object from the given DataRow
+            </summary>
+            <param name="settings">Data settings</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.New(System.String,System.Data.DataRow)">
+            <summary>
+            Creates new BizFormItem instance which must inherit the BizFormItem class.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="dataRow">Data row containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.New``1(System.String,System.Data.DataRow)">
+            <summary>
+            Creates new document instance.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="dataRow">Data row containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.New``1(System.String,CMS.Base.IDataContainer)">
+            <summary>
+            Creates new document instance.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="data">Data container containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.NewInstance``1(System.String)">
+            <summary>
+            Creates a new instance of the given type
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.Initialize(System.String,System.Data.DataRow)">
+            <summary>
+            Initializes the object created with default constructor. Use it to load existing item from data row.
+            </summary>
+            <param name="className">Class name</param>
+            <param name="dr">Data row containing all page data</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.Initialize(System.String,CMS.Base.IDataContainer)">
+            <summary>
+            Initializes the object created with default constructor. Use it to load existing item from data row.
+            </summary>
+            <param name="className">Class name</param>
+            <param name="data">Data container containing all page data</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.UpdateTypeInfo(CMS.DataEngine.ObjectTypeInfo)">
+            <summary>
+            Updates instance with given type info
+            </summary>
+            <param name="typeInfo">Type info</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.GetValue(System.String)">
+            <summary>
+            Gets BizForm item value.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Returns value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Returns the value</param>
+            <returns>Returns true if the operation was successful (the value was present)</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.SetValue(System.String,System.Object)">
+            <summary>
+            Sets value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Column value</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.GetSearchID">
+            <summary>
+            Gets the id column value which is used as search id by default.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItem.GetSearchImageUrl(System.String)">
+            <summary>
+            Returns URL to current search result item image.
+            </summary>
+            <param name="image">Image</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemFactory">
+            <summary>
+            Factory that provides BizForm item objects
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItemFactory.Type">
+            <summary>
+            BizForm item type
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemFactory.#ctor(System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="type">Type of the BizForm class</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemFactory.CreateNewObject">
+            <summary>
+            Creates new BizForm item object
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemGenerator">
+            <summary>
+            Generator of the specific BizForm items
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemGenerator.mGenerator">
+            <summary>
+            Object generator
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemGenerator.NewInstance``1(System.String)">
+            <summary>
+            Creates new instance of the given type
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemGenerator.RegisterBizForm(System.String,CMS.OnlineForms.BizFormItemFactory)">
+            <summary>
+            Registers the given BizForm item class
+            </summary>
+            <param name="className">Class name to register</param>
+            <param name="factory">Factory to use for new items</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemGenerator.RegisterBizForm``1(System.String)">
+            <summary>
+            Registers the given BizForm item class
+            </summary>
+            <param name="className">Class name to register</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemGenerator.RegisterDefaultFactory(CMS.OnlineForms.BizFormItemFactory)">
+            <summary>
+            Registers the default factory for the BizForm items, which overlaps the default one
+            </summary>
+            <param name="factory">Factory to register</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormItemProvider">
+            <summary>
+            Class for retrieving BizForm items.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemProvider.BIZFORM_ITEM_PREFIX">
+            <summary>
+            BizFrom item prefix for object type.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemProvider.licenseBizForm">
+            <summary>
+            License limitation "BizForms" table
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormItemProvider.mTypeInfos">
+            <summary>
+            BizForms TypeInfo [className.ToLowerInvariant()] -> [TypeInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItemProvider.IsValid">
+            <summary>
+            Indicates if the provider instance is up-to-date and can be used to manage object instances.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItemProvider.TypeInfos">
+            <summary>
+            BizForms TypeInfo [className.ToLowerInvariant()] -> [TypeInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormItemProvider.ClassName">
+            <summary>
+            Class name
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.#ctor">
+            <summary>
+            Constructor (Creates uninitialized provider.)
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.#ctor(System.String)">
+            <summary>
+            Base constructor for inherited classes and internal purposes
+            </summary>
+            <param name="className">Class name of the BizForm</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.BizFormItemProvider"/> class.
+            </summary>
+            <param name="initialize">Indicates if provider together with hash tables should be initialized.</param>
+            <param name="className">Class name of the BizForm.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItem(System.Int32,System.String)">
+            <summary>
+            Returns BizForm item of specified class name and item ID.
+            </summary>
+            <param name="itemId">Item ID</param>
+            <param name="className">Class name of the BizForm</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItem``1(System.Int32)">
+            <summary>
+            Returns BizForm item of specified type and item ID.
+            </summary>
+            <param name="itemId">Item ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.DeleteItem(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Deletes given BizForm item
+            </summary>
+            <param name="item">BizForm item</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.SetItem(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Sets given BizForm item
+            </summary>
+            <param name="item">BizForm item</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItems(System.String)">
+            <summary>
+            Returns query of all data record for given BizForm.
+            </summary>
+            <param name="className">Class name of the BizForm</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItems``1">
+            <summary>
+            Returns query of all data records for given type.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.DeleteItems(System.String,System.String)">
+            <summary>
+            Deletes all items for given BizForm.
+            </summary>
+            <param name="className">Class name of the BizForm</param>
+            <param name="where">Where condition to filter the items</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.LicenseVersionCheck(System.String,CMS.DataEngine.ObjectActionEnum)">
+            <summary>
+            License version checker.
+            </summary>
+            <param name="domain">Domain name</param>
+            <param name="action">Type of action - edit, insert, delete</param>
+            <returns>Returns true if feature is without any limitations for domain and action</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.CheckLicense(CMS.DataEngine.ObjectActionEnum,System.String)">
+            <summary>
+            Checks the license.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.ClearLicensesCount">
+            <summary>
+            Clear BizForm items hash count values.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetClassName(System.String)">
+            <summary>
+            Gets BizForm item class name from given object type.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetObjectType(System.String)">
+            <summary>
+            Gets BizForm item object type from given class name.
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.IsBizFormItemObjectType(System.String)">
+            <summary>
+            Indicates if given object type represents BizForm item.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItemName(CMS.OnlineForms.BizFormItem,System.String)">
+            <summary>
+            Gets BizForm item name.
+            </summary>
+            <param name="item">BizFrom table item</param>
+            <param name="classDisplayName">Class display name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.DeleteItemInternal(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Deletes given BizForm item
+            </summary>
+            <param name="item">BizForm item</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.SetItemInternal(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Sets given BizForm item
+            </summary>
+            <param name="item">BizForm item</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItemInternal(System.Int32)">
+            <summary>
+            Returns BizForm item of specified class name and item ID.
+            </summary>
+            <param name="itemId">Item ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItemsInternal">
+            <summary>
+            Returns query of all data record for given BizForm.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.DeleteItemsInternal(System.String)">
+            <summary>
+            Deletes all items for given class.
+            </summary>
+            <param name="where">Where condition to filter the items</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetItemNameInternal(CMS.OnlineForms.BizFormItem,System.String)">
+            <summary>
+            Gets BizForm item name.
+            </summary>
+            <param name="item">BizForm item</param>
+            <param name="classDisplayName">Class display name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetProviderObject(System.String)">
+            <summary>
+            Gets provider object.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.LoadProviderInternal(System.String)">
+            <summary>
+            Loads BizForm item provider for given object type
+            </summary>
+            <param name="objectType">BizForm item object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.InvalidateProvider(System.String)">
+            <summary>
+            Invalidates specific provider.
+            </summary>
+            <param name="objectType">Type of the object</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.CreateInfo(System.Data.DataRow,System.Boolean)">
+            <summary>
+            Creates new BizForm item instance
+            </summary>
+            <param name="dr">DataRow with the data</param>
+            <param name="useGenerator">If true, the process allows using the generator to differentiate between particular info types based on data</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.GetTypeInfo(System.String)">
+            <summary>
+            Returns the TypeInfo for specified class.
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.Clear(System.Boolean)">
+            <summary>
+            Clear the class info and properties lists of all object types.
+            </summary>
+            <param name="logTask">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.InvalidateTypeInfo(System.String,System.Boolean)">
+            <summary>
+            Invalidates typeinfo specified by class name.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.ValidateClass(System.String)">
+            <summary>
+            Validates given class name if represents existing on-line form.
+            </summary>
+            <param name="className">Class name to validate</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormItemProvider.CreateTypeInfo(System.String)">
+            <summary>
+            Creates new typeinfo.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormTypeInfo">
+            <summary>
+            Type info for the BizForm items
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTypeInfo.#ctor(System.Type,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="providerType">Provider type</param>
+            <param name="objectType">Object type</param>
+            <param name="objectClassName">Object class name</param>
+            <param name="idColumn">ID column name</param>
+            <param name="timeStampColumn">Time stamp column name</param>
+            <param name="guidColumn">GUID column name</param>
+            <param name="codeNameColumn">Code name column name</param>
+            <param name="displayNameColumn">Display name column name</param>
+            <param name="binaryColumn">Binary column name</param>
+            <param name="siteIDColumn">Site ID column name</param>
+            <param name="parentIDColumn">Parent ID column name</param>
+            <param name="parentObjectType">Parent object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTypeInfo.GetNiceObjectTypeName">
+            <summary>
+            Gets the nice object type name for this type
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormTypeInfo.CopyBizFormTypeInfoEventsTo(CMS.DataEngine.ObjectTypeInfo)">
+            <summary>
+            Copies the event's hooks from current ObjectTypeInfo to specified one.
+            </summary>
+            <param name="info">Target.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.CMSContactFilledFormFieldWithValueInstanceTranslator">
+            <summary>
+            Translates ContactHasEnteredASpecificValueInASpecificFormSFieldInTheLastXDays Macro rule.
+            {_perfectum}Contact.FilledFormFieldWithValue("{field}", "{value}", {days});
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.ContactOnlineFormsMacroMethods.FilledFormFieldWithValue(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if the contact filled a form with the given field at least once so that the value contains expected value.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.OnlineForms.ContactOnlineFormsMacroMethods.SubmittedForm(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if the contact submitted specified form.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.OnlineForms.ContactOnlineFormsMacroMethods.FilledFormFieldWithValue(CMS.ContactManagement.ContactInfo,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Returns true if the contact filled a form with the given field at least once so that the value contains expected value.
+            </summary>
+            <param name="contact">Contact info</param>
+            <param name="siteName">Name of site the macro is evaluated for</param>
+            <param name="formName">Form name</param>
+            <param name="fieldName">Filed name</param>
+            <param name="expectedValue">Expected value</param>
+            <param name="lastXDays">Constraint for last X days (if zero or negative value is given, no constraint is applied)</param>
+        </member>
+        <member name="M:CMS.OnlineForms.ContactOnlineFormsMacroMethods.SubmittedForm(System.Object,System.String,System.Int32)">
+            <summary>
+            Returns true if the contact submitted specified form.
+            </summary>
+            <param name="contact">Contact which should be checked</param>
+            <param name="formName">Form name</param>
+            <param name="lastXDays">Constraint for last X days (if zero or negative value is given, no constraint is applied)</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormExport">
+            <summary>
+            Handles special actions during the BizForm export process.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormExport.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormExport.ExportData(CMS.CMSImportExport.SiteExportSettings,System.Data.DataSet,CMS.DataEngine.TranslationHelper)">
+            <summary>
+            Export BizForms data.
+            </summary>
+            <param name="settings">Export settings</param>
+            <param name="data">Parent dataset</param>
+            <param name="th">Translation helper</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormExport.GetData(CMS.DataEngine.DataClassInfo)">
+            <summary>
+            Returns DataSet of form records.
+            </summary>
+            <param name="dataClass">Form class</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormImport">
+            <summary>
+            Handles special actions during the BizForm import process.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormImport.Init">
+            <summary>
+            Initializes import handlers
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormImport.ImportData(CMS.CMSImportExport.SiteImportSettings,System.Data.DataTable,CMS.DataEngine.TranslationHelper)">
+            <summary>
+            Import BizForms data.
+            </summary>
+            <param name="settings">Import settings</param>
+            <param name="table">Parent data</param>
+            <param name="th">Translation helper</param>
+        </member>
+        <member name="T:CMS.OnlineForms.ImportSpecialActions">
+            <summary>
+            Handles special actions during the import process.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.ImportSpecialActions.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.OnlineFormsHandlers">
+            <summary>
+            Online forms events handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.Init">
+            <summary>
+            Initializes the events handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.CreateIndexIfNeeded(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Ensures index existence after each <see cref="T:CMS.OnlineForms.FormClassInfo"/> info insert or update operation.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.LogFormSubmitActivity(System.Object,CMS.OnlineForms.BizFormItemEventArgs)">
+            <summary>
+            Logs form submission activity.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.Insert(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when inserting a form
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.Delete(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when deleting a form
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.ClearHashtables(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Clears data in hashtables
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.Update(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when updating a form
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.UpdateDisplayName(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Updates display name of DataClass when BizFormInfo display name changes.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.LogChange(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Logs the change of the biz form for the alternative form event handler
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.OnlineFormsModule">
+            <summary>
+            Represents the Form module.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.OnPreInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.OnInit">
+            <summary>
+            Init module
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.GetObject(System.String)">
+            <summary>
+            Gets the object created from the given DataRow.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.AbstractProvider_LoadProvider(System.Object,CMS.DataEngine.LoadProviderEventArgs)">
+            <summary>
+            Ensures provider for the BizForm items
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the module hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.RegisterMacroRule">
+            <summary>
+            Register metadata containing macro->dataquery translator to speed up contact group recalculation.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModule.RegisterDataTypeCodeGenerators">
+            <summary>
+            Register code generator for <see cref="F:CMS.OnlineForms.BizFormUploadFile.DATATYPE_FORMFILE"/> type.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.OnlineFormsModuleDataTypeRegistrator">
+            <summary>
+            Class responsible for registering data types to the system.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModuleDataTypeRegistrator.RegisterDataTypeBizFormUploadFile">
+            <summary>
+            Registers <see cref="T:CMS.OnlineForms.BizFormUploadFile"/> data type.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.OnlineFormsModuleMetadata">
+            <summary>
+            Represents the Online forms module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.OnlineFormsModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.ClearBizFormTypeInfosWebFarmTask">
+            <summary>
+            Web farm task used to clear the bizForm item type info.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="M:CMS.OnlineForms.ClearBizFormTypeInfosWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.OnlineForms.BizFormItemProvider.Clear(System.Boolean)"/> method.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.DeleteBizFormFileWebFarmTask">
+            <summary>
+            Web farm task used to delete bizform files.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which bizform is assigned to.
+            Null if <see cref="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.IsTempFile"/> is true.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.FileName">
+            <summary>
+            Gets or sets name of the file to be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.IsTempFile">
+            <summary>
+            Gets or sets the flag indicating whether file is a temporary file. False by default.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.OnlineForms.DeleteBizFormFileWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for deleting bizform files is allowed.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.IO.File.Delete(System.String)"/> method upon bizform file given by <see cref="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.SiteName"/> and <see cref="P:CMS.OnlineForms.DeleteBizFormFileWebFarmTask.FileName"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.FormSynchronization">
+            <summary>
+            Web farm synchronization for Documents.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.FormSynchronization.SynchronizeBizFormFiles">
+            <summary>
+            Gets or sets value that indicates whether file synchronization for BizForm files is enabled.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormSynchronization.Init">
+            <summary>
+            Initializes the tasks for forms synchronization
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.InvalidateBizFormTypeInfoWebFarmTask">
+            <summary>
+            Web farm task used to invalidate BizForm type info.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.OnlineForms.InvalidateBizFormTypeInfoWebFarmTask.ClassName">
+            <summary>
+            Gets or sets name of the class to be invalidated.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.InvalidateBizFormTypeInfoWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.OnlineForms.BizFormItemProvider.InvalidateTypeInfo(System.String,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask">
+            <summary>
+            Web farm task used to promote temporary files attached to a form.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.SiteName">
+            <summary>
+            Gets or sets the name of the site the form is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.TempFileName">
+            <summary>
+            Gets or sets the name of the temporary file to be promoted.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.FileName">
+            <summary>
+            Gets or sets the name of the file to be updated.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true if the synchronization of the BizForm files is allowed.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by moving the temporary file identified by <see cref="P:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.TempFileName"/> to a new location specified by <see cref="P:CMS.OnlineForms.PromoteBizFormTempFileWebFarmTask.FileName"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.UpdateBizFormFileWebFarmTask">
+            <summary>
+            Web farm task used to update files attached to a form.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.SiteName">
+            <summary>
+            Gets or sets the name of the site the form is assigned to.
+            Null if <see cref="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.IsTempFile"/> is true.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.FileName">
+            <summary>
+            Gets or sets the name of the file to be updated.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.IsTempFile">
+            <summary>
+            Gets or sets the flag indicating whether file is a temporary file. False by default.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.OnlineForms.UpdateBizFormFileWebFarmTask"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true if the synchronization of the BizForm files is allowed.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.IO.StorageHelper.SaveFileToDisk(System.String,CMS.Core.BinaryData,System.Boolean)"/> method upon bizform file given by <see cref="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.SiteName"/> and <see cref="P:CMS.OnlineForms.UpdateBizFormFileWebFarmTask.FileName"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormMailSender">
+            <summary>
+            Represents default implementation for sending on-line form notification and autoresponder emails.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.RegExEmailMacro">
+            <summary>
+            Regular expression for macros in e-mail body, macros are in form $$type:fieldname$$ where type is "label" or "value".
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.FormConfiguration">
+            <summary>
+            Configuration of the form.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.FormData">
+            <summary>
+            Data collected from the form.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.FormDefinition">
+            <summary>
+            Form structure definition.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.Uploads">
+            <summary>
+            Names of file input fields where some files were recently uploaded.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormMailSender.EncodeEmails">
+            <summary>
+            Indicates if email content should be encoded.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.#ctor(CMS.OnlineForms.BizFormInfo,CMS.Base.IDataContainer,CMS.FormEngine.FormInfo,System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Initiates the mail sender service with required data.
+            </summary>
+            <param name="formConfiguration">Configuration of the online form</param>
+            <param name="formData">Data collected from the form</param>
+            <param name="formDefinition">Form structure definition, may include changes from alternative form if alt.form is used; if empty, default definition from <paramref name="formConfiguration"/> is used</param>
+            <param name="uploads">Names of file input fields where some files were recently uploaded</param>
+            <param name="encodeEmails">Indicates if email content should be encoded; false by default</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.SendNotificationEmail">
+            <summary>
+            Sends notification email to specified person based on on-line form configuration and collected data.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.SendConfirmationEmail">
+            <summary>
+            Sends confirmation email (autoresponder) based on on-line form configuration and collected data.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.ResolveEmailMessageText(System.String)">
+            <summary>
+            Resolve possible field macros in email message text.
+            </summary>
+            <param name="emailLayout">Email layout template with macros to resolve</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.GetFieldValueForMail(CMS.FormEngine.FormFieldInfo)">
+            <summary>
+            Returns field value for mail message. Value is transformed according to field type.
+            </summary>
+            <param name="formFieldInfo">Form field info</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSender.CreateTemplateWithDefaultLayout(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates email body template with default layout based on form fields.
+            </summary>
+            <param name="columnNames">Form fields</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormMailSenderFactory">
+            <summary>
+            Default implementation of <see cref="T:CMS.OnlineForms.IBizFormMailSenderFactory"/> providing on-line form email sender <see cref="T:CMS.OnlineForms.BizFormMailSender"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormMailSenderFactory.GetFormMailSender(CMS.OnlineForms.BizFormInfo,CMS.Base.IDataContainer,CMS.FormEngine.FormInfo,System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Returns an email sender instance initiated with given data.
+            </summary>
+            <param name="formConfiguration">Configuration of the online form</param>
+            <param name="formData">Data collected from the form</param>
+            <param name="formDefinition">Form structure definition, may include changes from alternative form if alt.form is used; if empty, default defition from <paramref name="formConfiguration"/> is used</param>
+            <param name="uploads">Names of file input fields via which files were recently uploaded</param>
+            <param name="encodeEmails">Indicates if email content should be encoded; false by default</param>
+        </member>
+        <member name="T:CMS.OnlineForms.IBizFormMailSender">
+            <summary>
+            Interface providing methods for sending on-line form notification and autoresponder emails.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormMailSender.SendNotificationEmail">
+            <summary>
+            Sends notification email to specified person based on on-line form configuration and collected data.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormMailSender.SendConfirmationEmail">
+            <summary>
+            Sends confirmation email (autoresponder) based on on-line form configuration and collected data.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.IBizFormMailSenderFactory">
+            <summary>
+            Represents factory providing on-line form email sender implementations.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormMailSenderFactory.GetFormMailSender(CMS.OnlineForms.BizFormInfo,CMS.Base.IDataContainer,CMS.FormEngine.FormInfo,System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Returns an email sender instance initiated with given data.
+            </summary>
+            <param name="formConfiguration">Configuration of the online form</param>
+            <param name="formData">Data collected from the form</param>
+            <param name="formDefinition">Form structure definition, may include changes from alternative form if alt.form is used; if empty, default defition from <paramref name="formConfiguration"/> is used</param>
+            <param name="uploads">Names of file input fields via which files were recently uploaded</param>
+            <param name="encodeEmails">Indicates if email content should be encoded; false by default</param>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormRoleInfo">
+            <summary>
+            BizFormRoleInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormRoleInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.BizFormRoleInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormRoleInfo.FormID">
+            <summary>
+            ID of the Form.
+            </summary>
+        </member>
+        <member name="P:CMS.OnlineForms.BizFormRoleInfo.RoleID">
+            <summary>
+            ID of the Role.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty BizFormRoleInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new BizFormRoleInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.BizFormRoleInfoProvider">
+            <summary>
+            Class providing BizFormRoleInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.GetBizFormRoles">
+            <summary>
+            Returns a query for all the BizFormRoleInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.GetBizFormRoleInfo(System.Int32,System.Int32)">
+            <summary>
+            Returns the BizFormRoleInfo structure for the specified bizFormRole.
+            </summary>
+            <param name="roleId">RoleID</param>
+            <param name="formId">FormID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.SetBizFormRoleInfo(CMS.OnlineForms.BizFormRoleInfo)">
+            <summary>
+            Sets (updates or inserts) specified BizFormRoleInfo.
+            </summary>
+            <param name="infoObj">BizFormRoleInfo to be set.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.SetBizFormRoleInfo(System.Int32,System.Int32)">
+            <summary>
+            Inserts specified BizFormRoleInfo.
+            </summary>
+            <param name="formId">FormId</param>
+            <param name="roleId">RoleId</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.DeleteBizFormRoleInfo(CMS.OnlineForms.BizFormRoleInfo)">
+            <summary>
+            Deletes specified BizFormRoleInfo.
+            </summary>
+            <param name="infoObj">BizFormRoleInfo to be deleted.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.DeleteBizFormRoleInfo(System.Int32,System.Int32)">
+            <summary>
+            Deletes specified BizFormRole.
+            </summary>
+            <param name="formId">FormId</param>
+            <param name="roleId">RoleId</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.RemoveAllRolesFromForm(System.Int32)">
+            <summary>
+            Removes all allowed roles from the form.
+            </summary>        
+            <param name="formId">Form ID</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.GetBizFormRoleInfoInternal(System.Int32,System.Int32)">
+            <summary>
+            Returns the BizFormRoleInfo structure for the specified form and role.
+            </summary>
+            <param name="roleId">RoleId</param>
+            <param name="formId">FormId</param>       
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.SetBizFormRoleInfoInternal(System.Int32,System.Int32)">
+            <summary>
+            Inserts specified BizFormRoleInfo.
+            </summary>
+            <param name="roleId">RoleId</param>
+            <param name="formId">FormId</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.RemoveAllRolesFromFormInternal(System.Int32)">
+            <summary>
+            Removes all allowed roles from the form.
+            </summary>        
+            <param name="formId">Form ID</param>
+        </member>
+        <member name="T:CMS.OnlineForms.FormFieldInfoExtensions">
+            <summary>
+            Extension methods for <see cref="T:CMS.FormEngine.FormFieldInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormFieldInfoExtensions.IsSmartField(CMS.FormEngine.FormFieldInfo)">
+            <summary>
+            Returns true when given <paramref name="fieldInfo"/> is defined as smart one.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormFieldInfoExtensions.ContainsSmartField(CMS.FormEngine.FormInfo)">
+            <summary>
+            Returns true when given <paramref name="formInfo"/> contains at least one field defined as smart one.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.IObjectQueryExtensions">
+            <summary>
+            Extension methods for <see cref="T:CMS.DataEngine.ObjectQuery`1"/>
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IObjectQueryExtensions.HasExistingItemForContact(CMS.DataEngine.ObjectQuery{CMS.OnlineForms.BizFormItem},CMS.OnlineForms.BizFormInfo,System.Nullable{System.Guid},CMS.OnlineForms.BizFormItem@)">
+            <summary>
+            Returns true when form item for combination given <paramref name="query"/> and given <paramref name="contactGuid"/> exists.
+            </summary>
+            <param name="query">Object query of form items.</param>
+            <param name="formInfo">Form description.</param>
+            <param name="contactGuid">Guid of contact.</param>
+            <param name="item">When item exists, it's assigned to parameter.</param>
+            <returns>True when item exists, false otherwise.</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.IObjectQueryExtensions.GetExistingItemForContact(CMS.DataEngine.ObjectQuery{CMS.OnlineForms.BizFormItem},CMS.OnlineForms.BizFormInfo,System.Nullable{System.Guid})">
+            <summary>
+            Returns existing form item from given <paramref name="query"/> for given <paramref name="contactGuid"/>.
+            </summary>
+            <param name="query">Object query of form items.</param>
+            <param name="formInfo">Form description.</param>
+            <param name="contactGuid">Guid of contact.</param>
+            <returns>Instance of <see cref="T:CMS.OnlineForms.BizFormItem"/> when such item exists, false otherwise.</returns>
+        </member>
+        <member name="T:CMS.OnlineForms.SmartFieldConstants">
+            <summary>
+            Provides internal constants for smart fields feature.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.SmartFieldConstants.CONTACT_COLUMN_NAME">
+            <summary>
+            Name of the column holding contact identifier.
+            </summary>
+        </member>
+        <member name="F:CMS.OnlineForms.SmartFieldConstants.MINIMUM_DISPLAYED_FIELD_COUNT">
+            <summary>
+            Minimum number of displayed field when all visible fields are smart ones.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.SmartFieldDatabaseUtils">
+            <summary>
+            Database helper methods for smart fields feature.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.SmartFieldDatabaseUtils.EnsureContactColumnIndex(System.String)">
+            <summary>
+            Ensures unique filtered non-clustered index on FormContactGUID column for given <paramref name="tableName"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.SmartFieldLicenseHelper">
+            <summary>
+            Licensing helper class for Smart field feature.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.SmartFieldLicenseHelper.HasLicense">
+            <summary>
+            Performs license check.
+            </summary>
+            <returns>True when license is available, false otherwise.</returns>
+        </member>
+        <member name="T:CMS.RegisterBizFormAttribute">
+            <summary>
+            Registers the BizForm item class within the system or overrides the existing one.
+            </summary>
+        </member>
+        <member name="P:CMS.RegisterBizFormAttribute.ClassName">
+            <summary>
+            Class name
+            </summary>
+        </member>
+        <member name="P:CMS.RegisterBizFormAttribute.MarkedType">
+            <summary>
+            Gets the BizForm item implementation type
+            </summary>
+        </member>
+        <member name="M:CMS.RegisterBizFormAttribute.#ctor(System.String,System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="className">Class name</param>
+            <param name="type">BizForm item implementation type</param>
+        </member>
+        <member name="M:CMS.RegisterBizFormAttribute.Init">
+            <summary>
+            Initializes the attribute
+            </summary>
+        </member>
+    </members>
+</doc>

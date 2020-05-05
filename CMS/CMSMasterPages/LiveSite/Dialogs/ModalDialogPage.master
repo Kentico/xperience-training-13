@@ -1,0 +1,64 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_LiveSite_Dialogs_ModalDialogPage"
+    CodeBehind="ModalDialogPage.master.cs" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>SimpleMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false"></asp:Literal>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body id="bodyElem" runat="server">
+    <form id="form1" runat="server">
+        <div class="LiveSiteDialog">
+            <asp:PlaceHolder runat="server" ID="plcManager" />
+            <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+            <asp:ContentPlaceHolder ID="plcBeforeBody" runat="server" />
+            <asp:Panel ID="pnlBody" runat="server" CssClass="DialogPageBody">
+                <cms:CMSPanel ID="pnlHeaderCont" runat="server" FixedPosition="true">
+                    <div id="divHeader" style="height: auto; min-height: 0">
+                        <asp:Panel ID="pnlHeader" runat="server" EnableViewState="false">
+                            <cms:PageTitle ID="titleElem" runat="server" ShortID="pt" Wrap="true" />
+                        </asp:Panel>
+                        <asp:Panel ID="pnlTitleActions" runat="server" Visible="false" CssClass="PageHeaderLine"
+                            EnableViewState="false">
+                            <asp:ContentPlaceHolder runat="server" ID="plcTitleActions" />
+                        </asp:Panel>
+                    </div>
+                    <asp:Panel ID="pnlAdditionalControls" runat="server" CssClass="PageHeaderLine" Visible="false">
+                        <asp:ContentPlaceHolder runat="server" ID="plcControls" />
+                    </asp:Panel>
+                    <asp:Panel ID="pnlActions" runat="server" CssClass="PageHeaderLine" EnableViewState="false">
+                        <cms:HeaderActions ID="actionsElem" ShortID="a" runat="server" />
+                        <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+                    </asp:Panel>
+                    <asp:ContentPlaceHolder ID="plcBeforeContent" runat="server" />
+                </cms:CMSPanel>
+                <asp:Panel ID="divContent" runat="server" ClientIDMode="Static" CssClass="dialog-content">
+                    <asp:PlaceHolder runat="server" ID="plcLabels" />
+                    <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+                </asp:Panel>
+                <asp:Panel runat="server" ID="pnlFooterContainer">
+                    <div id="divFooter" class="dialog-footer">
+                        <asp:Panel runat="server" ID="pnlFooter">
+                            <asp:ContentPlaceHolder ID="plcFooter" runat="server" />
+                        </asp:Panel>
+                    </div>
+                </asp:Panel>
+            </asp:Panel>
+        </div>
+    </form>
+</body>
+</html>

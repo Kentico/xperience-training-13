@@ -1,0 +1,1746 @@
+// Skin.less provides default styles to Admin UI components which appear on live site. It can be changed or overridden using particular site stylesheet.
+//
+// Import just references of these less files. It doesn't compile them into the CSS code
+@import (reference) "./Skin/variables.less";
+@import (reference) "./Skin/mixins.less";
+@import (reference) "./Skin/utilities.less";
+@import (reference) "./Skin/type.less";
+
+// Import full less files
+@import "./Skin/tooltip.less";
+
+.ContentBody {
+    @import "./Skin/icons-core.less";
+    // General styles
+    .RightAlign {
+        float: right;
+    }
+
+    .LeftAlign {
+        float: left;
+    }
+
+    .TextLeft, .DialogBody {
+        text-align: left;
+    }
+
+    .TextRight, .DialogContent {
+        text-align: right;
+    }
+    // Type - hide element accessibly
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+    // Hide from screen-readers and browsers
+    .hidden {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .clear {
+        clear: both;
+    }
+    // Pagination
+    // ----------
+    .pagination-items-per-page {
+        text-align: right;
+        font-size: @font-size-base;
+        font-family: Arial;
+
+        select.form-control {
+            margin-left: @base-unit * 0.5;
+            width: 59px;
+        }
+    }
+
+    .pagination-pages {
+        float: left;
+    }
+
+    .pagination-list {
+        list-style-type: none;
+        .clearfix();
+
+        li {
+            float: left;
+            margin: 5px;
+            display: block;
+        }
+    }
+    // Forms and filters
+    // -----------------
+    // General styles
+    .form-horizontal {
+        width: @screen-tablet;
+    }
+
+    .form-group {
+        margin-bottom: 4px;
+        .clearfix();
+        clear: both;
+
+        .editing-form-label-cell, .filter-form-label-cell, .filter-form-condition-cell, .filter-form-condition-cell-generated, .filter-form-value-cell {
+            width: 33.33333333%;
+            float: left;
+        }
+
+        .editing-form-value-cell {
+            width: 66.66666667%;
+            float: left;
+        }
+
+        .editing-form-label-cell {
+            text-align: right;
+        }
+
+        .editing-form-value-cell-offset {
+            margin-left: 33.33333333%;
+        }
+        // html markup of radios is not consistent (divs, tables)
+        .radio {
+            display: block;
+
+            label {
+                margin-right: 6px;
+            }
+        }
+
+        .radio-list-vertical {
+            margin-bottom: 10px;
+        }
+        // Full width for textarea column
+        .textarea-full-width {
+            width: 100%;
+
+            .form-control {
+                width: 100%;
+            }
+        }
+    }
+    // submit button row
+    .form-group-submit {
+        margin-left: 33.33333333%;
+    }
+    // buttons row in filter (e.g. report)
+    .form-group-buttons {
+        margin-left: 33.33333333%;
+    }
+    // Input widths across the site
+    // e.g. in Phone number
+    input[type="text"].input-width-15 {
+        width: @base-unit * 2;
+    }
+    // e.g. in Phone number, select in image gallery
+    input[type="text"].input-width-20,
+    select.input-width-20 {
+        width: @base-unit * 3;
+    }
+    // Specialties
+    // Newsletter subscription form
+    .NewsletterSubscription {
+        .form-horizontal {
+            width: 220px;
+
+            .control-label {
+                padding-right: 8px;
+            }
+        }
+    }
+    // Logon form
+    .LogonDialog {
+        tr {
+            // mysteriously, it works in IE7 as well
+            td:first-child {
+                text-align: right;
+            }
+        }
+    }
+    // Registration form
+    .registration-form {
+        .form-horizontal {
+            width: 400px;
+        }
+    }
+    // Password strength indicator
+    .password-strength {
+        .password-strength-text {
+            line-height: @line-height-100;
+        }
+
+        .passw-strength-indicator {
+            margin-bottom: @base-unit * 0.25;
+            max-width: @input-max-width;
+            width: 100%;
+            height: (@base-unit * 0.5);
+            background-color: @color-gray-150;
+
+            div {
+                height: 100%;
+            }
+        }
+
+        .password-strength-not-acceptable,
+        .password-strength-weak,
+        .password-strength-acceptable,
+        .password-strength-average,
+        .password-strength-strong,
+        .password-strength-excellent {
+            font-weight: bold;
+        }
+
+        .passw-indicator-not-acceptable {
+            background-color: @color-red-70;
+            width: 0;
+        }
+
+        .passw-indicator-weak {
+            background-color: @color-red-70;
+            width: 20%;
+        }
+
+        .passw-indicator-acceptable {
+            background-color: @color-orange-80;
+            width: 40%;
+        }
+
+        .passw-indicator-average {
+            background-color: @color-blue-100;
+            width: 60%;
+        }
+
+        .passw-indicator-strong {
+            background-color: @color-green-120;
+            width: 80%;
+        }
+
+        .passw-indicator-excellent {
+            background-color: @color-green-100;
+            width: 100%;
+        }
+    }
+    // Magnifier watermark in filter/search box
+    .form-search-container .icon-magnifier {
+        position: relative;
+        width: 16px;
+        left: -8px;
+        margin-left: -16px;
+    }
+    // Shopping cart
+    // -------------
+    .CartStepBody .currency-selector div {
+        display: inline-block;
+        vertical-align: top;
+    }
+    // Animations
+    // ----------
+    .spinning {
+        display: inline-block;
+        animation: spin 1.2s infinite linear;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(359deg);
+        }
+    }
+    // The dropdown menu (ul)
+    // ----------------------
+    .dropdown-menu {
+        position: absolute;
+        left: 0;
+        z-index: @zindex-dropdown;
+        display: none; // none by default, but block on "open" of the menu
+        float: left;
+        min-width: @dropdown-min-width;
+        padding: 0;
+        margin: 0; // override default ul
+        list-style: none;
+        font-size: @font-size-base;
+        background-color: @dropdown-bg;
+        border-radius: @border-radius-small;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        background-clip: padding-box;
+        font-family: Arial;
+        // Aligns the dropdown menu to right
+        &.pull-right {
+            right: 0;
+            left: auto;
+        }
+
+        &.pull-up {
+            top: auto;
+            bottom: 100%;
+        }
+        // Dividers (basically an hr) within the dropdown
+        .divider {
+            .nav-divider(@dropdown-divider-bg);
+        }
+
+        > li, > .jspContainer > .jspPane > li {
+            word-wrap: break-word;
+            width: 100%;
+            box-sizing: border-box;
+            // Links within the dropdown menu
+            > a, > span > a {
+                color: @dropdown-link-color;
+                line-height: @line-height-100;
+                padding: @padding-small-horizontal @padding-base-horizontal;
+                display: block;
+                clear: both;
+                font-weight: normal;
+                text-decoration: none;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
+    // Button group has relative positioning
+    .btn-group .dropdown-menu {
+        top: 100%;
+    }
+    // Hover/Focus state
+    .dropdown-menu > li > a,
+    .dropdown-menu > li > span > a {
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: @dropdown-link-hover-color;
+            background-color: @dropdown-link-hover-bg;
+        }
+    }
+    // Disable disabled hover
+    .dropdown-menu > li.disabled > a,
+    .dropdown-menu > li.disabled > span > a {
+        background-color: @dropdown-bg;
+    }
+    // Active state
+    .dropdown-menu > .active > a,
+    .dropdown-menu > .active > span > a {
+        &,
+        &:hover,
+        &:focus {
+            color: @dropdown-link-active-color;
+            text-decoration: none;
+            outline: 0;
+            background-color: @dropdown-link-active-bg;
+        }
+    }
+    // Disabled state
+    .dropdown-menu .disabled a {
+        .dropdown-disabled();
+    }
+    // Open state for the dropdown
+    .open {
+        // Show the menu
+        > .dropdown-menu {
+            display: block;
+        }
+        // Remove the outline when :focus is triggered
+        > a {
+            outline: 0;
+        }
+    }
+    // Breadcrumbs
+    // -----------
+    .breadcrumb {
+        list-style: none;
+        color: @breadcrumb-color;
+
+        > li {
+            display: inline-block;
+            vertical-align: middle;
+
+            & + li:before {
+                font-family: @icon-font-name;
+                content: @icon-chevron-right; // ">"
+                .cms-icon-50;
+                margin: 0 @base-unit * 0.25;
+                text-align: center;
+            }
+        }
+
+        a {
+            color: @breadcrumb-color;
+        }
+    }
+    // Alerts
+    // ------
+    .alert {
+        padding: (@base-unit * 0.5) (@base-unit * 0.5) (@base-unit * 0.5) (@base-unit * 4);
+        margin-bottom: @base-unit * 0.5;
+        margin-right: @base-unit;
+        display: inline-block;
+        z-index: @zindex-alert;
+        max-height: 90%;
+        overflow: auto;
+        position: relative;
+        // Headings for larger alerts
+        h4 {
+            margin-top: 0;
+            // Specified for the h4 to prevent conflicts of changing @headingsColor
+            color: inherit;
+        }
+        // Main icon
+        .alert-icon {
+            position: absolute;
+            top: @base-unit * 0.5;
+            left: @base-unit;
+
+            i {
+                float: left;
+                font-size: 30px;
+
+                .RTL & {
+                    float: right;
+                    padding: 0 0 0 (@base-unit * 0.5);
+                }
+            }
+        }
+        // Text
+        .alert-label {
+            padding: @base-unit * 0.375 @base-unit * 0.5 @base-unit * 0.375 0;
+            display: inline-block;
+        }
+    }
+
+    .alert-success {
+        .alert-variant(@alert-success-bg;
+        @alert-success-text;
+        @alert-success-icon-color;
+        @alert-success-icon-close-color
+        );
+        z-index: @zindex-alert-info;
+    }
+
+    .alert-info {
+        .alert-variant(@alert-info-bg;
+        @alert-info-text;
+        @alert-info-icon-color;
+        @alert-info-icon-close-color
+        );
+    }
+
+    .alert-warning {
+        .alert-variant(@alert-warning-bg;
+        @alert-warning-text;
+        @alert-warning-icon-color;
+        @alert-warning-icon-close-color
+        );
+    }
+
+    .alert-error {
+        .alert-variant(@alert-error-bg;
+        @alert-error-text;
+        @alert-error-icon-color;
+        @alert-error-icon-close-color
+        );
+    }
+    // Calendar
+    // --------
+    .datetime-ui-time-textbox {
+        width: 45px;
+        text-align: right;
+        padding-right: 5px;
+    }
+
+    .datetime-ui-timeicon-s {
+        background-position: -65px 0px;
+    }
+
+    .datetime-ui-datepicker-title a i {
+        margin-top: 7px;
+    }
+    // Web parts
+    .HiddenButton {
+        display: none;
+    }
+    //Web parts - user contribution
+    .EditContributionEdit, .EditContributionDelete {
+        padding-right: 5px;
+    }
+    // Tabs
+    // ----
+    // Navigation (required by tabs)
+    .nav {
+        margin-bottom: 0;
+        padding-left: 0; // Override default ul/ol
+        list-style: none;
+        &:extend(.cms-bootstrap .clearfix all);
+
+        > li {
+            position: relative;
+            display: block;
+
+            > a {
+                position: relative;
+                display: block;
+                padding: @nav-link-padding;
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                    background-color: @nav-link-hover-bg;
+                }
+            }
+            // Disabled state sets text to gray and nukes hover/tab effects
+            &.disabled > a {
+                color: @nav-disabled-link-color;
+
+                &:hover,
+                &:focus {
+                    color: @nav-disabled-link-hover-color;
+                    text-decoration: none;
+                    background-color: transparent;
+                    cursor: not-allowed;
+                }
+            }
+        }
+        // Open dropdowns
+        .open > a {
+            &,
+            &:hover,
+            &:focus {
+                background-color: @nav-link-hover-bg;
+                border-color: @link-color;
+            }
+        }
+        // Dividers (basically an hr) within the dropdown
+        .nav-divider {
+            .nav-divider();
+        }
+        // Prevent IE8 from misplacing imgs
+        // See https://github.com/h5bp/html5-boilerplate/issues/984#issuecomment-3985989
+        > li > a > img {
+            max-width: none;
+        }
+    }
+    // Horizontal tabs
+    .nav-tabs-container-horizontal .nav-tabs {
+        min-height: 32px;
+    }
+
+    .nav-tabs {
+        padding-top: @base-unit;
+
+        > li {
+            line-height: @line-height-200;
+        }
+            // Actual tabs (as links)
+            > li > a, > li > div {
+                padding: 0 @padding-base-horizontal;
+                text-decoration: none;
+                color: @text-color;
+                cursor: pointer;
+
+                &:hover, &:focus {
+                    background-color: @nav-tabs-active-link-hover-bg;
+                }
+            }
+        // Active state, and it's :hover to override normal :hover
+        .active a, .active div {
+            &,
+            &:hover,
+            &:focus {
+                background-color: @nav-tabs-active-link-bg;
+            }
+        }
+
+        .active .dropdown-menu a {
+            background-color: @dropdown-bg;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                color: @dropdown-link-hover-color;
+                background-color: @dropdown-link-hover-bg;
+            }
+        }
+
+        .dropdown-menu {
+            z-index: @zindex-tabs;
+        }
+
+        .dropdown-toggle .tab-title, .active .dropdown-toggle .tab-original-title {
+            display: none;
+        }
+
+        .active .dropdown-toggle .tab-title, .dropdown-toggle .tab-original-title {
+            display: inline;
+        }
+    }
+
+    &.nav-tabs-bg {
+        background: @nav-tabs-container-bg;
+    }
+    // Horizontal tabs specialities
+    .nav-tabs-container-horizontal {
+        background-color: @nav-tabs-container-bg;
+        //height: @nav-tabs-horizontal-height;
+        line-height: @line-height-200;
+        padding: 0 @padding-base-horizontal;
+
+        li {
+            float: left;
+
+            a > img {
+                padding: @padding-small-horizontal;
+            }
+        }
+
+        .caret {
+            line-height: @base-unit * 0.5;
+        }
+    }
+    // Blank site Tabs - commented for preserving existing site tab styles (uncomment or apply to site CSS for getting simple style for tabs on webparts)
+    // ---------------
+    /*
+    @color-tabs-border: @color-gray-100;
+
+    .TabsHeader, .TabContainer {
+        margin-bottom: 10px;
+    }
+
+    .TabControl, .TabControlLeft, .TabControlRight {
+        border-bottom: 1px solid @color-tabs-border;
+    }
+
+    .TabControlSelected, .TabControlSelectedLeft, .TabControlSelectedRight {
+        border-top: 1px solid @color-tabs-border;
+    }
+
+    .TabControlSelectedLeft {
+        border-left: 1px solid @color-tabs-border;
+    }
+
+    .TabControlSelectedRight {
+        border-right: 1px solid @color-tabs-border;
+    }
+    */
+    // UI Dialogs
+    // ----------
+    .dialog-header {
+        background: @color-gray-50;
+        padding-left: @base-unit;
+
+        h2 {
+            line-height: @dialog-header-height;
+            font-weight: @headings-font-weight;
+        }
+
+        .dialog-header-title {
+            position: relative;
+            display: inline;
+            font-size: @font-size-huge;
+            color: @color-white;
+        }
+
+        .dialog-header-action-buttons {
+            .pull-right;
+            display: table;
+            text-align: center;
+
+            .action-button {
+                display: table-cell;
+                vertical-align: middle;
+                height: @dialog-header-height;
+
+                &:hover {
+                    background-color: @color-gray-70;
+                }
+
+                a {
+                    color: @color-gray-100;
+                    text-decoration: none;
+                    display: table-cell;
+                    min-width: @base-unit * 2;
+                    vertical-align: middle;
+                    height: @base-unit * 2;
+                }
+            }
+
+            .close-button {
+                background-color: @color-gray-70;
+
+                &:hover {
+                    background-color: @color-gray-80;
+                }
+            }
+        }
+    }
+    // Dialog footer
+    .dialog-footer,
+    .PageFooterLine {
+        height: 64px;
+        padding: 16px;
+        background: #d6d9d6;
+        box-sizing: border-box;
+
+        .Buttons {
+            .fix-white-space();
+
+            .btn + .btn {
+                margin-left: 4px;
+            }
+        }
+    }
+    // Columns row in Advanced Export Dialog
+    .DialogPageContent {
+        .form-group {
+            .btn + .btn {
+                margin-left: 4px;
+            }
+        }
+    }
+    // Adjust dialog form
+    .checkbox,
+    .radio {
+        display: inline-block;
+    }
+    // UniGrid
+    // -------
+    .unigrid-actions .btn-icon {
+        border: none;
+        background: none;
+        margin: 0;
+        padding: @base-unit * 0.25;
+    }
+
+    .table .unigrid-selection {
+        vertical-align: middle;
+    }
+    //
+    // Tables
+    // ------
+    table {
+        max-width: 100%;
+        background-color: @table-bg;
+    }
+
+    th {
+        text-align: left;
+    }
+    // UniMatrix first column
+    .first-column {
+        width: @table-first-column-width;
+    }
+    // Main column width 10%
+    .main-column-10 {
+        width: @main-column-10;
+    }
+    // Main column width 20%
+    .main-column-20 {
+        width: @main-column-20;
+    }
+    // Main column width 30%
+    .main-column-30 {
+        width: @main-column-30;
+    }
+    // Main column width 40%
+    .main-column-40 {
+        width: @main-column-40;
+    }
+    // Main column width 50%
+    .main-column-50 {
+        width: @main-column-50;
+    }
+    // Main column width 60%
+    .main-column-60 {
+        width: @main-column-60;
+    }
+    // Main column width 70%
+    .main-column-70 {
+        width: @main-column-70;
+    }
+    // Main column width 80%
+    .main-column-80 {
+        width: @main-column-80;
+    }
+    // Main column width 90%
+    .main-column-90 {
+        width: @main-column-90;
+    }
+    // Main column width 100%
+    .main-column-100 {
+        width: @main-column-100;
+    }
+    // Class used in empty columns for filling purposes
+    .filling-column {
+        width: @main-column-100;
+    }
+    // Baseline styles
+    .table {
+        width: 100%;
+        white-space: nowrap;
+        margin-bottom: @table-margin-bottom;
+        font-family: @font-family-base;
+        font-size: @font-size-base;
+        border-collapse: collapse;
+
+        &.rows-middle-vertical-align {
+            td, td.unigrid-actions {
+                vertical-align: middle;
+            }
+        }
+        // Links
+        a {
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        .SelectableItem {
+            color: @link-color;
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        // Actions in the table header styled as standard links
+        .table-header-action {
+            color: @link-color;
+        }
+        // Cells
+        thead,
+        tbody,
+        tfoot {
+            > tr {
+                > th,
+                > td {
+                    padding: @table-cell-padding;
+                    vertical-align: top;
+                    line-height: @table-line-height;
+                    font-family: @font-family-base;
+                    font-size: @font-size-base;
+                }
+            }
+        }
+        // Head cells
+        thead {
+            th {
+                color: @table-th-text-color;
+                font-weight: bold;
+                background-color: @table-th-bg;
+                border-bottom: none;
+                // Icon only - obsolete
+                &.unigrid-actions-header-empty {
+                    .unigrid-menu-panel {
+                        padding: @base-unit * 0.125; // (2px)
+                    }
+                }
+
+                i {
+                    color: @table-icon-head-color;
+                    padding: 0 0 0 @padding-small-horizontal;
+                    cursor: pointer;
+                    vertical-align: baseline;
+                    // Menu icon
+                    &.icon-menu {
+                        padding: 0 @padding-small-horizontal 0 0;
+                    }
+                    // Sorting icon
+                    &.icon-caret-up {
+                        vertical-align: bottom;
+                    }
+                }
+
+                a {
+                    cursor: pointer;
+                    color: @table-th-link-color;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            .with-filter th {
+                line-height: @base-unit * 2;
+            }
+        }
+        // Body cells
+        tbody {
+            > tr {
+                border-bottom: 1px solid @table-border-color;
+                border-top: 1px solid transparent;
+
+                > td {
+                    // Actions cell - buttons are styled lower in this less file
+                    &.unigrid-actions {
+                        vertical-align: top;
+                        padding: @base-unit* 0.25 @base-unit * 0.5;
+                    }
+                    // Flags exception
+                    &.Translated,
+                    &.Outdated,
+                    &.NotAvailable {
+                        line-height: @base-unit;
+                    }
+                }
+                // Row borders
+                &:hover > td {
+                    border-top: 1px solid @table-bg-hover-border;
+                    border-bottom: 1px solid @table-bg-hover-border;
+                }
+                // Flags in pages listing exception
+                &:hover td.Translated,
+                &:hover td.Outdated,
+                &:hover td.NotAvailable {
+                    border: none;
+                }
+            }
+            // Used in unimatrix
+            .highlighted {
+                background-color: @color-orange-100;
+            }
+
+            [class^="cms-icon-"], [class*=" cms-icon-"] {
+                padding: 0;
+            }
+
+            input[type="text"] {
+                height: @table-textbox-height;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
+        // Remove top border from thead by default
+        caption + thead,
+        colgroup + thead,
+        thead:first-child {
+            tr:first-child {
+                th, td {
+                    border-top: 0;
+                }
+            }
+        }
+        // Account for multiple tbody instances
+        tbody + tbody {
+            border-top: 1px solid @table-border-color;
+        }
+        // Nesting
+        .table {
+            background-color: @body-bg;
+        }
+        // Fix checkbox position in unigrid (bulk actions)
+        .radio,
+        .checkbox {
+            margin: 0;
+            padding: 0;
+
+            label {
+                margin: 0;
+                padding: 0;
+
+                &:before {
+                    margin: 0;
+                    vertical-align: middle;
+                }
+
+                &:before,
+                &:after {
+                    bottom: @base-unit * 0.125; // special alignment
+                    top: auto;
+                }
+            }
+        }
+    }
+        // Fix nested tables border
+        .table table tbody > tr:hover > td {
+            border: none;
+        }
+
+    .table-width-30 {
+        width: 30%;
+    }
+    // Zebra-striping
+    //
+    // Default zebra-stripe styles (alternating gray and transparent backgrounds)
+    .table-striped {
+        > tbody {
+            > tr:nth-child(odd) {
+                > td,
+                > th {
+                    background-color: @table-bg-accent;
+                }
+            }
+        }
+    }
+    // Hover effect
+    //
+    // Placed here since it has to come after the potential zebra striping
+    .table-hover {
+        > tbody {
+            > tr:hover {
+                > td,
+                > th {
+                    background-color: @table-bg-hover;
+                }
+            }
+        }
+    }
+    // Table cell sizing
+    //
+    // Reset default table behavior
+    table col[class*="col-"] {
+        float: none;
+        display: table-column;
+    }
+
+    table {
+        td,
+        th {
+            &[class*="col-"] {
+                float: none;
+                display: table-cell;
+            }
+        }
+    }
+    // Table backgrounds
+    //
+    // Exact selectors below required to override `.table-striped` and prevent
+    // inheritance to nested tables.
+    .table > thead > tr,
+    .table > tbody > tr,
+    .table > tfoot > tr {
+        > td.active,
+        > th.active,
+        &.active > td,
+        &.active > th {
+            background-color: @table-bg-active;
+        }
+    }
+    // Responsive tables
+    //
+    // Wrap your tables in `.table-scrollable` and we'll make them mobile friendly
+    // by enabling horizontal scrolling. Only applies <768px. Everything above that
+    // will display normally.
+    @media screen and (max-width: @screen-sm) {
+        .table-responsive {
+            width: 100%;
+            margin-bottom: @base-unit;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            border: 1px solid @table-border-color;
+            // Tighten up spacing and give a background color
+            > .table {
+                margin-bottom: 0;
+                background-color: @color-white;
+                // Ensure the content doesn't wrap
+                > thead,
+                > tbody,
+                > tfoot {
+                    > tr {
+                        > th,
+                        > td {
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+            // Special overrides for the bordered tables
+            > .table-bordered {
+                border: 0;
+                // Nuke the appropriate borders so that the parent can handle them
+                > thead,
+                > tbody,
+                > tfoot {
+                    > tr {
+                        > th:first-child,
+                        > td:first-child {
+                            border-left: 0;
+                        }
+
+                        > th:last-child,
+                        > td:last-child {
+                            border-right: 0;
+                        }
+                    }
+
+                        > tr:last-child {
+                            > th,
+                            > td {
+                                border-bottom: 0;
+                            }
+                        }
+                }
+            }
+        }
+    }
+    // CMS buttons above the table
+    .table-buttons {
+        background-color: @color-gray-150;
+        padding: @base-unit;
+        margin-bottom: @base-unit * 0.125;
+    }
+    //Link to simple filter in the advanced filter above the table
+    .table-filter-simple-link {
+        padding-top: 2*@padding-base-vertical + 0.5*@base-unit + 1; // align the link with the button
+    }
+    // Width of column for bulk actions
+    .table-bulk {
+        width: @base-unit * 1.25;
+    }
+    // Centered checkboxes in permission-matrix
+    .permission-matrix {
+        & .content-before {
+            background-color: @color-green-130;
+        }
+
+        & td:first-child, th:first-child {
+            text-align: left;
+        }
+
+        & td, th {
+            text-align: center;
+        }
+
+        .warning-icon {
+            cursor: default;
+            color: @color-warning;
+            padding: 0;
+        }
+    }
+    //
+    // Unigrid document and file type icons
+    // ------------------------------------
+    .table {
+        .icon-doctype,
+        .icon-file-default,
+        .icon-folder {
+            padding-right: @padding-small-horizontal;
+            color: @light-bg-icon-color;
+        }
+        // ImportGridView
+        .warning-icon {
+            margin-left: @margin-50;
+        }
+    }
+    //
+    // Media library- thumbnail view - file type icons
+    // -----------------------------------------------
+    .ThumbnailsView .icon-file-default {
+        color: @light-bg-icon-color;
+    }
+    // New document type selection table with no borders and bg
+    // .ContentNew class can be removed from here as soon as unigrid control will support .table-blank instead just .table-hover)
+    .table-blank tbody > tr, .ContentNewClasses .table tbody > tr {
+        border: none;
+
+        &:hover td {
+            border: none;
+            background: none;
+        }
+    }
+        // New doc type in Pages
+        .ContentNewClasses .table tbody > tr td {
+            padding: @base-unit * 0.125 @padding-small-horizontal;
+        }
+    // Unigrid icons
+    .unigrid-actions {
+        // Text before/after action button in unigrid
+        .text-unigrid-action {
+            display: inline-table;
+            margin-top: @base-unit * 0.125;
+        }
+        // Unigrid buttons
+        .btn-unigrid-action {
+            height: auto;
+            // Font icons
+            &.icon-only {
+                vertical-align: middle;
+                padding: @base-unit * 0.25;
+            }
+            // Colors
+            // Gray - default
+            i {
+                display: block;
+                color: @color-gray-70;
+            }
+            // Green - e.g. add, play
+            &.icon-style-allow {
+                i {
+                    color: @color-green-100;
+                }
+            }
+            // Yellow - e.g. exlamation mark
+            &.icon-style-warning {
+                i {
+                    color: @color-warning;
+                }
+            }
+            // Red - e.g. remove, bin
+            &.icon-style-critical {
+                i {
+                    color: @color-red-70;
+                }
+            }
+            // Hover for all
+            &:hover {
+                i,
+                .icon-style-allow,
+                .icon-style-warning,
+                .icon-style-critical {
+                    color: @color-blue-70;
+                }
+            }
+            // Disabled style for all
+            &:disabled {
+                i,
+                .icon-style-allow,
+                .icon-style-warning,
+                .icon-style-critical {
+                    color: @color-gray-70;
+                }
+            }
+        }
+        // Unigrid More actions button (...)
+        .unigrid-actionmenu {
+            display: inline-block;
+        }
+        // Unigrid image icons - customer can use images as well
+        input[type="image"] {
+            vertical-align: middle;
+            padding: @base-unit * 0.25;
+        }
+        // Uploader in unigrid
+        // Inline styles fix for indent
+        >div {
+            width: auto !important;
+        }
+        // Media library files
+        .MediaView,
+        // Attachements
+        .update,
+        // Form tab
+        .direct-file-uploader,
+        [class*="Uploader_"] {
+            // Override inline styles - useful also for web dav margin
+            width: @base-unit * 1.5 !important;
+            height: @base-unit * 1.5 !important;
+
+            i {
+                cursor: pointer;
+                padding: @base-unit * 0.25;
+                margin: 0;
+            }
+            // disabled state
+            & .uploader-button-disabled {
+                color: @color-gray-70;
+
+                &:hover {
+                    i {
+                        cursor: default;
+                    }
+                }
+            }
+        }
+        // Special hover style
+        .MouseOver {
+            i:not(.icon-disabled) {
+                color: @color-blue-70;
+            }
+        }
+    }
+    // Image editor
+    // ------------
+    .ImageEditorMain {
+        border-bottom: 1px solid #999999 !important;
+        border-left: 1px solid #999999 !important;
+    }
+
+        .ImageEditorMain .MenuHeaderItemSelected {
+            border-bottom: 1px solid #999999 !important;
+        }
+
+        .ImageEditorMain .Divider {
+            background-color: #999999 !important;
+        }
+
+    .ImageEditorFrame {
+        border: 1px solid #999999 !important;
+    }
+
+    .ImageEditorMain .MenuHeaderItem, .ImageEditorMain .MenuHeaderItemSelected {
+        text-decoration: none;
+        color: #313131;
+        height: 26px;
+        background: url('../../CMSPages/GetResource.ashx?image=BackgroundImageEditor.png') repeat-x left bottom;
+        border-top: 1px solid #999999 !important;
+    }
+    
+    .ModalPopupDialog .DialogPageContent {
+        min-height: 80px;
+        min-width: 475px;
+        padding: 16px;
+    }
+
+    .ModalPopupDialog {
+        background-color: #FFFFFF;
+        height: 176px;
+        left: 384px;
+        position: fixed;
+        top: 211px;
+        width: 495px;
+        z-index: 9998;
+    }
+
+    .WidgetTabsPageHeader .TextRight a {
+        color: #ffffff;
+    }
+
+    .ModalBackground {
+        background-color: #000;
+        opacity: 0.35;
+    }
+    // Categories
+    // ----------
+    .Categories {
+        .DialogLeftBlock {
+            height: 100%;
+            width: 251px;
+            float: left;
+            overflow: hidden;
+        }
+
+        .DialogRightBlock {
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .PageTitleBreadCrumbsPadding {
+            border-bottom: 1px solid #CCCCCC;
+            display: block;
+            height: 15px;
+            padding: 7px 10px;
+            width: 100%;
+        }
+    }
+
+    .DialogTreeAreaSeparator {
+        background: url(../../CMSPages/GetResource.ashx?image=Design/Controls/FrameResizer/Horizontal/Resizer.png) repeat-y scroll left top transparent;
+        float: left;
+        height: 100%;
+        width: 7px;
+    }
+    // Numeric spinner
+    // ---------------
+    .numeric-up-down {
+        .numeric-updown-buttons {
+            display: inline-block;
+            left: -22px;
+            position: relative;
+            height: 18px;
+            width: 16px;
+
+            .btn {
+                margin: 0;
+                padding: 0;
+                line-height: 8px;
+                height: 8px;
+                width: 16px;
+                font-size: 12px;
+                color: #403e3d;
+                border: none;
+                background: none;
+                position: absolute;
+                // Vertical position of the "bottom" button calculated from the input height
+                top: 14px;
+                // Vertical position of the "up" button
+                &:nth-child(1) {
+                    margin-bottom: 2px;
+                    top: 6px;
+                }
+                // Icons within buttons
+                i {
+                    font-size: 12px;
+                    line-height: 8px;
+                    height: 8px;
+                }
+            }
+        }
+        // Textbox with up/down arrows
+        .form-control {
+            padding-right: 24px;
+        }
+    }
+    // Slider
+    // ------
+    // Horizontal layout
+    .slider-horizontal-rail {
+        height: 1px;
+        background-color: @color-gray-100;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        position: relative;
+    }
+
+    .slider-horizontal-handle {
+        width: 10px;
+        height: 10px;
+        margin-top: -5px;
+        cursor: pointer;
+    }
+    // Vertical layout
+    .slider-vertical-rail {
+        width: 1px;
+        height: 150px;
+        margin-left: 6px;
+        position: relative;
+        background-color: @color-gray-100;
+    }
+
+    .slider-vertical-handle {
+        width: 10px;
+        height: 10px;
+        margin-left: -4px;
+        cursor: pointer;
+    }
+    // Uniselector
+    .UniSelector .btn-actions .btn {
+        vertical-align: middle;
+    }
+    // Context menu
+    // ------------
+    // Context menu styles
+    @context-menu-level0-bg: @color-gray-70;
+    @context-menu-level0-hover-bg: @color-gray-80;
+    @context-menu-level1-bg: @color-gray-80;
+    @context-menu-level1-hover-bg: @color-gray-90;
+    @context-menu-level2-bg: @color-gray-90;
+    @context-menu-level2-hover-bg: @color-gray-100;
+
+    @dropdown-divider-level0-bg: @dropdown-divider-bg;
+    @dropdown-divider-level1-bg: @color-gray-90;
+    @dropdown-divider-level2-bg: @color-gray-100;
+
+
+    &.ContextMenu {
+        border: none !important;
+    }
+
+    &.ContextMenu,
+    .TreeContextMenu,
+    .PortalContextMenu {
+        border-radius: @border-radius-small;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        background-clip: padding-box;
+        background: @context-menu-level0-bg;
+
+        .item-last,
+        .Item {
+            border: none !important;
+            display: block;
+            height: auto !important;
+            text-decoration: none !important;
+            text-align: left !important;
+
+            .RTL & {
+                text-align: right !important;
+            }
+
+            .Name,
+            .NameInactive {
+                border: inherit !important;
+                text-decoration: inherit !important;
+                font-size: @font-size-base;
+                font-family: @font-family-base;
+                line-height: @line-height-80 !important;
+                color: @color-white !important;
+            }
+        }
+
+        .ItemDisabled {
+            cursor: not-allowed;
+
+            .Name,
+            .NameInactive {
+                cursor: not-allowed;
+            }
+        }
+
+
+        .ItemPadding {
+            padding: (@base-unit * 0.5) @base-unit;
+            border: none !important;
+            cursor: pointer;
+            line-height: @line-height-80;
+
+            .ImgLoader {
+                display: inline-block;
+                padding: 0px (@base-unit * 0.5);
+                height: 15px;
+            }
+
+            img {
+                display: inline-block;
+            }
+        }
+
+        .item-last:hover,
+        .Item:hover,
+        .ItemSelected {
+            cursor: pointer;
+            background: @context-menu-level0-hover-bg;
+        }
+
+        .Separator {
+            .nav-divider(@dropdown-divider-level0-bg);
+        }
+    }
+
+    .PortalContextMenu {
+        min-width: @base-unit * 8;
+    }
+
+    .TreeContextMenu {
+        min-width: @base-unit * 8;
+
+        > .TreeContextMenu {
+            box-shadow: none;
+        }
+    }
+
+    .TreeNewContextMenu {
+        min-width: @base-unit * 12;
+    }
+
+    .WebPartContextMenu,
+    .ZoneContextMenu,
+    .PlaceholderContextMenu {
+        min-width: @base-unit * 10;
+    }
+    // Portal context menu - additional styles
+    .PortalContextMenu .ItemDisabled {
+        .dropdown-disabled() !important;
+    }
+
+
+    .PortalContextMenu.CPMenu {
+        display: none;
+    }
+
+
+    &.ContextMenuLevel_1 {
+        // extra styles for the second context menu level
+        background: @context-menu-level1-bg;
+
+        .Item:hover,
+        .ItemSelected {
+            background: @context-menu-level1-hover-bg;
+        }
+
+        .Separator {
+            .nav-divider(@dropdown-divider-level1-bg);
+        }
+    }
+
+    &.ContextMenuLevel_2 {
+        // extra styles for the third context menu level
+        background: @context-menu-level2-bg;
+
+        .Item:hover,
+        .ItemSelected {
+            background: @context-menu-level2-hover-bg;
+        }
+
+        .Separator {
+            .nav-divider(@dropdown-divider-level2-bg);
+        }
+    }
+    // Button groups
+    // --------------------------------------------------
+    // Button carets
+    //
+    // Match the button text color to the arrow/caret for indicating dropdown-ness.
+    .caret {
+        .btn-default & {
+            border-top-color: @btn-default-color;
+        }
+
+        .btn-primary & {
+            border-top-color: @color-white;
+        }
+    }
+
+    .dropup {
+        & .btn-default .caret {
+            border-bottom-color: @btn-default-color;
+        }
+
+        .btn-primary {
+            .caret {
+                border-bottom-color: @color-white;
+            }
+        }
+    }
+    // Make the div behave like a button
+    .btn-group {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle; // match .btn alignment given font-size hack above
+        > .btn {
+            position: relative;
+            float: left;
+            // Bring the "active" button to the front
+            &:hover,
+            &.active {
+                z-index: @zindex-btn-group-active;
+            }
+
+            &.active {
+                background: @btn-secondary-bg;
+                color: @btn-secondary-color;
+                box-shadow: @btn-secondary-box-shadow 0 -@btn-shadow-width 0 inset;
+
+                i, .badge {
+                    color: @btn-secondary-color;
+                }
+            }
+
+            &:focus {
+                // Remove focus outline when dropdown JS adds it after closing the menu
+                outline: none;
+            }
+            // No space between buttons in the button group
+            & + .btn {
+                margin-left: 0;
+            }
+        }
+    }
+
+        .btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+            border-radius: 0;
+        }
+        // Set corners individual because sometimes a single button can be in a .btn-group and we need :first-child and :last-child to both match
+        .btn-group > .btn:first-child {
+            margin-left: 0;
+
+            &:not(:last-child):not(.dropdown-toggle) {
+                .border-right-radius(0);
+            }
+        }
+        // Need .dropdown-toggle since :last-child doesn't apply given a .dropdown-menu immediately after it
+        .btn-group > .btn:last-child:not(:first-child),
+        .btn-group > .dropdown-toggle:not(:first-child) {
+            .border-left-radius(0);
+        }
+        // Custom edits for including btn-groups within btn-groups (useful for including dropdown buttons within a btn-group)
+        .btn-group > .btn-group {
+            float: left;
+        }
+
+            .btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+                border-radius: 0;
+            }
+
+            .btn-group > .btn-group:first-child {
+                > .btn:last-child,
+                > .dropdown-toggle {
+                    .border-right-radius(0);
+                }
+            }
+
+            .btn-group > .btn-group:last-child > .btn:first-child {
+                .border-left-radius(0);
+            }
+        // On active and open, don't show outline
+        .btn-group .dropdown-toggle:active,
+        .btn-group.open .dropdown-toggle {
+            outline: 0;
+        }
+        // Negative space for dropdown toggle
+        .btn-group > .btn + .dropdown-toggle {
+            padding: 0 (@base-unit * 0.5);
+        }
+
+        .btn-group > .btn-lg + .dropdown-toggle {
+            padding: 0 (@base-unit * 0.75);
+        }
+    // Checkbox and radio options
+    [data-toggle="buttons"] > .btn > input[type="radio"],
+    [data-toggle="buttons"] > .btn > input[type="checkbox"] {
+        display: none;
+    }
+    // Fix dropdown toggler height on blank (non-styled) sites
+    .dropdown-toggle i {
+        line-height: normal;
+    }
+    // Vertical separated buttons
+    // ----------------------
+    .btns-vertical {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
+
+        .btn {
+            margin-bottom: @base-unit * 0.5;
+            display: block;
+            // No horizontal space between buttons
+            + .btn {
+                margin-left: 0;
+            }
+            //
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    // Date time form control with calendar
+    // ----------------------
+    // Calendar button
+    .date-time-picker .btn {
+        margin: 0 5px;
+    }
+
+    input.datetime-ui-time-textbox {
+        width: 27px;
+        border: 1px solid #999993;
+    }
+
+    .datetime-ui-datepicker-title a {
+        height: 22px;
+    }
+
+        .datetime-ui-datepicker-title a i.CalendarIcon {
+            margin-top: 3px;
+        }
+    // Link Now
+    .calendar-action {
+        margin-right: 5px;
+    }
+    // Group polls
+    .PollsEdit .control-label {
+        display: inline-block;
+    }
+    // Sets MultiFileUploader overlay and hides original input, does not affect DirecFileUploaderControl
+    .uploader-overlay-div {
+        background: rgba(0,0,0,0);
+        overflow: hidden;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        > input[type="file"] {
+            display: none;
+        }
+    }
+}

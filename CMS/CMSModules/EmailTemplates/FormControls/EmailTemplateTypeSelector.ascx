@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EmailTemplateTypeSelector.ascx.cs" Inherits="CMSModules_EmailTemplates_FormControls_EmailTemplateTypeSelector" %>
+<cms:CMSDropDownList ID="drpEmailTemplateType" runat="server" CssClass="DropDownField" />

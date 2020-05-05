@@ -1,0 +1,2192 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.TranslationServices</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.TranslationServices.TranslationCultureMappingDirectionEnum">
+            <summary>
+            Enumeration for the direction of culture mapping
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationCultureMappingDirectionEnum.SystemToService">
+            <summary>
+            Mapping from system to translation service
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationCultureMappingDirectionEnum.ServiceToSystem">
+            <summary>
+            Mapping from translation service to the system
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TargetDocumentNotExistsException">
+            <summary>
+            Target document doesn't exist exception.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TargetDocumentNotExistsException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.TranslationServices.TargetDocumentNotExistsException"/> class with default values.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TargetDocumentNotExistsException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.TranslationServices.TargetDocumentNotExistsException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TargetDocumentNotExistsException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.TranslationServices.TargetDocumentNotExistsException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="inner">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TargetDocumentNotExistsException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.TranslationServices.TargetDocumentNotExistsException"/> class with serialized data.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationExtensions">
+            <summary>
+            Extension methods.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationExtensions.SubmitToTranslation(CMS.DocumentEngine.TreeNode,CMS.TranslationServices.TranslationSettings)">
+            <summary>
+            Submits the document to a translation.
+            </summary>
+            <param name="node">Source culture document (if you want to translate EN to CZ, pass EN version of the document as this parameter)</param>
+            <param name="settings">Translation settings</param>
+            <returns>Null if operation was successful, error message to display otherwise</returns>
+        </member>
+        <member name="T:CMS.TranslationServices.CreateSubmissionItemEventArgs">
+            <summary>
+            Create submission item event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.Settings">
+            <summary>
+            Translation settings
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.TargetObjectID">
+            <summary>
+            Target object ID
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.TargetCultureCode">
+            <summary>
+            Target culture code
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.SourceObject">
+            <summary>
+            Source object to be translated
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.Submission">
+            <summary>
+            Translation submission for which the item is created
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.CreateSubmissionItemEventArgs.SubmissionItem">
+            <summary>
+            Created submission item
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.CreateSubmissionItemHandler">
+            <summary>
+            Translation handler for creating the submission item
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.CreateSubmissionItemHandler.StartEvent(CMS.TranslationServices.TranslationSettings,CMS.TranslationServices.TranslationSubmissionInfo,CMS.Base.ICMSObject,System.Int32,System.String)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="settings">Translation settings</param>
+            <param name="submission">Submission being processed</param>
+            <param name="source">Source object being translated</param>
+            <param name="targetObjectId">Target object ID</param>
+            <param name="targetCultureCode">Target culture code</param>
+        </member>
+        <member name="T:CMS.TranslationServices.ProcessTranslationEventArgs">
+            <summary>
+            Process translation event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ProcessTranslationEventArgs.SourceObject">
+            <summary>
+            Source object to be translated
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ProcessTranslationEventArgs.TargetObject">
+            <summary>
+            Target object to be used as a translation (Typically same as the soure object. Documents have separate culture versions.)
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ProcessTranslationEventArgs.Submission">
+            <summary>
+            Translation submission for which the translation is processed
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ProcessTranslationEventArgs.ForceTargetObjectUpdate">
+            <summary>
+            Indicates if the update of the target object should be forced
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.ProcessTranslationHandler">
+            <summary>
+            Translation handler for processing the translation
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ProcessTranslationHandler.StartEvent(CMS.Base.ICMSObject,CMS.Base.ICMSObject,CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="sourceObject">Source object ot be translated</param>
+            <param name="targetObject">Target object ot be used as a translation</param>
+            <param name="submission">Submission being processed</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationCultureMappingEventArgs">
+            <summary>
+            Translation culture mapping event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationCultureMappingEventArgs.SystemCultureCode">
+            <summary>
+            Culture code representation for the system
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationCultureMappingEventArgs.ServiceCultureCode">
+            <summary>
+            Culture code representation for the service
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationCultureMappingEventArgs.Direction">
+            <summary>
+            Direction of the mapping
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationCultureMappingHandler">
+            <summary>
+            Translation handler to be used to map culture code from the system to a service in both directions
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationCultureMappingHandler.StartEvent(System.String,System.String,CMS.TranslationServices.TranslationCultureMappingDirectionEnum)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="systemCultureCode">Culture code representation for the system</param>
+            <param name="serviceCultureCode">Culture code representation for the service</param>
+            <param name="direction">Direction fo the mapping</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationEvents">
+            <summary>
+            Translation events
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationEvents.MapCultureCode">
+            <summary>
+            Fires when the system and service culture codes are mapped
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationEvents.ProcessTranslation">
+            <summary>
+            Fires when the translation is being processed
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationEvents.CreateSubmissionItem">
+            <summary>
+            Fires when the submission item is being created
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.EmailTranslationService">
+            <summary>
+            Email translations provider.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.EmailTranslationService.Recipients">
+            <summary>
+            List of recipients of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.EmailTranslationService.SendFromEmail">
+            <summary>
+            E-mail address to send the e-mails from.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.IsTargetLanguageSupported(System.String)">
+            <summary>
+            Checks if target language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.IsSourceLanguageSupported(System.String)">
+            <summary>
+            Checks if source language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.CreateSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Creates new submission (or resubmits existing if submission ticket is present).
+            </summary>
+            <param name="submission">Submission object</param>
+            <exception cref="T:System.Exception">Thrown when missing license for translation feature</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="submission"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.CancelSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Cancels given submission.
+            </summary>
+            <param name="submission">Submission to cancel</param>
+        </member>
+        <member name="M:CMS.TranslationServices.EmailTranslationService.DownloadCompletedTranslations(System.String)">
+            <summary>
+            Retrieves completed XLIFF files from the service and processes them (imports them into the system). Returns true if everything went well.
+            </summary>
+            <param name="siteName">Name of site for which this method downloads completed XLIFF files.</param>
+        </member>
+        <member name="T:CMS.TranslationServices.AbstractHumanTranslationService">
+            <summary>
+            Human translation service interface.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.CreateSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Creates new submission (or resubmits existing if submission ticket is present).
+            </summary>
+            <param name="submission">Submission info</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.CancelSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Cancels given submission. Return 
+            </summary>
+            <param name="submission">Submission info</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.DownloadCompletedTranslations(System.String)">
+            <summary>
+            Retrieves completed XLIFF files from the service and saves them to appropriate submission items.
+            </summary>
+            <param name="siteName">Name of site for which this method downloads completed XLIFF files.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.IsTargetLanguageSupported(System.String)">
+            <summary>
+            Checks if target language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.IsSourceLanguageSupported(System.String)">
+            <summary>
+            Checks if source language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the hashtables of cached services and optionally logs a web farm task to propagate the change.
+            </summary>
+            <param name="logTask">A value indicating whether to log a web farm task.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.GetTranslationService(CMS.TranslationServices.TranslationServiceInfo,System.String)">
+            <summary>
+            Dynamically loads the provider from the TranslationServiceInfo object information.
+            </summary>
+            <param name="service">TranslationService info object</param>
+            <param name="siteName">Name of the site (for settings loading)</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.CheckTargetLanguagesAvailability(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Checks that all given target languages are supported by selected service.
+            </summary>
+            <param name="targetLanguages">List of target languages</param>
+            <returns>List of the unsupported languages</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractHumanTranslationService.CheckSourceLanguageAvailability(System.String)">
+            <summary>
+            Checks that given source language is supported by selected service.
+            </summary>
+            <param name="sourceLanguage">Source language</param>
+            <returns>True if given language is supported by translation service, otherwise returns false</returns>
+        </member>
+        <member name="T:CMS.TranslationServices.ManualTranslationService">
+            <summary>
+            Manual translations provider.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ManualTranslationService.ExportFolder">
+            <summary>
+            Folder path where translation submission are exported.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ManualTranslationService.ImportFolder">
+            <summary>
+            Folder path where the translated submission are retrieved from.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.ManualTranslationService.DeleteAfterSuccessfulDownload">
+            <summary>
+            If true, ZIP file with translated submission is deleted once the XLIFF files from within the ZIP file are downloaded into the submission item queue.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.IsTargetLanguageSupported(System.String)">
+            <summary>
+            Checks if target language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.IsSourceLanguageSupported(System.String)">
+            <summary>
+            Checks if source language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.CreateSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Creates new submission (or resubmits existing if submission ticket is present).
+            </summary>
+            <param name="submission">Submission object</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="submission"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.CancelSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Cancels given submission.
+            </summary>
+            <param name="submission">Submission to cancel</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="submission"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.TranslationServices.ManualTranslationService.DownloadCompletedTranslations(System.String)">
+            <summary>
+            Retrieves completed XLIFF files from the service and processes them (imports them into the system). Returns empty string if everything went well.
+            </summary>
+            <param name="siteName">Name of site for which this method downloads completed XLIFF files.</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationsComService">
+            <summary>
+            Translations.com provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.#ctor">
+            <summary>
+            Creates an isntance of <see cref="T:CMS.TranslationServices.TranslationsComService"/>
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.IsTargetLanguageSupported(System.String)">
+            <summary>
+            Checks if target language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.IsSourceLanguageSupported(System.String)">
+            <summary>
+            Checks if source language is supported within the service
+            </summary>
+            <param name="langCode">Code of the culture</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.CreateSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Creates new submission (or resubmits existing if submission ticket is present).
+            </summary>
+            <param name="submission">Submission object</param>
+            <exception cref="T:System.Exception">Thrown when missing license for translation feature</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="submission"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.CancelSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Cancels given submission.
+            </summary>
+            <param name="submission">Submission to cancel</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.DownloadCompletedTranslations(System.String)">
+            <summary>
+            Retrieves completed XLIFF files from the service and processes them (imports them into the system). Returns null if everything went well.
+            </summary>
+            <param name="siteName">Name of site for which this method downloads completed XLIFF files.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.CheckCompletedSubmission(System.Int32)">
+            <summary>
+            Processes submissions the translation of which is completed.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.CheckCanceledSubmissions(System.Int32)">
+            <summary>
+            Processes submissions the translation of which is canceled.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsComService.ProcessCompletedTarget(System.String,System.String,System.String)">
+            <summary>
+            Processes document with given ticket. Returns ID of the submission to which the submission item belongs.
+            </summary>
+            <param name="documentTicket">Target document ticket</param>
+            <param name="targetTicket">Target item ticket</param>
+            <param name="targetLanguage">Target language in which was translation requested</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationsScheduledTask">
+            <summary>
+            Provides an ITask interface to process translated documents from translation services
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationsScheduledTask.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Executes the task.
+            </summary>
+            <param name="task">Task to process</param>
+        </member>
+        <member name="T:CMS.TranslationServices.AzureAuthTokenClient">
+            <summary>
+            Client to call Cognitive Services Azure Auth Token service in order to get an access token.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.ServiceUrl">
+            URL of the token service
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.OcpApimSubscriptionKeyHeader">
+            Name of header used to pass the subscription key to the token service
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.TokenCacheDuration">
+            After obtaining a valid token, this class will cache it for this duration.
+            Use a duration of 5 minutes, which is less than the actual token lifetime of 10 minutes.
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.storedTokenValue">
+            Cache the value of the last valid token obtained from the token service.
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.storedTokenTime">
+            When the last valid token was obtained.
+        </member>
+        <member name="F:CMS.TranslationServices.AzureAuthTokenClient.subscriptionKey">
+            Gets the subscription key.
+        </member>
+        <member name="P:CMS.TranslationServices.AzureAuthTokenClient.RequestStatusCode">
+            Gets the HTTP status code for the most recent request to the token service.
+        </member>
+        <member name="M:CMS.TranslationServices.AzureAuthTokenClient.#ctor(System.String)">
+            <summary>
+            Creates a client to obtain an access token.
+            </summary>
+            <param name="key">Subscription key to use to get an authentication token.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AzureAuthTokenClient.RequestAccessToken">
+            <summary>
+            Gets a token for the specified subscription.
+            </summary>
+            <returns>The encoded JWT token prefixed with the string "Bearer ".</returns>
+            <remarks>
+            This method uses a cache to limit the number of request to the token service.
+            A fresh token can be re-used during its lifetime of 10 minutes. After a successful
+            request to the token service, this method caches the access token. Subsequent 
+            invocations of the method return the cached token for the next 5 minutes. After
+            5 minutes, a new token is fetched from the token service and the cache is updated.
+            </remarks>
+        </member>
+        <member name="M:CMS.TranslationServices.AzureAuthTokenClient.GetAccessToken">
+            <summary>
+            Gets a token for the specified subscription.
+            </summary>
+            <returns>The encoded JWT token prefixed with the string "Bearer ".</returns>
+            <remarks>
+            This method uses a cache to limit the number of request to the token service.
+            A fresh token can be re-used during its lifetime of 10 minutes. After a successful
+            request to the token service, this method caches the access token. Subsequent 
+            invocations of the method return the cached token for the next 5 minutes. After
+            5 minutes, a new token is fetched from the token service and the cache is updated.
+            </remarks>
+        </member>
+        <member name="T:CMS.TranslationServices.GoogleTranslatorService">
+            <summary>
+            Class providing access to the Google Translator Service API.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslateAPIKey">
+            <summary>
+            Gets or sets the API key needed to access the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.Translate(System.String,System.String,System.String)">
+            <summary>
+            Translates given text using free Google Translation API.
+            </summary>
+            <param name="text">Text you want to translate</param>
+            <param name="sourceLang">Source language (if null or empty, automatic detection is used)</param>
+            <param name="targetLang">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.Detect(System.String)">
+            <summary>
+            Detects language of given text using free Google Translation API.
+            </summary>
+            <param name="text">Text the language of which you want to detect</param>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.Speak(System.String,System.String)">
+            <summary>
+            Not supported by Google Translation API.
+            </summary>
+            <param name="text">Text to speech</param>
+            <param name="lang">Language in which the speech should be generated (if null or empty, automatic detection is used)</param>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.CheckConnection">
+            <summary>
+            Checks if the credentials are set correctly.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.GetLangCode(System.String)">
+            <summary>
+            Returns only first part of a culture code string (i.e. it returns "cs" from "cs-CZ").
+            </summary>
+            <param name="cultureCode">Culture code to process</param>
+        </member>
+        <member name="M:CMS.TranslationServices.GoogleTranslatorService.GetGoogleResponse(System.String)">
+            <summary>
+            Contacts the service with given URL and returns serialized response object.
+            </summary>
+            <param name="requestString">Service request URL</param>
+        </member>
+        <member name="T:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorWrapper">
+            <summary>
+            Wrapper class for Google Translator service response.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorWrapper.Data">
+            <summary>
+            Token type.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorData">
+            <summary>
+            Translator service token encapsulation class.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorData.Translations">
+            <summary>
+            Access token value.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorTranslation">
+            <summary>
+            Wrapper for translations node in Google Translator response.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorTranslation.TranslatedText">
+            <summary>
+            Translated text.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.GoogleTranslatorService.GoogleTranslatorTranslation.DetectedSourceLanguage">
+            <summary>
+            Detected language of the text.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.AbstractMachineTranslationService">
+            <summary>
+            Computer translation service interface.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractMachineTranslationService.Translate(System.String,System.String,System.String)">
+            <summary>
+            Translates given text using the service.
+            </summary>
+            <param name="text">Text you want to translate</param>
+            <param name="sourceLang">Source language (if null or empty, automatic detection is used)</param>
+            <param name="targetLang">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractMachineTranslationService.Detect(System.String)">
+            <summary>
+            Detects language of given text using the service.
+            </summary>
+            <param name="text">Text the language of which you want to detect</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractMachineTranslationService.Speak(System.String,System.String)">
+            <summary>
+            Returns stream of wav file generated using the service.
+            </summary>
+            <param name="text">Text to speech</param>
+            <param name="lang">Language in which the speech should be generated (if null or empty, automatic detection is used)</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractMachineTranslationService.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the hashtables of cached services and optionally logs a web farm task to propagate the change.
+            </summary>
+            <param name="logTask">A value indicating whether to log a web farm task.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.AbstractMachineTranslationService.GetTranslationService(CMS.TranslationServices.TranslationServiceInfo,System.String)">
+            <summary>
+            Dynamically loads the provider from the TranslationServiceInfo object information.
+            </summary>
+            <param name="service">TranslationService info object</param>
+            <param name="siteName">Name of the site (for settings loading)</param>
+        </member>
+        <member name="T:CMS.TranslationServices.MicrosoftTranslatorService">
+            <summary>
+            Class providing access to the Microsoft Translator API.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.MicrosoftTranslatorService.Clients">
+            <summary>
+            Hash table of clients indexed by site name.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.MicrosoftTranslatorService.MSTranslatorTextAPISubscriptionKey">
+            <summary>
+            Subscription key from Translator Text API azure cognitive service <see href="https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-text-how-to-signup"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.Translate(System.String,System.String,System.String)">
+            <summary>
+            Translates given text using Translator Text API azure cognitive service.
+            </summary>
+            <param name="text">Text you want to translate</param>
+            <param name="sourceLang">Source language (if null or empty, automatic detection is used)</param>
+            <param name="targetLang">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.Detect(System.String)">
+            <summary>
+            Detects language of given text using Translator Text API azure cognitive service.
+            </summary>
+            <param name="text">Text the language of which you want to detect</param>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.Speak(System.String,System.String)">
+            <summary>
+            Returns stream of wav file generated by Translator Text API azure cognitive service.
+            </summary>
+            <param name="text">Text to speech</param>
+            <param name="lang">Language in which the speech should be generated (if null or empty, automatic detection is used)</param>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.CheckConnection">
+            <summary>
+            Checks if it is possible to communicate with service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.TranslateInternal(System.String,System.String,System.String)">
+            <summary>
+            Translates given text using Translator Text API azure cognitive service.
+            </summary>
+            <param name="text">Text you want to translate</param>
+            <param name="sourceLang">Source language (if null or empty, automatic detection is used)</param>
+            <param name="targetLang">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.DetectInternal(System.String)">
+            <summary>
+            Detects language of given text using Translator Text API azure cognitive service.
+            </summary>
+            <param name="text">Text the language of which you want to detect</param>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.ContactService``1(System.String,System.String,System.String)">
+            <summary>
+            Contacts the service using the OAuth authorization method and returns the deserialized JSON response.
+            </summary>
+            <typeparam name="ResponseType">Type used for deserialization of JSON response</typeparam>
+            <param name="endpointName">Name of endpoint to be contacted</param>
+            <param name="text">Text used in request body</param>
+            <param name="queryString">Query string parameters for API endpoint</param>
+            <returns>JSON response deserialized to <typeparamref name="ResponseType"/>.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.GenerateRequest(System.String,System.String)">
+            <summary>
+            Generates request for translation API using URI and text to be translated.
+            </summary>
+            <param name="uriString">URI of translation API including necessary query strings</param>
+            <param name="text">Text for request body</param>
+            <returns>Complete request ready to be sent.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.GetToken">
+            <summary>
+            Creates the token for given service.
+            </summary>
+            <returns>Authentication token.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.GetAuthTokenClient">
+            <summary>
+            Initialize a client for token management.
+            </summary>
+            <returns>Initialized client for token management.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.GetBaseUrlFor(System.String)">
+            <summary>
+            Gets base URL for specified method.
+            </summary>
+            <param name="apiMethod">API method name</param>
+            <returns>Base request URL for specified method.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.MicrosoftTranslatorService.GetRequestBody(System.String)">
+            <summary>
+            Gets body for requests.
+            </summary>
+            <param name="text">Text specified in body</param>
+            <returns>Body for request containing specified text.</returns>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesMethods">
+            <summary>
+            Translation services methods - wrapping methods for macro resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesMethods.GetTranslationPriority(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns translation priority text.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesTransformationFunctions">
+            <summary>
+            Translation services functions.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesTransformationFunctions.IsTranslationReady(System.Object)">
+            <summary>
+            Returns true if there is at least one translation submission item with target XLIFF for given page and submission is marked as ready.
+            </summary>
+            <param name="document">Document to check</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesTreeNodeMethods">
+            <summary>
+            Translation services methods - wrapping methods for macro resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesTreeNodeMethods.IsTranslationReady(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if there is at least one translation submission item with target XLIFF.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="T:CMS.TranslationServices.ImportSpecialActions">
+            <summary>
+            Handles special actions during the import process.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.ImportSpecialActions.RemovedFormControlGUIDsInV11">
+            <summary>
+            List of removed form control GUIDs.
+            Form controls in this list won't be imported.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ImportSpecialActions.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesHandlers">
+            <summary>
+            Event handlers for translation services module
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesHandlers.Init">
+            <summary>
+            Initializes the handlers
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesHandlers.ClearServiceSettings(System.Object,CMS.DataEngine.SettingsKeyChangedEventArgs)">
+            <summary>
+            Settings key changed handler
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesModule">
+            <summary>
+            Represents the Translation Services module.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationServicesModule.TRANSLATION_SERVICES_EMAIL_TEMPLATE_TYPE_NAME">
+            <summary>
+            Name of email template type for translation services.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesModuleMetadata">
+            <summary>
+            Represents the Translation Services module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServicesModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServicesResolvers">
+            <summary>
+            Resolvers used in e-mail templates and other macro visual components.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServicesResolvers.TranslationServicesResolver">
+            <summary>
+            Returns translation services e-mail template macro resolver.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.BaseTranslationService">
+            <summary>
+            Base class for translation service interface.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.BaseTranslationService.CustomParameter">
+            <summary>
+            Get or sets custom parameter.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.BaseTranslationService.SiteName">
+            <summary>
+            Gets or sets the name of the site where the settings are retrieved from.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.BaseTranslationService.IsAvailable">
+            <summary>
+            Checks if everything required to run the service is in the settings of the service.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServiceHelper">
+            <summary>
+            Class containing methods for manipulating with Translation Services (XLIFF format).
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationServiceHelper.XLIFFEXTENSION">
+            <summary>
+            XLIFF file extension
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationServiceHelper.XLIFFMIME">
+            <summary>
+            XLIFF MIME type
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceHelper.UseCDATAForTranslationUnit">
+            <summary>
+            Indicates if CDATA section should be used for translation units.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceHelper.AutoImportEnabled">
+            <summary>
+            If true, submissions are processed automatically (without explicit approval in administration) when the submission is ready to translate.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.Base.IDataContainer,CMS.TranslationServices.TranslationSettings,System.String)">
+            <summary>
+            Returns XLIFF export for given IDataContainer object.
+            </summary>
+            <param name="data">DataContainer object to export</param>
+            <param name="settings">Translation settings</param>
+            <param name="targetLanguage">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.Base.IDataContainer,CMS.TranslationServices.TranslationSettings,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Returns XLIFF export for given IDataContainer object.
+            </summary>
+            <param name="data">DataContainer object to export</param>
+            <param name="settings">Translation settings</param>
+            <param name="targetLanguage">Target language</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.DataEngine.BaseInfo,CMS.TranslationServices.TranslationSettings,System.String)">
+            <summary>
+            Returns XLIFF export for given object instance.
+            </summary>
+            <param name="info">BaseInfo object to export</param>
+            <param name="settings">Translation settings</param>
+            <param name="targetLanguage">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.DataEngine.BaseInfo,CMS.TranslationServices.TranslationSettings,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Returns XLIFF export for given TreeNode object.
+            </summary>
+            <param name="info">BaseInfo object to export</param>
+            <param name="settings">Translation settings</param>
+            <param name="targetLanguage">Target language</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.DocumentEngine.TreeNode,CMS.TranslationServices.TranslationSettings,System.String)">
+            <summary>
+            Returns XLIFF export for given TreeNode object.
+            </summary>
+            <param name="node">TreeNode object to export</param>
+            <param name="settings">Export settings</param>
+            <param name="targetLanguage">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXLIFF(CMS.DocumentEngine.TreeNode,CMS.TranslationServices.TranslationSettings,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Returns XLIFF export for given TreeNode object.
+            </summary>
+            <param name="node">TreeNode object to export</param>
+            <param name="settings">Export settings</param>
+            <param name="targetLanguage">Target language</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsFieldDataTypeAllowedForTranslation(System.String)">
+            <summary>
+            Returns true for Text, LongText, and Binary field types.
+            </summary>
+            <param name="dataType">DataType of the field</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteFields(System.Xml.XmlWriter,CMS.Base.ICMSObject,System.Collections.Generic.IEnumerable{CMS.FormEngine.FormFieldInfo},System.String,System.Boolean,System.Boolean,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Writes XLIFF trans-units generated from data from given object according to given field info.
+            </summary>
+            <param name="xml">XmlWriter object</param>
+            <param name="obj">Object with the data</param>
+            <param name="fields">List of fields</param>
+            <param name="sourceLang">Source language of the data</param>
+            <param name="processBinary">If true, binary files are included into translation</param>
+            <param name="writeTarget">If true, target node is generated as well with the same content as source tag (needed for translations.com)</param>
+            <param name="mimeType">Mime type of the binary data</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteHeader(System.Xml.XmlWriter,System.String,System.String,System.String,System.String)">
+            <summary>
+            Writes [file][body] tags of XLIFF file with specified attributes.
+            </summary>
+            <param name="xml">XmlWriter object</param>
+            <param name="original">Original attribute field</param>
+            <param name="source">Source language attribute field</param>
+            <param name="target">Target language attribute field</param>
+            <param name="datatype">Datatype attribute field</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteEnd(System.Xml.XmlWriter)">
+            <summary>
+            Ends [file][body] tags of XLIFF file.
+            </summary>
+            <param name="xml">XmlWriter object</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteTransUnit(System.Xml.XmlWriter,System.String,System.Object,System.String,System.Boolean,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Writes a trans-unit XLIFF element.
+            </summary>
+            <param name="xml">XmlWriter object</param>
+            <param name="id">ID of the unit</param>
+            <param name="source">Data to translate</param>
+            <param name="sourceLang">Source language</param>
+            <param name="writeTarget">If true, target node is generated as well with the same content as source tag (needed for translations.com)</param>
+            <param name="mimeType">MIME type of the binary if the source is binary. Ignored parameter for non-binary data.</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteTransUnitContent(System.Xml.XmlWriter,System.Object,System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Writes a content of trans-unit XLIFF element.
+            </summary>
+            <param name="xml">XmlWriter object</param>
+            <param name="source">Data to translate</param>
+            <param name="sourceLang">Source language</param>
+            <param name="charCount">Number of characters to translate within exported XLIFF</param>
+            <param name="wordCount">Number of words to translate within exported XLIFF</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteFormattedTransUnitText(System.Xml.XmlWriter,System.String)">
+            <summary>
+            Gets formatted text based on settings
+            </summary>
+            <param name="xml">XmlWriter object</param>
+            <param name="text">Text to format</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetXmlWriter(System.Text.StringBuilder)">
+            <summary>
+            Returns new instance of XmlWriter for XLIFF export.
+            </summary>
+            <param name="sb">StringBuilder object to build the writer on</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.SetCounts(System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Returns number of words and characters within the given text.
+            </summary>
+            <param name="text">Text to analyze</param>
+            <param name="wordCount">Word count</param>
+            <param name="charCount">Character count</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetFieldLength(CMS.FormEngine.FormFieldInfo,System.Boolean)">
+            <summary>
+            Get maximal allowed length of the given field. If using resource string the result is substract by length of the "{$ $}" macro signatures
+            </summary>
+            <param name="field">Field info</param>
+            <param name="useResourceString">Indicates if length is used for resource string or not</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.ProcessTranslation(System.String,CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Translates object specified by XLIFF document. Returns translated object if translation went ok, null otherwise.
+            </summary>
+            <param name="xliff">XLIFF document</param>
+            <param name="submission">Translation submission</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.ProcessTranslation(System.IO.Stream,CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Translates object specified by XLIFF document. Returns translated object if translation went ok, null otherwise.
+            </summary>
+            <param name="xliff">Stream with XLIFF document</param>
+            <param name="submission">Translation submission</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CheckLicense">
+            <summary>
+            Checks license limitation.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.Translate(CMS.TranslationServices.AbstractMachineTranslationService,CMS.TranslationServices.TranslationSettings,CMS.Base.ICMSObject)">
+            <summary>
+            Translates given object using machine translation service. Returns true if translation went ok, false if there was any error.
+            </summary>
+            <param name="service">Machine translation service to use to translate the object</param>
+            <param name="obj">Object to translate</param>
+            <param name="settings">Translation settings</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.TranslateInfo(CMS.TranslationServices.AbstractMachineTranslationService,CMS.TranslationServices.TranslationSettings,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Translates given object using machine translation service. Returns true if translation went ok, false if there was any error.
+            </summary>
+            <param name="service">Machine translation service to use to translate the object</param>
+            <param name="info">Info object to translate</param>
+            <param name="settings">Translation settings</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.TranslateDocument(CMS.TranslationServices.AbstractMachineTranslationService,CMS.TranslationServices.TranslationSettings,CMS.DocumentEngine.TreeNode)">
+            <summary>
+            Translates given object using machine translation service. Returns true if translation went ok, false if there was any error.
+            </summary>
+            <param name="service">Machine translation service to use to translate the object</param>
+            <param name="settings">Translation settings</param>
+            <param name="node">Document to translate</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.TranslateFields(CMS.Base.ICMSObject,System.Collections.Generic.IEnumerable{CMS.FormEngine.FormFieldInfo},CMS.TranslationServices.AbstractMachineTranslationService,System.String,System.Collections.Generic.HashSet{System.String},System.Boolean)">
+            <summary>
+            Translates given object using specified machine translation service. Returns true if any field was updated.
+            </summary>
+            <param name="obj">Object to translate</param>
+            <param name="fields">List of fields</param>
+            <param name="service">Machine translation service to use</param>
+            <param name="sourceLanguage">Source language of the data</param>
+            <param name="targetLanguages">Target language(s) of the data</param>
+            <param name="useResourceString">If true, field is translated using {$ $} macro, if false, translated value is saved directly in the field</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CheckValidLength(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Checks if translation length is not longer than allowed field length else throws an exception
+            </summary>
+            <param name="translationLength">Length of the translation</param>
+            <param name="columnLength">Maximal length of the column </param>
+            <param name="columnName">Column name</param>
+            <param name="componentName">Name of the component which field is checked</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CancelSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Cancels given submission
+            </summary>
+            <param name="submissionInfo">Submission info</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.ResubmitSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Generates XLIFF documents again and resubmits given submission to the service provider. Returns null if everything went ok, otherwise return error message.
+            </summary>
+            <param name="submissionInfo">Submission info</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.SaveSubmissionInfo(CMS.TranslationServices.TranslationSubmissionInfo,CMS.TranslationServices.TranslationStatusEnum,System.String)">
+            <summary>
+            Sets submission status and updates info in database.
+            </summary>
+            <param name="submissionInfo">Submission info</param>
+            <param name="status">Translation status</param>
+            <param name="message">Translation status message</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.PrepareTranslationSettings(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Prepares translations settings
+            </summary>
+            <param name="submissionInfo">Submission info object</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.ProcessSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Processes all the translations within the submission. Returns null if everything went ok, otherwise return error message.
+            </summary>
+            <param name="submissionInfo">Submission to process</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.SubmitToTranslation(CMS.TranslationServices.TranslationSettings,CMS.DocumentEngine.TreeNode,CMS.TranslationServices.TranslationSubmissionInfo@)">
+            <summary>
+            Submits the node for translation. If the service is human translation service, creates the whole submission (submission will contain only specified document).
+            </summary>
+            <param name="settings">Translations settings</param>
+            <param name="sourceNode">Node to submit (source language node with all necessary data)</param>
+            <param name="submissionInfo">Submission info</param>
+            <returns>Null if operation succeeded, otherwise returns error message.</returns>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CreateSubmissionItemInfo(CMS.TranslationServices.TranslationSettings,CMS.TranslationServices.TranslationSubmissionInfo,CMS.DocumentEngine.TreeNode,System.Int32,System.String)">
+            <summary>
+            Creates new submission item within given submission (saves it to DB also) and returns the object.
+            </summary>
+            <param name="settings">Translation settings</param>
+            <param name="submission">Submission to which the item belongs</param>
+            <param name="sourceNode">Node tu submit</param>
+            <param name="targetDocId">Document ID of the target culture node (0 if does not exist)</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CreateSubmissionItemInfo(CMS.TranslationServices.TranslationSettings,CMS.TranslationServices.TranslationSubmissionInfo,CMS.DocumentEngine.TreeNode,System.Int32,System.Guid,System.Int32,System.String,System.String)">
+            <summary>
+            Creates new submission item within given submission (saves it to DB also) and returns the object.
+            </summary>
+            <param name="settings">Translation settings</param>
+            <param name="submission">Submission to which the item belongs</param>
+            <param name="sourceNode">Node to submit</param>
+            <param name="originalGuid">GUID of the submission item</param>
+            <param name="originalId">ID of the submission item</param>
+            <param name="targetDocId">Document ID of the target culture node (0 if does not exist)</param>
+            <param name="originalDocumentTicket">Original document ticket of re-submitted document</param>
+            <param name="targetLanguage">Target language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CreateSubmissionInfo(CMS.TranslationServices.TranslationSettings,CMS.TranslationServices.TranslationServiceInfo,System.Int32,System.Int32,System.String)">
+            <summary>
+            Creates new submission to queue (saves it to DB also) and returns the object.
+            </summary>
+            <param name="settings">Translation settings</param>
+            <param name="info">Translation service info</param>
+            <param name="userId">ID of the user who created submission</param>
+            <param name="siteId">ID of the site the submission belongs to</param>
+            <param name="submissionName">Name of the submission</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetCultureCode(System.String,CMS.TranslationServices.TranslationCultureMappingDirectionEnum)">
+            <summary>
+            Gets culture code for the translation process
+            </summary>
+            <param name="cultureCode">Culture code to map</param>
+            <param name="direction">Direction of the mapping</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetDocumentFields(CMS.DocumentEngine.TreeNode)">
+            <summary>
+            Gets list of fields to be translated
+            </summary>
+            <param name="node">Document</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsExtensionAllowed(System.String,System.String)">
+            <summary>
+            Gets allowed extensions for attachments that should be included in XLIFF
+            </summary>
+            <param name="siteName">Node site name</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetSubmissionFileName(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Gets submission file name with source and target cultures specified.
+            </summary>
+            <param name="submission">Translations submission</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.AutoImportSubmission(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Processes the submission automatically if enabled. If auto import is disabled, does nothing.
+            </summary>
+            <param name="submission">Submission to process</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetTranslationsEncoding(System.Int32)">
+            <summary>
+            Returns encoding which should be used for translations (export/import of XLIFF) for given site.
+            </summary>
+            <param name="siteId">ID of the site</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetTranslationsEncoding(System.String)">
+            <summary>
+            Returns encoding which should be used for translations (export/import of XLIFF) for given site.
+            </summary>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetSubmissionLinkURL(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Returns absolute URL of the submission page where a translator can submit translated files.
+            </summary>
+            <param name="submission">Submission to create link for</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsTranslationReady(CMS.DocumentEngine.TreeNode)">
+            <summary>
+            Returns true if there is at least one translation submission item with target XLIFF for given page and submission is marked as ready.
+            </summary>
+            <param name="doc">Document to check</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsSubmissionReady(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Checks if submission is ready to import the translation based on current submission status
+            </summary>
+            <param name="submission">Translation submission to check</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.ImportXLIFFfromZIP(CMS.TranslationServices.TranslationSubmissionInfo,System.IO.Stream)">
+            <summary>
+            Imports XLIFF documents from ZIP file. Returns list of unrecognized filenames, null if everything went ok.
+            </summary>
+            <param name="submissionInfo">Submission to export</param>
+            <param name="inputStream">Input stream of a ZIP file</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.WriteSubmissionInZIP(CMS.TranslationServices.TranslationSubmissionInfo,System.IO.Stream)">
+            <summary>
+            Writes the XLIFF documents to translate into a zip file to a given stream.
+            </summary>
+            <param name="submissionInfo">Submission to export</param>
+            <param name="outputStream">Stream to write the data to</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsTextExtension(System.String)">
+            <summary>
+            Returns true if given extension is considered as a text file.
+            </summary>
+            <param name="extension">Extension to check</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.DownloadXLIFFinZIP(CMS.TranslationServices.TranslationSubmissionInfo,System.Web.HttpResponse)">
+            <summary>
+            Starts download of XLIFF document from given submission item.
+            </summary>
+            <param name="submissionInfo">Submission to export</param>
+            <param name="response">Response object</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.DownloadXLIFF(CMS.TranslationServices.TranslationSubmissionItemInfo,System.Web.HttpResponse)">
+            <summary>
+            Starts download of XLIFF document from given submission item.
+            </summary>
+            <param name="item">Submission item</param>
+            <param name="response">Response object</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.SendDataToDowload(System.Web.HttpResponse,System.Byte[],System.String,System.String)">
+            <summary>
+            Sends specified data to download.
+            </summary>
+            <param name="response">Response to use</param>
+            <param name="data">Data to download</param>
+            <param name="fileName">File name of the data</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetFormattedStatusString(CMS.TranslationServices.TranslationStatusEnum)">
+            <summary>
+            Returns formatted (colored) status string.
+            </summary>
+            <param name="status">Status to format</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetPriorityText(System.Int32)">
+            <summary>
+            Returns text representation of integer priority.
+            </summary>
+            <param name="priority">Submission priority</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsAuthorizedToTranslateDocument(CMS.DocumentEngine.TreeNode,CMS.Membership.CurrentUserInfo,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Checks whether the user is authorized to translate document.
+            </summary>
+            <param name="node">Document node</param>
+            <param name="user">User to check</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.AnyServiceAvailable(System.String)">
+            <summary>
+            Returns true if at least one service is available (= is enabled and its IsAvailable() method returns true).
+            </summary>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsServiceAvailable(System.String,System.String)">
+            <summary>
+            Returns true if specified service is available (= is enabled and its IsAvailable() method returns true).
+            </summary>
+            <param name="serviceName">Name of the service</param>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.IsTranslationAllowed(System.String)">
+            <summary>
+            Reflects CMSEnableTranslations setting for specified site.
+            </summary>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.LogError(System.String)">
+            <summary>
+            Logs an error message to event log.
+            </summary>
+            <param name="message">Message to log</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.LogEvent(System.Exception)">
+            <summary>
+            Logs an event if error occurred during action.
+            </summary>
+            <param name="ex">Exception occurring</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.LogEvent(CMS.Core.EventTypeEnum,System.String,System.String)">
+            <summary>
+            Logs an event if error occurred during action.
+            </summary>
+            <param name="message">Error message</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.SaveDocument(CMS.DocumentEngine.TreeNode,CMS.DocumentEngine.TreeProvider)">
+            <summary>
+            Saves document
+            </summary>
+            <param name="node">Document</param>
+            <param name="tree">Tree provider</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CreateTargetCultureNode(CMS.DocumentEngine.TreeNode,System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns document of target culture from specified node or creates new culture version as a copy of the original.
+            </summary>
+            <param name="originalNode">Source culture document</param>
+            <param name="targetLang">Target language</param>
+            <param name="setWaitingForTranslation">If true, WaitingForTranslation flag of the target node is set to true</param>
+            <param name="copyOriginalNodeData">If true, data from en existing originalNode (source culture) is copied to the target (this flag is taken into account only for existing target documents)</param>
+            <param name="copyAttachments">Indicates if attachments from source node should be copied to target node</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.TranslateField(CMS.Base.ICMSObject,System.String,System.String,System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Translates a specified field of given CMS object. Object can be modified (normal string might be changed to resource strings) - if the object was modified, returns true, otherwise false.
+            </summary>
+            <param name="obj">Object the field of which to translate</param>
+            <param name="columnName">Name of the column to translate</param>
+            <param name="translation">Translation</param>
+            <param name="sourceCulture">Source culture code</param>
+            <param name="targetCulture">Target culture code</param>
+            <param name="maxKeyLength">Maximal length of the resource string key</param>
+            <param name="useResourceString">If true, field is translated using {$ $} macro, if false, translated value is saved directly in the field</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.TranslateString(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Translates given string. Checks if original value is resource string. If not creates new and creates translations for original culture and translated culture.
+            </summary>
+            <param name="originalValue">Original value (possibly resource string macro)</param>
+            <param name="translation">Translation in target culture</param>
+            <param name="sourceCulture">Source culture</param>
+            <param name="targetCulture">Target culture</param>
+            <param name="maxKeyLength">Maximal resource string key length</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetTranslationValue(System.String,System.String)">
+            <summary>
+            Returns value for translation - if the value is localization macro, than it returns it value in source language, otherwise return the input value without change.
+            </summary>
+            <param name="src">Text to process</param>
+            <param name="sourceLang">Source language</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.GetLatestTranslatedSubmissionItemQuery(CMS.DocumentEngine.TreeNode)">
+            <summary>
+            Returns query for latest translated submission item of the given document.
+            </summary>
+            <param name="doc">Document waiting for translation</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceHelper.CheckAndDownloadTranslations(System.String)">
+            <summary>
+            Checks all the available translation services for given site and downloads the translations if they are available, stores them in the submission.
+            </summary>
+            <param name="siteName">Site where to check</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServiceInfo">
+            <summary>
+            TranslationServiceInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationServiceInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationServiceInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceName">
+            <summary>
+            Code name of the translation service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceParameter">
+            <summary>
+            Custom parameter of the service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceDisplayName">
+            <summary>
+            Display name of the translation service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceAssemblyName">
+            <summary>
+            Name of the assembly where the provider is implemented.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceGUID">
+            <summary>
+            GUID of the translation service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceClassName">
+            <summary>
+            Name of the class where the provider is implemented.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceGenerateTargetTag">
+            <summary>
+            Determines whether the service requires to generate target tag in XLIFF in advance.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceIsMachine">
+            <summary>
+            Determines whether the service is machine translation service (for example Google Translator) or classical translation service (for example Translations.com).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceEnabled">
+            <summary>
+            Determines whether the service is enabled or not.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceSupportsInstructions">
+            <summary>
+            Determines whether the service supports instructions for submissions.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceSupportsDeadline">
+            <summary>
+            Determines whether the service supports deadline for submissions.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceSupportsPriority">
+            <summary>
+            Determines whether the service supports prioritizing of submissions.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceSupportsCancel">
+            <summary>
+            Determines whether the service supports canceling submissions.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceSupportsStatusUpdate">
+            <summary>
+            Determines whether is allowed manual updating of submission status .
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceLastModified">
+            <summary>
+            Last modified date of the translation service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationServiceInfo.TranslationServiceID">
+            <summary>
+            ID of the translation service.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty TranslationServiceInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new TranslationServiceInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationServiceInfoProvider">
+            <summary>
+            Class providing TranslationServiceInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.GetTranslationServiceInfo(System.Int32)">
+            <summary>
+            Returns translation service with specified ID.
+            </summary>
+            <param name="serviceId">Translation service ID.</param>        
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.GetTranslationServiceInfo(System.String)">
+            <summary>
+            Returns translation service with specified name.
+            </summary>
+            <param name="serviceName">Translation service name.</param>                
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.SetTranslationServiceInfo(CMS.TranslationServices.TranslationServiceInfo)">
+            <summary>
+            Sets (updates or inserts) specified translation service.
+            </summary>
+            <param name="serviceObj">Translation service to be set.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.DeleteTranslationServiceInfo(CMS.TranslationServices.TranslationServiceInfo)">
+            <summary>
+            Deletes specified translation service.
+            </summary>
+            <param name="serviceObj">Translation service to be deleted.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.DeleteTranslationServiceInfo(System.Int32)">
+            <summary>
+            Deletes translation service with specified ID.
+            </summary>
+            <param name="serviceId">Translation service ID.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.GetTranslationServices">
+            <summary>
+            Returns the query of all translation services.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.GetTranslationServices(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns dataset of all translation services matching the specified parameters.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.SetInfo(CMS.TranslationServices.TranslationServiceInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationServiceInfoProvider.DeleteInfo(CMS.TranslationServices.TranslationServiceInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationPriorityEnum">
+            <summary>
+            Translation priority levels.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationPriorityEnum.Low">
+            <summary>
+            Low priority.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationPriorityEnum.Normal">
+            <summary>
+            Normal priority.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationPriorityEnum.High">
+            <summary>
+            High priority.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationSettings">
+            <summary>
+            Class encapsulating settings for manipulating with Translation Services (XLIFF format).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslationServiceName">
+            <summary>
+            Gets or sets code name of the translation service used to submit a translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslateEditableItems">
+            <summary>
+            Gets or sets the value which indicates whether to include editable regions into translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslateWebpartProperties">
+            <summary>
+            Gets or sets the value which indicates whether to include webpart properties into translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslateDocCoupledData">
+            <summary>
+            Gets or sets the value which indicates whether to include coupled data fields into translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslateAttachments">
+            <summary>
+            Gets or sets the value which indicates whether to include attachments binary data fields into translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.GenerateTargetTag">
+            <summary>
+            If true, target tag is generated and filled with source tag content while exporting to XLIFF (needed for Translations.com).
+            If not set, the setting is initialized based on translation service setting.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TargetLanguages">
+            <summary>
+            Gets or sets the target languages of the object/document.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.SourceLanguage">
+            <summary>
+            Gets or sets the source language of the object/document.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.ItemIdentifier">
+            <summary>
+            Gets or sets unique identifier of a file within a submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.DataType">
+            <summary>
+            Gets or sets the data type of the translation - constant according to XLIFF specification (htmlbody, plaintext, ...).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.Priority">
+            <summary>
+            Gets or sets the priority with which the translation will be submitted to the translation service (the higher the number the higher the priority).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.Instructions">
+            <summary>
+            Gets or sets the instructions which will be added to the translation submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSettings.TranslationDeadline">
+            <summary>
+            Gets or sets the deadline proposed for the translation.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSettings.Clone">
+            <summary>
+            Creates clone of translation settings
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationStatusEnum">
+            <summary>
+            Translation process statuses.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.WaitingForTranslation">
+            <summary>
+            Horizontal.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.TranslationReady">
+            <summary>
+            Translation is ready to process
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.TranslationCompleted">
+            <summary>
+            Translation was already processed.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.SubmissionError">
+            <summary>
+            Error while submitting occured.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.ProcessingError">
+            <summary>
+            Error while processing occured.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.TranslationCanceled">
+            <summary>
+            Translation was canceled.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.ResubmittingSubmission">
+            <summary>
+            Submission is being resubmitted
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationStatusEnum.ProcessingSubmission">
+            <summary>
+            Submission is being processed
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationSubmissionInfo">
+            <summary>
+            TranslationSubmissionInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationSubmissionInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationSubmissionInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionTargetCulture">
+            <summary>
+            List of target cultures of the submission separated by ';'.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionTargetCultures">
+            <summary>
+            List of target cultures of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionTicket">
+            <summary>
+            Submission ticket (unique ID on the translation service side).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionGUID">
+            <summary>
+            Submission GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionID">
+            <summary>
+            ID of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionSiteID">
+            <summary>
+            Site ID of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionSubmittedByUserID">
+            <summary>
+            ID of the user who submitted submission to translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionName">
+            <summary>
+            Name of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionPrice">
+            <summary>
+            Price of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionDeadline">
+            <summary>
+            Deadline of the translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionDate">
+            <summary>
+            Date of the submission (when it was created).
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionLastModified">
+            <summary>
+            Submission last modified date.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionSourceCulture">
+            <summary>
+            Source culture of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionServiceID">
+            <summary>
+            ID of the translation service provider.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionPriority">
+            <summary>
+            Priority of the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionStatus">
+            <summary>
+            Status of the translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionStatusMessage">
+            <summary>
+            Status message of the translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionInstructions">
+            <summary>
+            Instructions for translators.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionTranslateAttachments">
+            <summary>
+            Indicates if binary files were included in the XLIFF.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionItemCount">
+            <summary>
+            Number of items within the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionWordCount">
+            <summary>
+            Number of words to translate within the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionCharCount">
+            <summary>
+            Number of character to translate within the submission.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionInfo.SubmissionParameter">
+            <summary>
+            Custom field used to pass parameters with submission to providers, this field does not correspond to any DB field.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.SetValue(System.String,System.Object)">
+            <summary>
+            Sets the field value.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">New value</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty TranslationSubmissionInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new TranslationSubmissionInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.GetServiceSourceCulture">
+            <summary>
+            Gets service representation of the source service culture code
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfo.GetServiceTargetCultures">
+            <summary>
+            Gets service representation of the target service culture codes
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationSubmissionInfoProvider">
+            <summary>
+            Class providing TranslationSubmissionInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(System.Int32)">
+            <summary>
+            Returns submission with specified ID.
+            </summary>
+            <param name="submissionId">Submission ID.</param>        
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(System.Guid)">
+            <summary>
+            Returns submission with specified GUID.
+            </summary>
+            <param name="submissionGuid">Submission GUID.</param>        
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(System.String)">
+            <summary>
+            Returns submission with specified name.
+            </summary>
+            <param name="submissionName">Submission name.</param>                
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.SetTranslationSubmissionInfo(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Sets (updates or inserts) specified submission.
+            </summary>
+            <param name="submissionObj">Submission to be set.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.DeleteTranslationSubmissionInfo(CMS.TranslationServices.TranslationSubmissionInfo)">
+            <summary>
+            Deletes specified submission.
+            </summary>
+            <param name="submissionObj">Submission to be deleted.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.DeleteTranslationSubmissionInfo(System.Int32)">
+            <summary>
+            Deletes submission with specified ID.
+            </summary>
+            <param name="submissionId">Submission ID.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetTranslationSubmissions">
+            <summary>
+            Returns the query of all translation submissions.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetSubmissions(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns dataset of all submissions matching the specified parameters.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetSubmissionDocuments(System.Int32,System.Int32)">
+            <summary>
+            Returns list of document names submitted within given submission.
+            </summary>
+            <param name="submissionId">ID of the submission</param>
+            <param name="documentsCount">Maximal number of documents to return</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.UpdateStatuses(CMS.TranslationServices.TranslationStatusEnum,System.String)">
+            <summary>
+            Updates statuses for all submissions given by where condition.
+            </summary>
+            <param name="status">Translation status</param>
+            <param name="where">Where condition</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.GetSubmissionDocumentsInternal(System.Int32,System.Int32)">
+            <summary>
+            Returns list of document names submitted within given submission.
+            </summary>
+            <param name="submissionId">ID of the submission</param>
+            <param name="documentsCount">Maximal number of documents to return</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionInfoProvider.UpdateStatusesInternal(CMS.TranslationServices.TranslationStatusEnum,System.String)">
+            <summary>
+            Updates statuses for all submissions given by where condition.
+            </summary>
+            <param name="status">Translation status</param>
+            <param name="where">Where condition</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationSubmissionItemInfo">
+            <summary>
+            TranslationSubmissionItemInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationSubmissionItemInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.TranslationServices.TranslationSubmissionItemInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemSubmissionID">
+            <summary>
+            ID of the submission this item belongs to.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemGUID">
+            <summary>
+            GUID of the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemName">
+            <summary>
+            Name of the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemTargetCulture">
+            <summary>
+            Target culture of the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemObjectType">
+            <summary>
+            Object type of the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemObjectID">
+            <summary>
+            ID of the object.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemTargetObjectID">
+            <summary>
+            ID of the object.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemWordCount">
+            <summary>
+            Number of words to translate within the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemCharCount">
+            <summary>
+            Number of characters to translate within the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemTargetXLIFF">
+            <summary>
+            Translated XLIFF document recieved from translation service.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemLastModified">
+            <summary>
+            Submission item last modified date.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemSourceXLIFF">
+            <summary>
+            Source XLIFF data sent for translation.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemCustomData">
+            <summary>
+            Custom data of submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemID">
+            <summary>
+            ID of the submission item.
+            </summary>
+        </member>
+        <member name="P:CMS.TranslationServices.TranslationSubmissionItemInfo.SubmissionItemType">
+            <summary>
+            File type of the submission item (XLIFF by default).
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty TranslationSubmissionItemInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new TranslationSubmissionItemInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.TranslationServices.TranslationSubmissionItemInfoProvider">
+            <summary>
+            Class providing TranslationSubmissionItemInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItemInfo(System.Int32)">
+            <summary>
+            Returns submission item with specified ID.
+            </summary>
+            <param name="itemId">Submission item ID.</param>        
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItemInfo(System.Guid)">
+            <summary>
+            Returns submission item with specified GUIID.
+            </summary>
+            <param name="itemGuid">Submission item GUIID.</param>        
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.SetTranslationSubmissionItemInfo(CMS.TranslationServices.TranslationSubmissionItemInfo)">
+            <summary>
+            Sets (updates or inserts) specified submission item.
+            </summary>
+            <param name="itemObj">Submission item to be set.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.DeleteTranslationSubmissionItemInfo(CMS.TranslationServices.TranslationSubmissionItemInfo)">
+            <summary>
+            Deletes specified submission item.
+            </summary>
+            <param name="itemObj">Submission item to be deleted.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.DeleteTranslationSubmissionItemInfo(System.Int32)">
+            <summary>
+            Deletes submission item with specified ID.
+            </summary>
+            <param name="itemId">Submission item ID.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItems">
+            <summary>
+            Returns the query of all translation services.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItems(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns dataset of all submission items matching the specified parameters.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+        </member>
+        <member name="M:CMS.TranslationServices.TranslationSubmissionItemInfoProvider.UpdateData(System.String,System.String,CMS.DataEngine.QueryDataParameters)">
+            <summary>
+            Updates data for all records given by where condition
+            </summary>
+            <param name="updateExpression">Update expression, e.g. "Value = Value * 2"</param>
+            <param name="where">Where condition</param>
+            <param name="parameters">Parameters</param>
+        </member>
+        <member name="T:CMS.TranslationServices.ClearHumanTranslationServiceHashtablesWebFarmTask">
+            <summary>
+            Web farm task used to clear human translation service hashtable.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ClearHumanTranslationServiceHashtablesWebFarmTask.ExecuteTask">
+            <summary>
+            Clears human translation service hashtable.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.ClearMachineTranslationServiceHashtablesWebFarmTask">
+            <summary>
+            Web farm task used to clear machine translation service hashtable.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ClearMachineTranslationServiceHashtablesWebFarmTask.ExecuteTask">
+            <summary>
+            Clears machine translation service hashtable.
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.ImportTranslationAction">
+            <summary>
+            Class for document translation import
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.ImportTranslationAction.Execute">
+            <summary>
+            Executes action
+            </summary>
+        </member>
+        <member name="T:CMS.TranslationServices.SendForTranslationAction">
+            <summary>
+            Class for sending the document for translation via workflow.
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.SendForTranslationAction.Execute">
+            <summary>
+            Executes action
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.SendForTranslationAction.GetTargetCultures">
+            <summary>
+            Gets validated target cultures
+            </summary>
+        </member>
+        <member name="M:CMS.TranslationServices.SendForTranslationAction.GetDeadlineDate(System.String)">
+            <summary>
+            Get deadline date in DateTime format
+            </summary>
+            <param name="deadline">Deadline settings</param>
+        </member>
+    </members>
+</doc>

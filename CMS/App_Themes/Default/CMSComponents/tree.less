@@ -1,0 +1,318 @@
+﻿// Styles for current implementation of tree component
+
+// Variables
+@tree-selected-item-color: @color-blue-130;
+@tree-item-text-color: @color-gray-50;
+@tree-item-drag-bg: @color-gray-150;
+@tree-panel-bg: @color-gray-140;
+@tree-bg: @color-white;
+
+@tree-margin: @base-unit * 0.5;
+@tree-line-height: @base-unit * 1.5;
+@tree-border-size: @base-unit * 0.5;
+@tree-icon-width: 20px;
+@tree-item-spacing: @base-unit * 0.5;
+
+// Styles
+.TreeBody {
+    height: 100%;
+    width: 100%;
+    background: @tree-bg;
+}
+
+.TreeArea {
+    overflow: auto;
+    position: absolute;
+    left: 0;
+    right: @tree-border-size;
+    top: 0;
+    bottom: 0;
+
+    .RTL & {
+        right: 0;
+        left: @tree-border-size;
+    }
+
+    &.tree-area-menu {
+        top: @base-unit * 3;
+    }
+
+    &.tree-area-menu-empty {
+        top: 0;
+    }
+}
+
+.SelectNodeTree .TreeArea {
+    right: auto;
+    left: auto;
+}
+
+.TreeAreaTree {
+    margin: @tree-margin;
+
+    .RefreshTreeIconContainer {
+        position: absolute;
+        right: @base-unit * 0.25;
+        top: @base-unit / 4;
+        cursor: pointer;
+        z-index: 10;
+
+        .RTL & {
+            left: 8px;
+            right: auto;
+        }
+    }
+
+    .RefreshTreeIcon.btn-icon {
+        visibility: hidden;
+        border-radius: 0;
+        background-color: @color-gray-70;
+
+        i {
+            color: @color-gray-100;
+        }
+    }
+}
+
+.ContentTreeArea {
+    width: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.TreeMain, .ContentTree {
+    td {
+        vertical-align: top;
+    }
+
+    a, a:link, a:visited, a:hover, a:active {
+        outline: none;
+        text-decoration: none;
+        color: @tree-item-text-color;
+    }
+
+        a[href$="SkipLink"] {
+            .sr-only;
+        }
+
+    [class^="icon-"]:not([class*="color-"]) {
+        color: @light-bg-icon-color;
+    }
+}
+
+.TreeAreaBorderTop {
+    border-top: @tree-border-size * 3 solid @tree-panel-bg;
+}
+
+.TreeBorder {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: @tree-border-size;
+    height: 100%;
+    overflow: hidden;
+    cursor: e-resize;
+    z-index: 1000;
+    background-color: @tree-panel-bg;
+
+    .RTL & {
+        right: auto;
+        left: 0;
+    }
+}
+
+.DDItem {
+    clear: both;
+    display: block;
+}
+
+.DDItemDragged {
+    clear: both;
+    background-color: @tree-item-drag-bg;
+    .opacity(0.7);
+
+    .tn-group {
+        display: none;
+    }
+}
+
+.ContentTreeItem, .ContentTreeSelectedItem {
+    display: inline-block;
+    line-height: @tree-line-height;
+
+    .Info {
+        color: #888888;
+    }
+
+    .Name {
+        display: inline-block;
+        margin-left: @tree-item-spacing / 2;
+        padding: 0 @tree-item-spacing / 2;
+        color: @tree-item-text-color;
+        cursor: pointer;
+
+        .RTL & {
+            margin-left: auto;
+            margin-right: @tree-item-spacing / 2;
+        }
+
+        & sup {
+            color: @color-blue-70;
+        }
+    }
+
+    [class^="cms-icon-"], [class*=" cms-icon-"] {
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    img {
+        padding-bottom: 3px;
+    }
+
+    &.highlighted {
+        font-weight: bold;
+    }
+
+    &.disabled {
+        .opacity(.5);
+    }
+}
+
+    .ContentTreeSelectedItem .Name, .TreeContextActiveNode .Name {
+        background: @tree-selected-item-color;
+    }
+
+.ContentTree td .NodeLink, .Listing td .NodeLink, .table td .NodeLink, .Node .content .main .NodeLink {
+    padding-left: @tree-item-spacing;
+
+    .RTL & {
+        padding-left: 0;
+        padding-right: @tree-item-spacing;
+    }
+}
+
+.PageContentTree {
+    padding: 5px;
+}
+
+.DDCue, .DDCueCtrl, .DDCueCtrlShift {
+    color: @color-gray-70;
+    clear: both;
+    height: @tree-line-height;
+    background-image: url(../../CMSPages/GetResource.ashx?image=Design/Controls/Tree/l.gif);
+    background-position: top left;
+    background-repeat: no-repeat;
+    padding-right: @tree-item-spacing;
+    padding-left: @tree-icon-width;
+
+    .RTL & {
+        background-image: url(../../CMSPages/GetResource.ashx?image=RTL/Design/Controls/Tree/l.gif);
+        background-position: top right;
+        padding-left: @tree-item-spacing;
+        padding-right: @tree-icon-width;
+    }
+}
+
+.DDCueLeft, .DDCueLeftCtrl, .DDCueLeftCtrlShift {
+    clear: both;
+    height: @tree-line-height;
+}
+
+.RootNode .DDCueLeft, .RootNode .DDCueLeftCtrl, .RootNode .DDCueLeftCtrlShift {
+    padding-left: @tree-icon-width;
+}
+
+.DDCueInside {
+    height: @tree-line-height;
+    min-width: 100px;
+}
+
+.CopyHere, .MoveHere, .LinkHere {
+    display: none;
+}
+
+.DDCueCtrl .CopyHere, .DDCueLeftCtrl .CopyHere,
+.DDCue .MoveHere, .DDCueLeft .MoveHere,
+.DDCueCtrlShift .LinkHere, .DDCueLeftCtrlShift .LinkHere {
+    display: block;
+}
+
+.TreeMenuPadding {
+    padding: @tree-margin;
+    background: @color-gray-140;
+}
+
+.tree-buttons-panel {
+    padding: @base-unit;
+    background: @tree-panel-bg;
+}
+
+.tree-actions-panel {
+    padding: 0 @base-unit;
+    background: @tree-panel-bg;
+    font-size: 0;
+}
+
+.tree-actions {
+    display: inline-block;
+    margin: @base-unit * 0.5 0;
+}
+
+.tree-bottom-actions-panel {
+    position: absolute;
+    bottom: 0;
+    background: @tree-panel-bg;
+}
+
+.tree-buttons {
+    padding-top: @base-unit;
+
+    button {
+        font-family: @font-family-base !important;
+    }
+}
+
+.tree-checkbox {
+    display: inline;
+
+    label {
+        padding-left: 0;
+    }
+
+    .Name {
+        margin: 0;
+        margin-left: @base-unit;
+    }
+}
+
+.tree-language-menu {
+    margin: @base-unit !important;
+}
+
+.macro-tree {
+    [class^="icon-"] {
+        padding-right: @padding-small-horizontal;
+    }
+}
+
+.tree-vertical-scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.tn-group {
+    position: absolute;
+    right: 0;
+    height: 25px;
+    background-color: @color-white;
+    padding-right: @base-unit * 0.5;
+    cursor: default;
+}
+
+.tn-icon {
+    float: right;
+}

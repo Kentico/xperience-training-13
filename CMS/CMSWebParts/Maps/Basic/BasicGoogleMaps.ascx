@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="~/CMSWebParts/Maps/Basic/BasicGoogleMaps.ascx.cs" Inherits="CMSWebParts_Maps_Basic_BasicGoogleMaps" %>
+<asp:PlaceHolder runat="server" ID="plcBasicGoogleMaps" />

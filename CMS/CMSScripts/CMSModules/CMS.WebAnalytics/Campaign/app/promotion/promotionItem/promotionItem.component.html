@@ -1,0 +1,49 @@
+<div class="campaign-promotionlist-item row form-horizontal">
+    <div class="col-xs-6">
+        <div class="campaign-assetlist-header">
+            <span class="campaign-assetlist-header-description">
+                <span class="primary-description">
+                    {$ campaign.assetlist.email $}
+                    <br />
+                </span>
+
+                <span ng-if="!$ctrl.isDeleted()"><a ng-href="{{$ctrl.asset.link}}" target="_blank">{{$ctrl.asset.name}}</a> </span>
+                <span ng-if="$ctrl.isDeleted()" class="campaign-assetlist-deleted">{{$ctrl.asset.name}}</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="campaign-email-source col-xs-4" title="{$ campaign.assetlist.email $}">
+        <form name="{{$ctrl.formName}}" cms-autosave="$ctrl.save()">
+            <cms-campaign-textbox value="$ctrl.asset.additionalProperties.utmSource"
+                                  maxlength="'200'"
+                                  required="true"
+                                  pattern="[0-9a-zA-Z_.-]+"
+                                  pattern-error="{$ campaign.utmparameter.wrongformat $}"
+                                  label="{$ campaign.utmsource $}"
+                                  id="{{$ctrl.inputId}}"
+                                  enabled="$ctrl.editable && $ctrl.asset.additionalProperties.isEditable"
+                                  form-element="$ctrl.getUtmSourceField()">
+            </cms-campaign-textbox>
+        </form>
+    </div>
+
+    <div class="cols-xs-2 promotionlist-icons">
+        <div ng-if="!$ctrl.isDeleted()" title="{$ general.edit $}">
+            <a ng-href="{{$ctrl.asset.link}}" target="_blank" class="btn icon-only btn-icon">
+                <i class="icon-edit" aria-hidden="true">
+                </i>
+            </a>
+        </div>
+
+        <button class="icon-only btn-icon btn"
+                ng-click="$ctrl.removeItem()"
+                title="{$ campaign.assetlist.removeemail $}"
+                ng-disabled="!$ctrl.editable">
+            <i class="icon-bin" aria-hidden="true"></i>
+            <span class="sr-only">{$ campaign.assetlist.removeemail $}</span>
+        </button>
+
+    </div>
+
+</div>

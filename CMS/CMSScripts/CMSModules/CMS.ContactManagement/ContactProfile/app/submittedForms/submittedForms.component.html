@@ -1,0 +1,31 @@
+﻿<div ng-if="$ctrl.forms">
+    <table class="table table-hover" ng-if="$ctrl.forms.length">
+        <thead>
+            <tr class="unigrid-head">
+                <th>
+                    <a href="#" ng-click="$ctrl.sort($ctrl.sortTypeName)">{$ general.form $}</a>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeName, $ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeName)" class="icon-caret-down"></i>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeName, !$ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeName)" class="icon-caret-up"></i>
+                </th>
+                <th class="site-name-column">
+                    <a href="#" ng-click="$ctrl.sort($ctrl.sortTypeSite)">{$ general.sitename $}</a>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeSite, $ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeSite)" class="icon-caret-down"></i>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeSite, !$ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeSite)" class="icon-caret-up"></i>
+                </th>
+                <th class="submission-date-column">
+                    <a href="#" ng-click="$ctrl.sort($ctrl.sortTypeDate)">{$ contactmanagement.contact.submittedforms.submissiondate $}</a>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeDate, $ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeDate)" class="icon-caret-down"></i>
+                    <i ng-show="$ctrl.showSorting($ctrl.sortTypeDate, !$ctrl.sortAsc)" ng-click="$ctrl.sort($ctrl.sortTypeDate)" class="icon-caret-up"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="tbody-hover">
+            <tr ng-repeat="form in $ctrl.forms | orderBy:$ctrl.sortType:$ctrl.sortAsc">
+                <td><a target="_blank" ng-href="{{::form.FormUrl}}">{{ ::form.FormDisplayName }}</a></td>
+                <td>{{ ::form.SiteDisplayName }}</td>
+                <td>{{ ::form.FormSubmissionDate | date:'medium' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <span ng-if="!$ctrl.forms.length">{$ contactmanagement.contact.submittedforms.nodata $}</span>
+</div>

@@ -1,0 +1,33 @@
+-- Delete old server mappings
+CREATE TABLE #tmp (
+SRV_NAME varchar(128) not null,
+SRV_PROVIDERNAME varchar(128) not null,
+SRV_PRODUCT varchar(255) null,
+SRV_DATASOURCE varchar(255) null,
+SRV_PROVIDERSTRING varchar(255) null,
+SRV_LOCATION varchar(255) null,
+SRV_CAT varchar(255) null)
+
+INSERT #tmp EXEC sp_linkedservers
+
+IF EXISTS (SELECT [SRV_NAME] FROM #tmp WHERE [SRV_NAME] = '##BASESERVER##')
+BEGIN
+	EXEC sp_serveroption '##BASESERVER##', 'pub', 'off';
+	EXEC sp_serveroption '##BASESERVER##', 'sub', 'off';
+	EXEC sp_dropserver '##BASESERVER##', 'droplogins';
+END
+
+DROP TABLE #tmp
+
+-- Create a link to the remote data source. 
+EXEC sp_addlinkedserver @server = N'##BASESERVER##',
+		@srvproduct=N'',
+		@provider=N'SQLNCLI',
+		@datasrc = N'##BASESERVER##',
+	    @catalog = N'##BASEDATABASENAME##';
+
+-- Ensure access rights	
+EXEC sp_serveroption '##BASESERVER##', 'data access', 'true'
+
+-- Updates a mapping between a login on the local instance of SQL Server and a security account on a remote server
+EXEC sp_addlinkedsrvlogin @rmtsrvname = N'##BASESERVER##', @useself = 'FALSE', @rmtuser =  '##BASEUSERNAME##',  @rmtpassword = '##BASEUSERPASS##'

@@ -1,0 +1,58 @@
+<cms-dialog-header on-close="$ctrl.dismiss" header="{$ campaign.getcontentlink.dialog.title $}"></cms-dialog-header>
+<div class="dialog-content">
+    <div class="campaign-edit-dialog">
+        <p class="form-horizontal">{$ campaign.getcontentlink.dialog.description $}</p>
+
+        <form class="form-horizontal" name="getLinkForm">
+            <div class="form-group" title="{$ campaign.utmsource $}" class="form-group">
+                <div class="editing-form-label-cell">
+                    <label class="control-label editing-form-label" for="utmSource">
+                        {$ campaign.utmsource $}:
+                        <span class="required-mark">*</span>
+                    </label>
+                </div>
+                <div class="editing-form-value-cell">
+                    <div class="editing-form-control-nested-control">
+                        <input name="utmSource" id="utmSource" class="form-control" type="text" ng-maxlength="100" pattern="[0-9a-zA-Z_.-]+" ng-change="$ctrl.onChange()" ng-model="$ctrl.utmSource" maxlength="100" required>
+                        <div class="explanation-text">{$ campaign.getcontentlink.dialog.utmsource.explanationtext $}</div>
+                        <span class="form-control-error" ng-if="getLinkForm.utmSource.$error.pattern">{$ campaign.utmparameter.wrongformat $}</span>
+                        <span class="form-control-error" ng-if="getLinkForm.utmSource.$error.required && getLinkForm.utmSource.$touched">{$ general.requiresvalue $}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" title="{$ campaign.utmmedium $}" class="form-group">
+                <div class="editing-form-label-cell">
+                    <label class="control-label editing-form-label" for="utmMedium">{$ campaign.utmmedium $}:</label>
+                </div>
+                <div class="editing-form-value-cell">
+                    <div class="editing-form-control-nested-control">
+                        <input name="utmMedium" id="utmMedium" class="form-control" type="text" ng-maxlength="100" pattern="[0-9a-zA-Z_.-]+" ng-model="$ctrl.utmMedium" ng-change="$ctrl.onChange()" maxlength="100">
+                        <div class="explanation-text">{$ campaign.getcontentlink.dialog.utmmedium.explanationtext $}</div>
+                        <span class="form-control-error" ng-if="getLinkForm.utmMedium.$error.pattern">{$ campaign.utmparameter.wrongformat $}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" title="{$ campaign.utmcontent $}" class="form-group">
+                <div class="editing-form-label-cell">
+                    <label class="control-label editing-form-label" for="utmContent">{$ campaign.utmcontent $}:</label>
+                </div>
+                <div class="editing-form-value-cell">
+                    <div class="editing-form-control-nested-control">
+                        <input name="utmContent" id="utmContent" class="form-control" type="text" ng-maxlength="100" pattern="[0-9a-zA-Z_.-]+" ng-model="$ctrl.utmContent" ng-change="$ctrl.onChange()" maxlength="100">
+                        <div class="explanation-text">{$ campaign.getcontentlink.dialog.utmcontent.explanationtext $}</div>
+                        <span class="form-control-error" ng-if="getLinkForm.utmContent.$error.pattern">{$ campaign.utmparameter.wrongformat $}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ng-isolate-scope form-group" title="{$ campaign.getcontentlink.dialog.linktextarea.label $}" class="form-group">
+                <div class="editing-form-label-cell">
+                    <label class="control-label editing-form-label" for="get-link-dialog-built-link">{$ campaign.getcontentlink.dialog.linktextarea.label $}:</label>
+                </div>
+                <div class="textarea editing-form-value-cell">
+                    <textarea id="get-link-dialog-built-link" ng-click="$ctrl.textAreaClick($event)" class="form-control" placeholder="" required="required" name="get-link-dialog-built-link" rows="4" ng-model="$ctrl.link" readonly></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<cms-dialog-footer dismiss-label="{$ general.close $}" on-dismiss="$ctrl.dismiss"></cms-dialog-footer>

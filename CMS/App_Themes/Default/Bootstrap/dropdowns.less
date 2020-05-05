@@ -1,0 +1,521 @@
+//
+// Dropdown menus
+// --------------------------------------------------
+
+
+// Dropdown arrow/caret
+.caret {
+    font-family: @icon-font-name;
+    .cms-icon-30;
+    line-height: @icon-size-30;
+    display: inline;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-decoration: none;
+
+    &:before {
+        content: @icon-caret-right-down;
+    }
+}
+
+// The dropdown wrapper (div)
+.dropdown {
+    position: relative;
+
+    .dropdown-toggle {
+        text-decoration: none !important;
+
+        span {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Prevent the focus on the dropdown toggle when closing dropdowns
+.dropdown-toggle:focus {
+    outline: 0;
+}
+
+// The dropdown menu (ul)
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: @zindex-dropdown;
+    display: none; // none by default, but block on "open" of the menu
+    float: left;
+    min-width: @dropdown-min-width;
+    padding: 0;
+    margin: 0; // override default ul
+    list-style: none;
+    font-size: @font-size-base;
+    background-color: @dropdown-bg;
+    border-radius: @border-radius-small;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    background-clip: padding-box;
+    // Aligns the dropdown menu to right
+    &.pull-right {
+        right: 0;
+        left: auto;
+    }
+
+    &.pull-up {
+        top: auto;
+        bottom: 100%;
+    }
+    // Dividers (basically an hr) within the dropdown
+    .divider {
+        .nav-divider(@dropdown-divider-bg);
+    }
+
+    a {
+        font-size: @font-size-base;
+    }
+
+    > li, > .jspContainer > .jspPane > li {
+        word-wrap: break-word;
+        width: 100%;
+        box-sizing: border-box;
+        // Links within the dropdown menu
+        > a, > span > a {
+            color: @dropdown-link-color;
+            line-height: @line-height-100;
+            padding: @padding-small-horizontal @padding-base-horizontal;
+            display: block;
+            clear: both;
+            font-weight: normal;
+            text-decoration: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+}
+
+    // Hover/Focus state
+    .dropdown-menu > li > a,
+    .dropdown-menu > li > span > a {
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: @dropdown-link-hover-color;
+            background-color: @dropdown-link-hover-bg;
+        }
+    }
+
+    // Disable disabled hover
+    .dropdown-menu > li.disabled > a,
+    .dropdown-menu > li.disabled > span > a {
+        background-color: @dropdown-bg;
+    }
+
+    // Active state
+    .dropdown-menu > .active > a,
+    .dropdown-menu > .active > span > a {
+        &,
+        &:hover,
+        &:focus {
+            color: @dropdown-link-active-color;
+            text-decoration: none;
+            outline: 0;
+            background-color: @dropdown-link-active-bg;
+        }
+    }
+    // Disabled state
+    .dropdown-menu .disabled a {
+        .dropdown-disabled();
+    }
+
+
+// Open state for the dropdown
+.open {
+    // Show the menu
+    > .dropdown-menu {
+        display: block;
+    }
+    // Remove the outline when :focus is triggered
+    > a {
+        outline: 0;
+    }
+}
+
+// Dropdown section headers
+.dropdown-header {
+    display: block;
+    padding: @padding-small-horizontal @padding-base-horizontal;
+    line-height: @line-height-100;
+    color: @dropdown-header-color;
+}
+
+// Backdrop to catch body clicks on mobile, etc.
+.dropdown-backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: @zindex-dropdown - 10;
+    .opacity(0);
+}
+
+// Right aligned dropdowns
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+// Allow for dropdowns to go bottom up (aka, dropup-menu)
+//
+// Just add .dropup after the standard .dropdown class and you're set, bro.
+// TODO: abstract this so that the navbar fixed styles are not placed here?
+
+.dropup,
+.navbar-fixed-bottom .dropdown {
+    // Reverse the caret
+    .caret {
+        // Firefox fix for https://github.com/twbs/bootstrap/issues/9538. Once this
+        // gets fixed, restore `border-top: 0;`.
+        border-top: 0 dotted;
+        border-bottom: 4px solid @dropdown-caret-color;
+        content: "";
+    }
+    // Different positioning for bottom up menu
+    .dropdown-menu {
+        top: auto;
+        bottom: 100%;
+        margin-bottom: 1px;
+    }
+}
+
+//
+// Context menu
+// --------------------------------------------------
+
+.context-menu {
+    background: none repeat scroll 0 0 @color-gray-70 !important;
+    border: medium none !important;
+    color: @color-white !important;
+    font-family: @font-family-base !important;
+    font-size: @font-size-small !important;
+    width: auto !important;
+
+    .item {
+        border: none !important;
+        display: block;
+        text-decoration: none;
+        overflow: hidden;
+        height: auto !important;
+        text-align: left;
+    }
+
+    .item-last {
+        border: medium none !important;
+        display: block;
+        height: auto !important;
+        overflow: hidden;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .item-padding {
+        cursor: pointer;
+        display: block;
+        padding: @padding-base-vertical;
+        vertical-align: middle;
+    }
+
+    .btn {
+        padding: @base-unit * 0.75;
+        line-height: @base-unit;
+        height: @base-unit * 2.5;
+        width: @base-unit * 2.5;
+    }
+
+        .btn.btn-default,
+        .btn.btn-default:hover,
+        .btn.btn-default:focus,
+        .btn.btn-default:active {
+            margin: 0;
+            color: @color-gray-130;
+            background-color: @color-gray-50;
+            border-color: @color-gray-50;
+            border-radius: @border-radius-small;
+            box-shadow: none;
+
+            i {
+                color: @color-gray-100;
+            }
+        }
+
+            .btn.btn-default:hover {
+                background-color: @color-gray-70;
+            }
+
+    &.open {
+        .btn.btn-default,
+        .btn.btn-default:hover,
+        .btn.btn-default:focus {
+            background-color: @color-gray-70;
+            border-color: @color-gray-70;
+            box-shadow: none !important;
+        }
+    }
+}
+
+//
+// Anchor dropup
+// --------------------------------------------------
+
+.anchor-dropup {
+    z-index: @zindex-anchordropup;
+
+    &.btn-group {
+        position: fixed;
+        bottom: @base-unit * 0.5;
+        right: @base-unit * 0.5;
+    }
+
+    &, &.open {
+        .dropdown-menu {
+            visibility: visible;
+        }
+    }
+
+    .dropdown-menu {
+        right: 0;
+        left: auto;
+        box-shadow: none;
+        margin-bottom: 0;
+        padding: 0;
+        color: @dropup-color;
+        background-color: @dropup-bg;
+        border-color: @dropup-bg;
+        visibility: hidden;
+        display: block;
+        min-width: @dropup-min-width;
+
+        > li > a,
+        ul > li > a,
+        > .jspContainer > .jspPane > li > a {
+            background-color: @dropup-item-bg;
+            color: @dropup-color;
+
+            &:hover {
+                background-color: @dropup-item-hover-bg;
+            }
+        }
+        // Scrollbar
+        .jspDrag {
+            background-color: @color-gray-90;
+            border: none;
+
+            &:hover {
+                background-color: @color-gray-100;
+            }
+        }
+
+        .jspTrack {
+            background: none;
+        }
+
+        .jspVerticalBar {
+            width: @base-unit * 0.5;
+        }
+        // HTML validating wrap due to scrollbar
+        &.dropdown-menu-inner-wrap {
+            padding: 0;
+            position: static;
+        }
+    }
+}
+
+// For dialogs with ModalDialog master page and without frames
+.anchor-dropup-dialog {
+    &.btn-group {
+        bottom: @base-unit * 6;
+        right: @base-unit * 3;
+    }
+}
+
+
+// Site selector in media library
+.DialogMediaLibraryBlock {
+    padding: @base-unit (@base-unit * 0.5) @base-unit @base-unit;
+    background-color: @color-gray-140;
+
+    .form-horizontal {
+        margin-bottom: 0;
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.DialogSiteBlock {
+    background-color: @color-gray-140;
+    padding: @base-unit / 2;
+
+    .SiteSelector {
+        display: inline-block;
+    }
+}
+
+
+// Component alignment
+//
+// Reiterate per navbar.less and the modified component alignment there.
+
+@media screen and (min-width: @grid-float-breakpoint) {
+    .navbar-right {
+        .dropdown-menu {
+            .pull-right > .dropdown-menu();
+        }
+    }
+}
+
+// Styles for the scrollable dropdown menu utilizing the jQueryJScrollPane plugin
+.scrollable-menu {
+    &, &.open {
+        .dropdown-menu {
+            visibility: visible;
+        }
+    }
+
+    .dropdown-menu {
+        visibility: hidden;
+        display: block;
+        width:265px;
+        max-height: @base-unit * 30;
+
+        span {
+            font-family: @font-family-base !important;
+        }
+
+        // HTML validating wrap due to scrollbar
+        .dropdown-menu-inner-wrap {
+            padding: 0;
+            position: static;
+        }
+
+        // Scrollbar
+        .jspDrag {
+            background-color: @color-gray-90;
+            border: none;
+
+            &:hover {
+                background-color: @color-gray-100;
+            }
+        }
+
+        .jspPane ul {
+            box-shadow: none;
+        }
+    }
+}
+
+// Language menu
+.language-menu {
+    & + .btn {
+        margin-left: @base-unit * 0.5;
+    }
+
+    
+    .language-flag {
+        float: left;
+        margin-top: @base-unit * 0.1875;
+    }
+
+    .language-name {
+        margin-left: @base-unit * 1.5;
+        display: block;
+    }
+
+    .language-name-selected {
+        .text-semibold();
+    }
+
+    .dropdown-toggle img {
+        vertical-align: text-bottom;
+    }
+}
+
+
+// Site selector in main header
+.header-site-selector {
+    margin-right: @base-unit * 0.5;
+    // Hide site selector before fancy script is initialized
+    .site-selector {
+        display: none;
+    }
+
+    .fancy-select {
+        position: relative;
+        border-left: 1px solid @color-gray-90;
+        border-right: 1px solid @color-gray-90;
+
+        &.disabled {
+            opacity: 0.5;
+        }
+
+        .dropdown {
+            font-size: @font-size-base;
+            padding: @base-unit @base-unit * 0.5;
+            line-height: @base-unit;
+            cursor: pointer;
+            white-space: nowrap;
+            vertical-align: middle;
+            display: inline-block;
+
+            &:hover, &.open {
+                background: @color-gray-70;
+            }
+
+            &:after {
+                font-family: @icon-font-name;
+                content: @icon-caret-right-down;
+                font-size: @base-unit * 0.5;
+                line-height: @base-unit * 0.5;
+                padding: 0 @base-unit * 0.25;
+                color: @color-gray-100;
+            }
+        }
+
+        .dropdown-menu {
+            visibility: hidden;
+            cursor: pointer;
+            overflow: auto;
+            display: none;
+
+            &.open {
+                visibility: visible;
+                display: block;
+            }
+
+            & li:hover {
+                background: @color-gray-80;
+            }
+        }
+    }
+}
+
+// Menu positioning
+//
+// Add extra class to `.dropdown-menu` to flip the alignment of the dropdown
+// menu with the parent.
+.dropdown-menu-right {
+    left: auto; // Reset the default from `.dropdown-menu`
+    right: 0;
+}
+// With v3, we enabled auto-flipping if you have a dropdown within a right
+// aligned nav component. To enable the undoing of that, we provide an override
+// to restore the default dropdown menu alignment.
+//
+// This is only for left-aligning a dropdown menu within a `.navbar-right` or
+// `.pull-right` nav component.
+.dropdown-menu-left {
+    left: 0;
+    right: auto;
+}

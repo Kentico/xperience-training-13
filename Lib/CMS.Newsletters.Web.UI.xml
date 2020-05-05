@@ -1,0 +1,1210 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Newsletters.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.EmailBuilderController">
+            <summary>
+            Handles various operations with email widgets in email builder.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.#ctor">
+            <summary>
+            Creates an instance of the <see cref="T:CMS.Newsletters.Web.UI.Internal.EmailBuilderController"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.#ctor(CMS.Newsletters.Issues.Widgets.Configuration.IZonesConfigurationServiceFactory,CMS.Newsletters.Filters.IWidgetContentFilter)">
+            <summary>
+            Creates an instance of the <see cref="T:CMS.Newsletters.Web.UI.Internal.EmailBuilderController"/> class.
+            </summary>
+            <param name="factory">Factory to get the configuration service.</param>
+            <param name="customFilter">Custom filter applied to the widget content. If not provided, default <see cref="T:CMS.Newsletters.Filters.EmailBuilderContentFilter"/> is used.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.InsertWidget(CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters)">
+            <summary>
+            Inserts a new widget to the issue.
+            </summary>
+            <param name="parameters">Insert widget parameters.</param>
+            <returns><see cref="T:CMS.Newsletters.Issues.Widgets.Content.WidgetContent"/> of inserted widget.</returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.MoveWidget(CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters)">
+            <summary>
+            Moves the existing widget within the issue.
+            </summary>
+            <param name="parameters">Move widget parameters.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.RemoveWidget(CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters)">
+            <summary>
+            Removes widget from the issue.
+            </summary>
+            <param name="parameters">Remove widget parameters.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.EmailBuilderController.GetWidgetContent(System.Int32,System.Guid)">
+            <summary>
+            Gets content of the widget.
+            </summary>
+            <param name="issueIdentifier">Identifier of the issue.</param>
+            <param name="widgetIdentifier">Identifier of the widget to retrieve.</param>
+            <returns><see cref="T:CMS.Newsletters.Issues.Widgets.Content.WidgetContent"/> of requested widget.</returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel">
+            <summary>
+            Represents view model for <see cref="T:CMS.Newsletters.NewsletterInfo"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel.DisplayName">
+            <summary>
+            Newsletter display name <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterDisplayName"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel.SenderName">
+            <summary>
+            Newsletter sender name <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterSenderName"/>
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel.SenderEmail">
+            <summary>
+            Newsletter sender email <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterSenderEmail"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel.UnsubscriptionTemplateId">
+            <summary>
+            Newsletter template type.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel.IssueTemplateId">
+            <summary>
+            Identifiers of issue type templates.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.IssueViewModel">
+            <summary>
+            Represents view model for <see cref="T:CMS.Newsletters.IssueInfo"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.IssueViewModel.Id">
+            <summary>
+            Issue id <see cref="P:CMS.Newsletters.IssueInfo.IssueID"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.IssueViewModel.NewsletterId">
+            <summary>
+            Newsletter id <see cref="P:CMS.Newsletters.IssueInfo.IssueID"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.IssueViewModel.Subject">
+            <summary>
+            Email subject <see cref="P:CMS.Newsletters.IssueInfo.IssueSubject"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel">
+            <summary>
+            Represents view model for <see cref="T:CMS.Newsletters.NewsletterInfo"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.Id">
+            <summary>
+            Newsletter id <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterID"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.DisplayName">
+            <summary>
+            Newsletter display name <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterDisplayName"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.SenderName">
+            <summary>
+            Newsletter sender name <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterSenderName"/>
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.SenderEmail">
+            <summary>
+            Newsletter sender email <see cref="P:CMS.Newsletters.NewsletterInfo.NewsletterSenderEmail"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.Templates">
+            <summary>
+            Newsletter template type.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.IssueTemplates">
+            <summary>
+            Identifiers of issue type templates.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.TemplateViewModel">
+            <summary>
+            Represents view model for <see cref="T:CMS.Newsletters.EmailTemplateInfo"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.TemplateViewModel.Id">
+            <summary>
+            Email template id (<see cref="P:CMS.Newsletters.EmailTemplateInfo.TemplateID"/>). 
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.TemplateViewModel.DisplayName">
+            <summary>
+            Email template display name (<see cref="P:CMS.Newsletters.EmailTemplateInfo.TemplateDisplayName"/>).
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.TemplateViewModel.Type">
+            <summary>
+            Email template type.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.NewslettersController">
+            <summary>
+            Handles various operations for newsletter module.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewslettersController.GetAllEmailCampaigns">
+            <summary>
+            Return all available email campaigns for current site.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewslettersController.GetIssues(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Return list of <see cref="T:CMS.Newsletters.Web.UI.Internal.IssueViewModel"/> for given issueIdList.
+            </summary>
+            <remarks>
+            If no issue can be found then empty <see cref="T:CMS.Newsletters.Web.UI.Internal.IssueViewModel"/> is returned (only issue id is set).
+            </remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewslettersController.CreateNewIssue(System.Int32,System.Int32,System.String)">
+            <summary>
+            Creates issue for given newsletter.
+            </summary>
+            <returns>New <see cref="T:CMS.Newsletters.Web.UI.Internal.IssueViewModel"/></returns>
+            <exception cref="T:System.ArgumentException">When <paramref name="newsletterId"/> is not set, when <paramref name="templateId"/> is not assigned to specified newsletter or when <paramref name="subject"/> is null or empty.</exception>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewslettersController.CreateEmailCampaign(CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel)">
+            <summary>
+            Creates static (template based) newsletter.
+            </summary>
+            <returns>New <see cref="T:CMS.Newsletters.Web.UI.Internal.NewsletterViewModel"/></returns>
+            <exception cref="T:System.Web.Http.HttpResponseException">When <see cref="T:CMS.Newsletters.Web.UI.Internal.CreateNewsletterModel"/> invalid.</exception>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewslettersController.GetTemplates">
+            <summary>
+            Returns available templates for current site.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.NewsletterReportController">
+            <summary>
+            Provides data for newsletter report.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewsletterReportController.#ctor">
+            <summary>
+            Constructor. Inner instance of <see cref="T:CMS.Newsletters.Web.UI.INewsletterReportDataProvider"/> is obtained from the Kentico object factory.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.NewsletterReportController.GetEmailsData(System.Int32)">
+            <summary>
+            Returns a collection of email statistics.
+            </summary>
+            <param name="newsletterId">ID of the email feed where the email belong.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters">
+            <summary>
+            Represents parameters required to insert a new widget.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters.IssueIdentifier">
+            <summary>
+            Identifier of the issue.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters.ZoneIdentifier">
+            <summary>
+            Identifier of the widget zone.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters.WidgetTypeIdentifier">
+            <summary>
+            Identifier of the widget type to insert.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.InsertWidgetParameters.Index">
+            <summary>
+            The zero-based index within the zone at which widget should be inserted.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters">
+            <summary>
+            Represents parameters required to remove a widget.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.IssueIdentifier">
+            <summary>
+            Identifier of the issue.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.WidgetIdentifier">
+            <summary>
+            Identifier of the widget instance.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters">
+            <summary>
+            Represents parameters required to move an existing widget.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters.IssueIdentifier">
+            <summary>
+            Identifier of the issue.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters.ZoneIdentifier">
+            <summary>
+            Identifier of the new widget zone.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters.WidgetIdentifier">
+            <summary>
+            Identifier of the widget instance.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters.Index">
+            <summary>
+            The zero-based index specifying the new location of the widget within the widget zone.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController">
+            <summary>
+            Provides endpoint for retrieving the email marketing status for component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController.#ctor(CMS.Newsletters.Web.UI.IContactMarketingEmailStatusService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController"/>.
+            </summary>
+            <param name="contactNewsletterSubscriptionsControllerService">Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController"/></param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController.Get(System.Int32)">
+            <summary>
+            Gets <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the view model is obtained for</param>
+            <returns><see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact newsletter subscriptions component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController.#ctor(CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            </summary>
+            <param name="contactNewsletterSubscriptionsControllerService">Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/></param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController.Get(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.IssueRecipientsListService">
+            <summary>
+            Service for retrieving bounced and unsubscribed contacts 
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.IssueRecipientsListService.GetBouncedContactsIds(System.Collections.Generic.IList{System.Int32},System.Int32)">
+            <summary>
+            Filters contact ids which exceed <paramhref name="bounceLimit">bounce limit</paramhref>.
+            </summary>
+            <param name="contactIds">Contact ids</param>
+            <param name="bounceLimit">Bounce limit</param>
+            <returns>Contact ids</returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.IssueRecipientsListService.GetUnsubscribedContactsIds(System.Collections.Generic.IList{System.Int32},System.Int32)">
+            <summary>
+            Filters unsubscribed contact ids for given <paramhref name="newsletterId">newsletter id</paramhref>.
+            </summary>
+            <param name="contactIds">Contact ids</param>
+            <param name="newsletterId">Newsletter id</param>
+            <returns>Contact ids</returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.IssueRecipientsListService.GetContactsAndContactGroups(System.Collections.Generic.IEnumerable{System.Int32},System.Int32)">
+            <summary>
+            Returns contact group for given <paramhref name="issueId">issue id</paramhref> and <paramhref name="contactIds">contact ids</paramhref>.
+            </summary>
+            <param name="contactIds">Contact ids</param>
+            <param name="issueId">Issue id</param>
+            <returns>Tuple collection - contactId, ContactGroupDisplayName</returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.IssueRecipientsListService.GetContactsWithFullName(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns contact full name for given <paramref name="contactIds"/>
+            </summary>
+            <param name="contactIds">Contact ids</param>
+            <returns>Tuple collection - contact Id, contact full name</returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.EmailRecipientStatusEnum">
+            <summary>
+            Enumeration of the email recipient status
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.EmailRecipientStatusEnum.Marketable">
+            <summary>
+            Everything is set, the recipient is marketable
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.EmailRecipientStatusEnum.MissingEmail">
+            <summary>
+            The recipient is anonymous without email
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.EmailRecipientStatusEnum.OptedOut">
+            <summary>
+            The recipient opted out from receiving emails
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.EmailRecipientStatusEnum.Bounced">
+            <summary>
+            The recipient email is unreachable
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator">
+            <summary>
+            Provides email marketing status calculation for newsletter recipients.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator.EMAIL_RECIPIENT_STATUS">
+            <summary>
+            Key under which is stored email recipient status in result <see cref="T:CMS.Base.IDataContainer"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator.SUBSCRIPTION_STATUS">
+            <summary>
+            Key under which is stored subscription status in result <see cref="T:CMS.Base.IDataContainer"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator.#ctor(System.Int32)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator"/>.
+            </summary>
+            <param name="newsletterNewsletterId">ID of newsletter for which status calculation should be performed.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Internal.RecipientStatusCalculator.GetStatuses(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of subscriber ids filled with data for <see cref="T:CMS.UIControls.ObjectTransformation"/>. Key of the dictionary is the ID of subscriber.
+            </summary>
+            <param name="subscriberIds">IDs of subscribers which the dictionary is to be filled with.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.CMSEmailAttribute">
+            <summary>
+            Validates email <see cref="M:CMS.Helpers.ValidationHelper.IsEmail(System.Object,System.Boolean)"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSEmailAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Checks if object is valid.
+            </summary>
+            <param name="value">Object to validate.</param>
+            <param name="validationContext">Validation context.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel">
+            <summary>
+            Represents data container to be used for newsletter report.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Name">
+            <summary>
+            Display name of the email.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Date">
+            <summary>
+            Date when the email was sent.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Sent">
+            <summary>
+            Absolute number of recipients whom the email was sent to.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Opens">
+            <summary>
+            Absolute number of recipients who opened the email.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Clicks">
+            <summary>
+            Absolute number of recipients who clicked any link in the email.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.Unsubscribed">
+            <summary>
+            Absolute number of recipients who opted-out.  
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.ClickRate">
+            <summary>
+            Relative number of recipients who clicked any link in the email to total number of recipients.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.OpenRate">
+            <summary>
+            Relative number of recipients who opened the email to total number of recipients.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.UnsubscribedRate">
+            <summary>
+            Relative number of recipients who opted-out to total number of recipients.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterEmailsDataViewModel.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterIssueAutomationHelper">
+            <summary>
+            Helper class for <see cref="T:CMS.Newsletters.IssueInfo"/> objects connected to Marketing automation processes.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterIssueAutomationHelper.GetProcessNamesWhereIssueIsUsed(CMS.Newsletters.IssueInfo)">
+            <summary>
+            Returns collection of <see cref="P:CMS.WorkflowEngine.WorkflowInfo.WorkflowDisplayName"/> of automation processes that uses given <paramref name="issue"/> in any of their steps.
+            </summary>
+            <param name="issue">Newsletter issue to check for usage.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterSubscriptionActionDataProvider">
+            <summary>
+            Class for providing additional data for <see cref="T:CMS.Newsletters.NewsletterSubscriptionAction"/> that will be displayed in automation process designer.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterSubscriptionActionDataProvider.GetStepDescription(System.Int32)">
+            <summary>
+            Returns description in HTML format for "Newsletter subscription" steps.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider">
+            <summary>
+            Class for providing additional data for <see cref="T:CMS.Newsletters.SendNewsletterIssueAction"/> that will be displayed in automation process designer.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider.#ctor(CMS.Base.ISiteService,CMS.Newsletters.Internal.IIssueStatisticsCalculator)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider"/>.
+            </summary>
+            <param name="siteService">Site service providing information about current site.</param>
+            <param name="calculator">Statistics calculator. Can be null.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider.GetStepInformation(System.Int32)">
+            <summary>
+            Returns HTML representation of additional information that will be displayed in automation designer for "Send marketing email" steps.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider.GetStepDescription(System.Int32)">
+            <summary>
+            Returns description in HTML format for "Send marketing email" steps.
+            </summary>
+            <param name="stepId">ID of the automation step</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.SendNewsletterIssueActionDataProvider.GetIssueStatisticsCalculator(CMS.Newsletters.IssueInfo)">
+            <summary>
+            Returns implementation of <see cref="T:CMS.Newsletters.Internal.IIssueStatisticsCalculator"/> used for calculating data of given <paramref name="issue"/>.
+            </summary>
+            <param name="issue">Issue which data to use for calculation.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterAssetModelStrategy">
+            <summary>
+            Logic connected to newsletter issue modeling and storing.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterAssetModelStrategy.GetAssetViewModel(CMS.WebAnalytics.CampaignAssetInfo)">
+            <summary>
+            Returns view model from given asset info.
+            </summary>
+            <param name="info">Asset info.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterAssetModelStrategy.SetAssetInfo(CMS.WebAnalytics.CampaignAssetViewModel)">
+            <summary>
+            Sets data from asset model and returns updated view model.
+            This method is called when existing asset is being updated.
+            </summary>
+            <param name="model">Asset view model.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusControllerService">
+            <summary>
+            Provides service methods to obtain <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusControllerService.#ctor(CMS.Newsletters.IUnsubscriptionProvider,CMS.Base.ISiteService,CMS.Core.ISettingsService,CMS.ContactManagement.IContactInfoProvider,CMS.Newsletters.ISubscriberInfoProvider)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusControllerService"/>.
+            </summary>
+            <param name="unsubscriptionProvider">Handles unsubscriptions</param>
+            <param name="siteService">Provides properties for obtaining current site</param>
+            <param name="settingsService">Provides methods for obtaining the site settings</param>
+            <param name="contactInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactInfo"/> management.</param>
+            <param name="subscriberInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberInfo"/> management.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusControllerService.GetContactMarketingEmailStatus(System.Int32)">
+            <summary>
+            Gets <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> is obtained for</param>
+            <returns><see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionsControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionsControllerService.#ctor(CMS.Newsletters.ISubscriptionService,CMS.PortalEngine.Internal.IUILinkProvider)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionsControllerService"/>.
+            </summary>
+            <param name="subscriptionService">Handles all work with subscriptions and unsubscriptions</param>
+            <param name="uiLinkProvider">Provides methods for generating links to access single objects within the module. (e.g. single Site).</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionsControllerService.GetContactNewsletterSubscriptionViewModels(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IContactMarketingEmailStatusService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusControllerService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IContactMarketingEmailStatusService.GetContactMarketingEmailStatus(System.Int32)">
+            <summary>
+            Gets <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> is obtained for</param>
+            <returns><see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum">
+            <summary>
+            Specifies possible values of Marketing email setting displayed within the contact card.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum.ReceivingMarketingEmails">
+            <summary>
+            Receiving marketing emails.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum.NoEmailAddress">
+            <summary>
+            The system does not have an email address for this contact. The contact is not receiving marketing emails and can't be added to any recipient list.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum.OptedOut">
+            <summary>
+            Determines the contact is unsubscribed from all the marketing communication.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum.Undeliverable">
+            <summary>
+            The contact reached the maximal count of bounces and does not receive marketing emails any more.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel">
+            <summary>
+            Represents view model for the contact email status component.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel.MarketingEmailStatus">
+            <summary>
+            Gets or sets value specifying the contact status regarding the email communication.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel">
+            <summary>
+            Represents view model for the contact newsletter subscriptions component.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel.NewsletterName">
+            <summary>
+            Gets or sets name of the newsletter.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel.NewsletterUrl">
+            <summary>
+            Gets or sets URL for the newsletter.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Controls.IssueSenderControl">
+            <summary>
+            Control for the issue send actions.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Controls.IssueSenderControl.IssueID">
+            <summary>
+            ID of newsletter issue that should be sent, required for template based newsletters.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Controls.IssueSenderControl.SendNow">
+            <summary>
+            Sends issue immediately.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Controls.IssueSenderControl.SendScheduled(System.DateTime)">
+            <summary>
+            Schedules mail-out of the issue to the future.
+            </summary>
+            <param name="dateTime">Schedule time of the mail-out</param>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.Controls.IssueSenderControl.RemovePreviousTaskAndSendIssue(System.DateTime)">
+            <summary>
+            Removes all scheduled tasks for the given issue.
+            </summary>
+            <param name="when">DateTime when to send</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterSelectorSimple">
+            <summary>
+            Form control for the newsletter selection.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterSelectorSimple.ValueDisplayName">
+            <summary>
+            Gets Value display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterSelectorSimple.ValueElementID">
+            <summary>
+            Gets ClientID of the current selector.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.NewsletterSelectorSimple.CurrentSelector">
+            <summary>
+            Gets current uni selector
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterSelectorSimple.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator">
+            <summary>
+            Class that processes the email template code to be used in the email builder content iframe.
+            It decorates the HTML with additional scripts, style sheets and replaces the zone placeholders with empty drop zones.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator.PrepareHtml(System.String,CMS.Newsletters.Filters.IEmailContentFilter)">
+            <summary>
+            Prepares the HTML for the email builder.
+            </summary>
+            <param name="templateCode">The template code.</param>
+            <param name="customFilter">Filter applied to the widget content.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator.AddExternalLinks(System.String)">
+            <summary>
+            Add style sheets and javascript to the <paramref name="templateCode"/>. Relative links are used, it's not necessary to make them absolute.
+            </summary>
+            <param name="templateCode">The template code.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator.GetEmptyZoneMarkup(System.String)">
+            <summary>
+            Returns the empty widget zone markup to be used in the email builder.
+            </summary>
+            <param name="zoneId">The zone identifier.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator.AddJavaScripts(CMS.Newsletters.Internal.EmailHtmlModifier)">
+            <summary>
+            Adds necessary JavaScripts for email builder. 
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderContentGenerator.AddStyleSheets(CMS.Newsletters.Internal.EmailHtmlModifier)">
+            <summary>
+            Adds necessary style sheets for email builder. 
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailBuilderHelper">
+            <summary>
+            Helper class for Email Builder.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.EmailBuilderHelper.EMAIL_BUILDER_UI_ELEMENT">
+            <summary>
+            Name of UI element that represents the Email builder UI.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderHelper.GetNavigationUrl(System.Int32,System.Int32,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Gets the URL for an email issue to be displayed in the Email Builder.
+            </summary>
+            <param name="newsletterID">Newsletter identifier.</param>
+            <param name="issueID">Issue identifier.</param>
+            <param name="isInAutomation">Indicates whether the Email builder is accessed within the Marketing automation.</param>
+            <param name="selectedTabIndex">Index of a tab that should be preselected.</param>
+            <param name="includeSaveMessage">Indicates whether save message parameter should be included in the URL.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderHelper.GetOriginalVariantIssueUrl(CMS.Newsletters.IssueInfo,System.Boolean)">
+            <summary>
+            Returns Email builder URL to the email variant which is considered as 'original'. Original variant is a clone of email which is A/B tested.
+            </summary>
+            <param name="issue">The issue.</param>
+            <param name="isInAutomation">Indicates whether the Email builder is accessed within the Marketing automation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="issue"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailBuilderHelper.IsIssueEditableByUser(CMS.Newsletters.IssueInfo,CMS.Membership.UserInfo,System.String)">
+            <summary>
+            Indicates whether the email builder should display editable UI to given <paramref name="user"/> or UI in a read-only mode.
+            Returns false if given <paramref name="issue"/> has different status than <see cref="F:CMS.Newsletters.IssueStatusEnum.Idle"/>.
+            </summary>
+            <param name="issue">Issue info</param>
+            <param name="user">User info</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailEditTabsExtender">
+            <summary>
+            Extender vertical tabs within email detail.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailEditTabsExtender.OnInitTabs">
+            <summary>
+            Initialization of tabs.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailEditTabsExtender.RegisterModalDialogOnCloseRefreshScript(System.Object,System.EventArgs)">
+            <summary>
+            Registers script that refreshes UniSelector and automation designer graph after the modal dialog is closed.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler">
+            <summary>
+            Provides HTML code of email given by <c>issueGuid</c> query string parameter.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.IsReusable">
+            <summary>
+            Gets whether this handler can be reused for other request; always returns <c>false</c>.
+            </summary>
+            <remarks>
+            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
+            is cheap and also initialization costs are minimal.
+            </remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Parses query parameters, check permissions and returns newsletter email template code.
+            </summary>
+            <param name="context">Current HTTP context</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailPlainTextEditExtender">
+            <summary>
+            Newsletter issue plain text UIForm extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailPlainTextEditExtender.OnInit">
+            <summary>
+            Initializes the extender.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler">
+            <summary>
+            Provides HTML code of email builder for marketing email given by <c>issueid</c> query string parameter.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.IsReusable">
+            <summary>
+            Gets whether this handler can be reused for other request; always returns <c>false</c>.
+            </summary>
+            <remarks>
+            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
+            is cheap and also initialization costs are minimal.
+            </remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Parses query parameters, check permissions and returns newsletter email template code.
+            </summary>
+            <param name="context">Current HTTP context</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IssueRecipientsListExtender">
+            <summary>
+            Extends Unsubscription listing unigrid.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetFullNamesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contacts' full name through issue. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which full name is to be fill with.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetStatusesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which status is to be filled with.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetCountsDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which count of contact groups is to be filled with.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IssueContactGroupsExtender">
+            <summary>
+            Extends Unsubscription listing unigrid.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueContactGroupsExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailTemplateListExtender">
+            <summary>
+            Email marketing template UIForm extender
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.OnInit">
+            <summary>
+            Initializes the extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.Control_OnAction(System.String,System.Object)">
+            <summary>
+            Handles the UniGrid's OnAction event.
+            </summary>
+            <param name="actionName">Name of item (button) that throws event</param>
+            <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender">
+            <summary>
+            Email marketing template UIForm extender.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender.TemplateCodeField">
+            <summary>
+            Returns the form control for editing email template code.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender.TemplateCodeEditor">
+            <summary>
+            Returns the editor control for email template code field.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender.OnInit">
+            <summary>
+            Initializes the extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender.RegisterEditPageHeaderActions(System.Web.UI.Page,CMS.PortalEngine.Web.UI.ObjectEditMenu,CMS.Newsletters.EmailTemplateInfo)">
+            <summary>
+            Registers email template actions headers to given page and menu item
+            </summary>
+            <param name="page">Page where the action is registered</param>
+            <param name="menu">Menu where the action is registered</param>
+            <param name="emailTemplate">Email template for which actions are registered</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender.RenderInsertAttachmentUrlScript">
+            <summary>
+            Renders the script which insert the selected attachment's URL into the template code editor.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender">
+            <summary>
+            Extends Unsubscription listing unigrid.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender.Control_ActionDelete(System.String,System.Object)">
+            <summary>
+            Handles control action buttons.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender.Control_OnDataReload(System.String,System.String,System.Int32,System.String,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            Returns unsubscriptions that should be visible in the UI.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender.ShowCreateConfirmation">
+            <summary>
+            Displays message about successful unsubscription, if unsubscription query string is set.
+            Content of displayed message depends on whether the email address was already unsubscribed or not.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.UnsubscriptionsNewItemExtender">
+            <summary>
+            Extends unsubscription new item form.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsNewItemExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsNewItemExtender.Control_OnBeforeSave(System.Object,System.EventArgs)">
+            <summary>
+            Checks whether the given email is already unsubscribed for the current site. In this case, display proper error since unsubscribing the same email again does not make sense.
+            Sets up URL to redirect to listing page after creating of the unsubscription.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.UnsubscriptionsNewItemExtender.GetRedirectUrl">
+            <summary>
+            Gets URL where the page should be redirected after the unsubscription save.
+            </summary>
+            <returns>Relative URL navigating to the unsubscription listing page.</returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService.GetContactNewsletterSubscriptionViewModels(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.INewsletterReportDataProvider">
+            <summary>
+            Provides methods to serve data for newsletter report.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.INewsletterReportDataProvider.GetEmailsData(System.Int32)">
+            <summary>
+            Returns statistical data of email in the newsletter given by <paramref name="newsletterId"/>.
+            <para>
+            Single row of the resulting dataset contains the following data:
+            <list type="bullet">
+            <item>
+               <description>Email name</description>
+            </item>
+            <item>
+               <description>Data and time when the email was sent.</description>
+            </item>
+            <item>
+               <description>Total number of sent emails.</description>
+            </item>
+            <item>
+               <description>Number of emails opened by their recipients.</description>
+            </item>
+            <item>
+               <description>Number of links within the emails clicked by their recipients.</description>
+            </item>
+            <item>
+               <description>Number of recipients who opted-out from the feed.</description>
+            </item>
+            <item>
+               <description>Relative number of recipients who clicked any link in the email to total number of recipients.</description>
+            </item>
+            <item>
+               <description>Relative number of recipients who opened the email to total number of recipients.</description>
+            </item>
+            <item>
+               <description>Relative number of recipients who opted-out to total number of recipients.</description>
+            </item>
+            </list>
+            </para>
+            </summary>
+            <param name="newsletterId">ID of the email feed where the email belong.</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.NewsletterReportDataProvider">
+            <summary>
+            Provides methods to serve data for newsletter report.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.issueVariantsByParentId">
+            <summary>
+            Represents association between main issue (key) and all its variants (value).
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.issueIDs">
+            <summary>
+            Collection of all issue IDs related to the newsletter.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.onlyParentIssueIDs">
+            <summary>
+            Collection IDs that represents main issues (ie. not variant issues).
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.variantOpens">
+            <summary>
+            Represents association between main issue ID and sum of 'opens' of its variants.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.siteName">
+            <summary>
+            Name of site the newsletter belongs to.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.GetEmailsData(System.Int32)">
+            <summary>
+            Returns statistical data of email in the newsletter given by <paramref name="newsletterId"/>.
+            </summary>
+            <param name="newsletterId">ID of the email feed where the email belong.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.NewsletterReportDataProvider.GetMainEmails">
+            <summary>
+            Returns a collection of main emails.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.CMSNewsletterDialog">
+            <summary>
+            Base dialog page for managing issue variants.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.CMSNewsletterDialog.Issue">
+            <summary>
+            Issue variant displayed on dialog.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterDialog.OnLoad(System.EventArgs)">
+            <summary>
+            OnLoad event.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterDialog.CheckPermissionsOnIssueSite(CMS.Newsletters.IssueInfo,System.String)">
+            <summary>
+            Checks whether user has permission with <paramref name="permissionName"/> on site to which <paramref name="issue"/> is assigned to.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.CMSNewsletterPage">
+            <summary>
+            Base page for the CMS Newsletter pages to apply global settings to the pages.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterPage.OnInit(System.EventArgs)">
+            <summary>
+            Page OnInit event.
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterPage.AddBrokenEmailUrlNotifier(CMS.Newsletters.NewsletterInfo,CMS.Base.Web.UI.AlertLabel)">
+            <summary>
+            Adds notifier, that checks for broken URLs used in newsletter emails and displays alert when these URLs are broken.
+            The notifier applies only for newsletters from current site.
+            </summary>
+            <param name="newsletter">Newsletter.</param>
+            <param name="alertLabel">Alert label control, where notification will be rendered.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterPage.GetUrlsToCheck(CMS.Newsletters.NewsletterInfo)">
+            <summary>
+            Gets the URLs to check. 
+            Includes only URLs for features enabled by the <paramref name="newsletter"/>
+            </summary>
+            <param name="newsletter">Newsletter</param>
+            <returns>Array of objects prepared to conversion to JSON</returns>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.CMSNewsletterSendPage">
+            <summary>
+            Base page for configuration of sending of <see cref="T:CMS.Newsletters.IssueInfo"/> objects.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.Issue">
+            <summary>
+            Issue displayed on page.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.Newsletter">
+            <summary>
+            Newsletter whose issue is displayed on page.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.IssueEditingEnabled">
+            <summary>
+            Indicates whether user has permission to edit issue.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.OnPreRender(System.EventArgs)">
+            <summary>
+            Page OnPreRender event.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.OnLoad(System.EventArgs)">
+            <summary>
+            Page OnLoad event.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.AddSendHeaderAction(CMS.Base.Web.UI.HeaderActions,System.Boolean,CMS.Base.Web.UI.ButtonStyle)">
+            <summary>
+            Adds send header action to existing <paramref name="headerActions"/>.
+            </summary>
+            <param name="headerActions">Header actions where new send action will be added.</param>
+            <param name="enabled">Whether header action should be enabled.</param>
+            <param name="buttonStyle">Style of header action button.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.HandleSendActionResult(System.String)">
+            <summary>
+            Handles result of send action. Depending on <paramref name="errorMessage"/> it either shows error, otherwise redirects to confirmation URL.
+            </summary>
+            <param name="errorMessage">Error message of send action which result to handle.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.DisplayMessage(System.String)">
+            <summary>
+            Shows user friendly message if it's not empty.
+            </summary>
+            <param name="message">Message to be shown.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.HandleMissingPermissionsForIssueEditing">
+            <summary>
+            Checks whether <see cref="P:CMS.Membership.MembershipContext.AuthenticatedUser"/> has "authorissues" permission in Email marketing module for site to which displayed issue is assigned to. Otherwise redirect to access denied page.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.IsAuthorIssuesAuthorized(CMS.Newsletters.IssueInfo)">
+            <summary>
+            Checks whether <see cref="P:CMS.Membership.MembershipContext.AuthenticatedUser"/> has "authorissues" permission in Email marketing module for site to which given <paramref name="issue"/> is assigned to.
+            </summary>
+            <remarks>When this page is rendered as a dialog opened from Marketing automation module, it is possible that displayed issue is assigned to a different site.</remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.CMSNewsletterSendPage.HandleBreadcrumbsScripts">
+            <summary>
+            Handles manual rendering of breadcrumbs.
+            The breadcrumbs on this page needs to be hard-coded in order to be able to access single email via link and ensure consistency of breadcrumbs.
+            </summary>
+        </member>
+    </members>
+</doc>

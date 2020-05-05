@@ -1,0 +1,147 @@
+﻿// Context menu styles
+@context-menu-level0-bg: @color-gray-70;
+@context-menu-level0-hover-bg: @color-gray-80;
+@context-menu-level1-bg: @color-gray-80;
+@context-menu-level1-hover-bg: @color-gray-90;
+@context-menu-level2-bg: @color-gray-90;
+@context-menu-level2-hover-bg: @color-gray-100;
+
+@dropdown-divider-level0-bg: @dropdown-divider-bg;
+@dropdown-divider-level1-bg: @color-gray-90;
+@dropdown-divider-level2-bg: @color-gray-100;
+
+
+&.ContextMenu {
+    border: none !important;
+}
+
+&.ContextMenu,
+.TreeContextMenu,
+.PortalContextMenu {
+    border-radius: @border-radius-small;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    background-clip: padding-box;
+    background: @context-menu-level0-bg;
+
+    .item-last,
+    .Item {
+        border: none !important;
+        display: block;
+        height: auto !important;
+        text-decoration: none !important;
+        text-align: left !important;
+
+        .RTL & {
+            text-align: right !important;
+        }
+
+        .Name,
+        .NameInactive {
+            border: inherit !important;
+            text-decoration: inherit !important;
+            font-size: @font-size-base;
+            font-family: @font-family-base;
+            line-height: @line-height-80 !important;
+            color: @color-white !important;
+        }
+    }
+
+    .ItemDisabled {
+        cursor: not-allowed;
+
+        .Name,
+        .NameInactive {
+            cursor: not-allowed;
+        }
+    }
+
+
+    .ItemPadding {
+        padding: (@base-unit * 0.5) @base-unit;
+        border: none !important;
+        cursor: pointer;
+        line-height: @line-height-80;
+
+        .ImgLoader {
+            display: inline-block;
+            padding: 0px (@base-unit * 0.5);
+            height: 15px;
+        }
+
+        img {
+            display: inline-block;
+        }
+    }
+
+    .item-last:hover,
+    .Item:hover,
+    .ItemSelected {
+        cursor: pointer;
+        background: @context-menu-level0-hover-bg;
+    }
+
+    .Separator {
+        .nav-divider(@dropdown-divider-level0-bg);
+    }
+}
+
+.PortalContextMenu {
+    min-width: @base-unit * 8;
+}
+
+.TreeContextMenu {
+    min-width: @base-unit * 8;
+
+    > .TreeContextMenu {
+        box-shadow: none;
+    }
+}
+
+.TreeNewContextMenu {
+    min-width: @base-unit * 12;
+}
+
+.WebPartContextMenu,
+.ZoneContextMenu,
+.PlaceholderContextMenu {
+    min-width: @base-unit * 10;
+}
+// Portal context menu - additional styles
+.PortalContextMenu .ItemDisabled {
+    .dropdown-disabled()
+    !important;
+}
+
+
+.PortalContextMenu.CPMenu {
+    display: none;
+}
+
+
+&.ContextMenuLevel_1 {
+    // extra styles for the second context menu level
+    background: @context-menu-level1-bg;
+
+    .Item:hover,
+    .ItemSelected {
+        background: @context-menu-level1-hover-bg;
+    }
+
+    .Separator {
+        .nav-divider(@dropdown-divider-level1-bg);
+    }
+}
+
+&.ContextMenuLevel_2 {
+    // extra styles for the third context menu level
+    background: @context-menu-level2-bg;
+
+    .Item:hover,
+    .ItemSelected {
+        background: @context-menu-level2-hover-bg;
+    }
+
+    .Separator {
+        .nav-divider(@dropdown-divider-level2-bg);
+    }
+}

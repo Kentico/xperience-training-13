@@ -1,0 +1,831 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Search.Lucene3</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Search.ClearSearchAnalyzersWebFarmTask">
+            <summary>
+            Web farm task used to clear Lucene search analyzers tables.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="M:CMS.Search.ClearSearchAnalyzersWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.ClearAnalyzersTable"/> method.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchAnalyzer">
+            <summary>
+            Represent a search analyzer for the Lucene.Net search index
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchAnalyzer.Analyzer">
+            <summary>
+            Search analyzer
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.#ctor(CMS.Search.SearchIndexInfo,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="sii">Search index info</param>
+            <param name="isSearch">If true, the analyzer is meant for searching</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.#ctor(CMS.Search.SearchIndexInfo[])">
+            <summary>
+            Creates analyzer that will be used for searching over multiple indexes
+            </summary>
+            <param name="indexes">Index infos</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.GetSearchAnalyzerKey(CMS.Search.SearchIndexInfo[])">
+            <summary>
+            Returns hash table key for given set of indexes
+            </summary>
+            <param name="indexes">Index infos</param>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.CreateSearchAnalyzer(CMS.Search.SearchIndexInfo[])">
+            <summary>
+            Returns analyzer to be used for searching over given indexes (not indexing)
+            </summary>
+            <param name="indexes">Search indexes</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.CreateIndexingAnalyzer(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Returns analyzer to be used for indexing (not searching)
+            </summary>
+            <param name="index">Search index</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.CreatePerFieldAnalyzer(System.Boolean,CMS.Search.SearchIndexInfo[])">
+            <summary>
+            Creates PerFieldAnalyzer for given indexes. This analyzer should be used for searching (not indexing)
+            </summary>
+            <param name="isSearch">If true, the analyzer is meant for searching (not indexing)</param>
+            <param name="indexes">Index infos</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.GetFieldAnalyzers(CMS.Search.SearchIndexInfo,System.Boolean)">
+            <summary>
+            Gets the dictionary of analyzers to be used by specific field. Dictionary [field name -> AnalyzerTypeEnum]
+            </summary>
+            <param name="index">Search index</param>
+            <param name="isSearch">If true, the analyzer is meant for searching (not indexing)</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.CreateAnalyzer(CMS.DataEngine.SearchAnalyzerTypeEnum,CMS.Search.SearchIndexInfo,System.Boolean)">
+            <summary>
+            Creates an analyzer of the given type
+            </summary>
+            <param name="analyzerType">Analyzer type</param>
+            <param name="sii">Search index info</param>
+            <param name="isSearch">If true, the analyzer is meant for searching</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.GetStopWordAnalyzer(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Returns correct stop word analyzer.
+            </summary>
+            <param name="sii">Search index info</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.GetSandardAnalyzer(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Returns correct standard analyzer.
+            </summary>
+            <param name="sii">Search index info</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.Init">
+            <summary>
+            Initializes handlers for clearing analyzers table.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.ClearAnalyzersTable">
+            <summary>
+            Clears analyzers table.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchAnalyzer.SyncClearAnalyzersTable">
+            <summary>
+            Clears analyzers table.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.StemmingAnalyzer">
+            <summary>
+            Stemming smart search analyzer. Converts words into their root form.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.StemmingAnalyzer.TokenStream(System.String,System.IO.TextReader)">
+            <summary>
+            Token stream method.
+            </summary>
+            <param name="fieldName">Field name</param>
+            <param name="reader">Text reader</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SubSetAnalyzer">
+            <summary>
+            SubSet smart search analyzer.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.SubSetAnalyzer.MinimalLength">
+            <summary>
+            Gets or sets the minimal length of set which should be indexed.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SubSetAnalyzer.#ctor(System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            SubSetAnalyzer constructor.
+            </summary>
+            <param name="isSearch">Indicates whether analyzer is used for indexing or searching</param>
+            <param name="startsWith">If is true the words are indexed similar to word*, if is false the words are indexed similar to *word*</param>
+            <param name="minimalLength">Sets the minimal length of set which should be indexed</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SubSetAnalyzer.TokenStream(System.String,System.IO.TextReader)">
+            <summary>
+            Token stream method.
+            </summary>
+            <param name="fieldName">Field name</param>
+            <param name="reader">Text reader</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SubSetAnalyzer.GetSubsets(System.String)">
+            <summary>
+            Returns the subsets for words in specified text.
+            </summary>
+            <param name="text">Text</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SubSetAnalyzer.ProcessWord(System.String,System.Boolean)">
+            <summary>
+            Returns subsets for specified word.
+            </summary>
+            <param name="word">Word</param>
+            <param name="startsWith">Indicates whether word should be processed as 'subset' or startsWith'</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SubSetAnalyzer.SubSets(System.String,System.Int32,System.Int32)">
+            <summary>
+            Returns the subset for specified word, with dependence on recursive round.
+            </summary>
+            <param name="word">Word</param>
+            <param name="round">Recursive round</param>
+            <param name="length">Required subset length</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchIndexInput">
+            <summary>
+            Search index input based on the file stream
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.#ctor(System.IO.Stream,System.Int32,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="stream">Input stream</param>
+            <param name="bufferSize">Buffer size</param>
+            <param name="chunkSize">Chunk size</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.ReadInternal(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads the data from the stream
+            </summary>
+            <param name="b">Buffer</param>
+            <param name="offset">Offset</param>
+            <param name="len">Number of bytes to read</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.Dispose(System.Boolean)">
+            <summary>
+            Disposes the object
+            </summary>
+            <param name="disposing">Flag that the object is being disposed</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.SeekInternal(System.Int64)">
+            <summary>
+            Sets the internal stream position
+            </summary>
+            <param name="position">Position</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.Length">
+            <summary>
+            Returns the stream length
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexInput.Clone">
+            <summary>
+            Clones the object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchIndexOutput">
+            <summary>
+            Search index output
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexOutput.#ctor(System.IO.Stream)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="stream">Output stream</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexOutput.FlushBuffer(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Flushes the given buffer to the output
+            </summary>
+            <param name="b">Buffer</param>
+            <param name="offset">Offset</param>
+            <param name="size">Size to write</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexOutput.Dispose(System.Boolean)">
+            <summary>
+            Disposes the object
+            </summary>
+            <param name="disposing">Flag if the object is currently disposing</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexOutput.Seek(System.Int64)">
+            <summary>
+            Adjusts the stream to the given position
+            </summary>
+            <param name="pos">Position</param>
+        </member>
+        <member name="P:CMS.Search.Lucene3.SearchIndexOutput.Length">
+            <summary>
+            Returns the stream length
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchIndexOutput.SetLength(System.Int64)">
+            <summary>
+            Sets the stream length
+            </summary>
+            <param name="length">Length to set</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.StreamDescriptor">
+            <summary>
+            Stream descriptor
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.StreamDescriptor.#ctor(System.IO.Stream)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="file">Input stream</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.StreamDescriptor.Dispose(System.Boolean)">
+            <summary>
+            Disposes the object
+            </summary>
+            <param name="disposing">Flag if the object is currently disposing</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.StreamDescriptor.Finalize">
+            <summary>
+            Destructor
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchDirectory">
+            <summary>
+            Provides methods for manipulation with Lucene.NET index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.#ctor(System.String)">
+            <summary>
+            Creates instance of directory class.
+            </summary>
+            <param name="dirName">Directory name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.CreateOutput(System.String)">
+            <summary>
+            Creates instance of IndexOutput for writing to file. 
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.DeleteFile(System.String)">
+            <summary>
+            Deletes file.
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.ListAll">
+            <summary>
+            Returns list of files in directory.
+            </summary>    
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.FileExists(System.String)">
+            <summary>
+            Returns whether file exists.
+            </summary>
+            <param name="name">Filename.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.FileLength(System.String)">
+            <summary>
+            Returns length of the file.
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.FileModified(System.String)">
+            <summary>
+            Returns when was file modified for last time.
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.OpenInput(System.String)">
+            <summary>
+            Opens file for reading.
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.TouchFile(System.String)">
+            <summary>
+            Creates empty file.
+            </summary>
+            <param name="name">File name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.ClearLock(System.String)">
+            <summary>
+            Clears (releases) lock.
+            </summary>
+            <param name="name">Lock name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchDirectory.MakeLock(System.String)">
+            <summary>
+            Makes (creates) lock.
+            </summary>
+            <param name="name">Lock name.</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchLock">
+            <summary>
+            Provides instance methods for locking files. Primary used by Smart search module when Index writer writes data into index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLock.#ctor(System.String,System.String)">
+            <summary>
+            Creates new instance of SearchLock class.
+            </summary>
+            <param name="dirPath">Path to directory.</param>
+            <param name="lockName">Lock file name.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLock.IsLocked">
+            <summary>
+            Returns whether current directory is locked.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLock.Obtain">
+            <summary>
+            Obtains lock for directory.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLock.Obtain(System.Int64)">
+            <summary>
+            Obtains lock for directory.
+            </summary>
+            <param name="lockWaitTimeout">This parameter is not used in out CMS implementation - because of Azure.</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLock.Release">
+            <summary>
+            Releases lock for directory.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchManager">
+            <summary>
+            Helper classes to provide search indexes
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Lucene3.LuceneSearchManager.mSortPrefixRegex">
+            <summary>
+            Sort prefix regular expression.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchManager.SortPrefixRegex">
+            <summary>
+            Gets the sort field type syntax regular expression.
+            Result contains type, name and order groups.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateDocument">
+            <summary>
+            Creates Lucene document.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateIndexWriter(System.String,CMS.Search.ISearchAnalyzer,System.Boolean)">
+            <summary>
+            Creates the index writer for the given path and Analyzer
+            </summary>
+            <remarks>This method needs to be run in a thread safe way such as smart search task queue.</remarks>
+            <param name="path">Index path</param>
+            <param name="analyzer">Analyzer</param>
+            <param name="create">If true, the writer is created</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateIndexSearcher(System.String)">
+            <summary>
+            Creates the index searcher
+            </summary>
+            <param name="path">Index path</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateAnalyzer(CMS.Search.SearchIndexInfo,System.Boolean)">
+            <summary>
+            Returns current object analyzer.
+            </summary>
+            <param name="sii">Search index info</param>
+            <param name="isSearch">Indicates whether analyzer should be used for search or indexing</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateAnalyzer(CMS.Search.SearchIndexInfo[])">
+            <summary>
+            Returns analyzer that can be used on searching over multiple indexes
+            </summary>
+            <param name="indexes">Search index infos</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.CreateFilter(System.String,System.String,System.Func{System.String,System.String,System.Boolean})">
+            <summary>
+            Creates the defined search filter
+            </summary>
+            <param name="fieldName">Name of the field</param>
+            <param name="match">Match value</param>
+            <param name="condition">Filter condition</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.GetSort(System.String)">
+            <summary>
+            With dependence on current sort condition returns Sort object, supports ##SCORE## macro.
+            </summary>
+            <param name="sortCondition">Sort condition</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.AddResults(CMS.Search.SearchParameters,CMS.Search.SearchResults)">
+            <summary>
+            Adds the attachment results to the search results
+            </summary>
+            <param name="parameters">Search parameters</param>
+            <param name="results">Search results</param>
+            <exception cref="T:CMS.Search.SearchException">Thrown when an error during search occurs.</exception>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.Unlock(System.String)">
+            <summary>
+            Forcibly unlock current index.
+            </summary>
+            <param name="path">Index path to unlock</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.ProcessQuery(Lucene.Net.Search.Query,CMS.Search.ClauseTypeEnum,CMS.Search.SearchQueryClauses,System.String)">
+            <summary>
+            Returns SearchQueryClauses objects with query keywords and clauses.
+            </summary>
+            <param name="q">Query to process</param>
+            <param name="type">Clause type</param>
+            <param name="clauses">Current clauses collection</param>
+            <param name="field">Filter for filed name</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.GetQueryClauses(System.String)">
+            <summary>
+            Returns SQL Fulltext query.
+            </summary>
+            <param name="searchFor">Search query</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchManager.GetQueryClauses(System.String,System.String)">
+            <summary>
+            Returns SQl Fulltext query.
+            </summary>
+            <param name="luceneQuery">Lucene query</param>
+            <param name="field">Field name</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchSyntaxHelper">
+            <summary>
+            Helper methods for search condition syntax
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchSyntaxHelper.EscapeKeyWords(System.String)">
+            <summary>
+            Escapes the key words to be searched
+            </summary>
+            <param name="keywords">Keywords</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchSyntaxHelper.TransformToFuzzySearch(System.String)">
+            <summary>
+            Adds ~ signs to each term to force fuzzy search.
+            </summary>
+            <param name="searchExpression">Search expression to transform</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchSyntaxHelper.CreateSynonymSearcher(System.String)">
+            <summary>
+            Creates the index searcher for synonym search.
+            </summary>
+            <param name="culture">Culture of the synonyms index</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchSyntaxHelper.ExpandWithSynonyms(System.String,System.String)">
+            <summary>
+            Expands given search expression with synonyms. If the data base of synonyms for given language is not found, searchExpression is returned without any modifications.
+            </summary>
+            <param name="searchExpression">Search expression which should be expanded with synonyms</param>
+            <param name="culture">Language code of the search expression (if null, en-us is used)</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchValueConverter">
+            <summary>
+            Helper methods for search condition syntax
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Lucene3.LuceneSearchValueConverter.SEARCH_DOUBLE_MAX">
+            <summary>
+            Maximal value of double value.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchValueConverter.IntReplacerRegex">
+            <summary>
+            Gets the integer replacer regular expression. Replaces integer values in following format (int)123.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchValueConverter.DoubleReplacerRegex">
+            <summary>
+            Gets the double replacer regular expression. Replaces double values in following format (double)123.456.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchValueConverter.DecimalReplacerRegex">
+            <summary>
+            Gets the double replacer regular expression.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.IntToString(System.Int32)">
+            <summary>
+            Returns string representation of the integer value. Returned value has always uniform format.
+            </summary>
+            <param name="value">Integer value</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.StringToInt(System.String)">
+            <summary>
+            Converts search string to the integer value.
+            </summary>
+            <param name="value">String representation of integer</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.DoubleToString(System.Double)">
+            <summary>
+            Returns string representation of the double value. Returned value has always uniform format.
+            </summary>
+            <param name="value">Double value</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.StringToDouble(System.String)">
+            <summary>
+            Converts search string to the integer value.
+            </summary>
+            <param name="value">String representation of double</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.DecimalToString(System.Decimal)">
+            <summary>
+            Returns string representation of the decimal value.
+            </summary>
+            <param name="value">Decimal value</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.StringToDecimal(System.String)">
+            <summary>
+            Converts search string to the decimal value.
+            </summary>
+            <param name="value">String representation of decimal</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.StringToDate(System.String)">
+            <summary>
+            Converts the string representation of the date time from searched document to a date time
+            </summary>
+            <param name="input">Input string</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.DateToString(System.DateTime)">
+            <summary>
+            Converts the date time from to its string representation
+            </summary>
+            <param name="input">Input date</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchValueConverter.EnsureNegativeDecimal(System.Text.StringBuilder)">
+            <summary>
+            Converts string representation of negative decimal number to comparable format. (123.4 -> 876.5)
+            </summary>
+            <param name="builder">String builder with representation of decimal (without sign value)</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchLuceneModule">
+            <summary>
+            Represents the Search Lucene module.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLuceneModule.#ctor">
+            <summary>
+            Module constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLuceneModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLuceneModule.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the module hash tables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.SearchLuceneModuleMetadata">
+            <summary>
+            Represents the Search Lucene module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.SearchLuceneModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneIndexSearcher">
+            <summary>
+            Lucene index searcher
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.#ctor(Lucene.Net.Store.Directory)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="directory">Index directory</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.IsOptimized">
+            <summary>
+            Returns true if the index is optimized
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.Search(System.String,CMS.Search.ISearchAnalyzer,CMS.Search.ISearchFilter)">
+            <summary>
+            Searches the given query
+            </summary>
+            <param name="query">Query to search</param>
+            <param name="analyzer">Search analyzer</param>
+            <param name="filter">Search filter</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.Delete(System.String,System.String)">
+            <summary>
+            Deletes the items with matching field name and value
+            </summary>
+            <param name="name">Field name</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.Commit">
+            <summary>
+            Commits the searcher
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.IsValid">
+            <summary>
+            Returns true if the searcher is valid
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexSearcher.NumberOfDocuments">
+            <summary>
+            Returns the number of documents available in the searcher
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneIndexWriter">
+            <summary>
+            Index writer for Lucene search engine
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexWriter.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="directory">Index directory</param>
+            <param name="a">Analyzer</param>
+            <param name="create">Create index</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexWriter.UpdateDocument(CMS.Search.ILuceneSearchDocument,System.String)">
+            <summary>
+            Updates the document within the index
+            </summary>
+            <param name="doc">Document to update</param>
+            <param name="docId">Document ID</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexWriter.AddDocument(CMS.Search.ILuceneSearchDocument)">
+            <summary>
+            Adds the specific document to the writer
+            </summary>
+            <param name="doc">Document to add</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexWriter.GetLuceneDocument(CMS.Search.ILuceneSearchDocument)">
+            <summary>
+            Gets the Lucene search document from the given document
+            </summary>
+            <param name="doc"></param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneIndexWriter.Flush">
+            <summary>
+            Flushes the writer.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchDocument">
+            <summary>
+            Represents Lucene search document
+            </summary>
+            <remarks>This class is strongly tied with the current Lucene.Net library (version 3.0.3). We do not recommend using the class except for special cases.</remarks>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchDocument.Document">
+            <summary>
+            Underlying document
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.#ctor(Lucene.Net.Documents.Document)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="doc">Base document</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.AddGeneralField(System.String,System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Add field do the Lucene document.
+            </summary>
+            <param name="name">Name of new field</param>
+            <param name="value">Value of field</param>
+            <param name="store">Should be value stored</param>
+            <param name="tokenize">Should be value tokenized</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.Add(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Adds the given field to the document
+            </summary>
+            <param name="name">Field name</param>
+            <param name="value">Field value</param>
+            <param name="store">If true, the field value is stored</param>
+            <param name="tokenize">If true, the field value is tokenized</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.Get(System.String)">
+            <summary>
+            Gets the value of specified field
+            </summary>
+            <param name="name">Field name</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchDocument.RemoveField(System.String)">
+            <summary>
+            Removes field with the given name
+            </summary>
+            <param name="name">Field name</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchFilter">
+            <summary>
+            Search alias path filter.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchFilter.FieldName">
+            <summary>
+            Field name.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchFilter.Match">
+            <summary>
+            Alias path.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchFilter.Condition">
+            <summary>
+            Filter condition
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchFilter.#ctor(System.String,System.String,System.Func{System.String,System.String,System.Boolean})">
+            <summary>
+            Alias path filter constructor.
+            </summary>
+            <param name="fieldName">Name of the field</param>
+            <param name="match">Match value</param>
+            <param name="condition">Filter condition</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchFilter.GetDocIdSet(Lucene.Net.Index.IndexReader)">
+            <summary>
+            Returns BitArray of filtered results.
+            </summary>
+            <param name="reader">Index reader</param>
+        </member>
+        <member name="T:CMS.Search.Lucene3.LuceneSearchHits">
+            <summary>
+            Represents the search hits collection
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchHits.Hits">
+            <summary>
+            Underlying search hits
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Lucene3.LuceneSearchHits.Searcher">
+            <summary>
+            Underlying search hits
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchHits.#ctor(Lucene.Net.Search.Searcher,Lucene.Net.Search.TopDocs)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="searcher">Searcher used to get the hits</param>
+            <param name="hits">Base hits</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchHits.Length">
+            <summary>
+            Returns the length of the hits collection
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchHits.MaxScore">
+            <summary>
+            Returns the score of the document at the specified index
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchHits.Doc(System.Int32)">
+            <summary>
+            Returns the document at the specified index
+            </summary>
+            <param name="i">Index</param>
+        </member>
+        <member name="M:CMS.Search.Lucene3.LuceneSearchHits.Score(System.Int32)">
+            <summary>
+            Returns the score of the document at the specified index
+            </summary>
+            <param name="i">Index</param>
+        </member>
+    </members>
+</doc>

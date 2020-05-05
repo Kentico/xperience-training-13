@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Search.TextExtractors</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Search.TextExtractors.DocxSearchTextExtractor">
+            <summary>
+            Provides content extraction from DOCX files.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.DocxSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.DocxSearchTextExtractor.ExtractComments(DocumentFormat.OpenXml.Packaging.MainDocumentPart)">
+            <summary>
+            Extracts author comments from the slides.
+            </summary>
+            <param name="mainPart">Main part of the DOCX file</param>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.HtmlSearchTextExtractor">
+            <summary>
+            Provides content extraction from HTML files.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.HtmlSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.SearchTextExtractorsModule">
+            <summary>
+            Represents the Search Text Extractors module.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.SearchTextExtractorsModule.#ctor">
+            <summary>
+            Module constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.SearchTextExtractorsModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.SearchTextExtractorsModuleMetadata">
+            <summary>
+            Represents the Search Text Extractors module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.SearchTextExtractorsModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.PdfSearchTextExtractor">
+            <summary>
+            Provides content extraction from PDF files.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PdfSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PdfSearchTextExtractor.StripInvalidContentCharacters(System.String)">
+            <summary>
+            Strips invalid characters from the <paramref name="content"/> before being returned
+            as the extracted PDF content.
+            </summary>
+            <param name="content">Input to strip invalid characters from.</param>
+            <returns>Returns input with invalid characters stripped, or null if input is null.</returns>
+            <remarks>
+            The default implementation strips invalid Unicode surrogate pairs from the <paramref name="content"/>.
+            </remarks>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PdfSearchTextExtractor.SafelyExtractContent(CMS.Core.BinaryData)">
+            <summary>
+            Extracts PDF content and returns it. When an error occurs, empty string is returned and corresponding exception is logged.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PdfSearchTextExtractor.ExtractDocumentContent(org.pdfclown.documents.Document)">
+            <summary>
+            Extracts content from <paramref name="document"/> and returns it as a string.
+            </summary>
+            <returns>Extracted document content, or an empty string when <paramref name="document"/> is null.</returns>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.PptxSearchTextExtractor">
+            <summary>
+            Provides content extraction from PPTX files.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PptxSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PptxSearchTextExtractor.ExtractNotes(DocumentFormat.OpenXml.Packaging.PresentationPart)">
+            <summary>
+            Extracts comments from the slides.
+            </summary>
+            <param name="presentation">Presentation part of the PPTX file</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.PptxSearchTextExtractor.ExtractComments(DocumentFormat.OpenXml.Packaging.PresentationPart)">
+            <summary>
+            Extracts author comments from the slides.
+            </summary>
+            <param name="presentation">Presentation part of the PPTX file</param>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.TextSearchTextExtractor">
+            <summary>
+            Provides content extraction from text (.txt) files.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.TextExtractors.TextSearchTextExtractor.DetectEncoding">
+            <summary>
+            If true, the extractor first tries to detect the encoding of the file to correctly interpret the text.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.TextSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.StreamExtensions.ReadToEnd(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Reads all characters from the current position to the end of the stream.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.UnicodeUtils">
+            <summary>
+            Contains a utility method for Unicode characters processing.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.TextExtractors.UnicodeUtils.INVALID_SURROGATE_PAIR_PATTERN">
+            <summary>
+            Regular expression pattern describing invalid surrogate pair.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.UnicodeUtils.StripInvalidSurrogatePairs(System.String)">
+            <summary>
+            Strips invalid surrogate pairs from <paramref name="input"/> string. Pairs are stripped either partially (low surrogate is kept)
+            or completely depending on whether the low surrogate is a valid character.
+            </summary>
+            <param name="input">Input to strip invalid surrogate pairs from.</param>
+            <returns>Returns string where invalid surrogate pairs are omitted. Returns null if <paramref name="input"/> is null.</returns>
+            <remarks>
+            A valid surrogate pair is a pair comprising a high surrogate (Unicode character in range 0xD800-0xDFFF) and a low surrogate (Unicode character in range 0xDC00-0xDFFF).
+            A high surrogate followed by a character which does not fall within the low surrogate range is considered invalid.
+            </remarks>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.UnicodeUtils.FixInvalidSurrogatePair(System.Text.RegularExpressions.Match)">
+            <summary>
+            Fixes invalid surrogate pair (or an unpaired high surrogate at the end of a string) by omitting the high surrogate or both the high and the low surrogate
+            depending on whether the low surrogate represents a valid character.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.XlsxSearchTextExtractor">
+            <summary>
+            Provides content extraction from XLSX files.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.XlsxSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.XlsxSearchTextExtractor.ExtractContent(System.IO.Stream)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.TextExtractors.XmlSearchTextExtractor">
+            <summary>
+            Provides content extraction from XML files.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.TextExtractors.XmlSearchTextExtractor.IncludeComments">
+            <summary>
+            If true, comments are indexed.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.TextExtractors.XmlSearchTextExtractor.IncludeAttributes">
+            <summary>
+            If true, values of the node attributes are indexed.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.TextExtractors.XmlSearchTextExtractor.ExtractContent(CMS.Core.BinaryData,CMS.Search.ExtractionContext)">
+            <summary>
+            Extracts content from given data.
+            </summary>
+            <param name="data">Data to extract text from.</param>
+            <param name="context">Extraction context.</param>
+        </member>
+    </members>
+</doc>

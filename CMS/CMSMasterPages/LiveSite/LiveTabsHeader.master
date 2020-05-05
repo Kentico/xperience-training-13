@@ -1,0 +1,47 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_LiveSite_LiveTabsHeader"
+     Codebehind="LiveTabsHeader.master.cs" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>TabsHeaderMasterPage</title>
+    <style type="text/css">
+        body
+        {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="<%=mBodyClass%>">
+    <form id="form1" runat="server">
+        <asp:PlaceHolder runat="server" ID="plcManager" />
+        <asp:Panel runat="server" ID="pnlBody" CssClass="TabsPageHeader">
+            <asp:Panel runat="server" ID="pnlTitle" CssClass="PageHeader" EnableViewState="false">
+                <cms:pagetitle id="titleElem" runat="server" shortid="t" />
+            </asp:Panel>
+            <asp:Panel ID="pnlActions" runat="server" CssClass="PageHeaderLine" EnableViewState="false">
+                <cms:headeractions id="actionsElem" runat="server" shortid="a" />
+                <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+                <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+            </asp:Panel>
+            <asp:Panel runat="server" ID="pnlTabsContainer" CssClass="TabsPageTabs" EnableViewState="false">
+                <asp:Panel runat="server" ID="pnlLeft" CssClass="TabsLeft">
+                    &nbsp;
+                </asp:Panel>
+                    <asp:Panel runat="server" ID="pnlWhite" CssClass="TabsWhite">
+                        <cms:uitabs id="tabControlElem" runat="server" shortid="t" />
+                    </asp:Panel>
+                <asp:Panel runat="server" ID="pnlRight" CssClass="TabsRight">
+                    &nbsp;
+                </asp:Panel>
+            </asp:Panel>
+        </asp:Panel>
+    </form>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.DocumentWebServices</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.DocumentWebServices.ObjectTranslationRESTService">
+            <summary>
+            REST service to access and manage translations of objects.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentWebServices.ObjectTranslationRESTService.GetStream(System.Object,System.String,CMS.DataEngine.TraverseObjectSettings)">
+            <summary>
+            Returns proper stream from given object.
+            </summary>
+            <param name="obj">Info object or TreeNode to get into the stream</param>
+            <param name="objectType">Original object type</param>
+            <param name="settings">Export settings</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.ObjectTranslationRESTService.GetExportSettings(System.String)">
+            <summary>
+            Creates ExportObjectSettings object from query string parameters.
+            </summary>
+            <param name="rootName">Name of the root</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.ObjectTranslationRESTService.GetTranslation(System.Object,System.String)">
+            <summary>
+            Returns XLIFF translation of the given object.
+            </summary>
+            <param name="obj">Object to translate</param>
+            <param name="currentSiteName">Name of the current site</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.ObjectTranslationRESTService.GetTranslationSettings(System.String)">
+            <summary>
+            Creates TranslationSettings object from query string parameters.
+            </summary>
+            <param name="currentSiteName">Name of the current site</param>
+        </member>
+        <member name="T:CMS.DocumentWebServices.DocumentRESTService">
+            <summary>
+            REST service to access and manage documents.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentWebServices.DocumentRESTService.AllowedDocumentTypes">
+            <summary>
+            Gets the list of allowed document types separated by semicolon. Empty string means all document types are allowed.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentWebServices.DocumentRESTService.mTreeProvider">
+            <summary>
+            TreeProvider object.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetDocumentFromSettings(CMS.DataEngine.TraverseObjectSettings)">
+            <summary>
+            Returns document according to given settings.
+            </summary>
+            <param name="settings">Settings object</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetTreeNode(CMS.DataEngine.TraverseObjectSettings,System.String,System.Boolean)">
+            <summary>
+            Returns TreeNode instance (existing for update, new instance for creations).
+            </summary>
+            <param name="settings">Export settings</param>
+            <param name="data">TreeNode data</param>
+            <param name="isUpdate">If true, document is retrieved using settings data, otherwise new document is created</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetDocumentsFromSettings(System.String,CMS.DataEngine.TraverseObjectSettings,System.String,System.Boolean)">
+            <summary>
+            Returns DataSet of documents matching the settings given in ExportObjectSettings object
+            </summary>
+            <param name="operation">Document operation</param>
+            <param name="settings">ExportObjectSettings object</param>
+            <param name="docTypes">Allowed document types</param>
+            <param name="checkAllowedDocTypes">If true, allowed document types (from settings) are checked and if the document has not allowed type, null is returned</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetDocument(System.String)">
+            <summary>
+            Selects tree node(s) according to provided parameters and returns them as dataset. 
+            Three oprations are supported: document (= select single document), all (= select documents), childrenof (= all children of given node).
+            If classNames not specified, the result does not contain coupled data.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.CreateDocument(System.String,System.IO.Stream)">
+            <summary>
+            Creates new document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+            <param name="stream">Stream with document data</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.DeleteDocument(System.String)">
+            <summary>
+            Deletes given document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.UpdateDocument(System.String,System.IO.Stream)">
+            <summary>
+            Processes given document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+            <param name="stream">Stream with document data</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.IsSingleDocumentOperation(System.String)">
+            <summary>
+            Returns true if the given document is 
+            </summary>
+            <param name="operation">Operation name</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.Translate(System.IO.Stream)">
+            <summary>
+            Gateway for submitting an XLIFF document.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetStream(System.Object,System.String,CMS.DataEngine.TraverseObjectSettings)">
+            <summary>
+            Returns proper stream from given object.
+            </summary>
+            <param name="obj">Info object or TreeNode to get into the stream</param>
+            <param name="objectType">Original object type</param>
+            <param name="settings">Export settings</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.IsAuthorizedForDocumentType(System.String)">
+            <summary>
+            Returns true if given document type is allowed in settings.
+            </summary>
+            <param name="docType">Document type of an document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetDocumentExportSettings(System.String,System.Boolean)">
+            <summary>
+            Creates ExportObjectSettings object from query string parameters.
+            </summary>
+            <param name="rootName">Name of the root</param>
+            <param name="isSingleDocument">If true, the request is a request to a single document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.CombineDocTypes(System.String)">
+            <summary>
+            Combines (intersection) requested and allowed document types to use in selecting documents methods.
+            </summary>
+            <param name="requestedTypes">Document types requested by users</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetObjectDataSetFeed(System.Data.DataSet,System.String,CMS.DataEngine.TraverseObjectSettings)">
+            <summary>
+            Returns SyndicationFeed of object dataset.
+            </summary>
+            <param name="ds">DataSet with objects data</param>
+            <param name="objectType">Object type of the data inside</param>
+            <param name="settings">Export settings</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.DocumentRESTService.GetResponse(System.Collections.Generic.IEnumerable{CMS.DocumentEngine.TreeNode},CMS.DataEngine.TraverseObjectSettings)">
+            <summary>
+            Returns response for modifying methods - ID and GUID of the modified object.
+            </summary>
+            <param name="nodes">TreeNode objects which were created/updated/deleted</param>
+            <param name="settings">Export settings</param>
+        </member>
+        <member name="T:CMS.DocumentWebServices.IDocumentRESTService">
+            <summary>
+            REST service interface for documents
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentWebServices.IDocumentRESTService.GetDocument(System.String)">
+            <summary>
+            Selects tree node(s) according to provided parameters and returns them as dataset. 
+            Three oprations are supported: document (= select single document), all (= select documents), childrenof (= all children of given node)
+            If classNames not specified, the result does not contain coupled data.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.IDocumentRESTService.UpdateDocument(System.String,System.IO.Stream)">
+            <summary>
+            Processes given document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+            <param name="stream">Stream with document data</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.IDocumentRESTService.CreateDocument(System.String,System.IO.Stream)">
+            <summary>
+            Creates new document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+            <param name="stream">Stream with document data</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.IDocumentRESTService.DeleteDocument(System.String)">
+            <summary>
+            Deletes specified document.
+            </summary>
+            <param name="operation">Operation to perform with document</param>
+        </member>
+        <member name="M:CMS.DocumentWebServices.IDocumentRESTService.Translate(System.IO.Stream)">
+            <summary>
+            Gateway for submiting an XLIFF document.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,41 @@
+﻿<div class="editing-form-category campaign-category-description">
+    <form name="campaignForm" cms-autosave="$ctrl.saveCampaign()">
+        <div class="campaign-description-textboxes">
+            <div class="campaign-input-padding" title="{$ campaign.displayname.description $}">
+                <cms-campaign-textbox value="$ctrl.campaign.displayName"
+                                      maxlength="100"
+                                      required="true"
+                                      label="{$ campaign.displayname $}"
+                                      id="campaignDisplayName"
+                                      form-element="campaignForm.campaignDisplayName"
+                                      enabled="$ctrl.campaign.isDraft()">
+                </cms-campaign-textbox>
+            </div>
+        </div>
+
+        <div class="campaign-description-textboxes">
+            <div class="campaign-input-padding" title="{$ campaign.utmcampaign.description $}">
+                <cms-campaign-textbox value="$ctrl.campaign.utmCode"
+                              maxlength="200"
+                              required="true"
+                              pattern="[0-9a-zA-Z_.-]+"
+                              pattern-error="{$ campaign.utmparameter.wrongformat $}"
+                              label="{$ campaign.utmcampaign $}"
+                              id="campaignUtmCode"
+                              form-element="campaignForm.campaignUtmCode"
+                              enabled="$ctrl.campaign.isDraft()"
+                              server-validation-message="$ctrl.serverValidationMessage">
+                </cms-campaign-textbox>
+            </div>
+        </div>
+
+        <div class="ClearBoth"></div>
+
+        <cms-campaign-textarea value="$ctrl.campaign.description"
+                               title="{$ campaign.description.description $}"
+                               rows="4"
+                               id="campaignDescription"
+                               label="{$ campaign.description $}">
+        </cms-campaign-textarea>
+    </form>
+</div>

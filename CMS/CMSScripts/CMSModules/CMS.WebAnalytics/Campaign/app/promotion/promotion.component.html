@@ -1,0 +1,20 @@
+﻿<h3 class="control-label">{$ campaign.promotion $}</h3>
+<p>{$ campaign.promotion.description $}</p>
+
+<div ng-repeat="item in $ctrl.items track by $index" class="campaign-list">
+    <cms-campaign-promotion-item asset="item"
+                                 remove-item="$ctrl.removeItem(item)"
+                                 editable="!$ctrl.campaign.isFinished()">
+    </cms-campaign-promotion-item>
+</div>
+
+<div class="content-block-50 remove-default-space">
+    <cms-select-email on-select="$ctrl.addPromotionItem"
+                      enabled="!$ctrl.campaign.isFinished()">
+    </cms-select-email>
+
+    <cms-create-email items="$ctrl.items"
+                      on-create="$ctrl.addPromotionItem"
+                      enabled="!$ctrl.campaign.isFinished()">
+    </cms-create-email>
+</div>

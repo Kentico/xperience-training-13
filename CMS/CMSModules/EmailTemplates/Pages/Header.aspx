@@ -1,0 +1,2 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true"  Codebehind="Header.aspx.cs" Inherits="CMSModules_EmailTemplates_Pages_Header"
+    Theme="Default" MasterPageFile="~/CMSMasterPages/UI/TabsHeader.master" %>

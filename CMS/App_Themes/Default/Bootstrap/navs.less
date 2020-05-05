@@ -1,0 +1,380 @@
+//
+// Navs
+// --------------------------------------------------
+
+
+// Base class
+// --------------------------------------------------
+
+.nav {
+    margin-bottom: 0;
+    padding-left: 0; // Override default ul/ol
+    list-style: none;
+    &:extend(.cms-bootstrap .clearfix all);
+
+    > li {
+        position: relative;
+        display: block;
+
+        > a {
+            position: relative;
+            display: block;
+            padding: @nav-link-padding;
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+                background-color: @nav-link-hover-bg;
+            }
+        }
+        // Disabled state sets text to gray and nukes hover/tab effects
+        &.disabled > a {
+            color: @nav-disabled-link-color;
+
+            &:hover,
+            &:focus {
+                color: @nav-disabled-link-hover-color;
+                text-decoration: none;
+                background-color: transparent;
+                cursor: not-allowed;
+            }
+        }
+    }
+    // Open dropdowns
+    .open > a {
+        &,
+        &:hover,
+        &:focus {
+            background-color: @nav-link-hover-bg;
+            border-color: @link-color;
+        }
+    }
+    // Dividers (basically an hr) within the dropdown
+    .nav-divider {
+        .nav-divider();
+    }
+    // Prevent IE8 from misplacing imgs
+    // See https://github.com/h5bp/html5-boilerplate/issues/984#issuecomment-3985989
+    > li > a > img {
+        max-width: none;
+    }
+}
+
+// Tabs
+// -------------------------
+
+// Give the tabs something to sit on
+.nav-tabs {
+    padding-top: @base-unit;
+
+    > li {
+        line-height: @line-height-200;
+    }
+    // Actual tabs (as links)
+    > li > a, > li > div {
+        padding: 0 @padding-base-horizontal;
+        text-decoration: none;
+        color: @text-color;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            background-color: @nav-tabs-active-link-hover-bg;
+        }
+    }
+    // Active state, and it's :hover to override normal :hover
+    .active a, .active div {
+        &,
+        &:hover,
+        &:focus {
+            background-color: @nav-tabs-active-link-bg;
+        }
+    }
+
+    .active .dropdown-menu a {
+        background-color: @dropdown-bg;
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            color: @dropdown-link-hover-color;
+            background-color: @dropdown-link-hover-bg;
+        }
+    }
+
+    .dropdown-menu {
+        z-index: @zindex-tabs;
+    }
+
+    .dropdown-toggle .tab-title, .active .dropdown-toggle .tab-original-title {
+        display: none;
+    }
+
+    .active .dropdown-toggle .tab-title, .dropdown-toggle .tab-original-title {
+        display: inline;
+    }
+}
+
+&.nav-tabs-bg {
+    background: @nav-tabs-container-bg;
+}
+
+// Differences for horizontal tabs
+.nav-tabs-container-horizontal {
+    background-color: @nav-tabs-container-bg;
+    //height: @nav-tabs-horizontal-height;
+    line-height: @line-height-200;
+    padding: 0 @padding-base-horizontal;
+
+    li {
+        float: left;
+
+        a > img {
+            padding: @padding-small-horizontal;
+        }
+    }
+
+    .caret {
+        line-height: @base-unit * 0.5;
+    }
+}
+
+// Differences for vertical tabs
+.nav-tabs-container-vertical {
+    background-color: @nav-tabs-container-bg;
+    width: @nav-tabs-vertical-width;
+    line-height: @line-height-200;
+    padding: 0 0 @padding-base-horizontal 0;
+    // For long lines which can overflow to the second line
+    .nav-tabs {
+        & > li {
+            font-size: @font-size-large;
+
+            & > a {
+                padding: @base-unit * 0.5 @padding-base-horizontal;
+                line-height: @line-height-150;
+            }
+        }
+
+        .nav-sub-tabs {
+            padding-top: 0;
+
+            & > li {
+                font-size: @font-size-base;
+                padding-left: @base-unit;
+
+                & > a {
+                    padding: @padding-middle-vertical @padding-base-horizontal;
+                    line-height: @line-height-100;
+                }
+            }
+        }
+    }
+}
+
+.nav-tabs-no-padding {
+    .nav-tabs-container-vertical .nav-tabs {
+        padding-top: 0;
+    }
+
+    .nav-tabs-container-horizontal .nav-tabs {
+        padding-left: 0;
+    }
+}
+
+.nav-tabs-container-vertical-background {
+    background-color: @nav-tabs-container-bg;
+    height: 100%;
+}
+
+.nav-tabs-container-vertical-hidden {
+    display: none;
+}
+
+.nav-tabs-vertical-hidden {
+    overflow: visible !important;
+    z-index: @zindex-tabs !important;
+
+    .nav-tabs-container-vertical-background {
+        box-shadow: 0 0 @base-unit * 0.5 @color-gray-130;
+        z-index: @zindex-tabs;
+        position: absolute;
+        top: 0 !important;
+        left: 0 !important;
+        width: @base-unit * 2;
+
+        .nav-tabs-container-vertical-hidden {
+            width: @base-unit * 2;
+            display: block;
+            background-color: @nav-tabs-container-bg;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: @zindex-tabs;
+            text-align: center;
+        }
+    }
+}
+
+.nav-tabs-container-vertical-hidden-icon {
+    width: @base-unit;
+    padding: @base-unit @base-unit * 0.5;
+    color: @light-bg-icon-color;
+}
+
+.nav-tabs-vertical-hiding {
+    overflow: visible !important;
+    z-index: @zindex-tabs !important;
+
+    .nav-tabs-container-vertical-background {
+        box-shadow: @base-unit * 0.2 0 @base-unit * 0.2 0px @color-gray-130;
+    }
+}
+
+.nav-tabs-vertical-hidden-hover {
+    .nav-tabs-container-vertical-background:hover {
+        .nav-tabs-container-vertical-hidden {
+            width: @base-unit * 2.5;
+            transition: all 125ms ease;
+            box-shadow: 0 0 @base-unit * 0.5 @color-gray-130;
+            cursor: pointer;
+        }
+
+        .nav-tabs-container-vertical-hidden-icon {
+            color: @light-bg-icon-hover-color;
+        }
+    }
+}
+
+.nav-tabs-container-vertical-background {
+    width: @nav-tabs-vertical-width;
+}
+
+.nav-tabs-vertical-hidden-show {
+    .nav-tabs-container-vertical-background {
+        width: @nav-tabs-vertical-width;
+
+        .nav-tabs-container-vertical-hidden {
+            display: none;
+        }
+    }
+}
+
+// Vertical tabs scroll
+.nav-tabs-vertical-layout {
+    .scroll-shadow {
+        display: block;
+        height: @base-unit * 0.5;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        @startColor: rgba(189, 187, 187, 1);
+        @endColor: rgba(189, 187, 187, 0);
+        #gradient.vertical(@startColor, @endColor);
+
+        &.bottom {
+            top: auto;
+            bottom: 0;
+            #gradient.vertical(@endColor, @startColor);
+        }
+    }
+    // jQuery slider styles
+    .js-scrollable {
+        outline: none;
+    }
+
+    .jspVerticalBar {
+        width: @base-unit * 0.5;
+    }
+
+    .jspDrag {
+        background-color: @color-gray-130;
+        border: none;
+
+        &.jspHover {
+            background-color: @color-gray-100;
+        }
+    }
+}
+
+// Differences for vertical tabs
+.nav-tabs-back {
+    display: none;
+    background-color: @nav-tabs-container-bg;
+    overflow: hidden;
+    height: @nav-tabs-back-height;
+
+    i {
+        .cms-icon-100;
+        padding: @base-unit * 0.75;
+        color: @light-bg-icon-color;
+    }
+
+    button {
+        padding: 0;
+        margin: 0;
+        height: @nav-tabs-back-height;
+    }
+}
+
+.design-showcontent {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: @base-unit * 1.5;
+    padding-right: @base-unit;
+}
+
+// Site selector for vertical tabs
+.nav-tabs-site-selector {
+    background-color: @nav-tabs-container-bg;
+    padding: @base-unit @base-unit 0 @base-unit;
+}
+
+
+// Nav variations
+// --------------------------------------------------
+
+// Tabbable tabs
+// -------------------------
+
+// Clear any floats
+.tabbable {
+    &:extend(.cms-bootstrap .clearfix all);
+}
+
+// Show/hide tabbable areas
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+    display: none;
+}
+
+.tab-content,
+.pill-content {
+    > .active {
+        display: block;
+    }
+}
+
+
+
+// Dropdowns
+// -------------------------
+
+// Make dropdown carets use link color in navs
+.nav .caret {
+    border-top-color: @link-color;
+    border-bottom-color: @link-color;
+}
+
+.nav a:hover .caret {
+    border-top-color: @link-hover-color;
+    border-bottom-color: @link-hover-color;
+}
+
+// Specific dropdowns
+.nav-tabs .dropdown-menu {
+    // Remove the top rounded corners here since there is a hard edge above the menu
+    .border-top-radius(0);
+}

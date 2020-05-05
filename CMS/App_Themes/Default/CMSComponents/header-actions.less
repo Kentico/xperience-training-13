@@ -1,0 +1,398 @@
+﻿// Styles for headers actions
+
+@edit-menu-border-width: 3px;
+
+// Groups of individual buttons (e.g. header actions)
+.btn-actions,
+.header-actions-main {
+    .fix-white-space();
+    margin-bottom: @padding-small-horizontal * -1;
+
+    > .btn,
+    > .btn-group,
+    .btn-dropdown {
+        margin: 0 @padding-small-horizontal @padding-small-horizontal 0;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        .btn-dropdown > .btn.dropdown-toggle {
+            margin: 0;
+        }
+    }
+
+    .button-explanation-text {
+        margin-left: @base-unit * 0.5;
+    }
+}
+
+// UniSelectors in header action
+.uniselector-action-buttons {
+    div {
+        display: inline-block;
+        float: left;
+
+        .btn {
+            margin-left: @base-unit * 0.5;
+        }
+    }
+
+    > div:first-child {
+        .btn {
+            margin-left: 0;
+        }
+    }
+}
+
+// Shadow under header actions
+.header-shadow {
+    box-shadow: 0 8px 8px -5px @color-gray-130;
+    position: relative;
+    z-index: @zindex-navbar;
+    display: block !important;
+}
+
+// Enwraps whole header
+.header-container {
+    background-color: @body-bg;
+    // Handle header with checkin/out message
+    .cms-edit-menu,
+    &.cms-edit-menu {
+        padding: 0;
+    }
+}
+// Container for header actions only
+.header-actions-container {
+    color: @text-color;
+    padding: @base-unit @base-unit (@base-unit * 0.5) @base-unit;
+    display: block;
+    min-height: @base-unit * 3.5;
+    box-sizing: border-box; // Prevent live site Bootstrap issues on Design tab
+    .fix-white-space(); // Remove white space e.g. in Sharepoint uploader buttons
+    // Fix for buttons in update panel - e.g. in Email marketing - Edit - Subscribers
+    > div {
+        margin-right: @base-unit * 0.5;
+    }
+    // Fix for reporting toolbar height
+    .cms-edit-menu {
+        min-height: 0;
+    }
+}
+
+// Object edit menu - bar with object locking information below the header actions buttons
+.object-edit-menu-info-wrapper {
+    clear: both;
+    float: none;
+    display: block;
+}
+
+.object-edit-menu-info {
+    clear: both;
+    background-color: @color-gray-150;
+    overflow: hidden;
+    padding: (@base-unit * 0.5) @base-unit;
+    color: @text-color;
+    text-align: left;
+    display: block; // Enforce block behavior for spans
+}
+
+// Special object edit menu styling
+.PreviewMenu .object-edit-menu-info {
+    margin: 0;
+    border-top: 0;
+}
+
+.UIHeader {  
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: @zindex-toolbar;
+    background-color: @color-white;
+    .object-edit-menu-info-wrapper {
+        margin-top: -1px;
+        padding-top: 0;
+    }
+
+    .object-edit-menu-info {
+        margin: auto;
+        border-top: none;
+    }
+
+    .cms-edit-menu {
+        display: block;
+    }
+}
+
+
+
+// Import from DesignMode for .cms-edit-menu
+.RTL .LTR,
+.RTL .LTR * {
+    direction: ltr;
+}
+
+.RTL .cms-edit-menu,
+.RTL .cms-edit-menu * {
+    direction: rtl;
+}
+
+.RTL .LTR .cms-edit-menu,
+.RTL .LTR .cms-edit-menu * {
+    direction: ltr;
+}
+
+.cms-edit-menu {
+    color: @text-color;
+    padding: @base-unit @base-unit (@base-unit * 0.5) @base-unit;
+    display: block;
+    background: @color-white;
+    min-height: @base-unit * 3.5;
+    box-sizing: border-box; // Prevent live site Bootstrap issues on Design tab
+    // additional actions. Don't affect locations with checkin/out message
+    >div:not(.object-edit-panel):not(.header-actions-container):not(.object-edit-menu-info-wrapper) {
+        float: left;
+        display: inline-block;
+    }
+    // additional actions fix
+    .cms-edit-menu {
+        padding: 0;
+        margin-right: @base-unit * 0.5;
+        min-height: @base-unit * 2;
+    }
+    // additional actions fix
+    .control-group-inline {
+        margin-right: @base-unit * 0.5;
+        // fix for an info text stacking - don't float Screen size, Rotation button, More actions and Personas buttons
+        >div:not(.device-profile-menu):not(.device-rotation):not(.personas-selectable-button):not(.more-actions-button) {
+            float: left;
+            display: inline-block;
+        }
+    }
+    // buttons
+    .btn-actions {
+        display: inline-block;
+    }
+
+    .RightAlign.AdditionalControls {
+        margin-right: @base-unit * 0.5;
+    }
+
+    .info-text {
+        display: inline-block;
+        margin-top: (@padding-base-vertical + @input-border-width); // Default padding plus a border
+        margin-right: @base-unit * 0.5;
+    }
+}
+// Multiple button sources within one toolbar - e.g. Staging
+.header-container-multiple-panels {
+    .object-edit-panel {
+        float: left;
+        margin-right: @base-unit * 0.5;
+    }
+}
+// Staging - server selector
+.server-selector {
+    width: @base-unit * 21 !important;
+    float: right !important;
+
+    .filter-form-value-cell-wide .control-group-inline {
+        margin-right: 0;
+    }
+}
+
+
+.cms-edit-menu .CtxContainer,
+.RTL .LTR .cms-edit-menu .CtxContainer {
+    float: left;
+    height: auto;
+    width: auto;
+    top: auto;
+}
+
+.RTL .cms-edit-menu .CtxContainer {
+    float: right;
+    height: auto;
+    width: auto;
+    top: auto;
+}
+
+.cms-edit-menu .Clear {
+    line-height: 0;
+    clear: both;
+}
+
+.cms-edit-menu td,
+.cms-edit-menu .Text,
+.cms-edit-menu label,
+.cms-edit-menu .MenuButtonText {
+    font-weight: normal !important;
+}
+
+.cms-edit-menu td {
+    vertical-align: top;
+}
+
+.cms-edit-menu a,
+.cms-edit-menu a[disabled="disabled"] {
+    text-decoration: none !important;
+}
+
+.cms-edit-menu .Pad,
+.RTL .LTR .cms-edit-menu .Pad {
+    margin-right: @base-unit * 0.5;
+    margin-left: auto;
+}
+
+.RTL .cms-edit-menu .Pad {
+    margin-right: auto;
+    margin-left: @base-unit * 0.5;
+}
+
+.cms-edit-menu .PadSeparator {
+    width: @base-unit * 0.75;
+    vertical-align: middle;
+}
+
+.IE .cms-edit-menu .PadSeparator {
+    padding-top: @base-unit * 0.5;
+}
+
+.cms-edit-menu .PadSeparator span {
+    padding-top: 3px;
+    padding-bottom: 4px;
+    padding-left: 1px;
+    margin-left: 2px;
+}
+
+.RTL .cms-edit-menu .PadSeparator span {
+    padding-right: 1px;
+    margin-right: 2px;
+}
+
+.cms-edit-menu .Text,
+.RTL .LTR .cms-edit-menu .Text,
+.cms-edit-menu .MenuButtonText,
+.RTL .LTR .cms-edit-menu .MenuButtonText {
+    padding: 0 @base-unit 0 0;
+}
+
+.RTL .cms-edit-menu .Text,
+.RTL .cms-edit-menu .MenuButtonText {
+    padding: 0 0 0 @base-unit;
+}
+
+.cms-edit-menu .AdditionalControls {
+    margin-top: 3px;
+}
+
+    .cms-edit-menu .AdditionalControls label,
+    .cms-edit-menu .AdditionalControls input[type=checkbox] {
+        vertical-align: middle;
+    }
+
+.PortalContextMenu.cms-edit-menu {
+    padding: 0;
+    width: auto !important;
+}
+
+    .PortalContextMenu.cms-edit-menu .Pad {
+        display: none;
+    }
+
+    .PortalContextMenu.cms-edit-menu .Text {
+        float: none;
+        display: inline;
+    }
+
+.cms-edit-menu .Right,
+.cms-edit-menu .RightABVariant,
+.RTL .LTR .cms-edit-menu .Right,
+.RTL .LTR .cms-edit-menu .RightABVariant {
+    position: absolute;
+    top: 6px;
+    right: 5px;
+}
+
+.RTL .cms-edit-menu .Right,
+.RTL .cms-edit-menu .RightABVariant {
+    left: 5px;
+    right: auto;
+}
+
+.cms-edit-menu .RightABVariant {
+    top: 41px;
+}
+
+.PortalContextMenu.cms-edit-menu .ItemPadding,
+.PortalContextMenu.cms-edit-menu .ItemPadding:hover {
+    padding: 2px !important;
+}
+
+.RightAlign,
+.RTL .LTR .RightAlign,
+.RTL .LTR .cms-edit-menu .RightAlign {
+    float: right !important;
+}
+
+.RTL .RightAlign,
+.RTL .cms-edit-menu .RightAlign {
+    float: left;
+}
+
+.LeftAlign,
+.RTL .LTR .LeftAlign,
+.RTL .LTR .cms-edit-menu .LeftAlign {
+    float: left;
+}
+
+.RTL .LeftAlign,
+.RTL .cms-edit-menu .LeftAlign {
+    float: right;
+}
+// Header actions box
+.header-panel {
+    padding: @base-unit @base-unit (@base-unit * 0.5) @base-unit;
+    background: @color-white;
+}
+// Handles space when 2 or more header panels are rendered
+// Applies to all but last header-panel elements
+.header-panel-not-last {
+    padding-bottom: (@base-unit * 0.25);
+}
+// Label e.g. in Contact groups, Polls
+.header-actions-label {
+    margin: 0 0 0 (@base-unit * 0.5);
+    display: inline-block;
+    // span in e.g. Polls
+    .form-control-text {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+// Header actions site selector
+.header-actions-site-selector-block {
+    .pull-right;
+    padding-left: @base-unit;
+    position: relative;
+    z-index: @zindex-dropdown;
+}
+// Main actions - e.g. on Page tab in Pages app
+.header-actions-main {
+    .pull-left;
+}
+// Additional actions - e.g. Refresh in Automation process
+.header-actions-additional {
+    .pull-left;
+}
+// Actions to be indented - floated to right on desktop
+.header-actions-additional-indented {
+    .pull-right;
+}
+// Anchor offset so that the anchors do not navigate under the actions
+.header-actions-anchor {
+    display: block;
+    position: relative;
+    top: (-@base-unit * 4);
+    visibility: hidden;
+}

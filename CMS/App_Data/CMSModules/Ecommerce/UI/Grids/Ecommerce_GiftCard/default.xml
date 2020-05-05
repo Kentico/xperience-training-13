@@ -1,0 +1,28 @@
+﻿<grid>
+  <actions parameters="GiftCardID">
+    <action Name="edit" Caption="$general.edit$" FontIconClass="icon-edit" FontIconStyle="allow" />
+    <action name="#delete" caption="$general.delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$general.confirmdelete$" />
+  </actions>
+  <columns>
+    <column source="GiftCardDisplayName" caption="$com.giftcard.displayname$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="##ALL##" externalsourcename="value" caption="$com.giftcard.value$" wrap="false" cssclass="TextRight" />
+    <column source="##ALL##" name="Status" caption="$com.discount.status$" wrap="false" externalsourcename="status">
+      <filter type="custom" path="~/CMSModules/Ecommerce/Controls/Filters/DiscountFilter.ascx">
+        <parameters>
+          <filterparameter name="DiscountType" value="GiftCard"/>
+        </parameters>
+      </filter>
+    </column>
+    <column source="GiftCardValidFrom" externalsourcename="#userdatetimegmt" caption="$com.giftcard.validfrom$" wrap="false" />
+    <column source="GiftCardValidTo" externalsourcename="#userdatetimegmt" caption="$com.giftcard.validto$" wrap="false" />
+    <column source="##ALL##" name="application" externalsourcename="application" caption="$com.giftcardcouponcode.amountredeemed$" wrap="false" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="ecommerce.giftcard" />
+  <options>
+    <key name="AllowSorting" value="false" />
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

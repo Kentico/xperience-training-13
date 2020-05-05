@@ -1,0 +1,699 @@
+//
+// Typography
+// --------------------------------------------------
+
+
+// Segoe UI Semibold definition
+// -----------------------------
+@font-face
+{
+    font-family: "Segoe UI Semibold";
+    font-weight: 600;
+    src: local("Segoe UI Semibold");
+}
+
+// Body text
+// -------------------------
+
+p
+{
+    margin: 0;
+    margin-bottom: @margin-base;
+    line-height: @line-height-100;
+
+    &.perex
+    {
+        font-size: @font-size-large;
+        line-height: @line-height-150;
+        margin-bottom: @margin-base;
+    }
+}
+
+small
+{
+    font-size: @font-size-small;
+    line-height: @line-height-80;
+    margin-bottom: @margin-base;
+}
+
+strong, b
+{
+    color: @color-blue-70;
+    font-weight: bold;
+}
+
+.lead
+{
+    margin-bottom: @line-height-100;
+    font-size: @base-unit;
+    line-height: @base-unit * 1.5;
+
+    @media screen and (min-width: 768px)
+    {
+        font-size: @font-size-large;
+    }
+
+    a
+    {
+        text-decoration: underline;
+    }
+}
+
+html
+{
+    font-size: @font-size-base;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body
+{
+    font-family: @font-family-base;
+    font-size: @font-size-base;
+    //  line-height: @line-height-100;
+    color: @text-color;
+    background-color: @body-bg;
+}
+
+
+// Reset unusual Firefox-on-Android default style.
+//
+// See https://github.com/necolas/normalize.css/issues/214
+
+button,
+input,
+select[multiple],
+textarea
+{
+    background-image: none;
+}
+
+
+// Links
+
+a, .link
+{
+    cursor: pointer;
+    color: @link-color;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus
+    {
+        color: @link-hover-color;
+        text-decoration: none;
+    }
+
+    &:focus
+    {
+        .tab-focus();
+    }
+
+    & + .icon-external-link
+    {
+        color: @color-blue-70;
+    }
+}
+
+.cms-icon-link
+{
+    &:hover,
+    &:focus
+    {
+        [class^="icon-"]
+        {
+            color: @link-color;
+        }
+    }
+
+    [class^="icon-"]
+    {
+        color: @light-bg-icon-color;
+        margin: 0;
+    }
+}
+
+
+// Images
+
+img
+{
+    vertical-align: middle;
+}
+
+// Responsive images (ensure images don't scale beyond their parents)
+.img-responsive
+{
+    .img-responsive();
+}
+
+// Rounded corners
+.img-rounded
+{
+    border-radius: @border-radius-large;
+}
+
+
+// Perfect circle
+.img-circle
+{
+    border-radius: 50%; // set radius in percents
+}
+
+
+// Horizontal rules
+
+hr
+{
+    margin-top: @line-height-100;
+    margin-bottom: @line-height-100;
+    border: 0;
+    border-top: 1px solid @hr-border;
+}
+
+
+// Only display content to screen-readers
+//
+// See: http://a11yproject.com/posts/how-to-hide-content/
+
+.sr-only
+{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+// Makes element visible on non-screen-reader browsers.
+.sr-only-disabled
+{
+    width: auto;
+    height: auto;
+    margin: auto;
+    clip: auto;
+}
+
+// The absolute position can cause en extra link with html5 doctype, for these cases use the fixed position
+.sr-only-fixed
+{
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+
+// Sizes of CMS icons
+
+// Icons on dashboard
+.cms-icon-200
+{
+    font-size: @icon-size-200;
+    height: @icon-size-200;
+    width: @icon-size-200;
+    padding: (@base-unit * 0.5) 0 (@base-unit * 0.5);
+}
+
+// Notifications
+.cms-icon-150
+{
+    font-size: @icon-size-150;
+    height: @icon-size-150;
+    width: @icon-size-150;
+    padding: @base-unit * 0.5;
+}
+
+// Do not use this one, reserved for Kentico logo
+.cms-icon-130
+{
+    font-size: @icon-size-130;
+    height: @icon-size-130;
+    width: @icon-size-130;
+    padding: (@base-unit * 0.625) (@base-unit * 0.5);
+}
+
+// Icons in header
+.cms-icon-100
+{
+    font-size: @icon-size-100;
+    height: @icon-size-100;
+    width: @icon-size-100;
+    padding: @base-unit * 0.25;
+}
+
+// Standard icon size
+.cms-icon-80
+{
+    font-size: @icon-size-80;
+    height: @icon-size-80;
+    width: @icon-size-80;
+    padding: @base-unit * 0.25;
+}
+
+// Tree icons - plus and minus
+.cms-icon-50
+{
+    font-size: @icon-size-50;
+    height: @icon-size-50;
+    width: @icon-size-50;
+}
+
+// Statuses or indicators
+.cms-icon-30
+{
+    font-size: @icon-size-30;
+    height: @icon-size-30;
+    width: @icon-size-30;
+    padding: 0 (@base-unit * 0.25);
+}
+
+// Basic classes
+// -------------------------
+.padding-100
+{
+    padding: @base-unit;
+}
+
+// Emphasis & misc
+// -------------------------
+
+
+// Undo browser default styling
+cite
+{
+    font-style: normal;
+}
+
+// Contextual emphasis
+.text-muted
+{
+    color: @text-muted;
+}
+
+.text-primary
+{
+    color: @color-blue-70;
+}
+
+.text-warning
+{
+    color: @state-warning-text;
+}
+
+.text-danger
+{
+    color: @state-error-text;
+}
+
+.text-success
+{
+    color: @state-success-text;
+}
+
+.text-info
+{
+    color: @state-info-text;
+}
+
+// Alignment
+.text-left
+{
+    text-align: left;
+}
+
+.text-right
+{
+    text-align: right;
+}
+
+.text-center
+{
+    text-align: center;
+}
+
+
+// Headings
+// -------------------------
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6
+{
+    font-family: @headings-font-family;
+    font-weight: @headings-font-weight;
+    line-height: @line-height-100;
+
+    small
+    {
+        font-weight: normal;
+        line-height: 1;
+        color: @headings-small-color;
+    }
+    // For icons behind the headers, esp. the help icons
+    .header-icon
+    {
+        margin-left: @base-unit * 0.5;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+    margin-top: 0;
+}
+
+h1, .h1
+{
+    font-size: floor(@base-unit * 2.75); // ~44px
+    line-height: floor(@base-unit * 3.75); // ~60px
+}
+
+h2, .h2
+{
+    font-size: floor(@base-unit * 2); // ~32px
+    line-height: floor(@base-unit * 2.5); // ~40px
+    font-weight: bold;
+    color: @color-blue-70;
+    margin-bottom: @base-unit * 1.5;
+}
+
+h3, .h3
+{
+    font-size: floor(@base-unit * 1.5); // ~24px
+    line-height: floor(@base-unit * 2.5); // ~40px
+    color: @color-blue-70;
+    margin-bottom: @base-unit * 1.5;
+}
+
+h4, .h4
+{
+    font-size: floor(@base-unit * 1.125); // ~18px
+    line-height: floor(@base-unit * 1.5); // ~24px
+    font-weight: bold;
+    color: @color-blue-70;
+    margin-bottom: @base-unit;
+}
+
+h5, .h5
+{
+    font-size: @base-unit; // ~16px
+    line-height: @line-height-100; // ~20px
+    font-weight: bold;
+    color: @text-color;
+    margin-bottom: @base-unit;
+}
+
+h4.anchor, .h4.anchor
+{
+    padding: @base-unit * 0.5; // ~8px
+    padding-left: @base-unit;
+    margin-bottom: @base-unit * 0.5;
+    color: @text-color;
+    background-color: @color-gray-150;
+}
+
+// -- not defined --
+h6, .h6
+{
+}
+// ~12px
+
+h1 small, .h1 small
+{
+    font-size: @base-unit * 2;
+}
+// ~24px
+h2 small, .h2 small
+{
+    font-size: @base-unit * 1.5;
+}
+// ~18px
+h3 small, .h3 small,
+h4 small, .h4 small
+{
+    font-size: @base-unit;
+}
+
+
+// Page header
+// -------------------------
+
+.page-header
+{
+    padding-bottom: ((@line-height-100 / 2) - 1);
+    margin: (@line-height-100 * 2) 0 @line-height-100;
+    border-bottom: 1px solid @page-header-border-color;
+}
+
+
+
+// Lists
+// --------------------------------------------------
+
+// Unordered and Ordered lists
+ul,
+ol
+{
+    margin-top: 0;
+    margin-bottom: 0;
+
+    ul,
+    ol
+    {
+        margin-bottom: 0;
+    }
+}
+
+.cms-list
+{
+    margin-bottom: @margin-base;
+    margin-right: @margin-150;
+    line-height: @line-height-100;
+
+    li
+    {
+        ul
+        {
+            margin-right: @margin-150;
+        }
+    }
+}
+
+// List options
+
+// Unstyled keeps list items block level, just removes default browser padding and list-style
+.list-unstyled
+{
+    padding-left: 0;
+    list-style: none;
+}
+// Inline turns list items into inline-block
+.list-inline
+{
+    .list-unstyled();
+
+    > li
+    {
+        display: inline-block;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+// Description Lists
+dl
+{
+    margin-bottom: @margin-base;
+    line-height: @line-height-100;
+
+    dt
+    {
+        font-weight: bold;
+    }
+
+    dd
+    {
+        margin-bottom: @margin-base;
+        margin-left: 0;
+    }
+}
+
+// Horizontal description lists
+//
+// Defaults to being stacked without any of the below styles applied, until the
+// grid breakpoint is reached (default of ~768px).
+
+@media screen and (min-width: @grid-float-breakpoint)
+{
+    .dl-horizontal
+    {
+        dt
+        {
+            float: left;
+            width: (@component-offset-horizontal - 20);
+            clear: left;
+            text-align: right;
+            .text-overflow();
+        }
+
+        dd
+        {
+            margin-left: @component-offset-horizontal;
+            &:extend(.cms-bootstrap .clearfix all); // Clear the floated `dt` if an empty `dd` is present
+        }
+    }
+}
+
+// MISC
+// ----
+
+// Abbreviations and acronyms
+abbr[title],
+// Added data-* attribute to help out our tooltip plugin, per https://github.com/twbs/bootstrap/issues/5257
+abbr[data-original-title]
+{
+    cursor: help;
+    border-bottom: 1px dotted @abbr-border-color;
+}
+
+abbr.initialism
+{
+    font-size: 90%;
+    text-transform: uppercase;
+}
+
+// Blockquotes
+blockquote
+{
+    padding: (@line-height-100 / 2) @line-height-100;
+    margin: 0 0 @line-height-100;
+    border-left: 5px solid @blockquote-border-color;
+
+    p
+    {
+        font-size: (@font-size-base * 1.25);
+        font-weight: 300;
+        line-height: 1.25;
+    }
+
+        p:last-child
+        {
+            margin-bottom: 0;
+        }
+
+    small
+    {
+        display: block;
+        line-height: @line-height-100;
+        color: @blockquote-small-color;
+
+        &:before
+        {
+            content: '\2014 \00A0'; // EM DASH, NBSP
+        }
+    }
+    // Float right with text-align: right
+    &.pull-right
+    {
+        padding-right: 15px;
+        padding-left: 0;
+        border-right: 5px solid @blockquote-border-color;
+        border-left: 0;
+
+        p,
+        small
+        {
+            text-align: right;
+        }
+
+        small
+        {
+            &:before
+            {
+                content: '';
+            }
+
+            &:after
+            {
+                content: '\00A0 \2014'; // NBSP, EM DASH
+            }
+        }
+    }
+}
+
+    // Quotes
+    q:before,
+    q:after,
+    blockquote:before,
+    blockquote:after
+    {
+        content: "";
+    }
+
+// Addresses
+address
+{
+    display: block;
+    margin-bottom: @line-height-100;
+    font-style: normal;
+    line-height: @line-height-100;
+}
+
+// General styles originally for Document statuses icons (reusable anywhere)
+.tn
+{
+    font-size: @icon-size-50;
+}
+
+.color-red-70
+{
+    color: @color-red-70;
+}
+
+.color-green-100
+{
+    color: @color-green-100;
+}
+
+.color-orange-80
+{
+    color: @color-orange-80;
+}
+
+.color-blue-100
+{
+    color: @color-blue-100;
+}
+
+.color-gray-100
+{
+    color: @color-gray-100;
+}
+
+// General style for block of controls
+.content-block
+{
+    margin-bottom: 1.5 * @base-unit;
+}
+
+// General style for related controls
+.content-block-50
+{
+    margin-bottom: @base-unit;
+}
+
+// General style for related controls
+.content-block-25
+{
+    margin-bottom: 0.5 * @base-unit;
+}

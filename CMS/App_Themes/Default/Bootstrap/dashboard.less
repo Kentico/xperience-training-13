@@ -1,0 +1,575 @@
+﻿.dashboard {
+	padding: (6 * @base-unit) @base-unit (2 * @base-unit) (12 * @base-unit);
+	background: @dashboard-bg url(../../CMSPages/GetResource.ashx?image=background.png) no-repeat center bottom fixed;
+	background-size: cover;
+	min-height: 100%;
+	width: 100%;
+	float: left;
+	position: absolute;
+	box-sizing: border-box;
+
+	.dashboard-inner {
+		max-width: (7 * (@tile-width + (@base-unit * 0.5)));
+		overflow: hidden;
+	}
+
+	.drag-placeholder {
+		.tile;
+		.tile-empty;
+	}
+
+	.tile-outer-wrapper {
+		height: @tile-height;
+		width: @tile-width;
+		position: relative;
+	}
+
+	.tile-wrapper {
+		height: 100%;
+		width: 2*@tile-width;
+	}
+
+	.tile-mask,
+	.tile-background {
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		position: absolute;
+
+		&:hover {
+			cursor: move;
+		}
+	}
+
+	.tile-background {
+		background-color: @tile-bg;
+	}
+
+	.tile-header-panel {
+		z-index: 1000;
+		position: absolute;
+		height: @base-unit * 2;
+		background-color: @color-gray-130;
+		text-align: right;
+		cursor: move;
+		right: 0px;
+	}
+
+	// Animations
+	@add: -add;
+	@active: -active;
+	@remove: -remove;
+
+	.tile-background:not(.tile-shrink) ~ .tile-mask .tile-btn {
+		opacity: 1;
+	}
+
+	.tile-header-panel.ng-hide {
+		&@{remove},
+		&@{add}.ng-hide-add-active {
+			opacity: 0;
+		}
+
+		&@{remove}.ng-hide-remove-active,
+		&@{add} {
+			opacity: 1;
+		}
+	}
+
+	.tile-wrapper-live {
+		&@{add},
+		&@{remove} {
+			transition: all 1000ms cubic-bezier(0.165, 0.840, 0.440, 1.000);
+		}
+
+		&@{remove}@{active} {
+			transform: translate(0, 0);
+		}
+
+		&,
+		&@{add}@{active} {
+			transform: translate(-@tile-width, 0);
+		}
+	}
+
+	.tile-shrink {
+		&@{add},
+		&@{remove} {
+			transition: all 125ms ease-out;
+		}
+
+		&,
+		&@{add}@{active} {
+			.scale-3d(0.8);
+		}
+
+		&@{remove}@{active} {
+			.scale-3d(1);
+		}
+	}
+
+	.btn-edit-mode-translate {
+		&@{add} {
+			transition: all 400ms ease-in;
+		}
+
+		&@{remove} {
+			transition: all 100ms ease-out;
+		}
+
+		&,
+		&@{add}@{active} {
+			transform: translate(-@base-unit*15, 0);
+		}
+
+		&@{remove}@{active} {
+			transform: translate(0, 0);
+		}
+	}
+
+	.editable-mode {
+		.tile-header-panel.ng-hide {
+			&@{add},
+			&@{remove} {
+				transition: all 125ms ease-out;
+				display: block !important;
+			}
+		}
+
+		.tile-header-panel.ng-hide-remove,
+		&.shrinked .tile-shrink-add {
+			// Delay has to be set in TileDirective.ts as well!
+			transition-delay: 125ms;
+		}
+	}
+
+
+	.tile {
+		display: inline-block;
+		margin: 0 (@base-unit * 0.5) (@base-unit * 0.5) 0;
+		float: left;
+		position: relative;
+
+		&:last-child {
+			margin-left: 0;
+		}
+
+		&.shadow {
+			box-shadow: 0 0 10px 2px #888888;
+		}
+
+		.welcome-tile {
+			@tile-padding: 2 * @base-unit;
+			@w-tile-width: (3 * @tile-width) + (2 * @base-unit * 0.5) - (2 * @tile-padding);
+			@w-tile-height: (2 * @tile-height) + (@base-unit * 0.5) - (2 * @tile-padding);
+			background-color: @tile-bg;
+			color: @color-gray-50;
+			padding: @tile-padding;
+			text-align: left;
+			width: @w-tile-width; // 3 tiles + 2 tile spaces - welcome tile padding
+			height: @w-tile-height - 0.5; // 2 tiles + 1 tile space - welcome tile padding. -0.5 should prevent problem with wrongly displayed tiles in browsers with zoom (see OM-2931)
+			max-width: @w-tile-width; // 3 tiles + 2 tile spaces - welcome tile padding
+			max-height: @w-tile-height; // 2 tiles + 1 tile space - welcome tile padding
+			position: relative;
+			overflow: hidden;
+
+			h2 {
+				color: @color-gray-50;
+				width: @w-tile-width;
+				height: @base-unit * 2.5;
+				overflow: hidden;
+			}
+
+			.lead {
+				margin-bottom: @base-unit * 2.25;
+				width: @w-tile-width;
+				height: @base-unit * 3;
+				overflow: hidden;
+			}
+
+			a {
+				color: @color-gray-50;
+				white-space: nowrap;
+
+				.icon-modal-close {
+					position: absolute;
+					top: 0;
+					right: 0;
+					margin: @base-unit;
+				}
+			}
+
+			ul {
+				list-style: none;
+				float: right;
+				margin-right: @base-unit * 0.75;
+
+				i {
+					font-size: 2.8em;
+					padding: @base-unit * 0.4;
+				}
+
+				li {
+					height: 51px; //?
+					max-width: 282px; //?
+					overflow: hidden;
+
+					span {
+						vertical-align: top;
+						padding: @base-unit;
+						display: inline-block;
+						max-width: 198px;
+						overflow: hidden;
+					}
+				}
+			}
+
+			// Home icon
+			&:after {
+				content: @icon-home;
+				font-family: @icon-font-name;
+				display: block;
+				font-size: 7em;
+				position: absolute;
+				left: 2 * @base-unit;
+				bottom: 2 * @base-unit;
+			}
+		}
+
+		.tile-btn {
+			text-decoration: none;
+			display: inline-block;
+			background-color: transparent;
+		}
+	}
+
+	.empty {
+		.tile {
+			background-color: transparent;
+			border: @empty-tile-border-width dashed @color-gray-100;
+			border-radius: @border-radius-xlarge;
+			height: @tile-height - (@empty-tile-border-width * 2);
+			width: @tile-width - (@empty-tile-border-width * 2);
+			float: left;
+		}
+
+		.info {
+			float: left;
+			padding-left: @base-unit * 2;
+			width: @tile-width * 3;
+		}
+	}
+
+
+
+	.edit-mode {
+		.tile-live:hover, .tile-dead:hover {
+			animation: none;
+			cursor: move;
+		}
+
+		.tile {
+			.tile-btn {
+				opacity: 0.7;
+
+				&:hover,
+				&:active {
+					cursor: move;
+				}
+
+				&.tile-btn-add {
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
+	// Dead tiles
+	.tile-dead {
+		text-align: center;
+
+		h3 {
+			display: -webkit-box;
+		}
+	}
+
+	.tile-dead-btn {
+		padding: @base-unit * 0.75;
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		border-bottom: 0px solid @color-white;
+		transition: all 125ms;
+
+		&:not(.tile-btn-add):hover {
+			border-bottom: (@base-unit * 0.5) solid @tile-hover-bg;
+			transition: all 125ms;
+		}
+
+		&.editable-mode:hover {
+			border-bottom: none;
+		}
+	}
+
+	// Empty tile with plus sign to add a new app
+	.tile-btn-add {
+		border: @empty-tile-border-width dashed @color-gray-100;
+		color: @color-gray-80;
+		background-color: transparent;
+		text-align: center;
+		border-radius: @border-radius-xlarge;
+		display: table-cell !important;
+		vertical-align: middle;
+		width: @tile-width;
+		height: @tile-height;
+	}
+
+	// Both Live & Dead tiles
+	.tile-dead, .tile-live {
+		height: 100%;
+		width: @tile-width;
+		float: left;
+	}
+
+	// Live tiles
+	.tile-live {
+		h3 {
+			line-height: @line-height-100;
+			font-size: @font-size-base;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		.tile-live-btn {
+			height: 100%;
+			width: 100%;
+			box-sizing: border-box;
+			border-bottom: 0px solid @color-white;
+			transition: all 125ms;
+
+			&:hover {
+				border-bottom: (@base-unit * 0.5) solid @tile-hover-bg;
+				transition: all 125ms;
+			}
+		}
+	}
+
+	.tile-live-icon {
+		padding: @base-unit * 0.75;
+		float: left;
+	}
+
+	.tile-live-title-container {
+		display: inline-block;
+		padding: @base-unit * 0.75 @base-unit * 0.75 0 0;
+		width: @base-unit * 5.5;
+		height: @base-unit * 2;
+		float: right;
+	}
+
+	.tile-live-value {
+		font-size: @font-size-huge;
+		padding: 0 @base-unit * 0.75;
+	}
+
+	.tile-live-description {
+		color: @dashboard-color;
+		padding: 0 @base-unit * 0.75 @base-unit * 0.75;
+		overflow: hidden;
+	}
+
+	.tile-empty {
+		.empty .tile;
+	}
+
+	// Single object tile
+	.tile-single-object {
+		.tile-live;
+
+		.tile-description {
+			.tile-live-description;
+
+			@lines-to-show: 3;
+
+			display: block;
+			max-width: inherit;
+			margin: @line-height-150 0 auto 0;
+			font-size: @font-size-base;
+			height: @line-height-150 * @lines-to-show;
+			overflow: hidden;
+			word-wrap: break-word;
+		}
+
+		.tile-single-object-btn {
+			.tile-live-btn;
+
+			&.editable-mode:hover {
+				border-bottom: none;
+			}
+		}
+	}
+
+
+	h3 {
+		color: @dashboard-color;
+		font-size: @font-size-large;
+		font-weight: normal;
+		line-height: @line-height-150;
+		margin: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-wrap: break-word;
+		max-height: @base-unit * 3; // Fallback
+		-webkit-line-clamp: 2; // Number of lines to show
+		-webkit-box-orient: vertical;
+	}
+
+	ul {
+		padding: 0;
+	}
+
+	.cat-development {
+		.tile-icon {
+			color: @color-gray-70;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-gray-70;
+		}
+	}
+
+	.cat-cmsdesk-onlinemarketing {
+		.tile-icon {
+			color: @color-red-100;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-red-100;
+		}
+	}
+
+	.cat-contentmanagementcategory {
+		.tile-icon {
+			color: @color-green-100;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-green-100;
+		}
+	}
+
+	.cat-socialandcommunity {
+		.tile-icon {
+			color: @color-blue-100;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-blue-100;
+		}
+	}
+
+	.cat-development {
+		.tile-icon {
+			color: @color-purple-100;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-purple-100;
+		}
+	}
+
+	.cat-socialandcommunity.app-facebook {
+		.tile-icon {
+			color: @color-app-facebook;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-app-facebook;
+		}
+	}
+
+	.cat-socialandcommunity.app-twitter {
+		.tile-icon {
+			color: @color-app-twitter;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-app-twitter;
+		}
+	}
+
+	.cat-socialandcommunity.app-linkedin {
+		.tile-icon {
+			color: @color-app-linkedin;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-app-linkedin;
+		}
+	}
+
+	.cat-configuration {
+		.tile-icon {
+			color: @color-gray-80;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-gray-80;
+		}
+	}
+
+	.cat-configuration.app-sharepointconnections {
+		.tile-icon {
+			color: @color-app-sharepoint;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-app-sharepoint;
+		}
+	}
+
+	.cat-cmsdesk-ecommerce {
+		.tile-icon {
+			color: @color-orange-80;
+		}
+
+		&.tile-btn:hover {
+			border-bottom-color: @color-orange-80;
+		}
+	}
+}
+
+// Edit mode button
+.context-menu {
+    .btn-primary {
+        border-radius: 0;
+    }
+
+    .btn-edit {
+        background: @color-white;
+        color: @color-gray-130;
+        border-radius: 0;
+    }
+}
+
+@media screen and (max-height: 750px) {
+    .dashboard {
+        padding-top: 2 * @base-unit;
+    }
+}
+
+@media screen and (max-width: @screen-lg) {
+    .dashboard {
+        padding-left: @base-unit;
+    }
+}
+
+// License owner info
+.license-owner-info {
+    background-color: @color-gray-140;
+    position: fixed;
+    bottom: (@base-unit / 2);
+    left: (@base-unit / 2);
+    padding: @padding-small-vertical @padding-small-horizontal;
+}

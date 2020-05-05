@@ -1,0 +1,1732 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.AzureStorage</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.AzureStorage.AccountInfo">
+            <summary>
+            Class which represents account info for connection to cloud.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.CurrentAccount">
+            <summary>
+            Gets instance of current account info.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.AccountName">
+            <summary>
+            Account name.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.SharedKey">
+            <summary>
+            Shared key.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.BlobEndpoint">
+            <summary>
+            Blob storage endpoint.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.TableEndpoint">
+            <summary>
+            Table storage endpoint.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.QueueEndpoint">
+            <summary>
+            Queue storage endpoint.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AccountInfo.AccountConfigured">
+             <summary>
+             Checks if acount information is set.
+            
+             Returns true if account name and shared key config keys are set. False otherwise.
+             </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.AccountInfo.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.AccountInfo.EnsureEndPoint(System.String)">
+            <summary>
+            Returns endpoint with ending slash.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+        </member>
+        <member name="T:CMS.AzureStorage.BlobCacheHelper">
+            <summary>
+            Helps to save data about files in blob storage into cache.
+            </summary>
+            <remarks>Current implementation caches data for current request only.</remarks>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.Remove(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Removes all data from cache about given <paramref name="blobInfo"/>.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.MarkBlobExists(CMS.AzureStorage.BlobInfo,System.Boolean)">
+            <summary>
+            Marks information about existence of blob in blob storage into cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+            <param name="exists">True if blob exists in blob storage, false otherwise.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.IsExistenceOfBlobMarked(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if information about blob existence in blob storage is cached.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.ExistsInBlobStorage(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if blob exists in blob storage, false otherwise.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+            <returns>
+            True if blob exists in blob storage. 
+            False if blob does not exist or the information about existence is not known.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.AddCloudBlockBlob(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Adds <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> instance for given <paramref name="blobInfo"/> in cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.IsCloudBlockBlobInstanceSaved(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> isntance encapsulated by <paramref name="blobInfo"/> is saved in cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.GetCloudBlockBlob(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Returns <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> instance for given <paramref name="blobInfo"/> from cache.
+            </summary>        
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.AddToCache(System.String,System.Object)">
+            <summary>
+            Adds the specified key and value to the cache.
+            </summary>
+            <param name="key">The key of the element to add.</param>
+            <param name="value">The value of the element to add.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.RemoveFromCache(System.String)">
+            <summary>
+            Removes the value with the specified key from the cache.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.Contains(System.String)">
+            <summary>
+            Determines whether the cache contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the cache.</param>
+            <returns>True if cache contains key.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.GetFromCache(System.String)">
+            <summary>
+            Gets the value associated with the specified key from cache.
+            </summary>
+            <param name="key">The key of the value to get</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.RemoveInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Removes all data from cache about given <paramref name="blobInfo"/>.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.ExistsInBlobStorageInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if blob exists in blob storage, false otherwise.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+            <returns>
+            True if blob exists in blob storage. 
+            False if blob does not exist or the information about existence is not known.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.MarkBlobExistsInternal(CMS.AzureStorage.BlobInfo,System.Boolean)">
+            <summary>
+            Marks information about existence of blob in blob storage into cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+            <param name="exists">True if blob exists in blob storage, false otherwise.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.IsExistenceOfBlobMarkedInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if information about blob existence in blob storage is cached.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.AddCloudBlockBlobInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Adds <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> instance for given <paramref name="blobInfo"/> in cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.GetCloudBlockBlobInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Returns <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> instance for given <paramref name="blobInfo"/> from cache.
+            </summary>        
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.IsCloudBlockBlobInstanceSavedInternal(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Indicates if <see cref="T:Microsoft.Azure.Storage.Blob.CloudBlockBlob"/> instance encapsulated by <paramref name="blobInfo"/> is saved in cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit. Is used as a key to cache values.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.AddToCacheInternal(System.String,System.Object)">
+            <summary>
+            Adds the specified key and value to the cache.
+            </summary>
+            <param name="key">The key of the element to add.</param>
+            <param name="value">The value of the element to add.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.RemoveFromCacheInternal(System.String)">
+            <summary>
+            Removes the value with the specified key from the cache.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.ContainsInternal(System.String)">
+            <summary>
+            Determines whether the cache contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the cache.</param>
+            <returns>True if cache contains key.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobCacheHelper.GetFromCacheInternal(System.String)">
+            <summary>
+            Gets the value associated with the specified key from cache.
+            </summary>
+            <param name="key">The key of the value to get</param>
+        </member>
+        <member name="T:CMS.AzureStorage.BlobInfo">
+            <summary>
+            Class which represents Azure blob unit.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.BlobName">
+            <summary>
+            Blob name.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.Blob">
+            <summary>
+            Blob object.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.Container">
+            <summary>
+            ContainerInfo object.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.IsLocked">
+            <summary>
+            Returns whether current blob is locked.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.ETag">
+            <summary>
+            Returns E-tag from blob.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Throws <see cref="T:System.InvalidOperationException"/> when ETag attribute could not be safely retrieved from blob 
+            e.g. blob does not exist in blob storage.
+            </exception>
+        </member>
+        <member name="P:CMS.AzureStorage.BlobInfo.Length">
+            <summary>
+            Returns length of the blob in bytes.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Throws <see cref="T:System.InvalidOperationException"/> when Length attribute could not be safely retrieved from blob 
+            e.g. blob does not exist in blob storage.
+            </exception>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.#ctor(System.String)">
+            <summary>
+            Initializes new instance of blob info class.
+            </summary>
+            <param name="path">Absolute or relative file system path.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.#ctor(CMS.AzureStorage.ContainerInfo,System.String)">
+            <summary>
+            Initializes new instance of blob info class.
+            </summary>
+            <param name="container">Container object.</param>
+            <param name="path">Absolute or relative file system path.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.#ctor(CMS.AzureStorage.ContainerInfo,System.String,System.Boolean)">
+            <summary>
+            Initializes new instance of blob info class.
+            </summary>
+            <param name="containerInfo">Container object.</param>
+            <param name="path">Absolute or relative file system path or blob URI (in that case set <paramref name="blobUri"/> appropriately).</param>
+            <param name="blobUri">Indicates whether path is blob URI</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.SetMetadata(System.String,System.String)">
+            <summary>
+            Sets meta data to blob.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.SetMetadata(System.String,System.String,System.Boolean)">
+            <summary>
+            Sets meta data to blob.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+            <param name="update">Indicates whether data are updated in the cloud.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.SetMetadata(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Sets meta data to blob.
+            </summary>
+            <param name="key">MetaData key.</param>
+            <param name="value">Metadata value.</param>
+            <param name="update">Indicates whether data are updated in the cloud.</param>
+            <param name="log">Indicates whether is operation logged.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.GetMetadata(System.String)">
+            <summary>
+            Returns blob meta data.  
+            </summary>
+            <param name="key">Metadata key.</param>        
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.Lock">
+            <summary>
+            Locks current blob.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.UnLock">
+            <summary>
+            Unlocks current blob.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfo.FetchAttributes">
+            <summary>
+            Acquires attributes of <see cref="P:CMS.AzureStorage.BlobInfo.Blob"/> saved in blob storage.
+            Ensures communication with the blob storage only if it's necessary.
+            </summary>
+            <returns>
+            True if blob exists in blob storage and attributes were successfully fetched, false otherwise.
+            </returns>
+        </member>
+        <member name="T:CMS.AzureStorage.BlobInfoExtensionMethods">
+            <summary>
+            Extension methods for <see cref="T:CMS.AzureStorage.BlobInfo"/> to ease work with caching.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoExtensionMethods.GetCacheKey(CMS.AzureStorage.BlobInfo,System.String)">
+            <summary>
+            Creates key for given <paramref name="blobInfo"/> and <paramref name="action"/> to be used 
+            for saving data in cache.
+            </summary>
+            <param name="blobInfo">Representation of Azure blob unit.</param>
+            <param name="action">Action that was made to <paramref name="blobInfo"/> that needs to be cached.</param>
+        </member>
+        <member name="T:CMS.AzureStorage.BlobInfoProvider">
+            <summary>
+            Class providing data from Azure blob storage.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.BlobInfoProvider.DIRECTORY_BLOB">
+            <summary>
+            Name of blob which represents folder.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.BlobInfoProvider.LOCK">
+            <summary>
+            Property name which returns if file is locked for writing.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.BlobInfoProvider.STORAGE_KEY">
+            <summary>
+            Storage key for Azure storage objects.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.BlobInfoProvider.MAXIMAL_PART_SIZE">
+            <summary>
+            Maximal size (4 MB) of the parts used for multipart upload.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.BlobInfoProvider.MINIMAL_PART_SIZE">
+            <summary>
+            Minimal size of the parts used for multipart upload.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.BlobExists(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Whether blob exists.
+            </summary>
+            <param name="blobInfo">Blob.</param>        
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.InitBlobInfo(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Returns reference to the blob.
+            </summary>
+            <param name="blobInfo">Blob info object</param>        
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.GetBlobContent(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Returns stream with block blob.
+            </summary>        
+            <param name="blobInfo">Blob info object.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.GetBlobContentWithOptions(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Returns stream with block blob.
+            </summary>        
+            <param name="blobInfo">Blob info object.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.GetBlobContent(CMS.AzureStorage.BlobInfo,Microsoft.Azure.Storage.Blob.BlobRequestOptions)">
+            <summary>
+            Returns stream with block blob.
+            </summary>        
+            <param name="blobInfo">Blob info object.</param>
+            <param name="requestOptions">Blob request options.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.PutFileToBlob(CMS.AzureStorage.BlobInfo,System.String)">
+            <summary>
+            Puts content of file to blob.
+            </summary>        
+            <param name="blobInfo">Blob info object.</param>
+            <param name="pathToFile">Path to file.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.PutTextToBlob(CMS.AzureStorage.BlobInfo,System.String)">
+            <summary>
+            Puts text to blob.
+            </summary>        
+            <param name="blobInfo">Blob.</param>
+            <param name="text">Text to put.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.AppendTextToBlob(CMS.AzureStorage.BlobInfo,System.String,System.Text.Encoding)">
+            <summary>
+            Appends text to blob.
+            </summary>        
+            <param name="blobInfo">Blob.</param>
+            <param name="text">Text to put.</param>
+            <param name="encoding">Encoding.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.PutByteArrayToBlob(CMS.AzureStorage.BlobInfo,System.Byte[])">
+            <summary>
+            Puts byte array to blob.
+            </summary>       
+            <param name="blobInfo">Blob.</param>
+            <param name="buffer">Buffer with data.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.PutDataFromStreamToBlob(CMS.AzureStorage.BlobInfo,System.IO.Stream)">
+            <summary>
+            Puts content of stream to blob.
+            </summary>       
+            <param name="blobInfo">Blob.</param>
+            <param name="stream">Stream to put.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.DeleteBlob(CMS.AzureStorage.BlobInfo)">
+            <summary>
+             Deletes blob. 
+            </summary>        
+            <param name="blobInfo">Blob info object.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.CopyBlobs(CMS.AzureStorage.BlobInfo,CMS.AzureStorage.BlobInfo,System.Boolean)">
+            <summary>
+            Copy one blob to another.
+            </summary>
+            <param name="sourceBlob">Source blob.</param>
+            <param name="destBlob">Destination blob.</param>
+            <param name="async">Indicates if copy operation should be asynchronous</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.CreateEmptyBlob(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Creates empty blob on the cloud. Don't use this method if you want to add content to blob.
+            </summary>
+            <param name="blobInfo">Blob info.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.GetBlobCacheKey(CMS.AzureStorage.BlobInfo,System.String)">
+            <summary>
+            Returns cache key for specified action performed on blob.  
+            </summary>
+            <param name="blobInfo">Blob to obtain cache key for</param>
+            <param name="blobAction">Action performed on the blob</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.RemoveRequestCache(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Removes cached blob items from cache.
+            </summary>
+            <param name="blobInfo">Blob info to clear object cache for.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.LogBlobOperation(CMS.AzureStorage.BlobInfo,System.String)">
+            <summary>
+            Logs operation performed on <paramref name="blobInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.RemoveFromTemp(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Remove blob file from temporary local storage.
+            </summary>
+            <param name="blobInfo">Blob info to be removed from temporary local storage</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.RemoveFromCache(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Remove blob file from cache local storage.
+            </summary>
+            <param name="blobInfo">Blob info to be removed from cache local storage</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.DeleteFileFromLocalPath(System.String)">
+            <summary>
+            Delete file from local filesystem
+            </summary>
+            <param name="path">Path to the file to be deleted</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.EnsureContentType(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Sets correct content type to file.
+            </summary>
+            <param name="blobInfo">Blob info.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.WaitUntilBlobCopied(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Waits till asynchronous copy operation of blob finish.
+            </summary>
+            <param name="targetBlob">Target blob to which data are copied</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.ThrowOnLockedBlob(CMS.AzureStorage.BlobInfo)">
+            <summary>
+            Throws <see cref="T:System.IO.IOException"/> if the <paramref name="blobInfo"/> is locked.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobInfoProvider.ReadStream(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Returns contents of <see cref="T:System.IO.Stream"/>. Uses appropriate <paramref name="encoding"/> if it is provided.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.BlobMultiPartUploader">
+            <summary>
+            Class for uploading large files to Azure blob storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.#ctor(CMS.AzureStorage.BlobInfo,System.Int32)">
+            <summary>
+            Creates object for uploading large files in smaller parts to Azure blob storage.
+            </summary>
+            <param name="blobInfo">Class representing azure blob unit.</param>
+            <param name="maximalPartSize">Maximal size of the part sent in one request to Azure blob storage.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.InitMultiPartUpload">
+            <summary>
+            Inits multipart upload to Azure blob storage.
+            </summary>
+            <returns>
+            Upload ID, unique identifier for one multipart upload to Azure blob storage.
+            Returned upload ID is needed for each subsequent multipart upload operation.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.MultiPartUploadFromStream(System.String,System.Int32,System.IO.Stream)">
+            <summary>
+            Uploads data inside a stream in multiple parts to Azure blob storage.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.BlobMultiPartUploader.InitMultiPartUpload"/> method.</param>
+            <param name="nextPartNumber">Number that defines position of the data obtained by the stream in the whole multipart upload process.</param>
+            <param name="stream">Stream with data to upload. Supplied stream has always it's position set to origin.</param>
+            <returns>Unique identifiers of the uploaded parts.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.CompleteMultiPartUploadProcess(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Completes multiple part upload process.
+            Sends final request to Azure blob storage to merge all parts already sent.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.BlobMultiPartUploader.InitMultiPartUpload"/> method.</param>
+            <param name="partIdentifiers">Identifiers of the parts already sent to Azure blob storage, obtained by calling <see cref="M:CMS.AzureStorage.BlobMultiPartUploader.MultiPartUploadFromStream(System.String,System.Int32,System.IO.Stream)"/></param>
+            <returns>
+            ETag of the uploaded file.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.AbortMultiPartUpload(System.String)">
+            <summary>
+            Aborts multipart upload.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.BlobMultiPartUploader.InitMultiPartUpload"/> method.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.GetBlockId(System.String,System.Int32)">
+            <summary>
+            Creates block id for given uploadSessionId and part number.
+            For one blob all the block ids need to have the same length.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.BlobMultiPartUploader.InitMultiPartUpload"/> method.</param>
+            <param name="nextPartNumber">Number that defines position of the data obtained by the stream in the whole multipart upload process.</param>
+            <returns>A Base64-encoded string that identifies the block.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.BlobMultiPartUploader.ReadDataFromStreamToByteArray(System.IO.Stream,System.Byte[],System.Int32)">
+            <summary>
+            Reads at most <paramref name="bytesToRead"/> data from <paramref name="stream"/> to <paramref name="bytes"/>.
+            </summary>
+            <param name="stream">Stream to read from.</param>
+            <param name="bytes">Byte array to save data from <paramref name="stream"/>.</param>
+            <param name="bytesToRead">Number of bytes to read from <paramref name="stream"/>.</param>
+        </member>
+        <member name="T:CMS.AzureStorage.ContainerInfo">
+            <summary>
+            Object which represents azure blob container
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.ContainerName">
+            <summary>
+            Container name.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.Account">
+            <summary>
+            Account info.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.BlobContainer">
+            <summary>
+            Blob container.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.BlobClient">
+            <summary>
+            Blob client.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.IsPublic">
+            <summary>
+            Indicates if this container is public.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.ContainerInfo.CaseSensitive">
+            <summary>
+            Gets or sets whether path should be case sensitive or not.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfo.#ctor(CMS.AzureStorage.AccountInfo,System.String,System.Boolean,System.Nullable{System.Boolean})">
+            <summary>
+            Initializes new instance of container info class.
+            </summary>
+            <param name="accountInfo">Account info.</param>
+            <param name="containerName">Name of container.</param>
+            <param name="referenceOnly">Sets container reference only. No existence verification, creation or permission setting.</param>
+            <param name="publicContainer">Flag indicating whether the container is public or not.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfo.#ctor(CMS.AzureStorage.AccountInfo,System.String)">
+            <summary>
+            Initializes new instance of container info class.
+            </summary>
+            <param name="info">Account info.</param>
+            <param name="containerName">Name of container.</param>
+        </member>
+        <member name="T:CMS.AzureStorage.ContainerInfoProvider">
+            <summary>
+            Blob container management.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.ContainerInfoProvider.LAST_WRITE_TIME">
+            <summary>
+            Last write time field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.ContainerInfoProvider.CREATION_TIME">
+            <summary>
+            Creation time field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.ContainerInfoProvider.ATTRIBUTES">
+            <summary>
+            Attributes field name in storage metadata.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.ContainerInfoProvider.CMS_ROOT">
+            <summary>
+            Default container name for root of filesystem - for backwards compatibility
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.ContainerInfoProvider.CMS_STORAGE">
+            <summary>
+            Default container name for root of filesystem
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.GetRootContainer(System.String)">
+            <summary>
+            Gets or sets root container name.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.IsContainerPublic(System.String)">
+            <summary>
+            Returns whether is container public.
+            </summary>
+            <param name="path">Path.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.GetRootContainerInfo(System.String)">
+            <summary>
+            Returns container info of root container.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.DeleteContainer(CMS.AzureStorage.ContainerInfo)">
+            <summary>
+            Deletes container.
+            </summary>
+            <param name="containerInfo">Container info object.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.GetContent(CMS.AzureStorage.ContainerInfo,System.String)">
+            <summary>
+            Returns content of container.
+            </summary>
+            <param name="containerInfo">Container info object.</param>        
+            <param name="path">Path.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.GetContent(CMS.AzureStorage.ContainerInfo,System.String,System.Boolean)">
+            <summary>
+            Returns content of container.
+            </summary>
+            <param name="containerInfo">Container info object.</param>        
+            <param name="path">Path.</param>
+            <param name="useFlatListing">Specifies whether flat listing is used (all blobs with path prefix are used).</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.InitContainerInfo(CMS.AzureStorage.ContainerInfo)">
+            <summary>
+            Returns reference to cloud container (creates it if not exists).
+            </summary>
+            <param name="containerInfo">Container info object.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.ContainerInfoProvider.InitContainerInfo(CMS.AzureStorage.ContainerInfo,System.Boolean)">
+            <summary>
+            Assigns reference to cloud container to <see cref="P:CMS.AzureStorage.ContainerInfo.BlobContainer"/> property of <paramref name="containerInfo"/>.
+            Creates a new container, if it does not exist.
+            </summary>
+            <param name="containerInfo">Container info object.</param>   
+            <param name="referenceOnly">Sets container reference only. No existence verification, creation or permission setting.</param>
+            <exception cref="T:System.IO.IOException">Thrown when initialization of the container fails.</exception>
+        </member>
+        <member name="T:CMS.AzureStorage.GetAzureFileService">
+            <summary>
+            Service for retrieving Azure files.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.GetAzureFileService.#ctor(CMS.Base.IWebPathMapper)">
+            <summary>
+            Initializes a new instance of a <see cref="T:CMS.AzureStorage.GetAzureFileService"/>.
+            </summary>
+            <param name="webPathMapper">Instance for mapping paths from the root of the web application.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.GetAzureFileService.GetExternalFile(System.String)">
+            <summary>
+            Gets blob from <paramref name="filePath"/>. If the blob does not exist null is returned.
+            </summary>
+            <param name="filePath">Full physical file path for blob.</param>
+        </member>
+        <member name="T:CMS.AzureStorage.Directory">
+            <summary>
+            Implementation of Directory provider for Azure.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.Directory.CurrentDirectory">
+            <summary>
+            Returns current directory. Value remains the same so it can be cached.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AzureStorage.Directory"/> class, which provides operations with directories.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.Exists(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on disk.
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.CreateDirectory(System.String)">
+            <summary>
+            Creates all directories and subdirectories as specified by path.
+            </summary>
+            <param name="path">Path to create.</param>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.EnumerateFiles(System.String,System.String)">
+            <summary>
+            Returns an enumerable collection of file names that match a search pattern in a specified path.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <returns>An enumerable collection of the full names (including paths) for the files in the directory specified by <paramref name="path"/> and that match the specified search pattern.</returns>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.EnumerateFilesCore(System.String,System.String)">
+            <summary>
+            Returns an enumerable collection of file names that match a search pattern in a specified path.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetFiles(System.String,System.String)">
+            <summary>
+            Returns the names of files (including their paths) that match the specified search pattern in the specified directory.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <returns>An array of the full names (including paths) for the files in the specified directory that match the specified search pattern, or an empty array if no files are found.</returns>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.EnumerateDirectories(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory names that match a search pattern in a specified path,
+            and optionally searches subdirectories.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or should include all subdirectories.</param>
+            <returns>An enumerable collection of the full names (including paths) for the directories in the directory specified by <paramref name="path"/> and that match the specified search pattern and option.</returns>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetDirectories(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Gets the names of the subdirectories (including their paths) that match the specified search pattern in the current directory,
+            and optionally searches subdirectories.
+            </summary>
+            <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include all subdirectories or only the current directory.</param>
+            <returns>An array of the full names (including paths) of the subdirectories that match the specified criteria, or an empty array if no directories are found.</returns>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.Delete(System.String,System.Boolean)">
+            <summary>
+            Deletes an empty directory and, if indicated, any subdirectories and files in the directory.
+            </summary>
+            <param name="path">Path to directory</param>
+            <param name="recursive">Delete if subdirs exists.</param>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.Move(System.String,System.String)">
+            <summary>
+            Moves directory.
+            </summary>
+            <param name="sourceDirName">Source directory name.</param>
+            <param name="destDirName">Destination directory name.</param>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="sourceDirName"/> or <paramref name="destDirName"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="sourceDirName"/> or <paramref name="destDirName"/> contains invalid characters</exception>
+            <exception cref="T:System.IO.IOException"><paramref name="sourceDirName"/> does not exist or <paramref name="destDirName"/> already exists</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.Delete(System.String)">
+            <summary>
+            Deletes an empty directory.
+            </summary>
+            <param name="path">Path to directory</param>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> contains invalid characters</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetAccessControl(System.String)">
+            <summary>
+            Gets a FileSecurity object that encapsulates the access control list (ACL) entries for a specified file.
+            </summary>
+            <param name="path">Path to directory.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.PrepareFilesForImport(System.String)">
+            <summary>
+            Prepares files for import. Converts them to media library.
+            </summary>
+            <param name="path">Path.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.DeleteDirectoryStructure(System.String)">
+            <summary>
+            Deletes all files in the directory structure. It works also in a shared hosting environment.
+            </summary>
+            <param name="path">Full path of the directory to delete</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetValidPath(System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Converts path to valid and lower case.
+            </summary>
+            <param name="path">Path to modify.</param>
+            <param name="caseSensitive">Case sensitive.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetPathFromUri(System.Uri,System.Boolean,System.String)">
+            <summary>
+            Returns system path from URI and container name.
+            </summary>
+            <param name="uri">Uri.</param>
+            <param name="absolute">If path should be absolute.</param>
+            <param name="containerName">Container name.</param>
+            <returns>Absolute path.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetBlobPathFromPath(System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Returns blob path from given file system path. Returns relative path with slashes '/' from the root of the blob storage.
+            </summary>
+            <param name="path">Path</param>
+            <param name="caseSensitive">Case sensitive.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.ExistsInBlobStorage(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on azure blob.
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.ExistsInFileSystem(System.String)">
+            <summary>
+            Determines whether the given path refers to an existing directory on filesystem
+            </summary>
+            <param name="path">Path to test.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.CreateDirectoryStructure(System.String)">
+            <summary>
+            Creates directory structure for given path.
+            </summary>
+            <param name="path">Path with temporary file.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetCaseValidPath(System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Returns lowered path if given container if not case sensitive. Otherwise method returns original path.
+            </summary>
+            <param name="path">Path to modify.</param>
+            <param name="caseSensitive">Indicates whether path is case sensitive</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.DeleteAzureDirectory(System.String)">
+            <summary>
+            Deletes container and map record in database.
+            </summary>
+            <param name="path">Path to directory</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.Move(System.String,System.String,System.Int32)">
+            <summary>
+            Moves directory.
+            </summary>
+            <param name="sourceDirName">Source directory name.</param>
+            <param name="destDirName">Destination directory name.</param>
+            <param name="level">Level.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.EnumerateDirectoriesCore(System.String,System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory names that match a search pattern in a specified path,
+            and optionally searches subdirectories.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.ThrowOnExistentDirectory(System.String)">
+            <summary>
+            Throws <see cref="T:System.IO.FileNotFoundException"/> if directory referenced by <paramref name="path"/>
+            does not exist.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.ThrowOnTooLongDirecotoryPath(System.String)">
+            <summary>
+            Throws <see cref="T:System.IO.PathTooLongException"/> if the path leading to a directory exceeds maximum length.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.ThrowOnInvalidPath(System.String)">
+            <summary>
+            Throws <see cref="T:System.ArgumentException"/> if the path leading to a directory contains invalid characters.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.IsPathToDirectoryContainingInvalidChars(System.String)">
+            <summary>
+            Returns <c>true</c> if <paramref name="path"/> contains some invalid char.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.IsBlobDirectory(Microsoft.Azure.Storage.Blob.IListBlobItem)">
+            <summary>
+            Returns true, if blob is placeholder for directory
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Directory.GetBlobName(Microsoft.Azure.Storage.Blob.IListBlobItem)">
+            <summary>
+            Returns name of the blob.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.DirectoryInfo">
+            <summary>
+            Implementation of DirectoryInfo object for Azure.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.FullName">
+            <summary>
+            Full name of directory (whole path).
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.LastWriteTime">
+            <summary>
+            Last write time to directory.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.Name">
+            <summary>
+            Name of directory (without path).
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.CreationTime">
+            <summary>
+            Creation time.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.Exists">
+            <summary>
+            Whether directory exists.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.DirectoryInfo.Parent">
+            <summary>
+            Parent directory.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="path">Path to directory</param>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.CreateSubdirectoryInternal(System.String)">
+            <summary>
+            Creates subdirectory.
+            </summary>
+            <param name="subdir">Subdirectory to create.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.DeleteInternal">
+            <summary>
+            Deletes directory.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.EnumerateDirectoriesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of file information that matches a specified search pattern and search subdirectory option.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param>
+            <returns>An enumerable collection of files that matches <paramref name="searchPattern"/> and <paramref name="searchOption"/>.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.GetDirectoriesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an array of directories in the current DirectoryInfo matching the given search criteria and using a value
+            to determine whether to search subdirectories.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">Specifies whether to search the current directory, or the current directory and all subdirectories.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.EnumerateFilesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns an enumerable collection of directory information that matches a specified search pattern and search subdirectory option.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param>
+            <returns>An enumerable collection of directories that matches <paramref name="searchPattern"/> and <paramref name="searchOption"/>.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.GetFilesInternal(System.String,CMS.IO.SearchOption)">
+            <summary>
+            Returns files of the current directory.
+            </summary>
+            <param name="searchPattern">Search pattern.</param>
+            <param name="searchOption">Whether return files from top directory or also from any subdirectories.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.InitCMSValues">
+            <summary>
+            Initializes CMS values by System.IO values.
+            </summary>     
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.InitCMSValuesFromSystemDirectory">
+            <summary>
+            Initializes CMS values by System.IO values.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.DirectoryInfo.InitCMSValuesFromBlob">
+            <summary>
+            Initializes CMS values by azure container values.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.File">
+            <summary>
+            Implementation of File class for Azure.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AzureStorage.File"/> class, which provides operations with files.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.#ctor(CMS.Core.Internal.IDateTimeNowService)">
+            <summary>
+            Internal constructor for testing purposes.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Exists(System.String)">
+            <summary>
+            Determines whether the specified file exists.
+            </summary>
+            <param name="path">Path to file.</param>  
+        </member>
+        <member name="M:CMS.AzureStorage.File.OpenText(System.String)">
+            <summary>
+            Opens an existing UTF-8 encoded text file for reading.
+            </summary>
+            <param name="path">Path to file</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Delete(System.String)">
+            <summary>
+            Deletes the specified file. An exception is not thrown if the specified file does not exist.
+            </summary>
+            <param name="path">Path to file</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Copy(System.String,System.String,System.Boolean)">
+            <summary>
+            Copies an existing file to a new file. Overwriting a file of the same name is allowed.
+            </summary>
+            <param name="sourceFileName">Path to source file.</param>
+            <param name="destFileName">Path to destination file.</param>
+            <param name="overwrite">If destination file should be overwritten.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="sourceFileName"/> does not exist</exception>
+            <exception cref="T:System.IO.IOException"><paramref name="destFileName"/> already exists and <paramref name="overwrite"/> is set to false</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Copy(System.String,System.String)">
+            <summary>
+            Copies an existing file to a new file. Overwriting a file of the same name is not allowed.
+            </summary>
+            <param name="sourceFileName">Path to source file.</param>
+            <param name="destFileName">Path to destination file.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="sourceFileName"/> does not exist</exception>
+            <exception cref="T:System.IO.IOException"><paramref name="destFileName"/> already exists</exception>        
+        </member>
+        <member name="M:CMS.AzureStorage.File.ReadAllBytes(System.String)">
+            <summary>
+            Opens a binary file, reads the contents of the file into a byte array, and then closes the file.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Create(System.String)">
+            <summary>
+            Creates or overwrites a file in the specified path.
+            </summary>
+            <param name="path">Path to file.</param> 
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Move(System.String,System.String)">
+            <summary>
+            Moves a specified file to a new location, providing the option to specify a new file name.
+            </summary>
+            <param name="sourceFileName">Source file name.</param>
+            <param name="destFileName">Destination file name.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="sourceFileName"/> does not exist</exception>
+            <exception cref="T:System.IO.IOException">Both <paramref name="sourceFileName"/> and <paramref name="destFileName"/> lead to the same file</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ReadAllText(System.String)">
+            <summary>
+            Opens a text file, reads all lines of the file, and then closes the file.
+            </summary>
+            <param name="path">Path to file.</param> 
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ReadAllText(System.String,System.Text.Encoding)">
+            <summary>
+            Opens a text file, reads all lines of the file, and then closes the file.
+            </summary>
+            <param name="path">Path to file</param> 
+            <param name="encoding">The character encoding to use</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.WriteAllText(System.String,System.String)">
+            <summary>
+            Creates a new file, write the contents to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file</param>
+            <param name="contents">Content to write.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.WriteAllText(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Creates a new file, write the contents to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file</param>
+            <param name="contents">Content to write</param>
+            <param name="encoding">The character encoding to use</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.AppendAllText(System.String,System.String)">
+            <summary>
+            Opens a file, appends the specified string to the file, and then closes the file. If the file does not exist, this method creates a file, writes the specified string to the file, then closes the file. 
+            </summary>
+            <param name="path">Path</param>
+            <param name="contents">Content to write.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.AppendAllText(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Opens a file, appends the specified string to the file, and then closes the file. If the file does not exist, this method creates a file, writes the specified string to the file, then closes the file. 
+            </summary>
+            <param name="path">Path</param>
+            <param name="contents">Content to write.</param>
+            <param name="encoding">The character encoding to use</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.WriteAllBytes(System.String,System.Byte[])">
+            <summary>
+            Creates a new file, writes the specified byte array to the file, and then closes the file. If the target file already exists, it is overwritten.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="bytes">Bytes to write.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.OpenRead(System.String)">
+            <summary>
+            Opens an existing file for reading.
+            </summary>
+            <param name="path">Path to file.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception>        
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.SetAttributes(System.String,CMS.IO.FileAttributes)">
+            <summary>
+            Sets the specified FileAttributes  of the file on the specified path.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="fileAttributes">File attributes.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.Open(System.String,CMS.IO.FileMode,CMS.IO.FileAccess)">
+            <summary>
+            Opens a FileStream  on the specified path, with the specified mode and access.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.SetLastWriteTimeUtc(System.String,System.DateTime)">
+            <summary>
+            Sets the date and time, in coordinated universal time (UTC), that the specified file was last written to.
+            </summary>
+            <param name="path">Path.</param>
+            <param name="lastWriteTimeUtc">Specified time.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.CreateText(System.String)">
+            <summary>
+            Creates or overwrites a file for writing UTF-8 encoded text.
+            </summary>
+            <param name="path">Path to file.</param>      
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception> 
+        </member>
+        <member name="M:CMS.AzureStorage.File.GetAccessControl(System.String)">
+            <summary>
+            Gets a FileSecurity object that encapsulates the access control list (ACL) entries for a specified directory.
+            </summary>
+            <param name="path">Path to file.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.GetLastWriteTime(System.String)">
+            <summary>
+            Returns the date and time the specified file or directory was last written to.
+            </summary>
+            <param name="path">Path to file.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception> 
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.SetLastWriteTime(System.String,System.DateTime)">
+            <summary>
+            Sets the date and time that the specified file was last written to.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="lastWriteTime">Last write time.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="path"/> is empty or contains invalid characters</exception>
+            <exception cref="T:System.IO.PathTooLongException"><paramref name="path"/> is too long</exception> 
+            <exception cref="T:System.IO.FileNotFoundException"><paramref name="path"/> does not exist</exception>
+        </member>
+        <member name="M:CMS.AzureStorage.File.GetFileUrl(System.String,System.String)">
+            <summary>
+            Returns URL to file. If can be accessed directly then direct URL is generated else URL with GetFile page is generated.
+            </summary>
+            <param name="path">Virtual path starting with ~ or absolute path.</param>
+            <param name="siteName">Site name.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ThrowOnNullPath(System.String)">
+            <summary>
+            Throws <see cref="T:System.NullReferenceException"/> if <paramref name="path"/> is null.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ThrowOnInvalidPath(System.String)">
+            <summary>
+            Throws <see cref="T:System.ArgumentException"/> if <paramref name="path"/> is empty, 
+            contains only white space or contains invalid characters.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ThrowOnNonexistentFile(System.String)">
+            <summary>
+            Throws <see cref="T:System.IO.FileNotFoundException"/> if file referenced by <paramref name="path"/>
+            does not exist.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.ThrowOnTooLongFilePath(System.String)">
+            <summary>
+            Throws <see cref="T:System.IO.PathTooLongException"/> if the path leading to a file exceeds maximum length.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.IsPathToFileContainingInvalidChars(System.String)">
+            <summary>
+            Returns <c>true</c> if <paramref name="path"/> contains some invalid char.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.IsPathDirectoryPlaceholder(System.String)">
+            <summary>
+            Returns <c>true</c> if <paramref name="path"/> has format of Azure directory placeholder.
+            </summary> 
+        </member>
+        <member name="M:CMS.AzureStorage.File.SetBlobLastWriteTimeToNow(CMS.AzureStorage.BlobInfo,System.Nullable{System.DateTime})">
+            <summary>
+            Set blob's last write time to the current time.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.File.SetBlobCreationTimeToNow(CMS.AzureStorage.BlobInfo,System.Nullable{System.DateTime})">
+            <summary>
+            Set blob's last write time to the current time.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.FileInfo">
+            <summary>
+            Envelope for FileInfo classes (System.IO or Azure)
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Length">
+            <summary>
+            Length of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Extension">
+            <summary>
+            File extension.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.FullName">
+            <summary>
+            Full name of file (with whole path).
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Name">
+            <summary>
+            File name of file (without path).
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Exists">
+            <summary>
+            If file exists.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Directory">
+            <summary>
+            Directory of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.DirectoryName">
+            <summary>
+            Directory name.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.IsReadOnly">
+            <summary>
+             If is read only.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.LastWriteTime">
+            <summary>
+            Last write time to file.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.CreationTime">
+            <summary>
+            Creation date of file.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.Attributes">
+            <summary>
+            File attributes.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileInfo.LastAccessTime">
+            <summary>
+            Last access time.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.#ctor(System.String)">
+            <summary>
+            Initializes new instance of
+            </summary>
+            <param name="filename">File name.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.CreateTextInternal">
+            <summary>
+            Creates or opens a file for writing UTF-8 encoded text.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.DeleteInternal">
+            <summary>
+            Deletes file.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.OpenReadInternal">
+            <summary>
+            Creates a read-only ICMSFileStream.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.CopyToInternal(System.String,System.Boolean)">
+            <summary>
+            Copies current file to destination.
+            </summary>
+            <param name="destFileName">Destination file name.</param>
+            <param name="overwrite">Indicates if existing file should be overwritten</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.MoveToInternal(System.String)">
+            <summary>
+            Moves an existing file to a new file.
+            </summary>
+            <param name="destFileName">Destination file name.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.OpenTextInternal">
+            <summary>
+            Creates a StreamReader with UTF8 encoding that reads from an existing text file.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.InitCMSValues">
+            <summary>
+            Sets values from System.IO.FileInfo to this file info
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileInfo.ToString">
+            <summary>
+            Converts current info to string.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.FileStream">
+            <summary>
+            Implementation of file stream for Microsoft Azure.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.CanRead">
+            <summary>
+            Gets a value indicating whether the current stream supports reading.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.CanSeek">
+            <summary>
+            Gets a value indicating whether the current stream supports seeking.
+            </summary>
+            <returns>True if the stream supports seeking, false otherwise.</returns>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.CanWrite">
+            <summary>
+            Gets a value indicating whether the current stream supports writing.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.Length">
+            <summary>
+            Length of stream.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.Position">
+            <summary>
+            Gets or sets position of current stream.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.MinimalPartSize">
+            <summary>
+            Returns minimal size of the part used in multipart upload process to Azure blob storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.MaximalPartSize">
+            <summary>
+            Maximal size of the part used in multipart upload process to Azure blob storage.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.FileStream.BlobMultiPartUploader">
+            <summary>
+            Instance for uploading large files in smaller parts to Azure blob storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.#ctor(System.String,CMS.IO.FileMode)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess,CMS.IO.FileShare)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>       
+            <param name="share">Sharing permissions.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.#ctor(System.String,CMS.IO.FileMode,CMS.IO.FileAccess,CMS.IO.FileShare,System.Int32)">
+            <summary>
+            Initializes new instance and initializes new system file stream.
+            </summary>
+            <param name="path">Path to file.</param>
+            <param name="mode">File mode.</param>
+            <param name="access">File access.</param>
+            <param name="bSize">Buffer size.</param>
+            <param name="share">Sharing permissions.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads data from stream and stores them into array.
+            </summary>
+            <param name="array">Array where result is stored.</param>
+            <param name="offset">Offset from begining of file.</param>
+            <param name="count">Number of characters which are read.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Close">
+            <summary>
+            Closes current stream.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Flush">
+            <summary>
+            Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes sequence of bytes to stream.
+            </summary>
+            <param name="buffer">Buffer.</param>
+            <param name="offset">Offset.</param>
+            <param name="count">Count.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream to the specified value.
+            </summary>
+            <param name="offset">Offset</param>
+            <param name="loc">Location</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.SetLength(System.Int64)">
+            <summary>
+            Set length to stream.
+            </summary>
+            <param name="value">Value to set.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.WriteByte(System.Byte)">
+            <summary>
+            Writes byte to the stream.
+            </summary>
+            <param name="value">Value to write.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.Dispose(System.Boolean)">
+            <summary>
+            Releases all unmanaged and optionally managed resources.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.InitMultiPartUpload">
+            <summary>
+            Inits multipart upload to Azure blob storage.
+            </summary>
+            <returns>
+            Upload ID, unique identifier for one multipart upload to Azure blob storage.
+            Returned upload ID is needed for each subsequent multipart upload operation.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.UploadStreamContentAsMultiPart(System.String,System.Int32)">
+            <summary>
+            Uploads data inside a stream in multiple parts to Azure blob storage.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.FileStream.InitMultiPartUpload"/> method.</param>
+            <param name="nextPartNumber">Number that defines position of the data obtained by the stream in the whole multipart upload process.</param>
+            <returns>Unique identifiers of the uploaded parts.</returns>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.CompleteMultiPartUploadProcess(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Completes multiple part upload process.
+            Sends final request to Azure blob storage to merge all parts already sent.
+            </summary>
+            <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.FileStream.InitMultiPartUpload"/> method.</param>
+            <param name="partIdentifiers">Identifiers of the parts already sent to Azure blob storage, obtained by calling <see cref="M:CMS.AzureStorage.FileStream.UploadStreamContentAsMultiPart(System.String,System.Int32)"/></param>
+            <returns>
+            ETag of the uploaded file.
+            </returns>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.AbortMultiPartUpload(System.String)">
+            <summary>
+            Aborts multipart upload, so Azure blob storage can delete uploaded parts.
+            </summary>        
+             <param name="uploadSessionId">Unique identifier for one multipart upload. Can be obtained by <see cref="M:CMS.AzureStorage.FileStream.InitMultiPartUpload"/> method.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.InitFileStream">
+            <summary>
+            Initializes the stream
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.FileStream.SetLastWriteTimeAndCreationTimeToBlob">
+            <summary>
+            Sets last write time and creation time to blob.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.AzureStorageUsageDataSource">
+            <summary>
+            Module usage data for Azure storage.
+            </summary>
+        </member>
+        <member name="F:CMS.AzureStorage.AzureStorageUsageDataSource.WWAG_KEY">
+            <summary>
+            Identifies Windows Application Gallery Kentico package.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AzureStorageUsageDataSource.Name">
+            <summary>
+            Azure storage usage data source name.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.AzureStorageUsageDataSource.GetData">
+            <summary>
+            Get Azure storage usage data.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.PathHelper">
+            <summary>
+            Contains helper members for accessing to blob storage, cache and temp.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.PathHelper.TempPath">
+            <summary>
+            Gets or sets path to local storage for temp.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.PathHelper.CachePath">
+            <summary>
+            Gets or sets path to local storage for cache.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.PathHelper.GetPathToTempDirectory(System.String,System.String)">
+            <summary>
+            Returns absolute path to temp. Also ensures that the directory exists.
+            </summary>
+            <param name="tempAbsolutePath">Absolute path to temp.</param>
+            <param name="relativeDirectoryPath">Path to directory relative to default temp root.</param>
+            <remarks>Relative directory path is used only when absolute path is not specified.</remarks>
+        </member>
+        <member name="T:CMS.AzureStorage.Queue">
+            <summary>
+            Provides operations with azure queue storage.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Queue.#ctor(System.String)">
+            <summary>
+            Initializes new queue object.
+            </summary>
+            <param name="name">Queue name.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Queue.SendMessage(System.String)">
+            <summary>
+            Sends message to the queue.
+            </summary>
+            <param name="message">Message to send.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Queue.SendMessage(System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            Sends message to the queue.
+            </summary>
+            <param name="message">Message to send.</param>
+            <param name="timeToLive">Message time to live.</param>
+        </member>
+        <member name="M:CMS.AzureStorage.Queue.GetMessage">
+            <summary>
+            Gets message from queue and deletes it. If queue is empty returns null.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.Queue.InitQueue">
+            <summary>
+            Initializes queue object.
+            </summary>
+        </member>
+        <member name="T:CMS.AzureStorage.AzureStorageCacheCleaner">
+            <summary>
+            Cleans Azure Temp and Cache folders on local file system.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AzureStorageCacheCleaner.Threshold">
+            <summary>
+            The limit in bytes. The scheduled task starts to delete files after reaching this limit.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AzureStorageCacheCleaner.KeepLimit">
+            <summary>
+            How many bytes should be kept on the disk after the cleanup.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AzureStorageCacheCleaner.ExcludedPaths">
+            <summary>
+            Paths that are excluded from the deletion.
+            </summary>
+        </member>
+        <member name="P:CMS.AzureStorage.AzureStorageCacheCleaner.DirsToSearch">
+            <summary>
+            Directories that are guarded by this scheduled task.
+            </summary>
+        </member>
+        <member name="M:CMS.AzureStorage.AzureStorageCacheCleaner.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Executes task.
+            </summary>
+            <param name="task">TaskInfo</param>
+        </member>
+        <member name="M:CMS.AzureStorage.AzureStorageCacheCleaner.IsFileExcluded(System.String)">
+            <summary>
+            Checks if the file should be excluded from the deletion.
+            </summary>
+            <param name="path">Full path to the file.</param>
+        </member>
+    </members>
+</doc>

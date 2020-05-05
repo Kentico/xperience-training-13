@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions>
+    <action name="copy" externalsourcename="copy" caption="$Copy to database$" fonticonclass="icon-doc-copy" />
+    <action name="delete" externalsourcename="delete" fonticonclass="icon-bin" fonticonstyle="critical" />
+  </actions>
+  <columns>
+    <column source="##ALL##" externalsourcename="name" sort="AttachmentName" caption="$general.name$" wrap="false" cssclass="main-column-100">
+      <filter type="text" source="CASE WHEN ParentName IS NULL THEN AttachmentName ELSE ParentName END" />
+    </column>
+    <column source="AttachmentExtension" caption="$media.file.extension$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="AttachmentSize" externalsourcename="size" caption="$general.size$" wrap="false">
+      <filter type="integer" />
+    </column>
+    <column source="AttachmentLastModified" caption="$contribution.columns.modifiedwhen$" wrap="false" />
+    <column source="HasBinary" allowsorting="false" externalsourcename="yesno" caption="$Stored in DB$" style="text-align: center;" wrap="false">
+      <filter type="bool" source="(CASE WHEN AttachmentBinary IS NULL THEN 0 ELSE 1 END)" />
+    </column>
+    <column source="##ALL##" externalsourcename="storedinfilesystem" caption="$Stored in FS$" style="text-align: center;" wrap="false" />
+    <column columnname="SiteName" source="AttachmentSiteID" externalsourcename="site" caption="$general.site$" wrap="false" />
+  </columns>
+  <pager>
+    <key name="DefaultPageSize" value="10" />
+  </pager>
+  <options>
+    <key name="DisplayFilter" value="true" />
+    <key name="ShowSelection" value="true" />
+  </options>
+</grid>

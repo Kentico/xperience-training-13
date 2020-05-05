@@ -1,0 +1,1727 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Activities</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Activities.ActivitiesUsageDataSource">
+            <summary>
+            Module usage tracking data source for activities module.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivitiesUsageDataSource.mSettingsToLog">
+            <summary>
+            Settings keys which are logged.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivitiesUsageDataSource.Name">
+            <summary>
+            Get the data source name.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitiesUsageDataSource.GetData">
+            <summary>
+            Get all module statistical data.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitiesUsageDataSource.GetSettingsUsage(System.Boolean)">
+            <summary>
+            Returns how many times is specific setting used with value which is not same as default value. 
+            Only settings on running sites (if <paramref name="global"/> is true), not hidden and not custom are retrieved.
+            Only global settings when <paramref name="global"/> is false.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityFactory">
+            <summary>
+            Provides possibility to create activities. Use <see cref="T:CMS.Activities.IActivityModifier"/> to extend factory.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityFactory.Create(CMS.Activities.IActivityInitializer)">
+            <summary>
+            Creates new activity info, and initializes it using <paramref name="activityInitializer"/>. 
+            Afterwards all registered modifiers are applied to created <see cref="T:CMS.Activities.IActivityInfo"/>.
+            </summary>
+            <returns>New <see cref="T:CMS.Activities.IActivityInfo"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="activityInitializer"/> is <c>null</c>.</exception>
+        </member>
+        <member name="T:CMS.Activities.ActivityInfo">
+            <summary>
+            ActivityInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityUTMSource">
+            <summary>
+            Gets or sets the UTM source for this activity. <c> NULL </c> value is saved if source is empty.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityUTMContent">
+            <summary>
+            Gets or sets the campaign UTM content for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityCampaign">
+            <summary>
+            Gets or sets the campaign code name for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityItemDetailID">
+            <summary>
+            Gets or sets the ID of the item detail that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityID">
+            <summary>
+            Gets or sets the activity ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityContactID">
+            <summary>
+            Gets or sets the ID of the active contact for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityContactGUID">
+            <summary>
+            Gets or sets the ID of the active contact for this activity. This fields does not have database representation.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityNodeID">
+            <summary>
+            Gets or sets the node ID that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityTitle">
+            <summary>
+            Gets or sets the activity title.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityType">
+            <summary>
+            Gets or sets the type of the activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityValue">
+            <summary>
+            Gets or sets the value of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityURL">
+            <summary>
+            Gets or sets the URL of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityCreated">
+            <summary>
+            Gets or sets the date and time the activity was created.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivitySiteID">
+            <summary>
+            Gets or sets the site ID for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityABVariantName">
+            <summary>
+            Gets or sets the AB test variant name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityMVTCombinationName">
+            <summary>
+            Gets or sets the MVT Combination name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityItemID">
+            <summary>
+            Gets or sets the ID of the item that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityURLReferrer">
+            <summary>
+            Gets or sets URL referrer.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityComment">
+            <summary>
+            Gets or set additional comment.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityCulture">
+            <summary>
+            Gets or sets the document culture where activity occurred.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInfo.ActivityURLHash">
+            <summary>
+            Gets or sets hash result of <see cref="P:CMS.Activities.IActivityInfo.ActivityURL"/>. The hash is needed for <see cref="F:CMS.Activities.PredefinedActivityType.PAGE_VISIT"/> activity type.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+            <remarks>
+            This method should not be used directly. For inserting new activity info use implementation of IActivityRepository.
+            </remarks>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.LoadDefaultData">
+            <summary>
+            Loads the default object data
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty ActivityInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new ActivityInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.CheckLicense(CMS.DataEngine.ObjectActionEnum,System.String)">
+            <summary>
+            Checks the object license. Returns true if the licensing conditions for this object were matched.
+            </summary>
+            <param name="action">Object action</param>
+            <param name="domainName">Domain name, if not set, feature in the best license is check</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfo.RegisterProperties">
+            <summary>
+            Registers the properties of this object.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityInfoProvider">
+            <summary>
+            Class providing ActivityInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetActivities">
+            <summary>
+            Returns a query for all the ActivityInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetActivityInfo(System.Int32)">
+            <summary>
+            Returns activity with specified ID.
+            </summary>
+            <param name="activityId">Activity ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.SetActivityInfo(CMS.Activities.ActivityInfo)">
+            <summary>
+            Sets (updates or inserts) specified activity. If contact set as ActivityContactID is merged, this method will not update it to its parent. It is up to called to ensure that activities are
+            property assigned to not merged contact.
+            </summary>
+            <param name="activityObj">Activity to be set</param>
+            <remarks>
+            This method should not be used directly. For inserting new activity info use implementation of IActivityRepository.
+            </remarks>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.DeleteActivityInfo(CMS.Activities.ActivityInfo)">
+            <summary>
+            Deletes specified activity.
+            </summary>
+            <param name="activityObj">Activity to be deleted</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.DeleteActivityInfo(System.Int32)">
+            <summary>
+            Deletes activity with specified ID.
+            </summary>
+            <param name="activityId">Activity ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetContactsLastActivity(System.Int32,System.String)">
+            <summary>
+            Returns last contact's activity, may be restricted to specific activity type.
+            </summary>
+            <param name="contactId">Contact ID</param>
+            <param name="activityType">Activity type - optional</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetContactsFirstActivity(System.Int32,System.String)">
+            <summary>
+            Returns first contact's activity, may be restricted to specific activity type.
+            </summary>
+            <param name="contactId">Contact ID</param>
+            <param name="activityType">Activity type - optional</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.ContactDidActivity(System.Int32,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns true if the contact did a specified activity.
+            </summary>
+            <param name="contactId">Contact ID</param>
+            <param name="activityType">Name of the activity to check (can specify more than one separated with semicolon, all of the types match than)</param>
+            <param name="cancelActivityType">Name of the activity which cancels the original activity (for example UnsubscribeNewsletter is a canceling event for SubscribeNewsletter etc.)</param>
+            <param name="lastXDays">Constraint for last X days (if zero or negative value is given, no constraint is applied)</param>
+            <param name="whereCondition">Additional WHERE condition</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetContactActivities(System.Int32,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns activities of specified type for contact.
+            </summary>
+            <param name="contactId">Contact ID</param>
+            <param name="activityType">Name of the activity to check (can specify more than one separated with semicolon, all of the types match than)</param>
+            <param name="cancelActivityType">Name of the activity which cancels the original activity (for example UnsubscribeNewsletter is a canceling event for SubscribeNewsletter etc.)</param>
+            <param name="lastXDays">Constraint for last X days (if zero or negative value is given, no constraint is applied)</param>
+            <param name="whereCondition">Additional WHERE condition</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.SetInfo(CMS.Activities.ActivityInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.GetContactsEdgeActivity(System.Int32,System.String,CMS.DataEngine.OrderDirection)">
+            <summary>
+            Returns TOP 1 from the contact's activities ordered by <see cref="P:CMS.Activities.ActivityInfo.ActivityCreated"/>.
+            ActivityType filter may be specified by setting value of <paramref name="activityType"/>. 
+            </summary>
+            <param name="contactId">Contact ID</param>
+            <param name="activityType">Activity type - optional</param>
+            <param name="orderBy">Order by</param>
+            <remarks>
+            Use <see cref="F:CMS.DataEngine.OrderDirection.Ascending"/> to obtain first contact's activity or 
+            <see cref="F:CMS.DataEngine.OrderDirection.Descending"/> to obtain last contact's activity.
+            </remarks>
+            <remarks>If activityType is set to null/empty, returns first/last activity among all activities</remarks>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.BulkMoveActivitiesToAnotherContact(System.Int32,System.Int32)">
+            <summary>
+            Moves all activities assigned to the contact identified by given <paramref name="sourceContactID"/> to the contact identified by <paramref name="targetContactID"/>.
+            </summary>
+            <remarks>
+            This method should be used only in the merging process. Note that there is no consistency check on whether the contacts with given IDs exist or not (nor is the 
+            foreign key check in DB). Caller of this method should perform all the necessary checks prior to the method invocation.
+            </remarks>
+            <param name="sourceContactID">Identifier of the contact the activities are moved from</param>
+            <param name="targetContactID">Identifier of the contact the activities are moved to</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.BulkInsert(System.Collections.Generic.IEnumerable{CMS.DataEngine.Internal.IDataTransferObject})">
+            <summary>
+            Bulk inserts the given <paramref name="activities"/>.
+            </summary>
+            <param name="activities">Data table containing values to be inserted</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInfoProvider.BulkInsertAndGetLastID(System.Collections.Generic.IEnumerable{CMS.DataEngine.Internal.IDataTransferObject})">
+            <summary>
+            Bulk inserts the given <paramref name="activities"/> and returns the last inserted ActivityID.
+            </summary>
+            <param name="activities">Data table containing values to be inserted</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityCampaignInitializer.#ctor(CMS.Activities.IActivityInitializer,System.String)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Activities.ActivitySiteIdInitializer"/> with provided <paramref name="campaign"/>.
+            Other settings that <see cref="P:CMS.Activities.IActivityInfo.ActivityCampaign"/> of <paramref name="originalInitializer"/> is not changed.
+            </summary>
+            <param name="originalInitializer">Original activity initializer</param>
+            <param name="campaign">Campaign to insert in activity</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityCampaignInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Calls method on original initializer and sets campaign.
+            </summary>
+            <param name="activity"><see cref="T:CMS.Activities.IActivityInfo"/> to initialize</param>
+        </member>
+        <member name="T:CMS.Activities.ActivityContactIdInitializer">
+            <summary>
+            Initializes activity with contact id. All other members are delegated to provided initializer.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityContactIdInitializer.#ctor(CMS.Activities.IActivityInitializer,System.Int32)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Activities.ActivityContactIdInitializer"/> with provided <paramref name="contactId"/>.
+            Other setting that <see cref="P:CMS.Activities.IActivityInfo.ActivityContactID"/> of <paramref name="originalInitializer"/> is not changed.
+            </summary>
+            <param name="originalInitializer">Original activity initializer</param>
+            <param name="contactId">Contact id to insert in activity</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityContactIdInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Calls method on original initializer and sets contactId.
+            </summary>
+            <param name="activity"></param>
+        </member>
+        <member name="T:CMS.Activities.ActivityInitializerExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:CMS.Activities.IActivityInitializer"/> for specifying the info's fields.
+            These methods are designed to be used as chained calls. 
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerExtensions.WithContactId(CMS.Activities.IActivityInitializer,System.Int32)">
+            <summary>
+            Extends the provided <paramref name="activityInitializer"/> with <paramref name="contactId"/>.
+            </summary>
+            <param name="activityInitializer">Initializer to extend</param>
+            <param name="contactId">Contact id to be saved in <paramref name="activityInitializer"/></param>
+            <returns>Extended <paramref name="activityInitializer"/></returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerExtensions.WithSiteId(CMS.Activities.IActivityInitializer,System.Int32)">
+            <summary>
+            Extends the provided <paramref name="activityInitializer"/> with <paramref name="siteId"/>.
+            </summary>
+            <param name="activityInitializer">Initializer to extend</param>
+            <param name="siteId">Site id to be saved in <paramref name="activityInitializer"/></param>
+            <returns>Extended <paramref name="activityInitializer"/></returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerExtensions.WithCampaign(CMS.Activities.IActivityInitializer,System.String)">
+            <summary>
+            Extends the provided <paramref name="activityInitializer"/> with <paramref name="campaign"/>.
+            </summary>
+            <param name="activityInitializer">Initializer to extend</param>
+            <param name="campaign">Campaign to be saved in <paramref name="activityInitializer"/></param>
+            <returns>Extended <paramref name="activityInitializer"/></returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerExtensions.WithUrl(CMS.Activities.IActivityInitializer,System.String)">
+            <summary>
+            Extends the provided <paramref name="activityInitializer"/> with <paramref name="url"/>.
+            </summary>
+            <param name="activityInitializer">Initializer to extend</param>
+            <param name="url">URL to be saved in <paramref name="activityInitializer"/></param>
+            <returns>Extended <paramref name="activityInitializer"/></returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityInitializerWrapperBase">
+            <summary>
+            Provides wrapper for activity type and activity setting key for <see cref="T:CMS.Activities.IActivityInitializer"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInitializerWrapperBase.OriginalInitializer">
+            <summary>
+            Original <see cref="T:CMS.Activities.IActivityInitializer"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerWrapperBase.#ctor(CMS.Activities.IActivityInitializer)">
+            <summary>
+            Constructs new instance of <see cref="T:CMS.Activities.ActivityInitializerWrapperBase"/>.
+            </summary>
+            <param name="originalInitializer">Original activity initializer</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityInitializerWrapperBase.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Activity info</param>
+        </member>
+        <member name="P:CMS.Activities.ActivityInitializerWrapperBase.ActivityType">
+            <summary>
+            Original activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityInitializerWrapperBase.SettingsKeyName">
+            <summary>
+            Original settings key.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivitySiteIdInitializer">
+            <summary>
+            Initializes activity with site id. All other members are delegated to provided initializer.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitySiteIdInitializer.#ctor(CMS.Activities.IActivityInitializer,System.Int32)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Activities.ActivitySiteIdInitializer"/> with provided <paramref name="siteId"/>.
+            Other settings that <see cref="P:CMS.Activities.IActivityInfo.ActivitySiteID"/> of <paramref name="originalInitializer"/> is not changed.
+            </summary>
+            <param name="originalInitializer">Original activity initializer</param>
+            <param name="siteId">Site id to insert in activity</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySiteIdInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Calls method on original initializer and sets siteId.
+            </summary>
+            <param name="activity"><see cref="T:CMS.Activities.IActivityInfo"/> to initialize</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityUrlInitializer.#ctor(CMS.Activities.IActivityInitializer,System.String)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Activities.ActivitySiteIdInitializer"/> with provided <paramref name="url"/>.
+            Other settings that <see cref="P:CMS.Activities.IActivityInfo.ActivityURL"/> of <paramref name="originalInitializer"/> is not changed.
+            </summary>
+            <param name="originalInitializer">Original activity initializer</param>
+            <param name="url">URL to insert in activity</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityUrlInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Calls method on original initializer and sets URL.
+            </summary>
+            <param name="activity"><see cref="T:CMS.Activities.IActivityInfo"/> to initialize</param>
+        </member>
+        <member name="T:CMS.Activities.IActivityInitializer">
+            <summary>
+            Provides possibility to initialize activity.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Activity info</param>
+        </member>
+        <member name="P:CMS.Activities.IActivityInitializer.ActivityType">
+            <summary>
+            Activity type
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInitializer.SettingsKeyName">
+            <summary>
+            Activity settings key name, used to check whether activity logging is enabled.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityLogService">
+            <summary>
+            Provides possibility to log activities.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.#ctor(CMS.Activities.IActivityRepository,CMS.Base.ISiteService,CMS.Activities.IActivitySettings,CMS.Activities.IActivityFactory,CMS.Base.Internal.IHttpContextRetriever)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.Activities.ActivityLogService"/>.
+            </summary>
+            <param name="activityRepository">Represents activity repository.</param>
+            <param name="siteService">Site service.</param>
+            <param name="activitySettings">Provides access to activities settings</param>
+            <param name="activityFactory">Activity factory service.</param>
+            <param name="httpContextRetriever">Service to retrieve http context.</param>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="activityRepository"/> is <c>null</c> -or-
+            <paramref name="siteService"/> is <c>null</c> -or-
+            <paramref name="activitySettings"/> is <c>null</c> -or-
+            <paramref name="activityFactory"/> is <c>null</c> -or-
+            <paramref name="httpContextRetriever"/> is <c>null</c>.
+            </exception> 
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.Log(CMS.Activities.IActivityInitializer,System.Boolean)">
+            <summary>
+            Logs given activity. Registered <see cref="T:CMS.Activities.IActivityLogFilter"/> are checked, activity is further processed only if all filters allow it.
+            Then <see cref="T:CMS.Activities.IActivityInfo"/> is created and <paramref name="activityInitializer"/> is called. 
+            Afterwards all registered modifiers are applied to the <see cref="T:CMS.Activities.IActivityInfo"/>. Finally the <see cref="T:CMS.Activities.IActivityInfo"/> is validated by registered <see cref="T:CMS.Activities.IActivityLogValidator"/>.
+            Activity is stored only if it is valid. After the activity is stored, two events are raised.
+            <see cref="F:CMS.Activities.ActivityEvents.ActivityProcessedInLogService"/> which should be used to hook on and also legacy activity which is there due to compatibility reasons (should not be used).
+            </summary>
+            <param name="activityInitializer">Activity initializer used to initialize logged activity.</param>
+            <param name="loggingDisabledInAdministration"><c>True</c> if activities should not be logged in administration.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="activityInitializer"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.LogWithoutModifiersAndFilters(CMS.Activities.IActivityInitializer)">
+            <summary>
+            Logs activity initialized by <paramref name="activityInitializer"/> directly to the database. Implementation does not check <see cref="T:CMS.Activities.IActivityLogFilter"/> 
+            and does not use <see cref="T:CMS.Activities.IActivityModifier"/>. If you have <see cref="T:CMS.Base.Internal.IRequest"/> available please 
+            use <see cref="M:CMS.Activities.ActivityLogService.Log(CMS.Activities.IActivityInitializer,System.Boolean)"/> instead.
+            Method is designed to be used in environment without request e. g. scheduled tasks. After the activity is stored, two events are raised.
+            <see cref="F:CMS.Activities.ActivityEvents.ActivityProcessedInLogService"/> which should be used to hook on and also legacy activity which is there due to compatibility reasons (should not be used).
+            </summary>
+            <param name="activityInitializer">Activity initializer used to initialize logged activity.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="activityInitializer"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.RegisterFilter(CMS.Activities.IActivityLogFilter)">
+            <summary>
+            Registers filter that can filter out logging of activities. Filters are called before <see cref="T:CMS.Activities.ActivityInfo"/> is created.
+            Activity is not logged if at least one filter denies activity.
+            </summary>
+            <param name="filter">Activity filter.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="filter"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.RegisterModifier(CMS.Activities.IActivityModifier)">
+            <summary>
+            Registers activity modifier. Modifier is used to update every newly created <see cref="T:CMS.Activities.IActivityInfo"/>. Modifier is called after activity is created
+            and successfully initialized. Modifiers are global, thus they are shared across all instances of the service.
+            </summary>
+            <param name="activityModifier">Activity modifier to be registered</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activityModifier"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.RegisterValidator(CMS.Activities.IActivityLogValidator)">
+            <summary>
+            Registers activity validator. Validators are used to check whether the processed <see cref="T:CMS.Activities.IActivityInfo"/> is valid and can be logged.
+            Validators are global, therefore they are shared across all instances of the service.
+            </summary>
+            <param name="activityLogValidator">Activity log validator to be registered</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activityLogValidator"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.InsufficientLicense">
+            <summary>
+            Used to check current license. Override is used only for test purposes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogService.ValidateActivity(CMS.Activities.IActivityInfo)">
+            <summary>
+            Checks whether the given <paramref name="activity"/> passes all the validators.
+            </summary>
+            <param name="activity">Activity to be validated</param>
+            <returns>True, if <paramref name="activity"/> passes all the validators; otherwise, false</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityModifier">
+            <summary>
+            Adds general data to activity.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityModifier.#ctor(CMS.Base.ISiteService,CMS.Activities.IActivityUrlService)">
+            <summary>
+            Initializes new instance of <see cref="T:CMS.Activities.ActivityModifier"/>.
+            </summary>
+            <param name="siteService">Site service</param>
+            <param name="activityUrlService">Service to insert correct URL in activity</param>
+            <exception cref="T:System.ArgumentNullException">Is thrown if <paramref name="siteService"/> or <paramref name="activityUrlService"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityModifier.Modify(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes activity URLs, site id and IP address.
+            </summary>
+            <param name="activity"></param>
+        </member>
+        <member name="T:CMS.Activities.ActivityObjectMapper">
+            <summary>
+            Object used to map activity to its related objects, for example Forum post activity to related forum.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityObjectMapper.GetLinkedObject(CMS.Activities.ActivityInfo,System.String)">
+            <summary>
+            Gets function to resolve object based on activity type and given object type.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityLogWorker">
+            <summary>
+            Activities log worker. Takes information from <see cref="T:CMS.Activities.IActivityQueue"/> and processes it. 
+            </summary>
+        </member>
+        <member name="E:CMS.Activities.ActivityLogWorker.Processed">
+            <summary>
+            Events fired by the worker once process method executes.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogWorker.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Activities.ActivityLogWorker"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityLogWorker.DefaultInterval">
+            <summary>
+            Gets the interval in milliseconds for the worker.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogWorker.Finish">
+            <summary>
+            Finishes the worker process. No extra action has to be taken.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityLogWorker.Process">
+            <summary>
+            Method that is being run every <see cref="P:CMS.Activities.ActivityLogWorker.DefaultInterval"/> millisecond. Processes items from <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityMemoryQueue">
+            <summary>
+            Provides methods for thread-safe storing of performed activities to the memory queue.
+            </summary>
+            <threadsafety static="true" instance="true"/>
+        </member>
+        <member name="P:CMS.Activities.ActivityMemoryQueue.Queue">
+            <summary>
+            Gets queue storing the performed activities.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueue.TryDequeueActivity(CMS.Activities.IActivityInfo@)">
+            <summary>
+            Tries to remove and return <see cref="T:CMS.Activities.IActivityInfo"/> at the beginning of the concurrent queue.
+            </summary>
+            <param name="activity">
+            When this method returns, if the operation was successful, <paramref name="activity"/> contains the object removed. If no object was available to be removed, the <paramref name="activity"/> is unspecified.
+            </param>
+            <returns>
+            True if <see cref="T:CMS.Activities.IActivityInfo"/> was removed and returned from the beginning of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/> successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueue.EnqueueActivity(CMS.Activities.IActivityInfo)">
+            <summary>
+            Adds <see cref="T:CMS.Activities.IActivityInfo"/> to the end of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.
+            </summary>
+            <param name="activity">The <see cref="T:CMS.Activities.IActivityInfo"/> to be added to the end of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activity"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueue.GetQueuedActivities">
+            <summary>
+            Enumerates all items in the queue of activities.
+            </summary>
+            <returns>Collection containing all the <see cref="T:CMS.Activities.IActivityInfo"/> from the queue</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityMemoryQueueProcessor">
+            <summary>
+            Provides method for processing the activity memory queue.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueueProcessor.#ctor(CMS.Activities.IActivityQueue)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Activities.ActivityMemoryQueueProcessor" />.
+            </summary>
+            <param name="activitiesQueue">Provides methods for storing of performed activities to the queue</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activitiesQueue" /> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueueProcessor.InsertActivitiesFromQueueToDB">
+            <summary>
+            Performs bulk insert of <see cref="T:CMS.Activities.IActivityInfo" /> from <see cref="T:CMS.Activities.ActivityMemoryQueue" />. 
+            Ensures that <see cref="P:CMS.Activities.IActivityInfo.ActivityID" /> is correctly filled for every <see cref="T:CMS.Activities.IActivityInfo" /> after the bulk insert,
+            so <see cref="F:CMS.Activities.ActivityEvents.ActivityBulkInsertPerformed" /> is fired with correct data.
+            </summary>
+            <remarks>
+            <see cref="F:CMS.Activities.ActivityEvents.ActivityBulkInsertPerformed" /> is fired once the bulk is inserted.
+            </remarks>
+        </member>
+        <member name="M:CMS.Activities.ActivityMemoryQueueProcessor.FillActivityIDs(System.Collections.Generic.IList{CMS.Activities.IActivityInfo},System.Int32)">
+            <summary>
+            Fills the <see cref="P:CMS.Activities.IActivityInfo.ActivityID" /> property to every <see cref="T:CMS.Activities.IActivityInfo" /> in given
+            <paramref name="activities" /> collection.
+            </summary>
+            <remarks>
+            <see cref="P:CMS.Activities.IActivityInfo.ActivityID" /> is obtained from the DB for the first <see cref="T:CMS.Activities.IActivityInfo" /> from
+            <paramref name="activities" />, other
+            <see cref="P:CMS.Activities.IActivityInfo.ActivityID" /> values are computed by repeated addition of 1. This can be done since bulk
+            insert guarantees atomicity and order of the inserted items.
+            </remarks>
+            <param name="activities">Collection of activities to be filled with <see cref="P:CMS.Activities.IActivityInfo.ActivityID" /></param>
+            <param name="lastActivityID">ID of the last inserted activity</param>
+        </member>
+        <member name="T:CMS.Activities.ActivityQueueRepository">
+            <summary>
+            Represents activity repository for storing the <see cref="T:CMS.Activities.IActivityInfo"/> in queue.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityQueueRepository.#ctor(CMS.Activities.IActivityQueue)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.Activities.ActivityQueueRepository"/>.
+            </summary>
+            <param name="activitiesQueue">Provides methods for storing of performed activities to the queue.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activitiesQueue"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.ActivityQueueRepository.Save(CMS.Activities.IActivityInfo)">
+            <summary>
+            Saves given <paramref name="activity"/> into the queue.
+            </summary>
+            <param name="activity">Activity to be saved</param>
+        </member>
+        <member name="T:CMS.Activities.IActivityQueue">
+            <summary>
+            Provides methods for storing of performed activities to the queue.
+            </summary>
+            <threadsafety static="true" instance="true"/>
+        </member>
+        <member name="M:CMS.Activities.IActivityQueue.TryDequeueActivity(CMS.Activities.IActivityInfo@)">
+            <summary>
+            Tries to remove and return <see cref="T:CMS.Activities.IActivityInfo"/> at the beginning of the concurrent queue.
+            </summary>
+            <param name="activity">
+            When this method returns, if the operation was successful, <paramref name="activity"/> contains the object removed. If no object was available to be removed, the <paramref name="activity"/> is unspecified.
+            </param>
+            <returns>
+            True if <see cref="T:CMS.Activities.IActivityInfo"/> was removed and returned from the beginning of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/> successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:CMS.Activities.IActivityQueue.EnqueueActivity(CMS.Activities.IActivityInfo)">
+            <summary>
+            Adds <see cref="T:CMS.Activities.IActivityInfo"/> to the end of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.
+            </summary>
+            <param name="activity">The <see cref="T:CMS.Activities.IActivityInfo"/> to be added to the end of the <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.</param>
+        </member>
+        <member name="M:CMS.Activities.IActivityQueue.GetQueuedActivities">
+            <summary>
+            Enumerates all items in the queue of activities.
+            </summary>
+            <returns>Collection containing all the <see cref="T:CMS.Activities.IActivityInfo"/> from the queue</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityQueueProcessor">
+            <summary>
+            Provides method for processing the activity queue.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityQueueProcessor.InsertActivitiesFromQueueToDB">
+            <summary>
+            Performs bulk insert of <see cref="T:CMS.Activities.IActivityInfo"/> from <see cref="T:CMS.Activities.ActivityMemoryQueue"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivitySettings">
+            <summary>
+            Provides access to activities settings.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettings.ActivitiesEnabledAndModuleLoadedForSite(System.String)">
+            <summary>
+            Checks whether activities logging is enabled for given site name and online marketing module is available.
+            </summary>
+            <param name="siteName">Site name</param>
+            <returns>Returns <c>True</c> if activities are enabled and online marketing module is available, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivitySettingsHelper">
+            <summary>
+            Provides comfortable access to settings keys for activities.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.GetLoggingEnabled(System.String,System.String,System.String)">
+            <summary>
+            Checks if specified activity logging is enabled.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="keyname">Settings key name of particular activity (e.g. "CMSCMPageVisits")</param>
+            <param name="activityType">Activity type code name (e.g. PredefinedActivityType.PAGE_VISIT)</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.OnlineMarketingEnabled(System.Int32)">
+            <summary>
+            Determines whether on-line marketing module is activated.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.OnlineMarketingEnabled(System.String)">
+            <summary>
+            Determines whether on-line marketing module is activated.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.IsModuleLoaded">
+            <summary>
+            Determines whether on-line marketing module is available.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.ActivitiesEnabled(System.Int32)">
+            <summary>
+            Returns true if activities logging is enabled.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.ActivitiesEnabled(System.String)">
+            <summary>
+            Returns true if activities logging is enabled.
+            </summary>
+            <param name="siteName">Site name (or NULL for global setting)</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.UserRegistrationEnabled(System.String)">
+            <summary>
+            Returns true if user registration logging is enabled.
+            </summary>
+            <param name="siteName">Site name (or NULL for global setting)</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.AddingProductToWLEnabled(System.Int32)">
+            <summary>
+            Returns true if adding product to WL logging is enabled.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.AddingProductToWLEnabled(System.String)">
+            <summary>
+            Returns true if adding product to WL logging is enabled.
+            </summary>
+            <param name="siteName">Site name (or NULL for global setting)</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.ActivitiesEnabledAndModuleLoaded(System.Int32)">
+            <summary>
+            Returns true if global logging switch for the given site is enabled and online marketing module is loaded.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.ActivitiesEnabledAndModuleLoaded(System.String)">
+            <summary>
+            Returns true if global logging switch for the given site is enabled and online marketing module is loaded.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.ActivitiesEnabledForThisUser(CMS.Membership.UserInfo)">
+            <summary>
+            Returns true if logging activity is enabled for given user.
+            </summary>
+            <param name="ui">User info</param>
+        </member>
+        <member name="M:CMS.Activities.ActivitySettingsHelper.GetBoolValue(System.String,System.String)">
+            <summary>
+            Returns key value (bool).
+            </summary>
+            <param name="siteName">Site name (optional)</param>
+            <param name="keyName">Key name</param>
+        </member>
+        <member name="T:CMS.Activities.ActivityTitleBuilder">
+            <summary>
+            Provides methods to create activity title.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTitleBuilder.CreateTitleWithUserName(System.String,CMS.Activities.VisitorData)">
+            <summary>
+            Creates title for given <paramref name="activityType"/> and user information in <paramref name="visitorData"/>. Title is read from resources.
+            </summary>
+            <param name="activityType">Activity type</param>
+            <param name="visitorData">Visitor data to create title from; if null default resource string is used</param>
+            <exception cref="T:System.ArgumentNullException">Is thrown if <paramref name="activityType"/> is null or empty</exception>
+            <returns>Title with included user name.</returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityTitleBuilder.CreateTitle(System.String,System.String)">
+            <summary>
+            Creates title from title data and <paramref name="activityType"/>. Title is read from resources.
+            </summary>
+            <param name="activityType">Activity type</param>
+            <param name="titleData">Data that should be displayed in title; if null default resource string is used</param>
+            <exception cref="T:System.ArgumentNullException">Is thrown if <paramref name="activityType"/> is null or empty</exception>
+            <returns>Returns activity title.</returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityTitleBuilder.BuildVisitorName(CMS.Activities.VisitorData)">
+            <summary>
+            Returns formatted visitor name.
+            </summary>
+            <param name="visitorData">Visitor data used to obtain visitor name.</param>
+            <returns>Created visitor name.</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityTypeInfo">
+            <summary>
+            ActivityTypeInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityTypeInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityTypeInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeDisplayName">
+            <summary>
+            Gets or sets the display name of the activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeDescription">
+            <summary>
+            Gets or sets the description for the activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeIsCustom">
+            <summary>
+            Gets or sets whether the activity is custom.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeName">
+            <summary>
+            Gets or sets the the code name of the activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeID">
+            <summary>
+            Gets or sets the ID of the activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeEnabled">
+            <summary>
+            Gets or sets whether the activity is enabled.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeManualCreationAllowed">
+            <summary>
+            Gets or sets whether the activity is enabled.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeMainFormControl">
+            <summary>
+            Gets or sets name of form control (selector) for setting ItemID
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeDetailFormControl">
+            <summary>
+            Gets or sets name of form control (selector) for setting ItemDetailID
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeColor">
+            <summary>
+            Gets or sets color used for coloring of activity type name in listings.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeItemObjectType">
+            <summary>
+            Gets or sets object type of activity type related object.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.ActivityTypeInfo.ActivityTypeItemDetailObjectType">
+            <summary>
+            Gets or sets object type of activity type related object.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty ActivityTypeInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new ActivityTypeInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Clones metafile and inserts it to DB as new object.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfo.RemoveObjectDependencies(System.Boolean,System.Boolean)">
+            <summary>
+            Removes object dependencies
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityTypeInfoProvider">
+            <summary>
+            Class providing ActivityTypeInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.#ctor">
+            <summary>
+            Constructor using ID and codename Hashtables.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.GetActivityTypes">
+            <summary>
+            Returns a query for all the ActivityTypeInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.GetActivityTypeInfo(System.Int32)">
+            <summary>
+            Returns activity type with specified ID.
+            </summary>
+            <param name="typeId">Activity type ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.GetActivityTypeInfo(System.String)">
+            <summary>
+            Returns activity type with specified name.
+            </summary>
+            <param name="typeName">Activity type name</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.SetActivityTypeInfo(CMS.Activities.ActivityTypeInfo)">
+            <summary>
+            Sets (updates or inserts) specified activity type.
+            </summary>
+            <param name="typeObj">Activity type to be set</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.DeleteActivityTypeInfo(CMS.Activities.ActivityTypeInfo)">
+            <summary>
+            Deletes specified activity type.
+            </summary>
+            <param name="typeObj">Activity type to be deleted</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.DeleteActivityTypeInfo(System.Int32)">
+            <summary>
+            Deletes activity type with specified ID.
+            </summary>
+            <param name="typeId">Activity type ID</param>
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.GetActivityTypeDisplayName(System.String)">
+            <summary>
+            Returns display name of particular activity.
+            </summary>
+            <param name="typeName">Code name of activity type</param>                
+        </member>
+        <member name="M:CMS.Activities.ActivityTypeInfoProvider.GetActivityTypeEnabled(System.String)">
+            <summary>
+            Checks if specified activity type is enabled.
+            </summary>
+            <param name="typeName">Code name of activity type</param>                
+        </member>
+        <member name="T:CMS.Activities.IActivityTypeInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Activities.ActivityTypeInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.PredefinedActivityType">
+            <summary>
+            Predefined activity types constants.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PAGE_VISIT">
+            <summary>
+            Code name for page visits activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.LANDING_PAGE">
+            <summary>
+            Code name for landing page activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.USER_LOGIN">
+            <summary>
+            Code name for user login activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.REGISTRATION">
+            <summary>
+            Code name for user registration activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PRODUCT_ADDED_TO_SHOPPINGCART">
+            <summary>
+            Code name for product added to shopping cart activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PRODUCT_REMOVED_FROM_SHOPPINGCART">
+            <summary>
+            Code name for product removed from shopping cart activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PRODUCT_ADDED_TO_WISHLIST">
+            <summary>
+            Code name for product added to wishlist activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PURCHASE">
+            <summary>
+            Code name for purchase activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.PURCHASEDPRODUCT">
+            <summary>
+            Code name for purchased product activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.NEWSLETTER_SUBSCRIBING">
+            <summary>
+            Code name for newsletter subscribing activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.NEWSLETTER_UNSUBSCRIBING">
+            <summary>
+            Code name for newsletter unsubscribing activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.NEWSLETTER_UNSUBSCRIBING_FROM_ALL">
+            <summary>
+            Code name for newsletter unsubscribing from all activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.NEWSLETTER_OPEN">
+            <summary>
+            Code name for newsletter open activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.NEWSLETTER_CLICKTHROUGH">
+            <summary>
+            Code name for newsletter clickthrough activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.EXTERNAL_SEARCH">
+            <summary>
+            Code name for external search activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.INTERNAL_SEARCH">
+            <summary>
+            Code name for internal search activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.BIZFORM_SUBMIT">
+            <summary>
+            Code name for bizform submit activity.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.PredefinedActivityType.CUSTOM_TABLE_SUBMIT">
+            <summary>
+            Code name for custom table form submit activity.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityUrlService">
+            <summary>
+            Provides methods to get correct URL and URL referrer to insert in <see cref="T:CMS.Activities.IActivityInfo" />.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityUrlService.GetActivityUrl">
+            <summary>
+            Gets URL of request the activity was logged for.
+            </summary>
+            <returns>URL</returns>
+        </member>
+        <member name="M:CMS.Activities.ActivityUrlService.GetActivityUrlReferrer">
+            <summary>
+            Gets URL referrer of request the activity was referred from.
+            </summary>
+            <returns>URL referrer</returns>
+        </member>
+        <member name="T:CMS.Activities.CustomActivityInitializerBase">
+            <summary>
+            Represents base class for custom activities.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.CustomActivityInitializerBase.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes properties of <see cref="T:CMS.Activities.IActivityInfo"/>.
+            </summary>
+            <param name="activity">Activity info that should be initialized.</param>
+        </member>
+        <member name="P:CMS.Activities.CustomActivityInitializerBase.ActivityType">
+            <summary>
+            Represents custom activity code name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.CustomActivityInitializerBase.SettingsKeyName">
+            <summary>
+            Provides settings key for custom activities.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivityBulkInsertPerformedHandler">
+            <summary>
+            Event handler for the event fired once the activities are inserted in bulk to the database.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityBulkInsertPerformedHandler.StartEvent(System.Collections.Generic.IList{CMS.Activities.IActivityInfo})">
+            <summary>
+            Initiates the event.
+            </summary>
+            <param name="activities">Collection of processed <see cref="T:CMS.Activities.IActivityInfo"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activities"/> is <c>null</c></exception>
+            <exception cref="T:System.InvalidOperationException">First <see cref="T:CMS.Activities.IActivityInfo"/> has to have its <see cref="P:CMS.Activities.IActivityInfo.ActivityID"/> property set</exception>
+            <returns>Event handler</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityEvents">
+            <summary>
+            Activity events.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityEvents.ActivityBulkInsertPerformed">
+            <summary>
+            Event fired once all the activities are inserted in bulk to the database.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.ActivityEvents.ActivityProcessedInLogService">
+            <summary>
+            Event handler for the event fired once the activity is processed in log service.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.Internal.ActivityEventsInternal">
+            <summary>
+            Activity events for internal purposes.
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:CMS.Activities.Internal.ActivityEventsInternal.ActivityFilteredOut">
+            <summary>
+            Event fired once the activities are filtered out before bulk processing.
+            </summary>
+        </member>
+        <member name="F:CMS.Activities.Internal.ActivityEventsInternal.ActivityIDMapped">
+            <summary>
+            Event fired once the activities are bulk inserted to the database and their <see cref="P:CMS.Activities.ActivityInfo.ActivityID"/> is assigned.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.Internal.ActivityInfoObjectQueryExtensions">
+            <summary>
+            Extends <see cref="T:CMS.DataEngine.ObjectQuery`1"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityInfoObjectQueryExtensions.NewerThan(CMS.DataEngine.ObjectQuery{CMS.Activities.ActivityInfo},System.TimeSpan)">
+            <summary>
+            Returns <see cref="T:CMS.DataEngine.ObjectQuery"/> with Activities that are older than given <paramref name="time"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.Internal.ActivityDto">
+            <summary>
+            Represents lightweight version of <see cref="T:CMS.Activities.ActivityInfo"/>. This class should be used instead of <see cref="T:CMS.Activities.ActivityInfo"/> in places
+            when dealing with the regular info object has to big performance impact and features provided by <see cref="T:CMS.DataEngine.BaseInfo"/> are not required.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityDto.#ctor">
+            <summary>
+            Instantiate new instance of <see cref="T:CMS.Activities.Internal.ActivityDto"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityDto.#ctor(System.Data.DataRow)">
+            <summary>
+            Instantiate new instance of <see cref="T:CMS.Activities.Internal.ActivityDto"/>.
+            </summary>
+            <param name="dataRow">Data row containing serialized <see cref="T:CMS.Activities.Internal.ActivityDto"/></param>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityDto.#ctor(CMS.Activities.ActivityInfo)">
+            <summary>
+            Instantiate new instance of <see cref="T:CMS.Activities.Internal.ActivityDto"/>.
+            </summary>
+            <param name="activity"><see cref="T:CMS.Activities.ActivityInfo"/> to be converted to <see cref="T:CMS.Activities.Internal.ActivityDto"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activity"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityDto.ToActivityInfo">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Activities.ActivityInfo"/> from the current <see cref="T:CMS.Activities.Internal.ActivityDto"/>.
+            </summary>
+            <remarks>
+            This method should be used with caution. Once called, the result should not take any part in performance critical methods.
+            </remarks>
+            <returns><see cref="T:CMS.Activities.ActivityInfo"/> created from current <see cref="T:CMS.Activities.Internal.ActivityDto"/></returns>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityCampaign">
+            <summary>
+            Gets or sets the campaign code name for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityUTMSource">
+            <summary>
+            Gets or sets the campaign UTM source for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityUTMContent">
+            <summary>
+            Gets or sets the campaign UTM content for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityItemDetailID">
+            <summary>
+            Gets or sets the ID othe item detail that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityID">
+            <summary>
+            Gets or sets the activity ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityContactID">
+            <summary>
+            Gets or sets the ID of the active contact for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityContactGUID">
+            <summary>
+            Gets or sets the GUID of the active contact for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityNodeID">
+            <summary>
+            Gets or sets the node ID that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityTitle">
+            <summary>
+            Gets or sets the activity title.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityType">
+            <summary>
+            Gets or sets the type of the activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityValue">
+            <summary>
+            Gets or sets the value of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityURL">
+            <summary>
+            Gets or sets the URL of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityURLHash">
+            <summary>
+            Gets or sets hash result of <see cref="P:CMS.Activities.IActivityInfo.ActivityURL"/>. The hash is needed for <see cref="F:CMS.Activities.PredefinedActivityType.PAGE_VISIT"/> activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityCreated">
+            <summary>
+            Gets or sets the date and time the activity was created.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivitySiteID">
+            <summary>
+            Gets or sets the site ID for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityItemID">
+            <summary>
+            Gets or sets the ID of the item that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityABVariantName">
+            <summary>
+            Gets or sets the AB test variant name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityMVTCombinationName">
+            <summary>
+            Gets or sets the MVT Combination name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityURLReferrer">
+            <summary>
+            Gets or sets URL referrer.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityComment">
+            <summary>
+            Gets or set additional comment.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.Internal.ActivityDto.ActivityCulture">
+            <summary>
+            Gets or sets the document culture where activity occurred.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.Internal.ActivityDto.FillDataContainer(CMS.Base.IDataContainer)">
+            <summary>
+            Fills given <paramref name="dataContainer"/> with values from current <see cref="T:CMS.Activities.Internal.ActivityDto"/>.
+            </summary>
+            <param name="dataContainer">Data container to be filled</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dataContainer"/> is <c>null</c></exception>
+        </member>
+        <member name="T:CMS.Activities.ActivityFilteredOutHandler">
+            <summary>
+            Event handler for the event fired once the activities are filtered out before bulk processing.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityFilteredOutHandler.StartEvent(System.Collections.Generic.IList{CMS.Activities.IActivityInfo})">
+            <summary>
+            Initiates the event.
+            </summary>
+            <param name="activities">Collection of filtered out<see cref="T:CMS.Activities.IActivityInfo"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activities"/> is <c>null</c></exception>
+            <returns>Event handler</returns>
+        </member>
+        <member name="T:CMS.Activities.ActivityProcessedInLogServiceHandler">
+            <summary>
+            Event handler for the event fired once the activity is processed in <see cref="T:CMS.Activities.IActivityLogService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivityProcessedInLogServiceHandler.StartEvent(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initiates the event.
+            </summary>
+            <param name="activity">Processed <see cref="T:CMS.Activities.IActivityInfo"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activity"/> is <c>null</c></exception>
+            <returns>Event handler</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityFactory">
+            <summary>
+            Provides possibility to create activities with basic data.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityFactory.Create(CMS.Activities.IActivityInitializer)">
+            <summary>
+            Creates new activity info, and initializes it using <paramref name="activityInitializer"/>.
+            </summary>
+            <returns>New <see cref="T:CMS.Activities.ActivityInfo"/></returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Activities.ActivityInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.IActivityLogFilter">
+            <summary>
+            Can filter out logging of activities, logged through <see cref="T:CMS.Activities.IActivityLogService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogFilter.IsDenied">
+            <summary>
+            Checks whether activity should be logged.
+            </summary>
+            <returns>Returns <c>true</c> if activity should not be logged, otherwise false.</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityLogService">
+            <summary>
+            Provides possibility to log activities.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogService.Log(CMS.Activities.IActivityInitializer,System.Boolean)">
+            <summary>
+            Logs given activity. Registered <see cref="T:CMS.Activities.IActivityLogFilter"/> are checked, activity is further processed only if all filters allow it.
+            Then <see cref="T:CMS.Activities.IActivityInfo"/> is created and <paramref name="activityInitializer"/> is called. 
+            Afterwards all registered modifiers are applied to the <see cref="T:CMS.Activities.IActivityInfo"/>. Finally the <see cref="T:CMS.Activities.IActivityInfo"/> is validated by registered <see cref="T:CMS.Activities.IActivityLogValidator"/>.
+            Activity is stored only if it is valid. After the activity is stored, two events are fired.
+            </summary>
+            <param name="activityInitializer">Activity initializer used to initialize logged activity.</param>
+            <param name="loggingDisabledInAdministration"><c>True</c> if activities should not be logged in administration.</param>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogService.LogWithoutModifiersAndFilters(CMS.Activities.IActivityInitializer)">
+            <summary>
+            Logs activity initialized by <paramref name="activityInitializer"/> directly to the database. Implementation does not check <see cref="T:CMS.Activities.IActivityLogFilter"/> 
+            and does not use <see cref="T:CMS.Activities.IActivityModifier"/>. Final validation by <see cref="T:CMS.Activities.IActivityLogValidator"/> is performed.
+            Method is designed to be used in environment without request e.g. scheduled tasks. After the activity is stored, two events are fired.
+            </summary>
+            <param name="activityInitializer">Activity initializer used to initialize logged activity</param>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogService.RegisterFilter(CMS.Activities.IActivityLogFilter)">
+            <summary>
+            Registers global filter which decide if activity should not be logged or otherwise. Filters are called before <see cref="T:CMS.Activities.IActivityInfo"/> is created.
+            Activity is not logged if at least one filter denies activity. Filters are global, thus they are shared across all instances of the service.
+            </summary>
+            <param name="filter">Activity filter.</param>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogService.RegisterModifier(CMS.Activities.IActivityModifier)">
+            <summary>
+            Registers global activity modifier. Modifier is used to update every newly created <see cref="T:CMS.Activities.IActivityInfo"/>. Modifier is called after activity is created
+            and successfully initialized. Modifiers are global, thus they are shared across all instances of the service.
+            </summary>
+            <param name="activityModifier"></param>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogService.RegisterValidator(CMS.Activities.IActivityLogValidator)">
+            <summary>
+            Registers global activity validator. Validators are used to check whether the processed <see cref="T:CMS.Activities.IActivityInfo"/> is valid and can be logged.
+            Validators are global, therefore they are shared across all instances of the service.
+            </summary>
+            <param name="activityLogValidator">Activity log validator to be registered</param>
+        </member>
+        <member name="T:CMS.Activities.IActivityLogValidator">
+            <summary>
+            Provides method for validating the <see cref="T:CMS.Activities.IActivityInfo"/> and determining, whether the <see cref="T:CMS.Activities.IActivityInfo"/>
+            is valid to be logged or not. Validator can be register as global validator for all activities being logged and it is used in 
+            <see cref="M:CMS.Activities.IActivityLogService.Log(CMS.Activities.IActivityInitializer,System.Boolean)"/> or <see cref="M:CMS.Activities.IActivityLogService.LogWithoutModifiersAndFilters(CMS.Activities.IActivityInitializer)"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityLogValidator.IsValid(CMS.Activities.IActivityInfo)">
+            <summary>
+            Determines whether the given <paramref name="activity"/> is valid or not, e.g. checks consistency of
+            activity properties.
+            </summary>
+            <param name="activity">Activity to be validated</param>
+            <returns>True if validation check was passed; otherwise, false</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityModifier">
+            <summary>
+            Provides possibility to modify activity data. Can be registered in <see cref="T:CMS.Activities.IActivityLogService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityModifier.Modify(CMS.Activities.IActivityInfo)">
+            <summary>
+            Mofifies activity properties. Should not rely on <see cref="T:CMS.Activities.IActivityInfo"/> properties, it should only update them.
+            </summary>
+            <param name="activity">Activity info</param>
+        </member>
+        <member name="T:CMS.Activities.IActivityRepository">
+            <summary>
+            Represents activity repository.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityRepository.Save(CMS.Activities.IActivityInfo)">
+            <summary>
+            Saves given activity info to repository.
+            </summary>
+            <param name="activity">Activity info</param>
+        </member>
+        <member name="T:CMS.Activities.IActivitySettings">
+            <summary>
+            Provides access to activities settings.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivitySettings.ActivitiesEnabledAndModuleLoadedForSite(System.String)">
+            <summary>
+            Checks whether activities logging is endabled for given site name and online marketing module is available.
+            </summary>
+            <param name="siteName">Site name</param>
+            <returns>Returns <c>True</c> if activities are enabled and online marketing module is available, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityUrlService">
+            <summary>
+            Provides methods to get correct URL and URL referrer to insert in <see cref="T:CMS.Activities.IActivityInfo" />.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.IActivityUrlService.GetActivityUrl">
+            <summary>
+            Gets URL of request the activity was logged for.
+            </summary>
+            <returns>URL</returns>
+        </member>
+        <member name="M:CMS.Activities.IActivityUrlService.GetActivityUrlReferrer">
+            <summary>
+            Gets URL referrer of request the activity was referred from.
+            </summary>
+            <returns>URL referrer</returns>
+        </member>
+        <member name="T:CMS.Activities.IActivityInfo">
+            <summary>
+            Defines contract for <see cref="T:CMS.Activities.ActivityInfo"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityCampaign">
+            <summary>
+            Gets or sets the campaign code name for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityUTMSource">
+            <summary>
+            Gets or sets the campaign UTM source for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityUTMContent">
+            <summary>
+            Gets or sets the campaign UTM content for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityItemDetailID">
+            <summary>
+            Gets or sets the ID other item detail that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityID">
+            <summary>
+            Gets or sets the activity ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityContactID">
+            <summary>
+            Gets or sets the ID of the active contact for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityContactGUID">
+            <summary>
+            Gets or sets the GUID of the active contact for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityNodeID">
+            <summary>
+            Gets or sets the node ID that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityTitle">
+            <summary>
+            Gets or sets the activity title.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityType">
+            <summary>
+            Gets or sets the type of the activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityValue">
+            <summary>
+            Gets or sets the value of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityURL">
+            <summary>
+            Gets or sets the URL of this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityURLHash">
+            <summary>
+            Gets or sets hash result of <see cref="P:CMS.Activities.IActivityInfo.ActivityURL"/>. The hash is needed for <see cref="F:CMS.Activities.PredefinedActivityType.PAGE_VISIT"/> activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityCreated">
+            <summary>
+            Gets or sets the date and time the activity was created.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivitySiteID">
+            <summary>
+            Gets or sets the site ID for this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityItemID">
+            <summary>
+            Gets or sets the ID of the item that relates to this activity.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityABVariantName">
+            <summary>
+            Gets or sets the AB test variant name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityMVTCombinationName">
+            <summary>
+            Gets or sets the MVT Combination name.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityURLReferrer">
+            <summary>
+            Gets or sets URL referrer.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityComment">
+            <summary>
+            Gets or set additional comment.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.IActivityInfo.ActivityCulture">
+            <summary>
+            Gets or sets the document culture where activity occurred.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.VisitorData">
+            <summary>
+            Represents visitor data such as customer, contact, user etc.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.ID">
+            <summary>
+            Object ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.FirstName">
+            <summary>
+            FirstName of the used subject.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.MiddleName">
+            <summary>
+            MiddleName of the used subject.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.LastName">
+            <summary>
+            LastName of the used subject.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.Email">
+            <summary>
+            Email of the used subject.
+            </summary>
+        </member>
+        <member name="P:CMS.Activities.VisitorData.UserName">
+            <summary>
+            UserName of the used subject.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivitiesModule">
+            <summary>
+            Represents the Activities module.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitiesModule.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="T:CMS.Activities.ActivitiesModuleMetadata">
+            <summary>
+            Represents the Activities module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Activities.ActivitiesModuleMetadata.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+    </members>
+</doc>

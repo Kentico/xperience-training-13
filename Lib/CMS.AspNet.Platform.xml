@@ -1,0 +1,1249 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.AspNet.Platform</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.AspNet.Platform.ApplicationRestartService">
+            <summary>
+            Full framework implementation of Application Restart service.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ApplicationRestartService.TriggerRestart">
+            <summary>
+            Attempts to restart an application using <see cref="M:System.Web.HttpRuntime.UnloadAppDomain"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.WebEnvironmentInitializer">
+            <summary>
+            Class is responsible for initializing website environment.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.WebEnvironmentInitializer.SetUp">
+            <summary>
+            Methods sets properties <see cref="P:CMS.Base.SystemContext.IsWebSite"/>, <see cref="P:CMS.Base.SystemContext.ApplicationPath"/> and <see cref="P:CMS.Base.SystemContext.WebApplicationPhysicalPath"/> by values provided by <see cref="T:System.Web.HttpRuntime"/> implementation.
+            </summary>
+            <remarks>
+            <para>
+            The method is not intended to be used directly from your code.
+            </para>
+            <para>
+            Method is called automatically during the application startup for applications hosted within the web server.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Cache.Extension.CMSCacheDependencyExtensions">
+            <summary>
+            Extension methods for <see cref="T:CMS.Helpers.CMSCacheDependency"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Cache.Extension.CMSCacheDependencyExtensions.CreateCacheDependency(CMS.Helpers.CMSCacheDependency)">
+            <summary>
+            Creates instance of <see cref="T:System.Web.Caching.CacheDependency"/> based on <paramref name="cmsDependency"/> values.
+            </summary>
+            <param name="cmsDependency">Cache dependency abstraction object.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.CachePolicyImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpCachePolicyBase"/> object implementing <see cref="T:CMS.Base.Internal.ICache"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Internal.HttpContextExtensions">
+            <summary>
+            Extensions for <see cref="T:System.Web.HttpContextBase"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Internal.HttpContextExtensions.GetProxy(System.Web.HttpContextBase)">
+            <summary>
+            Wraps the .NET Core <see cref="T:System.Web.HttpContextBase"/> within a proxy class implementation of <see cref="T:CMS.Base.Internal.IHttpContext"/>.
+            </summary>
+            <param name="httpContext">The <see cref="T:System.Web.HttpContextBase"/> to proxy.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpContext.Extensions.IHttpCookieExtensions">
+            <summary>
+            Extensions for <see cref="T:CMS.Base.Internal.IHttpCookie"/> interface.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpContext.Extensions.IHttpCookieExtensions.ToHttpCookie(CMS.Base.Internal.IHttpCookie)">
+            <summary>
+            Returns instance of <see cref="T:System.Web.HttpCookie"/> with same values as <see cref="T:CMS.Base.Internal.IHttpCookie"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HeaderDictionary">
+            <summary>
+            Class representing header dictionary of <see cref="T:CMS.Base.Internal.IRequest"/>. 
+            Proxies method calls to underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.AspNet.Platform.HeaderDictionary"/>.
+            </summary>
+            <param name="headers">Underlying collection to proxy methods to.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.Item(System.String)">
+            <summary>
+            Gets and sets a header.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.ContentLength">
+            <summary>
+            Gets and sets the "Content-Length" header value.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.Keys">
+            <summary>
+            Gets collection containing names of all set header.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.Values">
+            <summary>
+            Gets collection containing values of all set headers.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.Count">
+            <summary>
+            Gets the number of set headers.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HeaderDictionary.IsReadOnly">
+            <summary>
+            Indicates whether the collection is readonly. Returns false in this implementation.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Add(System.String,Microsoft.Extensions.Primitives.StringValues)">
+            <summary>
+            Adds a new header.
+            </summary>
+            <param name="key">Name of the header.</param>
+            <param name="value">Value of the header.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Add(System.Collections.Generic.KeyValuePair{System.String,Microsoft.Extensions.Primitives.StringValues})">
+            <summary>
+            Adds a new header.
+            </summary>
+            <param name="item">Key value pair representing the header.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Clear">
+            <summary>
+            Removes all headers from the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Contains(System.Collections.Generic.KeyValuePair{System.String,Microsoft.Extensions.Primitives.StringValues})">
+            <summary>
+            Determines whether the collection contains a header with specified name and value.
+            </summary>
+            <param name="item">Key value pair representing the tested header.</param>
+            <returns>True if the item is present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.ContainsKey(System.String)">
+            <summary>
+            Determines whether the collection contains a header with specified name.
+            </summary>
+            <param name="key">Name of the tested header.</param>
+            <returns>True if the key is present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.CopyTo(System.Collections.Generic.KeyValuePair{System.String,Microsoft.Extensions.Primitives.StringValues}[],System.Int32)">
+            <summary>
+            Copies all headers to <paramref name="array"/> starting at <paramref name="arrayIndex"/>.
+            Caller must ensure sufficient length of the array.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Remove(System.String)">
+            <summary>
+            Remove header with given name from the collection.
+            </summary>
+            <param name="key">Name of the header to be removed.</param>
+            <returns>True if the key was removed. False if the key was not present in the collection.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.Remove(System.Collections.Generic.KeyValuePair{System.String,Microsoft.Extensions.Primitives.StringValues})">
+            <summary>
+            Removes header with given name and value from the collection.
+            </summary>
+            <param name="item">Key value pair representing header to be removed.</param>
+            <returns>True if the item was removed. False if the item was not present in the collection.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.TryGetValue(System.String,Microsoft.Extensions.Primitives.StringValues@)">
+            <summary>
+            Retrieves value of header specified by given name.
+            </summary>
+            <param name="key">Name of the header for which value is retrieved.</param>
+            <param name="value">If the key is found the value associated with the specified key, otherwise the default value for the type of the value parameter.</param>
+            <returns>True if header was present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HeaderDictionary.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpApplicationImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpApplication"/> object implementing <see cref="T:CMS.Base.Internal.IHttpApplication"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpContextImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpContextBase"/> object implementing <see cref="T:CMS.Base.Internal.IHttpContext"/> interface.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpContextImpl.#ctor(System.Web.HttpContextBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.HttpContextImpl"/> class.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.HttpContextBase"/> object.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.HttpContextImpl.Items">
+            <summary>
+            Gets or sets a key/value collection that can be used to share data within the
+            scope of this request.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpContextRetrieverImpl">
+            <summary>
+            Implementation providing <see cref="T:CMS.Base.Internal.IHttpContext"/> implementation based on <see cref="P:CMS.Helpers.CMSHttpContext.Current"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpCookieImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpCookie"/> object implementing <see cref="T:CMS.Base.Internal.IHttpCookie"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.RequestImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpRequestBase"/> object implementing <see cref="T:CMS.Base.Internal.IRequest"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.RequestContextImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.Routing.RequestContext"/> object implementing <see cref="T:CMS.Base.Internal.IRequestContext"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.RequestCookieCollectionImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpCookieCollection"/> object implementing <see cref="T:CMS.Base.Internal.IRequestCookieCollection"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.FormCollection">
+            <summary>
+            Class representing collection of form values of <see cref="T:CMS.Base.Internal.IRequest"/>. 
+            Proxies method calls to underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.FormCollection.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.AspNet.Platform.FormCollection"/> class.
+            </summary>
+            <param name="form">Underlying collection to proxy methods to.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.FormCollection.Item(System.String)">
+            <summary>
+            Gets value of the form item specified by <paramref name="key"/>.
+            </summary>
+            <param name="key">Key of the value to get.</param>
+            <returns>Value of the form item if it is present, otherwise <see cref="F:Microsoft.Extensions.Primitives.StringValues.Empty"/>.</returns>
+        </member>
+        <member name="P:CMS.AspNet.Platform.FormCollection.Count">
+            <summary>
+            Gets the number of form items.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.FormCollection.Keys">
+            <summary>
+            Gets collection containing name keys of the form.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.FormCollection.ContainsKey(System.String)">
+            <summary>
+            Determines whether the collection contains a form item with specified name.
+            </summary>
+            <param name="key">Name of the tested form item.</param>
+            <returns>True if the key is present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.FormCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.FormCollection.TryGetValue(System.String,Microsoft.Extensions.Primitives.StringValues@)">
+            <summary>
+            Retrieves value of form item specified by given name.
+            </summary>
+            <param name="key">Name of the form item for which value is retrieved.</param>
+            <param name="value">If the key is found the value associated with the specified key, otherwise the default value for the type of the value parameter.</param>
+            <returns>True if query string item was present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.FormCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.HttpRequestExtensions">
+            <summary>
+            Extension methods for request objects.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRequestExtensions.GetEffectiveUrl(System.Web.HttpRequestBase)">
+            <summary>
+            Returns effective URL with correct port number based on <see cref="P:CMS.Helpers.RequestContext.IsSSL"/> property for <see cref="T:System.Security.Policy.Url"/> property.
+            </summary>
+            <param name="request"><see cref="T:System.Web.HttpRequestBase"/> object.</param>
+            <remarks>
+            When SSL offloading proxy is used <see cref="P:System.Web.HttpRequestBase.Url"/> does not contain valid port and scheme.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException"><paramref name="request"/></exception>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRequestExtensions.GetEffectiveUrl(System.Web.HttpRequest)">
+            <summary>
+            Returns effective URL with correct port number based on <see cref="P:CMS.Helpers.RequestContext.IsSSL"/> property for <see cref="P:System.Web.HttpRequest.Url"/> property.
+            </summary>
+            <param name="request"><see cref="T:System.Web.HttpRequest"/> object.</param>
+            <remarks>
+            When SSL offloading proxy is used <see cref="P:System.Web.HttpRequest.Url"/> does not contain valid port and scheme.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException"><paramref name="request"/></exception>
+        </member>
+        <member name="T:CMS.AspNet.Platform.QueryString">
+            <summary>
+            Class representing query string of <see cref="T:CMS.Base.Internal.IRequest"/>. 
+            Proxies method calls to underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.QueryString.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.AspNet.Platform.QueryString"/>.
+            </summary>
+            <param name="query">Underlying collection to proxy methods to.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.QueryString.Item(System.String)">
+            <summary>
+            Gets a query string value.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.QueryString.Count">
+            <summary>
+            Gets the number of set query string values.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.QueryString.Keys">
+            <summary>
+            Gets collection containing names of all set header.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.QueryString.ContainsKey(System.String)">
+            <summary>
+            Determines whether the collection contains a query string value with specified name.
+            </summary>
+            <param name="key">Name of the tested query string value.</param>
+            <returns>True if the key is present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.QueryString.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.QueryString.TryGetValue(System.String,Microsoft.Extensions.Primitives.StringValues@)">
+            <summary>
+            Retrieves value of query string item specified by given name.
+            </summary>
+            <param name="key">Name of the query string item for which value is retrieved.</param>
+            <param name="value">If the key is found the value associated with the specified key, otherwise the default value for the type of the value parameter.</param>
+            <returns>True if query string item was present, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.QueryString.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.ServerVariablesImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Collections.Specialized.NameValueCollection"/> object implementing <see cref="T:CMS.Base.Internal.IServerVariables"/> interface.
+            </summary>
+        </member>
+        <member name="F:CMS.AspNet.Platform.ServerVariablesImpl.mCollection">
+            <summary>
+            Underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ServerVariablesImpl.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.ServerVariablesImpl"/> class.
+            </summary>
+            <param name="collection">Underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/>.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.ServerVariablesImpl.Item(System.String)">
+            <summary>
+            Gets the value of a server variable for the current request.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.ResponseImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpResponseBase"/> object implementing <see cref="T:CMS.Base.Internal.IResponse"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.ResponseCookieCollectionImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpCookieCollection"/> object implementing <see cref="T:CMS.Base.Internal.IResponseCookieCollection"/> interface.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Keys">
+            <summary>
+            Gets a string array containing all the keys (cookie names) in the cookie collection.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Item(System.String)">
+            <summary>
+            Gets the cookie with the specified name from the cookie collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Clear">
+            <summary>
+            Clears all cookies from the cookie collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Remove(System.String)">
+            <summary>
+            Removes the cookie with the specified name from the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Append(CMS.Base.Internal.IHttpCookie)">
+            <summary>
+            Adds or updates the value of an existing cookie in a cookie collection.
+            </summary>
+            <param name="cookie"></param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ResponseCookieCollectionImpl.Delete(System.String)">
+            <summary>
+            Sets an expired cookie.
+            </summary>
+            <param name="key">Name of the cookie to expire.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.ResponseCookieCollectionImpl.GetNewCookie(System.String)">
+            <summary>
+            Creates and return new <see cref="T:CMS.AspNet.Platform.HttpCookieImpl"/> object.
+            </summary>
+            <param name="name">New cookie name.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.RouteDataImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.Routing.RouteData"/> object implementing <see cref="T:CMS.Base.Internal.IRouteData"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.SessionImpl">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpSessionStateBase"/> object implementing <see cref="T:CMS.Base.Internal.ISession"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.StringValuesEnumerator">
+            <summary>
+            String values enumerator.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.StringValuesEnumerator.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.AspNet.Platform.StringValuesEnumerator"/>.
+            </summary>
+            <param name="collection">Underlying collection to proxy methods to.</param>
+        </member>
+        <member name="P:CMS.AspNet.Platform.StringValuesEnumerator.Current">
+            <summary>
+            Gets the element in the collection at the current position of the enumerator.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.StringValuesEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets the Key of the element in the collection at the current position of the enumerator.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.StringValuesEnumerator.MoveNext">
+            <summary>
+            Advances the enumerator to the next element of the collection.
+            </summary>
+            <returns>
+            <c>true</c> if the enumerator was successfully advanced to the next element;
+            <c>false</c> if the enumerator has passed the end of the collection.
+            </returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.StringValuesEnumerator.Reset">
+            <summary>
+            Sets the enumerator to its initial position, which is before the first element
+            in the collection.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.StringValuesEnumerator.Dispose">
+            <summary>
+            Nothing to dispose in current implementation.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.WebPathMapperImpl">
+            <summary>
+            Maps paths from the root of the web application.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.AspNet.Platform.WebPathMapperImpl"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.MapPathInternal(System.String)">
+            <summary>
+            Returns the full physical file path from the <paramref name="relativePath"/>.
+            For the application residing in C:\\folder\\appFolder and "~/AppData" <paramref name="relativePath"/> parameter,
+            the result will be C:\\folder\\appFolder\\AppData.
+            </summary>
+            <param name="relativePath">Relative path to be resolved.</param>
+            <returns>The physical file path that corresponds to <paramref name="relativePath" />.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.GetRootPath">
+            <summary>
+            Gets the application root path. Not used in this implementation.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.PlatformModule">
+            <summary>
+            Represents the module providing basic full framework implementations.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.PlatformModule.#ctor">
+            <summary>
+            Creates new instance of <see cref="T:CMS.AspNet.Platform.PlatformModule"/>
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.PlatformModule.OnPreInit">
+            <summary>
+            Handles the module pre-initialization.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.PlatformModule.RegisterRoutes(System.Object,System.EventArgs)">
+            <summary>
+            Adds custom HTTP Handler routes discovered during CMS Application PreInit.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ActionResultExecutorBase">
+            <summary>
+            Base class for services which can execute a particular kind of <see cref="T:CMS.Base.Routing.CMSActionResult"/>
+            by manipulating the <see cref="T:System.Web.HttpResponse"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultExecutorBase.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when this executor can be used for <paramref name="actionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultExecutorBase.Execute(System.Web.HttpContext,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Performs actions required by <paramref name="actionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultExecutorBase.SetHeaders(System.Web.HttpResponseBase,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Sets cache-related and status code response headers for <paramref name="actionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultExecutorBase.ExecuteInternal(System.Web.HttpContextBase,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Performs specific actions required by <paramref name="actionResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ContentResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSContentResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ContentResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSContentResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.DirectActionResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSDirectActionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.DirectActionResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSDirectActionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.DirectActionResultExecutor.Execute(System.Web.HttpContext,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Executes synchronously a <see cref="P:CMS.Base.Routing.CMSDirectActionResult.Action"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.FileContentResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSFileContentResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.FileContentResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSFileContentResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.FileResultExecutorBase">
+            <summary>
+            Base class for services which can execute a <see cref="T:CMS.Base.Routing.CMSFileResult"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.FileResultExecutorBase.GetFileEndRequest">
+            <summary>
+            When <see langword="true"/>, the request is completed, when <see langword="false"/>, the Request.End is called.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.FileResultExecutorBase.FixSessionIdForInProcOptimization(System.Web.HttpContextBase)">
+             <summary>
+             <see cref="T:AdvancedGetFileService"/> is implementation of <see cref="T:System.Web.SessionState.IReadOnlySessionState"/>.
+             This may cause that session created within request handled by this handler won't be saved due to 
+             optimization in default <see cref="T:System.Web.SessionState.SessionStateModule"/>. The optimization is trying
+             to postpone creation of session to the latest request event (<see cref="E:System.Web.HttpApplication.ReleaseRequestState"/>.
+            
+             <see cref="T:CMS.AspNet.Platform.Routing.ResponseDataSender"/> used for data transmission is eagerly flushing response to the client. 
+             The first flush is sending response headers (in our case without sessionId). In case of not existing session id
+             in cookies the postponed sessionId creation causes an exception (not affecting current response or CMS system, the
+             exception is logged to the system log).
+             
+             The optimization is used only if following conditions are satisfied:
+             <see cref="P:System.Web.HttpSessionStateBase.Mode"/> is <see cref="F:System.Web.SessionState.SessionStateMode.InProc"/>
+             <see cref="T:System.Web.SessionState.ISessionIDManager"/> is <see cref="T:System.Web.SessionState.SessionIDManager"/>
+             Cookies are used as sessionId storage.
+             </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ForbiddenResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSForbiddenResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ForbiddenResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSForbiddenResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.IActionResultExecutor">
+            <summary>
+            Defines an interface for a service which can execute a particular kind of <see cref="T:CMS.Base.Routing.CMSActionResult"/>
+            by manipulating the <see cref="T:System.Web.HttpResponse"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IActionResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when this executor can be used for <paramref name="actionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IActionResultExecutor.Execute(System.Web.HttpContext,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Performs actions required by <paramref name="actionResult"/>.
+            </summary>
+            <param name="httpContext">The <see cref="T:System.Web.HttpContext"/>.</param>
+            <param name="actionResult">The <see cref="T:CMS.Base.Routing.CMSActionResult"/>.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.IResponseDataSender">
+            <summary>
+            Defines an object that writes data to the given context's response and handles multipart and range requests. 
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.LogExceptions">
+            <summary>
+            Logs the exceptions caused by the process.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.LogCommunicationExceptions">
+            <summary>
+            Whether to log exception caused by communication problems (e.g. when remote host closes the connection).
+            <see cref="P:CMS.AspNet.Platform.Routing.IResponseDataSender.LogExceptions"/> has to be set to <see langword="true"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.AcceptRange">
+            <summary>
+            Indicates if resumable downloads should be supported for current file.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.IsRangeRequest">
+            <summary>
+            Indicates whether it is range request.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.IsMultipart">
+            <summary>
+            Indicates whether it is multipart range request.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.Ranges">
+            <summary>
+            2D Array in format {{START_RANGE,END_RANGE},{START_RANGE, END_RANGE}}.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.AreRangesValid">
+            <summary>
+            Indicates whether ranges are valid.
+            <see langword="true"/>: ranges are valid or request is not range request
+            <see langword="false"/>: all other cases
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.IResponseDataSender.DataLength">
+            <summary>
+            Size of data.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IResponseDataSender.WriteFile(System.String,System.Boolean)">
+            <summary>
+            Streams the data file to the response.
+            </summary>
+            <param name="filepath">File path</param>
+            <param name="returnOutputData">If true, output data is returned</param>
+            <returns>Returns streamed binary data if requested by <paramref name="returnOutputData"/>. Binary data are never returned for range requests.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IResponseDataSender.WriteBytes(System.Byte[])">
+            <summary>
+            Streams the byte array to the response.
+            </summary>
+            <param name="data">Data to write</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.NotFoundResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSNotModifiedResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.NotFoundResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSNotFoundResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.NotModifiedResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSNotModifiedResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.NotModifiedResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSNotModifiedResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.PhysicalFileResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.AspNet.Platform.Routing.FileResultExecutorBase"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.PhysicalFileResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSPhysicalFileResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.RedirectResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSRedirectResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.RedirectResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSRedirectResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ResponseDataSender">
+            <summary>
+            Class that writes data to the given context's response and handles multipart and range requests. 
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.LogExceptions">
+            <summary>
+            Logs the exceptions caused by the process.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.LogCommunicationExceptions">
+            <summary>
+            Whether to log exception caused by communication problems (e.g. when remote host closes the connection).
+            Log exceptions has to be set to TRUE.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.AcceptRanges">
+            <summary>
+            Indicates whether range requests are enabled (ex. for resumable downloads). If false, the HTTP Handler
+            ignores the Range HTTP Header and returns the entire contents.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.Context">
+            <summary>
+             Current HTTP context.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.Response">
+            <summary>
+            Current HTTP response.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.IsRangeRequest">
+            <summary>
+            Indicates whether it is range request.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.IsMultipart">
+            <summary>
+            Indicates whether it is multipart range request.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.AcceptRange">
+            <summary>
+            Indicates if resumable downloads should be supported for current file.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.Ranges">
+            <summary>
+            2D Array in format {{START_RANGE,END_RANGE},{START_RANGE, END_RANGE}}.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.AreRangesValid">
+            <summary>
+            Indicates whether ranges are valid.
+            TRUE: ranges are valid or request is not range request
+            FALSE: all other cases
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ResponseDataSender.DataLength">
+            <summary>
+            Size of data.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.#ctor(System.Web.HttpContextBase)">
+            <summary>
+            Creates a new ResponseDataSender instance.
+            </summary>
+            <param name="context">HTTP context that will be used for sending a data.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.WriteFile(System.String,System.Boolean)">
+            <summary>
+            Streams the data file to the response.
+            </summary>
+            <param name="filepath">File path</param>
+            <param name="returnOutputData">If true, output data is returned</param>
+            <returns>Returns streamed binary data if requested by <paramref name="returnOutputData"/>. Binary data are never returned for range requests.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.WriteBytes(System.Byte[])">
+            <summary>
+            Streams the byte array to the response.
+            </summary>
+            <param name="data">Data to write</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.GetRange(System.Int64)">
+            <summary>
+            Parses the range header from the request.
+            </summary>
+            <param name="size">Size of data</param>
+            <returns>2D Array in format {{START_RANGE,END_RANGE},{START_RANGE, END_RANGE}}</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.GetResponseContentLength(System.String)">
+            <summary>
+            Gets response content length and sets up response.
+            </summary>
+            <param name="fileContentType">Content type</param>
+            <returns>Response content length</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ResponseDataSender.IsCommunicationError(System.Exception)">
+            <summary>
+            Determines whether given exception is caused by communication problem (e.g. when remote host closes the connection).
+            </summary>
+            <param name="ex">Exception to examine</param>
+            <returns>TRUE if exception is thrown due to communication problems</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.RewritePathResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.Base.Routing.CMSRewritePathResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.RewritePathResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.Base.Routing.CMSRewritePathResult"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ServerTransferResultExecutor">
+            <summary>
+            Represents a service which can execute a <see cref="T:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ServerTransferResultExecutor.CanExecute(CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            <see langword="true"/> when <paramref name="actionResult"/> is <see cref="T:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ServerTransferResultExecutor.Execute(System.Web.HttpContext,CMS.Base.Routing.CMSActionResult)">
+            <summary>
+            Performs actions required by <paramref name="actionResult"/>.
+            Calls <see cref="M:System.Web.HttpServerUtility.Transfer(System.String)"/> method on <paramref name="httpContext"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult">
+            <summary>
+            An <see cref="T:CMS.Base.Routing.CMSActionResult"/> that performs server transfer redirect by using the specified path.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult.Path">
+            <summary>
+            The URL path of the new page on the server to execute.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.Internal.CMSServerTransferResult"/> class with the values provided.
+            </summary>
+            <param name="path">
+            The URL path of the new page on the server to execute.
+            </param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.Internal.RouteCollectionExtensions">
+            <summary>
+            Provides methods to add routes to Kentico HTTP handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.Internal.RouteCollectionExtensions.AddKenticoHttpHandlerRoutes(System.Web.Routing.RouteCollection)">
+            <summary>
+            Adds custom <see cref="T:System.Web.IHttpHandler"/> discovered during CMS Application PreInit to <paramref name="routes"/> collection.
+            </summary>
+            <param name="routes">The <see cref="T:System.Web.Routing.RouteCollection"/>.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ActionResultHttpHandler">
+            <summary>
+            Executes <see cref="T:CMS.Base.Routing.CMSActionResult"/> returned by <see cref="T:CMS.Base.Routing.IActionResultService"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.Routing.ActionResultHttpHandler.IsReusable">
+            <summary>
+            Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultHttpHandler.#ctor(CMS.Base.Routing.IActionResultService,System.Collections.Generic.IEnumerable{CMS.AspNet.Platform.Routing.IActionResultExecutor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.ActionResultHttpHandler"/> class.
+            </summary>
+            <param name="actionResultService">
+            Service responsible for handling the incoming request by returning a <see cref="T:CMS.Base.Routing.CMSActionResult"/>.
+            </param>
+            <param name="executors">
+            Collection of executors to execute a <see cref="T:CMS.Base.Routing.CMSActionResult"/> returned by the <paramref name="actionResultService"/>.
+            </param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultHttpHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Enables processing of HTTP Web requests by a custom HttpHandler.
+            </summary>
+            <param name="context">
+            An <see cref="T:System.Web.HttpContext"/> object that provides references to the intrinsic server
+            objects (for example, Request, Response, Session, and Server) used to service HTTP requests.
+            </param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ActionResultHttpHandlerResolver">
+            <summary>
+            Represents a service that can resolve a specific <see cref="T:System.Web.IHttpHandler"/> object which can
+            call <see cref="T:CMS.Base.Routing.IActionResultService"/> and execute its result.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultHttpHandlerResolver.#ctor(System.Collections.Generic.IEnumerable{CMS.AspNet.Platform.Routing.IActionResultExecutor})">
+            <summary>
+            Initializes a new instance of an <see cref="T:CMS.AspNet.Platform.Routing.ActionResultHttpHandlerResolver"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultHttpHandlerResolver.Resolve(System.Type)">
+            <summary>
+            Returns an <see cref="T:System.Web.IHttpHandler"/> that should be used by <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">The type of <see cref="T:CMS.Base.Routing.IActionResultService"/> to resolve an <see cref="T:System.Web.IHttpHandler"/> for.</param>
+            <returns>An <see cref="T:System.Web.IHttpHandler"/> instance.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultHttpHandlerResolver.Resolve``1">
+            <summary>
+            Returns an <see cref="T:System.Web.IHttpHandler"/> that should be used by <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">The <see cref="T:CMS.Base.Routing.IActionResultService"/> to resolve an <see cref="T:System.Web.IHttpHandler"/> for.</typeparam>
+            <returns>An <see cref="T:System.Web.IHttpHandler"/> instance.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.IActionResultHttpHandlerResolver">
+            <summary>
+            Represents a service that can resolve a specific <see cref="T:System.Web.IHttpHandler"/> object which can
+            call <see cref="T:CMS.Base.Routing.IActionResultService"/> and execute its result.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IActionResultHttpHandlerResolver.Resolve(System.Type)">
+            <summary>
+            Returns an <see cref="T:System.Web.IHttpHandler"/> that should be used by <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">The type of <see cref="T:CMS.Base.Routing.IActionResultService"/> to resolve an <see cref="T:System.Web.IHttpHandler"/> for.</param>
+            <returns>An <see cref="T:System.Web.IHttpHandler"/> instance.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IActionResultHttpHandlerResolver.Resolve``1">
+            <summary>
+            Returns an <see cref="T:System.Web.IHttpHandler"/> that should be used by <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">The <see cref="T:CMS.Base.Routing.IActionResultService"/> to resolve an <see cref="T:System.Web.IHttpHandler"/> for.</typeparam>
+            <returns>An <see cref="T:System.Web.IHttpHandler"/> instance.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ReadOnlySessionActionResultHttpHandler">
+            <summary>
+            Executes <see cref="T:CMS.Base.Routing.CMSActionResult"/> returned by <see cref="T:CMS.Base.Routing.IActionResultService"/>.
+            This HTTP handler requires only read access to session-state values.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ReadOnlySessionActionResultHttpHandler.#ctor(CMS.Base.Routing.IActionResultService,System.Collections.Generic.IEnumerable{CMS.AspNet.Platform.Routing.IActionResultExecutor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.RequiresSessionActionResultHttpHandler"/> class.
+            </summary>
+            <param name="actionResultService">Service responsible for handling the incoming request by returing a <see cref="T:CMS.Base.Routing.CMSActionResult"/>.</param>
+            <param name="executors">Collection of executors to execute a result returned by the <paramref name="actionResultService"/>.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.RequiresSessionActionResultHttpHandler">
+            <summary>
+            Executes <see cref="T:CMS.Base.Routing.CMSActionResult"/> returned by <see cref="T:CMS.Base.Routing.IActionResultService"/>.
+            This HTTP handler requires read and write access to session-state values.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.RequiresSessionActionResultHttpHandler.#ctor(CMS.Base.Routing.IActionResultService,System.Collections.Generic.IEnumerable{CMS.AspNet.Platform.Routing.IActionResultExecutor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.RequiresSessionActionResultHttpHandler"/> class.
+            </summary>
+            <param name="actionResultService">Service responsible for handling the incoming request by returing a <see cref="T:CMS.Base.Routing.CMSActionResult"/>.</param>
+            <param name="executors">Collection of executors to execute a result returned by the <paramref name="actionResultService"/>.</param>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.GuidRouteConstraint">
+            <summary>
+            Constrains a route parameter to represent only <see cref="T:System.Guid"/> values.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.GuidRouteConstraint.Match(System.Web.HttpContextBase,System.Web.Routing.Route,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteDirection)">
+            <summary>
+            Determines whether this instance matches a specified route.
+            </summary>
+            <param name="httpContext">The HTTP context.</param>
+            <param name="route">The route to match.</param>
+            <param name="parameterName">The name of the route parameter.</param>
+            <param name="values">A list of route parameter values.</param>
+            <param name="routeDirection">The route direction.</param>
+            <returns><c>true</c> if this instance matches a specified route; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.IntRouteConstraint">
+            <summary>
+            Constrains a route parameter to represent only <see cref="T:System.Int32"/> values.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IntRouteConstraint.Match(System.Web.HttpContextBase,System.Web.Routing.Route,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteDirection)">
+            <summary>
+            Determines whether this instance matches a specified route.
+            </summary>
+            <param name="httpContext">The HTTP context.</param>
+            <param name="route">The route to match.</param>
+            <param name="parameterName">The name of the route parameter.</param>
+            <param name="values">A list of route parameter values.</param>
+            <param name="routeDirection">The route direction.</param>
+            <returns><c>true</c> if this instance matches a specified route; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.DefaultInlineConstraintResolver">
+            <summary>
+            Resolves inline constraints as instances of <see cref="T:System.Web.Routing.IRouteConstraint"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.DefaultInlineConstraintResolver.ResolveConstraint(System.String)">
+            <summary>
+            Resolves the inline constraint.
+            </summary>
+            <param name="inlineConstraint">The inline constraint to resolve.</param>
+            <returns>The <see cref="T:System.Web.Routing.IRouteConstraint"/> that the inline constraint was resolved to, if applicable; otherwise, <c>null</c>.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.HttpHandlerRoute">
+            <summary>
+            Represents a route for Kentico HTTP handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.HttpHandlerRoute.#ctor(System.String,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.HttpHandlerRoute"/> class.
+            </summary>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="routeHandler">The object that processes requests for the route.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.HttpHandlerRoute.GetVirtualPath(System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Returns information about the URL that is associated with the route.
+            </summary>
+            <param name="requestContext">An object that encapsulates information about the requested route.</param>
+            <param name="values">An object that contains the parameters for a route.</param>
+            <remarks>
+            This method always returns <c>null</c> to prevent generation of links to Kentico HTTP handlers in external web applications.
+            </remarks>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.HttpHandlerRouteBuilder">
+            <summary>
+            Builds routes for Kentico HTTP handlers from route templates that support inline constraints.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.HttpHandlerRouteBuilder.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.Routing.HttpHandlerRouteBuilder"/> class using the default inline constraint resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.HttpHandlerRouteBuilder.Build(System.String,System.Type)">
+            <summary>
+            Builds a route for a Kentico HTTP handler.
+            </summary>
+            <param name="routeTemplate">The route template with optional inline constraints.</param>
+            <param name="routeHandlerType">The route handler type.</param>
+            <returns>A route for a Kentico HTTP handler.</returns>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.HttpHandlerRouteBuilder.Build(System.String,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Builds a route for a Kentico HTTP handler.
+            </summary>
+            <param name="routeTemplate">The route template with optional inline constraints.</param>
+            <param name="routeHandler">The route handler.</param>
+            <returns>A route for a Kentico HTTP handler.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.IInlineConstraintResolver">
+            <summary>
+            Represents the contract for resolving inline constraints as instances of <see cref="T:System.Web.Routing.IRouteConstraint"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.IInlineConstraintResolver.ResolveConstraint(System.String)">
+            <summary>
+            Resolves the inline constraint.
+            </summary>
+            <param name="inlineConstraint">The inline constraint to resolve.</param>
+            <returns>The <see cref="T:System.Web.Routing.IRouteConstraint"/> that the inline constraint was resolved to, if applicable; otherwise, <c>null</c>.</returns>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ActionResultRouteHandler">
+            <summary>
+            Wrapper over <see cref="T:CMS.AspNet.Platform.Routing.IActionResultHttpHandlerResolver"/> resolving appropriate
+            <see cref="T:System.Web.IHttpHandler"/> from services container.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultRouteHandler.#ctor(System.Type)">
+            <summary>
+            Creates an instance of the <see cref="T:CMS.AspNet.Platform.Routing.ActionResultRouteHandler"/> class.
+            </summary>
+            <param name="type">HttpHandler type to initialize.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Resolves appropriate HTTP handler from services container.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ActionResultRouteHandler`1">
+            <summary>
+            Wrapper over <see cref="T:CMS.AspNet.Platform.Routing.IActionResultHttpHandlerResolver"/> resolving appropriate
+            <see cref="T:System.Web.IHttpHandler"/> from services container.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ActionResultRouteHandler`1.GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Resolves appropriate HTTP handler from services container.
+            </summary>
+        </member>
+        <member name="T:CMS.AspNet.Platform.Routing.ObjectFactoryRouteHandler">
+            <summary>
+            Wrapper over <see cref="T:CMS.Core.ObjectFactory"/> to instantiate <see cref="T:System.Web.IHttpHandler"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ObjectFactoryRouteHandler.#ctor(System.Type)">
+            <summary>
+            Creates an instance of the <see cref="T:CMS.AspNet.Platform.Routing.ObjectFactoryRouteHandler"/> class.
+            </summary>
+            <param name="type">HttpHandler type to initialize.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.Routing.ObjectFactoryRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Provides the object that processes the request.
+            </summary>
+        </member>
+        <member name="T:CMS.Base.UploadExtensions.HttpPostedFileExtensions">
+            <summary>
+            Provides methods to get a wrapper object implementing <see cref="T:CMS.Base.IUploadedFile"/> interface.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.UploadExtensions.HttpPostedFileExtensions.ToUploadedFile(System.Web.HttpPostedFile)">
+            <summary>
+            Returns a wrapper object over <see cref="T:System.Web.HttpPostedFile"/> implementing <see cref="T:CMS.Base.IUploadedFile"/> interface.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.UploadExtensions.HttpPostedFileExtensions.ToUploadedFile(System.Web.HttpPostedFileBase)">
+            <summary>
+            Returns a wrapper object over <see cref="T:System.Web.HttpPostedFileBase"/> implementing <see cref="T:CMS.Base.IUploadedFile"/> interface.
+            </summary>
+        </member>
+        <member name="T:CMS.Base.UploadedFile">
+            <summary>
+            Wrapper over <see cref="T:System.Web.HttpPostedFileBase"/> object implementing <see cref="T:CMS.Base.IUploadedFile"/> interface.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.UploadedFile.CanOpenReadStream">
+            <summary>
+            Gets a value that indicates whether this implementation supports accessing the input stream
+            via <see cref="M:CMS.Base.UploadedFile.OpenReadStream"/> method. This property always returns <see langword="false"/>.
+            </summary>
+            <return>
+            <see langword="false"/> to indicate that the input stream must be accessed via <see cref="P:CMS.Base.UploadedFile.InputStream"/> property.
+            </return>
+        </member>
+        <member name="P:CMS.Base.UploadedFile.ContentType">
+            <summary>
+            Gets the MIME content type of an uploaded file.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.UploadedFile.Length">
+            <summary>
+            Gets the size of an uploaded file in bytes.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.UploadedFile.FileName">
+            <summary>
+            Gets the fully qualified name of the file on the client.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.UploadedFile.InputStream">
+            <summary>
+            Gets a <see cref="T:System.IO.Stream"/> object that points to an uploaded file.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.UploadedFile.#ctor(System.Web.HttpPostedFileBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Base.UploadedFile"/> class.
+            </summary>
+            <param name="postedFile">The <see cref="T:System.Web.HttpPostedFileBase"/>.</param>
+        </member>
+        <member name="M:CMS.Base.UploadedFile.OpenReadStream">
+            <summary>
+            Opens the request stream for reading the uploaded file.
+            This method is not currently supported.
+            The input stream must be accessed via <see cref="P:CMS.Base.UploadedFile.InputStream"/> property. 
+            </summary>
+            <exception cref="T:System.NotSupportedException">
+            Thrown always.
+            </exception>
+        </member>
+        <member name="T:CMS.Membership.AuthenticationMode">
+            <summary>
+            Specifies the ASP.NET authentication scheme that is used to identify users.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.AuthenticationMode.AuthenticationTypeCheck">
+            <summary>
+            Gets the value that sets the type of current authentication
+            AUTH_TYPE_DEFAULT  - Use default
+            AUTH_TYPE_FORMS    - Forcibly sets Forms authentication
+            AUTH_TYPE_WINDOWS  - Forcibly sets Windows authentication
+            AUTH_TYPE_BOTH     - Forcibly sets Windows authentication  and Forms authentication
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.AuthenticationMode.IsWindowsAuthentication">
+            <summary>
+            Returns true if the authentication mode is Windows authentication.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.AuthenticationMode.IsFormsAuthentication">
+            <summary>
+            Returns true if the authentication mode is Forms authentication.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.AuthenticationMode.IsMixedAuthentication">
+            <summary>
+            If true, mixed authentication is used.
+            </summary>
+        </member>
+    </members>
+</doc>

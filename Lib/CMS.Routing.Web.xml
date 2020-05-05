@@ -1,0 +1,563 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Routing.Web</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Routing.Web.DomainPolicy">
+            <summary>
+            Ensures domain policies like redirection to site alias, using of domain prefix etc.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.DomainPolicy.UseDomainRedirectForFiles">
+            <summary>
+            Indicates whether domain redirect should be used for file request (getattachment, getmediafile, getmetafile, etc)
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.DomainPolicy.ApplyForFiles(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Applies domain policy for files regarding given site.
+            </summary>
+            <param name="site">Site info for which the policy is applied.</param>
+        </member>
+        <member name="T:CMS.Routing.Web.RoutingModule">
+            <summary>
+            Represents the Routing module.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.RoutingModule.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Routing.Web.RoutingModule" /> class.
+            </summary>
+        </member>
+        <member name="T:CMS.Routing.Web.ActionResultServiceBase">
+            <summary>
+            Base class for services implementing custom HTTP handlers.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.ActionResultServiceBase.CMS#Base#Routing#IActionResultService#IsReusable">
+            <summary>
+            Returns false as service cannot be re-used for handling multiple requests.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.ActionResultServiceBase.RequestStatusEnum">
+            <summary>
+            Gets current request URL rewriting status.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.GetActionResult">
+            <summary>
+            Process the request.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.GetActionResultInternal">
+            <summary>
+            Process the request.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.FileNotFound">
+            <summary>
+            Responds HTTP code 404 Not Found.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.Forbidden">
+            <summary>
+            Responds HTTP code 403 Forbidden.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.Unauthorized">
+            <summary>
+            Responds HTTP code 401 Forbidden.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.ETagsMatch(System.String,System.DateTime)">
+            <summary>
+            Checks if given and requested ETags match and object has current timestamp.
+            </summary>
+            <param name="eTag">Entity tag of object to compare against ETag received in request.</param>
+            <param name="lastModified">Timestamp of last modification to compare against value in request.</param>        
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.GetIfModifiedSinceRequestHeader">
+            <summary>
+            Returns the value of <see langword="If-Modified-Since"/> HTTP header or <see langword="null"/> if the header not found.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.HasIfModifiedSinceRequestHeader">
+            <summary>
+            Returns <see langword="true"/> when non-empty <see langword="If-Modified-Since"/>
+            header is present in current request.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ActionResultServiceBase.GetHeader(System.String)">
+            <summary>
+            Returns the value of specified HTTP header or <see langword="null"/> if the header not found.
+            </summary>
+            <param name="name">HTTP header name</param>
+        </member>
+        <member name="T:CMS.Routing.Web.AdvancedGetFileService">
+            <summary>
+            Base class for services retrieving a file.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mCacheMinutes">
+            <summary>
+            Cache minutes
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mClientCacheMinutes">
+            <summary>
+            Client cache minutes
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mRevalidateClientCache">
+            <summary>
+            Indicates whether client cache should be revalidated
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mWidth">
+            <summary>
+            Width
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mHeight">
+            <summary>
+            Height
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mMaxSideSize">
+            <summary>
+            Max. side size
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mResizeToDevice">
+            <summary>
+            Indicates whether resizing should be used for device
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mExcludedResumableExtensions">
+            <summary>
+            List of file extensions for which the resumable downloads are disabled.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.useCacheItemName">
+            <summary>
+            Cache item name for the request.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.deviceResizeIsUsed">
+            <summary>
+            Indicates if max resize for mobile device is used.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.AdvancedGetFileService.mIsLiveSite">
+            <summary>
+            Indicates if used on live site
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.RequestStatusEnum">
+            <summary>
+            Gets current request URL rewriting status.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.Watermark">
+            <summary>
+            If set, watermark image is applied to the image. Name of the watermark image from ~/App_Themes/{theme}/Images/Watermarks
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.WatermarkPosition">
+            <summary>
+            Watermark position.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.GetFileEndRequest">
+            <summary>
+            When true, the request is completed, when false, the Request.End is called.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.ExcludedResumableExtensions">
+            <summary>
+            List of file extensions for which the resumable downloads are disabled.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.CurrentSiteName">
+            <summary>
+            Current site name.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.CurrentSite">
+            <summary>
+            Current site.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.CacheMinutes">
+            <summary>
+            Cache minutes.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.ClientCacheMinutes">
+            <summary>
+            Cache minutes.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.AllowClientCache">
+            <summary>
+            Returns true if client cache is allowed for the current request.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.RevalidateClientCache">
+            <summary>
+            Gets or sets the value representing if client HTTP cache should be revalidated.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.OutputDataCacheItemName">
+            <summary>
+            Cache item name for the file output data.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.Width">
+            <summary>
+            Image width.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.Height">
+            <summary>
+            Image height.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.MaxSideSize">
+            <summary>
+            Image maximum side size.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.ResizeToDevice">
+            <summary>
+            Indicates if max side size parameter should be changes to device profile dimensions.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.LogExceptions">
+            <summary>
+            Logs the exceptions caused by the process.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.LogCommunicationExceptions">
+            <summary>
+            Whether to log exception caused by communication problems (e.g. when remote host closes the connection).
+            Log exceptions has to be set to TRUE.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.AllowCache">
+            <summary>
+            Returns true if the process allows cache.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.AdvancedGetFileService.IsLiveSite">
+            <summary>
+            Indicates if live site mode.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.GetActionResultInternal">
+            <summary>
+            Checks domain policy for current site and calls <see cref="M:CMS.Routing.Web.AdvancedGetFileService.GetFileServiceResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.GetFileServiceResult">
+            <summary>
+            Returns a <see cref="T:CMS.Base.Routing.CMSActionResult"/> by specific service retrieving file contents.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.NotModified(System.String,System.String,System.DateTime,System.Boolean)">
+            <summary>
+            Responds HTTP code 304 Not Modified.
+            </summary>
+            <param name="contentType">The <see langword="Content-Type"/> header for the response.</param>
+            <param name="eTag">Entity tag of object.</param>
+            <param name="lastModified">Last modified date.</param>
+            <param name="publicCache">True if object can be cached by clients and proxies, false if only by clients.</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.PrepareFileContentResult(System.String,System.String,System.String,System.String,System.DateTime,System.Boolean,System.Boolean)">
+            <summary>
+            Prepares the <see cref="T:CMS.Base.Routing.CMSFileContentResult"/> object with common properties populated.
+            </summary>
+            <param name="fileName">File name (e.g. image.png)</param>
+            <param name="extension">File extension.</param>
+            <param name="contentType">The <see langword="Content-Type"/> header for the response.</param>
+            <param name="eTag">Entity tag of object.</param>
+            <param name="lastModified">Last modified date.</param>
+            <param name="useClientCache">True if client caching is enabled.</param>
+            <param name="publicCache">True if object can be cached by clients and proxies, false if only by clients.</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.PreparePhysicalFileResult(System.String,System.String,System.String,System.String,System.String,System.DateTime,System.Boolean,System.Boolean)">
+            <summary>
+            Prepares the <see cref="T:CMS.Base.Routing.CMSPhysicalFileResult"/> object with common properties populated.
+            </summary>
+            <param name="path">Path to the file that will be sent back as the response.</param>
+            <param name="fileName">File name (e.g. image.png)</param>
+            <param name="extension">File extension.</param>
+            <param name="contentType">The <see langword="Content-Type"/> header for the response.</param>
+            <param name="eTag">Entity tag of object.</param>
+            <param name="lastModified">Last modified date.</param>
+            <param name="useClientCache">True if client caching is enabled.</param>
+            <param name="publicCache">True if object can be cached by clients and proxies, false if only by clients.</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.SetCacheabilityAndRevalidation(CMS.Base.Routing.CMSActionResult,System.DateTime,System.Boolean,System.Boolean)">
+            <summary>
+            Sets the cacheability restriction based on the options provided as arguments and <see cref="P:CMS.Routing.Web.AdvancedGetFileService.AllowCache"/> property.
+            Revalidation is set based on the <see cref="P:CMS.Routing.Web.AdvancedGetFileService.RevalidateClientCache"/> property.
+            </summary>
+            <param name="result">The <see cref="T:CMS.Base.Routing.CMSActionResult" /> object to update.</param>
+            <param name="lastModified">Last modified date.</param>
+            <param name="useClientCache">True if client caching is enabled.</param>
+            <param name="publicCache">True if object can be cached by clients and proxies, false if only by clients.</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.LoadSiteName">
+            <summary>
+            Loads the site name from the query string.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.GetCachedOutputData">
+            <summary>
+            Gets the cached data for the current request.
+            </summary>
+            <returns>Returns null if no data is cached</returns>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.SaveOutputDataToCache(System.Byte[],CMS.Helpers.CMSCacheDependency)">
+            <summary>
+            Saves the data for current request to cache.
+            </summary>
+            <param name="data">Data to cache</param>
+            <param name="cd">Cache item dependency</param>
+            <remarks>If the data is null, nothing is saved to the cache</remarks>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.GetBaseCacheKey">
+            <summary>
+            Returns the base cache key (created with all parameters considered to be valid for proper caching).
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.HandleDeviceResize">
+            <summary>
+            Changes MaxSideSize to device dimensions if device resizing is enabled.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.GetCacheDependency(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Creates the cache dependency from the given keys.
+            </summary>
+            <param name="dependencies">Cache keys</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.IsExtensionExcludedFromRanges(System.String)">
+            <summary>
+            Indicates if file with given extension is excluded from resumable downloads.
+            </summary>
+            <param name="extension">File extension</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.HandleDeviceDimension(System.Int32)">
+            <summary>
+            Handles max side size according to device profile dimensions.
+            </summary>
+            <param name="maxSideSize">Max side size</param>
+        </member>
+        <member name="M:CMS.Routing.Web.AdvancedGetFileService.ReadFileContent(System.String)">
+            <summary>
+            Reads <paramref name="filePath"/> and returns bytes array.
+            </summary>
+        </member>
+        <member name="T:CMS.Routing.Web.ExternalFile">
+            <summary>
+            Represents a file stored on external storage.
+            </summary>
+            <seealso cref="T:CMS.Routing.Web.GetExternalFileService"/>
+        </member>
+        <member name="P:CMS.Routing.Web.ExternalFile.ETag">
+            <summary>
+            Defines an identifier representing specific version of a resource.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.ExternalFile.LastModified">
+            <summary>
+            Defines point in time in which the external file was modified.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.ExternalFile.#ctor(System.DateTime,System.String)">
+            <summary>
+            Initializes a new instance of an <see cref="T:CMS.Routing.Web.ExternalFile"/>.
+            </summary>
+            <param name="lastModified">Defines point in time in which the external file was modified.</param>
+            <param name="eTag">Defines an optional identifier representing specific version of a resource.</param>
+            <seealso cref="T:CMS.Routing.Web.GetExternalFileService"/>
+        </member>
+        <member name="T:CMS.Routing.Web.GetExternalFileService">
+            <summary>
+            Base class for services retrieving a files from external storages.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetExternalFileService.#ctor(CMS.Base.IWebPathMapper)">
+            <summary>
+            Initializes a new instance of a <see cref="T:CMS.Routing.Web.GetExternalFileService"/>.
+            </summary>
+            <param name="webPathMapper">Instance for mapping paths from the root of the web application.</param>
+        </member>
+        <member name="P:CMS.Routing.Web.GetExternalFileService.AllowCache">
+            <summary>
+            Gets or sets whether cache is allowed. By default cache is allowed on live site.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetExternalFileService.GetFileServiceResult">
+            <summary>
+            Processes the incoming HTTP request and returns a <see cref="T:CMS.Base.Routing.CMSActionResult"/> describing the action to be executed for the request.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetExternalFileService.GetExternalFile(System.String)">
+            <summary>
+            Returns an object representing a file on external storage.
+            Returns null if the file on the <paramref name="filePath"/> does not exist.
+            </summary>
+            <param name="filePath">Full physical file path.</param>
+        </member>
+        <member name="T:CMS.Routing.Web.GetFileService">
+            <summary>
+            Base class for GetFile handlers. Handles client caching and range requests.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.RequestStatusEnum">
+            <summary>
+            Gets current request URL rewriting status.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.ClientCacheMinutes">
+            <summary>
+            Client cache minutes.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.AllowClientCache">
+            <summary>
+            Returns true if client cache is allowed for the current request.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.RevalidateClientCache">
+            <summary>
+            Indicates if client cache should be revalidated.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.IsLiveSite">
+            <summary>
+            Indicates if live site mode.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetFileService.ExcludedResumableExtensions">
+            <summary>
+            List of file extensions for which the resumable downloads are disabled.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetFileService.SetResponseHeaders(CMS.Base.Routing.CMSFileResult,System.String,System.String,System.String)">
+            <summary>
+            Sets response headers.
+            </summary>
+            <param name="fileResult">The <see cref="T:CMS.Base.Routing.CMSFileResult"/> object to set properties on.</param>
+            <param name="fileName">File name</param>
+            <param name="extension">File extension</param>
+            <param name="mimeType">File MIME type</param>
+        </member>
+        <member name="M:CMS.Routing.Web.GetFileService.HandleClientCache(CMS.Base.Routing.CMSFileResult,System.String,System.DateTime,System.Boolean)">
+            <summary>
+            Sets client cache headers.
+            Returns <see cref="T:CMS.Base.Routing.CMSNotModifiedResult"/> when requested file is in client's cache, <see langword="null"/> otherwise.
+            </summary>
+            <param name="fileResult">The <see cref="T:CMS.Base.Routing.CMSFileResult"/> to populate cache headers.</param>
+            <param name="eTag">Entity tag of object to compare against ETag received in request</param>
+            <param name="lastModified">Timestamp of the last modification to compare against value in request</param>        
+            <param name="publicCache">Indicates whether response can be cached by public cache systems or not</param>
+            <returns>Returns <see cref="T:CMS.Base.Routing.CMSNotModifiedResult"/> when requested file is in client's cache, <see langword="null"/> otherwise.</returns>
+        </member>
+        <member name="M:CMS.Routing.Web.GetFileService.SetClientCache(CMS.Base.Routing.CMSFileResult,System.String,System.DateTime,System.Boolean,System.Boolean)">
+            <summary>
+            Sets client cache headers.
+            </summary>
+            <param name="fileResult">The <see cref="T:CMS.Base.Routing.CMSFileResult"/> to populate cache headers.</param>
+            <param name="eTag">Entity tag of object to compare against ETag received in request.</param>
+            <param name="lastModified">Timestamp of the last modification to compare against value in request.</param>        
+            <param name="useClientCache">True if client cache is allowed for the current request.</param>
+            <param name="publicCache">Indicates whether response can be cached by public cache systems or not.</param>
+        </member>
+        <member name="T:CMS.Routing.Web.GetMetafileService">
+            <summary>
+            HTTP handler for serving metafiles.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.GetMetafileService.useClientCache">
+            <summary>
+            Sets to false to disable the client caching.
+            </summary>
+        </member>
+        <member name="F:CMS.Routing.Web.GetMetafileService.largeFilesCacheMinutes">
+            <summary>
+            Sets to 0 if you do not wish to cache large files.
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetMetafileService.AllowCache">
+            <summary>
+            Returns true if the process allows cache.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.GetFileServiceResult">
+            <summary>
+            Handles metafile caching and returns the request process result as a <see cref="T:CMS.Base.Routing.CMSActionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.ProcessFile">
+            <summary>
+            Processes the file.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.GetSendFileAction(CMS.DataEngine.CMSOutputMetaFile)">
+            <summary>
+            Sends the given file within response.
+            </summary>
+            <param name="file">File to send</param>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.EnsureOutputData(CMS.DataEngine.CMSOutputMetaFile,System.Boolean)">
+            <summary>
+            Ensures the file data if physical file not present.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.GetFileETag(CMS.DataEngine.CMSOutputMetaFile)">
+            <summary>
+            Gets the ETag for the given file
+            </summary>
+            <param name="file">File</param>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.GetOutputDataDependency(CMS.DataEngine.MetaFileInfo)">
+            <summary>
+            Returns the output data dependency based on the given attachment record.
+            </summary>
+            <param name="mi">Metafile object</param>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.EnsurePhysicalFile(CMS.DataEngine.CMSOutputMetaFile)">
+            <summary>
+            Ensures the physical file.
+            </summary>
+            <param name="file">Output file</param>
+        </member>
+        <member name="M:CMS.Routing.Web.GetMetafileService.NewOutputFile(CMS.DataEngine.MetaFileInfo,System.Byte[])">
+            <summary>
+            Gets the new output MetaFile object.
+            </summary>
+            <param name="mfi">Meta file info</param>
+            <param name="data">Output MetaFile data</param>
+        </member>
+        <member name="T:CMS.Routing.Web.GetVersionService">
+            <summary>
+            Handler to get CMS version
+            </summary>
+        </member>
+        <member name="P:CMS.Routing.Web.GetVersionService.CMS#Base#Routing#IActionResultService#IsReusable">
+            <summary>
+            Returns true as service can be re-used for handling multiple requests.
+            </summary>
+        </member>
+        <member name="M:CMS.Routing.Web.GetVersionService.GetActionResult">
+            <summary>
+            Processes the incoming HTTP request and returns current system version if version key is valid.
+            </summary>
+        </member>
+    </members>
+</doc>

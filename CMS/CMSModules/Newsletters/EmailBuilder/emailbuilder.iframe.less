@@ -1,0 +1,195 @@
+﻿// Import just references of these less files. It doesn't compile them into the CSS code.
+@import (reference) "../../../App_Themes/Default/Bootstrap/variables.less";
+@import (reference) "../../../App_Themes/Default/Bootstrap/mixins.less";
+@import (reference) "../../../App_Themes/Default/Bootstrap/type.less";
+
+// Import common styles for the iframe and the builder's page
+@import "../../../App_Themes/Default/CMSModules/cms.emailmarketing/cms.emailmarketing.emailbuilder.common.less";
+
+// Specify font icons location
+@font-face {
+    font-family: @icon-font-name;
+    src: url('../../../App_Themes/Default/Fonts/Core-icons.eot');
+    src: url('../../../App_Themes/Default/Fonts/Core-icons.svg#Core-icons') format('svg'),
+        url('../../../App_Themes/Default/Fonts/Core-icons.eot?#iefix') format('embedded-opentype'),
+        url('../../../App_Themes/Default/Fonts/Core-icons.woff') format('woff'),
+        url('../../../App_Themes/Default/Fonts/Core-icons.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@zone-empty-border-color: @color-gray-140;
+@zone-border-width: 2px;
+@zone-min-height: (@base-unit * 6.25) + (@zone-border-width * 2);
+
+@widget-header-height: 2 * @base-unit;
+@widget-outline-color: @color-gray-50;
+@widget-outline-width: 1px;
+@widget-top-margin: -1 * (@widget-header-height - @widget-outline-width);
+@widget-controls-left-margin: @base-unit / 2;
+
+.cms-zone {
+    width: 100%;
+    z-index: 1;
+
+    // Import font icons class names
+    @import (reference) "../../../App_Themes/Default/Bootstrap/icon-variables.less";
+    @import (reference) "../../../App_Themes/Default/Bootstrap/icon-mixins.less";
+    @import "../../../App_Themes/Default/Bootstrap/icon-font-base-class.less";
+    @import "../../../App_Themes/Default/Bootstrap/icon-classes.less";
+
+    .cms-email-widget {
+        .email-widget;
+        background: @color-gray-150;
+        color: @color-gray-130;
+        width: @email-widget-width;
+        float: none;
+
+        .cms-icon-150 {
+            .cms-icon-150;
+        }
+    }
+
+    .cms-email-widget-label {
+        color: @color-gray-90;
+    }
+
+    &:empty {
+        position: relative;
+        height: @zone-min-height;
+        text-align: center;
+        outline: @zone-border-width dashed @zone-empty-border-color;
+
+        &:before {
+            content: attr(data-empty-zone-text);
+            font: initial;
+            font-size: @font-size-large;
+            font-family: @font-family-semibold;
+            color: @zone-empty-border-color;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    &.cms-zone-highlight {
+        outline: @zone-border-width dashed @color-gray-100;
+        min-height: @zone-min-height;
+
+        &:before {
+            content: "";
+        }
+    }
+
+    .cms-widget {
+        position: relative;
+
+        .cms-widget-header {
+            z-index: 2;
+            display: none;
+            position: absolute;
+            width: 100%;
+            min-width: 6 * @base-unit;
+            height: @widget-header-height;
+            background-color: @color-gray-50;
+            margin-top: @widget-top-margin;
+            outline: @widget-outline-width solid @widget-outline-color;
+            color: @color-white;
+            box-sizing: border-box;
+
+            .cms-widget-controls-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                cursor: move;
+
+                .cms-widget-controls {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 100%;
+
+                    .cms-widget-controls-left {
+                        text-align: left;
+
+                        i[class^="icon-"] {
+                            margin-left: @widget-controls-left-margin;
+                        }
+                    }
+
+                    .cms-widget-controls-right {
+                        float: right;
+
+                        .cms-widget-delete {
+                            border: 0;
+                            cursor: pointer;
+                            color: inherit;
+                            padding-top: 0;
+                            padding-bottom: 0;
+                            background-color: transparent;
+                        }
+                    }
+
+                    i[class^="icon-"] {
+                        font-size: @icon-size-80;
+                    }
+                }
+            }
+        }
+
+        .cms-widget-content {
+            min-height: @base-unit;
+        }
+
+        .cms-widget-missing {
+            outline: @widget-outline-width solid @color-red-100;
+            min-height: 3 * @base-unit !important;
+            line-height: 3 * @base-unit !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-family: @font-family-base !important;
+            font-size: @font-size-base !important;
+
+            .cms-missing-exclamationmark {
+                margin: .75 * @base-unit !important;
+                color: @color-red-70 !important;
+                display: block !important;
+                position: absolute !important;
+                font-size: 1.25 * @base-unit !important;
+            }
+        }
+
+        .cms-widget-invalid {
+            outline: @widget-outline-width solid @color-orange-80;
+            min-height: 3 * @base-unit;
+
+            .cms-invalid-exclamationmark {
+                margin: .75 * @base-unit;
+                color: @color-orange-80;
+                display: block;
+                position: absolute;
+                font-size: 1.25 * @base-unit;
+            }
+        }
+
+        &.cms-widget-highlight {
+            z-index: 3;
+
+            .cms-widget-header {
+                display: block;
+            }
+
+            .cms-widget-content {
+                outline: @widget-outline-width solid @widget-outline-color;
+            }
+        }
+
+        &.cms-widget-dragging {
+            .cms-widget-content {
+                outline: @widget-outline-width dashed @widget-outline-color;
+                outline-offset: -1px;
+            }
+        }
+    }
+}

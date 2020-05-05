@@ -1,0 +1,57 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_UI_Dialogs_ModalSimplePage"
+     Codebehind="ModalSimplePage.master.cs" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagPrefix="cms"
+    TagName="HeaderActions" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagPrefix="cms"
+    TagName="PageTitle" %>
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>SimpleMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false"></asp:Literal>
+    <style type="text/css">
+        body
+        {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+    </style>
+</head>
+<body id="bodyElem" runat="server">
+    <form id="form1" runat="server">
+    <asp:PlaceHolder runat="server" ID="plcManager" />
+    <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+    <asp:ContentPlaceHolder ID="plcBeforeBody" runat="server" />
+    <asp:Panel ID="pnlBody" runat="server" CssClass="DialogPageBody">
+        <cms:CMSPanel ID="pnlHeaderContainer" runat="server" FixedPosition="true" CssClass="header-container">
+            <asp:Panel ID="pnlHeader" runat="server" CssClass="DialogsPageHeader SimpleHeader"
+                EnableViewState="false">
+                <cms:PageTitle ID="titleElem" ShortID="pt" runat="server" HelpIconName="icon-modal-question cms-icon-80" Wrap="true" IsDialog="true" />
+                <asp:Panel runat="server" ID="pnlSeparator" CssClass="HeaderSeparator" Visible="false">
+                    &nbsp;</asp:Panel>
+            </asp:Panel>
+            <asp:Panel ID="pnlSiteSelector" runat="server" CssClass="header-panel header-actions-site-selector-block"
+                Visible="false">
+                <asp:ContentPlaceHolder runat="server" ID="plcSiteSelector" />
+            </asp:Panel>
+            <asp:Panel ID="pnlAdditionalControls" runat="server" CssClass="header-panel" Visible="false">
+                <asp:ContentPlaceHolder runat="server" ID="plcControls" />
+            </asp:Panel>
+            <asp:Panel ID="pnlActions" runat="server" CssClass="cms-edit-menu" EnableViewState="false">
+                <cms:HeaderActions ID="actionsElem" ShortID="a" CssClass="cms-edit-menu" IsLiveSite="false"
+                    runat="server" />
+                <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+            </asp:Panel>
+        </cms:CMSPanel>
+        <asp:Panel ID="pnlContent" runat="server" CssClass="PageContentModal scroll-area">
+            <cms:CMSUpdateProgress ID="up" runat="server" HandlePostback="true" />
+            <asp:PlaceHolder runat="server" ID="plcLabels" />
+            <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+        </asp:Panel>
+    </asp:Panel>
+    </form>
+    <asp:PlaceHolder runat="server" ID="plcAfterForm"></asp:PlaceHolder>
+</body>
+</html>

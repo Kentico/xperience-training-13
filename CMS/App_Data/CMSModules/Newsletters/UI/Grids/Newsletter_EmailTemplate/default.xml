@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="TemplateID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$General.ConfirmDelete$" />
+  </actions>
+  <columns>
+    <column source="TemplateDisplayName" caption="$Unigrid.NewsletterTemplate.Columns.TemplateDisplayName$" wrap="false" localize="true">
+      <Filter Type="text" />
+    </column>
+    <column source="TemplateType" externalsourcename="templatetype" caption="$general.type$" wrap="false">
+      <Filter type="custom" controlname="EnumSelector">
+        <Parameters>
+          <filterparameter name="AssemblyName" value="CMS.Newsletters" />
+          <filterparameter name="TypeName" value="CMS.Newsletters.EmailTemplateTypeEnum" />
+          <filterparameter name="UseStringRepresentation" value="true" />
+          <filterparameter name="Items" value=";{$general.selectall$}" />
+          <filterparameter name="Sort" value="true" />
+        </Parameters>
+      </Filter>
+    </column>
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="newsletter.emailtemplate" columns="TemplateID,TemplateDisplayName,TemplateType" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

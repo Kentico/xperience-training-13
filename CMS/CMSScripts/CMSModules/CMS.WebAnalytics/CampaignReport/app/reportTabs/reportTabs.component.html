@@ -1,0 +1,15 @@
+﻿<cms-tab-switcher tabs="::$ctrl.tabs" selected-index="$ctrl.tabIndex" on-tab-change="$ctrl.changeTab(index)"></cms-tab-switcher>
+
+<div ng-switch on="$ctrl.tabIndex">
+    <div ng-switch-when="0">
+        <h3>{$ campaign.conversions $}</h3>
+        <div ng-repeat="conversion in ::$ctrl.nonFunnelConversions">
+            <cms-conversion-report conversion="::conversion" source-details="::$ctrl.report.sourceDetails"></cms-conversion-report>
+        </div>
+        <span ng-if="::!$ctrl.nonFunnelConversions.length">{$ campaign.noconversion $}</span>
+    </div>
+
+    <div ng-switch-when="1">
+        <cms-campaign-funnel report="::$ctrl.report"></cms-campaign-funnel>
+    </div>
+</div>

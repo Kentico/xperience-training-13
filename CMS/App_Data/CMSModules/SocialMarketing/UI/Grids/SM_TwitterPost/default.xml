@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="TwitterPostID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$sm.twitter.posts.confirmation.delete$" />
+  </actions>
+  <columns>
+    <column source="TwitterPostText" caption="$sm.twitter.posts.content$" wrap="false" localize="true" maxlength="50" />
+    <column source="TwitterPostTwitterAccountID" caption="$sm.twitter.posts.account$" externalsourcename="#transform: sm.twitteraccount : {%TwitterAccountDisplayName%}" wrap="false">
+      <filter source="TwitterAccountDisplayName" type="text" format="[TwitterPostTwitterAccountID] IN (SELECT [TwitterAccountID] FROM [SM_TwitterAccount] WHERE {3})" />
+    </column>
+    <column source="##ALL##" caption="$sm.twitter.posts.document$" wrap="false" externalsourcename="documentguid" />
+    <column source="TwitterPostCampaignID" caption="$sm.twitter.posts.campaign$" wrap="false" externalsourcename="#transform: analytics.campaign : {%CampaignDisplayName%}">
+      <!-- Third parameter contains the original generated condition, which takes care of proper encapsulation of LIKE clause within percent symbols -->
+      <filter source="CampaignDisplayName" type="text" format="[TwitterPostCampaignID] IN (SELECT [CampaignID] FROM [Analytics_Campaign] WHERE {3}) OR (('{1}' = 'NOT LIKE' OR '{1}' = '&lt;&gt;') AND ([TwitterPostCampaignID] IS NULL))" />
+    </column>
+    <column source="TwitterPostID" caption="$sm.twitter.posts.state$" wrap="false" externalsourcename="state" allowsorting="false" />
+    <column source="TwitterPostFavorites" caption="$sm.twitter.posts.favorites$" wrap="false" externalsourcename="favorites" allowsorting="true" />
+    <column source="TwitterPostRetweets" caption="$sm.twitter.posts.retweets$" wrap="false" externalsourcename="retweets" allowsorting="true" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="sm.twitterpost" columns="TwitterPostID, TwitterPostText, TwitterPostTwitterAccountID, TwitterPostCampaignID, TwitterPostLastModified, TwitterPostDocumentGUID, TwitterPostFavorites, TwitterPostRetweets, TwitterPostSiteID" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

@@ -1,0 +1,629 @@
+﻿// Variables
+@design-header-height: @base-unit * 2;
+@design-header-padding: (@design-header-height - @base-unit) * 0.5;
+@design-content-min-heigh: (@design-header-height + 2px);
+@design-placeholder-bgcolor: #83b558;
+@design-zone-bgcolor: #feb54f;
+@design-zone-orphaned-bgcolor: #ddd;
+@design-widget-zone-bgcolor: #E79E41;
+@design-webpart-bgcolor: #c0dee2;
+@design-webpart-border: 2px;
+@design-webpart-border-color: @design-zone-bgcolor;
+@design-title-padding: 0px (@base-unit * 1) 0px (@base-unit * 0.25);
+@design-title-padding-rtl: 0px (@base-unit * 0.25) 0px (@base-unit * 1);
+@design-webpart-drop-cue-color: #e5e5e5;
+@design-icon-color: @color-gray-70;
+@design-icon-hover-color: @color-blue-70;
+@design-header-menu-padding: @design-header-padding (@base-unit * 0.5);
+@design-layout-webpart-header: #bdbbbb;
+@layout-info-color: #008800;
+
+
+// Design mode with "cms-bootstrap" wrapping
+// -----------------------------------------
+.cms-bootstrap {
+    // Page placeholder
+    .PagePlaceholderHeader {
+        .design-header();
+        background: @design-placeholder-bgcolor;
+        margin: 1px;
+        overflow: hidden;
+
+        .PagePlaceholderTitle {
+            padding: @design-title-padding;
+            font-size: @font-size-base !important;
+            font-weight: bold;
+
+            strong {
+                color: @text-color;
+            }
+
+            .RTL & {
+                padding: @design-title-padding-rtl;
+            }
+        }
+
+        tbody {
+            background-color: inherit;
+            border: inherit;
+        }
+    }
+
+    .PagePlaceholderLeftAction {
+        width: @base-unit;
+        color: @design-icon-color;
+
+        i {
+            padding: @design-header-menu-padding;
+            padding-left: 0px;
+        }
+    }
+
+    .PagePlaceholderActiveContextMenu {
+        .PagePlaceholderLeftAction {
+            background: #ceefaf;
+            color: @design-icon-hover-color;
+        }
+    }
+
+    .PagePlaceholderDevice {
+        width: 16px;
+        padding-left: 2px;
+        padding-right: 2px;
+
+        img {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+    }
+    // Layout web parts
+    .StandardWebPart & .LayoutWebPartHeader {
+        position: relative;
+        background: @design-layout-webpart-header;
+
+        .WebPartZoneHeader {
+            clear: both;
+            border-left: none;
+            border-right: none;
+        }
+
+        table {
+            width: 100%;
+            margin: 0;
+
+            td {
+                line-height: @design-header-height;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    &.LayoutFooter {
+        padding: 0;
+        background: @design-layout-webpart-header;
+
+        .LayoutFooterContent {
+            color: #000000;
+            text-align: left !important;
+            white-space: nowrap;
+
+            .RTL & {
+                text-align: right !important;
+            }
+
+            .LayoutLeftActions {
+                float: left;
+
+                .RTL & {
+                    float: right;
+                }
+            }
+
+            .LayoutRightActions {
+                float: right;
+
+                .RTL & {
+                    float: left;
+                }
+            }
+
+            .LayoutAction {
+                padding: 0px (@base-unit * 0.5);
+                text-decoration: none !important;
+                line-height: @design-header-height;
+                color: @design-icon-color !important;
+
+                &:hover {
+                    color: @design-icon-hover-color !important;
+                }
+            }
+        }
+    }
+
+    .UserWidget &.LayoutFooter {
+        display: none;
+    }
+}
+
+
+// Design mode without "cms-bootstrap" wrapping
+// --------------------------------------------
+
+// Web parts
+.StandardWebPart {
+    .WebPartBorder,
+    .WebPartBorderActive {
+        box-sizing: content-box;
+        min-height: @design-header-height !important;
+    }
+
+    .WebPartBorder {
+        padding: @design-webpart-border !important;
+    }
+
+    .WebPartBorderActive {
+        padding: 0;
+        border: dashed @design-webpart-border @design-webpart-border-color;
+
+        .WebPartHeader {
+            z-index: 10010;
+            .opacity(1);
+        }
+    }
+
+    .WebPartHeaderEnvelope {
+        height: 0;
+        overflow: visible;
+    }
+
+    .WebPartHeader,
+    .LayoutWebPartHeader {
+        .design-header();
+        z-index: 9900;
+        white-space: nowrap;
+        min-height: @design-header-height;
+        min-width: @base-unit * 10;
+
+        tbody {
+            background-color: inherit;
+            border: inherit;
+        }
+    }
+
+    .WebPartHeader {
+        background: @design-webpart-bgcolor;
+        display: inline-block;
+        position: relative;
+
+        .WidgetType {
+            padding-left: @base-unit * 0.25;
+
+            .RTL & {
+                padding-left: 0;
+                padding-right: @base-unit * 0.25;
+            }
+        }
+    }
+
+    .WebPartSource {
+        background: #B7B7DE;
+    }
+
+    .WebPartPlaceholder {
+        background: #BDE19A;
+    }
+
+    .WebPartInvisible {
+        background: #CCADA8;
+    }
+
+    .WebPartLeftAction {
+        .design-left-action();
+    }
+
+    .WebPartActiveContextMenu .WebPartLeftAction {
+        background-color: #eaf1fa;
+        color: @design-icon-hover-color;
+    }
+
+    .WebPartPlaceholder .WebPartActiveContextMenu .WebPartLeftAction {
+        background-color: #95BB76;
+    }
+
+    .WebPartTypeIcon {
+        color: @design-icon-color;
+        font-size: @base-unit;
+        padding: @design-header-padding (@base-unit * 0.25);
+        vertical-align: top;
+    }
+}
+
+.WebPart {
+    .WebPartHandle {
+        cursor: move;
+        text-align: left !important;
+
+        .RTL & {
+            text-align: right !important;
+        }
+    }
+
+    .WebPartTitle {
+        font-size: @font-size-base !important;
+        padding: @design-title-padding;
+        margin: 0;
+
+        .RTL & {
+            padding: @design-title-padding-rtl;
+        }
+    }
+}
+
+.WebPartPlaceholder .WebPartActiveContextMenu .WebPartLeftAction {
+    background-color: #95BB76;
+}
+
+.WebPartSource .WebPartActiveContextMenu .WebPartLeftAction {
+    background: #dedeee;
+}
+
+.WebPartFilter .WebPartActiveContextMenu .WebPartLeftAction {
+    background: #e3ecf0;
+}
+
+.WebPartInvisible .WebPartActiveContextMenu .WebPartLeftAction {
+    background: #dbdbdb;
+}
+// Web part zones
+.StandardZone {
+    .WebPartZoneHeader {
+        .design-header();
+
+        tbody {
+            background-color: inherit;
+            border: inherit;
+        }
+    }
+
+    .WebPartZoneHeaderOrphaned {
+        .design-header();
+        background-color: @design-zone-orphaned-bgcolor;
+    }
+
+    .WebPartZoneHandle {
+        line-height: @design-header-height;
+
+        .WebPartZoneTitle {
+            font-size: @font-size-base !important;
+            padding: @design-title-padding;
+
+            .RTL & {
+                padding: @design-title-padding-rtl;
+            }
+        }
+    }
+
+    .WebPartZoneBorder {
+        margin: 1px;
+    }
+
+    .WebPartZoneBorderActive {
+        margin: 1px;
+    }
+
+    .WebPartZoneLeftAction {
+        .design-left-action();
+    }
+
+    .WebPartZoneActiveContextMenu {
+        .WebPartZoneLeftAction {
+            background: #ffdca4;
+            color: @design-icon-hover-color;
+        }
+    }
+
+    .WebPartZoneContent {
+        border: solid 1px @color-gray-140;
+        border-top-width: 0px;
+        min-height: @design-content-min-heigh;
+    }
+
+    .WebPartZoneType {
+        padding-left: @base-unit * 0.25;
+
+        .RTL & {
+            padding-left: 0;
+            padding-right: @base-unit * 0.25;
+        }
+    }
+}
+
+.FreeLayout {
+    background-color: #fff;
+    background: url(../../CMSPages/GetResource.ashx?image=CMSModules/CMS_PortalEngine/Grid.png);
+    border: solid 1px #fff !important;
+    min-width: 100%;
+}
+
+.FreeLayout.ActiveDropArea {
+    border: dashed 1px red !important;
+}
+
+.WebPartZoneHeaderOrphaned .WebPartZoneActiveContextMenu .WebPartZoneLeftAction {
+    background: #ececec;
+}
+
+.WebPartZoneActiveContextMenu .SimpleZoneAction {
+    color: @design-icon-hover-color;
+}
+
+.WebPartZoneCue {
+    background-color: @design-webpart-drop-cue-color;
+
+    &.CueFree {
+        position: absolute;
+    }
+
+    &.CueLFloat {
+        float: left;
+    }
+
+    &.CueRFloat {
+        float: right;
+    }
+}
+
+// Layout web parts
+.LayoutTable {
+    border: solid 1px @design-layout-webpart-header;
+    border-top: none;
+}
+
+.LayoutHeader {
+    padding: 0;
+    margin: 0;
+
+    .WebPartHeaderEnvelope {
+        height: auto !important;
+    }
+}
+
+
+.LayoutOverlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    filter: alpha(opacity=1);
+    opacity: 0.01;
+    background-color: #fff;
+}
+
+.LayoutInfoOverlay {
+    border: solid 1px #ffffff;
+    position: absolute;
+    z-index: 9998;
+    background-color: @layout-info-color;
+    filter: alpha(opacity=30);
+    opacity: 0.3;
+    text-align: center;
+}
+
+.LayoutInfoText {
+    background-color: #aaddaa;
+    border: solid 1px @layout-info-color;
+    padding: 2px;
+    position: absolute;
+    z-index: 9999;
+    text-align: center;
+    color: @color-gray-50;
+    margin: auto;
+}
+
+.VerticalResizer, .HorizontalResizer, .BothResizer, .HorizontalDivResizer {
+    background-color: @layout-info-color;
+    font-size: 1px;
+    line-height: 1px;
+    padding: 0;
+    margin: 0;
+}
+
+.HorizontalResizer {
+    cursor: e-resize;
+    width: 2px;
+    margin-left: 1px;
+    margin-right: 1px;
+    max-width: 2px;
+    min-height: 25px;
+}
+
+.VerticalResizer {
+    border-bottom: solid 1px white;
+    cursor: n-resize;
+    height: 2px;
+    max-height: 2px;
+}
+
+.BothResizer {
+    cursor: nw-resize;
+    border: solid 1px @layout-info-color;
+    background-color: @layout-info-color;
+}
+
+.LayoutCenterColumn, .LayoutLeftColumn, .LayoutRightColumn {
+    border: none;
+}
+
+// Layout code
+.CodeDirectives {
+    border-left: solid 1px #CCC;
+    border-top: solid 1px #CCC;
+    border-right: solid 1px #CCC;
+    padding: 3px;
+    background-color: #F5F5F0;
+    font-family: @font-family-monospace;
+    font-size: 12px;
+    color: #666;
+}
+
+.LayoutControlHeaderInfo {
+    margin-bottom: 5px;
+}
+// Video-like webpart correction
+.WebPart .VideoLikeContent {
+    padding-top: 26px;
+}
+
+.FrameContent {
+    padding: 0 6px 0 6px;
+}
+
+.PageContentViewer {
+    padding: 0 6px 15px 6px;
+}
+
+.HeaderTitleBreadcrumbs {
+    border-bottom: solid 1px #CCCCCC;
+    padding-bottom: 8px;
+}
+
+// MVC/Content personalization - Page tab
+.CPMenuBorder,
+.CPMenuBorderActive {
+    position: absolute;
+    z-index: 9998;
+    cursor: pointer;
+}
+
+.CPMenuBorder {
+    display: none;
+}
+
+.WebPartBorderActive,
+.WebPartZoneBorderActive {
+
+    .CPContainer {
+        padding: 0;
+        border: dotted 1px #8a8a8a;
+    }
+
+    .CPMenuBorder {
+        display: block;
+    }
+}
+
+.WebPartBorder .CPContainer, .WebPartZoneBorder .CPContainer {
+    border: none;
+    padding: 1px;
+}
+
+
+.CPMenuWebPart, .CPMenuZone {
+    background-color: @design-webpart-bgcolor;
+    width: 16px;
+    height: 16px;
+    padding: 4px;
+}
+
+.CPMenuZone {
+    background-color: @design-zone-bgcolor;
+}
+
+.CPMenuButton {
+    float: left;
+    margin: 3px;
+}
+
+
+// Web part specific styles
+
+// BingMaps, GoogleMaps
+.DesignMode .WebPartContent .WebpartDesignPadding {
+    width: 1px;
+    height: 30px;
+}
+
+.design-ui .ui-layout-pane, .design-ui .ui-layout-pane-visible {
+    position: relative !important;
+    z-index: auto !important;
+}
+
+.design-ui .nav-tabs-horizontal-layout .ui-layout-pane-center {
+    height: 0 !important;
+    width: auto !important;
+}
+
+.design-ui .nav-tabs-vertical-layout .ui-layout-pane {
+    height: 75% !important;
+}
+
+.design-ui .nav-tabs-vertical-layout .ui-layout-pane-west {
+    width: @nav-tabs-vertical-width + @padding-base-horizontal !important;
+    top: 0px !important;
+}
+
+// Mixins
+
+.design-left-action() {
+    width: @base-unit;
+    color: @design-icon-color;
+
+    i {
+        padding: @design-header-menu-padding;
+        padding-left: 0px;
+        cursor: pointer;
+
+        &:hover {
+            color: @design-icon-hover-color;
+        }
+
+        .RTL & {
+            padding: @design-header-menu-padding;
+            padding-right: 0px;
+        }
+    }
+}
+
+.design-header() {
+    background: @design-zone-bgcolor;
+    text-align: left !important;
+    color: @text-color;
+    white-space: nowrap;
+    min-height: @design-header-height;
+    cursor: default;
+    overflow: hidden;
+
+    * {
+        text-align: left !important;
+
+        .RTL & {
+            text-align: right !important;
+        }
+    }
+
+    table {
+        border: none !important;
+        margin: 0px !important;
+    }
+
+    td {
+        vertical-align: middle;
+        line-height: @design-header-height;
+
+        &:first-of-type {
+            padding-left: (@base-unit * 0.5) !important;
+
+            .RTL & {
+                padding-left: 0 !important;
+                padding-right: (@base-unit * 0.5) !important;
+            }
+        }
+    }
+
+    .RTL & {
+        text-align: right !important;
+    }
+}

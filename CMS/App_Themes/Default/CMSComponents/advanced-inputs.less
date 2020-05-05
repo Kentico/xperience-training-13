@@ -1,0 +1,684 @@
+﻿// Content rating
+// --------------
+.rating-star {
+    margin-top: @base-unit * 0.375;
+    cursor: pointer;
+    display: block;
+    background-repeat: no-repeat;
+    color: @color-gray-70;
+
+    &:last-of-type {
+        margin-right: @base-unit * 0.375;
+    }
+}
+
+.disabled .rating-star {
+    cursor: default;
+}
+
+.saved-rating-star {
+    color: @color-red-70;
+}
+
+.RTL .RatingControlCell {
+    padding-left: 64px;
+    padding-right: 0 !important;
+}
+
+// Switch on/off
+// -------------
+.has-switch {
+    border-radius: @border-radius-large;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    vertical-align: middle;
+    width: @switch-width;
+    height: @switch-height;
+    background-color: @input-bg-disabled;
+
+    i {
+        pointer-events: none;
+    }
+
+    span {
+        text-align: center;
+        z-index: 1;
+        width: 50%;
+        display: inline-block;
+        margin: 0;
+        height: @switch-height;
+        line-height: @switch-height;
+
+        &.switch-left {
+            background-color: @btn-primary-bg;
+            color: @btn-primary-color;
+            border-radius: @border-radius-large 0 0 @border-radius-large;
+        }
+
+        &.switch-right {
+            background-color: @btn-default-bg;
+            color: @btn-default-color;
+            position: relative;
+            left: 50%;
+            border-radius: 0 @border-radius-large @border-radius-large 0;
+        }
+    }
+}
+
+// Date-time picker
+// ----------------
+.date-time-picker {
+    display: inline;
+
+    .btn {
+        i.icon-calendar {
+            margin: 0;
+        }
+    }
+}
+
+// Uploader styles
+//
+// Styles for form based UploaderControl (advanced control)
+// Unigrid uploader buttons are styled in tables.less
+.uploader {
+    background-color: @uploader-background-color;
+    min-width: @uploader-min-width;
+    display: table;
+    border: none;
+
+    .IE & {
+        width: auto;
+        min-width: @uploader-min-width-IE;
+    }
+    // Current file
+    .uploader-current-file {
+        width: auto;
+        color: @link-color;
+        text-decoration: underline;
+        margin-left: @uploader-margin-horizontal;
+
+        .RTL & {
+            margin-left: auto;
+            margin-right: @uploader-margin-horizontal;
+        }
+    }
+    // Actions for current file
+    .uploader-action {
+        vertical-align: middle;
+    }
+
+    .uploader-external-edit {
+        .uploader-action;
+        display: inline-block;
+    }
+
+    .uploader-delete {
+        vertical-align: middle;
+    }
+    // Upload new file
+    .uploader-upload {
+        clear: both;
+    }
+
+    .uploader-label {
+        margin-right: @uploader-margin-horizontal;
+
+        .RTL & {
+            margin-right: auto;
+            margin-left: @uploader-margin-horizontal;
+        }
+    }
+}
+
+// Uploader button
+.ButtonUploaderContainer {
+    padding: 0;
+}
+
+.ButtonUploader {
+    height: @btn-height;
+
+    img {
+        display: none;
+    }
+}
+
+.uploader-icon {
+    padding: 0;
+}
+
+.direct-file-uploader {
+    display: inline-block;
+    margin-right: (@base-unit * 0.5); // Solves multiple button spacing
+}
+
+.uploader-overlay-div {
+    background:rgba(0,0,0,0);
+    overflow: hidden;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    > input[type="file"] {
+        display: none;
+    }
+}
+
+// Special hover styles for uploader button - because of silverlight stuff
+.MouseOver {
+    .btn-default {
+        background-color: @btn-default-box-shadow;
+    } 
+
+    .btn-primary {
+        background-color: @btn-primary-box-shadow;
+    }
+    // Disabled style
+    .uploader-button-disabled + .UploaderDiv {
+        cursor: not-allowed;
+    }
+}
+
+// Search box in a form
+// --------------------
+.form-search-container {
+    // The icon overflows thus it needs this
+    overflow: hidden;
+    white-space: nowrap;
+    width: @nav-search-width;
+
+    input {
+        display: inline-block;
+        width: 100%;
+        padding: 0 (@base-unit * 0.25);
+        margin-right: 0 !important;
+        color: @input-color;
+        vertical-align: baseline !important;
+        background-color: @input-bg;
+        padding-right: @base-unit * 1.5;
+        border: @input-border-width solid @input-border;
+        border-radius: @input-border-radius;
+        box-sizing: border-box;
+        transition: ~"border-color ease-in-out .15s, box-shadow ease-in-out .15s";
+        .placeholder();
+    }
+
+    i {
+        .cms-icon-80;
+        padding: (@input-height-base - (@input-border-width * 2) - @icon-size-80) / 2;
+        position: relative;
+        left: -(@base-unit * 2.125);
+        color: @navbar-inverse-icon-color;
+
+        .Chrome& {
+            top: 1px;
+        }
+    }
+}
+
+// ColorPicker
+// -----------
+.color-picker-form-control {
+    .color-preview {
+        border: @input-border-width solid @input-border;
+        border-radius: @input-border-radius;
+        margin-left: (@base-unit /2);
+        // (2* BaseUnit - Border).
+        width: (2*(@base-unit - @input-border-width));
+        height: (2*(@base-unit - @input-border-width));
+        display: inline-block;
+    }
+}
+
+.color-picker-wrapper-div {
+    margin: 0;
+    padding: 0;
+    width: 265px;
+
+    i.color-picker-crosshair-icon {
+        font-size: 21px;
+        height: 23px;
+        width: 23px;
+        padding: 0;
+        cursor: pointer;
+        // Borders are added because of IE rendering error. Also: they change the size so it implies changes in colorpicker.js
+        border: solid 1px transparent;
+    }
+
+    .RTL.Safari div.color-picker-slider-arrows {
+        left: 0;
+    }
+
+    div.color-picker-slider-arrows {
+        width: 35px;
+        height: 13px;
+        font-size: 11px;
+
+        i.color-picker-hue-selector-arrow {
+            font-size: 11px;
+            height: 13px;
+            width: 11px;
+            padding: 0;
+            cursor: pointer;
+            // Borders are added because of IE rendering error. Also they change the size so it implies changes in colorpicker.js
+            border-top: solid 1px transparent;
+            border-bottom: solid 1px transparent;
+        }
+
+        i:nth-child(1) {
+            padding-right: 13px;
+        }
+    }
+
+    .color-picker-preview {
+        .form-control;
+        .input-width-20;
+        position: absolute;
+        top: 225px;
+        left: 0px;
+    }
+
+    .color-picker-textbox {
+        .form-control;
+        .input-width-20;
+        position: absolute;
+        top: 225px;
+        right: 0px;
+    }
+}
+
+// Image selector
+// --------------
+.image-selector {
+    .form-control {
+        .input-width-100;
+    }
+
+    .image-selector-image-preview {
+        margin-top: @base-unit;
+        display: block;
+        cursor: pointer;
+    }
+}
+
+// Uniflat selector
+// ----------------
+.selector-flat-description {
+    padding: @padding-base-horizontal;
+    margin: 0 @padding-base-horizontal @padding-base-horizontal @padding-base-horizontal;
+    height: @base-unit * 2.5;
+
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.selector-flat-description-background {
+    background-color: @color-orange-130;
+}
+
+.uni-flat-search {
+    padding: @base-unit @base-unit (@base-unit - @form-group-margin) @base-unit;
+    background-color: @color-gray-150;
+    // This ensures javascript getting correct outer height & outer width
+    box-sizing: border-box;
+    margin-bottom: 0;
+
+    .form-filter {
+        margin-bottom: 0;
+    }
+
+    .uni-flat-search-input {
+        box-sizing: border-box;
+        padding-right: @base-unit * 1.5;
+    }
+
+    .uni-flat-search-btn {
+        color: @color-gray-100;
+        position: relative;
+        left: @base-unit * -2.5;
+        margin-right: @base-unit * -2;
+    }
+
+    .uni-flat-search-icon {
+        line-height: @input-height-base;
+    }
+}
+
+
+// Group size slider
+// -----------------
+.group-size-slider-group-1 {
+    background-color: @color-red-100;
+
+    &.group-disabled {
+        background-color: @color-gray-150;
+    }
+}
+
+.group-size-slider-group-2 {
+    background-color: @color-green-120;
+
+    &.group-disabled {
+        background-color: @color-gray-130;
+    }
+}
+
+.group-size-slider-group-3 {
+    background-color: @color-orange-80;
+
+    &.group-disabled {
+        background-color: @color-gray-100;
+    }
+}
+
+// Newsletter A-B testing
+// ----------------------
+.newsletter-group-size {
+    width: auto;
+    margin: @margin-50;
+
+    .firstbox, .otherbox {
+        float: left;
+        height: 8px;
+    }
+
+    .ui-slider {
+        background: @color-gray-150 !important;
+
+        .ui-slider-handle {
+            background: url(../../CMSPages/GetResource.ashx?image=CMSModules/CMS_Newsletter/groupsizeslider.png) no-repeat transparent;
+            cursor: e-resize;
+            width: 12px;
+            position: absolute;
+            z-index: 2;
+            margin-top: 2px;
+        }
+    }
+
+    .ui-slider-disabled .ui-slider-handle {
+        cursor: default !important;
+    }
+}
+
+.ui-slider-horizontal {
+    height: (@base-unit / 2);
+}
+
+
+// Newsletter issue selector
+// -------------------------
+.newsletter-issue-selector div:nth-child(2) {
+    margin-top: @base-unit * 0.75;
+}
+
+
+// Spinner (Numeric Up/Down) control
+// ---------------------------------
+.numeric-up-down {
+
+    @numeric-updown-button-width: @icon-size-80;
+    @numeric-updown-button-height: @base-unit * 0.5;
+    @numeric-updown-button-space: @base-unit * 0.125;
+    @numeric-updown-buttons-complete-height: (@numeric-updown-button-height * 2) + @numeric-updown-button-space;
+    @numeric-updown-button-padding: @btn-icononly-padding * 0.5;
+
+    .ui-spinner {
+        display: inline;
+    }
+
+    .ui-widget {
+        input {
+            font-family: inherit;
+        }
+    }
+
+    .numeric-updown-buttons {
+        display: inline-block;
+        left: (@numeric-updown-button-width + @numeric-updown-button-padding + @margin-50 + @input-border-width) * -1;
+        position: relative;
+        height: @numeric-updown-buttons-complete-height;
+        width: @numeric-updown-button-width;
+
+        .btn {
+            padding: 0;
+            line-height: @numeric-updown-button-height;
+            height: @numeric-updown-button-height;
+            width: @numeric-updown-button-width;
+            font-size: @font-size-small;
+            position: absolute;
+            // Vertical position of the "bottom" button calculated from the input height
+            top: (((@base-unit * 2) - @numeric-updown-buttons-complete-height) * 0.5) + @numeric-updown-button-height + @numeric-updown-button-space;
+            // Vertical position of the "up" button
+            &:nth-child(1) {
+                margin-bottom: @numeric-updown-button-space;
+                top: ((@base-unit * 2) - @numeric-updown-buttons-complete-height) * 0.5;
+            }
+            // Icons within buttons
+            i {
+                font-size: @font-size-small;
+                line-height: @numeric-updown-button-height;
+                height: @numeric-updown-button-height;
+            }
+        }
+    }
+    // Textbox with up/down arrows
+    .form-control {
+        padding-right: @numeric-updown-button-padding * 2 + @numeric-updown-button-width;
+        text-align: right;
+    }
+}
+
+
+// Date Interval Selector
+// ----------------------
+.radio-list-vertical.date-interval-selector .last-days .radio {
+    margin-top: @base-unit * 0.375;
+    margin-right: @base-unit * 0.5;
+}
+
+
+// Options selector
+// ----------------
+.options-selector .editor {
+    padding-top: @base-unit * 0.5;
+    min-width: @base-unit * 37;
+    margin-right: @base-unit * 0.5;
+}
+
+.GlobalWizardStep .options-selector .editor {
+    min-width: 0;
+}
+
+// Font selector dialog
+// --------------------
+.font-selector {
+
+    td:not(:last-child) {
+        padding-right: @base-unit * 0.5;
+    }
+
+    td {
+        padding-top: @base-unit * 0.5;
+    }
+
+    .boxes {
+        margin-top: @base-unit * 0.5;
+
+        .checkbox {
+            margin-top: @base-unit * 0.25;
+        }
+    }
+}
+
+
+// Reporting items list
+// --------------------
+.reporting-items-list {
+    td:not(:first-child) {
+        padding-left: @base-unit * 0.5;
+    }
+
+    td:first-child {
+        .input-width-82;
+    }
+}
+
+
+// Copy move dialog scrollable list
+// --------------------------------
+.vertical-scrollable-list {
+    overflow-y: scroll;
+    height: @base-unit * 8;
+}
+
+
+// Online forms custom layout
+// --------------------------
+.form-custom-layout {
+    .editor {
+        float: left;
+    }
+
+    .fields {
+        margin-left: @base-unit;
+        float: left;
+    }
+
+    .fields-list {
+        margin-top: @base-unit * 0.5;
+        margin-bottom: @base-unit * 0.5;
+    }
+}
+
+
+// Level tree
+// ----------
+.level-tree {
+    & > a {
+        display: none;
+    }
+
+    .level-tree-view {
+        margin-left: @margin-50;
+        margin-top: @base-unit * 0.25;
+    }
+}
+
+
+// Tag selector
+// ------------
+.tag-selector {
+    & ul {
+        display: inline;
+    }
+}
+
+
+// Code name with prefix
+// ---------------------
+.codename-with-prefix {
+    .explanation-text {
+        span {
+            display: inline-block;
+        }
+    }
+
+    .input-width-5 {
+        margin-right: 0;
+        width: @base-unit * 0.75;
+    }
+
+    .input-width-60 {
+        width: @base-unit * 11.75;
+    }
+}
+
+
+// Inline editing text box
+// -----------------------
+.inline-editing-textbox {
+    width: @base-unit * 8;
+
+    a {
+        text-decoration: none;
+    }
+
+    .inline-edit-submit,
+    .inline-edit-cancel {
+        margin-left: @base-unit * 0.375;
+    }
+
+    .inline-edit-submit {
+        .color-green-100;
+    }
+
+    .inline-edit-cancel {
+        .color-red-70;
+    }
+
+    .editing-panel {
+        text-align: left;
+    }
+
+    .static-textpanel {
+        width: @base-unit * 8;
+        padding: 0 @base-unit * 0.5;
+        height: @table-textbox-height;
+        overflow: hidden;
+        line-height: @table-textbox-height - (@input-border-width * 2);
+
+        .Chrome& {
+            line-height: @table-textbox-height - (@input-border-width);
+        }
+    }
+
+    .editing-textbox {
+        display: inline-block;
+        text-align: right;
+        width: @base-unit * 5;
+        padding: 0 @base-unit * 0.5;
+    }
+
+    .inline-textbox-error {
+        border-bottom: 2px solid @color-red-100;
+    }
+}
+
+
+// Wide inline editing text box for text inputs
+.inline-editing-textbox-text {
+    width: @base-unit * 22;
+
+    .static-textpanel {
+        width: @base-unit * 22;
+    }
+
+    .editing-textbox {
+        width: @base-unit * 19;
+        text-align: left;
+    }
+}
+
+
+// Extra wide inline editing text box for text inputs
+.inline-editing-textbox-wide {
+    width: @base-unit * 44;
+
+    .static-textpanel {
+        width: @base-unit * 44;
+        overflow: visible;
+    }
+
+    .editing-textbox {
+        width: @base-unit * 41;
+        text-align: left;
+    }
+}

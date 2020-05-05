@@ -1,0 +1,47 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_LiveSite_Dialogs_ModalSimplePage"
+     Codebehind="ModalSimplePage.master.cs" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>SimpleMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false"></asp:Literal>
+    <style type="text/css">
+        body
+        {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+    </style>
+</head>
+<body id="bodyElem" runat="server">
+    <form id="form1" runat="server">
+    <asp:PlaceHolder runat="server" ID="plcManager" />
+    <div class="LiveSiteDialog">
+        <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+        <asp:ContentPlaceHolder ID="plcBeforeBody" runat="server" />
+        <asp:Panel ID="pnlBody" runat="server" CssClass="DialogPageBody">
+            <asp:Panel ID="pnlHeader" runat="server" CssClass="PageHeader" EnableViewState="false">
+                <cms:PageTitle ID="titleElem" runat="server" ShortID="pt" Wrap="true" />
+            </asp:Panel>
+            <asp:Panel ID="pnlAdditionalControls" runat="server" CssClass="PageHeaderLine" Visible="false">
+                <asp:ContentPlaceHolder runat="server" ID="plcControls" />
+            </asp:Panel>
+            <asp:Panel ID="pnlActions" runat="server" CssClass="PageHeaderLine" EnableViewState="false">
+                <cms:HeaderActions ID="actionsElem" runat="server" ShortID="a" />
+            </asp:Panel>
+            <asp:Panel ID="pnlContent" runat="server" CssClass="PageContentModal">
+                <cms:CMSUpdateProgress ID="up" runat="server" HandlePostback="true" />
+                <asp:PlaceHolder runat="server" ID="plcLabels" />
+                <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+            </asp:Panel>
+        </asp:Panel>
+    </div>
+    </form>
+</body>
+</html>

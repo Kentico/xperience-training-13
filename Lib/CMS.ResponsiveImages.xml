@@ -1,0 +1,327 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.ResponsiveImages</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.ResponsiveImages.IVariantContext">
+            <summary>
+            General interface for image variant processing context.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.IVariantContextScope">
+            <summary>
+            General interface for variant context scopes which restrict generating of variants based on the context in which the variant is generated.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IVariantContextScope.CheckContext(CMS.ResponsiveImages.IVariantContext)">
+            <summary>
+            Checks the given variant context. Returns true if the context matches the defined scope.
+            </summary>
+            <param name="context">Variant context.</param>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageContainer">
+            <summary>
+            Represents a container which encapsulates image data that are passed into the image filters.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageContainer.Metadata">
+            <summary>
+            Image metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageContainer.#ctor(CMS.Core.BinaryData,CMS.ResponsiveImages.ImageMetadata)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="data">Image data.</param>
+            <param name="imageMetadata">Image metadata.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageContainer.OpenReadStream">
+            <summary>
+            Opens a read-only stream with the image's data.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageMetadata">
+            <summary>
+            Represents image metadata.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageMetadata.Width">
+            <summary>
+            Image width.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageMetadata.Height">
+            <summary>
+            Image height.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageMetadata.MimeType">
+            <summary>
+            Image MIME type.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageMetadata.Extension">
+            <summary>
+            Image file extension.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageMetadata.#ctor(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Creates an instace of the <see cref="T:CMS.ResponsiveImages.ImageMetadata"/> class.
+            </summary>
+            <param name="width">Image width.</param>
+            <param name="height">Image height.</param>
+            <param name="mimeType">Image MIME type.</param>
+            <param name="extension">Image file extension.</param>
+        </member>
+        <member name="T:CMS.ResponsiveImages.IImageVariantDefinition">
+            <summary>
+            Interface for the image variant definition.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.IImageVariantDefinition.Identifier">
+            <summary>
+            Definition identifier.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.IImageVariantDefinition.Filters">
+            <summary>
+            Collection of filters used for variant generation.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.IImageVariantDefinition.ContextScopes">
+            <summary>
+            Returns context scopes to restrict variant application.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IImageVariantDefinitionProvider.RegisterDefinition(System.Type)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="type">Definition type which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IImageVariantDefinitionProvider.RegisterDefinition(CMS.ResponsiveImages.IImageVariantDefinition)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="definition">Definition object which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IImageVariantDefinitionProvider.GetDefinition(System.String)">
+            <summary>
+            Returns an image variant definition by identifier.
+            </summary>
+            <param name="identifier">Definition identifier.</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IImageVariantDefinitionProvider.GetDefinitions">
+            <summary>
+            Returns all registered image variant definitions.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageVariantDefinition">
+            <summary>
+            Variant definition which is generated using the collection of <see cref="T:CMS.ResponsiveImages.IImageFilter"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageVariantDefinition.Identifier">
+            <summary>
+            Definition identifier.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageVariantDefinition.ContextScopes">
+            <summary>
+            Returns context scopes to restrict variant application.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageVariantDefinition.Filters">
+            <summary>
+            Collection of filters used for variant generation.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageVariantDefinitionExtensions">
+            <summary>
+            Extension methods for <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionExtensions.GenerateVariant(CMS.ResponsiveImages.IImageVariantDefinition,CMS.ResponsiveImages.ImageContainer,CMS.ResponsiveImages.IVariantContext)">
+            <summary>
+            Generates an image variant by applying all variant definition filters.
+            </summary>
+            <param name="imageVariantDefinition">Image variant definition.</param>
+            <param name="imageContainer">Source image data.</param>
+            <param name="context">Image processing context.</param>
+            <returns>
+            New instance of <see cref="T:CMS.ResponsiveImages.ImageContainer" /> with transformed image data or <c>null</c> when the definition is not applicable for the provided image.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:CMS.ResponsiveImages.ImageFilterException">Thrown when an error occurs during a filter application.</exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionExtensions.IsApplicable(CMS.ResponsiveImages.IImageVariantDefinition,CMS.ResponsiveImages.ImageMetadata,CMS.ResponsiveImages.IVariantContext)">
+            <summary>
+            Indicates whether the definition is applicable for the given image metadata.
+            </summary>
+            <param name="imageVariantDefinition">Image variant definition.</param>
+            <param name="metadata">Image metadata for which the condition should be evaluated.</param>
+            <param name="context">Context in which the variant is generated.</param>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageVariantDefinitionManager">
+            <summary>
+            Provides methods for image variant definition management.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageVariantDefinitionManager.ProviderObject">
+            <summary>
+            Provider object.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionManager.SetProvider(CMS.ResponsiveImages.IImageVariantDefinitionProvider)">
+            <summary>
+            Sets the provider object.
+            </summary>
+            <param name="provider">Image variant definition provider.</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionManager.RegisterDefinition(CMS.ResponsiveImages.IImageVariantDefinition)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="definition">Definition object which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:System.ArgumentException">
+            Thrown when the definition doesn't implement the <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/> interface,
+                or doesn't provide a parameterless constructor.
+            </exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionManager.RegisterDefinition(System.Type)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="type">Definition type which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:System.ArgumentException">
+            Thrown when the definition type doesn't implement the <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/> interface,
+                is abstract or doesn't provide a parameterless constructor.
+            </exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionManager.GetDefinition(System.String)">
+            <summary>
+            Returns an image variant definition by identifier.
+            </summary>
+            <param name="identifier">Definition identifier.</param>
+            <returns>Image variant definition or <c>null</c> when definition with the given name does not exists.</returns>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionManager.GetDefinitions">
+            <summary>
+            Returns all registered image variant definitions.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageVariantDefinitionProvider">
+            <summary>
+            Provides image variant definition management implementation for <see cref="T:CMS.ResponsiveImages.ImageVariantDefinitionManager"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.ImageVariantDefinitionProvider.ImageVariantDefinitions">
+            <summary>
+            Collection of registered image variant definition instances.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionProvider.RegisterDefinition(CMS.ResponsiveImages.IImageVariantDefinition)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="definition">Definition object which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:System.ArgumentException">
+            Thrown when the definition doesn't provide a parameterless constructor.
+            </exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionProvider.RegisterDefinition(System.Type)">
+            <summary>
+            Registers an image variant definition.
+            </summary>
+            <param name="type">Definition type which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:System.ArgumentException">
+            Thrown when the definition type doesn't implement the <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/> interface,
+                is abstract or doesn't provide a parameterless constructor.
+            </exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionProvider.GetDefinition(System.String)">
+            <summary>
+            Returns an image variant definition by identifier.
+            </summary>
+            <param name="identifier">Definition identifier</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageVariantDefinitionProvider.GetDefinitions">
+            <summary>
+            Returns all registered image variant definitions.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.RegisterImageVariantDefinitionAttribute">
+            <summary>
+            Registers an image variant definition within the system.
+            </summary>
+        </member>
+        <member name="P:CMS.ResponsiveImages.RegisterImageVariantDefinitionAttribute.MarkedType">
+            <summary>
+            Definition's type.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.RegisterImageVariantDefinitionAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="type">Definition type which implements <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either of the parameters is null.</exception>
+            <exception cref="T:System.ArgumentException">
+            Thrown when the definition type doesn't implement the <see cref="T:CMS.ResponsiveImages.IImageVariantDefinition"/> interface,
+                is abstract or doesn't provide a parameterless constructor.
+            </exception>
+        </member>
+        <member name="M:CMS.ResponsiveImages.RegisterImageVariantDefinitionAttribute.PreInit">
+            <summary>
+            Registers the image variant definition during application pre-initialization.
+            </summary>
+        </member>
+        <member name="T:CMS.ResponsiveImages.IImageFilter">
+            <summary>
+            Represents an image filter which can be applied on an image.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.IImageFilter.ApplyFilter(CMS.ResponsiveImages.ImageContainer)">
+            <summary>
+            Applies the filter on the image data.
+            </summary>
+            <param name="container">Input image container.</param>
+            <returns>
+            New instance of <see cref="T:CMS.ResponsiveImages.ImageContainer"/> with the applied filter or <c>null</c> when the filter was not applied.
+            </returns>
+            <exception cref="T:CMS.ResponsiveImages.ImageFilterException">Thrown when an error occurs during the filter application. Throwing this exception will cause that the image variant will not be generated.</exception>
+        </member>
+        <member name="T:CMS.ResponsiveImages.ImageFilterException">
+            <summary>
+            Represents errors that occur during filter application.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageFilterException.#ctor">
+            <summary>
+            Initializes a new instance of the ImageFilterException class.
+            </summary>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageFilterException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ImageFilterException class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:CMS.ResponsiveImages.ImageFilterException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the ImageFilterException class with a specified error
+                message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,787 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Taxonomy</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Taxonomy.CategoryInfo">
+            <summary>
+            CategoryInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryInfo.OBJECT_TYPE_USERCATEGORY">
+            <summary>
+            Object type for usercategory
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryInfo.TYPEINFO">
+            <summary>
+            Type information for global categories.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryInfo.TYPEINFOUSERCATEGORY">
+            <summary>
+            Type information for user categories.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryLastModified">
+            <summary>
+            Category last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryName">
+            <summary>
+            Category code name.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryEnabled">
+            <summary>
+            Category enabled.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryID">
+            <summary>
+            Category ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryDisplayName">
+            <summary>
+            Category display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryGUID">
+            <summary>
+            Category GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryCount">
+            <summary>
+            Category count.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryDescription">
+            <summary>
+            Category description.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryUserID">
+            <summary>
+            Category User ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategorySiteID">
+            <summary>
+            ID of the site on which category can be used. 0 for global categories.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryParentID">
+            <summary>
+            ID of the parent category. 0 for top-level categories.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryIDPath">
+            <summary>
+            Path consisting of IDs of categories preceding this category.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryNamePath">
+            <summary>
+            Path consisting of display names of categories preceding this category.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryLevel">
+            <summary>
+            Level of nesting for this category. 0 for top-level categories.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryOrder">
+            <summary>
+            Order of the category.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryIsGlobal">
+            <summary>
+            Indicates whether category is global.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.CategoryIsPersonal">
+            <summary>
+            Indicates whether category is personal.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfo.TypeInfo">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.GetSiblingsWhereCondition">
+            <summary>
+            Creates where condition according to Parent, Group and Site settings.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.BuildObjectPath(System.String,System.String,System.String,System.String,System.Int32@)">
+            <summary>
+            Builds the path from the given column.
+            </summary>
+            <param name="parentColumName">Column of the parent ID</param>
+            <param name="pathColumnName">Column name to build the path from</param>
+            <param name="levelColumnName">Column name of the level</param>
+            <param name="pathPartColumn">Name of the column which creates the path (IDColumn for IDPath, CodeNameColumn for name path)</param>
+            <param name="level">Level of the object within the tree hierarchy</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.GetNamePathPartColumn">
+            <summary>
+            Returns the name of the column which is used to build the NamePath
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.GetAutomaticCodeName">
+            <summary>
+            Returns automatic code name. If user is specified, code name has user name as prefix.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.CheckUniqueCodeName">
+            <summary>
+            Checks if the category has unique code name. Returns true if the object has unique code name.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty CategoryInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new CategoryInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts cloned object to DB.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="T:CMS.Taxonomy.CategoryInfoProvider">
+            <summary>
+            Class providing CategoryInfo management.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfoProvider.CategoryIDLength">
+            <summary>
+            Length of the category ID, 8 by default.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.CategoryInfoProvider.MaxCategoryLevel">
+            <summary>
+            Returns maximal available level of the category.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategories">
+            <summary>
+            Returns a query for all the categoryInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategories(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns a query for all categories matching the specified parameters.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoryInfo(System.Int32)">
+            <summary>
+            Returns category with specified ID.
+            </summary>
+            <param name="categoryId">Category ID.</param>        
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoryInfo(System.String,System.String)">
+            <summary>
+            Returns category with specified name.
+            </summary>
+            <param name="categoryName">Category name.</param>                
+            <param name="siteName">Site name.</param>                
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.SetCategoryInfo(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Sets (updates or inserts) specified category.
+            </summary>
+            <param name="categoryObj">Category to be set.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.DeleteCategoryInfo(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Deletes specified category.
+            </summary>
+            <param name="categoryObj">Category to be deleted.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.DeleteCategoryInfo(System.Int32)">
+            <summary>
+            Deletes category with specified ID.
+            </summary>
+            <param name="categoryId">Category ID.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategories(System.String,System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            Returns a query for all categories for specified site matching the specified parameters.
+            </summary>       
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+            <param name="siteId">Site ID.</param>            
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetChildCategories(System.Int32,System.String,System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            Returns a query for all subcategories for specified site matching the specified parameters.
+            </summary>
+            <param name="categoryId">ID of the category to get child categories for.</param>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by expression.</param>
+            <param name="topN">Number of records to be selected.</param>        
+            <param name="columns">Columns to be selected.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetDocumentCategories(System.String,System.String,System.Int32)">
+            <summary>
+            Returns dataset of all categories base on complete where condition from TreeProvider.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by condition.</param>
+            <param name="topN">Top N condition.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoryCount(System.Int32)">
+            <summary>
+            Gets count of the documents related to the specified category.
+            </summary>
+            <param name="categoryId">ID of the category.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.MoveCategoryUp(System.Int32)">
+            <summary>
+            Moves specified category up within the parent category.
+            </summary>
+            <param name="categoryId">ID of the category</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.MoveCategoryDown(System.Int32)">
+            <summary>
+            Moves specified category down within the parent category.
+            </summary>
+            <param name="categoryId">ID of the category.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetLastCategoryOrder(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Returns maximum order value for given category siblings.
+            </summary>
+            <param name="category">Category to get max order for.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoriesDocumentsWhereCondition(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Returns where condition usable for filtering documents by categories.
+            </summary>
+            <param name="categoriesIDPaths">Categories ID paths.</param>
+            <param name="onlyEnabled">Indicates if only documents belonging to enabled (sub)categories are to be filtered out.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoryInfoInternal(System.String,System.String)">
+            <summary>
+            Returns category with specified name.
+            </summary>
+            <param name="categoryName">Category name.</param>                
+            <param name="siteName">Site name.</param>         
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.SetInfo(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.DeleteInfo(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoryCountInternal(System.Int32)">
+            <summary>
+            Gets count of the documents related to the specified category.
+            </summary>
+            <param name="categoryId">ID of the category.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetDocumentCategoriesInternal(System.String,System.String,System.Int32)">
+            <summary>
+            Returns dataset of all categories base on complete where condition from TreeProvider.
+            </summary>
+            <param name="where">Where condition.</param>
+            <param name="orderBy">Order by condition.</param>
+            <param name="topN">Top N condition.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.MoveCategoryUpInternal(System.Int32)">
+            <summary>
+            Moves specified category up within the parent category.
+            </summary>
+            <param name="categoryId">ID of the category</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.MoveCategoryDownInternal(System.Int32)">
+            <summary>
+            Moves specified category down within the parent category.
+            </summary>
+            <param name="categoryId">ID of the category.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetLastCategoryOrderInternal(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Returns maximum order value for given category siblings.
+            </summary>
+            <param name="category">Category to get max order for.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetCategoriesDocumentsWhereConditionInternal(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Returns where condition usable for filtering documents by categories.
+            </summary>
+            <param name="categoriesIDPaths">Categories ID paths.</param>
+            <param name="onlyEnabled">Indicates if only documents belonging to enabled (sub)categories are to be filtered out.</param>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryInfoProvider.GetWhereCondition(CMS.Taxonomy.CategoryInfo)">
+            <summary>
+            Returns where condition usable for filtering categories of same type under the same parent.
+            </summary>
+            <param name="category">Category info</param>
+        </member>
+        <member name="T:CMS.Taxonomy.CategoryListInfo">
+            <summary>
+            CategoryListInfo virtual object.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryListInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.CategoryListInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.CategoryListInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty CategoryListInfo object.
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.ExportSpecialActions">
+            <summary>
+            Handles special actions during the export process.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.ExportSpecialActions.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.ImportSpecialActions">
+            <summary>
+            Handles special actions during the import process.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.ImportSpecialActions.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TaxonomyContext">
+            <summary>
+            Site related context methods and variables.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TaxonomyContext.CurrentCategory">
+            <summary>
+            Current category info object according the URL parameter of the current request. 
+            It is available when the request contains parameters "category" or "categoryname" with valid value of the category.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TaxonomyContext.GetCurrentCategory">
+            <summary>
+            Returns information on the current category according category ID/name specified as an URL parameter of the current request
+            </summary> 
+        </member>
+        <member name="T:CMS.Taxonomy.TaxonomyModule">
+            <summary>
+            Represents the Taxonomy module.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TaxonomyModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TaxonomyModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TaxonomyModuleMetadata">
+            <summary>
+            Represents the Taxonomy module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TaxonomyModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TagGroupInfo">
+            <summary>
+            TagGroupInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.TagGroupInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.TagGroupInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupIsAdHoc">
+            <summary>
+            Tag group is ad-hoc.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupLastModified">
+            <summary>
+            Tag group last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupDisplayName">
+            <summary>
+            Tag group display name.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupName">
+            <summary>
+            Tag group name.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupSiteID">
+            <summary>
+            Tag group site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupDescription">
+            <summary>
+            Tag group description.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupGUID">
+            <summary>
+            Tag group GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupID">
+            <summary>
+            Tag group ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagGroupInfo.TagGroupFullName">
+            <summary>
+            Tag group full name in format [sitename].[taggroupname].
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfo.LoadDefaultData">
+            <summary>
+            Loads the object default data
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty TagGroupInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new TagGroupInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TagGroupInfoProvider">
+            <summary>
+            Class providing TagGroupInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.GetTagGroups">
+            <summary>
+            Returns a query for all the TagGroupInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.GetTagGroupInfo(System.Int32)">
+            <summary>
+            Returns the TagGroupInfo structure for the specified tag group.
+            </summary>
+            <param name="tagGroupId">TagGroup id</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.GetTagGroupInfo(System.String,System.Int32)">
+            <summary>
+            Returns the TagGroupInfo structure for the specified tag group.
+            </summary>
+            <param name="tagGroupName">TagGroup name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.SetTagGroupInfo(CMS.Taxonomy.TagGroupInfo)">
+            <summary>
+            Sets (updates or inserts) specified tagGroup.
+            </summary>
+            <param name="tagGroup">Tag group to set</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.DeleteTagGroupInfo(CMS.Taxonomy.TagGroupInfo)">
+            <summary>
+            Deletes specified tag group.
+            </summary>
+            <param name="infoObj">Tag group to delete</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.DeleteTagGroupInfo(System.Int32)">
+            <summary>
+            Deletes specified tag group.
+            </summary>
+            <param name="tagGroupId">TagGroup id</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.GetTagGroupInfo(System.Guid,System.Int32)">
+            <summary>
+            Returns the TagGroupInfo structure for the specified tag group.
+            </summary>
+            <param name="tagGroupGuid">TagGroup GUID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagGroupInfoProvider.GetTagGroups(System.Int32)">
+            <summary>
+            Returns a query for all the TagGroupInfo objects of a specified site.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="T:CMS.Taxonomy.TagHelper">
+            <summary>
+            Tag helper class.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.TagHelper.mTagsRegex">
+            <summary>
+            Regex for detection tags separated with comma or space from string.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagHelper.GetTags(System.String)">
+             <summary>
+             Returns hash table of tags from tags string.
+             </summary>
+            <param name="tags">Tags string separated with comma or space</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagHelper.GetTagsForSave(System.String)">
+            <summary>
+            Returns tags prepared for save for document
+            (alphabetical sorted and with maximal length 250)
+            </summary>
+            <param name="tags">Unsorted tags string</param>
+        </member>
+        <member name="T:CMS.Taxonomy.TagInfo">
+            <summary>
+            TagInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.TagInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.Taxonomy.TagInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagInfo.TagCount">
+            <summary>
+            Number of documents tagged with this tag.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagInfo.TagName">
+            <summary>
+            Name of the tag.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagInfo.TagGroupID">
+            <summary>
+            ID of the tag group.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagInfo.TagID">
+            <summary>
+            ID of the tag.
+            </summary>
+        </member>
+        <member name="P:CMS.Taxonomy.TagInfo.TagGUID">
+            <summary>
+            Tag GUID
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty TagInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new TagInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TagInfoProvider">
+            <summary>
+            Class providing TagInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTags">
+            <summary>
+            Returns a query for all the TagInfo objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTagInfo(System.Int32)">
+            <summary>
+            Returns the TagInfo structure for the specified tag.
+            </summary>
+            <param name="tagId">Tag id</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTags(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns all the tags filtered by where condition and sorted by orderBy expression.
+            </summary>
+            <param name="where">The WHERE condition to use</param>
+            <param name="orderBy">The ORDER BY expression to use to sort the result</param>
+            <param name="topN">Number of records to return</param>
+            <param name="columns">Columns to be selected</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTags(System.Int32,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns all the tags for specified document filtered by where condition.
+            </summary>
+            <param name="documentId">ID of the document the tags of which should be returned</param>
+            <param name="where">The WHERE condition to use</param>
+            <param name="orderBy">The ORDER BY expression to use to sort the result</param>
+            <param name="topN">Number of records to return</param>
+            <param name="columns">Columns to be selected</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTags(System.String,System.Int32,System.String,System.String,System.Int32)">
+            <summary>
+            Returns tags set according specified criteria.
+            </summary>
+            <param name="tagGroupName">Code name of the tag group</param>
+            <param name="siteId">Tag group site ID</param>
+            <param name="where">Where condition to filter the data</param>
+            <param name="orderBy">Order by statement to use</param>
+            <param name="topN">Number of records to return</param>        
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.SetTagInfo(CMS.Taxonomy.TagInfo)">
+            <summary>
+            Sets (updates or inserts) specified tag.
+            </summary>
+            <param name="tag">Tag to set</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.DeleteTagInfo(CMS.Taxonomy.TagInfo)">
+            <summary>
+            Deletes specified tag.
+            </summary>
+            <param name="tag">Tag object</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.DeleteTagInfo(System.Int32)">
+            <summary>
+            Deletes specified tag.
+            </summary>
+            <param name="tagId">Tag id</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.DeleteNotUsedTags">
+            <summary>
+             Deletes tags which are used by no documents.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.GetTagsInternal(System.String,System.Int32,System.String,System.String,System.Int32)">
+            <summary>
+            Returns all the tags filtered by specified tag group and document properties (path, culture code, ...) which can be entered as where condition and sorted by orderBy expression.
+            </summary>
+            <param name="tagGroupName">Tag group name to use</param>
+            <param name="siteId">Tag group site ID</param>
+            <param name="where">The WHERE condition to use</param>
+            <param name="orderBy">The ORDER BY expression to use to sort the result</param>
+            <param name="topN">Number of records to return</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.SetInfo(CMS.Taxonomy.TagInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.Taxonomy.TagInfoProvider.DeleteNotUsedTagsInternal">
+            <summary>
+             Deletes tags which are used by no documents.
+            </summary>
+        </member>
+        <member name="T:CMS.Taxonomy.TaxonomyCacheHelper">
+            <summary>
+            Provides helper methods for caching of tags.
+            </summary>
+        </member>
+        <member name="M:CMS.Taxonomy.TaxonomyCacheHelper.GetTagGroupCacheDependencyKey(System.Int32)">
+            <summary>
+            Gets the dependency cache keys for the given tag group.
+            </summary>
+            <param name="tagGroupId">ID of the tag group.</param>
+        </member>
+    </members>
+</doc>

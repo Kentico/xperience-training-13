@@ -1,0 +1,173 @@
+﻿// Chat toolbar in CMSDesk
+.cms-navbar-chat {
+    background-color: @context-menu-bg;
+    min-height: 0;
+    color: @navbar-inverse-color;
+    z-index: @zindex-navbar-placeholder;
+
+    a {
+        color: @dropdown-link-color;
+    }
+
+    ul {
+        border: none;
+        line-height: @cms-navbar-toolbar-height;
+        padding: 0;
+    }
+
+    .nav {
+        li {
+            display: block;
+
+            .dropdown-menu {
+                background-color: @context-submenu-bg;
+                border-color: @context-submenu-bg;
+
+                > li {
+                    padding: 0;
+                    line-height: @line-height-200;
+                    width: 100%;
+
+                    > a {
+                        line-height: @line-height-200;
+                        padding: 0 @padding-base-horizontal;
+                        width: 100%;
+
+                        &:hover, &:focus {
+                            background-color: @context-submenu-hover-bg;
+                        }
+                    }
+                }
+            }
+        }
+
+        li, .chat-navbar-rooms li {
+            line-height: @cms-navbar-toolbar-height;
+
+            a {
+                line-height: @cms-navbar-toolbar-height;
+
+                &:not(.dropdown-toggle) {
+                    padding: 0 @padding-base-horizontal;
+                }
+            }
+        }
+
+        a.dropdown-toggle, > .open > a.dropdown-toggle {
+            padding: 0;
+            height: @cms-navbar-toolbar-height;
+
+            [class^="icon-"], [class*=" icon-"] {
+                padding: @base-unit * 0.5;
+            }
+
+            &:hover {
+                background-color: @context-menu-hover-bg;
+            }
+        }
+
+        > .open > a.dropdown-toggle {
+            background-color: @context-menu-hover-bg;
+        }
+    }
+
+    .chat-navbar-action {
+        display: inline;
+    }
+
+    &.navbar-right {
+        > .dropdown > a.dropdown-toggle {
+            background-color: @chat-navbar-active-room-bg;
+            padding: 0 @padding-base-horizontal;
+
+            i {
+                color: @navbar-inverse-color;
+            }
+
+            &:hover {
+                background-color: @chat-navbar-active-room-hover-bg;
+            }
+            // Disabled dropdown for new chat requests
+            &.disabled {
+                &, &:hover {
+                    background-color: @context-menu-bg;
+                    cursor: default;
+                }
+
+                .caret {
+                    display: none;
+                }
+            }
+        }
+
+         > .dropdown.open > a.dropdown-toggle {
+            &, &:hover {
+                background-color: @chat-navbar-active-room-hover-bg;
+            }
+        }
+    }
+
+    // Styles for menu in the chat toolbar 
+    > .navbar-left .cms-nav-chat-menu {
+        // Fix of HTML 5 issue (http://stackoverflow.com/questions/7774814/remove-white-space-below-image)
+        display: block;
+        text-decoration: none;
+        > i {
+            display: block;
+        }
+    }
+}
+
+.chat-toggle, .navbar-inverse .navbar-nav > li > a.chat-toggle:hover, .navbar-inverse .navbar-nav > li > a.chat-toggle:focus {
+    background-color: @context-menu-bg;
+    text-decoration: none;
+}
+
+// Rooms within Chat toolbar in CMSDesk
+.navbar-inverse .navbar-nav .chat-navbar-rooms {
+    background-color: @chat-navbar-room-bg;
+
+    li {
+        padding: 0;
+        float: left;
+        box-sizing: border-box;
+        border-bottom: 1px solid @chat-navbar-room-border-color;
+        border-right: 1px solid @chat-navbar-room-border-color;
+    }
+
+    .active {
+        background-color: @chat-navbar-active-room-bg;
+        border-color: @chat-navbar-active-room-hover-bg;
+
+        a:hover, a:focus {
+            background-color: @chat-navbar-active-room-hover-bg;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        display: block;
+
+        &:hover, &:focus {
+            background-color: @chat-navbar-room-hover-bg;
+        }
+    }
+}
+
+// Online indicator for chat in the main navbar
+.navbar-inverse .navbar-nav > li > a > i.chat-navbar-online {
+    color: @chat-online-color;
+}
+
+// Number of requests in the main navbar
+.chat-req-number {
+    background-color: @chat-req-number-bg;
+    position: relative;
+    display: block;
+    float: left;
+    left: (@base-unit * 0.5);
+    padding: 0 (@base-unit * 0.25);
+    white-space: nowrap;
+    line-height: @icon-size-100;
+    margin: (@base-unit * 0.75) 0 (@base-unit * 0.75) (@base-unit * 0.25);
+}

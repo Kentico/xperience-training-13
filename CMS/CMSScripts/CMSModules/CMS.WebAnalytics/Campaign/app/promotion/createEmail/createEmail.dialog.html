@@ -1,0 +1,105 @@
+<cms-dialog-header on-close="$ctrl.dismiss" header="{$ campaign.create.email $}"></cms-dialog-header>
+<div class="dialog-content">
+    <div class="campaign-edit-dialog">
+        <form class="form-horizontal" name="newEmailForm">
+            <cms-textbox value="$ctrl.emailSubject"
+                         maxlength="100"
+                         required="true"
+                         title="{$ campaign.create.email.subject $}"
+                         label="{$ campaign.create.email.subject $}"
+                         id="email-subject">
+            </cms-textbox>
+
+            <cms-radio-button value="$ctrl.emailCampaignType"
+                              options="$ctrl.emailCampaignTypeOptions"
+                              name="assignOrCreateEmailCampaign"
+                              id="email-campaign-select">
+            </cms-radio-button>
+
+            <div ng-show="$ctrl.isNewCampaignType()">
+                <cms-textbox value="$ctrl.emailDisplayName"
+                             maxlength="100"
+                             required="$ctrl.isNewCampaignType()"
+                             title="{$ newsletter_edit.newsletterdisplaynamelabel $}"
+                             label="{$ newsletter_edit.newsletterdisplaynamelabel $}"
+                             id="email-display-name">
+                </cms-textbox>
+
+                <cms-textbox value="$ctrl.emailSenderName"
+                             maxlength="100"
+                             required="$ctrl.isNewCampaignType()"
+                             title="{$ newsletter_edit.newslettersendernamelabel $}"
+                             label="{$ newsletter_edit.newslettersendernamelabel $}"
+                             id="email-sender-name">
+                </cms-textbox>
+
+                <cms-textbox value="$ctrl.emailSenderAddress"
+                             input-type="email"
+                             pattern="$ctrl.emailPattern"
+                             pattern-error="{$ campaign.create.email.campaign.senderaddress.invalid.email $}"
+                             maxlength="100"
+                             required="$ctrl.isNewCampaignType()"
+                             title="{$ newsletter_edit.newslettersenderemaillabel $}"
+                             label="{$ newsletter_edit.newslettersenderemaillabel $}"
+                             id="email-sender-address">
+                </cms-textbox>
+
+                <cms-select value="$ctrl.templateUnsubscription"
+                            options="$ctrl.data.emailTemplates.unsubscription"
+                            required="$ctrl.isNewCampaignType()"
+                            title="{$ newsletter_edit.unsubscriptiontemplate $}"
+                            label="{$ newsletter_edit.unsubscriptiontemplate $}"
+                            id="template-unsubscription">
+                </cms-select>
+
+                <cms-select value="$ctrl.templateIssue"
+                            options="$ctrl.data.emailTemplates.issue"
+                            required="$ctrl.isNewCampaignType()"
+                            title="{$ newsletter_edit.newslettertemplate $}"
+                            label="{$ newsletter_edit.newslettertemplate $}"
+                            id="template-issue">
+                </cms-select>
+            </div>
+
+            <div ng-show="!$ctrl.isNewCampaignType()">
+                <div title="{$ newsletter_newsletter.select.selectitem $}" class="form-group">
+                    <div class="editing-form-label-cell">
+                        <label for="template-issue" class="control-label editing-form-label">
+                            {$ newsletter_newsletter.select.selectitem $}:<span class="required-mark">*</span>
+                        </label>
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <div class="editing-form-control-nested-control">
+                            <select class="form-control" id="email-newsletter-select" data-ng-model="$ctrl.emailCampaignSelect"
+                                    data-ng-required="!$ctrl.isNewCampaignType()" name="emailNewsletterSelect"
+                                    data-ng-options="campaign as campaign.name for campaign in $ctrl.data.emailCampaigns track by campaign.id"
+                                    data-ng-change="templatesSelector = $ctrl.emailCampaignSelect.templates"></select>
+                            <span class="form-control-error" ng-show="(newEmailForm.$submitted || $ctrl.emailCampaignSelect.$dirty) && newEmailForm.emailNewsletterSelect.$error.required">
+                                {{"general.requiresvalue"|resolve}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div title="{$ newsletter_edit.newslettertemplate $}" class="form-group">
+                    <div class="editing-form-label-cell">
+                        <label for="email-template-select" class="control-label editing-form-label">
+                            {$ newsletter_edit.newslettertemplate $}:<span class="required-mark">*</span>
+                        </label>
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <div class="editing-form-control-nested-control">
+                            <select class="form-control" id="email-template-select" data-ng-model="$ctrl.templateIssue"
+                                    data-ng-required="!$ctrl.isNewCampaignType()" name="emailTemplateSelect"
+                                    data-ng-options="template as template.displayName for template in templatesSelector track by template.id"></select>
+                            <span class="form-control-error" ng-show="(newEmailForm.$submitted || $ctrl.templateIssue.$dirty) && newEmailForm.emailTemplateSelect.$error.required">
+                                {{"general.requiresvalue"|resolve}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<cms-dialog-footer confirm-label="{$ general.create $}" on-confirm="$ctrl.confirm"></cms-dialog-footer>

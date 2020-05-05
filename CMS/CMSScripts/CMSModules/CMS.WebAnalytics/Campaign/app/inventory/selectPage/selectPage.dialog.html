@@ -1,0 +1,32 @@
+<div id="js-page-selector-container">
+    <cms-dialog-header on-close="$ctrl.dismiss" header="{$ documentselection.title $}"></cms-dialog-header>
+    <div class="dialog-content">
+        <form class="form-horizontal" name="$ctrl.form" novalidate>
+            <div class="editing-form-label-cell">
+                <label for="pageSelector" class="control-label editing-form-label">
+                    {$ campaign.conversion.pageselector $}<span class="required-mark">*</span>
+                </label>
+            </div>
+
+            <div class="editing-form-value-cell">
+                <div class="editing-form-control-nested-control">
+                    <select id="pageSelector" name="pageSelector" class="form-control"
+                            model-item="$ctrl.detail"
+                            result-template="$ctrl.resultTemplate"
+                            rest-url="{{$ctrl.restUrl}}"
+                            rest-url-params="$ctrl.restUrlParams"
+                            dropdown-parent-id="js-page-selector-container"
+                            ng-min="1"
+                            cms-select2>
+                     </select>
+                </div>
+                <span class="form-control-error" 
+                      ng-if="!$ctrl.isSelectionValid() && ($ctrl.form.pageSelector.$touched || $ctrl.form.$submitted);">
+                    {$ campaign.conversion.pageisrequired $}
+                </span>
+            </div>
+        </form>
+    </div>
+    <cms-dialog-footer confirm-label="{$ general.save $}" on-confirm="$ctrl.confirm"
+                       dismiss-label="{$ general.cancel $}" on-dismiss="$ctrl.dismiss"></cms-dialog-footer>
+</div>

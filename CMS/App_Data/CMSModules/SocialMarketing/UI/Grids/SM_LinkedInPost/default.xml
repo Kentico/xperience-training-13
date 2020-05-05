@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="LinkedInPostID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$sm.linkedin.posts.confirmation.delete$" />
+  </actions>
+  <columns>
+    <column source="LinkedInPostComment" caption="$sm.linkedin.posts.content$" wrap="false" localize="true" maxlength="50" />
+    <column source="LinkedInPostLinkedInAccountID" caption="$sm.linkedin.posts.account$" externalsourcename="#transform: sm.linkedinaccount : {%LinkedInAccountDisplayName%}" wrap="false">
+      <filter source="LinkedInAccountDisplayName" type="text" format="[LinkedInPostLinkedInAccountID] IN (SELECT [LinkedInAccountID] FROM [SM_LinkedInAccount] WHERE {3})" />
+    </column>
+    <column source="##ALL##" caption="$sm.linkedin.posts.document$" wrap="false" externalsourcename="documentguid" />
+    <column source="LinkedInPostCampaignID" caption="$sm.linkedin.posts.campaign$" wrap="false" externalsourcename="#transform: analytics.campaign : {%CampaignDisplayName%}">
+      <!-- Third parameter contains the original generated condition, which takes care of proper encapsulation of LIKE clause within percent symbols -->
+      <filter source="CampaignDisplayName" type="text" format="[LinkedInPostCampaignID] IN (SELECT [CampaignID] FROM [Analytics_Campaign] WHERE {3}) OR (('{1}' = 'NOT LIKE' OR '{1}' = '&lt;&gt;') AND ([LinkedInPostCampaignID] IS NULL))" />
+    </column>
+    <column source="LinkedInPostID" caption="$sm.linkedin.posts.state$" wrap="false" externalsourcename="state" allowsorting="false" />
+    <column source="LinkedInPostImpressionCount" caption="$sm.linkedin.posts.impressioncount$" wrap="false" allowsorting="true" />
+    <column source="LinkedInPostClickCount" caption="$sm.linkedin.posts.clickcount$" wrap="false" allowsorting="true" />
+    <column source="LinkedInPostLikeCount" caption="$sm.linkedin.posts.likecount$" wrap="false" allowsorting="true" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="sm.linkedinpost" columns="LinkedInPostID, LinkedInPostComment, LinkedInPostLinkedInAccountID, LinkedInPostCampaignID, LinkedInPostLastModified, LinkedInPostDocumentGUID, LinkedInPostClickCount, LinkedInPostCommentCount, LinkedInPostEngagement, LinkedInPostImpressionCount, LinkedInPostLikeCount, LinkedInPostShareCount, LinkedInPostSiteID" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

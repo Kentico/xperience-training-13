@@ -1,0 +1,49 @@
+﻿<div class="campaign-assetlist-item row">
+    <div class="campaign-assetlist-header">
+        <span class="campaign-assetlist-header-description">
+            <span ng-if="$ctrl.isExistingDocument()" class="primary-description">
+                {{$ctrl.asset.additionalProperties.documentType}}
+                <br />
+            </span>
+
+            <span ng-if="!$ctrl.isDeleted()"><a ng-href="{{$ctrl.asset.link}}" target="_blank">{{$ctrl.asset.name}}</a></span>
+            <span ng-if="$ctrl.isDeleted()" class="campaign-assetlist-deleted">{{$ctrl.asset.name}}</span>
+
+            <span ng-if="!$ctrl.siteIsContentOnly && $ctrl.isExistingDocument()">
+                <i ng-if="$ctrl.isPublished()"
+                   class="campaign-assetlist-header-icon icon-check-circle color-green-100"
+                   title="{$ tree.publishednodetooltip $}"
+                   aria-hidden="true">
+                </i>
+                <i ng-if="!$ctrl.isPublished()"
+                   class="campaign-assetlist-header-icon icon-times-circle color-red-70"
+                   title="{$ tree.unpublishednodetooltip $}"
+                   aria-hidden="true">
+                </i>
+            </span>
+        </span>
+    </div>
+
+    <div class="campaign-assetlist-icons">
+        <div title="{$ campaign.assetlist.removeasset $}">
+            <button type="button" value="" ng-disabled="!$ctrl.editable"
+                    class="icon-only btn-icon btn"
+                    ng-click="$ctrl.removeAsset()"
+                    title="{$ campaign.assetlist.removeasset $}">
+                <i aria-hidden="true" class="icon-bin"></i>
+                <span class="sr-only">{$ campaign.assetlist.removeasset $}</span>
+            </button>
+        </div>
+
+        <div ng-if="!$ctrl.isDeleted()" title="{$ general.edit $}">
+            <a ng-href="{{$ctrl.asset.link}}" target="_blank" class="btn icon-only btn-icon">
+                <i class="icon-edit" aria-hidden="true">
+                </i>
+            </a>
+        </div>
+
+        <cms-get-link ng-if="$ctrl.asset.id > 0"
+                      asset-link="$ctrl.asset.additionalProperties.liveSiteLink"
+                      utm-code="$ctrl.utmCode"></cms-get-link>
+    </div>
+</div>

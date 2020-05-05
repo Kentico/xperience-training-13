@@ -1,0 +1,15 @@
+﻿<label for="{{$ctrl.id}}" class="control-label">{{$ctrl.label}}:<span ng-if="$ctrl.required" class="required-mark">*</span></label>
+<input type="text"
+       class="form-control"
+       ng-class="{ invalid : $ctrl.serverValidationMessage }"
+       ng-model="$ctrl.value"
+       ng-pattern="$ctrl.pattern"
+       ng-required="$ctrl.required"
+       ng-maxLength="$ctrl.maxlength"
+       ng-disabled="!$ctrl.enabled"
+       id="{{$ctrl.id}}"
+       name="{{$ctrl.id}}"/>
+
+<span class="form-control-error" ng-if="$ctrl.formElement.$error.pattern">{{$ctrl.patternError}}</span>
+<span class="form-control-error" ng-if="$ctrl.formElement.$error.required">{$ general.requiresvalue $}</span>
+<span class="form-control-error" ng-if="$ctrl.serverValidationMessage && $ctrl.formElement.$valid">{{ $ctrl.serverValidationMessage }}</span>

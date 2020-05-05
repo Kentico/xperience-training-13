@@ -1,0 +1,1317 @@
+//
+// Forms
+// --------------------------------------------------
+
+
+// Normalize non-controls
+//
+// Restyle and baseline non-control form elements.
+
+fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    // Chrome and Firefox set a `min-width: -webkit-min-content;` on fieldsets,
+    // so we reset that to ensure it behaves more like a standard block element.
+    // See https://github.com/twbs/bootstrap/issues/12359.
+    min-width: 0;
+}
+
+legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: @line-height-100;
+    font-size: (@font-size-base * 1.5);
+    line-height: inherit;
+    color: @legend-color;
+    border: 0;
+    border-bottom: 1px solid @legend-border-color;
+}
+
+// Normalize form controls
+
+// Override content-box in Normalize (* isn't specific enough)
+input[type="search"] {
+    box-sizing: border-box;
+}
+
+// Remove 'x' symbol from text boxes in IE
+input[type="search"], input[type="text"] {
+    &::-ms-clear {
+        display: none;
+    }
+}
+
+// Set the height of select and file controls to match text inputs
+input[type="file"] {
+    display: block;
+}
+
+// Make range inputs behave like textual form controls
+input[type="range"] {
+    display: block;
+    width: 100%;
+}
+// Make multiple select elements height not fixed
+select[multiple],
+select[size] {
+    height: auto;
+}
+
+// Form control feedback states
+//
+// Apply contextual and semantic states to individual form controls.
+
+// Warning
+.has-warning {
+    .form-control-validation(@state-warning-text; @state-warning-text; @state-warning-bg );
+}
+// Error
+.has-error {
+    .form-control-validation(@state-error-text; @state-error-text; @state-error-bg );
+}
+
+// Success
+.has-success {
+    .form-control-validation(@state-success-text; @state-success-text; @state-success-bg );
+}
+
+// Inline validation mostly in form
+.form-control-error {
+    font-size: @font-size-base;
+    color: @color-red-70;
+    display: inline-block; // important
+    margin-top: @base-unit * 0.375;
+    margin-right: @base-unit * 0.5;
+    // Error icon
+    &:before {
+        font-family: @icon-font-name;
+        font-size: @icon-size-80;
+        content: @icon-times-circle;
+        color: @field-check-color-error;
+        margin-right: @base-unit * 0.375;
+    }
+    // Override display used by .NET validator to show the error
+    &[style*="inline"] {
+        display: inline-block !important;
+    }
+}
+
+.form-control-loading {
+    font-size: @font-size-base;
+    color: @color-blue-100;
+    display: inline-block; // important
+    margin-top: @base-unit * 0.375;
+    margin-right: @base-unit * 0.5;
+    
+    // :before pseudo-selector cannot be used, because it cannot be animated in some browsers
+    // icon spinner has to be added manually into the element
+    i {
+      margin-right: @base-unit * 0.125 !important;
+      margin-left: -@base-unit * 0.25;
+    }
+}
+
+// obsolete version
+.CMSValidator {
+    span {
+        font-size: @font-size-base;
+        color: @color-red-70;
+        display: inline-block; // important
+        margin-top: @base-unit * 0.375;
+        margin-right: @base-unit * 0.5;
+        // Error icon
+        &:before {
+            font-family: @icon-font-name;
+            font-size: @icon-size-80;
+            content: @icon-times-circle;
+            color: @field-check-color-error;
+            margin-right: @base-unit * 0.375;
+        }
+        // Override display used by .NET validator to show the error
+        &[style*="inline"] {
+            display: inline-block !important;
+        }
+    }
+}
+
+// Colors of the validation results
+.validation-success {
+    color: @field-check-color-success;
+}
+
+.validation-warning {
+    color: @field-check-color-warning;
+}
+
+.validation-error {
+    color: @field-check-color-error;
+}
+
+// Horizontal forms
+//
+// Horizontal forms are built on grid classes and allow you to create forms with
+// labels on the left and inputs on the right.
+
+.form-horizontal {
+    width: 100%;
+    margin-bottom: @base-unit * 1.5;
+    // Consistent vertical alignment of labels, radios, and checkboxes
+    .control-label,
+    .control-label-top,
+    .radio,
+    .checkbox,
+    .selector-subitem {
+        margin-bottom: 0;
+        margin-top: (@padding-base-vertical + @input-border-width); // Default padding plus a border
+    }
+    // Fix for checkbox in table within a form
+    .table {
+        .radio,
+        .checkbox {
+            margin-top: 0;
+        }
+    }
+    // Make form groups behave like rows
+    .form-group {
+        &:extend(.cms-bootstrap .clearfix all);
+    }
+    // Vertical alignment in radio group for first item
+    .radio-list-vertical {
+        .radio {
+            margin-right: 0;
+        }
+
+        .radio:first-child {
+            margin-top: 0;
+        }
+
+        & + .control-group-inline {
+            margin-top: @base-unit * 0.5;
+        }
+    }
+    // Vertical alignment in checkbox group for first item
+    .checkbox-list-vertical {
+        .checkbox {
+            margin-right: 0;
+        }
+
+        .checkbox:first-child {
+            margin-top: 0;
+        }
+    }
+    // Left margin for selector subitems
+    .selector-subitem {
+        margin-left: @base-unit * 1.5;
+    }
+    // Only right align form labels here when the columns stop stacking
+    @media screen and (min-width: @screen-tablet) {
+        .control-label {
+            text-align: right;
+        }
+    }
+    // Left align for top labels
+    .control-label-top {
+        text-align: left;
+    }
+    // Cell for condition panel in generated filter control
+    .form-condition-cell-generated {
+        .input-width-60;
+        float: left;
+        padding-right: @grid-gutter-width-half;
+    }
+    // Category nested in category
+    h5.editing-form-category-caption {
+        padding: @base-unit * 0.5; // ~8px
+        padding-left: @base-unit;
+        margin-bottom: @base-unit * 0.5;
+    }
+}
+
+// Div layout
+//
+// Used for in horizontal-forms
+
+// Form groups
+// Standard form group
+.form-group {
+    margin-bottom: @form-group-margin;
+}
+// Submit buttons row
+.form-group-submit {
+    .make-column-offset(@screen-tablet; 4);
+    .make-column-offset(@screen-desktop; 2);
+}
+
+
+// Cell for field label
+.editing-form-label-cell {
+    font-size: @font-size-base;
+    .make-column(@screen-tablet; 4);
+    .make-column(@screen-desktop; 2);
+    padding-right: @grid-gutter-width;
+}
+
+// Cell for form control + button + error message
+.editing-form-value-cell {
+    .make-column(@screen-tablet; 8);
+    .make-column(@screen-desktop; 10);
+    .fix-white-space();
+
+    .form-control, .cms-input-group, .cms-form-group-btn, .cms-form-group-text {
+        .inline-input();
+        font-size: @font-size-base;
+    }
+
+    .btn {
+        vertical-align: top;
+
+        &.icon-only {
+            i {
+                margin: 0;
+            }
+        }
+
+        + .form-control-text {
+            margin-left: @base-unit * 0.5;
+        }
+    }
+    // Try not to use directly
+    .form-control-inline {
+        display: inline-block;
+        margin-top: (@padding-base-vertical + @input-border-width); // Default padding plus a border
+        margin-right: @base-unit * 0.5;
+    }
+    // Use in value cell for any text
+    .form-control-text {
+        .form-control-inline;
+        font-size: @font-size-base;
+    }
+    // Use in value cell for image control
+    .form-control-image {
+        .form-control-inline;
+    }
+    // Use in value cell for upload control
+    .form-control-upload {
+        .form-control-inline;
+    }
+
+    .field-value-override-checkbox {
+        margin-bottom: @margin-50;
+    }
+
+    i {
+        margin-right: @base-unit * 0.5;
+    }
+    // Macro edit styles
+    .macro-edit-cell {
+        display: inline-block;
+        // Place macro edit button between label and input
+        width: @grid-gutter-width;
+        margin-left: -@grid-gutter-width;
+        // Define higher specificity to disable margin
+        .macro-edit-remove-button.icon-only.btn {
+            padding: 0px;
+            margin: 0px;
+
+            .macro-edit-remove-icon {
+                // Fill whole gutter with clickable area
+                padding: @macro-edit-icon-padding;
+                // Class-defined icon size can't be used, because accessible button sets default icon size with higher specificity
+                font-size: 12px;
+            }
+        }
+    }
+
+    .macro-edit-control-cell {
+        display: inline-block;
+        vertical-align: top;
+        width: 100%;
+    }
+
+    .uploader {
+        margin-top: @base-unit *0.25;
+    }
+}
+
+// Cell for field label in narrow form
+.editing-form-label-cell-narrow {
+    .editing-form-label-cell;
+    .make-column(@screen-desktop; 4);
+}
+
+// Cell for form control + button + error message in narrow form
+.editing-form-value-cell-narrow {
+    .editing-form-value-cell;
+    .make-column(@screen-desktop; 8);
+}
+
+// Cell with offset
+.editing-form-value-cell-offset {
+    .make-column-offset(@screen-tablet; 4);
+    .make-column-offset(@screen-desktop; 2);
+}
+
+.settings-group-inline {
+    display: block;
+    .fix-white-space();
+
+    .control-group-inline,
+    input,
+    button,
+    p,
+    .country-selector span {
+        display: inline;
+    }
+
+    > .editing-form-control-nested-control,
+    > .settings-info-group {
+        display: inline-block;
+
+        & + .settings-info-group {
+            vertical-align: top;
+        }
+    }
+
+    .form-control {
+        width: @input-max-width;
+    }
+
+    .alert {
+        display: block;
+    }
+
+    .checkbox,
+    .radio,
+    .CM {
+        display: inline-block;
+        vertical-align: top;
+
+        div,
+        p,
+        .checkbox {
+            display: block;
+        }
+    }
+
+    .checkbox-no-label > label {
+        .fix-white-space();
+    }
+
+    .btn, .btn + .btn {
+        margin-left: 0;
+        margin-right: @padding-small-horizontal;
+    }
+}
+
+.editing-form-control-nested-control {
+    display: inline;
+}
+
+.editing-form-control-nested-control:not(:first-child) {
+    :first-child {
+        margin-top: @base-unit * 0.25;
+    }
+}
+
+// Mass actions
+.mass-action {
+    width: @screen-tablet;
+    margin-top: @base-unit;
+
+    .mass-action-label-cell {
+        .make-column(@screen-tablet; 3);
+        padding-right: @grid-gutter-width;
+        font-size: @font-size-base;
+    }
+
+    .mass-action-value-cell {
+        .fix-white-space();
+
+        .form-control {
+            min-width: @base-unit * 12;
+            width: auto;
+            max-width: @base-unit * 18;
+        }
+
+        .form-control, .cms-input-group, .cms-form-group-btn, .cms-form-group-text {
+            .inline-input();
+        }
+        // E.g. in product variants
+        .control-group-inline {
+            display: inline-block;
+            margin-left: @margin-50;
+        }
+
+        .input-price {
+            .input-width-40;
+            .input-number;
+            min-width: 0;
+        }
+
+        .btn {
+            vertical-align: top;
+        }
+    }
+}
+
+// Remove bottom indentation from filters for headers
+.cms-edit-menu .form-horizontal, .header-panel .form-horizontal {
+    margin-bottom: 0;
+
+    .form-group:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+// Labels
+label {
+    display: inline-block;
+
+    &.control-label, &.control-label-top {
+        color: @color-blue-70;
+        .text-semibold();
+        width: 100%;
+    }
+}
+
+// Special case of span-label (i.e. site selector)
+span {
+    &.control-label {
+        display: inline-block;
+        .text-semibold();
+        color: @color-blue-70;
+        width: 100%;
+    }
+}
+
+
+// Table layout used in custom form layout - generate default layout
+.form-table {
+    display: block;
+    float: left; // IE fix
+    tbody {
+        display: block;
+        float: left; // IE fix
+    }
+
+    .form-table-group {
+        display: block;
+        width: 100%; // IE fix
+        float: left; // IE fix
+        margin-bottom: @form-group-margin;
+        &:extend(.cms-bootstrap .clearfix all);
+    }
+
+    .form-table-label-cell {
+        .make-column(@screen-tablet; 4);
+        .make-column(@screen-desktop; 2);
+        display: block;
+        padding-right: @grid-gutter-width;
+        vertical-align: top;
+    }
+
+    .form-table-value-cell {
+        .make-column(@screen-tablet; 6);
+        .make-column(@screen-desktop; 8);
+        .fix-white-space();
+        display: block;
+        // All controls
+        .form-control {
+            .inline-input();
+        }
+        // Use in value cell for any text
+        .form-control-text {
+            display: inline-block;
+            margin-top: (@padding-base-vertical + @input-border-width); // Default padding plus a border
+            margin-right: @base-unit * 0.5;
+        }
+    }
+
+    .form-table-validation-cell {
+        .make-column(@screen-tablet; 2);
+        .make-column(@screen-desktop; 2);
+        display: block;
+    }
+}
+
+
+// Common form controls
+//
+// Shared size and type resets for form controls. Apply .form-control to any
+// of the following form controls:
+//
+// select
+// textarea
+// input[type="text"]
+// input[type="password"]
+// input[type="datetime"]
+// input[type="datetime-local"]
+// input[type="date"]
+// input[type="month"]
+// input[type="time"]
+// input[type="week"]
+// input[type="number"]
+// input[type="email"]
+// input[type="url"]
+// input[type="search"]
+// input[type="tel"]
+// input[type="color"]
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+    padding: @padding-base-vertical @padding-base-horizontal * 0.5;
+    font-size: @font-size-base;
+    line-height: @line-height-100;
+    color: @input-color;
+    vertical-align: baseline;
+    background-color: @input-bg;
+    border: @input-border-width solid @input-border;
+    border-radius: @input-border-radius;
+    box-sizing: border-box;
+    transition: ~"border-color ease-in-out .15s, box-shadow ease-in-out .15s";
+    // Customize the `:focus` state to imitate native WebKit styles.
+    .form-control-focus();
+    // Disabled and read-only inputs
+    // Note: HTML5 says that controls under a fieldset > legend:first-child won't
+    // be disabled if the fieldset is disabled. Due to implementation difficulty,
+    // we don't honor that edge case; we style them as disabled anyway.
+    &[disabled],
+    &[readonly] {
+        color: @input-color-disabled;
+        background-color: @input-bg-disabled;
+        border-color: @input-bg-disabled;
+        .placeholder(@input-color-disabled);
+    }
+
+    &[disabled] {
+        cursor: not-allowed;
+    }
+}
+
+// Reset height for textareas
+textarea.form-control {
+    height: auto;
+}
+
+// Fix dropdown flag position in select
+select.form-control {
+    padding-right: @base-unit * 0.25;
+}
+
+&.IE select.form-control {
+    padding-top: @base-unit * 0.1875;
+}
+
+// Placeholder
+//
+// Placeholder text gets special styles because when browsers invalidate entire
+// lines if it doesn't understand a selector/
+.form-control {
+    .placeholder();
+}
+
+.form-control-icon {
+    .cms-icon-80;
+    margin-top: @base-unit * 0.25;
+}
+
+
+// Form controls sizing
+//
+
+// Main input width definitions
+.input-width-15 {
+    width: @base-unit * 3; // ~48px = 0n chars in drp, 3n chars in txb
+}
+
+.input-width-20 {
+    width: @base-unit * 5; // ~80px = 4n chars in drp, 7n chars in txb
+}
+
+.input-width-40 {
+    width: @base-unit * 7; // ~112px = 7n chars in drp, 11n chars in txb
+}
+
+.input-width-60 {
+    width: @base-unit * 12; // ~192px = 18n chars in drp, 21n chars in txb
+}
+
+.input-width-100 {
+    width: @base-unit * 20; // ~320px = 34n chars in drp, 37n chars in txb
+}
+
+// Other width definitions - use custom widths as little as possible
+.input-width-82 {
+    width: @base-unit * 16.5;
+}
+
+// For date/time textbox
+.input-width-58 {
+    width: @base-unit * 11;
+}
+
+
+// Bootstrap sizing - obsolete
+.input-sm {
+    .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-80; @border-radius-small );
+}
+
+.input-lg {
+    .input-size(@input-height-large; @padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-200; @border-radius-large );
+}
+
+// Form types
+// Date
+.input-date {
+    .text-right;
+}
+
+// Number
+.input-number {
+    .text-right;
+}
+
+
+// Checkboxes and radios
+// Uses font-icon for the checkboxes and radio buttons
+//
+// Common radio and checkbox styles
+.radio,
+.checkbox {
+    display: block;
+
+    label {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        padding-left: @base-unit * 1.5;
+        font-size: @font-size-base;
+        line-height: @line-height-100;
+        font-weight: normal;
+        // Common styles for border and inner icon
+        &:before,
+        &:after {
+            content: "";
+            width: @base-unit - 1px; // remove white bg around
+            height: @base-unit - 1px; // remove white bg around
+            line-height: @base-unit;
+            display: inline-block;
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: @base-unit * 0.125; // special alignment
+            background-color: @color-white;
+        }
+        // Inner icon specific
+        &:after {
+            background-color: transparent;
+        }
+    }
+
+    input {
+        // Disabled styling
+        &[disabled], &:active[disabled] {
+            & + label {
+                cursor: not-allowed;
+
+                &:before, &:focus:before, &:active:before {
+                    color: @input-bg-disabled;
+                }
+
+                &:after {
+                    color: @input-color-disabled;
+                }
+            }
+        }
+        // Hide default inputs
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+        // Icons
+        + label:before,
+        + label:after {
+            font-family: @icon-font-name;
+            font-size: @icon-size-80;
+            text-align: center;
+        }
+
+        + label:before {
+            color: @color-gray-130;
+        }
+
+        + label:after {
+            color: @color-green-100;
+        }
+        // Focus
+        &:focus + label:before,
+        &:active + label:before {
+            color: @color-blue-100;
+        }
+    }
+}
+// Checkbox correction for Safari
+&.Safari {
+    .checkbox {
+        label {
+            &:after {
+                height: @base-unit;
+            }
+        }
+    }
+}
+// Checkbox correction for Chrome
+&.Chrome {
+    .checkbox {
+        label {
+            &:before,
+            &:after {
+                height: @base-unit;
+            }
+        }
+    }
+}
+
+// Radio specific styles
+.radio {
+    input {
+        // Border - shown for both selected and unselected
+        + label:before {
+            content: @icon-rb-uncheck;
+        }
+
+        &:disabled + label:before {
+            content: @icon-circle;
+        }
+        // Inner icon
+        &:checked + label:after {
+            content: @icon-rb-check-sign;
+        }
+    }
+    // Radio button border radius fix - because of background issue on table hover
+    label:before {
+        border-radius: 50%;
+    }
+}
+
+// Checkbox specific styles
+.checkbox {
+    input {
+        // Border - shown for both checked and unchecked
+        + label:before {
+            content: @icon-cb-uncheck;
+        }
+
+        &:disabled + label:before {
+            content: @icon-cb-check-disabled;
+        }
+        // Inner icon
+        &:checked + label:after {
+            content: @icon-cb-check-sign;
+        }
+    }
+
+    &:not(.checkbox-no-label):not(.control-group-inline, .checkbox) {
+        label {
+            margin-right: @base-unit * 0.5;
+        }
+    }
+}
+
+
+
+// Vertical radio and checkbox lists
+.radio-list-vertical,
+.checkbox-list-vertical {
+    margin-top: (@base-unit * 0.25 + @input-border-width);
+    margin-right: @base-unit * 0.5;
+
+    label:not(:first-of-type),
+    // When disabled, radio list item gets wrapped with a span
+    span:not(:first-of-type) label,
+    .radio + .radio,
+    .checkbox + .checkbox {
+        margin-top: @base-unit * 0.25;
+    }
+    // Use this class when the list is the first thing on the page
+    &.first-on-page {
+        margin-top: 0px;
+    }
+}
+
+// Horizontal radio and checkbox lists
+.radio-list-horizontal,
+.checkbox-list-horizontal {
+    .radio,
+    .checkbox {
+        display: inline-block;
+    }
+
+    label {
+        margin-right: @base-unit;
+    }
+}
+
+
+// Additional elements styling
+//
+// Full width for textarea column
+.textarea-full-width {
+    width: 100%;
+
+    .form-control, .cms-input-group {
+        max-width: 100%;
+    }
+}
+
+.form-field-full-column-width {
+    .form-control {
+        max-width: 100%;
+    }
+}
+
+// Label for full-width textarea
+.label-full-width {
+    width: 100%;
+
+    .control-label {
+        text-align: left;
+    }
+}
+
+// Text under the input
+.explanation-text {
+    font-size: @font-size-base;
+    display: block;
+    margin-top: @form-explanation-text-margin-top;
+    max-width: @explanation-text-max-width;
+}
+
+.form-field-full-column-width .explanation-text {
+    max-width: none;
+}
+
+.explanation-text-settings {
+    .explanation-text;
+    max-width: @explanation-text-max-width*1.75;
+}
+
+// Required mark (*)
+.required-mark {
+    font-size: @font-size-base;
+    font-weight: bold;
+    color: Red;
+}
+
+// Remove red outline added by automatic input validation before submit
+input:invalid {
+    box-shadow: none;
+}
+
+
+// Styles for collapsible panels (i.e. webpart properties)
+
+.form-horizontal .editing-form-category-fields {
+    margin-top: @base-unit;
+    margin-bottom: @base-unit * 1.5;
+}
+
+// Not used Bootstrap stuff
+// ------------------------
+
+// Static form control text
+//
+// Apply class to a `p` element to make any string of text align with labels in
+// a horizontal form layout.
+
+.form-control-static {
+    margin-bottom: 0; // Remove default margin from `p`
+    margin-top: (@padding-base-vertical + 1);
+}
+
+
+// Help text
+//
+// Apply to any element you wish to create light text for placement immediately
+// below a form control. Use for general help, formatting, or instructional text.
+
+.help-block {
+    display: block; // account for any element using help-block
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: lighten(@text-color, 25%); // lighten the text some for contrast
+}
+
+
+// Inline forms
+//
+// Make forms appear inline(-block) by adding the `.form-inline` class. Inline
+// forms begin stacked on extra small (mobile) devices and then go inline when
+// viewports reach <768px.
+//
+// Requires wrapping inputs and labels with `.form-group` for proper display of
+// default HTML form controls and our custom form controls (e.g., input groups).
+//
+// Heads up! This is mixin-ed into `.navbar-form` in navbars.less.
+
+.form-inline {
+    // Kick in the inline
+    @media screen and (min-width: @screen-tablet) {
+        // Inline-block all the things for "inline"
+        .form-group {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+        // In navbar-form, allow folks to *not* use `.form-group`
+        .form-control {
+            display: inline-block;
+            width: auto;
+            min-width: 60px;
+        }
+        // Remove default margin on radios/checkboxes that were used for stacking, and
+        // then undo the floating of radios and checkboxes to match (which also avoids
+        // a bug in WebKit: https://github.com/twbs/bootstrap/issues/1969).
+        .radio,
+        .checkbox {
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-left: 0;
+        }
+
+        .radio input[type="radio"],
+        .checkbox input[type="checkbox"] {
+            float: none;
+            margin-left: 0;
+        }
+    }
+}
+
+// Form control used to select icon for RSS feeds
+.iconSelector {
+    // Set margin for different types of selectors
+    .selector {
+        margin-top: @base-unit;
+    }
+    // Set formatting for selection from group of predefined icons
+    .iconGroup {
+        .iconItem {
+            margin: @base-unit * 0.25;
+            padding: @base-unit * 0.5;
+            float: left;
+            cursor: pointer;
+            text-align: center;
+
+            &.selected {
+                background-color: @table-bg-hover;
+            }
+
+            img {
+                &:extend(.cms-bootstrap .clearfix all);
+                display: block;
+                margin: auto;
+            }
+        }
+    }
+}
+
+// Form control used to check for URL availability
+.url-checker {
+    // Basic status panel
+    .status {
+        margin-top: (@padding-base-vertical + @input-border-width);
+        display: inline-block;
+        margin-left: @margin-50;
+        // Status icon for available URL
+        .status-icon-ok {
+            color: @color-green-100;
+        }
+        // Status icon for not-available URL
+        .status-icon-error {
+            color: @color-red-100;
+        }
+        // Status text for available URL
+        .status-text.ok {
+            color: @color-green-70;
+        }
+        // Status text for not-available URL
+        .status-text.error {
+            color: @color-red-70;
+        }
+    }
+    // Error detail status panel
+    .status-error-detail {
+        margin-top: (@padding-base-vertical + @input-border-width);
+        padding: @padding-base-horizontal;
+        background-color: @color-red-130;
+        // Error detail heading
+        strong {
+            color: @color-red-70;
+        }
+        // Error detail text
+        p {
+            margin: 0;
+        }
+    }
+}
+
+// Styles for new-Page dialog
+.new-page-dialog {
+    h3 {
+        padding-left: @base-unit;
+    }
+
+    .message-label {
+        margin-left: @base-unit;
+        margin-top: @base-unit;
+    }
+
+    .page-content-frame {
+        .page-name-form {
+            padding: (@base-unit - 3px) @base-unit 0 @base-unit;
+
+            &.form-horizontal {
+                margin-bottom: 0;
+                background-color: @color-gray-140;
+                width: auto;
+            }
+
+            .form-group {
+                margin-bottom: 0;
+
+                .editing-form-value-cell {
+                    width: auto;
+
+                    .form-control {
+                        width: auto;
+                        .input-width-100;
+                    }
+                }
+
+                .editing-form-label-cell {
+                    width: auto;
+                    padding-right: @base-unit * 0.5;
+
+                    .control-label {
+                        font-size: @font-size-base;
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.selector-no-results {
+    padding-left: @base-unit;
+}
+
+.template-selection-control {
+    background-color: @color-gray-140;
+
+    .radio-list-horizontal {
+        padding: @base-unit;
+    }
+}
+
+// Styles for collision dialog
+.form-merge-collisions {
+    .label-state-selector {
+        margin-top: @base-unit * 1.5;
+    }
+
+    .merge-country-selector {
+        div {
+            display: block;
+
+            .control-group-inline {
+                display: block;
+                width: @input-max-width + @margin-50;
+            }
+        }
+    }
+
+    .merge-country-selector,
+    .merge-country-conflict-icons {
+        float: left;
+    }
+
+    .merge-country-conflict-icons {
+        width: @base-unit * 2;
+    }
+
+    .merge-country-conflict-icons i:not(:first-child) {
+        margin-top: @base-unit * 1.25;
+    }
+
+    .merge-gender-selector {
+        div {
+            display: inline;
+        }
+    }
+}
+
+// Styles for country selector
+.country-selector {
+    div {
+        &:nth-child(2) {
+            margin-top: @base-unit * 0.75;
+        }
+    }
+}
+
+// ScreenLock styling
+.screen-lock-dialog {
+    .form-info {
+        margin-bottom: @base-unit;
+        display: block;
+    }
+
+    .screen-lock-dialog-form {
+        .editing-form-label-cell {
+            .make-column(@screen-tablet, 4);
+            .make-column(@screen-desktop, 4);
+            padding-right: @grid-gutter-width;
+        }
+
+        .editing-form-value-cell {
+            .make-column(@screen-tablet, 8);
+            .make-column(@screen-desktop, 8);
+        }
+    }
+}
+// Form layout exceptions
+// Advanced export
+.advanced-export,
+// Classes
+.NewClassWizard,
+// Orders, Custom tables
+.GlobalWizard,
+// New product option category in Dialog
+.DialogPageBody .ecommerce_optioncategory,
+// Macro rules
+.MacroRuleDialogBody {
+    .editing-form-label-cell {
+        .make-column(@screen-tablet, 4);
+        .make-column(@screen-desktop, 4);
+    }
+
+    .editing-form-value-cell {
+        .make-column(@screen-tablet, 8);
+        .make-column(@screen-desktop, 8);
+    }
+}
+
+// Document type uploader form control used for specifying icon or files
+.doc-type-icon-uploader {
+    .ButtonUploaderContainer {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 @padding-base-horizontal 0 @padding-small-horizontal;
+    }
+    // Defining size for large icon
+    .img-300 {
+        width: @base-unit * 3;
+        height: @base-unit * 3;
+    }
+    // Defining size for small icon
+    .img-100 {
+        width: @base-unit;
+        height: @base-unit;
+    }
+}
+
+// Mark localized inputs with icon flag
+
+.input-localized {
+    position: relative;
+
+    &::after {
+        content: @icon-earth;
+        font-family: @icon-font-name;
+        position: absolute;
+        top: 0;
+        right: 0;
+        .cms-icon-50;
+        margin: @base-unit * 0.25 @base-unit * 0.25 0 0;
+    }
+
+    &.has-scroller::after {
+        right: @base-unit;
+    }
+
+    .Gecko&.has-scroller::after {
+        right: @base-unit * 1.5;
+    }
+}
+
+// Info icon
+
+.info-icon {
+    .btn-icon;
+    cursor: default;
+
+    > i {
+        .cms-icon-80;
+        padding-left: 0;
+        margin-top: @base-unit * 0.25;
+    }
+
+    &.info-icon-heading > i {
+        margin-top: 0;
+    }
+}
+
+// Media selector form control
+.media-selector-image {
+    padding-top: @padding-base-vertical;
+}
+
+// Form control used for changing the zone type
+.zone-type-change-warning {
+    &.alert {
+        display: none;
+        position: fixed;
+    }
+}
+
+// Toggle button form control used as image alternative to checkbox
+.toggle-button .checkbox input + label {
+    display: none;
+}
+
+// Textbox with placeholder
+&.Safari {
+    .cms-input-group.cms-textwithplaceholder-container::before {
+        padding: 6px 8px 6px;
+    }
+}
+
+.cms-input-group.cms-textwithplaceholder-container::before {
+    content: attr(data-content);
+    position: absolute;
+    color: @color-gray-90;
+    display: inline-block;
+    padding: 5px 8px 4px;
+    background-color: @color-gray-150;
+    border: 2px solid @color-gray-130;
+    border-radius: 3px 0 0 3px;
+}
+
+.cms-input-group.cms-textwithplaceholder-container {
+    .cms-textwithplaceholder-hidden {
+        display: inline-block;
+        visibility: hidden;
+        position: absolute;
+    }
+}

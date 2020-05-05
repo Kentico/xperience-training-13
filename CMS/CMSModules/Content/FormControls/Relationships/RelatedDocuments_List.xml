@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions>
+    <action name="#move" externalsourcename="move" caption="$General.DragMove$" fonticonclass="icon-dots-vertical" />
+    <action name="delete" externalsourcename="delete" caption="$General.Remove$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$Relationship.DeleteMsg$" />
+    <action name="#moveup" externalsourcename="moveup" caption="$general.up$" fonticonclass="icon-chevron-up" />
+    <action name="#movedown" externalsourcename="movedown" caption="$general.down$" fonticonclass="icon-chevron-down" />
+  </actions>
+  <columns>
+    <column source="LeftNodeID" externalsourcename="lefnodename" caption="$Unigrid.Relationship.Columns.LeftDocument$" wrap="false" columnname="LeftNodeName">
+      <filter type="text" format="LeftNodeID IN (SELECT NodeID FROM CMS_Tree WHERE {3})" source="nodename" fieldname="LeftNode" />
+    </column>
+    <column source="LeftNodeID" caption="$Unigrid.Relationship.Columns.LeftDocumentType$" wrap="false" externalsourcename="#transform: cms.node.nodeclassid #classname" columnname="LeftClassID">
+    </column>
+    <column source="RelationshipNameID" externalsourcename="#transform: cms.relationshipname.relationshipdisplayname" caption="$Unigrid.Relationship.Columns.RelationshipName$" wrap="false" localize="true" columnname="RelationshipDisplayName">
+      <filter type="text" format="RelationshipNameID IN (SELECT RelationshipNameID FROM CMS_RelationshipName WHERE {3})" source="RelationshipName" />
+    </column>
+    <column source="RightNodeID" externalsourcename="rightnodename" caption="$Unigrid.Relationship.Columns.RightDocument$" wrap="false" columnname="RightNodeName">
+      <filter type="text" format="RightNodeID IN (SELECT NodeID FROM CMS_Tree WHERE {3})" source="nodename" fieldname="RightNode" />
+    </column>
+    <column source="RightNodeID" caption="$Unigrid.Relationship.Columns.RightDocumentType$" wrap="false" externalsourcename="#transform: cms.node.nodeclassid #classname" columnname="RightClassID">
+    </column>
+  </columns>
+  <options>
+    <key name="DisplayFilter" value="true" />
+    <key name="AllowSorting" value="false" />
+  </options>
+</grid>

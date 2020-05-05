@@ -1,0 +1,77 @@
+﻿<div class="journey-report content-block">
+    <div ng-if="::$ctrl.conversions.length && $ctrl.sources.length">
+        <h4>{$campaign.report.channelperformance$}</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr class="unigrid-head">
+                    <th class="main-column-icon-size">
+                        &nbsp;
+                    </th>
+                    <th class="main-column-20">
+                        <a href="#" ng-click="$ctrl.sort($ctrl.sortTypeName)">{$ campaign.conversion.trafficchannel $}</a>
+                        <i ng-show="$ctrl.showSorting($ctrl.sortTypeName, $ctrl.sortDesc)" ng-click="$ctrl.sort($ctrl.sortTypeName)" aria-hidden="true" class="icon-caret-down"></i>
+                        <i ng-show="$ctrl.showSorting($ctrl.sortTypeName, !$ctrl.sortDesc)" ng-click="$ctrl.sort($ctrl.sortTypeName)" aria-hidden="true" class="icon-caret-up"></i>
+                    </th>
+                    <th ng-if="::$ctrl.hasDetails" class="main-column-20">
+                        {$campaign.report.emailreports$}
+                    </th>
+                    <th class="text-right" ng-repeat="conversion in $ctrl.conversions track by $index">
+                        <a href="#" ng-click="$ctrl.sort($index)" title="{{::$ctrl.formatConversionName(conversion)}}">{{:: conversion.name || conversion.typeName }}</a>
+                        <i ng-show="$ctrl.showSorting($index, $ctrl.sortDesc)" ng-click="$ctrl.sort($index)" aria-hidden="true" class="icon-caret-down"></i>
+                        <i ng-show="$ctrl.showSorting($index, !$ctrl.sortDesc)" ng-click="$ctrl.sort($index)" aria-hidden="true" class="icon-caret-up"></i>
+                    </th>
+                    <th class="text-right">
+                        <a href="#" ng-click="$ctrl.sort($ctrl.sortTypeRate)" title="{$campaign.report.conversionrateexplanation$}">{$ campaign.conversionrate $}</a>
+                        <i ng-show="$ctrl.showSorting($ctrl.sortTypeRate, $ctrl.sortDesc)" ng-click="$ctrl.sort($ctrl.sortTypeRate)" aria-hidden="true" class="icon-caret-down"></i>
+                        <i ng-show="$ctrl.showSorting($ctrl.sortTypeRate, !$ctrl.sortDesc)" ng-click="$ctrl.sort($ctrl.sortTypeRate)" aria-hidden="true" class="icon-caret-up"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody-hover">
+                <tr ng-repeat-start="source in $ctrl.sources | orderBy:$ctrl.sortValueExtractor:$ctrl.sortDesc" class="summary-row">
+                    <td>
+                        <cms-collapse-button collapsed="source.collapsed"></cms-collapse-button>
+                    </td>
+                    <td>
+                        {{::source.name}}
+                    </td>
+                    <td ng-if="::$ctrl.hasDetails">
+                        <cms-source-detail-link link="source.link"></cms-source-detail-link>
+                    </td>
+                    <td class="text-right" ng-repeat="hitCount in source.hits track by $index">
+                        <cms-demographics-link data="hitCount"></cms-demographics-link>
+                    </td>
+                    <td class="text-right">{{::source.conversionRate | percentage:2}}</td>
+                </tr>
+                <tr ng-repeat-end ng-repeat-start="content in source.contents" ng-if="!source.collapsed">
+                    <td>&nbsp;</td>
+                    <td ng-if="!content.content">{$ campaign.conversion.trafficnocontent $}</td>
+                    <td ng-if="content.content">{{::content.content}}</td>
+                    <td ng-if="::$ctrl.hasDetails">&nbsp;</td>
+                    <td class="text-right" ng-repeat="hitCount in content.hits track by $index">
+                        <cms-demographics-link data="hitCount"></cms-demographics-link>
+                    </td>
+                    <td class="text-right">{{::content.conversionRate | percentage:2}}</td>
+                </tr>
+                <tr class="separator-row" ng-repeat-end ng-if="!source.collapsed">
+                    <td colspan="{{::source.hits.length + ($ctrl.hasDetails ? 4 : 3)}}">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr class="summary-row">
+                    <td>&nbsp;</td>
+                    <td>{$general.summary$}</td>
+                    <td ng-if="::$ctrl.hasDetails"></td>
+                    <td class="text-right" ng-repeat="summaryHit in $ctrl.summaryHits track by $index">
+                        <cms-demographics-link data="summaryHit"></cms-demographics-link>
+                    </td>
+                    <td class="text-right">
+                        {{::$ctrl.conversionRate | percentage:2}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <span ng-if="::!$ctrl.conversions.length">{$ campaign.nojourneystep $}</span>
+    <span ng-if="::$ctrl.conversions.length && !$ctrl.sources.length">{$ campaign.nodata $}</span>
+</div>

@@ -1,0 +1,60 @@
+<div id="js-page-selector-container">
+    <cms-dialog-header on-close="$ctrl.dismiss" header="{{ $ctrl.title }}"></cms-dialog-header>
+    <div class="dialog-content">
+        <div class="campaign-edit-dialog">
+            <form class="form-horizontal" name="$ctrl.form">
+                <cms-select value="$ctrl.conversion.activityType"
+                            options="$ctrl.activityTypes"
+                            title="{$ campaign.conversion.visitoractivity $}"
+                            label="{$ campaign.conversion.visitoractivity $}"
+                            id="selectActivityType"
+                            required="true"
+                            info-text="{$ campaign.conversion.visitoractivityinfo $}">
+                </cms-select>
+
+                <div class="form-group" ng-if="$ctrl.selectedActivity.areParametersRequired">
+                    <div class="editing-form-label-cell">
+                        <label for="pageSelector" class="control-label editing-form-label">
+                            {{ $ctrl.selectedActivity.selectorLabel }}<span class="required-mark" ng-if="$ctrl.selectedActivity.configuration.isRequired">*</span>
+                        </label>
+                    </div>
+
+                    <div class="editing-form-value-cell">
+                        <cms-select-parameter configuration="$ctrl.selectedActivity.configuration"
+                                              selected-conversion="$ctrl.selectedConversionItem">
+                        </cms-select-parameter>
+
+                        <span class="form-control-error"
+                              ng-if="!$ctrl.isSelectionValid() &&
+                              ($ctrl.form.pageSelector.$touched || $ctrl.form.$submitted);">
+
+                            {{ $ctrl.selectedActivity.errorMessage}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Page visit selector for content only sites -->
+                <div ng-if="$ctrl.showContentOnlyPageVisitConfiguration()">
+                    <cms-textarea value="$ctrl.selectedConversionItem.url" maxlength="4096" required="true"
+                                  title="{$ campaign.conversion.pagevisit.pageurl $}"
+                                  regex-pattern="{{ ::$ctrl.urlAssetTargetRegex }}"
+                                  regex-pattern-modifiers="i"
+                                  regex-pattern-error="{$ campaignAssetUrl.target.wrongFormat $}"
+                                  label="{$ campaign.conversion.pagevisit.pageurl $}"
+                                  id="pageURL"
+                                  placeholder="https://example.com/page">
+                    </cms-textarea>
+
+                    <cms-textbox value="$ctrl.selectedConversionItem.text" maxlength="4096" required="true"
+                                 title="{$ campaign.conversion.pagevisit.pagename $}"
+                                 label="{$ campaign.conversion.pagevisit.pagename $}"
+                                 explanation-text="{$ campaign.conversion.pagevisit.explanationText $}"
+                                 id="pageName">
+                    </cms-textbox> 
+                </div>
+            </form>
+        </div>
+    </div>
+    <cms-dialog-footer confirm-label="{$ general.save $}" on-confirm="$ctrl.confirm"
+                       dismiss-label="{$ general.cancel $}" on-dismiss="$ctrl.dismiss"></cms-dialog-footer>
+</div>

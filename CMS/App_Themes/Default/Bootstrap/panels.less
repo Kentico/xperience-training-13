@@ -1,0 +1,167 @@
+//
+// Panels
+// --------------------------------------------------
+
+
+// Base class
+.panel {
+    margin-bottom: @line-height-100;
+    background-color: @panel-bg;
+    border: none;
+    border-radius: @panel-border-radius;
+}
+
+// Panel contents
+.panel-body {
+    padding: @base-unit * 0.75 @base-unit;
+    &:extend(.cms-bootstrap .clearfix all);
+}
+
+
+// Tables in panels
+//
+// Place a non-bordered `.table` within a panel (not within a `.panel-body`) and
+// watch it go full width.
+
+.panel {
+    > .table {
+        margin-bottom: 0;
+    }
+
+    > .panel-body + .table {
+        border-top: 1px solid @table-border-color;
+    }
+}
+
+
+// Optional heading
+.panel-heading {
+    padding: @base-unit * 0.75 @base-unit;
+    font-size: @font-size-large;
+    border-bottom: 1px solid transparent;
+    .border-top-radius(@panel-border-radius - 1);
+}
+
+// Within heading, strip any `h*` tag of it's default margins for spacing.
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: ceil((@font-size-base * 1.125));
+
+    > a {
+        color: inherit;
+    }
+}
+
+// Optional footer (stays gray in every modifier class)
+.panel-footer {
+    padding: @base-unit;
+    background-color: @panel-footer-bg;
+    border-top: 1px solid @panel-inner-border;
+    .border-bottom-radius(@panel-border-radius - 1);
+}
+
+
+// Collapsible panels (aka, accordion)
+//
+// Wrap a series of panels in `.panel-group` to turn them into an accordion with
+// the help of our collapse JavaScript plugin.
+
+.panel-group {
+    // Tighten up margin so it's only between panels
+    .panel {
+        margin-bottom: 0;
+        border-radius: @panel-border-radius;
+        //overflow: hidden; // caused a missing line in Chrome
+        + .panel {
+            margin-top: 5px;
+        }
+    }
+
+    .panel-heading {
+        border-bottom: 0;
+
+        + .panel-collapse .panel-body {
+            border-top: 1px solid @panel-inner-border;
+        }
+    }
+
+    .panel-footer {
+        border-top: 0;
+
+        + .panel-collapse .panel-body {
+            border-bottom: 1px solid @panel-inner-border;
+        }
+    }
+    // New subcomponent for wrapping collapsible content for proper animations
+    .panel-collapse {
+    }
+}
+
+
+// Contextual variations
+.panel-default {
+    .panel-variant(@panel-default-border;
+    @panel-default-text;
+    @panel-default-heading-bg;
+    @panel-default-border
+    );
+}
+
+.panel-primary {
+    .panel-variant(@panel-primary-border;
+    @panel-primary-text;
+    @panel-primary-heading-bg;
+    @panel-primary-border
+    );
+}
+
+.panel-success {
+    .panel-variant(@panel-success-border;
+    @panel-success-text;
+    @panel-success-heading-bg;
+    @panel-success-border
+    );
+}
+
+.panel-warning {
+    .panel-variant(@panel-warning-border;
+    @panel-warning-text;
+    @panel-warning-heading-bg;
+    @panel-warning-border
+    );
+}
+
+.panel-danger {
+    .panel-variant(@panel-danger-border;
+    @panel-danger-text;
+    @panel-danger-heading-bg;
+    @panel-danger-border
+    );
+}
+
+// Collapsible panels - e.g. Web part properties
+.toggle-image {
+    margin: @base-unit * 0.75 @base-unit * 0.5;
+    float: left;
+}
+
+// Collapsible panel in form control category
+.FieldPanel {
+    .toggle-image {
+        margin: @base-unit * 0.125 @base-unit * 0.5 @base-unit * 0.125 0;
+        padding: 0;
+        float: left;
+    }
+}
+
+.collapsible-div {
+    .anchor, .toggle-image {
+        cursor: pointer;
+    }
+}
+
+// CMS Category panel
+.category-panel-header-right {
+    padding: (@base-unit * 0.25) @base-unit;
+}

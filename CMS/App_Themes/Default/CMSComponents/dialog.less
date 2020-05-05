@@ -1,0 +1,177 @@
+﻿.dialog-header {
+    background: @color-gray-50;
+    padding-left: @base-unit;
+
+    h2 {
+        line-height: @dialog-header-height;
+        font-weight: @headings-font-weight;
+    }
+
+    .dialog-header-title {
+        position: relative;
+        display: inline;
+        font-size: @font-size-huge;
+        color: @color-white;
+    }
+
+    .dialog-header-action-buttons {
+        .pull-right;
+        display: table;
+        text-align: center;
+
+        .action-button {
+            display: table-cell;
+            vertical-align: middle;
+            height: @dialog-header-height;
+
+            &:hover {
+                background-color: @color-gray-70;
+            }
+
+            a {
+                color: @color-gray-100;
+                text-decoration: none;
+                display: table-cell;
+                min-width: @base-unit * 2;
+                vertical-align: middle;
+                height: @base-unit * 2;
+            }
+        }
+
+        .close-button {
+            background-color: @color-gray-70;
+
+            &:hover {
+                background-color: @color-gray-80;
+            }
+        }
+    }
+}
+
+.dialog-content {
+    padding: @base-unit @base-unit 0;
+    overflow: auto;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    // Fix of bottom padding: http://stackoverflow.com/questions/10722367/bottom-padding-not-working-on-overflow-element-in-non-chrome-browsers
+    > div, > span {
+        &:last-child {
+            margin-bottom: @base-unit;
+        }
+    }
+}
+
+.dialog-content-frame {
+    width: 100%;
+    padding: 0;
+}
+
+.dialog-content-scrollable {
+    overflow: auto;
+    position: relative; // Position alerts correctly
+}
+
+.dialog-footer {
+    box-sizing: border-box;
+    display: block;
+    height: @dialog-footer-height;
+    padding: @base-unit;
+    background: @color-gray-140;
+    text-align: right;
+    z-index: @zindex-modal;
+    .fix-white-space();
+
+    .FloatLeft, .FloatRight {
+        .fix-white-space();
+    }
+}
+
+    .dialog-footer .cms-edit-menu {
+        background: none;
+        padding: 0;
+    }
+
+        .dialog-footer .cms-edit-menu .btn-actions, .dialog-footer .cms-edit-menu > div {
+            float: right;
+        }
+
+// Screen-lock dialog styling. The screen-lock form is styled in forms.less
+.screenlock-overlay {
+    z-index: (@zindex-screen-lock - 1);
+}
+
+.screen-lock-dialog {
+    // important because the JavaScript method for bringing up the dialog
+    // inserts a low z-index into 'style' attribute. Screenlock HAS TO be over all
+    z-index: @zindex-screen-lock !important;
+}
+
+// Membership add item dialog
+.dialog-user-add-item {
+    padding: 0 @padding-base-horizontal;
+}
+
+//
+// Override of jquery-ui CSS classes.
+// ---------------------------------
+.ui-dialog {
+    background-color: white;
+
+    .ui-dialog-titlebar {
+        display: none;
+    }
+}
+
+.ui-widget-overlay {
+    background-color: @color-gray-90 !important;
+}
+
+// Obsolete markup dialog
+//-----------------------
+.DialogPageBody {
+    // Show scrollbar if height overflows dialog window
+    .PageContent {
+        overflow: auto;
+        box-sizing: border-box;
+    }
+}
+
+
+// Async dialog - e.g. in Staging log
+// ----------------------------------
+
+.async-log-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: @zindex-async-dialog-bg;
+    background-color: @color-gray-90;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.async-log-area-wrapper {
+    position: fixed;
+    height: 95%;
+    width: 95%;
+    top: 2%;
+    left: 2%;
+    background-color: @color-white;
+    overflow: hidden;
+    z-index: @zindex-async-dialog;
+    box-sizing: border-box;
+}
+.async-log-area-content {
+    overflow: auto;
+    padding: @base-unit;
+    height: calc(~"100% -" @dialog-footer-height + @dialog-header-height);
+    box-sizing: border-box;
+}
+.async-log-area-footer {
+    position: absolute;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+}

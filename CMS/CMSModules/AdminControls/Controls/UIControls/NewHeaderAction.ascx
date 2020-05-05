@@ -1,0 +1,1 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="~/CMSModules/AdminControls/Controls/UIControls/NewHeaderAction.ascx.cs" Inherits="CMSModules_AdminControls_Controls_UIControls_NewHeaderAction" %>

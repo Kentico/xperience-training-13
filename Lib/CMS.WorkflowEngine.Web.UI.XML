@@ -1,0 +1,508 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.WorkflowEngine.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage">
+            <summary>
+            Base page for the workflow pages.
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage.WorkflowId">
+            <summary>
+            Current workflow ID
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage.CurrentWorkflow">
+            <summary>
+            Current workflow
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage.WorkflowType">
+            <summary>
+            Type of the workflow
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage.CheckProcessManagePermission">
+            <summary>
+            Ensures that current user can manage automation processes.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.CMSWorkflowPage.OnLoad(System.EventArgs)">
+            <summary>
+            Load event handler
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar">
+            <summary>
+            Shared toolbar implementation for workflow designers.
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.Injector">
+            <summary>
+            Factory for uniMenu items.
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.StopProcessing">
+            <summary>
+            In this control visibility has same function as stopping processing. Only values are inversed.
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.Workflow">
+            <summary>
+            Gets or sets workflow info object.
+            </summary>
+        </member>
+        <member name="P:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.JsGraphObject">
+            <summary>
+            Name of JS object used for deleting items.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.RegisterInitScript(System.String)">
+            <summary>
+            Registers script initializing toolbar.
+            </summary>
+            <remarks>
+            Call the method during OnLoad life-cycle phase.
+            </remarks>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.FilterList(System.Collections.Generic.List{CMS.UIControls.UniMenuConfig.Item},System.String)">
+            <summary>
+            Filters menu items in list by specified name.
+            </summary>
+            <param name="list">List to be filtered</param>
+            <param name="pattern">Pattern to search for</param>
+            <returns>Filtered list</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.GetGroupItemsFromDB(System.String)">
+            <summary>
+            Returns menu items based on workflow action types persisted in database.
+            </summary>
+            <param name="filter">Filter expression</param>
+            <seealso cref="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.GetWhereCondition"/>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.GetGroupItemsFromEnum(System.Collections.Generic.List{CMS.DataEngine.WorkflowStepTypeEnum},System.String)">
+            <summary>
+            Returns menu items based on step type list <paramref name="stepItems"/> and filtered by <paramref name="filter"/>.
+            </summary>
+            <param name="stepItems">List of step types</param>
+            <param name="filter">Filter expression</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.GraphDesignerToolbar.GetWhereCondition">
+            <summary>
+            Returns <see cref="T:CMS.DataEngine.IWhereCondition"/> used to get workflows persisted in database.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems">
+            <summary>
+            Items representing marketing automation step types in UniMenu control.
+            </summary>
+        </member>
+        <member name="F:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.mDraggableScope">
+            <summary>
+            Scope of draggable setting in JS.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.#ctor(System.String)">
+            <summary>
+            Initialize a new instance of the <see cref="T:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems"/> class.
+            </summary>
+            <param name="draggableScope">Scope for JS dragging mechanism.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.CreateMenuItem">
+            <summary>
+            Method covering shared bootstrap for menu item.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetDefaultDraggableHandler(CMS.DataEngine.WorkflowStepTypeEnum,System.String)">
+            <summary>
+            Returns HTML representation of default draggable handler.
+            </summary>
+            <param name="stepType">WorkflowStepTypeEnum value</param>
+            <param name="text">Text</param>
+            <returns>HTML code</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetTooltip(System.String)">
+            <summary>
+            Get tooltip
+            </summary>
+            <param name="text">Tooltip text</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetActionSettings(CMS.WorkflowEngine.WorkflowActionInfo)">
+            <summary>
+            Creates menu item for workflow action.
+            </summary>
+            <param name="actionDefinition">Info object</param>
+            <returns>UniMenu Item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetConditionSettings">
+            <summary>
+            Returns new menu item representing condition step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetMultichoiceSettings">
+            <summary>
+            Returns new menu item representing multi choice step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetMultichoiceFirstWinSettings">
+            <summary>
+            Returns new menu item representing multi choice first win step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetStandardSettings">
+            <summary>
+            Returns new menu item representing standard step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetStartSettings">
+            <summary>
+            Returns new menu item representing start step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetFinishedSettings">
+            <summary>
+            Returns new menu item representing finished step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetUserchoiceSettings">
+            <summary>
+            Returns new menu item representing user choice step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetWaitSettings">
+            <summary>
+            Returns new menu item representing wait step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetDefaultSettings">
+            <summary>
+            Returns new default menu item.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetUndefinedSettings">
+            <summary>
+            Returns new menu item representing undefined step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetNoteSettings">
+            <summary>
+            Returns new menu item representing automation process note.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetDocumentArchivedSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetDocumentEditSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetDocumentPublishedSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeAutomationUniMenuItems.GetActionSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems">
+            <summary>
+            Items representing step types in UniMenu control.
+            </summary>
+        </member>
+        <member name="F:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.mDraggableScope">
+            <summary>
+            Scope of draggable setting in JS.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.#ctor(System.String)">
+            <summary>
+            Constructor setting context to menu items.
+            </summary>
+            <param name="draggableScope">Scope for JS dragging mechanism.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.CreateMenuItem">
+            <summary>
+            Method covering shared bootstrap for menu item.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetDefaultDraggableHandler(CMS.DataEngine.WorkflowStepTypeEnum,System.String)">
+            <summary>
+            Returns HTML representation of default draggable handler.
+            </summary>
+            <param name="stepType">WorkflowStepTypeEnum value</param>
+            <param name="text">Text</param>
+            <returns>HTML code</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetTooltip(System.String)">
+            <summary>
+            Get tooltip
+            </summary>
+            <param name="text">Tooltip text</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetActionSettings(CMS.WorkflowEngine.WorkflowActionInfo)">
+            <summary>
+            Creates menu item for workflow action.
+            </summary>
+            <param name="actionDefinition">Info object</param>
+            <returns>UniMenu Item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetConditionSettings">
+            <summary>
+            Returns new menu item representing condition step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetDocumentArchivedSettings">
+            <summary>
+            Returns new menu item representing archived document step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetDocumentEditSettings">
+            <summary>
+            Returns new menu item representing edited document step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetDocumentPublishedSettings">
+            <summary>
+            Returns new menu item representing published document step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetMultichoiceSettings">
+            <summary>
+            Returns new menu item representing multi choice step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetMultichoiceFirstWinSettings">
+            <summary>
+            Returns new menu item representing multi choice first win step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetStandardSettings">
+            <summary>
+            Returns new menu item representing standard step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetStartSettings">
+            <summary>
+            Returns new menu item representing start step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetFinishedSettings">
+            <summary>
+            Returns new menu item representing finished step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetUserchoiceSettings">
+            <summary>
+            Returns new menu item representing user choice step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetWaitSettings">
+            <summary>
+            Returns new menu item representing wait step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetUndefinedSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetDefaultSettings">
+            <summary>
+            Throws appropriate exception.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetActionSettings">
+            <summary>
+            Returns new menu item representing action step.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.StepTypeUniMenuItems.GetNoteSettings">
+            <summary>
+            Returns new menu item representing automation process note.
+            </summary>
+            <returns>New menu item</returns>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.AutomationProcessActionListExtender">
+            <summary>
+            Extender for listing page of <see cref="T:CMS.WorkflowEngine.WorkflowActionInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.AutomationProcessActionListExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowActionEditExtender">
+            <summary>
+            Extender for editing <see cref="T:CMS.WorkflowEngine.WorkflowActionInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowActionEditExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowListControlExtender">
+            <summary>
+            Permission edit control extender
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowListControlExtender.OnInit">
+            <summary>
+            OnInit event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowListControlExtender.OnExternalDataBound(System.Object,System.String,System.Object)">
+            <summary>
+            OnExternalDataBound event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowListControlExtender.OnAction(System.String,System.Object)">
+            <summary>
+            Handles the UniGrid's OnAction event.
+            </summary>
+            <param name="actionName">Name of item (button) that threw event</param>
+            <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowScopeListControlExtender">
+            <summary>
+            Permission edit control extender
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowScopeListControlExtender.OnInit">
+            <summary>
+            OnInit event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowScopeListControlExtender.OnExternalDataBound(System.Object,System.String,System.Object)">
+            <summary>
+            OnExternalDataBound event handler
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowStepListControlExtender">
+            <summary>
+            Permission edit control extender
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowStepListControlExtender.OnInit">
+            <summary>
+            OnInit event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowStepListControlExtender.DataBinding(System.Object,System.EventArgs)">
+            <summary>
+            DataBinding event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowStepListControlExtender.OnExternalDataBound(System.Object,System.String,System.Object)">
+            <summary>
+            OnExternalDataBound event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowStepListControlExtender.OnAction(System.String,System.Object)">
+            <summary>
+            Handles the UniGrid's OnAction event.
+            </summary>
+            <param name="actionName">Name of item (button) that threw event</param>
+            <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowMethods">
+            <summary>
+            Workflow methods - wrapping methods for macro resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowMethods.PassedThroughActions(System.Object[])">
+            <summary>
+            Returns true if document passed through one/all of the selected workflow actions in history.
+            </summary>
+            <param name="parameters">
+            Document to be checked;
+            Workflow action names separated with a semicolon;
+            Indicator whether all of the selected action should be required.
+            </param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowMethods.PassedThroughSteps(System.Object[])">
+            <summary>
+            Returns true if document passed through one/all of the selected workflow steps in history.
+            </summary>
+            <param name="parameters">
+            Document to be checked;
+            Workflow step names separated with a semicolon;
+            Indicator whether all of the selected steps should be required.
+            </param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowTransformationFunctions">
+            <summary>
+            Functions for workflow macro methods.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowTransformationFunctions.PassedThroughActions(System.Object,System.String,System.Boolean)">
+            <summary>
+            Returns true if document had passed through one/all selected workflow actions.
+            </summary>
+            <param name="document">Document to check</param>
+            <param name="actions">Workflow action names separated with a semicolon</param>
+            <param name="allActions">If true all actions must have been passed.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowTransformationFunctions.PassedThroughSteps(System.Object,System.String,System.Boolean)">
+            <summary>
+            Returns true if document had passed through one/all specified workflow steps.
+            </summary>
+            <param name="document">Document to check</param>
+            <param name="steps">Workflow step names separated with a semicolon</param>
+            <param name="allSteps">If true all specified steps must have been passed.</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Web.UI.WorkflowScriptHelper">
+            <summary>
+            Class for Workflow script helpers.
+            </summary>
+        </member>
+        <member name="F:CMS.WorkflowEngine.Web.UI.WorkflowScriptHelper.REFRESH_FUNCTION_NAME">
+            <summary>
+            Name of the javascript function
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowScriptHelper.RefreshDesignerFromDialog(System.Web.UI.Page,System.Int32,System.String)">
+            <summary>
+            Refreshes designer from dialog edit
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Web.UI.WorkflowScriptHelper.RegisterRefreshDesignerFunction(System.Web.UI.Page,System.Int32,System.String)">
+            <summary>
+            Registers parameter-less javascript function for refreshing node in automation designer.
+            </summary>
+        </member>
+    </members>
+</doc>

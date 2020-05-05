@@ -1,0 +1,49 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_UI_SimplePage"
+     Codebehind="SimplePage.master.cs" %>
+
+<%@ Register Src="~/CMSModules/Objects/Controls/Locking/ObjectEditPanel.ascx" TagName="ObjectEditPanel"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>SimpleMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false"></asp:Literal>
+</head>
+<body runat="server" id="bodyElem">
+    <form id="form1" runat="server">
+        <asp:PlaceHolder runat="server" ID="plcManager" />
+        <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+        <asp:ContentPlaceHolder ID="plcBeforeBody" runat="server" />
+        <asp:Panel ID="pnlBody" runat="server" CssClass="PageBody">
+            <cms:cmspanel id="pnlContainer" runat="server" fixedposition="true" cssclass="header-container">
+                <asp:Panel ID="pnlHeader" runat="server" CssClass="PageHeader SimpleHeader" EnableViewState="false">
+                    <cms:PageTitle ID="titleElem" ShortID="pt" runat="server" HideTitle="true" />
+                </asp:Panel>
+                <asp:Panel ID="pnlSiteSelector" runat="server" CssClass="header-panel header-actions-site-selector-block" Visible="false">
+                    <asp:ContentPlaceHolder runat="server" ID="plcSiteSelector" />
+                </asp:Panel>
+                <asp:Panel ID="pnlAdditionalControls" runat="server" CssClass="header-panel" Visible="false">
+                    <asp:ContentPlaceHolder runat="server" ID="plcControls" />
+                </asp:Panel>
+                <cms:UIPlaceHolder ID="plcActionsPermissions" runat="server">
+                    <asp:Panel ID="pnlActions" runat="server" CssClass="cms-edit-menu">
+                        <asp:ContentPlaceHolder runat="server" ID="plcBeforeActions" />
+                        <cms:ObjectEditPanel ID="actionsElem" runat="server" IsLiveSite="false" />
+                        <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+                    </asp:Panel>
+                </cms:UIPlaceHolder>
+                <asp:ContentPlaceHolder ID="plcBeforeContent" runat="server" />
+            </cms:cmspanel>
+            <asp:Panel ID="pnlContent" runat="server" CssClass="PageContent">
+                <cms:cmsupdateprogress id="up" runat="server" handlepostback="true" />
+                <asp:PlaceHolder runat="server" ID="plcLabels" />
+                <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+            </asp:Panel>
+        </asp:Panel>
+    </form>
+    <asp:PlaceHolder runat="server" ID="plcAfterForm"></asp:PlaceHolder>
+</body>
+</html>

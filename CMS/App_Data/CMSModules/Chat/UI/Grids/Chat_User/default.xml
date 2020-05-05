@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions parameters="ChatUserID">
+    <action name="edit" caption="$General.Edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+  </actions>
+  <columns>
+    <column source="ChatUserNickname" caption="$chat.user.nickname$" wrap="false" localize="false" >
+      <filter type="text" size="200" />
+    </column>
+    <column source="IsOnline" caption="$chat.online$" wrap="false" localize="true" allowsorting="false" externalsourcename="#yesno">
+		 <!-- Sort does not support subqueries yet - only column names Sort="(CASE WHEN EXISTS(SELECT * FROM Chat_OnlineUser COU WHERE COU.ChatOnlineUserChatUserID = ChatUserID AND COU.ChatOnlineUserJoinTime IS NOT NULL) THEN 1 ELSE 0 END)" >-->
+		<filter source="ChatUserID" path="~/CMSModules/Chat/Controls/UI/ChatUser/ChatUserIsOnlineFilter.ascx" />
+	</column>
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="chat.user" columns="ChatUserID,ChatUserNickname,CASE WHEN EXISTS(SELECT * FROM Chat_OnlineUser COU WHERE COU.ChatOnlineUserChatUserID = ChatUserID AND COU.ChatOnlineUserJoinTime IS NOT NULL) THEN 1 ELSE 0 END AS IsOnline" />
+  <options>
+    <key name="DisplayFilter" value="true" />
+	<key name="FilterLimit" value="10"/>
+  </options>
+</grid>

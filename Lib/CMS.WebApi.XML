@@ -1,0 +1,428 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.WebApi.CMSApiController">
+            <summary>
+            Base class for all CMS <see cref="T:System.Web.Http.ApiController"/>s.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.CMSApiControllerConfiguration">
+            <summary>
+            Stores configuration for CMS API controller
+            </summary>
+        </member>
+        <member name="P:CMS.WebApi.CMSApiControllerConfiguration.ControllerType">
+            <summary>
+            Gets or sets controller type.
+            </summary>
+        </member>
+        <member name="P:CMS.WebApi.CMSApiControllerConfiguration.RequiresSessionState">
+            <summary>
+            Gets or sets flag indicating whether session state is required.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.RegisterCMSApiControllerAttribute">
+            <summary>
+            Registers route given CMS API controller.
+            </summary>
+        </member>
+        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.MarkedType">
+            <summary>
+            Type of the registered API controller.
+            </summary>
+        </member>
+        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.RequiresSessionState">
+            <summary>
+            Gets or sets value that defines if the target API controller requires read and write access to session-state values.
+            Default value is <c>true</c>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.#ctor(System.Type)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebApi.RegisterCMSApiControllerAttribute"/>
+            </summary>
+            <param name="markedType"></param>
+        </member>
+        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.PreInit">
+            <summary>
+            Registers instance of this attribute to <see cref="T:CMS.WebApi.HttpControllerRouteTable"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.AllowOnlyEditorAttribute">
+             <summary>
+             Restricts access to controller only for the editors.
+             </summary>
+             <example>
+             This example shows how to restrict access to the whole controller.
+             <code>
+             [AllowOnlyEditor]
+             public class MyController : ApiController
+             {
+                 // For accessing this method user has to be authorized.
+                 public HttpResponseMessage GetValue()
+                 {
+                     ...
+                 }
+             }
+             </code>
+            
+             This example shows how to restrict access to the single action.
+             <code>
+             public class MyController : ApiController
+             {
+                 [AllowOnlyEditor]
+                 // For accessing this method user has to authorized.
+                 public HttpResponseMessage GetAuthorized()
+                 {
+                     ...
+                 }
+             
+                 // While this action can be accessed even by public user.
+                 public HttpResponseMessage GetPublic()
+                 {
+                     ...
+                 }
+             }
+             </code>
+             </example>
+             <remarks>
+             <para>
+             This API supports the framework infrastructure and is not intended to be used directly from your code.
+             </para>
+             <para>
+             It is preferable to use this <see cref="T:CMS.WebApi.AllowOnlyEditorAttribute"/> over the default Web API <see cref="T:System.Web.Http.AuthorizeAttribute"/>,
+             since this filter logs exceptions to the event log and handles Windows authentication properly for the CMS administration.
+             However, this attribute does not work with the <see cref="T:System.Web.Http.AllowAnonymousAttribute" />, so it should not be used within the controller which
+             is already decorated with the <see cref="T:CMS.WebApi.AllowOnlyEditorAttribute" />.
+             
+             This attribute is not intended to be used in customer code directly.
+             </para>
+             </remarks>
+        </member>
+        <member name="M:CMS.WebApi.AllowOnlyEditorAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Calls when a process requests authorization.
+            </summary>
+            <param name="actionContext">The action context, which encapsulates information for using <see cref="T:System.Web.Http.Filters.AuthorizationFilterAttribute"/>.</param>
+        </member>
+        <member name="M:CMS.WebApi.AllowOnlyEditorAttribute.IsAuthorized">
+            <summary>
+            Checks whether the current user has editor privileges for current site.
+            </summary>
+            <returns><c>True</c>, if user is authorized; otherwise, <c>false</c></returns>
+        </member>
+        <member name="T:CMS.WebApi.HandleExceptionsAttribute">
+             <summary>
+             Handles exceptions thrown when processing controller's actions, ensures that internal exceptions are properly logged to the Event log.
+             </summary>
+             <example>
+             This example shows how to handle unauthorized request.
+             <code>
+             [HandleExceptions]
+             public class MyController : ApiController
+             {
+                 public HttpResponseMessage GetValue()
+                 {
+                     ...
+                     if(!IsAuthorized(MembershipContext.AuthenticatedUser))
+                     {
+                         // 401 status code Unauthorized is returned to the caller, so browser can handle the response properly
+                         throw new UnauthorizedAccessException();
+                     }
+                     ...
+                 }
+             }
+             </code>
+             
+             This example shows how <see cref="T:System.Web.Http.HttpResponseException"/> behaves.
+             <code>
+             [HandleExceptions]
+             public class MyController : ApiController
+             {
+                 public HttpResponseMessage GetValue()
+                 {
+                     ...
+                     // 400 status code Bad request is returned to the caller together with the error message
+                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Given property is in invalid format"))
+                 }
+             }
+             </code>
+            
+             This example shows how other types of exceptions behave.
+             <code>
+             [HandleExceptions]
+             public class MyController : ApiController
+             {
+                 public HttpResponseMessage GetValue()
+                 {
+                     ...
+                     // 500 status code Internal server error is returned to the caller. All sensitive data like error message or stack trace are omitted
+                     // Exception is logged to the Event log
+                     throw new Exception()
+                 }
+             }
+             </code>
+             </example>
+             <remarks>
+             <para>
+             This API supports the framework infrastructure and is not intended to be used directly from your code.
+             </para>
+             <para>
+             If exception is of type <see cref="T:System.UnauthorizedAccessException"/>, response is returned with the status code 
+             <see cref="F:System.Net.HttpStatusCode.Unauthorized"/>, so the browser can invoke login dialog.
+             
+             All other exceptions are logged to the Event log and empty response with status code <see cref="F:System.Net.HttpStatusCode.InternalServerError"/>
+             is returned, except for the <see cref="T:System.Web.Http.HttpResponseException"/>. 
+             This exception is considered as valid result and therefore is returned to the caller, including the error message.
+             </para>
+             </remarks>
+        </member>
+        <member name="M:CMS.WebApi.HandleExceptionsAttribute.#ctor">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebApi.HandleExceptionsAttribute"/>. 
+            </summary>
+            <remarks>
+            For event logging uses default implementation of <see cref="T:CMS.Core.IEventLogService"/>.
+            </remarks>
+        </member>
+        <member name="M:CMS.WebApi.HandleExceptionsAttribute.#ctor(CMS.Core.IEventLogService)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebApi.HandleExceptionsAttribute"/>
+            </summary>
+            <param name="eventLogService">Event log service used for logging handled exceptions</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="eventLogService"/> is null</exception>
+        </member>
+        <member name="M:CMS.WebApi.HandleExceptionsAttribute.OnException(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            Raises the exception event.
+            </summary>
+            <param name="actionExecutedContext">The context for the action.</param>
+        </member>
+        <member name="T:CMS.WebApi.IsAuthorizedPerResourceAttribute">
+            <summary>
+            Restrict access for authorized user with given resource name and permission.
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+        </member>
+        <member name="M:CMS.WebApi.IsAuthorizedPerResourceAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates permission attribute. Permission will be checked similarly to <see cref="M:CMS.Membership.UserInfo.IsAuthorizedPerResource(System.String,System.String)"/>.
+            </summary>
+            <param name="resourceName">Resource name</param>
+            <param name="permissionName">Permission name to check</param>
+            <param name="message">Error message, if null or empty <see cref="F:CMS.WebApi.IsAuthorizedPerResourceAttribute.DEFAULT_ERROR_MESSAGE"/> is used</param>
+        </member>
+        <member name="M:CMS.WebApi.IsAuthorizedPerResourceAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Restrict access for authorized user with given resource name and permission.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.IsFeatureAvailableAttribute">
+            <summary>
+            Restrict access when necessary feature is not available in the best license.
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+        </member>
+        <member name="M:CMS.WebApi.IsFeatureAvailableAttribute.#ctor(CMS.DataEngine.FeatureEnum,System.String)">
+            <summary>
+            Creates feature available attribute. Feature will be checked similarly to <see cref="M:CMS.DataEngine.ILicenseService.IsFeatureAvailable(CMS.DataEngine.FeatureEnum,System.String)"/>.
+            </summary>
+            <param name="feature">Necessary feature</param>
+            <param name="message">Error message, if null or empty <see cref="F:CMS.WebApi.IsFeatureAvailableAttribute.DEFAULT_ERROR_MESSAGE"/> is used</param>
+        </member>
+        <member name="M:CMS.WebApi.IsFeatureAvailableAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Restrict access when necessary feature is not available in the best license.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.ThreadUICultureActionFilter">
+            <summary>
+            Filter that sets correct thread UI culture based on user preferred UI culture.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.RequiredSessionStateControllerHandler">
+            <summary>
+            A <see cref="T:System.Web.IHttpAsyncHandler"/> that passes ASP.NET requests into the <see cref="T:System.Web.Http.HttpServer"/>
+            pipeline and write the result back.
+            </summary>
+            <remarks>
+            Specifies that the target HTTP handler requires access to session-state values. 
+            </remarks>
+        </member>
+        <member name="M:CMS.WebApi.RequiredSessionStateControllerHandler.#ctor(System.Web.Routing.RouteData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Web.Http.WebHost.HttpControllerHandler"/> class.
+            </summary>
+            <param name="routeData">The route data.</param>
+        </member>
+        <member name="T:CMS.WebApi.RequiredSessionStateRouteHandler">
+            <summary>
+            A <see cref="T:System.Web.Routing.IRouteHandler"/> that returns instances of <see cref="T:System.Web.Http.WebHost.HttpControllerHandler"/> that
+            can pass requests to a given <see cref="T:System.Web.Http.HttpServer"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.RequiredSessionStateRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Provides the object that processes the request.
+            </summary>
+            <remarks>
+            Specifies that the target HTTP handler requires access to session-state values. 
+            </remarks>
+            <param name="requestContext">An object that encapsulates information about the request.</param>
+            <returns>
+            An object that processes the request.
+            </returns>
+        </member>
+        <member name="T:CMS.WebApi.EnsureSessionMessageHandler">
+            <summary>
+            HTTP handler ensuring that the request has available session.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.EnsureSessionMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Ensures the request has session available. Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
+            </summary>
+            <param name="request">The HTTP request message to send to the server.</param>
+            <param name="cancellationToken">A cancellation token to cancel operation.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="request"/> is null.</exception>
+            <returns>
+            The task object representing the asynchronous operation.
+            </returns>
+        </member>
+        <member name="T:CMS.WebApi.HttpControllerRouteMapper">
+            <summary>
+            Maps routes served by Kentico CMS API controllers.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteMapper.MapRoute(System.Web.Routing.RouteCollection,CMS.WebApi.CMSApiControllerConfiguration)">
+            <summary>
+            Maps a route served by CMS API controller into <paramref name="routes"/>.
+            </summary>
+            <param name="routes">Route collection to map route in.</param>
+            <param name="controllerConfiguration">Controller configuration.</param>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteMapper.GetControllerName(System.String)">
+            <summary>
+            Gets name of Controller without <c>"Controller"</c> suffix.
+            </summary>
+            <param name="controllerTypeName">Controller type name.</param>
+            <returns>Controller type name without <c>"Controller"</c> suffix or empty string, if <paramref name="controllerTypeName"/> does not ends with <c>"Controller"</c>.</returns>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteMapper.IsRouteMapped(System.Web.Routing.RouteCollection,System.String)">
+            <summary>
+            Returns <c>true</c> if a route served by <paramref name="controllerName"/> is mapped in <paramref name="routes"/>.
+            </summary>
+            <param name="routes">Routes.</param>
+            <param name="controllerName">Controller name.</param>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteMapper.GetSessionHttpMessageHandler">
+            <summary>
+            Gets instance of <see cref="T:System.Net.Http.HttpMessageHandler"/> that ensures the session is available for the Web API requests.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpMessageHandler"/> ensuring the session is available.</returns>
+        </member>
+        <member name="T:CMS.WebApi.HttpControllerRouteTable">
+            <summary>
+            Stores the URL routes served by Kentico CMS API controllers.
+            </summary>
+        </member>
+        <member name="P:CMS.WebApi.HttpControllerRouteTable.Instance">
+            <summary>
+            Gets default instance of <see cref="T:CMS.WebApi.HttpControllerRouteTable"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteTable.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteTable.Register(System.Type,System.Boolean)">
+            <summary>
+            Registers a route served by Kentico CMS API controller.
+            </summary>
+            <param name="controllerType">Kentico CMS API controller type.</param>
+            <param name="requiresSessionState">Indicates whether session state is required for given controller.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="controllerType"/> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">A controller of given name is already registered.</exception>
+        </member>
+        <member name="M:CMS.WebApi.HttpControllerRouteTable.MapRoutes">
+            <summary>
+            Maps HTTP routes served by all registered Kentico CMS API controllers.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.WebApiModule">
+            <summary>
+            Represents the Web API module.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.WebApiModule.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebApi.WebApiModule"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.WebApiModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.WebApiModule.MapCmsApiRoutes(System.Object,System.EventArgs)">
+            <summary>
+            Maps routes for Kentico CMS API controllers.
+            </summary>
+            <param name="sender">Sender.</param>
+            <param name="e">Event args.</param>
+        </member>
+        <member name="T:CMS.WebApi.WebApiModuleMetadata">
+            <summary>
+            Represents the Web API module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.WebApiModuleMetadata.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebApi.WebApiModuleMetadata"/> class.
+            </summary>
+        </member>
+        <member name="T:CMS.WebApi.ContainsKeyAttribute">
+            <summary>
+            Validates if dictionary contains specific key.
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+            <exclude />
+        </member>
+        <member name="M:CMS.WebApi.ContainsKeyAttribute.#ctor(System.Object)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="key">key which should be present in dictionary.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null</exception>
+        </member>
+        <member name="M:CMS.WebApi.ContainsKeyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Checks if object is valid.
+            </summary>
+            <param name="value">Object to validate.</param>
+            <param name="validationContext">Validation context.</param>
+        </member>
+        <member name="T:CMS.WebApi.UseDefaultJsonMediaTypeFormatterAttribute">
+            <summary>
+            Controller decorated with this attribute uses <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter"/> to handle JSON formatting.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.UseDefaultJsonMediaTypeFormatterAttribute.Initialize(System.Web.Http.Controllers.HttpControllerSettings,System.Web.Http.Controllers.HttpControllerDescriptor)">
+            <summary>
+            Initializes controller with <see cref="T:System.Net.Http.Formatting.JsonMediaTypeFormatter"/> to handle JSON formatting.
+            </summary>
+            <param name="settings">The controller settings to initialize.</param>
+            <param name="descriptor">The controller descriptor.</param>
+        </member>
+    </members>
+</doc>

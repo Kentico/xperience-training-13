@@ -1,0 +1,1055 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.CustomTables</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.CustomTables.CustomTableFormSubmitActivityInitializer">
+            <summary>
+            Represents implementation of <see cref="T:CMS.Activities.IActivityInitializer"/> for custom table form submission activity.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableFormSubmitActivityInitializer.#ctor(CMS.DataEngine.DataClassInfo,System.Int32,System.Boolean)">
+            <summary>
+            Instantiate new instance of <see cref="T:CMS.CustomTables.CustomTableFormSubmitActivityInitializer"/>.
+            </summary>
+            <param name="customTable">Custom table the record was inserted or updated into</param>
+            <param name="itemID">ID of the record in custom table</param>
+            <param name="isEdit">Indicates whether the item is new or existing one.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="itemID"/> is not a positive integer number greater than zero.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="customTable"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableFormSubmitActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Activity info to be initialized</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="activity"/> is <c>null</c>.</exception>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableFormSubmitActivityInitializer.ActivityType">
+            <summary>
+            Activity type
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableFormSubmitActivityInitializer.SettingsKeyName">
+            <summary>
+            Activity settings key name, used to check whether activity logging is enabled.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemEventArgs">
+            <summary>
+            Custom table item event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemEventArgs.Item">
+            <summary>
+            Processed custom table item
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemEvents">
+            <summary>
+            Custom table item events
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemEvents.Update">
+            <summary>
+            Fires when custom table item is updated
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemEvents.Insert">
+            <summary>
+            Fires when custom table item is inserted
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemEvents.Delete">
+            <summary>
+            Fires when custom table item is deleted
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemHandler">
+            <summary>
+            Custom table item handler
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemHandler.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemHandler.#ctor(CMS.CustomTables.CustomTableItemHandler)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="parentHandler">Parent handler</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemHandler.StartEvent(CMS.CustomTables.CustomTableItem)">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="item">Handled custom table item</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemHandler.GetRecursionKey(CMS.CustomTables.CustomTableItemEventArgs)">
+            <summary>
+            Gets the recursion key for this handler
+            </summary>
+            <param name="e">Event arguments</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableInfo">
+            <summary>
+            Specialized class for the custom table info
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableInfo.OBJECT_TYPE_CUSTOMTABLE">
+            <summary>
+            Object type for custom table
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableInfo.TYPEINFOCUSTOMTABLE">
+            <summary>
+            Type information for custom tables.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableInfo.TypeInfo">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableInfo.RegisteredProperties">
+            <summary>
+            Local registered properties
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableInfo.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableInfo.RegisterProperties">
+            <summary>
+            Registers the properties of this object
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableInfo.GetCustomTableItems">
+            <summary>
+            Returns the custom table items.
+            In order to limit properties available in macros, provide custom table items via <see cref="T:CMS.DataEngine.InfoObjectCollection"/> type.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItem">
+            <summary>
+            Class providing access to custom table data.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.DataClassInfo">
+            <summary>
+            DataClass info
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.CustomTableClassName">
+            <summary>
+            Gets class name of custom table item.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.OrderEnabled">
+            <summary>
+            Indicates if custom table contains ItemOrder column.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemID">
+            <summary>
+            Gets or sets custom table item ID.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemGUID">
+            <summary>
+            Gets or sets custom table item GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemCreatedBy">
+            <summary>
+            Gets or sets id of user who created custom table item.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemCreatedWhen">
+            <summary>
+            Gets or sets custom table item creation date.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemModifiedBy">
+            <summary>
+            Gets or sets is of user who modified the custom table item.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemModifiedWhen">
+            <summary>
+            Gets or sets date of modification of custom table item.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ItemOrder">
+            <summary>
+            Gets or sets custom table item order.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.LogSynchronization">
+            <summary>
+            If true, synchronization tasks are logged on the object update.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.ObjectDisplayName">
+            <summary>
+            Object display name.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.Clone">
+            <summary>
+            Creates a clone of custom table item
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.#ctor(System.String,System.Data.DataRow)">
+            <summary>
+            Base constructor for inherited classes and internal purposes
+            </summary>
+            <param name="className">Class name of the custom table</param>
+            <param name="dr">DataRow with the data</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.NewObject(CMS.DataEngine.LoadDataSettings)">
+            <summary>
+            Creates a new object from the given DataRow
+            </summary>
+            <param name="settings">Data settings</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.New(System.String,System.Data.DataRow)">
+            <summary>
+            Creates new CustomTableItem instance which must inherit the CustomTableItem class.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="dataRow">Data row containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.New``1(System.String,System.Data.DataRow)">
+            <summary>
+            Creates new custom table item instance.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="dataRow">Data row containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.New``1(System.String,CMS.Base.IDataContainer)">
+            <summary>
+            Creates new custom table item instance.
+            </summary>
+            <param name="className">Class name in format application.class</param>
+            <param name="data">Data container containing both tree node and coupled table</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.NewInstance``1(System.String)">
+            <summary>
+            Creates a new instance of the given type
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.Initialize(System.String,System.Data.DataRow)">
+            <summary>
+            Initializes the object created with default constructor. Use it to load existing item from data row.
+            </summary>
+            <param name="className">Class name</param>
+            <param name="dr">Data row containing all page data</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.Initialize(System.String,CMS.Base.IDataContainer)">
+            <summary>
+            Initializes the object created with default constructor. Use it to load existing item from data row.
+            </summary>
+            <param name="className">Class name</param>
+            <param name="data">Data container containing all page data</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.UpdateTypeInfo(CMS.DataEngine.ObjectTypeInfo)">
+            <summary>
+            Updates instance with given type info
+            </summary>
+            <param name="typeInfo">Type info</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.UpdateData">
+            <summary>
+            Update custom table item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.InsertData">
+            <summary>
+            Insert custom table item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.LogSearchTask">
+            <summary>
+            Returns true if given custom table has any search index defined.
+            Uses only cached values - this operation has to be very fast since it's called in each update/insert of the custom table item.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.DeleteData">
+            <summary>
+            Delete custom table item DataClass.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts cloned object to DB.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.GetValue(System.String)">
+            <summary>
+            Gets custom table item value.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Returns value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Returns the value</param>
+            <returns>Returns true if the operation was successful (the value was present)</returns>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.SetValue(System.String,System.Object)">
+            <summary>
+            Sets value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Column value</param> 
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItem.SearchType">
+            <summary>
+            Gets the type of current object.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.GetSearchID">
+            <summary>
+            Gets the id column value which is used as search id by default.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItem.GetSearchFields(CMS.DataEngine.ISearchIndexInfo,CMS.DataEngine.ISearchFields)">
+            <summary>
+            Returns search fields collection. When existing collection is passed as argument, fields will be added to that collection.
+            When collection is not passed, new collection will be created and return. 
+            Collection will contain field values only when collection with StoreValues property set to true is passed to the method.
+            When method creates new collection, it is created with StoreValues property set to false.
+            </summary>
+            <param name="index">Search index</param>
+            <param name="searchFields">Search fields collection</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemProvider">
+            <summary>
+            Class for retrieving custom table items.
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemProvider.CUSTOM_TABLE_ITEM_PREFIX">
+            <summary>
+            Custom table item prefix for object type.
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemProvider.mLicensesCustom">
+            <summary>
+            License limitation custom table
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemProvider.mTypeInfos">
+            <summary>
+            Custom table TypeInfo [className.ToLowerCSafe()] -> [TypeInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemProvider.IsValid">
+            <summary>
+            Indicates if the provider instance is up-to-date and can be used to manage object instances.
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemProvider.LicensesCustom">
+            <summary>
+            License limitation custom table
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemProvider.TypeInfos">
+            <summary>
+            Custom table TypeInfo [className.ToLowerCSafe()] -> [TypeInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemProvider.ClassName">
+            <summary>
+            Class name
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.#ctor">
+            <summary>
+            Constructor (Creates uninitialized provider.)
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.#ctor(System.String)">
+            <summary>
+            Base constructor for inherited classes and internal purposes
+            </summary>
+            <param name="className">Class name of the custom table</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.CustomTables.CustomTableItemProvider"/> class.
+            </summary>
+            <param name="initialize">Indicates if provider together with hash tables should be initialized.</param>
+            <param name="className">Class name of the custom table.</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItem(System.Int32,System.String)">
+            <summary>
+            Returns custom table item of specified class name and item ID.
+            </summary>
+            <param name="itemId">Item ID</param>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItem``1(System.Int32)">
+            <summary>
+            Returns custom table item of specified type.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItem``1(System.Guid)">
+            <summary>
+            Returns custom table item of specified type.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItem(System.Guid,System.String)">
+            <summary>
+            Returns custom table item of specified class name and item GUID.
+            </summary>
+            <param name="itemGuid">Item GUID</param>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.DeleteItem(CMS.CustomTables.CustomTableItem)">
+            <summary>
+            Deletes given custom table item
+            </summary>
+            <param name="item">Custom table item</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.SetItem(CMS.CustomTables.CustomTableItem)">
+            <summary>
+            Sets given custom table item
+            </summary>
+            <param name="item">Custom table item</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItems(System.String)">
+            <summary>
+            Returns the query for all custom table items.
+            </summary>
+            <param name="className">Custom table class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItems``1">
+            <summary>
+            Returns all custom table items of specified type.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItems(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns the query of all data record for given custom table filtered out by where condition and ordered by given expression.
+            </summary>
+            <param name="className">Class name</param>
+            <param name="where">Where condition</param>
+            <param name="orderBy">Order by expression</param>
+            <param name="topN">Top N items</param>
+            <param name="columns">Columns to select, null or empty returns all columns</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.DeleteItems(System.String,System.String)">
+            <summary>
+            Deletes all items for given class.
+            </summary>
+            <param name="className">Custom table class name</param>
+            <param name="where">Where condition to filter the items</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetLastItemOrder(System.String)">
+            <summary>
+            Returns last item order for specified custom table.
+            </summary>
+            <param name="className">Custom table class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetClassName(System.String)">
+            <summary>
+            Gets custom table class name from given object type.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetObjectType(System.String)">
+            <summary>
+            Gets custom table object type from given class name.
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.IsCustomTableItemObjectType(System.String)">
+            <summary>
+            Indicates if given object type represents custom table item.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItemName(CMS.CustomTables.CustomTableItem,System.String)">
+            <summary>
+            Gets custom table item name.
+            </summary>
+            <param name="item">Custom table item</param>
+            <param name="classDisplayName">Class display name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.DeleteItemInternal(CMS.CustomTables.CustomTableItem)">
+            <summary>
+            Deletes given custom table item
+            </summary>
+            <param name="item">Custom table item</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.SetItemInternal(CMS.CustomTables.CustomTableItem)">
+            <summary>
+            Sets given custom table item
+            </summary>
+            <param name="item">Custom table item</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItemInternal(System.Int32)">
+            <summary>
+            Returns custom table item of specified class name and item ID.
+            </summary>
+            <param name="itemId">Item ID</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItemInternal(System.Guid)">
+            <summary>
+            Returns custom table item of specified class name and item GUID.
+            </summary>
+            <param name="itemGuid">Item GUID</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItemsInternal">
+            <summary>
+            Returns the query for all custom table items.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.DeleteItemsInternal(System.String)">
+            <summary>
+            Deletes all items for given class.
+            </summary>
+            <param name="where">Where condition to filter the items</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetItemNameInternal(CMS.CustomTables.CustomTableItem,System.String)">
+            <summary>
+            Gets custom table item name.
+            </summary>
+            <param name="item">Custom table item</param>
+            <param name="classDisplayName">Class display name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetLastItemOrderInternal">
+            <summary>
+            Returns last item order for specified custom table.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.LicenseVersionCheck(System.String,CMS.DataEngine.ObjectActionEnum)">
+            <summary>
+            License version checker.
+            </summary>
+            <param name="domain">Domain name</param>
+            <param name="action">Type of action - edit, insert, delete</param>
+            <returns>Returns true if feature is without any limitations for domain and action</returns>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.CheckLicense(CMS.DataEngine.ObjectActionEnum,System.String)">
+            <summary>
+            Checks the license.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.ClearLicensesCount(System.Boolean)">
+            <summary>
+            Clears custom tables hash count values.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetProviderObject(System.String)">
+            <summary>
+            Gets provider object.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.LoadProviderInternal(System.String)">
+            <summary>
+            Loads custom table item provider for given object type
+            </summary>
+            <param name="objectType">Custom table item object type</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.InvalidateProvider(System.String)">
+            <summary>
+            Invalidates specific provider.
+            </summary>
+            <param name="objectType">Type of the object</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.CreateInfo(System.Data.DataRow,System.Boolean)">
+            <summary>
+            Creates new custom table item instance
+            </summary>
+            <param name="dr">Data row with the object data</param>
+            <param name="useGenerator">If true, the process allows using the generator to differentiate between particular info types based on data</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.GetTypeInfo(System.String)">
+            <summary>
+            Returns the TypeInfo for specified class.
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.Clear(System.Boolean)">
+            <summary>
+            Clear the class info and properties lists of all object types.
+            </summary>
+            <param name="logTask">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.InvalidateTypeInfo(System.String,System.Boolean)">
+            <summary>
+            Invalidates typeinfo specified by class name.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.ValidateClass(System.String)">
+            <summary>
+            Validates given class name if represents existing custom table.
+            </summary>
+            <param name="className">Class name to validate</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemProvider.CreateTypeInfo(System.String)">
+            <summary>
+            Creates new typeinfo.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemTypeInfo">
+            <summary>
+            Type info for the custom table items.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemTypeInfo.#ctor(System.Type,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="providerType">Provider type</param>
+            <param name="objectType">Object type</param>
+            <param name="objectClassName">Object class name</param>
+            <param name="idColumn">ID column name</param>
+            <param name="timeStampColumn">Time stamp column name</param>
+            <param name="guidColumn">GUID column name</param>
+            <param name="codeNameColumn">Code name column name</param>
+            <param name="displayNameColumn">Display name column name</param>
+            <param name="binaryColumn">Binary column name</param>
+            <param name="siteIDColumn">Site ID column name</param>
+            <param name="parentIDColumn">Parent ID column name</param>
+            <param name="parentObjectType">Parent object type</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemTypeInfo.GetNiceObjectTypeName">
+            <summary>
+            Gets the nice object type name for this type
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemTypeInfo.CopyCustomTableItemTypeInfoEventsTo(CMS.DataEngine.ObjectTypeInfo)">
+            <summary>
+            Copies the event's hooks from current ObjectTypeInfo to specified one.
+            </summary>
+            <param name="info">Target.</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemFactory">
+            <summary>
+            Factory that provides custom table item objects
+            </summary>
+        </member>
+        <member name="P:CMS.CustomTables.CustomTableItemFactory.Type">
+            <summary>
+            Custom table item type
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemFactory.#ctor(System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="type">Type of the custom table item class</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemFactory.CreateNewObject">
+            <summary>
+            Creates new custom table item object
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableItemGenerator">
+            <summary>
+            Generator of the specific custom table items
+            </summary>
+        </member>
+        <member name="F:CMS.CustomTables.CustomTableItemGenerator.mGenerator">
+            <summary>
+            Object generator
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemGenerator.NewInstance``1(System.String)">
+            <summary>
+            Creates new instance of the given type
+            </summary>
+            <param name="className">Class name</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemGenerator.RegisterCustomTable(System.String,CMS.CustomTables.CustomTableItemFactory)">
+            <summary>
+            Registers the given custom table item class
+            </summary>
+            <param name="className">Class name to register</param>
+            <param name="factory">Factory to use for new items</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemGenerator.RegisterCustomTable``1(System.String)">
+            <summary>
+            Registers the given custom table item class
+            </summary>
+            <param name="className">Class name to register</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableItemGenerator.RegisterDefaultFactory(CMS.CustomTables.CustomTableItemFactory)">
+            <summary>
+            Registers the default factory for the custom table items, which overlaps the default one
+            </summary>
+            <param name="factory">Factory to register</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableMembershipMethods">
+            <summary>
+            Custom table membership methods - wrapping methods for macro resolver.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableMembershipMethods.IsAuthorizedPerCustomTablesData(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns true if user has read permission on at least one custom table.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="T:CMS.CustomTables.ContinuousIntegrationHandlers">
+            <summary>
+            Continuous integration handlers for custom tables
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.ContinuousIntegrationHandlers.Init">
+            <summary>
+            Registers continuous integration handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.ContinuousIntegrationHandlers.UpdateItemsInRepository(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Updates repository depending on change
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.ContinuousIntegrationHandlers.HandleDataClassUpdate(CMS.DataEngine.DataClassInfo,CMS.DataEngine.ObjectEventArgs,System.Boolean)">
+            <summary>
+            Handles both form definition and classname change for given <see cref="T:CMS.DataEngine.DataClassInfo" />
+            Repository for original name is deleted directly, but the store is performed during finishing the event. 
+            </summary>
+            <param name="classInfo">Info from before event</param>
+            <param name="e">Event arguments</param>
+            <param name="classNameChanged">true when classname is changed</param>
+        </member>
+        <member name="M:CMS.CustomTables.ContinuousIntegrationHandlers.RemoveItemsFromRepository(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Removes custom table items from repository.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableHandlers">
+            <summary>
+            Provides handlers for custom tables
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.Init">
+            <summary>
+            Initializes the document handlers
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.Update(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when updating a table
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.Insert(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when inserting a table
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.LogCustomTableSubmitActivity(System.Object,CMS.CustomTables.CustomTableItemEventArgs)">
+            <summary>
+            Logs custom table form submission activity.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.LogCustomTableEditActivity(System.Object,CMS.CustomTables.CustomTableItemEventArgs)">
+            <summary>
+            Logs custom table form edit activity.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.Delete(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles additional actions when deleting a table
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.BeforeDelete(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Handles before delete event on custom tables
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHandlers.ClearHashtables(System.String)">
+            <summary>
+            Clears data in hashtables
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableHelper">
+            <summary>
+            Provides methods for creating search documents for custom tables
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHelper.GetSearchDocuments(CMS.DataEngine.ISearchIndexInfo,System.String,System.String,System.Int32)">
+            <summary>
+            Returns collection of search index documents filtered by input criteria.
+            </summary>
+            <param name="indexInfo">Search index info object</param>
+            <param name="customTableClassName">Custom table class name</param>
+            <param name="whereCondition">Where condition</param>
+            <param name="lastItemId">Last item id</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHelper.GetCustomTableClasses">
+            <summary>
+            Returns the dataset containing custom tables classes.
+            </summary>        
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHelper.GetCustomTableClasses(System.Int32)">
+            <summary>
+            Returns the dataset containing custom tables classes allowed in site.
+            </summary>     
+            <param name="siteId">Site id</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHelper.GetFilteredTablesByPermission(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns DataSet with custom tables which current user can read.
+            </summary>
+            <param name="where">Complete where condition</param>
+            <param name="orderBy">Current order by clause</param>
+            <param name="topN">Current top N value</param>
+            <param name="columns">Currently selected columns</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableHelper.FilterTablesByPermission(CMS.DataEngine.ObjectQuery{CMS.DataEngine.DataClassInfo})">
+            <summary>
+            Filters custom tables by 'read' permission
+            </summary>
+            <param name="data">Custom tables data query</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableModule">
+            <summary>
+            Represents the Custom table module.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModule.OnPreInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModule.OnInit">
+            <summary>
+            Init module
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModule.GetObject(System.String)">
+            <summary>
+            Gets the object created from the given DataRow.
+            </summary>
+            <param name="objectType">Object type</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModule.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the module hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableModuleMetadata">
+            <summary>
+            Represents the Site module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableSearchIndexer">
+            <summary>
+            Search indexer for custom table search index
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSearchIndexer.ExecuteProcessTask(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Indexes the custom table
+            </summary>
+            <param name="sti">Search task</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSearchIndexer.Rebuild(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Rebuilds the custom table index
+            </summary>
+            <remarks>This method needs to be run in a thread safe way such as smart search task queue.</remarks>
+            <param name="indexInfo">Search index</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSearchIndexer.LoadResults(System.Collections.Generic.IEnumerable{CMS.Search.ILuceneSearchDocument},CMS.Base.SafeDictionary{System.String,System.Data.DataRow})">
+            <summary>
+            Loads the results to the given result collection
+            </summary>
+            <param name="results">Collection of results to load</param>
+            <param name="result">Dictionary of the loaded results indexed by their key</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSearchIndexer.GetDataClassInfo(CMS.Search.ILuceneSearchDocument)">
+            <summary>
+            Returns the data class info for the given search document
+            </summary>
+            <param name="obj">Document object</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSearchIndexer.GetSearchFields(CMS.Search.SearchIndexInfo,CMS.DataEngine.ISearchFields)">
+            <summary>
+            Gets the collection of search fields. When no SearchFields colection is provided, new is created.
+            </summary>
+            <param name="index">Search index</param>
+            <param name="searchFields">Search fields collection</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableExport">
+            <summary>
+            Handles special actions during the Custom table export process.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableExport.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableExport.ExportData(CMS.CMSImportExport.SiteExportSettings,System.Data.DataSet,CMS.DataEngine.TranslationHelper)">
+            <summary>
+            Export custom tables data.
+            </summary>
+            <param name="settings">Export settings</param>
+            <param name="data">Parent dataset</param>
+            <param name="th">Translation helper</param>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableExport.GetData(System.String,System.String)">
+            <summary>
+            Returns DataSet of custom table records.
+            </summary>
+            <param name="className">Custom table class name</param>
+            <param name="tableName">Table name</param>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableImport">
+            <summary>
+            Handles special actions during the Custom table import process.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableImport.Init">
+            <summary>
+            Initializes import handlers
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableImport.ImportData(CMS.CMSImportExport.SiteImportSettings,System.Data.DataTable,CMS.DataEngine.TranslationHelper)">
+            <summary>
+            Import custom tables data.
+            </summary>
+            <param name="settings">Import settings</param>
+            <param name="table">Parent data</param>
+            <param name="th">Translation helper</param>
+        </member>
+        <member name="T:CMS.CustomTables.ClearCustomTableLicensesCountWebFarmTask">
+            <summary>
+            Web farm task used to clear custom tables hash count values.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="M:CMS.CustomTables.ClearCustomTableLicensesCountWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.CustomTables.CustomTableItemProvider.ClearLicensesCount(System.Boolean)"/> method.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.ClearCustomTableTypeInfosWebFarmTask">
+            <summary>
+            Web farm task used to clear all custom table type infos.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="M:CMS.CustomTables.ClearCustomTableTypeInfosWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.CustomTables.CustomTableItemProvider.Clear(System.Boolean)"/> method.
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.CustomTableSynchronization">
+            <summary>
+            Web farm synchronization for custom table items
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.CustomTableSynchronization.Init">
+            <summary>
+            Initializes the tasks for custom table items synchronization
+            </summary>
+        </member>
+        <member name="T:CMS.CustomTables.InvalidateCustomTableTypeInfoWebFarmTask">
+            <summary>
+            Web farm task used to invalidate custom table type info.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.CustomTables.InvalidateCustomTableTypeInfoWebFarmTask.ClassName">
+            <summary>
+            Gets or sets class name of the custom table to be invalidated.
+            </summary>
+        </member>
+        <member name="M:CMS.CustomTables.InvalidateCustomTableTypeInfoWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.CustomTables.CustomTableItemProvider.InvalidateTypeInfo(System.String,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.RegisterCustomTableAttribute">
+            <summary>
+            Registers the custom table item class within the system or overrides the existing one.
+            </summary>
+        </member>
+        <member name="P:CMS.RegisterCustomTableAttribute.ClassName">
+            <summary>
+            Class name
+            </summary>
+        </member>
+        <member name="P:CMS.RegisterCustomTableAttribute.MarkedType">
+            <summary>
+            Gets the custom table item implementation type
+            </summary>
+        </member>
+        <member name="M:CMS.RegisterCustomTableAttribute.#ctor(System.String,System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="className">Class name</param>
+            <param name="type">Custom table item implementation type</param>
+        </member>
+        <member name="M:CMS.RegisterCustomTableAttribute.Init">
+            <summary>
+            Initializes the attribute
+            </summary>
+        </member>
+    </members>
+</doc>

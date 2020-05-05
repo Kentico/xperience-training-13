@@ -1,0 +1,21 @@
+﻿<div>
+    <h4 class="control-label {{ $ctrl.configuration.additionalClass }}">{{ $ctrl.configuration.heading }}</h4>
+    <p>{{ $ctrl.configuration.description }}</p>
+
+    <div ng-repeat="conversion in $ctrl.conversions | filter: { isFunnelStep: $ctrl.isFunnel }" class="campaign-list">
+        <cms-campaign-conversion is-funnel="$ctrl.isFunnel"
+                                 conversion="conversion"
+                                 removable="$ctrl.isRemovable()"
+                                 editable="!$ctrl.campaign.isFinished()"
+                                 remove-conversion="$ctrl.removeConversion(conversion)">
+        </cms-campaign-conversion>
+    </div>
+
+    <div class="content-block-50">
+        <cms-add-conversion is-funnel="$ctrl.isFunnel"
+                            on-created="$ctrl.addConversionToList"
+                            enabled="!$ctrl.campaign.isFinished()"
+                            campaign-id="$ctrl.campaign.campaignID">
+        </cms-add-conversion>
+    </div>
+</div>

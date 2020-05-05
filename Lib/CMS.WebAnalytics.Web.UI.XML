@@ -1,0 +1,1343 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.WebAnalytics.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.WebAnalytics.Web.UI.AnalyticsLog">
+            <summary>
+            Cache log base class.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.AnalyticsLog.Settings">
+            <summary>
+            Debug settings for this particular log
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetIPAndAgent(System.Object,System.Web.UI.WebControls.GridViewRowEventArgs)">
+            <summary>
+            Update footer values
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetInformation(System.Object,System.Object,System.Object)">
+            <summary>
+            Returns information writable to analytics debug.
+            </summary>
+            <paramref name="objectName">Object name</paramref>
+            <paramref name="culture">Culture</paramref>
+            <paramref name="objectId">Object ID</paramref>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetCount(System.Object,System.Object)">
+            <summary>
+            Gets the count/value information
+            </summary>
+            <param name="count">Count</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.AssetController">
+            <summary>
+            Handles the campaign assets.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AssetController.Post(CMS.WebAnalytics.CampaignAssetViewModel)">
+            <summary>
+            Performs saving of the <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/> corresponding to the given <see cref="T:CMS.WebAnalytics.CampaignAssetViewModel"/>.
+            The <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/> is inserted with the values obtained from <paramref name="campaignAssetViewModel"/>.
+            </summary>
+            <param name="campaignAssetViewModel">Instance of updated view-model. This instance will be used to creating corresponding <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad request</c>, if model state of binded <paramref name="campaignAssetViewModel"/> was not valid;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <paramref name="campaignAssetViewModel"/>. This campaign has <see cref="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CampaignID"/> filled
+            with the data from the DB.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AssetController.Put(CMS.WebAnalytics.CampaignAssetViewModel)">
+            <summary>
+            Performs update of the <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/> corresponding.
+            The <see cref="T:CMS.WebAnalytics.CampaignAssetInfo" /> values are updated with the values from <paramref name="campaignAssetViewModel"/>.
+            </summary>
+            <remarks>
+            No dirty checking is performed, <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/> will be updated even if no change was made to the object.
+            HTTP verb PUT is not supported, therefore this request accepts only the POST requests.
+            </remarks>
+            <param name="campaignAssetViewModel">Instance of updated view-model. This instance will be used to update corresponding <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad request</c>, if model state of binded <paramref name="campaignAssetViewModel"/> was not valid
+            otherwise, <c>HTTP status code 200 OK</c> with updated <paramref name="campaignAssetViewModel"/>.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.AssetController.Delete(System.Int32)">
+            <summary>
+            Deletes given campaign asset.
+            </summary>
+            <remarks>
+            When response is returned, there will be no campaign with given ID in database.
+            HTTP verb DELETE is not supported, therefore this request accepts only the GET requests.
+            </remarks>
+            <param name="campaignAssetID">ID of asset</param>
+            <returns>
+            Returns <c>HTTP status code 200 OK</c> if request was successful.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignController">
+            <summary>
+            Handles getting of campaigns.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignController.Get">
+            <summary>
+            Gets list of campaigns from the current site.
+            </summary>
+            <returns>
+            HTTP response message containing the status code dependent on whether the action was successful or not.
+            Returns 200 OK status and list of campaigns from the current site.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignController.Post(CMS.WebAnalytics.Web.UI.CampaignEditViewModel)">
+            <summary>
+            Performs saving of the <see cref="T:CMS.WebAnalytics.CampaignInfo"/> corresponding to the given <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/>.
+            The <see cref="T:CMS.WebAnalytics.CampaignInfo"/> is inserted with the values obtained from <paramref name="model"/>.
+            </summary>
+            <remarks>
+            <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignName"/> is set to <see cref="F:CMS.DataEngine.InfoHelper.CODENAME_AUTOMATIC"/> to let the <see cref="T:CMS.WebAnalytics.CampaignInfoProvider"/> decide
+            what codename should be used based on the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignDisplayName"/>.
+            </remarks>
+            <param name="model">Instance of updated view-model. This instance will be used to create corresponding <see cref="T:CMS.WebAnalytics.CampaignInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad request</c>, if model state of bound <paramref name="model"/> was not valid;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <paramref name="model"/>. This campaign has <see cref="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CampaignID"/> filled
+            with the data from the DB.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignController.Put(CMS.WebAnalytics.Web.UI.CampaignEditViewModel)">
+            <summary>
+            Performs update of the <see cref="T:CMS.WebAnalytics.CampaignInfo"/> corresponding to the given <see cref="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CampaignID"/> property.
+            The <see cref="T:CMS.WebAnalytics.CampaignInfo" /> values are updated with the values from <paramref name="model"/>. 
+            </summary>
+            <remarks>
+            No dirty checking is performed, <see cref="T:CMS.WebAnalytics.CampaignInfo"/> will be updated even if no change was made to the object.
+            HTTP verb PUT is not supported, therefore this request accepts only the POST requests.
+            </remarks>
+            <param name="model">Instance of updated view-model. This instance will be used to update corresponding <see cref="T:CMS.WebAnalytics.CampaignInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad request</c>, if model state of bound <paramref name="model"/> was not valid or -
+            if no campaign was found for the provided <see cref="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CampaignID"/>;
+            otherwise, <c>HTTP status code 200 OK</c> with updated <paramref name="model"/>. 
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignController.Delete(System.Int32)">
+            <summary>
+            Deletes campaign with given id only for current site.
+            </summary>
+            <remarks>
+            When response is returned, there will be no campaign with given ID in database.
+            HTTP verb DELETE is not supported, therefore this request accepts only the GET requests.
+            </remarks>
+            <param name="id">ID of campaign</param>
+            <returns>
+            Returns <c>HTTP status code 200 OK</c> if request was successful.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignController.UpdateNewsletterUTMCodes(System.String,System.String)">
+            <summary>
+            Updates UTM campaign codes in newsletters.
+            </summary>
+            <param name="oldUTMCode">Original UTM campaign code.</param>
+            <param name="newUTMCode">New UTM campaign code.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionController">
+            <summary>
+            Handles the campaign conversions.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionController.Post(CMS.WebAnalytics.Web.UI.CampaignConversionViewModel)">
+            <summary>
+            Creates a new instance of the <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> corresponding to the given <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/>.
+            The <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> is inserted into database with the values obtained from <paramref name="conversionViewModel"/>.
+            </summary>
+            <remarks>
+            If conversion with the same name and activity already exists within campaign, no action is performed and exiting conversion is returned.
+            </remarks>
+            <param name="conversionViewModel">Instance of view model with conversion information. This instance will be used to create corresponding <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if model state of bound <paramref name="conversionViewModel"/> is not valid;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <paramref name="conversionViewModel"/>.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionController.Put(CMS.WebAnalytics.Web.UI.CampaignConversionViewModel)">
+            <summary>
+            Updates existing instance of the <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> corresponding to the given <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/>.
+            The <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> is updated in database with the values obtained from <paramref name="conversionViewModel"/>.
+            </summary>
+            <remarks>
+            If conversion with the same name and activity already exists within campaign, no action is performed and original unchanged conversion is returned.
+            </remarks>
+            <param name="conversionViewModel">Instance of view model with conversion information. This instance will be used to update corresponding <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if model state of bound <paramref name="conversionViewModel"/> is not valid;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <paramref name="conversionViewModel"/>.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionController.Delete(System.Int32)">
+            <summary>
+            Deletes the given campaign conversion.
+            </summary>
+            <remarks>
+            When response is returned, there will be no conversion with given ID in the database.
+            HTTP verb DELETE is not supported, therefore this request accepts only GET requests.
+            </remarks>
+            <param name="conversionID">ID of conversion</param>
+            <returns>
+            Returns <c>HTTP status code 200 OK</c> if request is successful.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionPageController">
+            <summary>
+            Supplies data for page Smart Drop-down in campaign conversions.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionPageController.Get(System.String,System.Int32)">
+            <summary>
+            Gets page according to <paramref name="ID"/> and <paramref name="objType"/>.
+            </summary>
+            <param name="objType">Object type.</param>
+            <param name="ID">Page node ID or product node SKUID.</param>        
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if page is not found;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <see cref="T:CMS.WebAnalytics.Web.UI.PageSelectorViewModel"/> view model.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionPageController.Get(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets list of pages for current site, where current user has read permission.
+            </summary>
+            <param name="objType">Object type.</param>
+            <param name="name">Search query (part of page's name).</param>        
+            <param name="pageIndex">Index of the page. Pages are indexed from 0 (first page).</param>
+            <param name="pageSize">Number of results in the page.</param>
+            <returns>
+            List of 10 serialized <see cref="T:CMS.WebAnalytics.Web.UI.PageSelectorViewModel"/> view models.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveController">
+            <summary>
+            Handles the campaign objectives.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveController.Post(CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel)">
+            <summary>
+            Updates existing or creates a new instance of the <see cref="T:CMS.WebAnalytics.CampaignObjectiveInfo"/> corresponding to the given <see cref="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel"/>.
+            The <see cref="T:CMS.WebAnalytics.CampaignObjectiveInfo"/> is updated or inserted into database with the values obtained from <paramref name="objectiveViewModel"/>.
+            </summary>
+            <param name="objectiveViewModel">Instance of view model with objective information. This instance will be used to update or create corresponding <see cref="T:CMS.WebAnalytics.CampaignObjectiveInfo"/></param>
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if model state of bound <paramref name="objectiveViewModel"/> is not valid;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <paramref name="objectiveViewModel"/>.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveController.Delete(System.Int32)">
+            <summary>
+            Deletes the given campaign objective.
+            </summary>
+            <remarks>
+            When response is returned, there will be no objective with given ID in the database.
+            HTTP verb DELETE is not supported, therefore this request accepts only GET requests.
+            </remarks>
+            <param name="objectiveID">ID of objective</param>
+            <returns>
+            Returns <c>HTTP status code 200 OK</c> if request is successful.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ActivityTypeService">
+            <summary>
+            Logic connected to <see cref="T:CMS.Activities.ActivityTypeInfo"/> modeling.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ActivityTypeService.#ctor(CMS.Activities.IActivityTypeInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebAnalytics.Web.UI.ActivityTypeService"/> class.
+            </summary>
+            <param name="activityTypeInfoProvider">Provider for <see cref="T:CMS.Activities.ActivityTypeInfo"/> management.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ActivityTypeService.GetActivityTypeViewModels(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Returns view models for all allowed activity types.
+            </summary>
+            <param name="allowedActivities">List of allowed activity types.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter">
+            <summary>
+            Provides method for filtering the given <see cref="T:CMS.DataEngine.ObjectQuery"/> before new <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> is created.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter.Filter(CMS.DataEngine.ObjectQuery)">
+            <summary>
+            Filters given <paramref name="objectQuery"/> and return the result.
+            </summary>
+            <param name="objectQuery">Query to be filtered</param>
+            <returns>Filtered <paramref name="objectQuery"/></returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilterContainer">
+            <summary>
+            Enables to register implementation of <see cref="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter"/> to corresponding object type. These filters will be used 
+            before creating the <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilterContainer.RegisterFilter(System.String,CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter)">
+            <summary>
+            Register given <paramref name="filter"/> to the given <paramref name="objectType"/>.
+            </summary>
+            <param name="objectType">Object type the <paramref name="filter"/> is registered for</param>
+            <param name="filter">Filter to be registered</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilterContainer.GetFilter(System.String)">
+            <summary>
+            Gets the previously registered <see cref="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter"/>. If no filter is found, returns <c>null</c>.
+            </summary>
+            <param name="objectType">Object type the <see cref="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignConversionItemFilter"/> is obtained for</param>
+            <returns>Gets previously registered filter for given <paramref name="objectType"/></returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignListItemViewModelService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.ICampaignListItemViewModelService.GetModel(CMS.WebAnalytics.CampaignInfo,System.DateTime)">
+            <summary>
+            Method takes <see cref="T:CMS.WebAnalytics.CampaignInfo"/> and creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel"/> containing all values
+            required for communication between Web API and javascript modules.
+            </summary>
+            <param name="campaign">Campaign info obtained from the database</param>
+            <param name="dateTime">Datetime, used to calculate the current status of campaign</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="campaign"/> is null</exception>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Internal.CampaignLinkService">
+            <summary>
+            Provides methods for obtaining link to single campaign object.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.CampaignLinkService.#ctor(CMS.PortalEngine.Internal.IUILinkProvider,CMS.Core.Internal.IDateTimeNowService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.Internal.CampaignLinkService"/>.
+            </summary>
+            <param name="uiLinkProvider">Provides methods for generating links to access single objects within the module. (e.g. single Site)</param>
+            <param name="dateTimeNowService">Provides method for getting current <see cref="T:System.DateTime"/></param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.CampaignLinkService.GetCampaignLink(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Gets link leading to the given <paramref name="campaign"/>. Takes the <paramref name="campaign"/> status into account
+            and changes the target tab accordingly.
+            </summary>
+            <param name="campaign">Campaign object the link is being obtained for</param>
+            <returns>Link leading to the given <paramref name="campaign"/></returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Internal.ICampaignLinkService">
+            <summary>
+            Provides methods for obtaining link to single campaign object.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Internal.ICampaignLinkService.GetCampaignLink(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Gets link leading to the given <paramref name="campaign"/>. Takes the <paramref name="campaign"/> status into account
+            and changes the target tab accordingly.
+            </summary>
+            <param name="campaign">Campaign object the link is being obtained for</param>
+            <returns>Link leading to the given <paramref name="campaign"/></returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/> objects.
+            Provides methods for conversion of the <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> objects to <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/>
+            and for saving the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/> objects into the database.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.#ctor(CMS.Activities.IActivityTypeInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionService"/> class.
+            </summary>
+            <param name="activityTypeInfoProvider">Provider for <see cref="T:CMS.Activities.ActivityTypeInfo"/> management.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.GetConversionViewModel(CMS.WebAnalytics.CampaignConversionInfo)">
+            <summary>
+            Returns view model for given campaign conversion info.
+            </summary>
+            <param name="info">Campaign conversion info.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.SaveConversion(CMS.WebAnalytics.Web.UI.CampaignConversionViewModel)">
+            <summary>
+            Sets data from campaign conversion model and returns updated view model.
+            </summary>
+            <param name="model">Campaign conversion view model.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.CreateViewModel(CMS.WebAnalytics.CampaignConversionInfo,CMS.Activities.ActivityTypeInfo)">
+            <summary>
+            Creates view model composed of campaign conversion and activity type properties.
+            </summary>
+            <param name="conversion">Campaign conversion.</param>
+            <param name="activity">Activity type.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.GetInfo(CMS.WebAnalytics.Web.UI.CampaignConversionViewModel)">
+            <summary>
+            Returns campaign conversion info from view model.
+            </summary>
+            <remarks>
+            If conversion with the same ID as in view model already exists, it's properties are modified according to the view model.
+            Otherwise new campaign info is created.
+            </remarks>
+            <param name="model">Campaign conversion view model sent from client.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModelService">
+            <summary>
+            Service that provides method to fill all the properties in <see cref="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignListItemViewModelService.#ctor(CMS.WebAnalytics.Web.UI.Internal.ICampaignLinkService,CMS.WebAnalytics.Internal.ICampaignStatisticsService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModelService"/>.
+            </summary>
+            <param name="campaignLinkService">Provides methods for obtaining link to single campaign object</param>
+            <param name="statisticsService">Provides methods for obtaining campaign statistics</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignListItemViewModelService.GetModel(CMS.WebAnalytics.CampaignInfo,System.DateTime)">
+            <summary>
+            Method takes <see cref="T:CMS.WebAnalytics.CampaignInfo"/> and creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel"/> containing all values
+            required for communication between Web API and javascript modules.
+            </summary>
+            <param name="campaign">Campaign info obtained from the database</param>
+            <param name="dateTime">Datetime, used to calculate the current status of campaign</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="campaign"/> is null</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveService.GetObjectiveViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
+            <summary>
+            Returns view model from specified objective (<paramref name="info"/>).
+            </summary>
+            <param name="info">Campaign objective info</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveService.SaveObjective(CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel)">
+            <summary>
+            Sets data from campaign objective model <paramref name="model"/> and returns updated view model.
+            </summary>
+            <param name="model">Campaign objective view model</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveService.CreateViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
+            <summary>
+            Returns view model from specified objective (<paramref name="info"/>).
+            </summary>
+            <param name="info">Campaign objective info</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportService">
+            <summary>
+            Service providing methods to work with campaign reports.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportService.InvalidateCampaignReport(System.Int32)">
+            <summary>
+            Invalidates reports statistics computed for campaign.
+            </summary>
+            <param name="campaignId">Campaign identifier</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService">
+            <summary>
+            Provides view model for campaign report.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetViewModel(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Returns view model for specified campaign.
+            </summary>
+            <param name="campaign">Campaign to create view model for.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetSourceDetails(CMS.WebAnalytics.CampaignInfo,System.Collections.Generic.IEnumerable{CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel})">
+            <summary>
+            Creates collection with distinct conversion sources with links to their details.
+            </summary>
+            <param name="campaign">Campaign to get sources for.</param>
+            <param name="conversionReports">List of individual conversion reports.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetCampaignObjective(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Returns campaign objective information (its name, target value and actual value) for given campaign.  
+            </summary>
+            <param name="campaign">Campaign to get objective for.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetConversionReports(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Creates report view models for individual conversions of given campaign.
+            </summary>
+            <param name="campaign">Campaign to get conversion reports for.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetConversionReport(CMS.WebAnalytics.CampaignConversionInfo,System.Collections.Generic.IEnumerable{CMS.WebAnalytics.CampaignConversionHitsInfo})">
+            <summary>
+            Creates view model for given conversion using supplied hits.
+            </summary>
+            <param name="conversion">Conversion to create report view model for.</param>
+            <param name="hits">Hits corresponding to the conversion</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetSourceReports(System.Collections.Generic.IEnumerable{CMS.WebAnalytics.CampaignConversionHitsInfo})">
+            <summary>
+            Creates source report view models for given hits.
+            </summary>
+            <param name="hits">Conversion hits to create view model for.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetSourceDetailLinks(CMS.WebAnalytics.CampaignInfo,System.Collections.Generic.ICollection{CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.UtmDisplayParameters})">
+            <summary>
+            Creates collection with distinct conversion sources with links to newsletter issue details.
+            </summary>
+            <param name="campaign">Campaign to get sources for.</param>
+            <param name="sourceNames">Source names to get links for.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetEmailReportLink(System.Collections.Generic.IEnumerable{CMS.DataEngine.BaseInfo})">
+            <summary>
+            Gets email report link.
+            </summary>
+            <param name="issues">Newsletter issues</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportViewModelService.GetConversionTypeName(CMS.WebAnalytics.CampaignConversionInfo)">
+            <summary>
+            Gets name of the conversion type (activity type on which the conversion is based).
+            </summary>
+            <param name="conversion">Conversion to get type for.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.IActivityTypeService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.ActivityTypeViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.IActivityTypeService.GetActivityTypeViewModels(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Returns view models for all allowed activity types.
+            </summary>
+            <param name="allowedActivities">List of allowed activity types.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.GetObjectiveViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
+            <summary>
+            Returns view model from specified objective (<paramref name="info"/>).
+            </summary>
+            <param name="info">Campaign objective info</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.SaveObjective(CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel)">
+            <summary>
+            Sets data from campaign objective model <paramref name="model"/> and returns updated view model.
+            </summary>
+            <param name="model">Campaign objective view model</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignConversionService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignConversionService.GetConversionViewModel(CMS.WebAnalytics.CampaignConversionInfo)">
+            <summary>
+            Returns view model from given campaign conversion info.
+            </summary>
+            <param name="info">Campaign conversion info</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignConversionService.SaveConversion(CMS.WebAnalytics.Web.UI.CampaignConversionViewModel)">
+            <summary>
+            Sets data from campaign conversion model and returns updated view model.
+            </summary>
+            <param name="model">Campaign conversion view model</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignReportService">
+            <summary>
+            Service providing methods to work with campaign reports.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignReportService.InvalidateCampaignReport(System.Int32)">
+            <summary>
+            Invalidates reports statistics computed for campaign.
+            </summary>
+            <param name="campaignId">Campaign identifier</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignReportViewModelService">
+            <summary>
+            Service providing <see cref="T:CMS.WebAnalytics.Web.UI.CampaignReportViewModel"/> for campaign.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignReportViewModelService.GetViewModel(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Provides view model for campaign report.
+            </summary>
+            <param name="campaign">Campaign to create view model for.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ActivityTypeViewModel">
+            <summary>
+            View model for <see cref="T:CMS.Activities.ActivityTypeInfo"/>
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.ActivityTypeViewModel.Type">
+            <summary>
+            Type of activity, e.g. pagevisit.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.ActivityTypeViewModel.DisplayName">
+            <summary>
+            Activity type display name.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel">
+            <summary>
+            View model for campaign conversions.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.ID">
+            <summary>
+            Conversion ID.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.Name">
+            <summary>
+            Conversion name.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.ActivityName">
+            <summary>
+            Activity name.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.ActivityType">
+            <summary>
+            Activity type.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.CampaignID">
+            <summary>
+            ID of campaign this conversion belongs to. Used when creating or updating conversion.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.ItemID">
+            <summary>
+            ID of object which is monitored by conversion. For example nodeid for <c>pagevisit</c> <see cref="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.ActivityType"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.Order">
+            <summary>
+            Order of conversion in the campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.IsFunnelStep">
+            <summary>
+            Boolean flag if conversion is part of funnel.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel.Url">
+            <summary>
+            Page visit URL.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel">
+            <summary>
+            Represents View model of Campaign Info which can be serialized and used for communication between API controller and javascript services.
+            This wrapper has to be used because info objects cannot be easily serialized and deserialized.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CampaignID">
+            <summary>
+            Unique integer identifier of the campaign. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignID"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.DisplayName">
+            <summary>
+            Name of the campaign used in listing and all reports. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignDisplayName"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.UTMCode">
+            <summary>
+            Campaign UTM code. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignUTMCode"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.Description">
+            <summary>
+            Campaign description used in reports, provides closer details about the campaign. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignDescription"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.Status">
+            <summary>
+            Refers to the current status. Can be one of the <see cref="T:CMS.WebAnalytics.CampaignStatusEnum"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.CodeName">
+            <summary>
+            Refers to codename of the campaign. This field is required for enabling single object pinning.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.SiteName">
+            <summary>
+            Refers to site name campaign is assigned to. This field is required for enabling single object pinning.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.#ctor">
+            <summary>
+            Empty constructor. Needs to be present to enable data binding performed by the Web API.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.#ctor(CMS.WebAnalytics.CampaignInfo,System.DateTime)">
+            <summary>
+            Constructor takes <see cref="T:CMS.WebAnalytics.CampaignInfo"/> and creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/> containing all values
+            required for communication between Web API and javascript modules.
+            </summary>
+            <param name="campaign">Campaign info obtained from the database</param>
+            <param name="dateTime">Datetime, used to calculate the current status of campaign</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="campaign"/> is null</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignEditViewModel.FillCampaignInfo(CMS.WebAnalytics.CampaignInfo)">
+            <summary>
+            Fills given <paramref name="campaign"/> with data obtained from current instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/>. 
+            This method should be used whenever the call from client to the server with filled <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/> was made
+            and the incoming object values need to be copied to the existing <paramref name="campaign"/>.
+            </summary>
+            <param name="campaign">Campaign which will be filled with data from the current instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="campaign"/> is null</exception>
+            <returns><paramref name="campaign"/> filled with the data from current instance of <see cref="T:CMS.WebAnalytics.Web.UI.CampaignEditViewModel"/></returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel">
+            <summary>
+            Represents listing View model of Campaign Info which can be serialized and used for communication between API controller and javascript services.
+            This wrapper has to be used because info objects cannot be easily serialized and deserialized.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.CampaignID">
+            <summary>
+            Unique integer identifier of the campaign. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignID"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.DisplayName">
+            <summary>
+            Name of the campaign used in listing and all reports. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignDisplayName"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.DaysToStart">
+            <summary>
+            Number of days from now to campaign start.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.OpenFrom">
+            <summary>
+            Provides time from which the campaign will be running. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignOpenFrom"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.OpenTo">
+            <summary>
+            Provides time to which the champaign will be running. Refers to the <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignOpenTo"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.Status">
+            <summary>
+            Refers to the current status. Can be one of the <see cref="T:CMS.WebAnalytics.CampaignStatusEnum"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.DetailLink">
+            <summary>
+            Single object url for editing current campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.Conversions">
+            <summary>
+            Indicates how many conversion happened in campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.Visitors">
+            <summary>
+            Indicates how many visitor has reached campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignListItemViewModel.Objective">
+            <summary>
+            Indicates how the campaign objective stored in <see cref="T:CMS.WebAnalytics.CampaignObjectiveInfo"/> is met (in percents).
+            If no objective is set for the campaign, this property is <c>null</c>.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel">
+            <summary>
+            View model for campaign objective.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel.ID">
+            <summary>
+            Objective ID.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel.Value">
+            <summary>
+            Objective value.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel.CampaignID">
+            <summary>
+            Objective campaign ID.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel.ConversionID">
+            <summary>
+            Objective conversion ID.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel">
+            <summary>
+            View model of campaign conversion report.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.ConversionName">
+            <summary>
+            Human-readable name of the conversion.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.ConversionTypeName">
+            <summary>
+            Human-readable name of the conversion type.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.ConversionHitsCount">
+            <summary>
+            Number of occurrences of the conversion.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.ConversionSources">
+            <summary>
+            Collection of sources for the conversion.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.IsFunnelStep">
+            <summary>
+            Boolean flag if conversion is part of funnel.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportConversionViewModel.CampaignConversionID">
+            <summary>
+            ID of related campaign conversion object.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportSourceDetailsViewModel">
+            <summary>
+            View model for campaing conversion containing utm source and utm content that were used in campaign along with link to email report details.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceDetailsViewModel.SourceName">
+            <summary>
+            Name of the source corresponding to UTM source.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceDetailsViewModel.ContentName">
+            <summary>
+            Name of the content corresponding to UTM content.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceDetailsViewModel.EmailLinkDetail">
+            <summary>
+            Link to email report details.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportSourceViewModel">
+            <summary>
+            View model for part of campaign conversion report specific for one source (UTM source).
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceViewModel.SourceName">
+            <summary>
+            Name of the source corresponding to UTM source.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceViewModel.ContentName">
+            <summary>
+            Name of the content corresponding to UTM content.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportSourceViewModel.SourceHitsCount">
+            <summary>
+            Number of conversion coming from the source.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignReportViewModel">
+            <summary>
+            View model containing data for campaign report.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignName">
+            <summary>
+            Human-readable name of the campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignDescription">
+            <summary>
+            Human-readable description of the campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignStatus">
+            <summary>
+            Status of the campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignLaunchDate">
+            <summary>
+            Date and time of the campaign launch or null when campaign does not have one.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignFinishDate">
+            <summary>
+            Date and time of the campaign finish or null when campaign does not have one.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignReportUpdated">
+            <summary>
+            Date and time of the last update of the campaign report.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignConversions">
+            <summary>
+            Collection of conversions tracked within campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignSourceDetails">
+            <summary>
+            Collection of campaign conversion source details.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.CampaignReportViewModel.CampaignObjective">
+            <summary>
+            Campaign goal details.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.EmailLinkDetailViewModel">
+            <summary>
+            View model for campaing conversion containing link to email report details.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.EmailLinkDetailViewModel.Text">
+            <summary>
+            Text to display.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.EmailLinkDetailViewModel.Url">
+            <summary>
+            Url to email report.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.PageSelectorViewModel">
+            <summary>
+            View model for page selector.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.PageSelectorViewModel.Path">
+            <summary>
+            Page path.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.PageSelectorViewModel.Icon">
+            <summary>
+            Page type icon markup.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionItemController">
+            <summary>
+            Provides conversion items for Smart Drop-down in campaign conversions. 
+            Controller handles selected site-specific object types and checks read permissions. 
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.Int32)">
+            <summary>
+            Gets object according to <paramref name="ID"/> and it's <paramref name="objType"/>.
+            </summary>
+            <param name="objType">Object type</param>
+            <param name="ID">Object ID</param>
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if object is not found or insufficient permissions;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view model.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets collection of items on the current site. User must have read permission for given <paramref name="objType"/>.
+            </summary>
+            <param name="objType">Object type of requested items.</param>
+            <param name="name">Search query (part of items's display name).</param>        
+            <param name="pageIndex">Index of the page. Pages are indexed from 0 (first page).</param>
+            <param name="pageSize">Number of results in the page.</param>
+            <returns>
+            Collection of 10 serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view models or
+            <c>HTTP status code 400 Bad Request</c> if <paramref name="objType"/> is not supported or insufficient permissions.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.UTMCodeAttribute">
+            <summary>
+            Validates campaign UTM code. UTM code must be unique in every site.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.UTMCodeAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Checks if object is valid.
+            </summary>
+            <param name="value">Object to validate.</param>
+            <param name="validationContext">Validation context.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsController">
+            <summary>
+            Handles logging of visitor hits.
+            </summary>
+            <remarks>
+            Only real visitors ban be logged, crawlers which the system is able to recognize are omitted.
+            Adds information to the header to tell the crawlers not to track this controller. This applies only to the crawlers that was
+            not recognized in the <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/>.
+            </remarks>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogHit(CMS.WebAnalytics.LogHitParameters)">
+            <summary>
+            Performs logging of general hit.
+            </summary>
+            <param name="logHitParameters">Parameters required for hit logging</param>
+            <returns>
+            HTTP response message containing the status code dependent on whether the action was successful or not.
+            Returns 200 OK status if logging was successful.
+            Returns 400 Bad request if exception was thrown while trying to log the hit.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogSearchHit(CMS.WebAnalytics.LogSearchHitParameters)">
+            <summary>
+            Performs logging of search event hit. 
+            </summary>
+            <param name="logSearchHitParameters">Parameters required for hit logging</param>
+            <returns>
+            HTTP response message containing the status code dependent on whether the action was successful or not.
+            Returns 200 OK status if logging was successful.
+            Returns 400 Bad request if exception was thrown while trying to log the hit.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogBannerHit(System.Int32)">
+            <summary>
+            Performs logging of banner hit.
+            </summary>
+            <param name="bannerID">ID of the banner the visitor clicked on</param>
+            <returns>
+            HTTP response message containing the status code dependent on whether the action was successful or not.
+            Returns 200 OK status if logging was successful.
+            Returns 400 Bad request if exception was thrown while trying to log the hit.
+            </returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignResolver">
+            <summary>
+            Provides method for resolving campaigns in contact detail component.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignResolver.#ctor(CMS.Base.ISiteService,CMS.WebAnalytics.Web.UI.Internal.ICampaignLinkService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignResolver"/>.
+            </summary>
+            <param name="siteService">Service for obtaining current site information</param>
+            <param name="campaignLinkService">Provides methods for obtaining link to single campaign object</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignResolver.ResolveField(CMS.ContactManagement.ContactInfo)">
+            <summary>
+            Resolves campaign detail field for given <paramref name="contact"/>. 
+            </summary>
+            <param name="contact">Contact the campaign detail field is resolved for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="contact"/> is <c>null</c></exception>
+            <returns><c>null</c> if no suitable <see cref="T:CMS.WebAnalytics.CampaignInfo"/> is found; otherwise, new instance of <see cref="T:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignViewModel"/> 
+            containing <see cref="P:CMS.WebAnalytics.CampaignInfo.CampaignDisplayName"/> and URL leading to the campaign</returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignViewModel">
+            <summary>
+            Represents view mdoel for the contact campaign details field.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignViewModel.Url">
+            <summary>
+            Gets or sets URL leading to the campaign.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignViewModel.Text">
+            <summary>
+            Gets or sets text representing the campaign.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender">
+            <summary>
+            Extender for Web Analytics Tree
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.additionalConversions">
+            <summary>
+            List of special conversions not displayed either in custom node list or in ui list.
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.customWhereCondition">
+            <summary>
+            Where condition used for select custom conversions.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.Control_OnNodeCreated(CMS.Modules.UIElementInfo,System.Web.UI.WebControls.TreeNode)">
+            <summary>
+            Node created event handling.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.GetReportCodeNames(System.String)">
+            <summary>
+            Returns generic report code names (based on analytics code name).
+            </summary>
+            <param name="statCodeName">Analytics code name (pageviews, pageviews.multilingual...)</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsTreeExtender.GetDataCodeName(System.String)">
+            <summary>
+            Returns data code name from analytics code name.
+            </summary>
+            <param name="statCodeName">Analytics code name (pageviews, pageviews.multilingual...)</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Filters.DoNotTrackAttribute">
+            <summary>
+            Adds header to the response telling the crawlers not to track the site the request was made for.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Filters.DoNotTrackAttribute.OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            Occurs after the action method is invoked.
+            </summary>
+            <param name="actionExecutedContext">The action executed context.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute">
+            <summary>
+            Checks whether the request was made by crawler. If so, returns 403 Forbidden message.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.#ctor">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/> with <see cref="T:CMS.WebAnalytics.Internal.ISearchEnginesDetector"/> resolved from service locator.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.#ctor(CMS.WebAnalytics.Internal.ISearchEnginesDetector)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/>.
+            </summary>
+            <param name="searchEnginesDetector">Implementation of <see cref="T:CMS.WebAnalytics.Internal.ISearchEnginesDetector"/> used to detect seach engines.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="searchEnginesDetector"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Calls when a process requests authorization.
+            </summary>
+            <param name="actionContext">The action context, which encapsulates information for using <see cref="T:System.Web.Http.Filters.AuthorizationFilterAttribute"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="actionContext"/> is null.</exception>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsLiveTileModelProvider">
+            <summary>
+            Provides live model for the Web analytics dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsLiveTileModelProvider.GetModel(CMS.ApplicationDashboard.Web.UI.LiveTileContext)">
+            <summary>
+            Loads number of visits in the last week.
+            </summary>
+            <param name="liveTileContext">Context of the live tile. Contains information about the user and the site the model is requested for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="liveTileContext"/> is null</exception>
+            <returns>Live tile model</returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsLiveTileModelProvider.GetWeekVisitsCount(System.Int32)">
+            <summary>
+            Gets number of visits in the last week.
+            </summary>
+            <param name="siteID">ID of the site</param>
+            <returns>Number of visits</returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsLiveTileModelProvider.GetVisitCount(System.Int32,System.String)">
+            <summary>
+            Gets number of visitors for the last week based on statistics with given staticstics type.
+            </summary>
+            <param name="siteId">ID of the site</param>
+            <param name="statisticsCode">Statistics code</param>
+            <exception cref="T:System.ArgumentException"><paramref name="statisticsCode"/> is null or empty.</exception>
+            <returns>Visitors count</returns>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers">
+            <summary>
+            Web analytics Web UI events handlers
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CAMPAIGN_URL_TRACKING_PARAMETER">
+            <summary>
+            Query parameter name for the campaign tracking.
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SOURCE_URL_TRACKING_PARAMETER">
+            <summary>
+            Query parameter name for the source tracking.
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CONTENT_URL_TRACKING_PARAMETER">
+            <summary>
+            Query parameter name for the content tracking.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.Init">
+            <summary>
+            Initializes the events handlers.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.LogCampaign(System.Object,CMS.OutputFilter.OutputCacheEventArgs)">
+            <summary>
+            Logs campaign.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SetCampaign">
+            <summary>
+            If URL contains campaign code this sets campaign and also makes hit to the analytics.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CanProceedInLogging">
+            <summary>
+            Determines whether conversions can be logged.
+            </summary>
+            <returns>True, if can proceed; otherwise, false</returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.LogPageViewConversion(System.Object,System.EventArgs)">
+            <summary>
+            Logs page view conversion. Requires access to the Session object.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SetCampaign(System.Object,System.EventArgs)">
+            <summary>
+            Sets campaign.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.DelayEndOfTheRequest(System.Object,CMS.OutputFilter.OutputCacheEventArgs)">
+            <summary>
+            Delays the end of the request when full page caching if Analytics or Activities are enabled.
+            Fired when cache successfully loaded.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIModule">
+            <summary>
+            Represents the Web Analytics Web UI module.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CMSCampaignPage">
+            <summary>
+            Base page for campaigns.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSCampaignPage.CheckAllPermissions">
+            <summary>
+            Checks all permissions for web analytics
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSCampaignPage.OnInit(System.EventArgs)">
+            <summary>
+            Init event handler
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CMSConversionPage">
+            <summary>
+            Base page for conversions.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage">
+            <summary>
+            Base page for the CMS Web analytics pages to apply global settings to the pages.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage.CheckAllPermissions">
+            <summary>
+            Checks all permissions for web analytics
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage.OnInit(System.EventArgs)">
+            <summary>
+            Init event handler
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage.CheckWebAnalyticsUI(System.String)">
+            <summary>
+            Check hierarchical UI permission for analytics codename. Redirects if check fails.
+            </summary>
+            <param name="codeName">Analytics code name</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage.CheckWebAnalyticsUI">
+            <summary>
+            Check UI permission for codename based on query 'datacodename' param. Redirects if check fails
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer">
+            <summary>
+            Contains methods for registering JavaScript code into page which logs web analytics statistics asynchronously via call to WebAnalyticsService.
+            LogHits call is registered automatically for each page request. Other calls have to be registered manually.
+            </summary>
+        </member>
+        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.JAVASCRIPT_QUERYPARAMS_SUBSTITUTE">
+            <summary>
+            String to put into HTML to JavaScript code before substitution resolving.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogBannerHitCall(System.Web.UI.Page,System.Int32)">
+            <summary>
+            Registers script which logs banner hit asynchronously.
+            </summary>
+            <param name="page">Page where script should be registered</param>
+            <param name="bannerID">Banner which was viewed</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogSearchCall(System.Web.UI.Page,CMS.PortalEngine.PageInfo,System.String)">
+            <summary>
+            Registers script which logs search hit asynchronously.
+            </summary>
+            <param name="page">Page where script should be registered</param>
+            <param name="pageInfo">PageInfo representing current document/node</param>
+            <param name="searchText">Text which was searched for</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.Init">
+            <summary>
+            Binds to appropriate events, so that LogHits call can be rendered on every page request.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogHitsCall(System.Object,System.EventArgs)">
+            <summary>
+            Registers script which logs page views and other hits asynchronously. The script is registered without the actual parameters.
+            There is a placeholder at the location where parameters would be and this placeholder should be replaced by the actual parameters
+            before sending page output to the client browser. This two-step rendering is required, because of the output cache mechanism.
+            At first, there is a universal script rendered and 
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.ShouldInsertAnalyticsJS(System.String,System.String)">
+            <summary>
+            Checks whether the JavaScript logging snippet should be added to the page.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.ResolveSubstitution(System.Object,CMS.OutputFilter.SubstitutionEventArgs)">
+            <summary>
+            Resolves JavaScript parameters substitution macro.
+            Substitution macro is used because of full page caching, JavaScript snippet is unique for each visitor, because of the Url Referrer parameter.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.WebAnalyticsWebUIModuleMetadata">
+            <summary>
+            Represents the Web Analytics Web UI module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.WebAnalyticsWebUIModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+    </members>
+</doc>

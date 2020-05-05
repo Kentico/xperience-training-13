@@ -1,0 +1,21 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" AutoEventWireup="false" CodeBehind="ProcessDetail.master.cs" Inherits="CMSMasterPages_UI_ProcessDetail" %>
+<%@ Register Src="~/CMSModules/Automation/Controls/Process/Edit.ascx" TagName="Detail"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/Automation/Controls/AutomationMenu.ascx" TagName="AutoMenu"
+    TagPrefix="cms" %>
+
+<asp:Content ID="cntActions" ContentPlaceHolderID="plcActions" runat="server">
+    <div class="control-group-inline header-actions-container">
+        <cms:AutoMenu ID="menuElem" runat="server" IsLiveSite="false" />        
+    </div>
+    <cms:CMSAutomationManager ID="autoMan" runat="server" ShortID="aM" />
+</asp:Content>
+<asp:Content ID="cntBody" ContentPlaceHolderID="plcContent" runat="server">
+    <cms:CMSUpdatePanel ID="pnlUp" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
+            <asp:Panel ID="pnlDetail" runat="server">
+                <cms:Detail runat="server" ID="detailElem" IsLiveSite="false" />
+            </asp:Panel>
+        </ContentTemplate>
+    </cms:CMSUpdatePanel>
+</asp:Content>

@@ -1,0 +1,2945 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.MediaLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.MediaLibrary.CMSOutputMediaFile">
+            <summary>
+            Class encapsulating MediaFile.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.UseWatermark">
+            <summary>
+            If true, the watermark is allowed to be used.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.MediaFile">
+            <summary>
+            Media file info object.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.LastModified">
+            <summary>
+            Time when the file was last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.UsePreview">
+            <summary>
+            Indicates if file preview should be pused for output file.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.SiteName">
+            <summary>
+            Media file site name.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.MimeType">
+            <summary>
+            Mime type.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.FileName">
+            <summary>
+            File extension.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.FileExtension">
+            <summary>
+            File extension.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.FilePath">
+            <summary>
+            File path.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.PreviewFilePath">
+            <summary>
+            Preview file path
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.PhysicalFile">
+            <summary>
+            Physical file path to the data.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.OriginalFile">
+            <summary>
+            Gets physical file path to the original file.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.#ctor(CMS.MediaLibrary.MediaFileInfo,System.Byte[])">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="mi">MediaFile info</param>
+            <param name="data">Output file data</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.GetPreviewPath">
+            <summary>
+            Gets the file preview path
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.EnsureData(System.Byte[])">
+            <summary>
+            Ensures that the object contains the output data.
+            </summary>
+            <param name="defaultData">Default data which should be loaded if data required</param>
+            <returns>Returns true if new data has been loaded</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.LoadData">
+            <summary>
+            Loads the data to the object.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.LoadPreview">
+            <summary>
+            Loads the preview data to the object.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.Item(System.String)">
+            <summary>
+            Gets or sets the value of the column.
+            </summary>
+            <param name="columnName">Column name</param>
+        </member>
+        <member name="P:CMS.MediaLibrary.CMSOutputMediaFile.ColumnNames">
+            <summary>
+            Column names.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Returns value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Returns the value</param>
+            <returns>Returns true if the operation was successful (the value was present)</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.GetValue(System.String)">
+            <summary>
+            Returns value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.SetValue(System.String,System.Object)">
+            <summary>
+            Sets value of column.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">Column value</param> 
+        </member>
+        <member name="M:CMS.MediaLibrary.CMSOutputMediaFile.ContainsColumn(System.String)">
+            <summary>
+            Returns true if the object contains specified column.
+            </summary>
+            <param name="columnName">Column name</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaFilePathNotUniqueException">
+            <summary>
+            Media file path not unique exception.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFilePathNotUniqueException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="message">Message</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.FileBinaryDataSyncManager">
+            <summary>
+            Provides methods for updating and getting physical files of <see cref="T:CMS.MediaLibrary.MediaFileInfo" />. 
+            Physical file is represented by DataSet with hard coded data structure which is used in SyncManager (Staging, Versioning).
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.FileBinaryDataSyncManager.#ctor(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Initializes a new instance of the FileBinaryDataSyncManager class.
+            </summary>
+            <param name="mediaFileInfo">Instance of <see cref="T:CMS.MediaLibrary.MediaFileInfo" />.</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.FileBinaryDataSyncManager.UpdatePhysicalFiles(System.Data.DataSet)">
+            <summary>
+            Updates (removes old and saves new) media file physical files.
+            <param name="filesData">DataSet with physical files data.</param>
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.FileBinaryDataSyncManager.GetPhysicalFiles(CMS.DataEngine.OperationTypeEnum,System.Boolean)">
+            <summary>
+            Method returns DataSet with binary data of <see cref="T:CMS.MediaLibrary.MediaFileInfo" />.
+            </summary>
+            <param name="operationType">Supported operations are Synchronization and Versioning.</param>
+            <param name="binaryData">If true, gets the binary data to the DataSet.</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaFileInfo">
+            <summary>
+            Media file info data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileCustomData">
+            <summary>
+            File custom data.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileBinary">
+            <summary>
+            MediaFile binary - for file information transfer purposes, not saved to the database.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileBinaryStream">
+            <summary>
+            MediaFile binary stream - for file information transfer purposes, not saved to the database.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileExtension">
+            <summary>
+            File extension.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileLibraryID">
+            <summary>
+            File library ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileGUID">
+            <summary>
+            File GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileModifiedWhen">
+            <summary>
+            Date and time when the file was last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileModifiedByUserID">
+            <summary>
+            ID of user who last modified current file.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileCreatedWhen">
+            <summary>
+            Date ant time when the file was created.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileCreatedByUserID">
+            <summary>
+            ID of user who created current file.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileID">
+            <summary>
+            File ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileSize">
+            <summary>
+            File size.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileSiteID">
+            <summary>
+            File site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileImageWidth">
+            <summary>
+            File image width.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FilePath">
+            <summary>
+            File path.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileName">
+            <summary>
+            File name.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileTitle">
+            <summary>
+            File title.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileDescription">
+            <summary>
+            File description.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileMimeType">
+            <summary>
+            File mime type.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.FileImageHeight">
+            <summary>
+            File image height.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfo.SupportsVersioning">
+            <summary>
+            Indicates if the object versioning is supported.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.GetPhysicalFiles(CMS.DataEngine.OperationTypeEnum,System.Boolean)">
+            <summary>
+            Gets media files physical files.
+            </summary>
+            <param name="operationType">Operation type</param>
+            <param name="binaryData">If true, gets the binary data to the DataSet</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.UpdatePhysicalFiles(System.Data.DataSet)">
+            <summary>
+            Saves media file physical files.
+            </summary>
+            <param name="filesData">DataSet with physical files data</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty MediaFileInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(CMS.MediaLibrary.MediaFileInfo,System.Boolean)">
+            <summary>
+            Creates a new MediaFileInfo object from the existing MediaFileInfo object.
+            Copy constructor.
+            </summary>
+            <param name="info">Original object to copy</param>
+            <param name="keepSourceData">If true, the copy is shallow, otherwise a deep copy is created (all object's data is cloned)</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new MediaFileInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.Web.HttpPostedFile,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="postedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.Web.HttpPostedFile,System.Int32,System.String)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="postedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.Web.HttpPostedFile,System.Int32,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="postedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+            <param name="height">Height of the image</param>
+            <param name="maxSideSize">Max side size of the image</param>
+            <param name="width">Width of the image</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.Web.HttpPostedFile,System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="postedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+            <param name="height">Height of the image</param>
+            <param name="maxSideSize">Max side size of the image</param>
+            <param name="width">Width of the image</param>
+            <param name="siteId">ID of the site new media file is related to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(CMS.Base.IUploadedFile,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="uploadedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(CMS.Base.IUploadedFile,System.Int32,System.String)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="uploadedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(CMS.Base.IUploadedFile,System.Int32,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="uploadedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+            <param name="height">Height of the image</param>
+            <param name="maxSideSize">Max side size of the image</param>
+            <param name="width">Width of the image</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(CMS.Base.IUploadedFile,System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object from posted file.
+            </summary>
+            <param name="uploadedFile">Posted file</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+            <param name="height">Height of the image</param>
+            <param name="maxSideSize">Max side size of the image</param>
+            <param name="width">Width of the image</param>
+            <param name="siteId">ID of the site new media file is related to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.String,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object specified by its file physical path.
+            </summary>
+            <param name="path">File physical path</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.String,System.Int32,System.String)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object specified by its file physical path.
+            </summary>
+            <param name="path">File physical path</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.#ctor(System.String,System.Int32,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructor - creates a new MediaFileInfo object specified by its file physical path.
+            </summary>
+            <param name="path">File physical path</param>
+            <param name="libraryId">ID of the library the file will be assigned to</param>
+            <param name="librarySubfolder">Library subfolder path where file should be saved</param>
+            <param name="width">Width of the image</param>
+            <param name="height">Height of the image</param>
+            <param name="maxSideSize">Max side size of the image</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.Clone(System.Boolean)">
+            <summary>
+            Creates a clone of the object
+            </summary>
+            <param name="clear">If true, the object is cleared to be able to create new object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks the permissions of the object.
+            </summary>
+            <param name="permission">Permission type</param>
+            <param name="siteName">Name of the site</param>
+            <param name="userInfo">UserInfo object</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts the file to the database using standard MediaFileInfoProvider.SetMediaFileInfo function.
+            </summary>
+            <param name="settings">Clone settings</param>
+            <param name="result">Result</param>
+            <param name="originalObject">Original object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.LoadDefaultData">
+            <summary>
+            Loads the default object data
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.GetUniqueNameWhereCondition(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Constructs base where condition for checking column value uniqueness.
+            
+            Condition is modified to check name uniqueness on the file path. Name is unique if there is no other file with the same name in the same folder.
+            </summary>
+            <param name="columnName">Name of the column in which the uniqueness should be preserved (CodeNameColumn/DisplayNameColumn)</param>
+            <param name="searchName">Name which should be saved in the column (evenutally with suffix)</param>
+            <param name="currentObjectId">ID of the current object (this object will be excluded from the search for duplicate names)</param>
+            <param name="exactMatch">If true, the names must match exactly</param>
+            <returns>Where condition used to check for unique name</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.IsFilePathUnique">
+            <summary>
+            Checks if the media file path is unique within its media library. Returns true if the file path is unique.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.SetDefaultDataFromFormDefinition">
+            <summary>
+            Sets default values for all possible custom fields.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaFileInfoProvider">
+            <summary>
+            Class providing media file info management.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfoProvider.ensureFileLock">
+            <summary>
+            Lock object for ensuring of the physical files.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfoProvider.mMaxStagingFileSize">
+            <summary>
+            Gets the maximal file size which is allowed for media files staging synchronization.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfoProvider.mMaxVersioningFileSize">
+            <summary>
+            Gets the maximal file size which is allowed for media files versioning.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaFileInfoProvider.mThumbnailQuality">
+            <summary>
+            Thumbnail quality.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfoProvider.ThumbnailQuality">
+            <summary>
+            Thumbnail quality.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfoProvider.MaxStagingFileSize">
+            <summary>
+            Gets the maximal file size in bytes which is allowed for media files staging synchronization.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaFileInfoProvider.MaxVersioningFileSize">
+            <summary>
+            Gets the maximal file size in bytes which is allowed for media files versioning.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfo(System.Int32)">
+            <summary>
+            Returns the MediaFileInfo structure for the specified media file.
+            </summary>
+            <param name="mediaFileId">Media file ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfo(System.Guid,System.String)">
+            <summary>
+            Returns media file with specified GUID.
+            </summary>
+            <param name="guid">Media file GUID</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfo(System.Int32,System.String)">
+            <summary>
+            Returns the MediaFileInfo structure for the specified media file.
+            </summary>
+            <param name="mediaLibraryId">Media library ID</param>
+            <param name="mediaFilePath">File path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfo(System.String,System.String,System.String)">
+            <summary>
+            Returns the MediaFileInfo structure for the specified media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="mediaFilePath">File path</param>
+            <param name="libraryFolder">Library folder name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.SetMediaFileInfo(CMS.MediaLibrary.MediaFileInfo,System.Boolean,System.Int32)">
+            <summary>
+            Sets (updates or inserts) specified media file.
+            </summary>
+            <param name="mediaFile">Media file to set</param>
+            <param name="ensureUniqueFileName">Indicates if unique file name should be ensured</param>
+            <param name="userId">ID of the user performing set action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileInfo(System.Int32)">
+            <summary>
+            Deletes specified media file.
+            </summary>
+            <param name="mediaFileId">Media file ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileInfo(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes specified media file.
+            </summary>
+            <param name="infoObj">Media file object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFiles">
+            <summary>
+            Returns the query for all media files.
+            </summary>        
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFiles(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns dataset of files matching given criteria from database.
+            </summary>
+            <param name="where">WHERE condition</param>
+            <param name="orderBy">ORDER BY parameter</param>
+            <param name="topN">TOP N parameter</param>
+            <param name="columns">Selected columns</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.ImportMediaFileInfo(CMS.MediaLibrary.MediaFileInfo,System.Int32)">
+            <summary>
+            Import media file into database.
+            </summary>
+            <param name="mediaFile">Media file to import</param>
+            <param name="userId">ID of the user performing set action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFile(System.Int32,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Deletes media file from file system.
+            </summary>
+            <param name="siteId">Site id</param>
+            <param name="libraryId">Library id</param>
+            <param name="filePath">Sub path to file</param>
+            <param name="onlyFile">Indicates if only file should be deleted</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilePreview(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Deletes media file preview from file system.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+            <param name="filePath">File path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFiles(System.String,System.Int32)">
+            <summary>
+            Deletes file records of files matching specified criteria.
+            </summary>
+            <param name="path">Path of the files to delete</param>
+            <param name="libraryId">ID of the library where the files belongs to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetDependencyCacheKeys(CMS.MediaLibrary.MediaFileInfo,System.Boolean)">
+            <summary>
+            Gets the cache key dependencies array for the media file (cache item keys affected when the meta file changes).
+            </summary>
+            <param name="fi">File</param>
+            <param name="preview">Indicates if preview cache key should be created</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.SaveFileToDisk(System.String,System.String,System.String,System.String,System.String,System.Guid,CMS.Core.BinaryData,System.Boolean,System.Boolean)">
+            <summary>
+            Saves media file to disk and returns the applied file path.
+            </summary>
+            <param name="siteName">Name of the site of the media library</param>
+            <param name="libraryFolder">Media library root folder</param>
+            <param name="librarySubFolderPath">Subfolder path</param>
+            <param name="fileName">Name of the file</param>
+            <param name="fileExtension">Extension of the file</param>
+            <param name="fileData">File data</param>
+            <param name="fileGuid">File GUID</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="ensureUniqueFileName">Indicates if unique file name should be ensured</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilePreviewThumbnails(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes media file preview thumbnails.
+            </summary>
+            <param name="fileInfo">File info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileThumbnails(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes media file thumbnails.
+            </summary>
+            <param name="fileInfo">File info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.CopyMediaFile(System.String,System.Int32,System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            Copy media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old file path within the library folder</param>
+            <param name="newPath">New file path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="userId">ID of the user performing copy action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.MoveMediaFile(System.String,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Moves media file within one library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old file path within the library folder</param>
+            <param name="newPath">New file path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.MoveMediaFile(System.String,System.Int32,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Moves media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="originalLibraryID">Original library ID</param>
+            <param name="newLibraryID">New library ID</param>
+            <param name="origPath">Old file path within the library folder</param>
+            <param name="newPath">New file path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.EnsureThumbnailFile(CMS.MediaLibrary.MediaFileInfo,System.String,System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Ensures the thumbnail file.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="siteName">Site name</param>
+            <param name="width">File width</param>
+            <param name="height">File height</param>
+            <param name="maxSideSize">Maximum side size</param>
+            <param name="usePreview">Use preview file</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetImageThumbnail(CMS.MediaLibrary.MediaFileInfo,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns image thumbnail from the disk or create a new one if doesn't exist yet.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="libraryFolder">Library folder</param>
+            <param name="siteName">Site name</param>
+            <param name="width">Image width</param>
+            <param name="height">Image height</param>
+            <param name="maxSideSize">Maximum side size</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetFile(CMS.MediaLibrary.MediaFileInfo,System.String,System.String)">
+            <summary>
+            Returns the file from disk or (if not available on the disk) from database.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePath(System.Int32,System.String,System.String)">
+            <summary>
+            Returns physical path to the media file.
+            </summary>
+            <param name="fileId">Media file ID</param>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePath(CMS.MediaLibrary.MediaFileInfo,System.String,System.String)">
+            <summary>
+            Returns physical path to the media file.
+            </summary>
+            <param name="fileInfo">Media file info</param>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePath(System.Int32,System.String)">
+            <summary>
+            Returns physical path to the media file.
+            </summary>
+            <param name="libraryId">Media library ID</param>
+            <param name="filePath">File path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePath(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Returns physical path to the given file path and library.
+            </summary>
+            <param name="filePath">Media file path</param>
+            <param name="fileLibraryId">Library ID of the media file</param>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePath(System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns physical path to the media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailPath(System.Int32,System.String)">
+            <summary>
+            Returns physical path to the thumbnail folder.
+            </summary>
+            <param name="libraryId">Media library ID</param>
+            <param name="filePath">File path from database</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailPath(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns physical path to the thumbnail folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="filePath">File path from database</param>
+            <param name="libraryId">Media library ID</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailPath(System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Returns physical path to the thumbnail.
+            </summary>
+            <param name="siteName">Site name of the site thumbnail is related to</param>
+            <param name="fileName">File name of the file thumbnail is related to</param>
+            <param name="fileExtension">Extension of the file thumbnail is related to</param>
+            <param name="path">Path of the original file</param>
+            <param name="width">Width of the thumbnail file</param>
+            <param name="height">Height of the thumbnail file</param>
+            <param name="addHiddenFolder">Indicates if hidden folder should be inserted into path</param>
+            <param name="addFileExtension">Indicates if file extension should be inserted into thumbnail file name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetPreviewFilePath(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Returns preview file path for media file info.
+            If no preview found returns NULL
+            </summary>
+            <param name="fileInfo">Media file info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetPreviewFilePath(System.String,System.String,System.Int32)">
+            <summary>
+            Returns preview file path for search pattern (.* as extension).
+            </summary>
+            <param name="filePath">File path from database</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.CanResizeImage(CMS.MediaLibrary.MediaFileInfo,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Checks whether the image should be processed (resized) by the Image manager (if the destination size is smaller).
+            </summary>
+            <param name="fileInfo">Media file info to check</param>
+            <param name="width">New width</param>
+            <param name="height">New height</param>
+            <param name="maxSideSize">Max side size</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.CanResizeImage(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Checks whether the image should be processed (resized) by the Image manager (if the destination size is smaller).
+            </summary>
+            <param name="filePath">File path</param>
+            <param name="width">New width</param>
+            <param name="height">New height</param>
+            <param name="maxSideSize">Max side size</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.ShouldResize(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns true if image should be scaled down.
+            </summary>
+            <param name="maxSideSize">Max side size</param>
+            <param name="width">Width</param>
+            <param name="height">Height</param>
+            <param name="imageWidth">Image width</param>
+            <param name="imageHeight">Image height</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnail(System.String,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns image thumbnail from the disk or create a new one if doesn't exist yet.
+            </summary>
+            <param name="originalFilePath">Original file path</param>
+            <param name="originalWidth">Original width</param>
+            <param name="originalHeight">Original height</param>
+            <param name="width">Width</param>
+            <param name="height">Height</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfoInternal(System.Guid,System.String)">
+            <summary>
+            Returns media file with specified GUID.
+            </summary>
+            <param name="guid">Media file GUID</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfoInternal(System.Int32,System.String)">
+            <summary>
+            Returns the MediaFileInfo structure for the specified media file.
+            </summary>
+            <param name="mediaLibraryId">Media library ID</param>
+            <param name="mediaFilePath">File path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFileInfoInternal(System.String,System.String,System.String)">
+            <summary>
+            Returns the MediaFileInfo structure for the specified media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="mediaFilePath">File path</param>
+            <param name="libraryFolder">Library folder name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.SetMediaFileInfoInternal(CMS.MediaLibrary.MediaFileInfo,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Sets MediaFileInfo internal.
+            </summary>
+            <param name="mediaFile">Media file info</param>
+            <param name="saveFileToDisk">Save file to disk</param>
+            <param name="userId">ID of the user performing set action</param>
+            <param name="ensureUniqueFileName">Indicates if unique file name should be ensured</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileInfoInternal(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes specified media file.
+            </summary>
+            <param name="infoObj">Media file object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilesInternal">
+            <summary>
+            Returns the query for all media files.
+            </summary>        
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.ImportMediaFileInfoInternal(CMS.MediaLibrary.MediaFileInfo,System.Int32)">
+            <summary>
+            Import media file into database.
+            </summary>
+            <param name="mediaFile">Media file to import</param>
+            <param name="userId">ID of the user performing set action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileInternal(System.Int32,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Deletes media file from filesystem.
+            </summary>
+            <param name="siteID">Site id</param>
+            <param name="libraryID">Library id</param>
+            <param name="filePath">Sub path to file</param>
+            <param name="onlyFile">Indicates if only file should be deleted</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilePreviewInternal(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Deletes media file preview from filesystem.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="filePath">File path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.UpdateFilesPath(System.String,System.String,System.Int32)">
+            <summary>
+            Updates the file path of all the files matching specified criteria.
+            </summary>
+            <param name="libraryId">ID of the library where the files belongs to</param>
+            <param name="newPath">New file path of the files</param>
+            <param name="originalPath">Old file path of the files</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.SaveFileToDiskInternal(System.String,System.String,System.String,System.String,System.String,System.Guid,CMS.Core.BinaryData,System.Boolean,System.Boolean,System.Boolean,System.String,System.String)">
+            <summary>
+            Saves media file to disk and returns the applied file path.
+            </summary>
+            <param name="siteName">Name of the site of the media library</param>
+            <param name="libraryFolder">Media library root folder</param>
+            <param name="librarySubFolderPath">Subfolder path</param>
+            <param name="fileName">Name of the file</param>
+            <param name="fileExtension">Extension of the file</param>
+            <param name="fileData">File data</param>
+            <param name="fileGuid">File GUID</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="ensureUniqueFileName">Indicates if unique file name should be ensured</param>
+            <param name="skipChecks">Skip check for file path and ensuring physical file path</param>
+            <param name="fileSubFolderPath">File subfolder path</param>
+            <param name="filePath">File path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.MoveMediaFileInternal(System.String,System.Int32,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Moves media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="originalLibraryID">Original library ID</param>
+            <param name="newLibraryID">New library ID</param>
+            <param name="origPath">Old file path within the library folder</param>
+            <param name="newPath">New file path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.CopyMediaFileInternal(System.String,System.Int32,System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            Copy media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old file path within the library folder</param>
+            <param name="newPath">New file path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="userId">ID of the user performing copy action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileThumbnailsInternal(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes media file thumbnails.
+            </summary>
+            <param name="fileInfo">File info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilePreviewThumbnailsInternal(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes media file preview thumbnails.
+            </summary>
+            <param name="fileInfo">File info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilesInternal(System.String,System.Int32)">
+            <summary>
+            Deletes file records of files matching specified criteria.
+            </summary>
+            <param name="path">Path of the files to delete</param>
+            <param name="libraryId">ID of the library where the files belongs to</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetDependencyCacheKeysInternal(CMS.MediaLibrary.MediaFileInfo,System.Boolean)">
+            <summary>
+            Gets the cache key dependencies array for the media file (cache item keys affected when the meta file changes).
+            </summary>
+            <param name="fi">File</param>
+            <param name="preview">Indicates if preview cache key should be created</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.EnsureThumbnailFileInternal(CMS.MediaLibrary.MediaFileInfo,System.String,System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Ensures the thumbnail file.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="siteName">Site name</param>
+            <param name="width">File width</param>
+            <param name="height">File height</param>
+            <param name="maxSideSize">Maximum side size</param>
+            <param name="usePreview">Use preview file</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetImageThumbnailInternal(CMS.MediaLibrary.MediaFileInfo,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns image thumbnail from the disk or create a new one if doesn't exist yet.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="libraryFolder">Library folder</param>
+            <param name="siteName">Site name</param>
+            <param name="width">Image width</param>
+            <param name="height">Image height</param>
+            <param name="maxSideSize">Maximum side size</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetFileInternal(CMS.MediaLibrary.MediaFileInfo,System.String,System.String)">
+            <summary>
+            Returns the file from disk or (if not available on the disk) from database.
+            </summary>
+            <param name="fileInfo">File info</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFilePathInternal(System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns physical path to the media file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailPathInternal(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns physical path to the thumbnail folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="filePath">File path from database</param>
+            <param name="libraryId">Media library ID</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailPathInternal(System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Returns physical path to the thumbnail.
+            </summary>
+            <param name="siteName">Site name of the site thumbnail is related to</param>
+            <param name="fileName">File name of the file thumbnail is related to</param>
+            <param name="fileExtension">Extension of the file thumbnail is related to</param>
+            <param name="path">Path of the original file</param>
+            <param name="width">Width of the thumbnail file</param>
+            <param name="height">Height of the thumbnail file</param>
+            <param name="addHiddenFolder">Indicates if hidden folder should be inserted into path</param>
+            <param name="addFileExtension">Indicates if file extension should be inserted into thumbnail file name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetPreviewFilePathInternal(System.String,System.String,System.Int32)">
+            <summary>
+            Returns preview file path for search pattern (.* as extension).
+            </summary>
+            <param name="filePath">File path from database</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.ShouldResizeInternal(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns true if image should be scaled down.
+            </summary>
+            <param name="maxSideSize">Max side size</param>
+            <param name="width">Width</param>
+            <param name="height">Height</param>
+            <param name="imageWidth">Image width</param>
+            <param name="imageHeight">Image height</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetThumbnailInternal(System.String,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns image thumbnail from the disk or create a new one if doesn't exist yet.
+            </summary>
+            <param name="originalFilePath">Original file path</param>
+            <param name="originalWidth">Original width</param>
+            <param name="originalHeight">Original height</param>
+            <param name="width">Width</param>
+            <param name="height">Height</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.CheckAndEnsureFilePath(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.String@)">
+            <summary>
+            Saves media file to disk and returns the applied file path.
+            </summary>
+            <param name="siteName">Name of the site of the media library</param>
+            <param name="libraryFolder">Media library root folder</param>
+            <param name="librarySubFolderPath">Subfolder path</param>
+            <param name="fileName">Name of the file</param>
+            <param name="fileExtension">Extension of the file</param>
+            <param name="ensureUniqueFileName">Indicates if unique file name should be ensured</param>
+            <param name="filePath">New file path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetFilePhysicalPath(System.String,System.String,System.String)">
+            <summary>
+            Returns physical path to the file.
+            </summary>
+            <param name="fileName">File name</param>
+            <param name="extension">File extension</param>
+            <param name="path">File path</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaFileURLProvider">
+            <summary>
+            URL provider for the media files.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileUrl(CMS.MediaLibrary.MediaFileInfo,System.String,System.String)">
+            <summary>
+            Returns relative URL path to the media file, user permissions are not checked.
+            </summary>
+            <param name="fileInfo">Media file info object</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileUrl(System.String,System.String,System.String)">
+            <summary>
+            Returns relative URL path to the media file, user permissions are not checked.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileUrl(System.Guid,System.String)">
+            <summary>
+            Returns relative URL path to the media file which is rewritten to calling GetMediaFile.aspx page where user permissions are checked.
+            </summary>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileAbsoluteUrl(System.String,System.String,System.String)">
+            <summary>
+            Returns absolute URL path to the media file including http://, user permissions are not checked
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileAbsoluteUrl(System.String,System.Guid,System.String)">
+            <summary>
+            Returns absolute URL path to the media file including http:// which is rewritten to calling GetMediaFile.aspx page where user permissions are checked
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileAbsoluteUrl(System.Guid,System.String)">
+            <summary>
+            Returns absolute URL path for current domain to the media file including http:// which is rewritten to calling GetMediaFile.aspx page where user permissions are checked
+            </summary>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileUrlInternal(CMS.MediaLibrary.MediaFileInfo,System.String,System.String,System.String)">
+            <summary>
+            Returns relative URL path to the media file, user permissions are not checked.
+            </summary>
+            <param name="fileInfo">Media file info object</param>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileUrlInternal(System.Guid,System.String)">
+            <summary>
+            Returns relative URL path to the media file which is rewritten to calling GetMediaFile.aspx page where user permissions are checked.
+            </summary>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileAbsoluteUrlInternal(System.String,System.String,System.String)">
+            <summary>
+            Returns absolute URL path to the media file including http://, user permissions are not checked
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="filePath">File path within the library folder</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetMediaFileAbsoluteUrlInternal(System.String,System.Guid,System.String)">
+            <summary>
+            Returns absolute URL path to the media file including http:// which is rewritten to calling GetMediaFile.aspx page where user permissions are checked
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileURLProvider.GetExternalStorageUrl(System.String,System.String)">
+            <summary>
+            Returns URL for External storage or null.
+            </summary>
+            <param name="relative">Relative path from root.</param>
+            <param name="siteName">Site name.</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.LogMediaLibraryChangeSettings">
+            <summary>
+            Encapsulates settings for staging and integration bus.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.LogMediaLibraryChangeSettings.LibraryID">
+            <summary>
+            <see cref="T:CMS.MediaLibrary.MediaLibraryInfo"/>'s ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.LogMediaLibraryChangeSettings.SourcePath">
+            <summary>
+            Source path of the synchronized file.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.LogMediaLibraryChangeSettings.TargetPath">
+            <summary>
+            Target path of the synchronized file.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.LogMediaLibraryChangeSettings.SiteName">
+            <summary>
+            Synchronized file site name.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryHelper">
+            <summary>
+            Class providing helper methods for media library.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryHelper.OBJECT_TYPE_FOLDER">
+            <summary>
+            Object type for abstract media folder.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryHelper.SuffixRegex">
+            <summary>
+            Suffix regex for files and folders.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryHelper.MediaLibraryCustomPath">
+            <summary>
+            Custom path to media library.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.EnsurePhysicalPath(System.String)">
+            <summary>
+            Return file path with replaced slash ("/") to back slash ("\").
+            </summary>
+            <param name="path">File path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.EnsureUniqueDirectory(System.String)">
+            <summary>
+            Ensures unique path for the specified directory. If the directory with the specified name already exist in the target location 
+            new path with the added suffix is returned. The suffix consist of '_' sign and the number.
+            </summary>
+            <param name="path">Directory path to ensure</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.EnsureUniqueFileName(System.String)">
+            <summary>
+            Ensures unique path for the specified file. If the directory with the specified name already exist in the target location 
+            new path with the added suffix is returned. The suffix consist of '_' sign and the number.
+            </summary>
+            <param name="path">Complete path to the file to ensure</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaFilePreviewSuffix(System.String)">
+            <summary>
+            Returns media file preview suffix from settings.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaFileHiddenFolder(System.String)">
+            <summary>
+            Returns media file hidden folder name from settings.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaLibrariesFolder(System.String)">
+            <summary>
+            Returns root folder from settings where all media libraries are stored.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.IsExternalLibrary(System.String,System.String)">
+            <summary>
+            Returns true if media library root folder is outside of CMS.
+            </summary>
+            <param name="siteName">Site name.</param>
+            <param name="libraryFolder">Library folder.</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetPreviewFileName(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns media file preview file name.
+            </summary>
+            <param name="fileName">File name</param>
+            <param name="fileExtension">File extension</param>
+            <param name="previewExtension">File preview extension</param>
+            <param name="siteName">Site name</param>
+            <param name="previewSuffix">Preview suffix</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetPreviewFilePath(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Returns media file preview file path.
+            </summary>
+            <param name="fileInfo">Media file info</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.MoveMediaFilePreview(CMS.MediaLibrary.MediaFileInfo,System.String)">
+            <summary>
+            Moves preview file into new location according new media file name.
+            </summary>
+            <param name="fileInfo">Media file info</param>
+            <param name="newName">New media file path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.CopyRecursive(System.Int32,CMS.IO.DirectoryInfo,System.String,System.String,System.Int32,System.String,System.Boolean,System.Int32)">
+            <summary>
+            Recursive copy media library directory.
+            </summary>
+            <param name="libraryID">Library ID</param>
+            <param name="dir">Directory Info</param>
+            <param name="destinationDirectory">Destination path</param>
+            <param name="sourcePath">Source DB path</param>
+            <param name="libraryPathIndex">Library path index</param>
+            <param name="startingPoint">Starting point</param>
+            <param name="copyDB">Indicate if database entries should copy</param>
+            <param name="userId">ID of the user performing action</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.CopyRecursive(System.Int32,System.Int32,CMS.IO.DirectoryInfo,System.String,System.String,System.Int32,System.String,System.Boolean,System.Int32,System.Boolean,CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult)">
+            <summary>
+            Recursive copy media library directory.
+            </summary>
+            <param name="sourceLibraryID">Source library ID</param>
+            <param name="destinationLibraryID">Destination library ID</param>
+            <param name="dir">Directory Info</param>
+            <param name="destinationDirectory">Destination path</param>
+            <param name="sourcePath">Source DB path</param>
+            <param name="libraryPathIndex">Library path index</param>
+            <param name="startingPoint">Starting point</param>
+            <param name="copyDB">Indicate if database entries should copy</param>
+            <param name="userId">ID of the user performing action</param>
+            <param name="overwrite">Indicates if the destination folder and files can be overwritten</param>
+            <param name="cloneSettings">MediaLibrary clone settings. Only some parameters are used. If null, cloning is not used and FileMediaInfo is inserted as a directly.</param>
+            <param name="cloneResult">Results of cloning will be stored to this instance</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.CopyRecursiveInternal(System.Int32,System.Int32,CMS.IO.DirectoryInfo,System.String,System.String,System.Int32,System.String,System.Boolean,System.Int32,System.Boolean,CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,System.Collections.Generic.Dictionary{System.Guid,System.Guid})">
+            <summary>
+            Recursive copy media library directory.
+            </summary>
+            <param name="sourceLibraryID">Source library ID</param>
+            <param name="destinationLibraryID">Destination library ID</param>
+            <param name="dir">Directory Info</param>
+            <param name="destinationDirectory">Destination path</param>
+            <param name="sourcePath">Source DB path</param>
+            <param name="libraryPathIndex">Library path index</param>
+            <param name="startingPoint">Starting point</param>
+            <param name="copyDB">Indicate if database entries should copy</param>
+            <param name="userId">ID of the user performing action</param>
+            <param name="overwrite">Indicates if the destination folder and files can be overwritten</param>
+            <param name="cloneSettings">MediaLibrary clone settings. Only some parameters are used. If null, cloning is not used and FileMediaInfo is inserted as a directly.</param>
+            <param name="cloneResult">Results of cloning will be stored to this instance</param>
+            <param name="fileGUIDs">List of original file GUIDs and their copied ones when staging is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.CloneLibraryFiles(System.Int32,System.Int32,CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult)">
+            <summary>
+            Clone media library files and folder to new media library.
+            </summary>
+            <param name="sourceLibraryID">Source library ID</param>
+            <param name="destinationLibraryID">Destination library ID</param>
+            <param name="cloneSettings">MediaLibrary clone settings. Only some parameters are used</param>
+            <param name="cloneResult">Results of cloning will be stored to this instance</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.HasPreview(System.String,System.Int32,System.String)">
+            <summary>
+            Returns true if file has preview file.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="filePath">File path within library</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaRootFolderPath(System.String,System.String)">
+            <summary>
+            Returns physical path to the directory where all media libraries are stored.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetAllowedExtensions(System.String)">
+            <summary>
+            Returns allowed extensions list from settings.
+            </summary>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.UseMediaLibrariesSiteFolder(System.String)">
+            <summary>
+            Gets the value that indicates if site-specific folder should be used for media files physical files.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.IsExtensionAllowed(System.String,System.String)">
+            <summary>
+            Determines whether the file with the specified extension (case insensitive) can be uploaded into library module on site specified by name.
+            </summary>
+            <param name="extension">File extension to check</param>
+            <param name="siteName">File extension to check</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetAccessDeniedMessage(System.String)">
+            <summary>
+            Returns access denied message for specified permission.
+            </summary>
+            <param name="permissionName">Permission name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaFileUrl(System.Guid,System.String)">
+            <summary>
+            Returns media file URL according to site settings.
+            </summary>
+            <param name="fileGuid">Media file GUID</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetDirectUrl(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Returns a direct URL to the media file.
+            </summary>
+            <param name="mediaFile">Media file for which the URL is generated.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="mediaFile"/> is null.</exception>
+            <remarks>
+            Generates various URL types depending on the media library location:
+            <list type="table">
+              <listheader>
+                <term>URL</term>
+                <description>Location</description>
+              </listheader>
+              <item>
+                <term>~/mediaLibraryFolder/filename.extension</term>
+                <description>Media file is located in a local media library on the current site.</description>
+              </item>
+              <item>
+                <term>http://domain.com/mediaLibraryFolder/filename.extension</term>
+                <description>Media file is located in a local media library on a different site.</description>
+              </item>
+              <item>
+                <term>http://CDN/mediaLibraryFolder/filename.extension</term>
+                <description>Media file is located in a media library stored in CDN.</description>
+              </item>
+              <item>
+                <term>~/getmedia/fileGUID/fileName.extension</term>
+                <description>Media file is located in a media library which is located outside of the CMS application on the current site.</description>
+              </item>
+              <item>
+                <term>http://domain.com/getmedia/fileGUID/fileName.extension</term>
+                <description>Media file is located in a media library which is located outside of the CMS application on a different site.</description>
+              </item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetPermanentUrl(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Returns a permanent URL to the media file.
+            </summary>
+            <param name="mediaFile">Media file which the URL will be generated for.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="mediaFile" /> is null.</exception>
+            <remarks>
+            Generates various URL types depending on the media library location and 'Files friendly URL extension' setting in CMS:
+            <list type="table">
+              <listheader>
+                <term>URL</term>
+                <description>Location</description>
+              </listheader>
+              <item>
+                <term>~/getmedia/fileGUID/fileName.extension</term>
+                <description>Media file is located in a media library on the current site.</description>
+              </item>
+              <item>
+                <term>http://domain.com/getmedia/fileGUID/fileName.extension</term>
+                <description>Media file is located in a media library on a different site.</description>
+              </item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.LogSynchronization(System.String,System.Int32,System.String,System.String,CMS.DataEngine.TaskTypeEnum,System.Boolean)">
+            <summary>
+            Logs the synchronization task for media folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+            <param name="sourcePath">Source path</param>
+            <param name="targetPath">Target path</param>
+            <param name="taskType">Task type</param>
+            <param name="runAsync">Indicates if the logging should run asynchronously</param>
+            <returns>Returns new synchronization task</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.LogSynchronization(System.String,System.Int32,System.String,System.String,CMS.DataEngine.TaskTypeEnum,System.Int32)">
+            <summary>
+            Logs the synchronization task for media folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+            <param name="sourcePath">Source path</param>
+            <param name="targetPath">Target path</param>
+            <param name="taskType">Task type</param>
+            <param name="serverId">Server ID to synchronize</param>
+            <returns>Returns new synchronization task</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.LogSynchronization(System.String,System.Int32,System.String,System.String,CMS.DataEngine.TaskTypeEnum,System.Int32,System.Boolean)">
+            <summary>
+            Logs the synchronization task for media folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryId">Library ID</param>
+            <param name="sourcePath">Source path</param>
+            <param name="targetPath">Target path</param>
+            <param name="taskType">Task type</param>
+            <param name="serverId">Server ID to synchronize</param>
+            <param name="runAsync">Indicates if the logging should run asynchronously</param>
+            <returns>Returns new synchronization task</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.LogSynchronization(CMS.MediaLibrary.LogMediaLibraryChangeSettings)">
+            <summary>
+            Logs the synchronization task for media folder.
+            </summary>
+            <param name="settings">Settings for staging and integration bus task logging</param>
+            <returns>Returns new synchronization task</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetTaskData(CMS.DataEngine.TaskTypeEnum,System.Int32,System.String,System.String)">
+            <summary>
+            Gets data for the staging task.
+            </summary>
+            <param name="taskType">Staging task type</param>
+            <param name="libraryId">Library identifier</param>
+            <param name="sourcePath">Library source path</param>
+            <param name="targetPath">Library target path</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaFilesData(System.String,System.String,System.Int32)">
+            <summary>
+            Retrieves file GUIDs from source path in match with target path.
+            </summary>
+            <param name="sourcePath">Source path</param>
+            <param name="targetPath">Target path</param>
+            <param name="libraryId">Library ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetTaskTitle(CMS.DataEngine.TaskTypeEnum,System.String,System.String,CMS.MediaLibrary.MediaLibraryInfo)">
+            <summary>
+            Gets task title.
+            </summary>
+            <param name="taskType">Task type</param>
+            <param name="sourcePath">Source path</param>
+            <param name="targetPath">Target path</param>
+            <param name="library">Media library</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryInfo">
+            <summary>
+            Media library info data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.OBJECT_TYPE_GROUP">
+            <summary>
+            Object type for group
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.TYPEINFOGROUP">
+            <summary>
+            Type information for group library.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryFullName">
+            <summary>
+            Media library full name in format [sitename].[libraryname].
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryGroupID">
+            <summary>
+            Library group ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryDescription">
+            <summary>
+            Library description.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibrarySiteID">
+            <summary>
+            Library site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryFolder">
+            <summary>
+            Library folder.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryName">
+            <summary>
+            Library name.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryDisplayName">
+            <summary>
+            Library display name.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryGUID">
+            <summary>
+            Library GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryID">
+            <summary>
+            Library ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryAccess">
+            <summary>
+            Library access.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryLastModified">
+            <summary>
+            Library last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FileCreate">
+            <summary>
+            Indicates whether the file creating is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FileDelete">
+            <summary>
+            Indicates whether the file deleting is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FileModify">
+            <summary>
+            Indicates whether the file modifying is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FolderCreate">
+            <summary>
+            Indicates whether the folder creating is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FolderDelete">
+            <summary>
+            Indicates whether the folder deleting is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.FolderModify">
+            <summary>
+            Indicates whether the folder modifying is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.Access">
+            <summary>
+            Indicates whether the access to library is allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryTeaserPath">
+            <summary>
+            Library teaser path.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryTeaserGuid">
+            <summary>
+            Library teaser guid.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.TypeInfo">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.RemoveObjectDependencies(System.Boolean,System.Boolean)">
+            <summary>
+            Removes library dependencies.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts cloned object to DB.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.InsertAsClonePostprocessing(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Clones the role bindings.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Result of the cloning - messages in this object will be altered by processing this method</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.GetPermissionName(CMS.DataEngine.PermissionsEnum)">
+            <summary>
+            Converts PermissionEnum to permission codename which will be checked when CheckPermission() is called (Modify => Manage).
+            </summary>
+            <param name="permission">Permission to convert to string</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
+            <summary>
+            Checks whether the specified user has permissions for this object. This method is called automatically after CheckPermissions event was fired.
+            </summary>
+            <param name="permission">Permission to perform this operation will be checked</param>
+            <param name="siteName">Permissions on this site will be checked</param>
+            <param name="userInfo">Permissions of this user will be checked</param>
+            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
+            <returns>True if user is allowed to perform specified operation on the this object; otherwise false</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty MediaLibraryInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new MediaLibraryInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfo.LoadDefaultData">
+            <summary>
+            Loads the default data to the object.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryInfoProvider">
+            <summary>
+            Class providing media library info management.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfoProvider.CURRENT_LIBRARY">
+            <summary>
+            Current media library.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryInfoProvider.mDeletePhysicalFiles">
+            <summary>
+            Indicates if media files physical files should be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryInfoProvider.DeletePhysicalFiles">
+            <summary>
+            Indicates if media files physical files should be deleted.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.String)">
+            <summary>
+            Returns media library info specified by library name and site name.
+            Do not use for retrieving group MLs (use GetMediaLibraryInfo(string libraryName, int siteId, int groupId) instead). 
+            </summary>
+            <param name="libraryName">Library name</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.Int32,System.Int32)">
+            <summary>
+            Returns media library info specified by library name, site name and groupId.
+            </summary>
+            <param name="libraryName">Library name</param>
+            <param name="siteId">Site ID</param>
+            <param name="groupId">Group ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.Int32)">
+            <summary>
+            Returns the MediaLibraryInfo structure for the specified media library.
+            </summary>
+            <param name="mediaLibraryId">MediaLibrary id</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.SetMediaLibraryInfo(CMS.MediaLibrary.MediaLibraryInfo)">
+            <summary>
+            Sets (updates or inserts) specified media library.
+            </summary>
+            <param name="mediaLibrary">MediaLibrary to set</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryInfo(System.Int32)">
+            <summary>
+            Deletes specified media library.
+            </summary>
+            <param name="mediaLibraryId">Media library id</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryInfo(CMS.MediaLibrary.MediaLibraryInfo)">
+            <summary>
+            Deletes specified media library.
+            </summary>
+            <param name="infoObj">MediaLibrary object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraries">
+            <summary>
+            Returns the query for all media libraries.
+            </summary>        
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraries(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns information on libraries matching specified criteria.
+            </summary>
+            <param name="where">Where condition to filter data</param>
+            <param name="orderBy">Order by statement to use</param>
+            <param name="topN">Top N records</param>
+            <param name="columns">List of columns to be returned</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibrariesInfos(System.Int32)">
+            <summary>
+            Delete media libraries only from database for selected group.
+            </summary>
+            <param name="groupId">Group ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolder(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Delete folder from media library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Media library ID</param>
+            <param name="folderPath">Path to the folder within the library</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolder(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Delete media library root folder from media root directory.
+            ~/[site name]/media/
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="folder">Media library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibrariesFolders(System.String,System.Collections.ArrayList)">
+            <summary>
+            Delete all media libraries folders.
+            </summary>
+            <param name="sitename">Site name</param>
+            <param name="folders">List of folder to delete</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CreateMediaLibraryFolder(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates folder within specified library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="newFolderPath">New folder path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.RenameMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Rename folder within specified library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="folderPath">Original folder path</param>
+            <param name="newFolderPath">New folder path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CopyMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Copy media library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old folder path within the library folder</param>
+            <param name="newPath">New folder path within the library folder</param>
+            <param name="userId">ID of the user performing the action</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CopyMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Int32,System.Boolean,System.Boolean,System.Collections.Generic.Dictionary{System.Guid,System.Guid})">
+            <summary>
+            Copy media library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old folder path within the library folder</param>
+            <param name="newPath">New folder path within the library folder</param>
+            <param name="userId">ID of the user performing the action</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+            <param name="fileGUIDs">List of original file GUIDs and their copied ones when staging is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.MoveMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Moves media library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old folder path within the library folder</param>
+            <param name="newPath">New folder path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereCondition(System.String,System.Int32)">
+            <summary>
+            Add security where condition to the existing where condition.
+            </summary>
+            <param name="where">Existing where condition</param>
+            <param name="communityGroupId">Community group ID</param>
+            <returns>Returns where condition</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(CMS.MediaLibrary.MediaLibraryInfo,System.String,CMS.Membership.CurrentUserInfo)">
+            <summary>
+            Returns True if current user is granted with specified media library permission, otherwise returns False.
+            </summary>
+            <param name="libraryInfo">Media library data</param>
+            <param name="permission">Permission code name</param>
+            <param name="userInfo">User to check</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryFolderPath(System.Int32,System.String)">
+            <summary>
+            Returns physical path to the specified library.
+            </summary>
+            <param name="libraryId">Library ID</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryFolderPath(System.Int32,System.String,System.String)">
+            <summary>
+            Returns physical path to the specified library.
+            </summary>
+            <param name="libraryId">Library ID</param>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryFolderPath(CMS.MediaLibrary.MediaLibraryInfo,System.String,System.String)">
+            <summary>
+            Gets the folder path for the given media library
+            </summary>
+            <param name="libInfo">Media library info</param>
+            <param name="siteName">Site name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryFolderPath(System.String,System.String,System.String)">
+            <summary>
+            Returns physical path to the specified library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.SetInfo(CMS.MediaLibrary.MediaLibraryInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryInfosInternal(System.Int32)">
+            <summary>
+            Delete media libraries only from database for selected group.
+            </summary>
+            <param name="groupId">Group ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Delete folder from media library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Media library ID</param>
+            <param name="folderPath">Path to the folder within the library</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolderInternal(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Delete media library root folder from media root directory.
+            ~/[site name]/media/
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="folder">Media library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibrariesFoldersInternal(System.String,System.Collections.ArrayList)">
+            <summary>
+            Delete all media libraries folders.
+            </summary>
+            <param name="sitename">Site name</param>
+            <param name="folders">List of folder to delete</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CreateMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates folder within specified library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="newFolderPath">New folder path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.RenameMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Rename folder within specified library.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="folderPath">Original folder path</param>
+            <param name="newFolderPath">New folder path</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CopyMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean,System.Int32,System.Collections.Generic.Dictionary{System.Guid,System.Guid})">
+            <summary>
+            Copy media library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old folder path within the library folder</param>
+            <param name="newPath">New folder path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+            <param name="userId">ID of the user performing the action</param>
+            <param name="fileGUIDs">List of original file GUIDs and their copied ones when staging is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.MoveMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Moves media library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryID">Library ID</param>
+            <param name="origPath">Old folder path within the library folder</param>
+            <param name="newPath">New folder path within the library folder</param>
+            <param name="synchronization">Indicates if method is running by web farms synchronization</param>
+            <param name="logSynchronization">Indicates if staging task should be logged</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereConditionInternal(System.String,System.Int32)">
+            <summary>
+            Add security where condition to the existing where condition.
+            </summary>
+            <param name="where">Existing where condition</param>
+            <param name="communityGroupId">Community group ID</param>
+            <returns>Returns where condition</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.IsUserAuthorizedPerLibraryInternal(CMS.MediaLibrary.MediaLibraryInfo,System.String,CMS.Membership.CurrentUserInfo)">
+            <summary>
+            Returns True if current user is granted with specified media library permission, otherwise returns False.
+            </summary>
+            <param name="libraryInfo">Media library data</param>
+            <param name="permission">Permission code name</param>
+            <param name="userInfo">User to check</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryFolderPathInternal(System.String,System.String,System.String)">
+            <summary>
+            Returns physical path to the specified library folder.
+            </summary>
+            <param name="siteName">Site name</param>
+            <param name="libraryFolder">Library folder name</param>
+            <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckResourcePermission(System.Int32,System.String,CMS.Membership.CurrentUserInfo,System.String)">
+            <summary>
+            Checks the specified permission for resource (cms.groups if library group id is specified, cms.medialibrary otherwise).
+            </summary>
+            <param name="libraryGroupId">ID of the library group</param>
+            <param name="permissionName">Name of the permission</param>
+            <param name="userInfo">User info to check</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckPermission(System.Int32,System.Int32,System.String,CMS.Helpers.SecurityAccessEnum,CMS.Membership.UserInfo)">
+            <summary>
+            Checks specified media library permission.
+            </summary>
+            <param name="libraryId">Media library ID</param>
+            <param name="libraryGroupId">Media library group ID</param>
+            <param name="permissionName">Name of the permission which is checked</param>
+            <param name="permissionValue">Value of the permission</param>
+            <param name="userInfo">User info to check</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.IsAuthorizedPerLibrary(System.Int32,System.String,System.Int32)">
+            <summary>
+            Returns true if the user is authorized per given library.
+            </summary>
+            <param name="mediaLibraryId">Library ID</param>
+            <param name="permissionName">Permission name</param>
+            <param name="userId">User ID</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo">
+            <summary>
+            Media library role permission data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.LibraryID">
+            <summary>
+            Library ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.RoleID">
+            <summary>
+            Role ID.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.PermissionID">
+            <summary>
+            Permission ID.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty MediaLibraryRolePermission object.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new MediaLibraryRolePermission object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider">
+            <summary>
+            Class providing media library role permission management.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetMediaLibraryRolePermissionInfo(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns the media library role permission structure matching specified criteria.
+            </summary>
+            <param name="libraryId">ID of the library</param>
+            <param name="roleId">ID of the role</param>
+            <param name="permissionId">ID of the permission</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.SetMediaLibraryRolePermissionInfo(CMS.MediaLibrary.MediaLibraryRolePermissionInfo)">
+            <summary>
+            Sets (updates or inserts) specified library role permission.
+            </summary>
+            <param name="libraryRolePermission">Library role permission to set</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.DeleteMediaLibraryRolePermissionInfo(CMS.MediaLibrary.MediaLibraryRolePermissionInfo)">
+            <summary>
+            Deletes specified media library role permission.
+            </summary>
+            <param name="infoObj">Media library role permission object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetMediaLibraryRolePermissions">
+            <summary>
+            Returns the query for all media library role permissions.
+            </summary>        
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetLibraryRolePermissions(System.String,System.String)">
+            <summary>
+            Returns the media library role permission data matching specified criteria.
+            </summary>
+            <param name="where">Where condition used to filter the data</param>
+            <param name="orderBy">Order by statement to use</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.AddRoleToLibrary(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Adds specified role to the library.
+            </summary>
+            <param name="roleId">Role ID</param>
+            <param name="libraryId">Library ID</param>
+            <param name="permissionId">Permission ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.RemoveRoleFromLibrary(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Deletes specified library role.
+            </summary>
+            <param name="roleId">Role ID</param>
+            <param name="libraryId">Library ID</param>
+            <param name="permissionId">Permission ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.DeleteAllRoles(System.String)">
+            <summary>
+            Delete all media library roles.
+            </summary>
+            <param name="where">Where condition</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.SetPermissions(System.Int32,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Sets permissions in <paramref name="permissionsIds"/> for each role in <paramref name="roleIds"/>.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleIds">List of role IDs.</param>
+            <param name="permissionsIds">List of permission IDs.</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetMediaLibraryRolePermissionInfoInternal(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns the media library role permission structure matching specified criteria.
+            </summary>
+            <param name="libraryId">ID of the library</param>
+            <param name="roleId">ID of the role</param>
+            <param name="permissionId">ID of the permission</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.AddRoleToLibraryInternal(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Adds specified role to the library.
+            </summary>
+            <param name="roleId">Role ID</param>
+            <param name="libraryId">Library ID</param>
+            <param name="permissionId">Permission ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.RemoveRoleFromLibraryInternal(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Deletes specified library role.
+            </summary>
+            <param name="roleId">Role ID</param>
+            <param name="libraryId">Library ID</param>
+            <param name="permissionId">Permission ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.DeleteAllRolesInternal(System.String)">
+            <summary>
+            Delete all media library roles.
+            </summary>
+            <param name="where">Where condition</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.SetPermissionsInternal(System.Int32,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Sets permissions in <paramref name="permissionsIds"/> for each role in <paramref name="roleIds"/>.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleIds">List of role IDs.</param>
+            <param name="permissionsIds">List of permission IDs.</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.CommunityGroupDeletion">
+            <summary>
+            Community group deletion actions
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CommunityGroupDeletion.Init">
+            <summary>
+            Initializes the actions for deletion
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CommunityGroupDeletion.Delete_Before(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Event handler for deleting group media libraries.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.ImportSpecialActions">
+            <summary>
+            Handles special actions during the import process.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.ImportSpecialActions.RemovedSettingsKeysCodeNamesInV11">
+            <summary>
+            List of removed settings keys code names.
+            Settings keys in this list won't be imported.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.ImportSpecialActions.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryExport">
+            <summary>
+            Handles special actions during the Media library export process.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryExport.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryExport.ExportMediaFiles(CMS.CMSImportExport.SiteExportSettings,System.Data.DataTable,System.Boolean)">
+            <summary>
+            Export media files.
+            </summary>
+            <param name="settings">Export settings</param>
+            <param name="table">Parent data</param>
+            <param name="isGroup">Indicates if group objects are exported</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryImport">
+            <summary>
+            Handles special actions during the Media library import process.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryImport.Init">
+            <summary>
+            Initializes export handlers
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryImport.ImportMediaFiles(CMS.CMSImportExport.SiteImportSettings,System.Data.DataTable,CMS.DataEngine.TranslationHelper,System.Boolean)">
+            <summary>
+            Import media files.
+            </summary>
+            <param name="settings">Import settings</param>
+            <param name="table">Parent data</param>
+            <param name="th">Translation helper</param>
+            <param name="isGroup">Indicates if group objects are imported</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryContext">
+            <summary>
+            Class representing media library in the current context.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryContext.CurrentMediaLibrary">
+            <summary>
+            Current media library info object matching libraryid, libraryguid or libraryname 
+            specified in the URL parameter of the current request
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaLibraryContext.CurrentMediaFile">
+            <summary>
+            Current media file info object matching fileid or fileguid specified in the URL parameter of the current request.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryContext.GetCurrentMediaLibrary">
+            <summary>
+            Returns information on the current media library according the library ID/ library GUID/ library name specified as an URL parameter of the current request
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryContext.GetCurrentMediaFile">
+            <summary>
+            Returns information on the current media file according the fileid or fileguid 
+            specified as an URL parameter of the current request
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryModule">
+            <summary>
+            Represents the Media Library module.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.RegisterCommands">
+            <summary>
+            Registers the object type of this module
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.GetMediaFileInfo(System.Object[])">
+            <summary>
+            Get media file object
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.GetMediaLibraryInfo(System.Object[])">
+            <summary>
+            Get media library object
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.GetMediaFileUrl(System.Object[])">
+            <summary>
+            Get media file URL
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.GetMediaFileUrlByName(System.Object[])">
+            <summary>
+            Gets the media file URL
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.DeleteMediaFile(System.Object[])">
+            <summary>
+            Delete media file
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModule.DeleteMediaFilePreview(System.Object[])">
+            <summary>
+            Delete media file preview
+            </summary>
+            <param name="parameters">Parameters array</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryModuleMetadata">
+            <summary>
+            Represents the Media Library module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaSynchronization">
+            <summary>
+            Synchronization helper class for the media library module.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MediaSynchronization.SynchronizeMediaFiles">
+            <summary>
+            Gets or sets value that indicates whether file synchronization for media files is enabled.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaSynchronization.Init">
+            <summary>
+            Initializes the tasks for media files synchronization
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaSynchronization.ProcessTask_Before(System.Object,CMS.Synchronization.StagingSynchronizationEventArgs)">
+            <summary>
+            Staging event handler for processing media folder tasks.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaSynchronization.ProcessMediaFolder(CMS.DataEngine.TaskTypeEnum,System.Data.DataSet,CMS.Synchronization.ISyncManager)">
+            <summary>
+            Process media folder task.
+            </summary>
+            <param name="taskType">Task type</param>
+            <param name="ds">DataSet with folder data</param>
+            <param name="syncManager">current SyncManager instance</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaSynchronization.GetFileGUIDsList(System.Data.DataTable)">
+            <summary>
+            Gets dictionary with source GUID : target GUID pairs
+            </summary>
+            <param name="dt">Data table with data</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.SiteDeletion">
+            <summary>
+            Site deletion actions
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.SiteDeletion.Init">
+            <summary>
+            Initializes the actions for deletion
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.CloneFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to clone media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.CloneFolderMediaWebFarmTask.SourceLibraryId">
+            <summary>
+            Gets or sets the identifier of the library from where the folder will be cloned.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CloneFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets the identifier of the library where the folder will be cloned.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CloneFolderMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.CloneFolderMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CloneFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for cloning media folders is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CloneFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryHelper.CopyRecursive(System.Int32,System.Int32,CMS.IO.DirectoryInfo,System.String,System.String,System.Int32,System.String,System.Boolean,System.Int32,System.Boolean,CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult)"/>
+            method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.CopyFileMediaWebFarmTask">
+            <summary>
+            Web farm task used to clone media files.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFileMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where the file will be cloned.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFileMediaWebFarmTask.SourcePath">
+            <summary>
+            Gets or sets relative path from where the file will be cloned.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFileMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFileMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where the file will be cloned.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFileMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.CopyFileMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFileMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for copying media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFileMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaFileInfoProvider.CopyMediaFile(System.String,System.Int32,System.String,System.String,System.Boolean,System.Int32)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.CopyFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to copy media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where the file will be copied.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.SourcePath">
+            <summary>
+            Gets or sets relative path from where the file will be copied.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where the file will be copied.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.CopyFolderMediaWebFarmTask"/>
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for copying media folders is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CopyFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CopyMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Int32,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.CreateFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to create media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where folder will be created.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where folder will be created.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.CreateFolderMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for creating media folders is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.CreateFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CreateMediaLibraryFolder(System.String,System.Int32,System.String,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.DeleteFileMediaWebFarmTask">
+            <summary>
+            Web farm task used to delete media files.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.SiteId">
+            <summary>
+            Gets or sets identifier of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where file will be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where file will be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.ApplyOnlyOnFiles">
+            <summary>
+            Gets or sets a value that indicates if media deletion will be executed only on files.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.DeleteFileMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFile(System.Int32,System.Int32,System.String,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFileMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for deleting media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask">
+            <summary>
+            Web farm task used to delete media preview files.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where file will be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where file will be deleted.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask"/>;
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for deleting media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFilePreviewMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFilePreview(System.String,System.Int32,System.String,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to delete media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where file will be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where file will be deleted.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for deleting media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.DeleteFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolder(System.String,System.String,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MoveFileMediaWebFarmTask">
+            <summary>
+            Web farm task used to move media files.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFileMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFileMediaWebFarmTask.SourceLibraryId">
+            <summary>
+            Gets or sets identifier of the library from where file will be moved.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFileMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where file will be moved.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFileMediaWebFarmTask.SourcePath">
+            <summary>
+            Gets or sets relative path from where file will be moved.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFileMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where file will be moved.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFileMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.MoveFileMediaWebFarmTask"/>
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFileMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaFileInfoProvider.MoveMediaFile(System.String,System.Int32,System.Int32,System.String,System.String,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFileMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for moving media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.MoveFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to move  media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative destination path where folder will be moved.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.SourcePath">
+            <summary>
+            Gets or sets relative source path from where folder will be moved.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which destination library will be assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where folder will be moved.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.MoveFolderMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for moving media folders is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MoveFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryInfoProvider.MoveMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.RenameFolderMediaWebFarmTask">
+            <summary>
+            Web farm task used to rename media folders.
+            </summary>
+            <seealso cref="P:CMS.Core.IWebFarmTask.TaskTextData"/>
+        </member>
+        <member name="P:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.DestinationPath">
+            <summary>
+            Gets or sets relative path where folder will be renamed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.SourcePath">
+            <summary>
+            Gets or sets relative path from where folder will be renamed.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.DestinationLibraryId">
+            <summary>
+            Gets or sets identifier of the library where folder will be renamed.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaLibraryInfoProvider.RenameMediaLibraryFolder(System.String,System.Int32,System.String,System.String,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.RenameFolderMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for renaming media folders is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.UpdateMediaWebFarmTask">
+            <summary>
+            Web farm task used to upload media files.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.UpdateMediaWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.MediaLibrary.UpdateMediaWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which media library is assigned to.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.LibraryFolder">
+            <summary>
+            Gets or sets media library root folder.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.LibrarySubFolderPath">
+            <summary>
+            Gets or sets library sub folder path.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.FileName">
+            <summary>
+            Gets or sets name of the file to be updated.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.FileExtension">
+            <summary>
+            Gets or sets extension of the file to be updated.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.UpdateMediaWebFarmTask.FileGuid">
+            <summary>
+            Gets or sets guid identifier of the file to be updated.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.UpdateMediaWebFarmTask.ExecuteTask">
+            <summary>
+            Processes the web farm task by invoking the <see cref="M:CMS.MediaLibrary.MediaFileInfoProvider.SaveFileToDisk(System.String,System.String,System.String,System.String,System.String,System.Guid,CMS.Core.BinaryData,System.Boolean,System.Boolean)"/> method while passing it current class' properties as its parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.UpdateMediaWebFarmTask.ConditionMethod">
+            <summary>
+            Returns true whether the synchronization for updating media files is allowed and provided storage is not shared.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.GetMediaService">
+            <summary>
+            Provides media library file.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.GetMediaService.useClientCache">
+            <summary>
+            Sets to false to disable the client caching.
+            </summary>
+        </member>
+        <member name="F:CMS.MediaLibrary.GetMediaService.largeFilesCacheMinutes">
+            <summary>
+            Sets to 0 if you do not wish to cache large files.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.GetMediaService.Preview">
+            <summary>
+            Returns true if file preview is used for sending.
+            </summary>
+        </member>
+        <member name="P:CMS.MediaLibrary.GetMediaService.AllowCache">
+            <summary>
+            Returns true if the process allows cache.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.GetFileServiceResult">
+            <summary>
+            Handles media library file caching and returns the request process result as a <see cref="T:CMS.Base.Routing.CMSActionResult"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.ProcessFile">
+            <summary>
+            Processes the file.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.GetSendFileAction(CMS.MediaLibrary.CMSOutputMediaFile)">
+            <summary>
+            Gets the send file action result.
+            </summary>
+            <param name="file">File to send.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.EnsureOutputData(CMS.MediaLibrary.CMSOutputMediaFile,System.Boolean)">
+            <summary>
+            Ensures the file data if physical file not present.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.GetFileETag(CMS.MediaLibrary.CMSOutputMediaFile)">
+            <summary>
+            Gets the ETag for the given file
+            </summary>
+            <param name="file">File</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.GetOutputDataDependency(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Returns the output data dependency based on the given attachment record.
+            </summary>
+            <param name="mi">MediaFile object</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.EnsurePhysicalFile(CMS.MediaLibrary.CMSOutputMediaFile)">
+            <summary>
+            Ensures the physical file.
+            </summary>
+            <param name="file">Output file</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.GetMediaService.NewOutputFile(CMS.MediaLibrary.MediaFileInfo,System.Byte[])">
+            <summary>
+            Gets the new output MediaFile object.
+            </summary>
+            <param name="mfi">Media file info</param>
+            <param name="data">Output MediaFile data</param>
+        </member>
+    </members>
+</doc>

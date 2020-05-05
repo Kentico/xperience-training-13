@@ -1,0 +1,455 @@
+.icon-disabled {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.action-disabled {
+  cursor: not-allowed;
+  color: #696663;
+  background-color: #a3a2a2;
+  background-image: repeating-linear-gradient(-45deg, rgba(189, 187, 187, 0) 0px, #bdbbbb 1px, #bdbbbb 2px, rgba(189, 187, 187, 0) 3px, rgba(189, 187, 187, 0) 4px);
+}
+.dropdown-disabled {
+  cursor: not-allowed;
+  background-image: repeating-linear-gradient(-45deg, rgba(189, 187, 187, 0) 0px, rgba(189, 187, 187, 0.25) 1px, rgba(189, 187, 187, 0.25) 2px, rgba(189, 187, 187, 0) 3px, rgba(189, 187, 187, 0) 4px);
+}
+.dropdown-disabled:hover {
+  background-color: inherit;
+  background-image: repeating-linear-gradient(-45deg, rgba(189, 187, 187, 0) 0px, rgba(189, 187, 187, 0.25) 1px, rgba(189, 187, 187, 0.25) 2px, rgba(189, 187, 187, 0) 3px, rgba(189, 187, 187, 0) 4px);
+}
+.GraphContainer {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  outline: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+.Graph {
+  width: 5000px;
+  height: 5000px;
+  position: relative;
+  padding: 40px;
+  overflow: hidden;
+  background: url("../../CMSPages/GetResource.ashx?image=Design/Controls/UniGraph/ma_bg.png") repeat;
+}
+.GraphProgress {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 6px 15px 6px 0;
+  background-color: #e5e5e5;
+  z-index: 1000;
+  -moz-user-select: none;
+}
+.GraphProgress span {
+  vertical-align: middle;
+}
+.GraphProgress img {
+  vertical-align: middle;
+  margin: 0 5px;
+}
+.GraphLegend {
+  z-index: 1200;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 11px 21px;
+  margin: 16px;
+  background: #fff;
+  -moz-user-select: none;
+}
+.GraphLegend .ConnectorExample {
+  width: 25px;
+  height: 2px;
+  float: left;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+.GraphLegend .ConnectorExample.Manual {
+  background-color: #1175ae;
+}
+.GraphLegend .ConnectorExample.Automatic {
+  background-color: #bdbbbb;
+}
+.UniGraph {
+  height: 300px;
+  font-family: "Segoe UI", Helvetica, Verdana, Arial, sans-serif;
+  font-size: 14px;
+}
+.UniGraph.Move *,
+.Graph.ReadOnly,
+.Graph.ReadOnly * {
+  cursor: move !important;
+}
+.tooltip {
+  max-width: 240px;
+  background-color: #e5e0cb;
+  padding: 3px;
+  z-index: 1001;
+}
+.Node.Dragging {
+  z-index: 1104 !important;
+}
+.Node.Front:not(.Dragging) {
+  z-index: 1102 !important;
+}
+.Node.Front.Selected {
+  z-index: 1103 !important;
+}
+.Node.NewConnection {
+  z-index: 1197 !important;
+}
+.Node .LabelEdit {
+  z-index: 1100;
+}
+._jsPlumb_connector {
+  z-index: 20;
+}
+._jsPlumb_connector.Selected {
+  z-index: 1102;
+}
+._jsPlumb_connector.NewConnection {
+  z-index: 1198 !important;
+}
+._jsPlumb_endpoint.Front {
+  z-index: 1103;
+}
+._jsPlumb_endpoint.Selected {
+  z-index: 1103;
+}
+._jsPlumb_endpoint.NewConnection {
+  z-index: 1199 !important;
+}
+._jsPlumb_endpoint.ui-draggable {
+  cursor: move;
+}
+.Node {
+  position: absolute;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 90px;
+  background-color: #f7f7f7;
+  border: 1px solid #d6d9d6;
+  border-radius: 3px;
+  cursor: move;
+  padding: 1px;
+}
+.Node.Selected,
+.Node.Highlight {
+  border: 2px solid #0f6194;
+  padding: 0;
+}
+.Node.Selected .header,
+.Node.Highlight .header {
+  border-radius: 0 3px 3px 0;
+}
+.Node.Selected .nodeDataIconPlaceholder,
+.Node.Highlight .nodeDataIconPlaceholder,
+.Node.Selected .nodeErrorIconPlaceholder,
+.Node.Highlight .nodeErrorIconPlaceholder,
+.Node.Selected .nodeDataPlaceholder,
+.Node.Highlight .nodeDataPlaceholder {
+  margin: -1px;
+}
+.Node.yellow {
+  background-color: #ffe99a;
+}
+.Node.Note .LabelEdit {
+  left: unset;
+  overflow: hidden;
+  background-color: #ffe99a;
+  width: 177px !important;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.Node.Note .Editable {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+.Node.Note:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 1.5em;
+  bottom: -1.5em;
+  border: 1em solid #ffe99a;
+  box-shadow: 0px 1px #d6d9d6, -1px 0px #d6d9d6;
+}
+.Node.Note:before {
+  content: "";
+  position: absolute;
+  bottom: -1.5em;
+  right: 0;
+  border-width: 1.5em 1.5em 0 0;
+  border-style: solid;
+  border-color: #d9b229 transparent;
+}
+.Node .Editable {
+  cursor: text;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+}
+.Node .LabelEdit {
+  position: absolute;
+  left: 0;
+  min-height: 18px;
+  border: 1px solid #bdbbbb;
+  padding: 3px 2px 0 2px;
+  margin: 3px 2px 0 2px;
+  resize: none;
+  -webkit-touch-callout: text;
+  -webkit-user-select: text;
+  outline: none;
+}
+.Node .Localized .LabelEdit {
+  background-color: #efe;
+}
+.Node .Placeholder {
+  color: #919194;
+  cursor: text;
+}
+.Node .header {
+  width: 60px;
+  min-height: 90px;
+  border-radius: 3px;
+  float: left;
+}
+.Node .header.black {
+  background-color: #262524;
+}
+.Node .header.red {
+  background-color: #b12628;
+}
+.Node .header.blue {
+  background-color: #0f6194;
+}
+.Node .header.undefined {
+  background-color: #403e3d;
+}
+.Node .header.rotated {
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  min-height: 66px;
+  height: 66px;
+  width: 66px;
+  margin: 12px 7px 0 -33px;
+}
+.Node .header.rotated .cms-icon-container {
+  -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  margin: 18px;
+}
+.Node .header.rotated .cms-icon-container .cms-icon-180 {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+.Node .header .cms-icon-container {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  margin-top: 30px;
+  color: #fff;
+}
+.Node .header .cms-icon-container .cms-icon-180 {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+}
+.Node .header .icon {
+  width: 100%;
+  height: 100%;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.Node .content {
+  width: 177px;
+  min-height: 74px;
+  padding: 8px 8px 8px 15px;
+  color: #000000;
+  float: left;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+}
+.Node .content .box {
+  position: relative;
+  padding: 0;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #a3a2a2;
+  border-radius: 2px;
+}
+.Node .content .box .inner {
+  cursor: text;
+  padding: 7px 40px 7px 7px;
+}
+.Node .content .box i {
+  position: absolute;
+  top: 6px;
+  right: 9px;
+  width: 8px;
+  height: 8px;
+  color: #696663;
+  cursor: pointer;
+}
+.Node .content .box i + i {
+  right: 25px;
+}
+.Node .content .text {
+  font-size: 12px;
+}
+.Node .content .main {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.Node .content .caption {
+  display: block;
+  padding-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.Node .content i.button {
+  float: right;
+  color: #696663;
+  cursor: pointer;
+  padding: 4px;
+}
+.Node .content .footer {
+  font-size: 90%;
+  margin: 5px 0;
+  height: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: end;
+      align-items: flex-end;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.Node .content .footer .timeout {
+  font-weight: bold;
+  padding-right: 4px;
+}
+.Node .nodeErrorIconPlaceholder,
+.Node .nodeDataIconPlaceholder {
+  cursor: pointer;
+  position: absolute;
+  right: -16px;
+  bottom: -16px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  display: inherit;
+  width: 32px;
+  height: 32px;
+}
+.Node .nodeErrorIconPlaceholder i,
+.Node .nodeDataIconPlaceholder i {
+  padding: 0;
+  color: #696663;
+}
+.Node .nodeErrorIconPlaceholder {
+  background-color: #c98209;
+}
+.Node .nodeErrorIconPlaceholder i {
+  color: #ffffff;
+  position: absolute;
+  top: 7px;
+  left: 8px;
+}
+.Node .nodeDataPlaceholder {
+  position: absolute;
+  font-size: 80%;
+  background-color: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -ms-grid;
+  -ms-grid-columns: max-content;
+  padding: 20px 20px 10px 20px;
+  cursor: auto;
+}
+.Node .nodeDataPlaceholder .refresh-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 4px;
+}
+.Node .nodeDataPlaceholder .refresh-button i.button {
+  color: #696663;
+  cursor: pointer;
+  padding: 4px;
+}
+.Node .nodeDataPlaceholder .variant-statistics-container {
+  width: auto;
+}
+.Node .nodeDataPlaceholder .variant-statistics-container .variant-statistics-column {
+  max-width: 150px;
+  display: inline-block;
+}
+.Node .nodeDataPlaceholder .variant-statistics-container .variant-statistics-column:not(:first-child) {
+  margin-left: 16px;
+}
+.Node .nodeDataPlaceholder .variant-statistics-container .more-variants-label {
+  margin-top: 5px;
+  font-weight: bold;
+}
+.Node .nodeDataPlaceholder .variant-name {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.Node .nodeDataPlaceholder .statistics-link {
+  margin-top: 5px;
+  grid-row: 2;
+  -ms-grid-row: 2;
+}
+.Node .nodeDataPlaceholder.hidden {
+  visibility: hidden;
+}
+.Node .nodeDataPlaceholder:after,
+.Node .nodeDataPlaceholder:before {
+  content: " ";
+  right: 100%;
+  top: 24px;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.Node .nodeDataPlaceholder:after {
+  border-color: rgba(247, 247, 247, 0);
+  border-right-color: #f7f7f7;
+  border-width: 11px;
+  margin-top: -12px;
+}
+.Node .nodeDataPlaceholder:before {
+  border-color: rgba(229, 229, 229, 0);
+  border-right-color: #e5e5e5;
+  border-width: 13px;
+  margin-top: -14px;
+}
+.Node ul.increased-space-between-items li:not(:first-child) {
+  margin-top: 12px;
+}
+.Node.Condition .content .inner {
+  padding: 7px;
+}
+.GraphContainer,
+.GraphWrapper,
+.UniGraph,
+._jsPlumb_connector {
+  direction: ltr !important;
+}

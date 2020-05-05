@@ -1,0 +1,1309 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.Search.Azure</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.Search.Azure.AzureIndexStatistics">
+            <summary>
+            Encapsulates statistics of an Azure index.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AzureIndexStatistics.DocumentCount">
+            <summary>
+            Gets the number of indexed documents.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AzureIndexStatistics.Size">
+            <summary>
+            Gets the index size in bytes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.AzureIndexStatistics.#ctor(System.Int64,System.Int64)">
+            <summary>
+            Initializes Azure index statistics.
+            </summary>
+            <param name="documentCount">Number of indexed documents.</param>
+            <param name="size">Size of the index.</param>
+        </member>
+        <member name="T:CMS.Search.Azure.AzureIndexStatisticsProvider">
+            <summary>
+            Provides statistics of Azure Search indexes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.AzureIndexStatisticsProvider.GetStatistics(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Gets statistics of an Azure index.
+            </summary>
+            <param name="indexInfo">Index to retrieve statistics for.</param>
+            <returns>Statistics of given index, or null when statistics are not available.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="indexInfo"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <see cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/> of given <paramref name="indexInfo"/> is not Azure.</exception>
+            <remarks>
+            This method returns null if index does not exist within Azure Search service or the index's service name and admin API key are not valid.
+            </remarks>
+            <seealso cref="F:CMS.Search.SearchIndexInfo.AZURE_SEARCH_PROVIDER"/>
+        </member>
+        <member name="T:CMS.Search.Azure.FieldPropertiesEqualityComparer">
+            <summary>
+            Defines methods to compare two <see cref="T:Microsoft.Azure.Search.Models.Field"/> objects if those fields can be merged into one field in Azure index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.FieldPropertiesEqualityComparer.Equals(Microsoft.Azure.Search.Models.Field,Microsoft.Azure.Search.Models.Field)">
+            <summary>
+            Compares two <see cref="T:Microsoft.Azure.Search.Models.Field"/> objects to decide if those fields can be merged into one field in Azure index.
+            </summary>
+            <param name="first">First <see cref="T:Microsoft.Azure.Search.Models.Field"/> object to compare.</param>
+            <param name="second">Second <see cref="T:Microsoft.Azure.Search.Models.Field"/> object to compare.</param>
+            <returns>Returns true if two <see cref="T:Microsoft.Azure.Search.Models.Field"/> objects can be merged into one field in Azure index. False otherwise.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.FieldPropertiesEqualityComparer.GetHashCode(Microsoft.Azure.Search.Models.Field)">
+            <summary>
+            Returns hash code for <see cref="T:Microsoft.Azure.Search.Models.Field"/> object.
+            </summary>
+            <param name="obj"><see cref="T:Microsoft.Azure.Search.Models.Field"/> object to generate hash code from.</param>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchEngineConfiguration">
+            <summary>
+            Class encapsulating configuration properties to customize indexing of documents to Azure Search service.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.Instance">
+            <summary>
+            Returns <see cref="T:CMS.Search.Azure.SearchEngineConfiguration"/> instance.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.DocumentsBatchSize">
+            <summary>
+            Maximum number of search documents processed per batch in one request to the Azure Search service (index uploads, merges or deletes).
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.DocumentSearchPageSize">
+            <summary>
+            Document count per page when searching Azure Search indexes.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.MaxBackoffTimeSeconds">
+            <summary>
+            Maximum time interval (in seconds) between two attempts to perform Azure search operations.
+            The interval starts from 0 and grows exponentially up to the maximum: 0, 1, 2, 4, 8, 16, ...
+            </summary>
+            <remarks>The default value is 8.</remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.RetryCount">
+            <summary>
+            Maximum number of retry attempts that the system performs after an Azure Search operation fails.
+            </summary>
+            <remarks>Setting the retry count to zero disables the retry strategy. The default value is 5.</remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchEngineConfiguration.TransientErrorDetectionStrategy">
+            <summary>
+            Defines an object responsible for detecting specific transient conditions on Azure Search service operations.
+            By default every exception is handled as transient and so the operation that caused exception will be retried.
+            </summary>
+            <remarks>May improve performance by skipping retry strategy of an operation for specific exceptions.</remarks>
+            <seealso cref="P:CMS.Search.Azure.SearchEngineConfiguration.MaxBackoffTimeSeconds"/>
+            <seealso cref="P:CMS.Search.Azure.SearchEngineConfiguration.RetryCount"/>
+            <seealso cref="T:Microsoft.Rest.TransientFaultHandling.ITransientErrorDetectionStrategy"/>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchService">
+            <summary>
+            Encapsulates information about Azure Search service necessary for connecting to the service's endpoint.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchService.Name">
+            <summary>
+            Azure Search service name.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchService.AdminApiKey">
+            <summary>
+            Azure Search service admin API key.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchService.FromAdminApiKey(System.String,System.String)">
+            <summary>
+            Creates a new <see cref="T:CMS.Search.Azure.SearchService"/> from specified <paramref name="name"/> and <paramref name="adminApiKey"/>.
+            </summary>
+            <param name="name">Azure Search service name.</param>
+            <param name="adminApiKey">Azure Search admin API key.</param>
+            <returns>Search service object initialized from given parameters.</returns>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchServiceManager">
+            <summary>
+            Performs create, update or delete operations on Azure indexes.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.SearchServiceManager.CreatingOrUpdatingIndex">
+            <summary>
+            An event raised upon <see cref="M:CMS.Search.Azure.SearchServiceManager.CreateOrUpdateIndex(Microsoft.Azure.Search.Models.Index)"/> execution.
+            The event allows for modification of processed <see cref="P:CMS.Search.Azure.CreateOrUpdateIndexEventArgs.Index"/>.
+            </summary>
+            <remarks>This event should be used for configuring <see cref="T:Microsoft.Azure.Search.Models.Suggester"/>s and <see cref="T:Microsoft.Azure.Search.Models.ScoringProfile"/>s.</remarks>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.#ctor(CMS.Search.Azure.SearchService,CMS.Search.Azure.ISearchServiceRetryStrategy)">
+            <summary>
+            Performs create, update or delete operations on Azure indexes.
+            </summary>
+            <param name="searchService">Search service in which to create the index.</param>
+            <param name="retryStrategy">Retry strategy that should be performed for failed operations. If null, no attempts are performed for failed operation.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.#ctor(CMS.Search.Azure.SearchService)">
+            <summary>
+            Performs create, update or delete operations on Azure indexes.
+            </summary>
+            <param name="searchService">Search service in which to create the index.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.GetAllDocuments(System.String,System.String,Microsoft.Azure.Search.Models.SearchParameters)">
+            <summary>
+            Searches for documents and enumerates all results while paging over the individual result sets.
+            </summary>
+            <param name="indexName">Name of index to search in.</param>
+            <param name="searchText">Text to search for.</param>
+            <param name="searchParameters"><para>Search parameters to be used.</para>
+            <para>
+            The <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/> property is modified while paging over the individual result sets
+            and is restored to its original value after enumeration end.
+            </para>
+            <para>
+            Use the <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Top"/> property to set the page size.
+            </para>
+            </param>
+            <returns>Enumeration of all documents found.</returns>
+            <remarks>
+            <para>
+            See the Azure Search documentation on how to search for documents.
+            </para>
+            <para>
+            The <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/> property of given <paramref name="searchParameters"/> is modified while enumerating
+            over the individual result sets and is restored to its original value after enumeration end.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.GetAllDocumentsCore(Microsoft.Azure.Search.SearchServiceClient,System.String,System.String,Microsoft.Azure.Search.Models.SearchParameters)">
+            <summary>
+            Searches for documents and enumerates all results while advancing the <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/>
+            of passed <paramref name="searchParameters"/>. The property <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/> is restored to its original value
+            after enumeration end.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.GetAllSearchResults(Microsoft.Azure.Search.ISearchIndexClient,System.String,Microsoft.Azure.Search.Models.SearchParameters)">
+            <summary>
+            Searches for documents and enumerates all search results while advancing the <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/>
+            of passed <paramref name="searchParameters"/>. The property <see cref="P:Microsoft.Azure.Search.Models.SearchParameters.Skip"/> is restored to its original value
+            after enumeration end.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.GetStatistics(System.String)">
+            <summary>
+            Gets index statistics from Azure Search service.
+            </summary>
+            <param name="indexName">Name of index to retrieve statistics for. The name must meet the service's requirements (e.g. lowercase string, no starting or trailing dash).</param>
+            <returns>Statistics of index named <paramref name="indexName"/>.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.IndexExists(System.String)">
+            <summary>
+            Indicates whether index exists in Azure Search service.
+            </summary>
+            <param name="indexName">Name of index whose existence is to be checked.</param>
+            <returns>Returns true if index exists, false otherwise.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.GetIndex(System.String)">
+            <summary>
+            Gets index from Azure Search service.
+            </summary>
+            <param name="indexName">Name of index to be retrieved. The name must meet the service's requirements (e.g. lowercase string, no starting or trailing dash).</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.DeleteIndexIfExists(System.String)">
+            <summary>
+            Deletes an Azure Search index if it exists.
+            </summary>
+            <param name="indexName">Name of index to be deleted.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.CreateOrUpdateIndex(Microsoft.Azure.Search.Models.Index)">
+            <summary>
+            Creates or updates <paramref name="index"/> in Azure Search.
+            </summary>
+            <param name="index">
+            Index to be created or updated. The <see cref="P:Microsoft.Azure.Search.Models.Index.Name"/> of the <paramref name="index"/> must meet the service's
+            requirements (e.g. lowercase string, no starting or trailing dash).
+            </param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.DeleteDocuments(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Deletes documents from the index.
+            </summary>
+            <param name="indexName">Name of the Azure index.</param>
+            <param name="keyName">Name of the field by which documents will be deleted.</param>
+            <param name="keyValues">Defines for which values in the <paramref name="keyName"/> field, documents will be deleted.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchServiceManager.ApplyIndexActions(System.String,System.Collections.Generic.ICollection{Microsoft.Azure.Search.Models.IndexAction{Microsoft.Azure.Search.Models.Document}})">
+            <summary>
+            Applies collection of <paramref name="actions"/> on index with name <paramref name="indexName"/>.
+            </summary>
+            <param name="indexName">Name of the Azure index.</param>
+            <param name="actions">Collection of actions to modify index.</param>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskEngine">
+            <summary>
+            Search task engine.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskEngine.FieldComparer">
+            <summary>
+            Comparer to compare two Azure index <see cref="T:Microsoft.Azure.Search.Models.Field"/>s.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ProcessAzureSearchTask(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Processes <paramref name="task"/> according to it's <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureType"/>.
+            </summary>
+            <param name="task">Search task to process.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteProcessTask(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Executes process task for Azure index by modifying some of it's content.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ProcessDocumentCategoryChange(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Re-indexes all documents containing updated category to reflect its name change.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.UpdateAffectedDocuments(System.Collections.Generic.IEnumerable{System.Int32},System.DateTime)">
+            <summary>
+            Updates content of document indexes based on enumeration of changed documents.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteDeleteTask(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Executes delete task for Azure index by removing some of it's content.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteDeleteTaskForIndex(CMS.Search.Azure.SearchTaskAzureInfo,CMS.Search.SearchIndexInfo,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Executes delete task for given Azure <paramref name="index"/> by removing some of it's content.
+            </summary>
+            <param name="task">Delete search task to execute.</param>
+            <param name="index">Index to perform delete operation on.</param>
+            <param name="searchServiceManager">Search service manager.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.DeleteDocumentsFromSiteInSubTree(CMS.Search.Azure.SearchTaskAzureInfo,CMS.Search.SearchIndexInfo,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Deletes documents from Azure on a site under given node alias path (specified in additional task data).
+            </summary>
+            <param name="task">Delete search task to execute.</param>
+            <param name="index">Index to perform delete operation on.</param>
+            <param name="searchServiceManager">Search service manager.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.DeleteDocumentsFromSite(CMS.Search.Azure.SearchTaskAzureInfo,CMS.Search.SearchIndexInfo,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Deletes documents from Azure belonging to given site (specified in additional task data).
+            </summary>
+            <param name="task">Delete search task to execute.</param>
+            <param name="index">Index to perform delete operation on.</param>
+            <param name="searchServiceManager">Search service manager.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.DeleteOneDocument(CMS.Search.Azure.SearchTaskAzureInfo,CMS.Search.SearchIndexInfo,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Deletes document from Azure by ID (specified in additional task data).
+            </summary>
+            <param name="task">Delete search task to execute.</param>
+            <param name="index">Index to perform delete operation on.</param>
+            <param name="searchServiceManager">Search service manager.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.CreateSearchServiceManager(CMS.Search.Azure.SearchService)">
+            <summary>
+            Returns service new manager instance.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteUpdateTask(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Executes update task for all relevant Azure indexes by modifying their content.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteUpdateOnIndex(CMS.Search.SearchIndexInfo,System.Collections.Generic.IEnumerable{CMS.DataEngine.ISearchable},System.DateTime)">
+            <summary>
+            Performs documents update for an Azure index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.GetIndexesWithSearchableObjects(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Returns collection of Azure indexes with all the related <see cref="T:CMS.DataEngine.ISearchable"/> objects which got modified for given <paramref name="task"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.GetIndexesWithSearchableObjectsForDocumentUpdate(System.String,System.Int32)">
+            <summary>
+            Returns collection of Azure indexes with all the related <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="objectType"/> and <paramref name="documentId"/>
+            that are necessary for document update.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.GetIndexesWithSearchableObjectsForPartialRebuild(System.String,System.String,CMS.Search.Internal.SearchablesRetriever)">
+            <summary>
+            Returns collection of Azure indexes with all the related <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="objectType"/>
+            and <paramref name="siteNodeIdentifier"/> (site name and node alias path) that are necessary for partial rebuild.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.ExecuteRebuildTask(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Executes rebuild task for Azure index by creating new index on Azure and uploading all <see cref="T:Microsoft.Azure.Search.Models.Document"/>s to the index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.Rebuild(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Rebuilds <paramref name="indexInfo"/>.
+            </summary>
+            <param name="indexInfo">Index to rebuild.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.UpdateIndex(CMS.Search.SearchIndexInfo,System.Collections.Generic.IEnumerable{CMS.DataEngine.ISearchable},System.Func{CMS.DataEngine.ISearchable,System.Collections.Generic.IEnumerable{Microsoft.Azure.Search.Models.Field},Microsoft.Azure.Search.Models.IndexAction{Microsoft.Azure.Search.Models.Document}},Microsoft.Azure.Search.Models.Index)">
+            <summary>
+            Updates <paramref name="indexInfo"/> content and definition if necessary.
+            </summary>
+            <remarks>Updating is done in batches defined by <see cref="P:CMS.Search.SearchIndexInfo.IndexBatchSize"/>.</remarks>
+            <param name="indexInfo">Defines <see cref="T:CMS.Search.SearchIndexInfo"/> to be created or updated in Azure Search service.</param>
+            <param name="searchables">Objects whose documents in the index should be modified. Modification is defined by <paramref name="transformSearchableToIndexAction"/>.</param>
+            <param name="transformSearchableToIndexAction">Defines how <paramref name="indexInfo"/> should be modified by a <see cref="T:CMS.DataEngine.ISearchable"/> object from <paramref name="searchables"/>.</param>
+            <param name="existingIndex">
+            Defines Azure <see cref="T:Microsoft.Azure.Search.Models.Index"/> already existing in Azure Search service. Azure <see cref="T:Microsoft.Azure.Search.Models.Index"/> has to be defined if there
+            is already existing Azure <see cref="T:Microsoft.Azure.Search.Models.Index"/> otherwise <see cref="T:Microsoft.Rest.Azure.CloudException"/> may be thrown.
+            Can be null or empty if Azure <see cref="T:Microsoft.Azure.Search.Models.Index"/> is created from scratch.
+            </param>
+            <exception cref="T:Microsoft.Rest.Azure.CloudException">Is thrown if fields are removed from existing Azure index.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngine.MergeFields(System.Collections.Generic.IEnumerable{Microsoft.Azure.Search.Models.Field},System.Collections.Generic.Dictionary{System.String,Microsoft.Azure.Search.Models.Field})">
+            <summary>
+            Merges the <paramref name="fields"/> to all already existing <paramref name="azureIndexFields"/>.
+            </summary>
+            <remarks>Checks for inconsistencies between properties of the fields with the same name.</remarks>
+            <param name="fields">Fields that needs to be merged with <paramref name="azureIndexFields"/>.</param>
+            <param name="azureIndexFields">Already prepared fields for the Azure index.</param>
+            <exception cref="T:System.InvalidOperationException">
+            Exception is thrown if <paramref name="fields"/> contains a field already existing in <paramref name="azureIndexFields"/>
+            but properties of those two fields are not compatible.
+            </exception>
+            <returns>True if new field has been added into <paramref name="azureIndexFields"/>. False otherwise.</returns>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskEngine.SiteNodeIdentifier">
+            <summary>
+            Represents compound identifier for node on a site.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngineUtils.GetAllDocumentIdsBySite(System.String,System.String,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Gets all document IDs from the search index by given <paramref name="siteCodeName"/>.
+            </summary>
+            <param name="indexName">Index name in Azure.</param>
+            <param name="siteCodeName">Site code name.</param>
+            <param name="searchService">Search service.</param>
+            <returns>List of Azure document IDs.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngineUtils.GetAllDocumentIdsByCategoryId(System.String,System.String,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Gets all document IDs from the search index by given <paramref name="categoryId"/>.
+            </summary>
+            <param name="indexName">Index name in Azure.</param>
+            <param name="categoryId">Category ID.</param>
+            <param name="searchService">Search service.</param>
+            <returns>List of Azure document IDs.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngineUtils.GetAllDocumentIdsInSubTree(System.String,System.String,System.String,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Gets all document IDs from the search index for the <paramref name="nodeAliasPath"/> page and its subtree on the specified site.
+            </summary>
+            <param name="indexName">Index name.</param>
+            <param name="nodeAliasPath">Node alias path.</param>
+            <param name="siteCodeName">Site code name.</param>
+            <param name="searchService">Search service.</param>
+            <returns>List of Azure document IDs.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngineUtils.GetAllDocumentIdsByFilter(System.String,System.String,CMS.Search.Azure.SearchServiceManager)">
+            <summary>
+            Gets all document IDs from the search index matching the <paramref name="filter"/>.
+            </summary>
+            <param name="indexName">Index name.</param>
+            <param name="filter">Filter expression.</param>
+            <param name="searchService">Search service.</param>
+            <returns>List of Azure document IDs.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskEngineUtils.TaskWasCreatedAfterIndexRebuild(System.DateTime,CMS.Search.SearchIndexInfo)">
+            <summary>
+            Returns true, if task was created at or after index rebuild time.
+            </summary>
+            <param name="taskCreated">Task creation time.</param>
+            <param name="index">Index info.</param>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskExecutor">
+            <summary>
+            Processes Azure Search tasks.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskExecutor.SearchTaskEngine">
+            <summary>   
+            Search task engine.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskExecutor.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Executes all search tasks.
+            </summary>
+            <param name="task">Task info.</param>
+            <returns>Always returns <c>null</c>.</returns>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskExecutorUtils">
+            <summary>
+            Provides methods for managing Azure search task processing.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskExecutorUtils.ProcessSearchTasks">
+            <summary>
+            Starts <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>s processing. 
+            If processing is already running then nothing happens.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskExecutorUtils.IsSearchTaskProcessingRunning">
+            <summary>
+            Indicates whether Azure search task processing is running already.
+            </summary>
+            <returns>True if <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>s processing is running. False otherwise.</returns>
+            <seealso cref="M:CMS.Search.Azure.SearchTaskExecutorUtils.ProcessSearchTasks"/>
+        </member>
+        <member name="T:CMS.Search.Azure.DataMapper">
+            <summary>
+            <para>
+            Provides mapping of data types and their values from .NET types to Azure Search types.
+            </para>
+            <para>
+            The implementation can map <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, <see cref="T:System.Boolean"/>, <see cref="T:System.Double"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.String"/> and <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:System.String"/> types directly
+            to their Azure counterparts. Types <see cref="T:System.Guid"/> and <see cref="T:System.Decimal"/> are mapped as <see cref="T:System.String"/> and <see cref="T:System.Double"/> respectively.
+            </para>
+            </summary>
+            <remarks>
+            Certain mappings can cause loss of precision. Azure Search does not support sub-millisecond precision of date time.
+            The <see cref="T:System.Decimal"/> type is mapped to <see cref="T:System.Double"/>, which can lead to round-off errors.
+            </remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.DataMapper.Instance">
+            <summary>
+            Gets the <see cref="T:CMS.Search.Azure.DataMapper"/> instance.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.#ctor">
+            <summary>
+            Initializes a new data mapper instance with default mappings.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.RegisterMapping(System.Type,Microsoft.Azure.Search.Models.DataType,System.Func{System.Object,System.Object})">
+            <summary>
+            Registers a new mapping of <paramref name="type"/> to Azure Search <see cref="T:Microsoft.Azure.Search.Models.DataType"/> along with a function for conversion
+            of source values to target values directly assignable to Azure Search API.
+            </summary>
+            <param name="type">Type for which to register the mapping.</param>
+            <param name="mappedDataType">Azure Search data type to be used for storing values of type <paramref name="type"/>.</param>
+            <param name="conversion">Function converting source value to value of type which is directly assignable to Azure Search API. Leave null to keep the value as is.</param>
+            <remarks>
+            <para>
+            Some types like <see cref="T:System.Int32"/> or <see cref="T:System.String"/> are directly assignable to Azure Search.
+            On the contrary <see cref="T:System.Guid"/> is explicitly converted to a string as the default mapping stores <see cref="T:System.Guid"/> as a <see cref="F:Microsoft.Azure.Search.Models.DataType.String"/>.
+            </para>
+            <para>
+            In order to avoid unexpected behavior while performing implicit conversions by the Azure Search API, it is recommended to always provide a conversion function.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.RegisterMappingCore(System.Type,CMS.Search.Azure.DataMapper.DataMapping)">
+            <summary>
+            Registers a new mapping and atomically publishes it.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.MapType(System.Type)">
+            <summary>
+            Gets Azure Search <see cref="T:Microsoft.Azure.Search.Models.DataType"/> suitable for given <paramref name="type"/>.
+            </summary>
+            <param name="type">Type for which to return corresponding Azure Search data type.</param>
+            <returns>Azure Search data type suitable for <paramref name="type"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="type"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="type"/> has no suitable mapping.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.ConvertValue(System.Object)">
+            <summary>
+            Coverts <paramref name="value"/> of type supported by this mapper to result of type suitable for Azure Search.
+            </summary>
+            <param name="value">Value of type supported by this mapper.</param>
+            <returns>Result of type suitable for Azure Search.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="value"/> has no conversion defined (i.e. corresponding mapping in <see cref="M:CMS.Search.Azure.DataMapper.MapType(System.Type)"/> does not exist).</exception>
+        </member>
+        <member name="T:CMS.Search.Azure.DataMapper.DataMapping">
+            <summary>
+            Defines a mapping result containing Azure data type and corresponding conversion function.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DataMapper.DataMapping.DataType">
+            <summary>
+            Gets Azure Search <see cref="P:CMS.Search.Azure.DataMapper.DataMapping.DataType"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DataMapper.DataMapping.Conversion">
+            <summary>
+            Gets function whose result is directly assignable to index field of type <see cref="T:Microsoft.Azure.Search.Models.DataType"/> in Azure Search.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.DataMapping.#ctor(Microsoft.Azure.Search.Models.DataType,System.Func{System.Object,System.Object})">
+            <summary>
+            Initializes a mapping result with specified data type and conversion function.
+            </summary>
+            <param name="dataType"></param>
+            <param name="conversion"></param>
+        </member>
+        <member name="T:CMS.Search.Azure.DataMapper.DataMapperState">
+            <summary>
+            Encapsulates the state of this <see cref="T:CMS.Search.Azure.DataMapper"/>. Allows for atomic publishing of newly registered mappings.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DataMapper.DataMapperState.Mappings">
+            <summary>
+            Maps source .NET types to Azure Search data types and corresponding conversion functions. The conversion function
+            converts to an object of type which is directly assignable to Azure Search field (i.e. the function is to perform an explicit
+            conversion to avoid implicit conversions in Azure Search.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DataMapper.DataMapperState.KnownTypes">
+            <summary>
+            List of known types in order of preferred type matching.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.DataMapperState.#ctor(System.Collections.Generic.Dictionary{System.Type,CMS.Search.Azure.DataMapper.DataMapping})">
+            <summary>
+            Initializes a new data mapper state from given <paramref name="mappings"/>.
+            </summary>
+            <param name="mappings">Mappings to initialize the state with.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.DataMapper.DataMapperState.TypeInheritanceSortedInsert(System.Type,System.Collections.Generic.List{System.Type})">
+            <summary>
+            Inserts <paramref name="type"/> in a list so that more specific types precede the less specific ones.
+            Order of types which are not in inheritance hierarchy is undefined.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.AddDocumentValueEventArgs">
+            <summary>
+            Arguments of event represented by <see cref="T:CMS.Search.Azure.AddDocumentValueHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.Name">
+            <summary>
+            Name of field in <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.SearchDocument"/> for which Azure Search <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.Document"/> value is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.AzureName">
+            <summary>
+            Name of resulting field in Azure Search <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.Document"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.Fields">
+            <summary>
+            Enumeration of Azure Search fields corresponding to the <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.Document"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.Value">
+            <summary>
+            Azure Search <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.Document"/> value to be assigned.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.SearchDocument">
+            <summary>
+            Search document for which the document value is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.Document">
+            <summary>
+            Azure Search document for which the document value is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.Searchable">
+            <summary>
+            Searchable for which the document value is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.AddDocumentValueEventArgs.SearchIndex">
+            <summary>
+            Index for which the document value is being created.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.AddDocumentValueHandler">
+            <summary>
+            Handler for event raised when Azure Search <see cref="T:Microsoft.Azure.Search.Models.Document"/> value is being added.
+            </summary>
+            <seealso cref="T:CMS.Search.Azure.DocumentFieldCreator"/>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateDocumentEventArgs">
+            <summary>
+            Arguments of event represented by <see cref="T:CMS.Search.Azure.CreateDocumentHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateDocumentEventArgs.SearchDocument">
+            <summary>
+            Search document for which Azure Search <see cref="P:CMS.Search.Azure.CreateDocumentEventArgs.Document"/> is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateDocumentEventArgs.Document">
+            <summary>
+            Azure Search document which is being created from <see cref="P:CMS.Search.Azure.CreateDocumentEventArgs.SearchDocument"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateDocumentEventArgs.Fields">
+            <summary>
+            Enumeration of Azure Search fields corresponding to the <see cref="P:CMS.Search.Azure.CreateDocumentEventArgs.Document"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateDocumentEventArgs.Searchable">
+            <summary>
+            Searchable for which the document is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateDocumentEventArgs.SearchIndex">
+            <summary>
+            Index for which the document is being created.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateDocumentHandler">
+            <summary>
+            Handler for event raised when Azure Search <see cref="T:Microsoft.Azure.Search.Models.Document"/> is being created from a <see cref="T:CMS.DataEngine.SearchDocument"/>.
+            </summary>
+            <seealso cref="T:CMS.Search.Azure.DocumentCreator"/>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateFieldEventArgs">
+            <summary>
+            Arguments of event represented by <see cref="T:CMS.Search.Azure.CreateFieldHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldEventArgs.Field">
+            <summary>
+            Azure Search field which is being created from <see cref="P:CMS.Search.Azure.CreateFieldEventArgs.SearchField"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldEventArgs.SearchField">
+            <summary>
+            Search field for which Azure Search <see cref="P:CMS.Search.Azure.CreateFieldEventArgs.Field"/> is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldEventArgs.Searchable">
+            <summary>
+            Searchable for which the field is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldEventArgs.SearchIndex">
+            <summary>
+            Index for which the field is being created.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateFieldHandler">
+            <summary>
+            Handler for event raised during Azure Search field creation.
+            </summary>
+            <seealso cref="T:CMS.Search.Azure.DocumentFieldCreator"/>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateFieldsEventArgs">
+            <summary>
+            Arguments of event represented by <see cref="T:CMS.Search.Azure.CreateFieldsHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldsEventArgs.Fields">
+            <summary>
+            List of Azure Search fields resulting from processing of <see cref="P:CMS.Search.Azure.CreateFieldsEventArgs.SearchFields"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldsEventArgs.SearchFields">
+            <summary>
+            List of search fields being processed to Azure Search <see cref="P:CMS.Search.Azure.CreateFieldsEventArgs.Fields"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldsEventArgs.Searchable">
+            <summary>
+            Searchable for which the collection of <see cref="P:CMS.Search.Azure.CreateFieldsEventArgs.Fields"/> is being created.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateFieldsEventArgs.SearchIndex">
+            <summary>
+            Index for which the fields are being created.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateFieldsHandler">
+            <summary>
+            Handler for event raised during Azure Search fields creation.
+            </summary>
+            <seealso cref="T:CMS.Search.Azure.DocumentFieldCreator"/>
+        </member>
+        <member name="T:CMS.Search.Azure.DocumentCreator">
+            <summary>
+            Creates Azure Search <see cref="T:Microsoft.Azure.Search.Models.Document"/>s for indexing.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DocumentCreator.Instance">
+            <summary>
+            Gets the <see cref="T:CMS.Search.Azure.DocumentCreator"/> instance.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.DocumentCreator.CreatingDocument">
+            <summary>
+            An event raised upon <see cref="M:CMS.Search.Azure.DocumentCreator.CreateDocument(CMS.DataEngine.SearchDocument,CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo,System.Collections.Generic.IEnumerable{Microsoft.Azure.Search.Models.Field})"/> execution. The before phase allows for modification of processed <see cref="P:CMS.Search.Azure.CreateDocumentEventArgs.SearchDocument"/>,
+            the after phase allows for modification of resulting <see cref="P:CMS.Search.Azure.CreateDocumentEventArgs.Document"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.DocumentCreator.AddingDocumentValue">
+            <summary>
+            An event raised upon adding a new <see cref="T:Microsoft.Azure.Search.Models.Document"/> value. The event allows for modification of <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.AzureName"/> and <see cref="P:CMS.Search.Azure.AddDocumentValueEventArgs.Value"/> before
+            it is passed to <see cref="M:CMS.Search.Azure.DataMapper.ConvertValue(System.Object)"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentCreator.#ctor">
+            <summary>
+            Initializes a new document creator.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentCreator.CreateDocument(CMS.DataEngine.SearchDocument,CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo,System.Collections.Generic.IEnumerable{Microsoft.Azure.Search.Models.Field})">
+            <summary>
+            Creates an Azure Search <see cref="T:Microsoft.Azure.Search.Models.Document"/> for given <paramref name="searchDocument"/>. The <paramref name="searchable"/>, <paramref name="searchIndex"/> and <paramref name="fields"/> parameters
+            are to provide contextual information for the creation.
+            </summary>
+            <param name="searchDocument">Search document for which to create an Azure Search document.</param>
+            <param name="searchable">Searchable for which the document is being created.</param>
+            <param name="searchIndex">Index for which the document is being created.</param>
+            <param name="fields">Enumeration of Azure Search fields corresponding to the <paramref name="searchable"/>.</param>
+            <returns>Returns Azure Search document for <paramref name="searchable"/>.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentCreator.AddDocumentValue(Microsoft.Azure.Search.Models.Document,CMS.DataEngine.SearchDocument,System.String,CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo,System.Collections.Generic.IEnumerable{Microsoft.Azure.Search.Models.Field})">
+            <summary>
+            Adds value of <paramref name="searchDocument"/> field <paramref name="name"/> to Azure Search <paramref name="document"/>.
+            </summary>
+            <param name="document">Azure Search document to which to add value.</param>
+            <param name="searchDocument">Search document whose <paramref name="name"/> field is to be added.</param>
+            <param name="name">Name of <paramref name="searchDocument"/> field being added.</param>
+            <param name="searchable">Searchable to which the Azure Search document relates.</param>
+            <param name="searchIndex">Index to which the Azure Search document relates.</param>
+            <param name="fields">Enumeration of Azure Search fields defined in the index the resulting document belongs to.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentCreator.ProcessSystemField(System.String,System.Object@)">
+            <summary>
+            Performs additional processing if <paramref name="name"/> is a system field.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentCreator.ConvertValue(System.Object,System.String,CMS.DataEngine.ISearchable)">
+            <summary>
+            Converts search document value to Azure Document value while providing additional details in case of an error.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.DocumentFieldCreator">
+            <summary>
+            Creates Azure Search field definitions.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.DocumentFieldCreator.Instance">
+            <summary>
+            Gets the <see cref="T:CMS.Search.Azure.DocumentFieldCreator"/> instance.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.DocumentFieldCreator.CreatingFields">
+            <summary>
+            An event raised upon <see cref="M:CMS.Search.Azure.DocumentFieldCreator.CreateFields(CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo)"/> execution. The before phase allows for modification of processed <see cref="P:CMS.Search.Azure.CreateFieldsEventArgs.SearchFields"/>,
+            the after phase allows for modification of resulting <see cref="P:CMS.Search.Azure.CreateFieldsEventArgs.Fields"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.DocumentFieldCreator.CreatingField">
+            <summary>
+            An event raised upon <see cref="M:CMS.Search.Azure.DocumentFieldCreator.CreateField(CMS.DataEngine.ISearchField,CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo)"/> execution. The before phase allows for custom initialization of <see cref="P:CMS.Search.Azure.CreateFieldEventArgs.Field"/>,
+            the after phase allows for modification of resulting <see cref="P:CMS.Search.Azure.CreateFieldEventArgs.Field"/> properties.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentFieldCreator.#ctor">
+            <summary>
+            Initializes a new document field creator.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentFieldCreator.CreateFields(CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo)">
+            <summary>
+            Creates an Azure Search <see cref="T:Microsoft.Azure.Search.Models.Field"/> collection for given <paramref name="searchable"/>. The <paramref name="searchIndex"/> parameter
+            is to provide contextual information for the creation.
+            </summary>
+            <param name="searchable">Searchable for which to create a collection of Azure Search fields.</param>
+            <param name="searchIndex">Index for which the fields are being created.</param>
+            <returns>Returns Azure Search fields for <paramref name="searchable"/>.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.DocumentFieldCreator.CreateField(CMS.DataEngine.ISearchField,CMS.DataEngine.ISearchable,CMS.DataEngine.ISearchIndexInfo)">
+            <summary>
+            Creates an Azure Search <see cref="T:Microsoft.Azure.Search.Models.Field"/> for given <paramref name="searchField"/>. The <paramref name="searchIndex"/> and <paramref name="searchable"/> parameters
+            are to provide contextual information for the creation.
+            </summary>
+            <param name="searchField">Search field for which to create an Azure Search counterpart.</param>
+            <param name="searchable">Searchable for which the field is being created.</param>
+            <param name="searchIndex">Index for which the field is being created.</param>
+            <returns>Returns Azure Search field representation for <paramref name="searchField"/>.</returns>
+            <remarks>
+            The default implementation maps <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.RETRIEVABLE"/>, <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.SEARCHABLE"/>, <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.FACETABLE"/>,
+            <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.FILTERABLE"/> and <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.SORTABLE"/> flags  to their Azure Search counterparts.
+            </remarks>
+        </member>
+        <member name="T:CMS.Search.Azure.NamingHelper">
+            <summary>
+            Utility class for Azure Search fields.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidFieldName(System.String)">
+            <summary>
+            Gets field name which is valid to be used for Azure Search index.
+            </summary>
+            <param name="fieldName">Field name to be renamed so it fulfills Azure Search naming conventions.</param>
+            <remarks>
+            <para>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which field names must follow.
+            Remarkably
+            <list type="bullet">
+                <item><description>Allowed characters are letters, numbers and dashes ('_').</description></item>
+                <item><description>First character must be a letter.</description></item>
+            </list>
+            </para>
+            <para>
+            Since system fields start with a dash (e.g. <see cref="F:CMS.DataEngine.SearchFieldsConstants.ID"/>), the default implementation prefixes dash starting name of column by string "sys".
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="fieldName"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidDocumentKey(System.String)">
+            <summary>
+            Gets document key which is valid to be used for Azure Search document.
+            </summary>
+            <param name="documentKey">Document key to be renamed so it fulfills Azure Search naming conventions.</param>
+            <returns>Returns document key where semicolons are replaced by dashes.</returns>
+            <remarks>
+            <para>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which document keys must follow.
+            </para>
+            <para>
+            Since the system uses semicolon (';') as a delimiter for compound identifiers, the default implementation replaces all semicolons by dashes ('-').
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="documentKey"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidIndexName(System.String)">
+            <summary>
+            Gets valid index name for Azure Search service.
+            </summary>
+            <param name="indexName">Index name to be renamed so it fulfills Azure Search naming conventions.</param>
+            <remarks>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which index names must follow.
+            </remarks>
+            <returns>Returns string that has first character a letter or number and dots are replaced with dashes.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="indexName"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidFieldNameInternal(System.String)">
+            <summary>
+            Gets field name which is valid to be used for Azure Search index.
+            </summary>
+            <param name="fieldName">Field name to be renamed so it fulfills Azure Search naming conventions.</param>
+            <remarks>
+            <para>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which field names must follow.
+            Remarkably
+            <list type="bullet">
+                <item><description>Allowed characters are letters, numbers and dashes ('_').</description></item>
+                <item><description>First character must be a letter.</description></item>
+            </list>
+            </para>
+            <para>
+            Since system fields start with a dash (e.g. <see cref="F:CMS.DataEngine.SearchFieldsConstants.ID"/>), the default implementation prefixes dash starting name of column by string "sys".
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="fieldName"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidDocumentKeyInternal(System.String)">
+            <summary>
+            Gets document key which is valid to be used for Azure Search document.
+            </summary>
+            <param name="documentKey">Document key to be renamed so it fulfills Azure Search naming conventions.</param>
+            <returns>Returns document key where semicolons are replaced by dashes.</returns>
+            <remarks>
+            <para>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which document keys must follow.
+            </para>
+            <para>
+            Since the system uses semicolon (';') as a delimiter for compound identifiers, the default implementation replaces all semicolons by dashes ('-').
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="documentKey"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.NamingHelper.GetValidIndexNameInternal(System.String)">
+            <summary>
+            Gets valid index name for Azure Search service.
+            </summary>
+            <param name="indexName">Index name to be renamed so it fulfills Azure Search naming conventions.</param>
+            <remarks>
+            Azure Search has naming rules (https://docs.microsoft.com/en-us/rest/api/searchservice/naming-rules) which index names must follow.
+            </remarks>
+            <returns>Returns string that has first character a letter or number and dots are replaced with dashes.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="indexName"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchValueHelper.EscapeSearchFilterValue(System.String)">
+            <summary>
+            Escapes characters for usage in filter expression.
+            </summary>
+            <param name="text">Text to escape characters in.</param>
+            <returns>Escaped text for usage in filter expression.</returns>
+        </member>
+        <member name="T:CMS.Search.Azure.AzureSearchFieldFlags">
+            <summary>
+            Contains Azure Search specific flag names.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.CONTENT">
+            <summary>
+            Name of flag indicating whether field is considered a content field.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.RETRIEVABLE">
+            <summary>
+            Name of flag indicating whether field is retrievable.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.SEARCHABLE">
+            <summary>
+            Name of flag indicating whether field is searchable.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.FACETABLE">
+            <summary>
+            Name of flag indicating whether field is facetable.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.FILTERABLE">
+            <summary>
+            Name of flag indicating whether field is filterable.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.AzureSearchFieldFlags.SORTABLE">
+            <summary>
+            Name of flag indicating whether field is sortable.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateOrUpdateIndexEventArgs">
+            <summary>
+            Arguments of event represented by <see cref="T:CMS.Search.Azure.CreateOrUpdateIndexHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateOrUpdateIndexEventArgs.Index">
+            <summary>
+            Azure index to be created or updated.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.CreateOrUpdateIndexEventArgs.SearchService">
+            <summary>
+            Azure Search service where <see cref="P:CMS.Search.Azure.CreateOrUpdateIndexEventArgs.Index"/> is to be created or updated.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.CreateOrUpdateIndexHandler">
+            <summary>
+            Handler for event raised when Azure Search <see cref="T:Microsoft.Azure.Search.Models.Index"/> is created or updated.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.SearchAzureModule.MODULE_NAME">
+            <summary>
+            Identifier of <see cref="T:CMS.Search.Azure.SearchAzureModule"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchAzureModule.#ctor">
+            <summary>
+            Initializes Azure Search module.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchAzureModule.DeleteAzureIndex(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Deletes index on Azure before it is deleted from the system.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchAzureModule.LogAzureSearchTasks(System.Object,CMS.Search.SearchTaskCreationEventArgs)">
+            <summary>
+            Logs <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>s based on <see cref="T:CMS.Search.SearchTaskCreationEventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchAzureModule.IsAzureSearchTask(CMS.Search.SearchTaskCreationParameters)">
+            <summary>
+            Indicates whether search task is to be logged to be processed by Azure Search task processing engine.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.SearchFieldsHandlers.mappedSearchFieldFlags">
+            <summary>
+            All flags except the <see cref="F:CMS.Search.Azure.AzureSearchFieldFlags.CONTENT"/> flag are mapped.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchFieldsHandlers.CreateDefaultSearchSettings(System.Object,CMS.Search.CreateDefaultSearchSettingsEventArgs)">
+            <summary>
+            Sets default values for Azure specific search field flags.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchFieldsHandlers.SetSearchFieldFlags(System.Object,CMS.DataEngine.CreateSearchFieldEventArgs)">
+            <summary>
+            Sets Azure specific flags of a system search field being created.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchFieldsHandlers.MapSearchFieldFlags(System.Object,CMS.DataEngine.CreateSearchFieldFromSettingsEventArgs)">
+            <summary>
+            Maps Azure specific search settings flags to search field flags.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchFieldsHandlers.IsContentField(System.Object,CMS.DataEngine.IsContentFieldEventArgs)">
+            <summary>
+            Performs detection of content field for Azure indexes and for index agnostic detection.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchFieldsHandlers.IsIndexField(System.Object,CMS.DataEngine.IsIndexFieldEventArgs)">
+            <summary>
+            Performs detection of field to be included as dedicated index field for Azure indexes and for index agnostic detection.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.ExponentialRetryStrategy">
+            <summary>
+            Performs exponential retry strategy.
+            </summary>
+            <remarks>
+            Time interval between two attempts is exponentially increased.
+            Retry is performed after 0, 1, 2, 4, 8, 16 ... seconds limited by <see cref="P:CMS.Search.Azure.ExponentialRetryStrategy.MaxBackoffTimeSeconds"/>.
+            </remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.ExponentialRetryStrategy.RetryCount">
+            <summary>
+            Number of retry attempts to perform after operation fails for the first time.
+            </summary>
+            <remarks>Retry count may equal zero, to not perform any retry strategy.</remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.ExponentialRetryStrategy.MaxBackoffTimeSeconds">
+            <summary>
+            Defines maximum time in seconds that is awaited between two attempts to perform a failed operation.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.ExponentialRetryStrategy.TransientErrorDetectionStrategy">
+            <summary>
+            Defines an object responsible for detecting specific transient conditions on Azure Search service operations.
+            By default every exception is handled as transient.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates exponential retry strategy for Azure Search service operations.
+            </summary>
+            <param name="retryCount">Number of retry attempts to perform after operation fails in the first attempt.</param>
+            <param name="maxBackoffTimeSeconds">Defines maximum time in seconds that is awaited between two attempts to perform a failed operation.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.#ctor(System.Int32,System.Int32,Microsoft.Rest.TransientFaultHandling.ITransientErrorDetectionStrategy)">
+            <summary>
+            Creates exponential retry strategy for Azure Search service operations.
+            </summary>
+            <param name="retryCount">Number of retry attempts to perform after operation fails in the first attempt.</param>
+            <param name="maxBackoffTimeSeconds">Defines maximum time in seconds that is awaited between two attempts to perform a failed operation.</param>
+            <param name="transientErrorDetectionStrategy">Defines an object responsible for detecting specific transient conditions.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.#ctor">
+            <summary>
+            Creates exponential retry strategy for Azure Search service operations.
+            </summary>
+            <remarks>
+            Default value for <see cref="P:CMS.Search.Azure.ExponentialRetryStrategy.RetryCount"/> is acquired from <see cref="P:CMS.Search.Azure.SearchEngineConfiguration.RetryCount"/>.
+            Default value for <see cref="P:CMS.Search.Azure.ExponentialRetryStrategy.MaxBackoffTimeSeconds"/> is acquired from <see cref="P:CMS.Search.Azure.SearchEngineConfiguration.MaxBackoffTimeSeconds"/>.
+            </remarks>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.Perform``1(System.Func{``0})">
+            <summary>
+            Performs exponential retry strategy on <paramref name="operation"/> if it fails during it's execution.
+            </summary>
+            <param name="operation">Operation that should be retried if fails during execution.</param>
+            <returns>
+            Returns the value of <paramref name="operation"/> if successfully finished. 
+            Otherwise default value of <typeparamref name="T"/> is returned.
+            </returns>
+            <seealso cref="T:CMS.Search.Azure.SearchServiceManager"/>
+            <seealso cref="T:Microsoft.Rest.Azure.CloudException"/>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.Perform``1(Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},System.Func{Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},``0})">
+            <summary>
+            Performs exponential retry strategy on <paramref name="operation"/> if it fails during execution of index action in <paramref name="batch"/>.
+            </summary>
+            <param name="batch">Index actions performed by <paramref name="operation"/>.</param>
+            <param name="operation">Operation that should be retried if fails during execution.</param>
+            <returns>
+            Returns the value of <paramref name="operation"/> if successfully finished. 
+            Otherwise default value of <typeparamref name="T"/> is returned.
+            </returns>
+            <seealso cref="T:CMS.Search.Azure.SearchServiceManager"/>
+            <seealso cref="T:Microsoft.Azure.Search.IndexBatchException"/>
+            <seealso cref="T:Microsoft.Rest.Azure.CloudException"/>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.Strategy``1(Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},System.Func{Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},``0})">
+            <summary>
+            Exponential retry strategy applied on <paramref name="operation"/> if operation fails during execution.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.ExponentialRetryStrategy.GetBackoffTime(System.Int32)">
+            <summary>
+            Returns how many seconds to wait before retrying operation again.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Azure.ISearchServiceRetryStrategy">
+            <summary>
+            Represents a contract for Azure Search service retry strategy.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.ISearchServiceRetryStrategy.Perform``1(System.Func{``0})">
+            <summary>
+            Provides retry policy and tries to perform given <paramref name="operation"/>.
+            </summary>
+            <typeparam name="T">Type of object returned by <paramref name="operation"/>.</typeparam>
+            <param name="operation">Operation to be performed.</param>
+            <returns>Returns the return value of the performed <paramref name="operation"/> of type <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:CMS.Search.Azure.ISearchServiceRetryStrategy.Perform``1(Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},System.Func{Microsoft.Azure.Search.Models.IndexBatch{Microsoft.Azure.Search.Models.Document},``0})">
+            <summary>
+            Provides retry policy and tries to perform <paramref name="operation"/> which uses index actions in the <paramref name="batch"/>.
+            </summary>
+            <typeparam name="T">Type of object returned by <paramref name="operation"/>.</typeparam>
+            <param name="batch">Index actions to be performed by <paramref name="operation"/>.</param>
+            <param name="operation">Operation to be performed.</param>
+            <returns>Returns the return value of the <paramref name="operation"/> of type <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskAzureInfo">
+            <summary>
+            Data container class for <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.SearchTaskAzureInfo.OBJECT_TYPE">
+            <summary>
+            Object type.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.Azure.SearchTaskAzureInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureID">
+            <summary>
+            Search task Azure ID.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureType">
+            <summary>
+            Type of the Azure Search task type e.g. <see cref="F:CMS.Search.SearchTaskTypeEnum.Rebuild"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureObjectType">
+            <summary>
+            Object type of the object defined by ID in <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureInitiatorObjectID"/> property.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureMetadata">
+            <summary>
+            Value of this field describes in what form to expect data inside <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureAdditionalData"/> property.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureAdditionalData">
+            <summary>
+            Additional data needed to process search task e.g. alias path of the moved document.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureInitiatorObjectID">
+            <summary>
+            ID of the object that initiated creation of this search task e.g. update task if object got modified. 
+            </summary>
+            <remarks>ID of document that had it's content changed, ID of an modified object or class ID of the custom table or page type.</remarks>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureErrorMessage">
+            <summary>
+            Contains error message if error occurred while processing the task. 
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzurePriority">
+            <summary>
+            Determines which task should be processed earlier, higher value = higher priority.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureCreated">
+            <summary>
+            Gets the task creation time.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor for de-serialization.
+            </summary>
+            <param name="info">Serialization info.</param>
+            <param name="context">Streaming context.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.#ctor">
+            <summary>
+            Creates an empty instance of the <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Creates a new instances of the <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> class from the given <see cref="T:System.Data.DataRow"/>.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.Search.Azure.SearchTaskAzureInfoProvider">
+            <summary>
+            Class providing <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:CMS.Search.Azure.SearchTaskAzureInfoProvider"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.GetSearchTaskAzureInfos">
+            <summary>
+            Returns a query for all the <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.GetSearchTaskAzureInfo(System.Int32)">
+            <summary>
+            Returns <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> with specified ID.
+            </summary>
+            <param name="id"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> ID.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.GetSearchTaskAzureInfo(System.String)">
+            <summary>
+            Returns <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> with specified name.
+            </summary>
+            <param name="name"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> name.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.SetSearchTaskAzureInfo(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Sets (updates or inserts) specified <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>.
+            </summary>
+            <param name="infoObj"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> to be set.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.DeleteSearchTaskAzureInfo(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Deletes specified <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>.
+            </summary>
+            <param name="infoObj"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> to be deleted.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.DeleteSearchTaskAzureInfo(System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> with specified ID.
+            </summary>
+            <param name="id"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> ID.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfoProvider.SetInfo(CMS.Search.Azure.SearchTaskAzureInfo)">
+            <summary>
+            Sets (updates or inserts) specified <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/>.
+            </summary>
+            <param name="infoObj"><see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> to be set.</param>
+        </member>
+    </members>
+</doc>

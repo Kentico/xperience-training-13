@@ -1,0 +1,358 @@
+﻿// WebPartToolbar
+
+// Variables
+@wpt-width: @base-unit * 15;
+@wpt-side-margin: @base-unit;
+@wpt-side-outer-margin: @base-unit * 0.5;
+@wpt-bottom-margin: @base-unit * 0.5;
+@wpt-menu-height: @base-unit * 6;
+@wpt-item-height: @base-unit * 2;
+@wpt-item-img-size: @base-unit * 1.5;
+@wpt-scroll-bgcolor: @color-gray-150;
+@wpt-scroll-hover-bgcolor: @color-gray-130;
+@wpt-resize-width: @base-unit * 0.5;
+@wpt-resize-icon-size: @base-unit * 0.375;
+@wpt-icon-size: @base-unit;
+
+// Webpart toolbar is wrapped into the bootstrap wrapper
+.cms-bootstrap {
+
+    .WPTPanel,
+    .RTL .LTR .WPTPanel {
+        position: relative;
+        direction: ltr;
+        z-index: 20001;
+
+        .AppearElement {
+            text-align: center !important;
+        }
+
+        .WPTLayout {
+            position: fixed;
+            z-index: 9999;
+            height: 100%;
+            border: none;
+            background: @color-white;
+            top: 0;
+            right: 0;
+        }
+
+        h4 {
+            line-height: floor(@base-unit * 1.125); // ~18px
+            margin-top: @base-unit;
+            margin-bottom: @base-unit * 0.5;
+        }
+    }
+
+    .RTL .WPTPanel {
+        direction: rtl;
+
+        .WPTLayout {
+            right: auto;
+            left: 0;
+        }
+    }
+
+    .WPTMaximized, .WPTMenu, .WPTBackSlider, .WPTForwardSlider,
+    .RTL .LTR .WPTMaximized, .RTL .LTR .WPTMenu, .RTL .LTR .WPTBackSlider, .RTL .LTR .WPTForwardSlider {
+        width: @wpt-width;
+    }
+
+    .WPTMenu {
+        position: absolute;
+        z-index: 9996;
+        background: @color-white;
+        vertical-align: middle;
+        height: @wpt-menu-height;
+    }
+
+    .WPTMenuContent,
+    .RTL .LTR .WPTMenuContent {
+        float: left;
+        width: 100%;
+        margin-top: @base-unit;
+
+        div {
+            overflow: hidden;
+            margin-left: @wpt-side-margin;
+            margin-right: @wpt-side-outer-margin;
+            margin-bottom: @wpt-bottom-margin;
+            padding: 0;
+        }
+    }
+
+    .RTL .WPTMenuContent {
+        float: right;
+
+        div {
+            margin-left: @wpt-side-outer-margin;
+            margin-right: @wpt-side-margin;
+        }
+    }
+
+    .WPTImgBtn {
+        height: @base-unit;
+        width: @base-unit;
+        cursor: pointer;
+    }
+
+    .WPTItemsRow,
+    .RTL .LTR .WPTItemsRow {
+        margin-top: @wpt-menu-height + 1;
+        height: 4000px;
+    }
+
+    .WPTCat {
+        margin-left: @wpt-side-margin;
+        margin-right: @wpt-side-margin;
+    }
+
+    .WPTBackSlider,
+    .WPTForwardSlider,
+    .RTL .LTR .WPTBackSlider,
+    .RTL .LTR .WPTForwardSlider {
+        display: none;
+        position: absolute;
+        z-index: 9996;
+        height: @base-unit * 2;
+        line-height: @base-unit * 2;
+        cursor: pointer;
+        background: @wpt-scroll-bgcolor;
+
+        &:hover {
+            background: @wpt-scroll-hover-bgcolor;
+        }
+
+        i {
+            position: absolute;
+            margin: auto;
+            width: @base-unit;
+            height: @base-unit;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+    }
+
+    .WPTBackSlider,
+    .RTL .LTR .WPTBackSlider {
+        top: @wpt-menu-height;
+    }
+
+    .WPTForwardSlider,
+    .RTL .LTR .WPTForwardSlider {
+        bottom: 0;
+    }
+
+    .WPTSelectorEnvelope,
+    .WPTSelectorEnvelopeHover,
+    .RTL .LTR .WPTSelectorEnvelope,
+    .RTL .LTR .WPTSelectorEnvelopeHover {
+        color: @color-gray-50 !important;
+        cursor: move;
+        clear: both;
+    }
+
+    .WPTSelectorEnvelopeHover,
+    .RTL .LTR .WPTSelectorEnvelopeHover {
+        background-color: @color-blue-130 !important;
+    }
+
+    .WPTHandle,
+    .RTL .LTR .WPTHandle {
+        text-align: left;
+        padding-left: @wpt-side-margin;
+        padding-right: @wpt-side-margin;
+
+        img {
+            float: left;
+            width: @wpt-item-img-size;
+            height: @wpt-item-img-size;
+            margin: (@wpt-item-height - @wpt-item-img-size) / 2;
+            margin-left: 0px;
+        }
+
+        i {
+            color: @color-gray-70 !important;
+            float: left;
+            font-size: @wpt-icon-size;
+            line-height: @wpt-item-height;
+            padding: 0 (@base-unit * 0.25);
+        }
+
+        div {
+            vertical-align: middle;
+            margin-left: @base-unit * 2;
+            height: @wpt-item-height;
+            line-height: @wpt-item-height;
+            .text-overflow();
+        }
+    }
+
+    .RTL .WPTHandle {
+        text-align: right;
+
+        img {
+            float: right;
+            margin: (@wpt-item-height - @wpt-item-img-size) / 2;
+            margin-right: 0px;
+        }
+
+        i {
+            float: right;
+        }
+
+        div {
+            margin: 0px;
+            margin-left: @base-unit * 2;
+            margin-right: @base-unit * 2;
+        }
+    }
+    // Web part toolbar - minimize button
+    .WPTMinimize,
+    .WPTMinimized,
+    .RTL .LTR .WPTMinimize,
+    .RTL .LTR .WPTMinimized {
+        color: @color-white;
+        background-color: @color-gray-140;
+        width: @wpt-resize-width;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        z-index: 9997;
+
+        div {
+            background-color: @color-gray-130;
+            cursor: pointer;
+            height: @base-unit * 2;
+            width: @wpt-resize-width;
+            position: absolute;
+            margin: auto 0px;
+            top: 0;
+            bottom: 0;
+
+            &:hover {
+                background-color: @color-gray-100;
+            }
+
+            i {
+                font-size: @wpt-resize-icon-size;
+                position: absolute;
+                margin: auto;
+                width: @wpt-resize-icon-size;
+                height: @wpt-resize-icon-size;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+            }
+        }
+    }
+
+    .RTL .WPTMinimize {
+        left: auto;
+        right: 0;
+    }
+    // Web part toolbar - minimized toolbar
+    .WPTMinimized,
+    .RTL .LTR .WPTMinimized {
+        position: static;
+        left: auto;
+        right: 0;
+    }
+    // WPT Loader
+    .WPTLoader {
+        display: none;
+    }
+
+    .WPTLoaderBackground {
+        width: 100%;
+        background-color: #666666;
+        position: absolute;
+        opacity: 0.6;
+        z-index: 10010;
+    }
+
+    .WPTLoaderBox,
+    .RTL .LTR .WPTLoaderBox {
+        position: absolute;
+        left: @base-unit * 0.5;
+        top: @base-unit * 0.5;
+        background-color: @color-gray-150;
+        padding: (@base-unit * 0.5) @base-unit;
+        z-index: 10011;
+
+        img {
+            vertical-align: middle;
+        }
+
+        span {
+            margin: 0 @base-unit;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    }
+
+    .RTL .WPTLoaderBox {
+        left: auto;
+        right: @base-unit * 0.5;
+    }
+
+    .WPTMenuContent {
+        // Search box
+        .nav-search-container {
+            width: auto;
+
+            input {
+                border: @input-border-width solid @input-border !important;
+                height: @base-unit * 2 !important;
+
+                &:focus {
+                    .form-control-focus();
+                }
+            }
+        }
+    }
+}
+
+// Styles not wrapped in the bootstrap wrapper tag
+.WPTTable {
+    display: table;
+    width: 100%;
+    height: 100%;
+    direction: ltr;
+}
+
+.WPTTableRow {
+    display: table-row;
+}
+
+.WPTTableCell {
+    display: table-cell;
+}
+
+.WPTTableCellContent {
+    width: 100%;
+}
+
+.WPTTT,
+.RTL .WPTTT.LTR {
+    font-family: @font-family-base;
+    font-size: 14px;
+    color: #000000;
+    position: absolute;
+    z-index: 10011;
+    background-color: @color-orange-130;
+    width: 300px;
+    text-align: left;
+    padding: @base-unit;
+
+    &.RTL {
+        text-align: right;
+    }
+
+    .WPTTH {
+        font-weight: bold;
+    }
+}

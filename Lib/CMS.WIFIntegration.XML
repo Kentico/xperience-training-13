@@ -1,0 +1,306 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.WIFIntegration</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.WIFIntegration.CertificateValidatorEnum">
+            <summary>
+            Validator method to be choosed.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.CertificateValidatorEnum.ChainTrust">
+            <summary>
+            Chain trust.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.CertificateValidatorEnum.PeerOrChainTrust">
+            <summary>
+            Peer or chain trust.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.CertificateValidatorEnum.PeerTrust">
+            <summary>
+            Peer trust.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.CertificateValidatorEnum.None">
+            <summary>
+            No validation applied.
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.WIFIntegrationHandlers">
+            <summary>
+            Event handlers for WIF integration
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.WIFIntegrationHandlers.Init">
+            <summary>
+            Initializes the handlers
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.SignIn">
+            <summary>
+            Class that handles the operations for WIF sign-in.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.ProcessSignInRequest">
+            <summary>
+            Handles WIF sign-in response from identity provider.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.RequestSignIn(System.String)">
+            <summary>
+            Handles WIF sign-in request to identity provider.
+            </summary>
+            <param name="returnUrl">Return URL.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.AuthenticateUser(Microsoft.IdentityModel.Claims.ClaimsPrincipal)">
+            <summary>
+            Authenticates user from claim.
+            </summary>
+            <param name="principal">Claims principal.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.CheckUserNameConflict(CMS.Membership.UserInfo,System.String)">
+            <summary>
+            In case of user name conflict logs error and redirects to error page.
+            </summary>
+            <param name="user">User to be checked.</param>
+            <param name="usernameClaim">User name.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.CreateExternalUser(System.String,System.String)">
+            <summary>
+            Creates external user with given name and email.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="email">Email.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.ExtractEmailClaim(Microsoft.IdentityModel.Claims.ClaimsPrincipal)">
+            <summary>
+            Extracts email claim from the claims principal.
+            </summary>
+            <param name="principal">Claims principal.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.GetTokenXml(Microsoft.IdentityModel.Protocols.WSFederation.SignInResponseMessage)">
+            <summary>
+            Parses the sign-in message and extracts assertion XML string
+            </summary>
+            <param name="message">Sing-in message.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.GetTokenSerializer(Microsoft.IdentityModel.Protocols.WSFederation.SignInResponseMessage)">
+            <summary>
+            Gets authentication token serializer to read the token.
+            </summary>
+            <param name="message">Authentication XML message representing the token.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.GetTokenNamespace(Microsoft.IdentityModel.Protocols.WSFederation.SignInResponseMessage)">
+            <summary>
+            Gets authentication token namespace.
+            </summary>
+            <param name="message">Message containing claims information.</param>
+            <returns>Namespace of the authentication token.</returns>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.GetXMLFirstCustomNamespacePath(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Gets first custom namespace from set of XML namespaces.
+            </summary>
+            <param name="namespaces">XML namespaces to investigate.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.ReadClaimsIdentityCollection(System.String,Microsoft.IdentityModel.Tokens.SecurityTokenHandlerCollection)">
+            <summary>
+            Returns ClaimsIdentityCollection.
+            </summary>
+            <param name="tokenXml">Token XML.</param>
+            <param name="hndlCol">Token handler collection.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.CreateTokenHandlerCollection">
+            <summary>
+            Creates the collection of security handlers based on module settings.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.ConfigureAudienceRestrictions(Microsoft.IdentityModel.Tokens.AudienceRestriction)">
+            <summary>
+            Method configuring audience restrictions from settings.
+            </summary>
+            <param name="restrictions">Audience restriction settings object.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignIn.GetSelectedCertificateValidator">
+            <summary>
+            Returns selected certificate validator.
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.WIFIntegrationModule">
+            <summary>
+            Represents the WIF Integration module.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.WIFIntegrationModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.WIFIntegrationModule.OnInit">
+            <summary>
+            Register AuthenticationRequested event.
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.WIFIntegrationModuleMetadata">
+            <summary>
+            Represents the WIF Integration module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.WIFIntegrationModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.IssuerNameRegistry">
+            <summary>
+            Issuer name registry using settings.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.IssuerNameRegistry.Settings">
+            <summary>
+            Settings of module.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.IssuerNameRegistry.GetIssuerName(System.IdentityModel.Tokens.SecurityToken)">
+            <summary>
+            Returns issuer name from certificate.
+            </summary>
+            <param name="securityToken">Received security token.</param>
+        </member>
+        <member name="T:CMS.WIFIntegration.Settings">
+            <summary>
+            Class providing settings of module.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.AllowedAudienceURIs">
+            <summary>
+            Allowed audience of identity provider.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.CertificateValidator">
+            <summary>
+            Selected certificate validator type.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.Enabled">
+            <summary>
+            Indicates whether module is enabled.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.Realm">
+            <summary>
+            Realm of the application (web site).
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.IdentityProviderURL">
+            <summary>
+            URL of identity provider.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.Settings.TrustedCertificateThumbprint">
+            <summary>
+            Thumbprint of trusted certificate used for secure communication with identity provider.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.Settings.#ctor">
+            <summary>
+            Constructor for current site settings.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.Settings.#ctor(System.String)">
+            <summary>
+            Creates instance of settings for given site.
+            </summary>
+            <param name="siteName">Name of site.</param>
+        </member>
+        <member name="T:CMS.WIFIntegration.AbstractWIFAuthentication">
+            <summary>
+            Support base class for other WIF classes.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.AbstractWIFAuthentication.Settings">
+            <summary>
+            Module settings.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.AbstractWIFAuthentication.LogErrorAndRedirect(System.String)">
+            <summary>
+            Logs authentication fail and redirects to error page to let user know that something went wrong.
+            </summary>
+            <param name="message">Error message.</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.AbstractWIFAuthentication.SetReferrer">
+            <summary>
+            Sets referrer HTTP header.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.AbstractWIFAuthentication.GetSignInUrl(System.Uri,System.String,System.String)">
+            <summary>
+            Creates sign in URL using the specified base URI, wtrealm parameter and wreply parameter.
+            </summary>
+            <param name="baseUrl">The Base URL to identity provider.</param>
+            <param name="realm">The value of the wtrealm message parameter.</param>
+            <param name="reply">The URI to which to reply. (The value of the wreply message parameter.)</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.AbstractWIFAuthentication.GetSignOutUrl(System.Uri,System.String,System.String)">
+            <summary>
+            Creates sign out URL using the specified base URI, wtrealm parameter and wreply parameter.
+            </summary>
+            <param name="baseUrl">The Base URL to identity provider.</param>
+            <param name="realm">The value of the wtrealm message parameter.</param>
+            <param name="reply">The URI to which to reply. (The value of the wreply message parameter.)</param>
+        </member>
+        <member name="M:CMS.WIFIntegration.AbstractWIFAuthentication.GetRedirectUrlToIdentityProvider(System.Uri,System.String,System.String,System.String)">
+            <summary>
+            Creates URL using the specified base URI, wa parameter, wtrealm parameter and wreply parameter.
+            </summary>
+            <param name="baseUrl">The Base URL to identity provider.</param>
+            <param name="action">The action to execute ("wsignin1.0", "wsignout1.0").</param>
+            <param name="realm">The value of the wtrealm message parameter.</param>
+            <param name="reply">The URI to which to reply. (The value of the wreply message parameter.)</param>
+        </member>
+        <member name="T:CMS.WIFIntegration.SignOut">
+            <summary>
+            Class that handles the operations for WIF sign-out.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.SignOut.SIGN_OUT_REQUEST_QUERY_NAME">
+            <summary>
+            Query parameter name sent when signing out from CMS on request from identity provider.
+            </summary>
+        </member>
+        <member name="F:CMS.WIFIntegration.SignOut.SIGN_OUT_REQUEST_QUERY_VALUE">
+            <summary>
+            Query parameter value sent when signing out from CMS on request from identity provider.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignOut.RequestSignOut">
+            <summary>
+            Sign Out user from identity provider.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignOut.ProcessSignOutRequest">
+            <summary>
+            Signs out user on request from identity provider.
+            </summary>
+        </member>
+        <member name="M:CMS.WIFIntegration.SignOut.IsSignOutRequest">
+            <summary>
+            Whether request should sign out user.
+            </summary>
+        </member>
+        <member name="T:CMS.WIFIntegration.WIFContext">
+            <summary>
+            WIF context.
+            </summary>
+        </member>
+        <member name="P:CMS.WIFIntegration.WIFContext.RequestIsSignOut">
+            <summary>
+            Indicates if current request is WIF sign out request.
+            </summary>
+        </member>
+    </members>
+</doc>

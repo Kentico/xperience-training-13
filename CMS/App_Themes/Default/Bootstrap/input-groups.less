@@ -1,0 +1,230 @@
+//
+// Input groups
+// --------------------------------------------------
+
+
+// Display as table-cell
+// -------------------------
+.input-group-btn {
+    display: table-cell;
+
+    &:not(:first-child):not(:last-child) {
+        border-radius: 0;
+    }
+}
+// Addon and addon wrapper for buttons
+.input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle; // Match the inputs
+}
+
+// Button input groups - updated for textbox with additional actions
+// -------------------------
+.input-group-btn {
+    white-space: nowrap;
+    position: absolute;
+    width: auto;
+    text-align: right;
+    right: 0;
+    top: @input-height-base - @input-border-width;
+
+    > .btn + .btn.btn-first {
+        margin-left: @base-unit * 0.25;
+    }
+}
+
+textarea + .input-group-btn {
+    top: -@input-height-base + @input-border-width;
+}
+
+.input-group-btn > .btn {
+    height: @input-height-base;
+    width: @input-height-base;
+    padding: 0;
+    margin: 0;
+    // Jankily prevent input button groups from wrapping
+    + .btn {
+        margin-left: -4px;
+    }
+    // Bring the "active" button to the front
+    &:hover,
+    &:active {
+        z-index: 2;
+    }
+}
+
+.input-group-btn:last-child > .btn:not(:first-child):not(.btn-first) {
+    border-left: 1px solid @btn-default-box-shadow;
+}
+
+// Inputs with buttons shown on focus
+.cms-input-group {
+    position: relative;
+    width: 100%;
+
+    .input-group-btn {
+        .sr-only;
+        z-index: @zindex-dropdown;
+
+        &:hover, &:focus {
+            .sr-only-disabled;
+        }
+
+        .btn-default:focus:not(:hover), .btn-default:active:not(:hover) {
+            background-color: @btn-default-bg;
+        }
+    }
+
+    input:focus + .input-group-btn, textarea:focus + .input-group-btn {
+        .sr-only-disabled;
+    }
+}
+
+// Obsolete styling for "responsive form group"
+.cms-form-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    width: 100%;
+
+    .form-control {
+        display: block;
+    }
+
+    .cms-form-group-btn, .cms-form-group-text {
+        width: 1px;
+        min-width: @base-unit * 0.5;
+        display: table-cell;
+        &:extend(.cms-bootstrap .clearfix all);
+
+        &:first-child span {
+            padding-left: 0;
+        }
+    }
+
+    .cms-form-group-btn, .cms-form-group-text, .cms-form-group-input {
+        display: table-cell;
+        position: relative;
+        white-space: nowrap;
+        vertical-align: middle;
+        font-size: 0;
+
+        .btn {
+            margin-left: @base-unit * 0.5;
+            font-size: @font-size-base;
+        }
+
+        span {
+            padding-left: @base-unit * 0.5;
+            font-size: @font-size-base;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        & + .cms-form-group-input {
+            padding-left: @base-unit * 0.5;
+        }
+    }
+}
+
+// Forced inline grouping, used for example in collision dialog in Online Marketing
+.control-group-inline-forced {
+    .control-group-inline;
+
+    div {
+        display: inline !important;
+        vertical-align: top !important;
+    }
+}
+
+// Controls get margins to be wrapped on new line correctly
+.control-group-inline-wrap {
+    .btn {
+        margin-left: 0;
+        margin-right: @base-unit * 0.5;
+        margin-bottom: @base-unit * 0.5;
+    }
+}
+
+// Group for inline controls - use for special controls
+.control-group-inline {
+    .fix-white-space();
+
+    .button-explanation-text {
+        margin-top: @base-unit * 0.375;
+        margin-left: @base-unit * 0.5;
+        display: inline-block;
+        float: left;
+    }
+
+    .btn, .btn-dropdown {
+        vertical-align: top;
+    }
+
+    .form-control,
+    .radio,
+    .checkbox {
+        .inline-input();
+    }
+
+    .checkbox-no-label {
+        .inline-input();
+        margin-right: 0;
+    }
+
+    .form-control-text {
+        margin-top: @base-unit * 0.375;
+        margin-right: @base-unit * 0.5;
+        font-size: @font-size-base;
+        display: inline-block;
+    }
+
+    & + .control-group-inline,
+    & + .control-group-inline-forced {
+        margin-top: @base-unit * 0.5;
+    }
+
+    .cms-icon-80 {
+        margin-top: @base-unit * 0.25;
+    }
+
+    .control-group-inline,
+    .btns-vertical {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap; // For responsive, we'll need media query here
+    }
+
+    .checkbox {
+        margin-top: @base-unit * 0.375;
+    }
+
+    .btn-group + .checkbox {
+        margin-left: @base-unit;
+    }
+
+    .btn.btn-icon + .form-control-text {
+        margin-left: @base-unit * 0.5;
+    }
+
+    .input-label {
+        color: @color-blue-70;
+        .text-semibold();
+    }
+}
+
+// Use for display explanation text inline
+.control-group-units .explanation-text {
+    margin-top: @base-unit * 0.375;
+    margin-right: @base-unit * 0.5;
+    font-size: @font-size-base;
+    display: inline-block;
+}
+
+// Page template selector with buttons below. E.g. in Modules
+.btns-vertical {
+    &.btns-vertical-page-template {
+        margin-top: @base-unit * 0.75;
+    }
+}

@@ -1,0 +1,660 @@
+/* --- WIDGETS --- */
+@import (reference) "../Default/Bootstrap/variables.less";
+@import (reference) "../Default/Bootstrap/mixins.less";
+
+/* Import component variables */
+@import (reference) "../Default/CMSComponents/portal-engine.less";
+
+/* --- General --- */
+.FloatLeft,
+.RTL .FloatRight {
+    float: left;
+    text-align: left;
+}
+
+.FloatRight,
+.RTL .FloatLeft {
+    float: right;
+    text-align: right;
+}
+
+/* Basic styles */
+.WebPartZoneBorder,
+.WebPartZoneBorderActive {
+    min-height: @design-content-min-heigh;
+    min-width: 40px;
+    border: solid 1px @color-gray-130;
+}
+
+.WebPartZoneBorderActive {
+    border-color: grey;
+}
+
+.WebPartActionButton {
+    padding: 8px 8px 8px 4px;
+}
+
+.WebPartZoneCue {
+    background-color: @design-webpart-drop-cue-color;
+}
+
+/* Widget styles */
+
+/* Editor widget styles  */
+.EditorWidget,
+.GroupWidget {
+    .WebPartActionButton {
+        float: left;
+        cursor: pointer;
+    }
+
+    .RTL & .WebPartActionButton {
+        float: right;
+    }
+
+    .WebPartBorder {
+        padding: 1px;
+        min-height: @design-header-height;
+        min-width: 60px;
+    }
+
+    .WebPartBorderActive {
+        border: dotted 1px #8a8a8a;
+        padding: 0;
+        min-height: @design-header-height;
+        min-width: 60px;
+
+        .WebPartHeader {
+            display: block;
+        }
+    }
+
+    .WebPartHeader {
+        height: 0;
+        direction: rtl;
+        position: relative;
+        z-index: 9991;
+        display: none;
+
+        &:hover {
+            z-index: 9992;
+        }
+
+        .WebPartHandle {
+            z-index: 9990;
+            height: 18px;
+            cursor: move;
+            direction: ltr;
+            position: absolute;
+            display: table;
+            color: @color-gray-70;
+            background: @color-gray-130;
+            padding: 0;
+
+            h3 {
+                margin: 0 0 @margin-base 0;
+                line-height: @base-unit * 1.5;
+            }
+
+            > i,
+            > div {
+                float: left;
+            }
+
+            i {
+                padding: @design-header-padding;
+
+                &:last-of-type {
+                    padding-right: (@base-unit * 0.5);
+                }
+            }
+        }
+    }
+
+    .RTL & .WebPartHeader {
+        direction: ltr;
+
+        .WebPartHandle {
+            direction: rtl;
+
+            > i,
+            > div {
+                float: right;
+            }
+        }
+    }
+}
+
+.EditorWidgetActions {
+    padding: 7px 0;
+}
+
+.WidgetEditorConfigure,
+.WebPartZoneActiveContextMenu {
+    .WebPartZoneActionButton {
+        padding: 8px 8px;
+        background-color: @color-gray-70;
+        cursor: pointer;
+        color: @color-gray-100;
+    }
+}
+
+/* Editor widget zone styles  */
+.EditorWidgetZone,
+.GroupWidgetZone {
+    .WebPartZoneActions {
+        position: absolute;
+        z-index: 9991;
+        height: 16px;
+
+        &:hover {
+            z-index: 9992;
+        }
+    }
+
+    .WebPartZoneHeader {
+        text-align: left;
+    }
+
+
+    .WebPartZoneBorderActive .WebPartZoneHeader {
+        display: block;
+    }
+
+    .RTL & .WebPartZoneHeader {
+        text-align: right;
+        padding-right: 0;
+    }
+
+    .Safari.RTL & .WebPartZoneHeader {
+        float: right;
+    }
+}
+
+.EditorWidgetZone {
+    .WebPartZoneHeader {
+        padding-right: 22px;
+        height: 29px;
+        position: absolute;
+    }
+}
+
+.EditorWidgetZoneDisabled {
+    .WebPartZoneHeader,
+    .WebPartZoneActions,
+    .WebPartHeader {
+        display: none;
+    }
+}
+
+.GroupWidgetZone {
+    .WebPartZoneBorder {
+        border: 1px solid transparent !important;
+    }
+
+    .WebPartZoneHeader {
+        height: 0;
+        display: none;
+        padding-right: 22px;
+    }
+}
+
+/* User widget styles */
+.UserWidget {
+    .WebPartBorder,
+    .WebPartBorderActive {
+        border: solid 1px @color-gray-130;
+    }
+
+    .WebPartContent {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .WebPartActionButton {
+        float: left;
+        padding: 0 1px 0 3px;
+        cursor: pointer;
+    }
+
+    .RTL & .WebPartActionButton {
+        float: right;
+    }
+
+    .RTL & .WebPartHandle {
+        text-align: right;
+        padding: 2px 8px 5px 3px;
+    }
+
+    .WebPartTitle {
+        display: block;
+        padding-top: 2px;
+        padding-left: 5px;
+        overflow: hidden;
+        float: left;
+    }
+
+    .RTL & .WebPartTitle {
+        padding-right: 5px;
+    }
+
+    .WebPartHandle {
+        background: @color-gray-130;
+        color: @color-gray-50;
+        text-align: left;
+        white-space: nowrap;
+        cursor: move;
+        line-height: @base-unit * 2.5;
+
+        .FloatRight,
+        .FloatLeft {
+            .fix-white-space()
+        }
+
+        h3 {
+            line-height: @base-unit * 2.5;
+            padding: 0 (@base-unit * 0.5);
+            margin: 0;
+        }
+
+        i {
+            padding: 0 (@base-unit * 0.5) 0 (@base-unit * 0.25);
+            line-height: @base-unit * 2.5;
+
+            &:last-of-type {
+                padding-right: (@base-unit * 0.5);
+            }
+        }
+    }
+}
+
+.MinimizedWidget .WebPartContent {
+    display: none;
+}
+
+.UserWidgetDisabled {
+    .WebPartActionButton {
+        cursor: default;
+    }
+
+    .WebPartHandle {
+        cursor: default;
+    }
+}
+
+/* User widget zone styles  */
+.UserWidgetZone {
+    .WebPartZoneHeader {
+        height: 0;
+        display: none;
+        text-align: left;
+        padding-right: 22px;
+        min-width: 40px;
+    }
+
+    .RTL & .WebPartZoneHeader {
+        padding-right: 0;
+    }
+
+    .Safari.RTL & .WebPartZoneHeader {
+        float: right;
+        margin-right: -10px;
+    }
+
+    .WebPartZoneActions {
+        position: absolute;
+        float: right;
+        z-index: 9991;
+        height: 16px;
+    }
+
+    .WebPartZoneBorderActive .WebPartZoneHeader {
+        display: block;
+    }
+}
+
+.UserWidgetZoneDisabled .WebPartZoneActionButton {
+    cursor: default;
+}
+
+/* Dashboard widget styles */
+.DashBoard {
+    padding-bottom: 10px;
+}
+
+/* Dashboard widget styles  */
+.DashboardWidget {
+     margin: @base-unit @base-unit 0 @base-unit;
+
+    .WebPartActionButton {
+        float: left;
+        padding: 0 1px 0 3px;
+        cursor: pointer;
+
+
+        .RTL & {
+            float: right;
+        }
+    }
+
+    .WebPartHandle {
+        text-align: left;
+        white-space: nowrap;
+        padding: 0;
+        cursor: move;
+
+        h3 {
+            margin: 0 0 @margin-base 0;
+            line-height: @base-unit * 1.5;
+        }
+
+        input {
+            padding: 0;
+            margin-left: 4px;
+        }
+
+        i {
+            padding: 0 (@base-unit * 0.5) 0 (@base-unit * 0.25);
+            line-height: @base-unit * 2;
+
+            &:last-of-type {
+                padding-right: (@base-unit * 0.5);
+            }
+        }
+    }
+
+    .RTL & .WebPartHandle {
+        text-align: right;
+    }
+
+    .WebPartTitle {
+        display: block;
+        padding-top: 2px;
+        padding-left: 8px;
+        padding-bottom: 1px;
+        overflow: hidden;
+    }
+
+    .RTL & .WebPartTitle {
+        padding-right: 5px;
+    }
+
+    .WebPartBorder,
+    .WebPartBorderActive {
+        background: @color-white;
+        padding: @padding-base-horizontal;
+    }
+
+    .WebPartContent {
+        margin: 0;
+        overflow: hidden;
+    }
+}
+
+/* Dashboard widget zone styles  */
+.DashboardWidgetZone {
+    .WebPartZoneBorder {
+        border: none;
+    }
+
+    .WebPartZoneBorderActive {
+        border: 2px solid #c7c4c4;
+        padding: 0;
+        min-height: 84px;
+
+        .WebPartZoneHeader {
+            height: 0;
+            text-align: left;
+            padding-right: 22px;
+            min-width: 40px;
+            display: block;
+        }
+    }
+
+    .WebPartZoneHeader {
+        display: none;
+    }
+
+    .RTL & .WebPartZoneHeader {
+        padding-right: 0;
+    }
+
+    .WebPartZoneActions {
+        position: absolute;
+        float: right;
+        z-index: 9991;
+        height: 16px;
+    }
+}
+
+.DashboardMode {
+    background: @color-gray-140;
+
+    .WidgetActionButtons {
+        float: left;
+        padding: 5px 0 7px 0;
+    }
+
+    .RTL& .WidgetActionButtons {
+        float: right;
+    }
+
+    .WidgetActionContextHelp {
+        float: right;
+    }
+
+    .RTL& .WidgetActionContextHelp {
+        float: left;
+    }
+
+    .WebPartZoneHighlight {
+        .WebPartContent,
+        .WebPartHandle {
+            background: @color-white;
+            filter: alpha(opacity=100);
+            opacity: 1.0;
+        }
+    }
+
+    .PageTitleHeader {
+        background: @color-white;
+        border: none;
+    }
+
+    .DashboardActions {
+        text-align: left;
+        padding: 8px 10px 6px 10px;
+
+        .DashboardActions {
+            padding: 0;
+        }
+    }
+}
+
+.WebPartZoneHighlight {
+    min-height: 84px;
+    margin: 1px;
+
+    .WebPartZoneBorder& {
+        border: 2px dashed @color-gray-100;
+    }
+
+    .DashboardWidget {
+        margin: 13px 8px 0 8px;
+    }
+
+    .WebPartContent,
+    .WebPartHandle {
+        background: @color-white;
+        filter: alpha(opacity=40);
+        opacity: 0.4;
+    }
+}
+
+.PageTitleHeader .DashboardActions {
+    padding-left: 11px;
+}
+
+.RTL .DashboardActions {
+    text-align: right;
+    padding-right: 10px;
+}
+
+/* General styles */
+.WebPart .ActionTop {
+    z-index: 9999 !important;
+}
+
+.WidgetDrag {
+    cursor: move !important;
+}
+
+.SliderWidgetConflict {
+    padding-top: 1px;
+    font-weight: bold;
+    cursor: help;
+    float: right;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.DraggedWebPart {
+    .WebPartContent,
+    .WebPartHandle {
+        filter: alpha(opacity=100);
+        opacity: 1.0;
+    }
+}
+
+/* Layout web parts */
+.UserWidget {
+    .LayoutTable {
+        border: none;
+    }
+
+    .LayoutFooter {
+        display: none;
+    }
+}
+
+.LayoutFooterContent {
+    background: @color-gray-130;
+    padding: 2px 3px 1px 3px;
+    height: 18px;
+}
+
+.LayoutAction {
+    text-decoration: none;
+
+    img {
+        border: none;
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+
+    .ActionTitle {
+        text-decoration: underline;
+        vertical-align: top;
+    }
+}
+
+.LayoutOverlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    filter: alpha(opacity=1);
+    opacity: 0.01;
+    background: #fff;
+}
+
+.LayoutInfoOverlay {
+    border: solid 1px @color-white;
+    position: absolute;
+    z-index: 9998;
+    background: @layout-info-color;
+    filter: alpha(opacity=30);
+    opacity: 0.3;
+    text-align: center;
+}
+
+.LayoutInfoText {
+    background: #aaddaa;
+    border: solid 1px @layout-info-color;
+    padding: 2px;
+    position: absolute;
+    z-index: 9999;
+    text-align: center;
+    color: #000000;
+    margin: auto;
+}
+
+.LayoutCenterColumn,
+.LayoutLeftColumn {
+    border-left: solid 1px #cccccc;
+}
+
+.LayoutCenterColumn,
+.LayoutRightColumn {
+    border-right: solid 1px #cccccc;
+}
+
+/* Resizer styles*/
+.VerticalResizer,
+.HorizontalResizer,
+.BothResizer,
+.HorizontalDivResizer {
+    background: #888888;
+    font-size: 1px;
+    line-height: 1px;
+    padding: 0;
+    margin: 0;
+}
+
+.HorizontalResizer {
+    border-left: solid 1px @color-gray-140;
+    border-right: solid 1px @color-gray-140;
+    cursor: e-resize;
+    width: 2px;
+    max-width: 2px;
+    min-height: 25px;
+}
+
+.VerticalResizer {
+    border-top: solid 1px @color-gray-140;
+    border-bottom: solid 1px @color-gray-140;
+    cursor: n-resize;
+    height: 2px;
+    max-height: 2px;
+}
+
+.BothResizer {
+    cursor: nw-resize;
+    border: solid 1px #888888;
+    background: #888888;
+}
+
+.UserWidget {
+    .VerticalResizer,
+    .HorizontalResizer,
+    .BothResizer,
+    .HorizontalDivResizer {
+        border: none;
+        background: Transparent;
+    }
+}
+
+/* Specific widgets styles */
+.DashboardWidget {
+    // Ecommerce
+    .widget-content-heading {
+        margin-top: 0;
+        margin-bottom: @margin-base;
+    }
+
+    .TabsTabs {
+        position: relative !important;
+    }
+}

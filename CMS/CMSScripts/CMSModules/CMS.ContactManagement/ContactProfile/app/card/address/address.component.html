@@ -1,0 +1,17 @@
+<div class="tag-group" ng-if="::$ctrl.showTags">
+    <span class="tag tag-default" ng-if="::$ctrl.contactCard.IsCustomer">{$ contactmanagement.contact.address.customer $}</span>
+    <span class="tag tag-default" ng-if="::$ctrl.contactCard.IsUser">{$ contactmanagement.contact.address.user $}</span>
+</div>
+<ul>
+    <li>
+        <span ng-if="::$ctrl.isMale" class="contact-name">{$ contactmanagement.contact.gender.male $}</span>
+        <span ng-if="::$ctrl.isFemale" class="contact-name">{$ contactmanagement.contact.gender.female $}</span>
+        <span class="contact-name">{{$ctrl.contactCard.ContactName}}</span>
+        <span ng-if="::$ctrl.contactCard.ContactAge">&ndash; {$ contactmanagement.contact.age $} {{$ctrl.contactCard.ContactAge}}</span>
+    </li>
+    <li ng-if="::$ctrl.contactCard.ContactAddress">{{$ctrl.contactCard.ContactAddress}}</li>
+    <li>
+        <a href="mailto:{{$ctrl.contactCard.ContactEmail}}" ng-bind="::$ctrl.contactCard.ContactEmail"></a> 
+        <cms-card-marketing-email-status ng-if="::$ctrl.showMarketingEmailStatus" contact-id="::$ctrl.contactCard.ContactID" />
+    </li>
+</ul>

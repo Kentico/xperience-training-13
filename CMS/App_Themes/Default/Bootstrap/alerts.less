@@ -1,0 +1,215 @@
+//
+// Alerts
+// --------------------------------------------------
+
+
+// Base styles
+// -------------------------
+
+.alert {
+    padding: @base-unit * 0.5 @base-unit * 0.5 @base-unit * 0.5 @base-unit * 4;
+    margin-bottom: @base-unit;
+    margin-right: @base-unit;
+    display: inline-block;
+    z-index: @zindex-alert;
+    max-height: 90%;
+    position: relative;
+    box-sizing: border-box;
+    overflow: auto;
+    // Headings for larger alerts
+    h4 {
+        margin-top: 0;
+        // Specified for the h4 to prevent conflicts of changing @headingsColor
+        color: inherit;
+    }
+    // Main icon
+    .alert-icon {
+        position: absolute;
+        top: @base-unit * 0.5;
+        left: @base-unit;
+
+        i {
+            float: left;
+            font-size: @base-unit * 2;
+
+            .RTL & {
+                float: right;
+                padding: 0 0 0 @base-unit * 0.5;
+            }
+        }
+    }
+    // Text
+    .alert-label {
+        padding: @base-unit * 0.375 @base-unit * 0.5 @base-unit * 0.375 0;
+        display: inline-block;
+    }
+    // Provide class for links that match alerts
+    .alert-link {
+        font-weight: @alert-link-font-weight;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+    // Buttons
+    .alert-buttons {
+        padding-top: @base-unit;
+        .fix-white-space();
+    }
+    // Improve alignment and spacing of inner content
+    > p,
+    > ul {
+        margin-bottom: 0;
+    }
+
+        > p + p {
+            margin-top: @base-unit;
+        }
+
+    p {
+        display: inline;
+    }
+    // Special content
+    .alert-status-error,
+    .alert-status-success {
+        color: @color-gray-50;
+    }
+
+    .Anchor {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .Anchor:hover {
+            text-decoration: underline;
+        }
+}
+
+// Dismissable alerts
+//
+// Expand the right padding and account for the close button's positioning.
+
+.alert-dismissable {
+    padding-right: @base-unit * 3;
+    // Close icon
+    .alert-close {
+        // Adjust close icon link position
+        .close, .close:hover, .close:focus {
+            font-size: @base-unit;
+            cursor: pointer;
+            position: absolute;
+            right: @base-unit * 0.5;
+            top: @base-unit * 0.5;
+            padding: @base-unit * 0.5;
+            opacity: 1;
+        }
+    }
+}
+
+// Alternate styles
+//
+// Generate contextual modifier classes for colorizing the alert.
+
+.alert-success {
+    .alert-variant(@alert-success-bg;
+    @alert-success-text;
+    @alert-success-icon-color;
+    @alert-success-icon-close-color;
+    @alert-success-border
+    );
+    z-index: @zindex-alert-success;
+    overflow-x: hidden;
+}
+
+.alert-info {
+    .alert-variant(@alert-info-bg;
+    @alert-info-text;
+    @alert-info-icon-color;
+    @alert-info-icon-close-color;
+    @alert-info-border
+    );
+}
+
+.alert-warning {
+    .alert-variant(@alert-warning-bg;
+    @alert-warning-text;
+    @alert-warning-icon-color;
+    @alert-warning-icon-close-color;
+    @alert-warning-border
+    );
+}
+
+.alert-error {
+    .alert-variant(@alert-error-bg;
+    @alert-error-text;
+    @alert-error-icon-color;
+    @alert-error-icon-close-color;
+    @alert-error-border
+    );
+    z-index: @zindex-alert-error;
+}
+
+// Correction of trial expiration and TechPreview warning
+.alert-warning {
+    &.message-panel {
+        padding: @base-unit * 0.25 @base-unit * 0.25 @base-unit * 0.25 @base-unit;
+        font-size: @font-size-base;
+        height: auto;
+        }
+}
+
+// "Feature exceeded" error message
+.alert-error {
+    &.message-panel {
+        padding: @base-unit @base-unit * 0.25 @base-unit @base-unit;
+        font-size: @font-size-base;
+        height: auto;
+
+        // Main icon
+        .alert-icon {
+            top: @base-unit * 0.5;
+            left: @base-unit;
+
+            i {
+                float: left;
+                font-size: @base-unit * 2;
+            }
+        }
+        // Text
+        .alert-label {
+            padding: @base-unit * 0.375 @base-unit * 0.5 @base-unit * 0.375 @base-unit * 4;
+        }
+    }
+}
+
+.screen-lock-warning-dialog {
+    width: 100%;
+    z-index: 42000;
+
+    .screen-lock-warning-cell {
+        display: inline-block;
+    }
+}
+
+// Informative font icon styles
+.warning-icon {
+    cursor: default;
+    color: @color-warning;
+}
+
+// Modified padding for "disabled module" alerts (above and below header actions)
+.header-panel-alert
+{
+    padding: @base-unit * 0.5 @base-unit 0 @base-unit;
+}
+
+.header-panel-alert-above-header
+{
+    padding: @base-unit @base-unit 0 @base-unit;
+}
+
+// Page tab fix
+.ContentBody & {
+    .alert {
+        margin-top: @base-unit !important;
+        margin-left: @base-unit !important;
+    }
+}

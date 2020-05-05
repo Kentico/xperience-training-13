@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid>
+  <actions>
+    <action name="delete" caption="$General.Delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$General.ConfirmDelete$" />
+  </actions>
+
+  <columns>
+    <column source="ServerDisplayName" caption="$Unigrid.WebFarmServers.Columns.ServerDisplayName$" wrap="false" localize="true" >
+    </column>
+    <column source="TaskType" caption="$general.type$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="TaskCreated" caption="$Unigrid.WebFarmServers.Columns.TaskCreated$" wrap="false" />
+    <column source="TaskMachineName" caption="$Unigrid.WebFarmServers.Columns.TaskMachineName$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="TaskTarget" caption="$Unigrid.WebFarmServers.Columns.TaskTarget$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="TaskTextData"  caption="$Unigrid.WebFarmServers.Columns.TaskTextData$" wrap="false" sort="TaskTextData" maxlength="100" >
+      <tooltip source="TaskTextData"/>
+      <filter type="text" />
+    </column>
+    <column source="ErrorMessage"  caption="$Unigrid.WebFarmServers.Columns.ErrorMessage$" wrap="false" cssclass="main-column-100" sort="ErrorMessage" >
+      <filter type="text" />
+    </column>
+    <column visible ="false" caption="$webfarm.taskstatus$" source="TaskID">
+      <filter path="~/CMSModules/WebFarm/Controls/WebFarm_Task_Filter.ascx"  />
+    </column>
+  </columns>
+  <objecttype name="cms.webfarmtasklist" columns="CMS_WebFarmTask.TaskID, TaskType, TaskTarget, TaskTextData, TaskCreated, TaskMachineName, ServerDisplayName, ErrorMessage" />
+  <options>
+    <key name="DisplayFilter" value="true"  />
+  </options>
+</grid>

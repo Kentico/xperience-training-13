@@ -1,0 +1,35 @@
+﻿<div ng-cloak="cloak">
+    <h3 class="control-label">{$ campaign.inventory $}</h3>
+    <p>{$ campaign.inventory.description $}</p>
+
+    <div ng-repeat="asset in $ctrl.assets track by $index" class="campaign-list">
+        <cms-campaign-inventory-item ng-if="asset.id != 0"
+                                     asset="asset"
+                                     site-is-content-only="$ctrl.siteIsContentOnly"
+                                     editable="!$ctrl.campaign.isFinished()"
+                                     utm-code="$ctrl.campaign.utmCode"
+                                     remove-asset="$ctrl.removeAsset(asset)">
+        </cms-campaign-inventory-item>
+    </div>
+
+    <div class="content-block-50">
+        <div ng-if="!$ctrl.siteIsContentOnly" class="remove-default-space">
+            <span>
+                <cms-select-page enabled="!$ctrl.campaign.isFinished()"
+                                 on-select="$ctrl.addPageAsset">
+                </cms-select-page>
+            </span>
+            <span>
+                <cms-create-page enabled="!$ctrl.campaign.isFinished()"
+                                 on-create="$ctrl.addPageAsset">
+                </cms-create-page>
+            </span>
+        </div>
+        <div ng-if="$ctrl.siteIsContentOnly">
+            <cms-add-url-asset on-add="$ctrl.addUrlAsset"
+                               campaign="$ctrl.campaign"
+                               url-asset-target-regex="$ctrl.urlAssetTargetRegex">
+            </cms-add-url-asset>
+        </div>
+    </div>
+</div>

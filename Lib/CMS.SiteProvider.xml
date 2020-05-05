@@ -1,0 +1,1358 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.SiteProvider</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.SiteProvider.SiteContext">
+            <summary>
+            Site related context methods and variables.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteContext.CurrentCategory">
+            <summary>
+            Current category info object according the URL parameter of the current request. 
+            It is available when the request contains parameters "category" or "categoryname" with valid value of the category.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteContext.CurrentSiteName">
+            <summary>
+            Returns current site name.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteContext.CurrentSiteID">
+            <summary>
+            Returns current site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteContext.CurrentSite">
+            <summary>
+            Returns the current site info.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteContext.GetCurrentSite">
+            <summary>
+            Returns the current site.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteContext.GetCurrentSiteByDomain">
+            <summary>
+            Gets the current site object based on current context
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteHandlers">
+            <summary>
+            Site module event handlers
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteHandlers.Init">
+            <summary>
+            Initializes the site module handlers
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteHandlers.Culture_Change_After(System.Object,CMS.DataEngine.ObjectEventArgs)">
+            <summary>
+            Fires after culture change - Clears cultures assigned to site
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteLocalizationContext">
+            <summary>
+            Site localization context
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteLocalizationContext.SetPreferredCultureCode(System.String)">
+            <summary>
+            Sets the preferred culture code and validates it against current site cultures
+            </summary>
+            <param name="value">New value</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteLocalizationContext.GetPreferredCultureCode">
+            <summary>
+            Gets the preferred culture code, if not available, initializes the culture with current site culture
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteModule">
+            <summary>
+            Represents the Site module.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteModule.OnInit">
+            <summary>
+            Init module
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteModule.InitMacros">
+            <summary>
+            Initializes the macro engine
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteModule.ClearHashtables(System.Boolean)">
+            <summary>
+            Clears the module hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteModuleMetadata">
+            <summary>
+            Represents the Site module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteService">
+            <summary>
+            Site service
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteService.CurrentSite">
+            <summary>
+            Current context site.
+            </summary>
+            <value>
+            The <see cref="P:CMS.SiteProvider.SiteContext.CurrentSite"/> value.
+            </value>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteService.IsLiveSite">
+            <summary>
+            Returns true, if the current context executes on live site.
+            </summary>
+            <value>
+            <see langword="false"/> when virtual context was initialized;
+            <see langword="true"/> otherwise.
+            </value>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteNameOnDemand">
+            <summary>
+            Encapsulates the site name but doesn't request it until it is demanded by Value.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteNameOnDemand.Value">
+            <summary>
+            Value.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteNameOnDemand.op_Implicit(CMS.SiteProvider.SiteNameOnDemand)~System.String">
+            <summary>
+            Converts the site name to its string representation
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDeletionEventArgs">
+            <summary>
+            Site deletion event arguments
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionEventArgs.Settings">
+            <summary>
+            Deletion settings
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionEventArgs.ProgressLog">
+            <summary>
+            Progress log
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDeletionHandler">
+            <summary>
+            Site deletion handler
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionHandler.StartEvent(CMS.SiteProvider.SiteDeletionSettings,System.IProgress{CMS.SiteProvider.SiteDeletionStatusMessage})">
+            <summary>
+            Initiates the event handling
+            </summary>
+            <param name="deletionSettings">Deletion settings</param>
+            <param name="progresslog">Progress log</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDeletionLog">
+            <summary>
+            Site deletion object for logging messages to the async control
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionLog.DeletionLog">
+            <summary>
+            Keep information about deletion progress.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionLog.PersistentLogKey">
+            <summary>
+            Persistent key to store the log.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.Report(CMS.SiteProvider.SiteDeletionStatusMessage)">
+            <summary>
+            Reports a progress update.
+            </summary>
+            <param name="statusMessage">Status message</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.GetProgressState">
+            <summary>
+            Gets progress state.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.LogDeletionState(CMS.Base.LogStatusEnum,System.String)">
+            <summary>
+            Logs deletion state.
+            </summary>
+            <param name="type">Type of the message</param>
+            <param name="message">Message to be logged</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.SavePersistent">
+            <summary>
+            Saves the settings object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Serialization function.
+            </summary>
+            <param name="info">Serialization info</param>
+            <param name="ctxt">Streaming context</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor for deserialization.
+            </summary>
+            <param name="info">Serialization info</param>
+            <param name="ctxt">Streaming context</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionLog.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDeletionSettings">
+            <summary>
+            Site deletion settings configuration
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionSettings.DeleteMetaFiles">
+            <summary>
+            Indicates if meta files should be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionSettings.DeleteMediaFiles">
+            <summary>
+            Indicates if media files should be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionSettings.DeleteAttachments">
+            <summary>
+            Indicates if attachments should be deleted.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionSettings.Site">
+            <summary>
+            Deleted site.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDeletionSettings.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDeletionStatusMessage">
+            <summary>
+            Site deletion status message object used for reporting progress of site deletion for <see cref="T:CMS.SiteProvider.SiteDeletionLog"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionStatusMessage.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDeletionStatusMessage.Message">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteEvents">
+            <summary>
+            Site events
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteEvents.Delete">
+            <summary>
+            Fires when the site with all the document structure and object is being deleted
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDomainAliasInfo">
+            <summary>
+            Site domain alias.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainAliasID">
+            <summary>
+            Gets or sets the site domain alias id.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainAliasName">
+            <summary>
+            Gets or sets the site domain alias name.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteID">
+            <summary>
+            Gets or sets the site id.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDefaultVisitorCulture">
+            <summary>
+            Gets or sets the site default visitor culture.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainGUID">
+            <summary>
+            Site domain GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainLastModified">
+            <summary>
+            Object last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl">
+            <summary>
+            Presentation URL.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty SiteDomainAlias object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new SiteDomainAlias object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteDomainAliasInfoProvider">
+            <summary>
+            Class providing SiteDomainAliasInfo management.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfoByGUID(System.Guid,System.Int32)">
+            <summary>
+            Returns object with specified GUID.
+            </summary>
+            <param name="guid">Object GUID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfo(System.Int32)">
+            <summary>
+            Returns the SiteDomainAliasInfo structure for the specified site domain alias ID.
+            </summary>
+            <param name="domainAliasId">Site domain alias id</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfo(System.String,System.Int32)">
+            <summary>
+            Returns the SiteDomainAliasInfo structure for the specified site domain alias name.
+            </summary>
+            <param name="domainAlias">Site domain alias name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfo(CMS.SiteProvider.SiteDomainAliasInfo,System.String)">
+            <summary>
+            Sets (updates or inserts) specified site domain alias.
+            </summary>
+            <param name="siteDomain">SiteDomainAliasInfo object to set</param>
+            <param name="originalDomainAlias">Original domain alias name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfo(CMS.SiteProvider.SiteDomainAliasInfo)">
+            <summary>
+            Sets (updates or inserts) specified site domain alias.
+            </summary>
+            <param name="siteDomain">SiteDomainAliasInfo object to set</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteSiteDomainAliasInfo(System.Int32)">
+            <summary>
+            Deletes specified site domain alias.
+            </summary>
+            <param name="siteDomainId">Site domain alias id</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteSiteDomainAliasInfo(CMS.SiteProvider.SiteDomainAliasInfo)">
+            <summary>
+            Deletes specified site domain alias.
+            </summary>
+            <param name="siteDomainObj">Site domain alias object</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetDomainAliases(System.Int32)">
+            <summary>
+            Returns all site domain aliases assigned to the selected site.
+            </summary>
+            <param name="siteId">Site ID</param>     
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetDomainAliases(System.String)">
+            <summary>
+            Returns all site domain aliases assigned to the selected site.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetDomainAliases">
+            <summary>
+            Returns all domain aliases.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DomainAliasExists(System.String,System.Int32)">
+            <summary>
+            Checks if domain alias exists for specified site.
+            </summary>
+            <param name="domainAlias">Domain alias</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteSiteAliases(System.Int32)">
+            <summary>
+            Deletes the site domain aliases.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.RemoveFromStaticCollection(System.Int32)">
+            <summary>
+            Removes domain aliases for specified site from cached collection
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.ClearHashtables(System.Boolean)">
+            <summary>
+            Clear hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteDomainAliasInfoProvider.mDomainAliasesBySiteId">
+            <summary>
+            Table of the domain aliases DataSets indexed by site ID. [siteId -> InfoDataSet]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfoProvider.DomainAliasesBySiteId">
+            <summary>
+            Table of the domain aliases DataSets indexed by site ID. [siteId -> InfoDataSet]
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfoByGUIDInternal(System.Guid,System.Int32)">
+            <summary>
+            Returns object with specified GUID.
+            </summary>
+            <param name="guid">Object GUID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfoInternal(System.String,System.Int32)">
+            <summary>
+            Returns the SiteDomainAliasInfo structure for the specified site domain alias name.
+            </summary>
+            <param name="domainAlias">Site domain alias name</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfoInternal(CMS.SiteProvider.SiteDomainAliasInfo,System.String)">
+            <summary>
+            Sets (updates or inserts) specified site domain alias.
+            </summary>
+            <param name="siteDomain">SiteDomainAliasInfo object to set</param>
+            <param name="originalDomainAlias">Original domain alias name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteInfo(CMS.SiteProvider.SiteDomainAliasInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetDomainAliasesInternal(System.Int32)">
+            <summary>
+            Returns all site domain aliases assigned to the selected site.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever">
+            <summary>
+            Retrieves site domain alias based on given parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of <see cref="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByUrl(System.Uri)">
+            <summary>
+            Retrieves the site alias based on given presentation URL.
+            </summary>
+            <param name="url">URL to detect matching site domain alias.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByCulture(System.String)">
+            <summary>
+            Retrieves the site alias based on given culture code.
+            </summary>
+            <param name="cultureCode">Culture code to detect matching site domain alias.</param>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever">
+            <summary>
+            Encapsulates presentation URLs loading from given site. 
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.Retrieve">
+            <summary>
+            Returns presentation URLs assigned to the given site.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.RunningSiteException">
+            <summary>
+            Running site exception.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.RunningSiteException.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.RunningSiteException.#ctor(System.String)">
+            <summary>
+            Constructor with message.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.CultureSiteInfo">
+            <summary>
+            CultureSiteInfo data container class.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.CultureSiteInfo.SiteID">
+            <summary>
+            Site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.CultureSiteInfo.CultureID">
+            <summary>
+            Culture ID.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty CultureSiteInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new CultureSiteInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.CultureSiteInfoProvider">
+            <summary>
+            Class providing CultureSiteInfo management.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfoProvider.mSiteCultures">
+            <summary>
+            Cultures per site - DataSet indexed by siteName. [siteName -> TypedDataSet]
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfoProvider.mSiteCultureCodes">
+            <summary>
+            Culture codes per site - ArrayList indexed by siteName. [siteName -> List[string]]
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfoProvider.mSiteCultureCount">
+            <summary>
+            Cultures count per site - int indexed by domain name. [domainName -> int]
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.CultureSiteInfoProvider.tableLock">
+            <summary>
+            Table lock for loading.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.CultureSiteInfoProvider.SiteCultures">
+            <summary>
+            Cultures per site - DataSet indexed by siteName. [siteName -> TypedDataSet]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.CultureSiteInfoProvider.SiteCultureCodes">
+            <summary>
+            Culture codes per site - ArrayList indexed by siteName. [siteName -> List[string]]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.CultureSiteInfoProvider.SiteCultureCount">
+            <summary>
+            Cultures count per site - int indexed by domain name. [domainName -> int]
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSites">
+            <summary>
+            Returns all bindings between cultures and sites.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSites(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Returns the bindings between cultures and sites.
+            </summary>
+            <param name="columns">Data columns to return</param>
+            <param name="where">Where condition to filter data</param>
+            <param name="orderBy">Order by statement</param>
+            <param name="topN">Specifies number of returned records</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSiteInfo(System.Int32,System.Int32)">
+            <summary>
+            Returns the CultureSiteInfo structure for the specified cultureSite.
+            </summary>
+            <param name="cultureId">CultureID</param>
+            <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.SetCultureSiteInfo(CMS.SiteProvider.CultureSiteInfo)">
+            <summary>
+            Sets (updates or inserts) specified cultureSite.
+            </summary>
+            <param name="cultureSite">CultureSite to set</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.DeleteCultureSiteInfo(CMS.SiteProvider.CultureSiteInfo)">
+            <summary>
+            Deletes specified cultureSite.
+            </summary>
+            <param name="infoObj">CultureSite object</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.RemoveCultureFromSite(System.Int32,System.Int32)">
+            <summary>
+            Deletes specified cultureSite.
+            </summary>
+            <param name="cultureId">CultureID</param>
+            <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.AddCultureToSite(System.Int32,System.Int32)">
+            <summary>
+            Adds the class to the specified site.
+            </summary>
+            <param name="cultureId">CultureID</param>
+            <param name="siteId">SiteID</param>
+            <exception cref="T:System.Exception">Throws Exception if license limitations are not fulfilled.</exception>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.IsCultureOnSite(System.Int32,System.Int32)">
+            <summary>
+            Determines whether specified culture is on specified site.
+            </summary>
+            <param name="cultureId">Culture ID</param>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSites(System.String)">
+            <summary>
+            Returns the dataset containing the sites of the specified culture.
+            </summary>
+            <param name="cultureCode">Culture code</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.AddCultureToSite(System.String,System.String)">
+            <summary>
+            Adds culture to specified site.
+            </summary>
+            <param name="culturedCode">Code of culture to add</param>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.IsCultureOnSite(System.String,System.String)">
+            <summary>
+            Determines whether the specified culture is allowed on the specified site.
+            Ignores the case in the <paramref name="cultureCode"/> comparison (both 'en-US' and 'en-us' are OK).
+            </summary>
+            <param name="cultureCode">Culture code to check.</param>
+            <param name="siteName">Site code name.</param>
+            <returns>
+              <c>true</c> if is <paramref name="cultureCode"/> is allowed; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.RemoveCultureFromSite(System.String,System.String)">
+            <summary>
+            Remove culture from the specified site.
+            </summary>
+            <param name="cultureCode">Code of culture to remove from the site</param>
+            <param name="siteName">Name of the site</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetSiteCultureCodes(System.String)">
+            <summary>
+            Returns a list containing the culture codes of the specified site.
+            If this feature not available for license type, returns only the first culture found
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetSiteCultures(System.String)">
+            <summary>
+            Returns the dataset containing the cultures of the specified site.
+            If this feature not available for license type, returns only the first culture in the dataset
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.RemoveSiteCultures(System.String)">
+            <summary>
+            Removes all cultures from specified site.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.IsCultureAllowed(System.String,System.String)">
+            <summary>
+            Checks if the <paramref name="culture" /> is allowed on the specified site.
+            Ignores the case in the <paramref name="culture" /> comparison (both 'en-US' and 'en-us' are OK).
+            </summary>
+            <param name="culture">Culture code to check.</param>
+            <param name="siteName">Site code name.</param>
+            <returns>
+              <c>true</c> if is culture is allowed; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.IsSiteMultilingual(System.String)">
+            <summary>
+             Finds out whether given site is multilingual
+            </summary>
+            <param name="siteName">Name of site</param>
+            <returns>True if site is multilingual.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.CheckCultureCode(System.String,System.String)">
+            <summary>
+            Check if culture code is in web, and return culture code, if no, return default culture code.
+            </summary>
+            <param name="cultureCode">Culture code</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.ClearSiteCultures(System.Boolean)">
+            <summary>
+            Clears the site cultures hashtables.
+            </summary>
+            <param name="logWebFarmTask">Indicates whether webfarm task should be created</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.LicenseVersionCheck">
+            <summary>
+            Checks if current domain has license supporting Multilingual feature.
+            </summary>
+            <returns>True if license includes the feature, otherwise false</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.LicenseVersionCheck(System.String,CMS.DataEngine.FeatureEnum,CMS.DataEngine.ObjectActionEnum)">
+            <summary>
+            Checks if domain has license supporting specified feature.
+            </summary>
+            <param name="domain">The domain carrying the license</param>
+            <param name="feature">The feature to be checked</param>
+            <param name="action">The action to complete. If it is insert action currentStatus count is increased to check the state after insertion</param>
+            <returns>True if license includes the feature, otherwise false</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.LicenseVersionCheckInternal(System.String,CMS.DataEngine.FeatureEnum,CMS.DataEngine.ObjectActionEnum,System.Int32)">
+            <summary>
+            Checks if domain has license supporting specified feature.
+            </summary>
+            <param name="domain">The domain carrying the license</param>
+            <param name="feature">The feature to be checked</param>
+            <param name="action">The action to complete. If it is insert action currentStatus count is increased to check the state after insertion</param>
+            <param name="siteId">The site id of the site. If specified the license check is not using cache tables per domain</param>
+            <returns>True if license includes the feature, otherwise false</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSiteInfoInternal(System.Int32,System.Int32)">
+            <summary>
+            Returns the CultureSiteInfo structure for the specified cultureSite.
+            </summary>
+            <param name="cultureId">CultureID</param>
+            <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.SetCultureSiteInfoInternal(CMS.SiteProvider.CultureSiteInfo)">
+            <summary>
+            Sets (updates or inserts) specified cultureSite.
+            </summary>
+            <param name="cultureSite">CultureSite to set</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.DeleteInfo(CMS.SiteProvider.CultureSiteInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSitesInternal(System.String)">
+            <summary>
+            Returns the dataset containing the sites of the specified culture.
+            </summary>
+            <param name="cultureCode">Culture code</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.LoadSiteCulturesInternal(System.Int32)">
+            <summary>
+            Returns dataset with all cultures for specified site.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.ProcessWebFarmTask(System.String,System.String,System.Byte[])">
+            <summary>
+            Runs the processing of specific web farm task for current provider
+            </summary>
+            <param name="actionName">Action name</param>
+            <param name="data">Custom data</param>
+            <param name="binary">Binary data</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteInfo">
+            <summary>
+            Represents a site.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteInfo.mSiteDomainAliases">
+            <summary>
+            Hash table contains domain aliases of current site [alias.ToLowerCSafe()] -> [DomainAliasInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.CombineWithDefaultCulture">
+            <summary>
+            Combine with default culture?
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.HasMultipleCultures">
+            <summary>
+            Indicates whether the site uses multiple cultures.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.DomainName">
+            <summary>
+            Site domain name.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SitePresentationURL">
+            <summary>
+            Presentation URL of the site.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteID">
+            <summary>
+            Site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteDefaultEditorStylesheet">
+            <summary>
+            Site default editor stylesheet.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.Description">
+            <summary>
+            Site description.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteName">
+            <summary>
+            Site name.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.DefaultVisitorCulture">
+            <summary>
+            Site default visitor culture.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.DisplayName">
+            <summary>
+            Site display name.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.Status">
+            <summary>
+            Site status.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteGUID">
+            <summary>
+            Site GUID.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteLastModified">
+            <summary>
+            Object last modified.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteDomainAliases">
+            <summary>
+            Hash table contains site's domain aliases. [alias.ToLowerInvariant()] -> [DomainAliasInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteTimeZone">
+            <summary>
+            Returns time zone info for current site.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteIsOffline">
+            <summary>
+            Indicates whether site is in offline mode.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteOfflineRedirectURL">
+            <summary>
+            URL redirection in offline mode.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.SiteOfflineMessage">
+            <summary>
+            Offline message.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.LoadDefaultData">
+            <summary>
+            Loads the default data to the object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty SiteInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new SiteInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.#ctor(CMS.SiteProvider.SiteInfo,System.Boolean)">
+            <summary>
+            Constructor - Creates a new SiteInfo object from the given DataClass.
+            </summary>
+            <param name="si">Source site info</param>
+            <param name="keepSourceData">If true, source data are kept in the object</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.CreateDomainAliasesTable(System.Data.DataSet)">
+            <summary>
+            Creates hashtable from given dataset.
+            </summary>
+            <param name="ds">Dataset contains with document aliases</param>
+            <returns>Created hashtable.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.ConvertServerDateTime(System.DateTime)">
+            <summary>
+            Returns server date time in dependence on site time zone.
+            </summary>
+            <param name="dateTime">Date time</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.ConvertSiteDateTime(System.DateTime)">
+            <summary>
+            Returns site date time in dependence on site time zone.
+            </summary>
+            <param name="dateTime">Date time</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfo.InsertAsCloneInternal(CMS.DataEngine.CloneSettings,CMS.DataEngine.CloneResult,CMS.DataEngine.BaseInfo)">
+            <summary>
+            Inserts cloned object to DB.
+            </summary>
+            <param name="settings">Cloning settings</param>
+            <param name="result">Cloning result</param>
+            <param name="originalObject">Original source BaseInfo (object being cloned)</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteInfoProvider">
+            <summary>
+            Class to provide the Site management.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSites">
+            <summary>
+            Table of the running site infos indexed by the domain names. [domainName -> SiteInfo]
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSiteByPresentationUrls">
+            <summary>
+            A collection of all running sites ordered (DESC) by their presentation URL (without protocol).
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSiteByDomainAliasPresentationUrls">
+            <summary>
+            A collection of all domain presentation URLs and their running sites.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetDomainForCulture(System.String,System.String)">
+            <summary>
+            Returns domain for specified culture
+            </summary>
+            <param name="siteName">Current site name</param>
+            <param name="docCulture">Required culture</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.EnsureSiteName(System.String@)">
+            <summary>
+            Ensures the site name value, if the value is null, sets the current site name to the value.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteInfo(System.Int32)">
+            <summary>
+            Returns the site info object with specified ID.
+            </summary>
+            <param name="siteId">Site ID for that retrieve the info structure</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteInfoByGUID(System.Guid)">
+            <summary>
+            Returns object with specified GUID.
+            </summary>
+            <param name="guid">Object GUID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteInfo(System.String)">
+            <summary>
+            Returns the SiteInfo structure for a specified site.
+            </summary>
+            <param name="siteName">Site name for that retrieve the data</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteID(System.String)">
+            <summary>
+            Returns ID of the specified site, or 0 if site not found.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteName(System.Int32)">
+            <summary>
+            Returns name of the specified site, or empty string if site not found.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.SetSiteInfo(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Sets the specified site data.
+            </summary>
+            <param name="siteInfo">New site info data</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteSiteInfo(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Deletes the specified site.
+            </summary>
+            <param name="siteInfo">Site object to delete</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteSiteInfo(System.String)">
+            <summary>
+            Deletes the specified site.
+            </summary>
+            <param name="siteName">Site name to delete</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteSiteInfo(CMS.SiteProvider.SiteDeletionSettings,System.IProgress{CMS.SiteProvider.SiteDeletionStatusMessage})">
+            <summary>
+            Deletes the site with all dependent objects. If <paramref name="progressLog"/> provided, all actions are logged to provide progress
+            </summary>
+            <param name="siteDeletionSettings">Site deletion settings</param>
+            <param name="progressLog">Progress log</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSites">
+            <summary>
+            Returns all site records.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.RunSite(System.String)">
+            <summary>
+            Sets the specified Site running.
+            </summary>
+            <param name="siteName">Site name of the site to run</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetDocumentTypeClassPerSite(System.Int32)">
+            <summary>
+            Returns dataSet with document type classes of specified site.
+            </summary>
+            <param name="siteId">ID of site</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteWhereCondition(System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns WHERE condition for retrieving data according to the unique column and site ID column.
+            </summary>
+            <param name="uniqueColumn">Unique (code name or GUID) column name</param>
+            <param name="uniqueColumnValue">Unique column value</param>
+            <param name="siteIDColumn">Site ID column name</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.CombineWithDefaultCulture(System.String)">
+            <summary>
+            Combine with default culture?
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSitesCount">
+            <summary>
+            Gets number of existing sites.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSitesCount">
+            <summary>
+            Gets number of running sites.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteInfo(System.String,System.String)">
+            <summary>
+            Returns the running SiteInfo selected by specified domain name, if the site is not running, returns null.
+            </summary>
+            <param name="domainName">Domain name</param>
+            <param name="applicationPath">Application path</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.StopSite(System.String)">
+            <summary>
+            Sets the specified Site stopped.
+            </summary>
+            <param name="siteName">Site name of the site to stop</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteNameFromUrl(System.String)">
+            <summary>
+            Returns site name from <paramref name="url"/>.
+            </summary>
+            <param name="url">Url</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteNameFromUrl(System.String,System.String)">
+            <summary>
+            Returns site name from url.
+            </summary>
+            <param name="url">Url</param>
+            <param name="appPath">Application path.</param>
+            <remarks>
+            If no <paramref name="appPath"/> is provided,
+            value from <see cref="P:CMS.Base.SystemContext.ApplicationPath"/> is used.
+            </remarks>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteInfoFromDB(System.String,System.String)">
+            <summary>
+            Returns running SiteInfo object from the database.
+            </summary>
+            <param name="domainName">Domain name</param>
+            <param name="applicationPath">Application path</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByPresentationUrl(System.String)">
+            <summary>
+            Gets the running site by matching a presentation URL.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByDomainAliasPresentationUrl(System.String)">
+            <summary>
+            Gets the running site by matching a domain presentation URL.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByPresentationUrlsInternal">
+            <summary>
+            Gets a list of running site infos ordered by their presentation URL (without protocol).
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByDomainAliasPresentationUrlsInternal">
+            <summary>
+            Gets a structured list of <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>(without protocol) and running site infos ordered by <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByDomain(System.String)">
+            <summary>
+            Gets the running site by matching a main domain or a domain alias.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetDomainForCultureInternal(System.String,System.String)">
+            <summary>
+            Returns domain for specified culture
+            </summary>
+            <param name="siteName">Current site name</param>
+            <param name="docCulture">Required culture</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteIDInternal(System.String)">
+            <summary>
+            Returns ID of the specified site, or 0 if site not found.
+            </summary>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteNameInternal(System.Int32)">
+            <summary>
+            Returns name of the specified site, or empty string if site not found.
+            </summary>
+            <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteWhereConditionInternal(System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns WHERE condition for retrieving data according to the unique column and site ID column.
+            </summary>
+            <param name="uniqueColumn">Unique (code name or GUID) column name</param>
+            <param name="uniqueColumnValue">Unique column value</param>
+            <param name="siteIDColumn">Site ID column name</param>
+            <param name="siteName">Site name</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.SetInfo(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteInfo(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Deletes the object to the database.
+            </summary>
+            <param name="info">Object to delete</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteSiteInfoInternal(CMS.SiteProvider.SiteDeletionSettings,System.IProgress{CMS.SiteProvider.SiteDeletionStatusMessage})">
+            <summary>
+            Deletes site with all dependent objects
+            </summary>
+            <param name="siteDeletionSettings">Site deletion settings</param>
+            <param name="progressLog">Progress log</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.RunSiteInternal(System.String)">
+            <summary>
+            Sets the specified Site running.
+            </summary>
+            <param name="siteName">Site name of the site to run</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteNameFromUrlInternal(System.String)">
+            <summary>
+            Returns site name from URL.
+            </summary>
+            <param name="url">URL of the site</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetSiteNameFromUrlInternal(System.String,System.String)">
+            <summary>
+            Returns site name from URL.
+            </summary>
+            <param name="url">URL of the site</param>
+            <param name="appPath">Application path.</param>
+            <remarks>
+            If no <paramref name="appPath"/> is provided,
+            value from <see cref="P:CMS.Base.SystemContext.ApplicationPath"/> is used.
+            </remarks>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteInfoFromDBInternal(System.String,System.String)">
+            <summary>
+            Returns running SiteInfo object from the database.
+            </summary>
+            <param name="domainName">Domain name</param>
+            <param name="applicationPath">Application path</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetDocumentTypeClassPerSiteInternal(System.Int32)">
+            <summary>
+            Returns dataSet with document type classes of specified site.
+            </summary>
+            <param name="siteId">ID of site</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.ClearHashtables(System.Boolean)">
+            <summary>
+            Clear hashtables.
+            </summary>
+            <param name="logTasks">If true, web farm tasks are logged</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.CheckDomainNameForCollision(System.String,System.Int32)">
+            <summary>
+            Checks the specified domain name(and site) for collision with another running site.
+            </summary>
+            <param name="domainName">Domain name to be checked</param>
+            <param name="siteId">ID of the site which holds the domain name (site is excluded from result)</param>
+            <returns>Dataset with data of the first site which is running under specified domain name.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.ProcessWebFarmTask(System.String,System.String,System.Byte[])">
+            <summary>
+            Runs the processing of specific web farm task for current provider
+            </summary>
+            <param name="actionName">Action name</param>
+            <param name="data">Custom data</param>
+            <param name="binary">Binary data</param>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteListInfo">
+            <summary>
+            Represents entry for site listing
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteListInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteListInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteListInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty SiteListInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteListInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new SiteListInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteListInfo.GetColumnNames">
+            <summary>
+            Gets the default list of column names for this class
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteListInfo.GetDataQueryInternal">
+            <summary>
+            Gets the data query for this object type
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.SiteStatusEnum">
+            <summary>
+            Site status enumeration.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteStatusEnum.Running">
+            <summary>
+            Running site
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteStatusEnum.Stopped">
+            <summary>
+            Stopped site
+            </summary>
+        </member>
+    </members>
+</doc>

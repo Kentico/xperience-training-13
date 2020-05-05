@@ -1,0 +1,1211 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.ApplicationDashboard.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController">
+            <summary>
+            Handles pinning and unpinning tiles.
+            </summary>
+            <remarks>
+            Only authorized users (editors) are allowed to pin or unpin tile.
+            Exceptions thrown on execution are automatically handled.
+            </remarks>
+            <exclude />
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.Pin(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel)">
+            <summary>
+            Pin application or single object.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.Unpin(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel)">
+            <summary>
+            Unpin application or single object.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.DoPin(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Boolean)">
+            <summary>
+            Pins or unpins either application or single object.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="model"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.UpdateSettings(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting},System.Boolean)">
+            <summary>
+            Update given <paramref name="settings"/> with the <paramref name="model"/>. If <paramref name="pin"/> is true, <paramref name="model"/> is added; otherwise, removed.
+            </summary>
+            <param name="model">Model to be used</param>
+            <param name="settings">Collection containing tiles to be displayed in the application dashboard</param>
+            <param name="pin">True if <paramref name="model"/> should be added; otherwise, false</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.RemoveApplicationFromSettings(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Removes given <paramref name="model"/> representing application from <paramref name="settings"/>.
+            </summary>
+            <param name="model">Model to be removed</param>
+            <param name="settings">Collection containing tiles to be displayed in the application dashboard</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.AddApplicationToSettings(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Collections.Generic.ICollection{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Adds given <paramref name="model"/> representing application to <paramref name="settings"/>.
+            </summary>
+            <param name="model">Model to be added</param>
+            <param name="settings">Collection containing tiles to be displayed in the application dashboard</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.RemoveSingleObjectFromSettings(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Removes given <paramref name="model"/> representing single object from <paramref name="settings"/>.
+            </summary>
+            <param name="model">Model to be removed</param>
+            <param name="settings">Collection containing tiles to be displayed in the application dashboard</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.AddSingleObjectToSettings(CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel,System.Collections.Generic.ICollection{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Adds given <paramref name="model"/> representing single object to <paramref name="settings"/>.
+            </summary>
+            <param name="model">Model to be added</param>
+            <param name="settings">Collection containing tiles to be displayed in the application dashboard</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.GetUserSettings">
+            <summary>
+            Gets dashboard settings for <see cref="F:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.mCurrentUser"/>.
+            </summary>
+            <remarks>
+            If no settings are available for <see cref="F:CMS.ApplicationDashboard.Web.UI.Internal.PinHandlerController.mCurrentUser"/>, default ones are selected.
+            </remarks>
+            <returns>Collection of tiles to be displayed in the dashboard</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.TileController">
+            <summary>
+            Handles obtaining of tile data from the server.
+            </summary>
+            <remarks>
+            Only authorized users (editors) are allowed to obtain live tile data.
+            Exceptions thrown on execution are automatically handled.
+            </remarks>
+            <exclude />
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.Get">
+            <summary>
+            Gets collection of applications specific for the user. If no items are found, uses default settings for user's role.
+            </summary>
+            <returns>User specified list of application. If not item is found, returns empty collection</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.LoadTile(System.Guid)">
+            <summary>
+            Gets the tile for given ApplicationGuid.
+            </summary>
+            <param name="guid">ApplicationGuid of the tile</param>
+            <returns>Tile with the guid</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.UpdateTile(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum)">
+            <summary>
+            Gets updated tile of type in <paramref name="tileModelType"/> for given <paramref name="userDashboardSetting"/>.
+            </summary>
+            <param name="userDashboardSetting">Setting specifying which tile will be proceeded</param>
+            <param name="tileModelType">Type of the tile</param>
+            <returns>Tile for the given <paramref name="userDashboardSetting"/></returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.Save(System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Saves given application list for the current user.
+            </summary>
+            <remarks>
+            Order of the application within the list determines order of the loaded tiles.
+            </remarks>
+            <param name="userDashboardSettings">Collection of user dashboard settings to be saved</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.TileController.CreateTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates new tile for the given UI element.
+            </summary>
+            <param name="userDashboardSetting">Setting specifying which tile will be proceeded</param>
+            <param name="dashboardItem">UI elements the tile should be created for</param>
+            <returns>Tile created for the given UI element</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileController">
+            <summary>
+            Handles obtaining of the welcome tile data from the server.
+            </summary>
+            <remarks>
+            Only authorized users (editors) are allowed to obtain live tile data.
+            Exceptions thrown on execution are automatically handled.
+            </remarks>
+            <exclude />
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileController.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileController.Get">
+            <summary>
+            Gets the welcome tile.
+            </summary>
+            <returns>Welcome tile</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileController.Post(System.Boolean)">
+            <summary>
+            Saves whether the welcome tile should be visible for the current user or not.
+            </summary>
+            <param name="visible">Visibility of the welcome tile</param>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel">
+            <summary>
+            Represents pin settings of dashboard item (application or single object). 
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.ApplicationGuid">
+            <summary>
+            GUID of application
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.ElementGuid">
+            <summary>
+            UI element GUID
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.ObjectName">
+            <summary>
+            Object code name
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.ObjectType">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.ObjectSiteName">
+            <summary>
+            Object site name
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.DashboardItemPinSettingsModel.IsPinned">
+            <summary>
+            Determines whether the pin is in pinned state or not.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel">
+            <summary>
+            Represents single live application tile.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.DisplayName">
+            <summary>
+            Name of the application which will be displayed as a title of a tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.ListItemCssClass">
+            <summary>
+            CSS class of the tile anchor.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.TileIcon">
+            <summary>
+            Model defining the way the tile icon should be displayed. Can be either the image, or CSS class defined in style sheets.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.Path">
+            <summary>
+            URL address of an application. After clicking on a tile, user will be redirected to this address.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.ApplicationGuid">
+            <summary>
+            Unique identifier of the application.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.Value">
+            <summary>
+            Number value that will be displayed on a live tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.Description">
+            <summary>
+            Text describing the meaning of the number on the live site.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.TileModelType">
+            <summary>
+            Represents type of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationLiveTileModel.IsVisible">
+            <summary>
+            Determines whether the object should be visible on dashboard or not (single object form another site, insufficient permission, license, etc.)
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel">
+            <summary>
+            Represents single application tile.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.DisplayName">
+            <summary>
+            Name of the application which will be displayed as a title of a tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.ListItemCssClass">
+            <summary>
+            CSS class of the tile anchor.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.TileIcon">
+            <summary>
+            Model defining the way the tile icon should be displayed. Can be either the image, or CSS class defined in style sheets.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.Path">
+            <summary>
+            URL address of an application. After clicking on a tile, user will be redirected to this address.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.ApplicationGuid">
+            <summary>
+            Unique identifier of the application.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.TileModelType">
+            <summary>
+            Represents type of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ApplicationTileModel.IsVisible">
+            <summary>
+            Determines whether the object should be visible on dashboard or not (single object form another site, insufficient permission, license, etc.)
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.ITileModel">
+            <summary>
+            Wrapper for single tile on the dashboard.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ITileModel.TileModelType">
+            <summary>
+            Represents type of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.ITileModel.IsVisible">
+            <summary>
+            Determines whether the tile should be visible on dashboard or not (single object form another site, insufficient permission, license, etc.)
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel">
+            <summary>
+            Represents single object application tile.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ApplicationDisplayName">
+            <summary>
+            Name of the application which will be displayed as a title of a tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ObjectDisplayName">
+            <summary>
+            Name of the single object application which will be displayed as a description of a tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ListItemCssClass">
+            <summary>
+            CSS class of the tile anchor.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.TileIcon">
+            <summary>
+            Model defining the way the tile icon should be displayed. Can be either the image, or CSS class defined in style sheets.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.Path">
+            <summary>
+            Url address of an application. After clicking on a tile, user will be redirected to this address.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ApplicationGuid">
+            <summary>
+            Unique identifier of the application.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.UIElementGuid">
+            <summary>
+            Unique identifier of the UI element displaying the single object.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ObjectName">
+            <summary>
+            Codename of the displayed object.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.TileModelType">
+            <summary>
+            Represents type of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.IsVisible">
+            <summary>
+            Determines whether the object should be visible on dashboard or not (single object form another site, insufficient permission, license, etc.)
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.SingleObjectTileModel.ObjectSiteName">
+            <summary>
+            Site name of the displayed object.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.TileIconModel">
+            <summary>
+            Data class containing information to display proper icon within the <see cref="T:CMS.ApplicationDashboard.Web.UI.Internal.ITileModel"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.TileIconModel.IconType">
+            <summary>
+            Type of the tile icon.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.TileIconModel.IconCssClass">
+            <summary>
+            CSS class containing the tile icon.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.TileIconModel.IconImagePath">
+            <summary>
+            Path to the icon image.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.TileIconTypeEnum">
+            <summary>
+            Type of the icon displayed within the <see cref="T:CMS.ApplicationDashboard.Web.UI.Internal.TileIconModel"/>.
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.Internal.TileIconTypeEnum.CssClass">
+            <summary>
+            Icon is defined in the CSS style sheet.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.Internal.TileIconTypeEnum.Image">
+            <summary>
+            Icon is defined as image.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum">
+            <summary>
+            Represents type of the dashboard tile.
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum.ApplicationTileModel">
+            <summary>
+            Single application tile without live data provider.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum.ApplicationLiveTileModel">
+            <summary>
+            Single application tile with live data provider.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum.SingleObjectTileModel">
+            <summary>
+            Single object tile without live data provider.  
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting">
+            <summary>
+            User dashboard setting.
+            Represents one tile on dashboard. Either application or single object.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ApplicationGuid">
+            <summary>
+            GUID of application.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ElementGuid">
+            <summary>
+            UI element GUID
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ObjectName">
+            <summary>
+            Object code name
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ObjectSiteName">
+            <summary>
+            Object site name.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel">
+            <summary>
+            Data class containing information needed to display the welcome tile.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel.Visible">
+            <summary>
+            Gets or sets whether the welcome tile is visible on the dashboard.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel.Header">
+            <summary>
+            Header text of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel.Description">
+            <summary>
+            Description of the tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel.BrowseApplicationsText">
+            <summary>
+            Link leading to the application list text.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.Internal.WelcomeTileModel.OpenHelpText">
+            <summary>
+            Link leading to the context help text.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.IDefaultDashboardItemsLoader">
+            <summary>
+            Loads dictionary containing default user dashboard setting and corresponding dashboard items for the given user and site. 
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IDefaultDashboardItemsLoader.GetDefaultDashboardItems(CMS.Membership.UserInfo,CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Gets dictionary containing default user dashboard setting and corresponding dashboard items for the given user and site. 
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.UserRolesDefaultDashboardItemsLoader">
+            <summary>
+            Loads dictionary containing default user dashboard setting and corresponding dashboard items for the given user and site. 
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserRolesDefaultDashboardItemsLoader.#ctor(CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dashboardItemProvider">Instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider"/></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dashboardItemProvider"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserRolesDefaultDashboardItemsLoader.GetDefaultDashboardItems(CMS.Membership.UserInfo,CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Gets dictionary containing default user dashboard setting and corresponding dashboard items for the given user and site. 
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> or <paramref name="site"/> is null</exception>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelFactory">
+            <summary>
+            Provides method for creating single application tile with live data provider.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelFactory.#ctor(CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelFactory"/>.
+            </summary>
+            <param name="tileIconModelProvider">Provides method for retrieving icon model for dashboard tiles</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="tileIconModelProvider"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelFactory.CreateTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of live tile model for given <paramref name="dashboardItem"/>.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="setting"/> is null -or- <paramref name="dashboardItem"/> is null</exception>
+            <returns>Instance of live tile model</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelFactory.CreateEmptyTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of empty tile model for given <paramref name="dashboardItem"/>. This object
+            is required in order to maintain order-ability of the dashboard. Dashboard item created with this
+            method should remain hidden, since they does not contain any information besides the one
+            needed for saving it to the user settings.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider">
+            <summary>
+            Provides method for obtaining properties of related info object contained within the <see cref="T:CMS.Modules.UIElementInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider.GetDisplayName(System.String,System.Int32,CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns display name of the object matching given <paramref name="codeName"/> on <paramref name="siteID"/> for the <paramref name="uiElement"/>.
+            </summary>
+            <param name="codeName">Code name identifying the desired info object</param>
+            <param name="siteID">ID of the <see cref="T:CMS.SiteProvider.SiteInfo"/> the desired object is assigned to</param>
+            <param name="uiElement">UI element containing desired object</param>
+            <returns>Display name of found object; if not found, returns null.</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider.GetCodeName(System.Int32,CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns code name of the object identified by given <paramref name="objectID"/> contained within the <paramref name="uiElement"/>.
+            </summary>
+            <param name="objectID">ID of the identifying the desired info object</param>
+            <param name="uiElement">UI element containing desired object</param>
+            <returns>Code name of found object; if not found, returns null.</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider.GetObjectTypeFromUIElement(CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns object type of the object containing within the given <paramref name="uiElement"/>
+            </summary>
+            <param name="uiElement">UI element containing desired object type</param>
+            <returns>Type of the found object; if not found, returns null</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.LiveTileContext">
+            <summary>
+            Context of the live tile passed to the live tile model providers.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.LiveTileContext.SiteInfo">
+            <summary>
+            Gets or sets the site for which the model is requested.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.LiveTileContext.UserInfo">
+            <summary>
+            Gets or sets the user for which the model is requested.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute">
+            <summary>
+            Registers live model provider for given resource and element name.
+            Live model provider is used when obtaining model for live tiles on the dashboard.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute.mResourceName">
+            <summary>
+            Name of the resource the provider is registered to.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute.mElementName">
+            <summary>
+            Name of the UI element the provider is registered to.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute.MarkedType">
+            <summary>
+            Gets the type of the live model provider.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute.#ctor(System.String,System.String,System.Type)">
+            <summary>
+            Attribute constructor.
+            </summary>
+            <param name="resourceName">Name of the resource</param>
+            <param name="elementName">Name of the UI element</param>
+            <param name="liveTileModelProvider">Type of live model provider. The type has to be implementing <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> interface</param>
+            <exception cref="T:System.ArgumentException"><paramref name="resourceName"/> or <paramref name="elementName"/> or <paramref name="liveTileModelProvider"/> is null</exception>
+            <exception cref="T:System.ArgumentNullException">Given type does not implement <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> interface</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.RegisterLiveTileModelProviderAttribute.PreInit">
+            <summary>
+            Registers the live model provider factory with the Live model provider container.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderContainer.RegisterProviderFactory(System.String,System.String,System.Func{CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider})">
+            <summary>
+            Registers the live model provider factory for given resource and UI element names.
+            </summary>
+            <remarks>
+            If provider is already registered for resource and element name, it is replaced with a new one.
+            </remarks>
+            <param name="resourceName">Name of the resource</param>
+            <param name="elementName">Name of the UI element</param>
+            <param name="liveTileModelProviderFactory">Factory for creating an implementation of <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider" /> interface</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="resourceName"/> or <paramref name="elementName"/> or <paramref name="liveTileModelProviderFactory"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderContainer.GetProvider(CMS.Modules.UIElementInfo)">
+            <summary>
+            Gets live model provider for given UI element object.
+            </summary>
+            <remarks>
+            Provider has to be registered in advance with <see cref="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderContainer.RegisterProviderFactory(System.String,System.String,System.Func{CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider})"/>.
+            </remarks>
+            <param name="uiElement">UI element object info</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="uiElement"/> is null</exception>
+            <returns>Live model provider implementing the <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> interface</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderContainer.GetProvider(System.String,System.String)">
+            <summary>
+            Gets live model provider for given resource ID and UI element name. If such provider does not exist, returns null.
+            </summary>
+            <remarks>
+            Provider has to be registered in advance with <see cref="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderContainer.RegisterProviderFactory(System.String,System.String,System.Func{CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider})"/>.
+            </remarks>
+            <param name="resourceName">Name of the resource</param>
+            <param name="elementName">Name of the UI element</param>
+            <returns>Live model provider implementing the <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> interface, if exists; otherwise, null</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelLoader">
+            <summary>
+            Provides method for loading live tile model for specific <see cref="T:CMS.Modules.UIElementInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ILiveTileModelLoader.LoadLiveTileModel(System.Guid,CMS.Base.ISiteInfo,CMS.Membership.UserInfo)">
+            <summary>
+            Gets <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> for an application (UI element) with given <paramref name="uiElementGuid"/>. Uses <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> that is set up in
+            the UIElement.
+            </summary>
+            <param name="uiElementGuid">Guid of a UI element for which <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> will be returned.</param>
+            <param name="user">User for which the model will be returned. Is used for security reasons.</param>
+            <param name="site">Site for which to display <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> for.</param>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider">
+            <summary>
+            Interface that provides access to <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider.GetModel(CMS.ApplicationDashboard.Web.UI.LiveTileContext)">
+            <summary>
+            Loads model for the dashboard live tile. Null should be returned if live tile should stay dead.
+            </summary>
+            <param name="liveTileContext">Context of the live tile. Contains information about the user and the site the model is requested for</param>
+            <returns>Live tile model or null if tile should stay in the dead state</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProviderFactory">
+            <summary>
+            Provides methods for obtaining live model providers for applications.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProviderFactory.GetLiveTileModelProvider(CMS.Modules.UIElementInfo)">
+            <summary>
+            Gets live model provider for given application.
+            </summary>
+            <param name="uiElementInfo">UI element representing the application</param>
+            <returns>Instance of live model provider</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProviderFactory.CanLoadLiveTileModelProvider(CMS.Modules.UIElementInfo)">
+            <summary>
+            Gets whether there is available live model provider for given application or not.
+            </summary>
+            <param name="uiElementInfo">UI element representing the application</param>
+            <returns>True if live model provider can be loaded, false otherwise</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.LiveTileModelLoader">
+            <summary>
+            Provides method for loading live tile model for specific <see cref="T:CMS.Modules.UIElementInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelLoader.#ctor(CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider,CMS.ApplicationDashboard.Web.UI.ILiveTileModelProviderFactory)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModelLoader"/>.
+            </summary>
+            <param name="dashboardItemProvider">Contains methods for obtaining filtered lists of dashboard items.</param>
+            <param name="liveTileModelProviderFactory">Provides methods for obtaining live model providers for applications.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dashboardItemProvider"/> is null -or- <paramref name="liveTileModelProviderFactory"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelLoader.LoadLiveTileModel(System.Guid,CMS.Base.ISiteInfo,CMS.Membership.UserInfo)">
+            <summary>
+            Gets <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> for an application (UI element) with given <paramref name="uiElementGuid"/>. Uses <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> that is set up in
+            the UIElement.
+            </summary>
+            <param name="uiElementGuid">Guid of a UI element for which <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> will be returned</param>
+            <param name="user">User for which the model will be returned. Is used for security reasons</param>
+            <param name="site">Site for which to display <see cref="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel"/> for</param>
+            <exception cref="T:System.UnauthorizedAccessException">User does not have permissions for the UI element</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="site"/> or <paramref name="user"/> is null</exception>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderFactory">
+            <summary>
+            Provides methods for obtaining live model providers for applications.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderFactory.GetLiveTileModelProvider(CMS.Modules.UIElementInfo)">
+            <summary>
+            Gets live model provider for given application.
+            </summary>
+            <param name="uiElementInfo">UI element representing the application</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="uiElementInfo"/> is null</exception>
+            <returns>Instance of live model provider</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.LiveTileModelProviderFactory.CanLoadLiveTileModelProvider(CMS.Modules.UIElementInfo)">
+            <summary>
+            Gets whether there is available live model provider for given application or not.
+            </summary>
+            <param name="uiElementInfo">UI element representing the application</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="uiElementInfo"/> is null</exception>
+            <returns>True if live model provider can be loaded, false otherwise</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader">
+            <summary>
+            Handles loading of applications from the user settings. 
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader.GetUserSpecificDashboardItems(CMS.Membership.UserInfo)">
+            <summary>
+            Gets dictionary containing user dashboard setting object and corresponding UI element for <paramref name="user"/> base on their preferences.
+            </summary>
+            <param name="user">User with preferences</param>
+            <returns>Dictionary of user dashboard setting and UI elements representing the user applications</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader.SaveUserSpecificDashboardSettings(CMS.Membership.UserInfo,System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Saves given list of user dashboard settings to the user settings.
+            </summary>
+            <param name="user">User the applications will be saved to</param>
+            <param name="userDashboardSettings">List of dashboard settings</param>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader.RemoveSpecificUserDashboardSetting(CMS.Membership.UserInfo,CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting)">
+            <summary>
+            Removes given <paramref name="userDashboardSetting"/> from current user dashboard settings.
+            </summary>
+            <param name="user">User info</param>
+            <param name="userDashboardSetting">Setting to be removed</param>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.UserSettingsJsonDashboardItemsLoader">
+            <summary>
+            Handles loading of applications from the user settings. 
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserSettingsJsonDashboardItemsLoader.#ctor(CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dashboardItemProvider">Provider containing methods for obtaining filtered lists of applications.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dashboardItemProvider"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserSettingsJsonDashboardItemsLoader.GetUserSpecificDashboardItems(CMS.Membership.UserInfo)">
+            <summary>
+            Gets dictionary containing user dashboard setting object and corresponding UI element for <paramref name="user"/> 
+            based on their preferences.
+            </summary>
+            <param name="user">User with preferences</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> is null</exception>
+            <returns>Dictionary of user dashboard setting and UI elements representing the user applications</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserSettingsJsonDashboardItemsLoader.SaveUserSpecificDashboardSettings(CMS.Membership.UserInfo,System.Collections.Generic.List{CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting})">
+            <summary>
+            Saves given list of user dashboard settings to the user settings.
+            </summary>
+            <param name="user">User the applications will be saved to</param>
+            <param name="userDashboardSettings">List of dashboard settings</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> is null -or- <paramref name="userDashboardSettings"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UserSettingsJsonDashboardItemsLoader.RemoveSpecificUserDashboardSetting(CMS.Membership.UserInfo,CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting)">
+            <summary>
+            Removes given <paramref name="userDashboardSetting"/> from current user dashboard settings.
+            </summary>
+            <param name="user">User info</param>
+            <param name="userDashboardSetting">Setting to be removed</param>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.LiveTileModel">
+            <summary>
+            Crate for data in LiveTiles, use concrete <see cref="T:CMS.ApplicationDashboard.Web.UI.ILiveTileModelProvider"/> to get an instance.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.LiveTileModel.Value">
+            <summary>
+            Number value that will be displayed on a live tile.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.LiveTileModel.Description">
+            <summary>
+            Text describing the meaning of the number on the live site.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.DashboardItem">
+            <summary>
+            Represents an object on dashboard.
+            This object is represented by one or more UI elements.
+            So far it can be application or single object.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.Application">
+            <summary>
+            Application UI element.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.SingleObject">
+            <summary>
+            Single object UI element.
+            </summary>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.IsVisible">
+            <summary>
+            Determines whether the object should be visible on dashboard or not (single object form another site, insufficient permission, license, etc.)
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.DashboardItemProvider">
+            <summary>
+            Contains methods for obtaining filtered lists of applications.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.DashboardItemProvider.GetFilteredApplicationsForRoles(CMS.Membership.UserInfo,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Gets list of UI elements filtered for given user and roles.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> or <paramref name="roleIDs"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.DashboardItemProvider.GetFilteredApplicationsByGuids(CMS.Membership.UserInfo,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Gets list of UI elements filtered for given user and applications Guids.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> or <paramref name="uiElementGuids"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.DashboardItemProvider.GetFilteredApplicationByGuid(CMS.Membership.UserInfo,System.Guid)">
+            <summary>
+            Gets UI element filtered for given user and application Guid.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="user"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.DashboardItemProvider.LoadAndFilterApplications(CMS.Membership.UserInfo,CMS.DataEngine.WhereCondition)">
+            <summary>
+            Gets list of UI elements filtered for given user and where condition.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider">
+            <summary>
+            Contains methods for obtaining filtered lists of dashboard items.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider.GetFilteredApplicationsForRoles(CMS.Membership.UserInfo,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Gets list of UI elements filtered for given user and roles.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider.GetFilteredApplicationsByGuids(CMS.Membership.UserInfo,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Gets list of UI elements filtered for given user and applications Guids.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.IDashboardItemProvider.GetFilteredApplicationByGuid(CMS.Membership.UserInfo,System.Guid)">
+            <summary>
+            Gets UI element filtered for given user and application Guid.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModule">
+            <summary>
+            Represents the Online Marketing module.
+            </summary>
+        </member>
+        <member name="F:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModule.SCORING_EMAIL_TEMPLATE_TYPE_NAME">
+            <summary>
+            Name of email template type for scoring.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModuleHandlers.Init">
+            <summary>
+            Initialization of all handlers.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModuleMetadata">
+            <summary>
+            Represents the Online Marketing module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationDashboardModuleMetadata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.SingleObjectTileModelFactory">
+            <summary>
+            Provides method for creating single object tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.SingleObjectTileModelFactory.#ctor(CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider,CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider,CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader,CMS.PortalEngine.Internal.IUILinkProvider,CMS.Base.ISiteService)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.SingleObjectTileModelFactory"/>.
+            </summary>
+            <param name="uiElementObjectPropertiesProvider">Service providing method for obtaining display name for given <see cref="T:CMS.Modules.UIElementInfo"/></param>
+            <param name="tileIconModelProvider">Service providing method for retrieving icon model for dashboard tiles</param>
+            <param name="userSpecificDashboardItemsLoader">Handles loading of applications from the user settings</param>
+            <param name="uiLinkProvider">Provides methods for generating links to access single objects within the module (e.g. single Site)</param>
+            <param name="siteService">Service for loading context of the current site</param>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="uiElementObjectPropertiesProvider"/> is null -or-
+            <paramref name="tileIconModelProvider"/> is null -or-
+            <paramref name="userSpecificDashboardItemsLoader"/> is null -or-
+            <paramref name="uiLinkProvider"/> is null
+            </exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.SingleObjectTileModelFactory.CreateTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of single object tile model for given <paramref name="dashboardItem"/>.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="setting"/> is null -or- <paramref name="dashboardItem"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="setting"/> has to have <see cref="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ElementGuid"/> and <see cref="P:CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting.ObjectName"/> properties set -and-
+            <paramref name="dashboardItem"/> has to have <see cref="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.Application"/> and <see cref="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.SingleObject"/> properties set</exception>
+            <returns>Instance of single object tile model</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.SingleObjectTileModelFactory.CreateEmptyTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of empty tile model for given <paramref name="dashboardItem"/>. This object
+            is required in order to maintain order-ability of the dashboard. Dashboard item created with this
+            method should remain hidden, since they does not contain any information besides the one
+            needed for saving it to the user settings.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider">
+            <summary>
+            Provides method for obtaining properties of related info object contained within the <see cref="T:CMS.Modules.UIElementInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider.#ctor(CMS.Base.ISiteService)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider"/>.
+            </summary>
+            <param name="siteService">Provides method for obtaining <see cref="T:CMS.Base.ISiteInfo"/> for current context</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="siteService"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider.GetDisplayName(System.String,System.Int32,CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns display name of the object matching given <paramref name="codeName"/> on <paramref name="siteID"/> for the <paramref name="uiElement"/>.
+            </summary>
+            <param name="codeName">Code name identifying the desired info object</param>
+            <param name="siteID">ID of the <see cref="T:CMS.SiteProvider.SiteInfo"/> the desired object is assigned to</param>
+            <param name="uiElement">UI element containing desired object</param>
+            <returns>Display name of found object; if not found, returns null.</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider.GetCodeName(System.Int32,CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns code name of the object identified by given <paramref name="objectID"/> contained within the <paramref name="uiElement"/>.
+            </summary>
+            <param name="objectID">ID of the identifying the desired info object</param>
+            <param name="uiElement">UI element containing desired object</param>
+            <returns>Code name of found object; if not found, returns null.</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider.GetObjectTypeFromUIElement(CMS.Modules.UIElementInfo)">
+            <summary>
+            Returns object type of the object containing within the given <paramref name="uiElement"/>
+            </summary>
+            <param name="uiElement">UI element containing desired object type</param>
+            <returns>Type of the found object; if not found, returns null</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.UIElementObjectPropertiesProvider.LogObjectTypeNotFoundEvent(CMS.Modules.UIElementInfo)">
+            <summary>
+            Logs warning event telling that system could not found object type for given <paramref name="uiElement"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelUpdater">
+            <summary>
+            Provides method for retrieving updated dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelUpdater.#ctor(CMS.ApplicationDashboard.Web.UI.ILiveTileModelLoader,CMS.Base.ISiteService)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="liveTileModelLoader">Service for loading live tile model for given UI element</param>
+            <param name="siteService">Service for loading context of the current site</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="liveTileModelLoader"/> is null -or- <paramref name="siteService"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationLiveTileModelUpdater.GetTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.Membership.UserInfo)">
+            <summary>
+            Creates instance of updated tile model for given <paramref name="userDashboardSetting"/>.
+            </summary>
+            <param name="userDashboardSetting">User settings for which the updated tile is retrieved for</param>
+            <param name="user">User the model is updated for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="userDashboardSetting"/> is null -or- <paramref name="user"/> is null</exception>
+            <returns>Instance of updated tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ApplicationTileModelFactory">
+            <summary>
+            Provides method for creating single application tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationTileModelFactory.#ctor(CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.ApplicationTileModelFactory"/>.
+            </summary>
+            <param name="tileIconModelProvider">Provides method for retrieving icon model for dashboard tiles</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="tileIconModelProvider"/> is null</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationTileModelFactory.CreateTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of tile model for given <paramref name="dashboardItem"/>.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="setting"/> is null -or- <paramref name="dashboardItem"/> is null</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="dashboardItem"/> has to have <see cref="P:CMS.ApplicationDashboard.Web.UI.DashboardItem.Application"/> property set</exception>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ApplicationTileModelFactory.CreateEmptyTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of empty tile model for given <paramref name="dashboardItem"/>. This object
+            is required in order to maintain order-ability of the dashboard. Dashboard item created with this
+            method should remain hidden, since they does not contain any information besides the one
+            needed for saving it to the user settings.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ITileModelUpdater">
+            <summary>
+            Provides method for retrieving updated dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileModelUpdater.GetTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.Membership.UserInfo)">
+            <summary>
+            Creates instance of updated tile model for given <paramref name="userDashboardSetting"/>.
+            </summary>
+            <param name="userDashboardSetting">User settings for which the updated tile is retrieved for</param>
+            <param name="user">User the model is updated for</param>
+            <returns>Instance of updated tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider">
+            <summary>
+            Provides method for retrieving icon model for dashboard tiles.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider.CreateTileIconModel(CMS.Modules.UIElementInfo)">
+            <summary>
+            Creates icon model for given <paramref name="uiElement"/>.
+            </summary>
+            <param name="uiElement">UI element the icon model is retrieved for</param>
+            <returns>Icon model for given <paramref name="uiElement"/></returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ITileModelFactory">
+            <summary>
+            Provides method for creating dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileModelFactory.CreateTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of tile model for given <paramref name="dashboardItem"/>.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileModelFactory.CreateEmptyTileModel(CMS.ApplicationDashboard.Web.UI.Internal.UserDashboardSetting,CMS.ApplicationDashboard.Web.UI.DashboardItem)">
+            <summary>
+            Creates instance of empty tile model for given <paramref name="dashboardItem"/>. This object
+            is required in order to maintain order-ability of the dashboard. Dashboard item created with this
+            method should remain hidden, since they does not contain any information besides the one
+            needed for saving it to the user settings.
+            </summary>
+            <param name="setting">User dashboard setting for the given <paramref name="dashboardItem"/></param>
+            <param name="dashboardItem">UI elements for which the tile is created</param>
+            <returns>Instance of tile model</returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.ITileModelFactorySelector">
+            <summary>
+            Provides methods for retrieving either tile model factory or tile model updater.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileModelFactorySelector.GetTileModelFactory(CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum)">
+            <summary>
+            Gets model factory for given <paramref name="tileModelType"/>.
+            </summary>
+            <param name="tileModelType">Type of the tile</param>
+            <returns>Factory for given <paramref name="tileModelType"/></returns>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.ITileModelFactorySelector.GetTileModelUpdater(CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum)">
+            <summary>
+            Gets model updated for given <paramref name="tileModelType"/>.
+            </summary>
+            <param name="tileModelType">Type of the tile</param>
+            <returns>Updater for given <paramref name="tileModelType"/></returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.TileIconModelProvider">
+            <summary>
+            Provides method for retrieving icon model for dashboard tiles.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.TileIconModelProvider.CreateTileIconModel(CMS.Modules.UIElementInfo)">
+            <summary>
+            Creates icon model for given <paramref name="uiElement"/>.
+            </summary>
+            <param name="uiElement">UI element the icon model is retrieved for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="uiElement"/> is null</exception>
+            <returns>Icon model for given <paramref name="uiElement"/></returns>
+        </member>
+        <member name="T:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector">
+            <summary>
+            Provides methods for retrieving either tile model factory or tile model updater.
+            </summary>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.#ctor(CMS.ApplicationDashboard.Web.UI.IUIElementObjectPropertiesProvider,CMS.ApplicationDashboard.Web.UI.ITileIconModelProvider,CMS.ApplicationDashboard.Web.UI.IUserSpecificDashboardItemsLoader,CMS.PortalEngine.Internal.IUILinkProvider,CMS.ApplicationDashboard.Web.UI.ILiveTileModelLoader,CMS.Base.ISiteService)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector"/>.
+            </summary>
+            <param name="uiElementObjectPropertiesProvider">Provides method for obtaining display name for given <see cref="T:CMS.Modules.UIElementInfo"/></param>
+            <param name="tileIconModelProvider">Provides method for retrieving icon model for dashboard tiles</param>
+            <param name="userSpecificDashboardItemsLoader">Handles loading of applications from the user settings</param>
+            <param name="uiLinkProvider"></param>
+            <param name="liveTileModelLoader">Provides method for loading live tile model for specific <see cref="T:CMS.Modules.UIElementInfo"/></param>
+            <param name="siteService">Provides method for obtaining <see cref="T:CMS.Base.ISiteInfo"/> for current context</param>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="uiElementObjectPropertiesProvider"/> is null -or-
+            <paramref name="tileIconModelProvider"/> is null -or-
+            <paramref name="userSpecificDashboardItemsLoader"/> is null -or-
+            <paramref name="uiLinkProvider"/> is null -or-
+            <paramref name="liveTileModelLoader"/> is null -or-
+            <paramref name="siteService"/> is null 
+            </exception>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.ApplicationTileModelFactory">
+            <value>
+            Provides method for creating single application tile.
+            </value>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.ApplicationLiveTileModelFactory">
+            <value>
+            Provides method for creating single application tile with live data provider.
+            </value>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.SingleObjectTileModelFactory">
+            <value>
+            Provides method for creating single object tile.
+            </value>
+        </member>
+        <member name="P:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.ApplicationLiveTileModelUpdater">
+            <value>
+            Provides method for retrieving updated dashboard tile.
+            </value>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.GetTileModelFactory(CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum)">
+            <summary>
+            Gets model factory for given <paramref name="tileModelType"/>.
+            </summary>
+            <param name="tileModelType">Type of the tile</param>
+            <returns>Factory for given <paramref name="tileModelType"/></returns>
+            <exception cref="T:System.ArgumentException"><paramref name="tileModelType"/> is not supported</exception>
+        </member>
+        <member name="M:CMS.ApplicationDashboard.Web.UI.TileModelFactorySelector.GetTileModelUpdater(CMS.ApplicationDashboard.Web.UI.Internal.TileModelTypeEnum)">
+            <summary>
+            Gets model updated for given <paramref name="tileModelType"/>.
+            </summary>
+            <param name="tileModelType">Type of the tile</param>
+            <returns>Updater for given <paramref name="tileModelType"/></returns>
+            <exception cref="T:System.ArgumentException"><paramref name="tileModelType"/> is not supported</exception>
+        </member>
+    </members>
+</doc>

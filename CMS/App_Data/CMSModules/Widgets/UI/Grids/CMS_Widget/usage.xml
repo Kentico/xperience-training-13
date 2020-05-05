@@ -1,0 +1,19 @@
+<grid>
+  <columns>
+    <column source="ObjectType" visible="false" caption="$general.objecttype$">
+      <filter type="custom" controlname="ObjectTypeSelector">
+        <Parameters>
+          <filterparameter name="ObjectTypeList" value="EditedObject.GetUsageObjectTypes()" />
+        </Parameters>
+      </filter>
+    </column>
+    <column name="Object" source="##ALL##" wrap="false" externalsourcename="#transform: {% ObjectType %} => {% ObjectID %} : {% Object.GetFullObjectName() %}" caption="$general.object$" />
+    <column name="Context" source="##ALL##" wrap="false" externalsourcename="#transform: {% ItemObjectType %} => {% ItemID %} : {% TypeInfo.GetNiceObjectTypeName() %} '{% DisplayName %}'" caption="$general.context$" />
+    <column name="Source" source="Source" wrap="false" caption="$general.source$" allowsorting="false" />
+    <column cssclass="filling-column" />
+  </columns>
+  <options>
+    <key name="DisplayFilter" value="true" />
+  </options>
+  <macro expression="EditedObject.GetUsages()" />
+</grid> 

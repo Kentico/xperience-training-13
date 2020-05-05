@@ -1,0 +1,29 @@
+﻿<grid>
+  <actions parameters="MultiBuyDiscountID">
+    <action name="#move" caption="$General.DragMove$" fonticonclass="icon-dots-vertical"/>
+    <action name="edit" caption="$general.edit$" fonticonclass="icon-edit" fonticonstyle="allow" />
+    <action name="#delete" caption="$general.delete$" fonticonclass="icon-bin" fonticonstyle="critical" confirmation="$general.confirmdelete$" />
+  </actions>
+  <columns>
+    <column source="MultiBuyDiscountDisplayName" caption="$general.name$" wrap="false">
+      <filter type="text" />
+    </column>
+    <column source="##ALL##" name="Status" caption="$com.discount.status$" wrap="false" externalsourcename="status">
+      <filter type="custom" path="~/CMSModules/Ecommerce/Controls/Filters/DiscountFilter.ascx">
+        <parameters>
+          <filterparameter name="DiscountType" value="MultibuyDiscount"/>
+        </parameters>
+      </filter>
+    </column>
+    <column source="MultiBuyDiscountValidFrom" externalsourcename="#userdatetimegmt" caption="$com.discount.validfrom$" wrap="false" />
+    <column source="MultiBuyDiscountValidTo" externalsourcename="#userdatetimegmt" caption="$com.discount.validto$" wrap="false" />
+    <column source="##ALL##" name="application"  caption="$com.couponcode.numberofuses$" externalsourcename="application" wrap="false" />
+    <column source="MultiBuyDiscountApplyFurtherDiscounts" caption="$com.discount.applyfurtherdiscountsshort$" wrap="false" externalsourcename="#yesno" />
+    <column cssclass="filling-column" />
+  </columns>
+  <objecttype name="ecommerce.multibuydiscount" />
+  <options>
+    <key name="AllowSorting" value="false" />
+    <key name="DisplayFilter" value="true" />
+  </options>
+</grid>

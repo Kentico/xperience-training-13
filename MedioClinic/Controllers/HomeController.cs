@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using XperienceAdapter;
 using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
@@ -20,6 +22,10 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index()
         {
+            var dbConnectivityTest = new DbConnectivityTest();
+            var documentGuid = dbConnectivityTest.GetDocumentGuid();
+            ViewBag.DocumentGuid = documentGuid;
+
             return View();
         }
 

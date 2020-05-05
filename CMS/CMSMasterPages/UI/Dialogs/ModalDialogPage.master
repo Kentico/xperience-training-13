@@ -1,0 +1,71 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_UI_Dialogs_ModalDialogPage"
+     Codebehind="ModalDialogPage.master.cs" %>
+
+<%@ Register Src="~/CMSModules/Objects/Controls/Locking/ObjectEditPanel.ascx" TagName="ObjectEditPanel"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>SimpleMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false" EnableViewState="false" />
+</head>
+<body id="bodyElem" runat="server">
+    <form id="form1" runat="server">
+        <asp:PlaceHolder runat="server" ID="plcManager" />
+        <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+        <asp:ContentPlaceHolder ID="plcBeforeBody" runat="server" />
+        <asp:Panel ID="pnlBody" runat="server" CssClass="DialogPageBody">
+            <cms:CMSPanel ID="pnlContainerHeader" runat="server" FixedPosition="true" CssClass="header-container">
+                <div id="divHeader" style="min-height: 0;" class="DialogsPageHeader SimpleHeader clearfix">
+                    <asp:Panel ID="pnlHeader" runat="server" EnableViewState="false">
+                        <cms:PageTitle ID="titleElem" ShortID="pt" runat="server" Wrap="true" HelpIconName="icon-modal-question cms-icon-80" IsDialog="true" />
+                    </asp:Panel>
+                    <asp:Panel ID="pnlTitleActions" runat="server" Visible="false" CssClass="header-panel"
+                        EnableViewState="false">
+                        <asp:ContentPlaceHolder runat="server" ID="plcTitleActions" />
+                    </asp:Panel>
+                    <asp:ContentPlaceHolder ID="plcHeaderTabs" runat="server" />
+                    <asp:Panel ID="pnlSiteSelector" runat="server" CssClass="header-panel header-actions-site-selector-block"
+                        Visible="false">
+                        <asp:ContentPlaceHolder runat="server" ID="plcSiteSelector" />
+                    </asp:Panel>
+                    <asp:Panel ID="pnlAdditionalControls" runat="server" CssClass="header-panel" Visible="false">
+                        <asp:ContentPlaceHolder runat="server" ID="plcControls" />
+                    </asp:Panel>
+                    <cms:UIPlaceHolder ID="plcActionsPermissions" runat="server">
+                        <asp:Panel ID="pnlActions" runat="server" CssClass="cms-edit-menu" EnableViewState="false">
+                            <asp:ContentPlaceHolder runat="server" ID="plcBeforeActions" />
+                            <cms:ObjectEditPanel ID="actionsElem" runat="server" IsLiveSite="false" />
+                            <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+                        </asp:Panel>
+                    </cms:UIPlaceHolder>
+                    <asp:ContentPlaceHolder ID="plcBeforeContent" runat="server" />
+                </div>
+            </cms:CMSPanel>
+            <div id="CMSHeaderDiv">
+                <div id="CKToolbar">
+                </div>
+            </div>
+            <asp:Panel ID="divContent" runat="server" ClientIDMode="Static" CssClass="dialog-content dialog-content-scrollable">
+                <cms:CMSUpdateProgress ID="up" runat="server" HandlePostback="true" />
+                <asp:PlaceHolder runat="server" ID="plcLabels" />
+                <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+            </asp:Panel>
+            <asp:Panel ID="pnlFooterContent" runat="server">
+                <div id="CKFooter">
+                </div>
+                <div id="divFooter" class="dialog-footer control-group-inline">
+                    <asp:Panel runat="server" ID="pnlFooter">
+                        <asp:ContentPlaceHolder ID="plcFooter" runat="server" />
+                        <cms:LocalizedButton Visible="false" ResourceString="general.saveandclose" ID="btnSaveAndClose" runat="server" OnClick="btnSaveAndClose_OnClick" ButtonStyle="Primary" EnableViewState="False" />
+                    </asp:Panel>
+                </div>
+            </asp:Panel>
+        </asp:Panel>
+    </form>
+    <asp:PlaceHolder runat="server" ID="plcAfterForm"></asp:PlaceHolder>
+</body>
+</html>

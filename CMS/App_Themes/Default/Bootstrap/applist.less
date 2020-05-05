@@ -1,0 +1,271 @@
+/// <reference path="variables.less" />
+/// <reference path="mixins.less" />
+/// <reference path="loader.less" />
+
+
+//
+// Applist
+// --------------------------------------------------
+
+
+// Provide Kentico Application list.
+
+
+// Applist
+// ------------------------
+@applist-width: @base-unit * 15;
+@applist-bg: @color-gray-50;
+@applist-item-hover-bg: @color-gray-70;
+@applist-tooltip-margin-left: -(@base-unit * 2);
+@applist-tooltip-maxwidth: @base-unit * 19;
+
+
+// Toggle button for Application list
+.applist-toggle {
+    height: 100%;
+    text-decoration: none;
+}
+
+
+// Core styles
+.applist-panel {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: @applist-width;
+    z-index: 0;
+    display: none;
+    background-color: @applist-bg;
+
+    .applist-header {
+        color: @navbar-inverse-color;
+        margin: 0;
+        line-height: @base-unit * 3;
+    }
+
+    .panel {
+        background-color: @applist-bg;
+        margin-bottom: @base-unit * 0.5;
+    }
+
+    .panel-heading {
+        border: 0;
+        list-style-type: none;
+        font-size: @font-size-large;
+        padding: 0;
+        // Section item
+        .accordion-toggle {
+            color: @navbar-inverse-link-color;
+            text-decoration: none;
+            padding: @base-unit * 0.5 @base-unit;
+            word-wrap: break-word;
+            display: block;
+            outline: 0;
+            cursor: default;
+
+            &[data-toggle="collapse"]:hover {
+                cursor: pointer;
+                background-color: @applist-item-hover-bg;
+            }
+        }
+
+        h3 {
+            color: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            margin: inherit;
+        }
+    }
+
+    .panel-body {
+        padding: 0;
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            font-size: @font-size-base;
+            padding: 0;
+            // Application item
+            a {
+                color: @navbar-inverse-link-color;
+                line-height: @line-height-100;
+                display: block;
+                position: relative;
+                text-decoration: none;
+                padding: @padding-middle-vertical @padding-middle-horizontal @padding-middle-vertical @padding-350;
+                margin: 0;
+                word-wrap: break-word;
+                outline: 0;
+
+                &:hover,
+                &:focus {
+                    background-color: @applist-item-hover-bg;
+                }
+            }
+            // Icon
+            i, img {
+                color: @color-white;
+                position: absolute;
+                top: @base-unit * 0.25;
+                left: @base-unit * 1.5;
+
+                &.DefaultAppIcon {
+                    color: @navbar-inverse-icon-color;
+                }
+            }
+        }
+    }
+    // Rewriting of border-top of .panel-group .panel-heading + .panel-collapse .panel-body
+    .panel-group {
+        clear: both;
+        color: @navbar-inverse-text-color;
+
+        .panel + .panel {
+            margin-top: 0;
+        }
+
+        .panel-collapse {
+            height: auto;
+        }
+
+        .panel-heading + .panel-collapse .panel-body {
+            border: none;
+        }
+
+        .highlighted {
+            background: @applist-item-hover-bg;
+        }
+
+        &.dashboard-edit-mode {
+            i.dashboard-pin {
+                left: auto;
+                right: @base-unit;
+                display: none;
+            }
+            
+            .pinned i.dashboard-pin, 
+            .pinned:hover i.dashboard-pin {
+                display: block;
+                color: @color-white;
+            }
+
+            a:hover i.dashboard-pin { 
+                display: block;
+                color: @color-gray-100;
+            }
+        }
+    }
+
+    .btn-livesite-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: @base-unit;
+        background: @applist-bg;
+
+        .btn:focus {
+            color: @color-gray-50;
+        }
+    }
+
+    .scroll-shadow {
+        display: block;
+        height: @base-unit * 0.5;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        @startColor: rgba(0, 0, 0, 1);
+        @endColor: rgba(0, 0, 0, 0);
+        #gradient.vertical(@startColor, @endColor);
+
+        &.bottom {
+            top: auto;
+            bottom: 0;
+            #gradient.vertical(@endColor, @startColor);
+        }
+    }
+    // jQuery slider styles
+    .js-scrollable {
+        outline: none;
+    }
+
+    .jspVerticalBar {
+        width: @base-unit * 0.5;
+    }
+
+    .jspDrag {
+        background-color: @color-gray-90;
+        border: none;
+    }
+}
+
+
+// Layer hiding the CMS when a user opens the Application list
+.applist-overlayer {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: @zindex-applist;
+    .overlayer-general
+}
+
+// Application colors
+
+.cat-cmsdesk-onlinemarketing {
+    background-color: @color-red-100;
+}
+
+.cat-contentmanagementcategory {
+    background-color: @color-green-100;
+}
+
+.cat-socialandcommunity {
+    background-color: @color-blue-100;
+}
+
+.cat-socialandcommunity.app-twitter {
+    background-color: @color-app-twitter;
+}
+
+.cat-socialandcommunity.app-facebook {
+    background-color: @color-app-facebook;
+}
+
+.cat-socialandcommunity.app-linkedin {
+    background-color: @color-app-linkedin;
+}
+
+.cat-development {
+    background-color: @color-purple-100;
+}
+
+.cat-configuration {
+    background-color: @color-gray-80;
+}
+
+.cat-configuration.app-sharepointconnections {
+    background-color: @color-app-sharepoint;
+}
+
+.cat-cmsdesk-ecommerce {
+    background-color: @color-orange-80;
+}
+
+// Application tooltip
+.applist-tooltip {
+    margin-left: @applist-tooltip-margin-left !important;
+    position: fixed !important;
+
+    .tooltip-inner {
+        max-width: @applist-tooltip-maxwidth;
+    }
+}

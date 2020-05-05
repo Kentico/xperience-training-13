@@ -1,0 +1,1520 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.ContactManagement.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupController">
+            <summary>
+            Handles posting of contact group to the server.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupController.Post(System.String)">
+            <summary>
+            Creates contact group by given name on specified site.
+            </summary>
+            <param name="contactGroupName">Contact group name. Will be used as Display name and also as a code name.</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImportController">
+            <summary>
+            Handles posting of contacts to the server.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportController.Post(CMS.ContactManagement.Web.UI.RequestModel,System.Nullable{System.Guid})">
+            <summary>
+            Imports contacts. 
+            Contacts are assigned to contact group when <paramref name="contactGroupGuid"/> is specified. 
+            </summary>
+            <param name="request">Fields must contain "ContactEmail".</param>
+            <param name="contactGroupGuid">Optional contact group where contacts will be assigned</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportController.GetMessageFromException(System.Exception)">
+            <summary>
+            For <see cref="T:CMS.ContactManagement.Web.UI.ContactImportException"/> returns UIMessage otherwise exception message.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportController.GetUniqueImportData(System.Collections.Generic.List{CMS.ContactManagement.Web.UI.ContactImportData},CMS.ContactManagement.Web.UI.ResultModel)">
+            <summary>
+            Filter out duplicates, the last one is one that's needed, because of consistency when duplicates are in more than one batch.
+            Also updates <paramref name="resultModel"/> duplicities.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportController.CreateManualContactGroupMembers(CMS.ContactManagement.ContactGroupInfo,System.Collections.Generic.IEnumerable{CMS.ContactManagement.ContactInfo})">
+            <summary>
+            Adds contacts represented by <paramref name="contacts"/> to the contact group specified by <paramref name="contactGroup"/>. 
+            Only those contacts which are not part of contact group should be passed in <paramref name="contacts"/>. If some contact who is already
+            a member of the group will be added, the whole operation will be unsuccessful.
+            Contacts will be added as manual, not automatic and not from account.
+            </summary>
+            <param name="contactGroup">Contact group where contacts will be assigned</param>
+            <param name="contacts">Contacts which will be added</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImportExceptionHandlingAttribute">
+            <summary>
+            Any exception thrown by ContactImport should be passed to client translated and with correct HTTP status code. 
+            This class ensure such a behavior.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel">
+            <summary>
+            Refers to data which were not imported. Result is same as <see cref="T:CMS.ContactManagement.Web.UI.RequestModel"/> and contains explanation message for each failed row.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldsOrder">
+            <summary>
+            Names of the contact fields which shall be imported. This list specifies meaning of fields values in <see cref="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldValues"/> property. 
+            </summary>
+            <example>
+            If FieldsOrder[0] is "ContactEmail", than first item in each row in <see cref="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldValues"/> property represents contact email.
+            </example>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldValues">
+            <summary>
+            Values of contact fields in order specified by <see cref="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldsOrder"/> property.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.Messages">
+            <summary>
+            Each message is trying to explain why was corresponding row in <see cref="P:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.FieldValues"/> rejected.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.NotImportedContactsResultModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.RequestModel">
+            <summary>
+            Data class carrying request parameters of the import operation. 
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.RequestModel.FieldsOrder">
+            <summary>
+            Names of the contact fields which shall be imported. This list specifies meaning of fields values in <see cref="P:CMS.ContactManagement.Web.UI.RequestModel.FieldValues"/> property. 
+            </summary>
+            <example>
+            If FieldsOrder[0] is "ContactEmail", than first item in each row in <see cref="P:CMS.ContactManagement.Web.UI.RequestModel.FieldValues"/> property represents contact email.
+            </example>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.RequestModel.FieldValues">
+            <summary>
+            Values of contact fields in order specified by <see cref="P:CMS.ContactManagement.Web.UI.RequestModel.FieldsOrder"/> property.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.RequestModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ResultModel">
+            <summary>
+            See <see cref="T:CMS.ContactManagement.Web.UI.ContactImportResults"/> for detailed description.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ResultModel.Duplicities">
+            <summary>
+            Number of contacts from input batch which already existed in DB and were updated or were in the input batch more than once.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ResultModel.Failures">
+            <summary>
+            Number of contacts from input batch which were not inserted or were not updated if they already existed in DB.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ResultModel.Imported">
+            <summary>
+            Number of contacts which were created.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ResultModel.NotImportedContacts">
+            <summary>
+            Information about contact which were not imported
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ResultModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ResultModel.Equals(System.Object)">
+            <summary>
+            Indicates whether the ResultModel equals to some other ResultModel
+            </summary>
+            <param name="obj">The ResultModel that will be used in the comparison</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ResultModel.GetHashCode">
+            <summary>
+            Empty implementation override of the default hash function.
+            It is here to avoid compile time warning. Equals() is used in tests only.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact journey component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController.#ctor(CMS.ContactManagement.Web.UI.Internal.IContactJourneyControllerService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController"/>.
+            </summary>
+            <param name="contactJourneyControllerService">Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactJourneyController.Get(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController">
+            <summary>
+            Provides endpoint for retrieving demographic statistics of all <see cref="T:CMS.ContactManagement.ContactInfo"/>s.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController.GetGroupedByCountry(System.String)">
+            <summary>
+            Returns collection of countries associated with a number of contacts from the country. 
+            </summary>
+            <param name="retrieverIdentifier">Specifies which implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/> should be used</param>
+            <exception cref="T:System.ArgumentException"><paramref name="retrieverIdentifier"/> is empty</exception>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController.GetGroupedByUSAStates(System.String)">
+            <summary>
+            Returns collection of USA's states associated with a number of contacts from the state. 
+            </summary>
+            <param name="retrieverIdentifier">Specifies which implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/> should be used</param>
+            <exception cref="T:System.ArgumentException"><paramref name="retrieverIdentifier"/> is empty</exception>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController.GetGroupedByGender(System.String)">
+            <summary>
+            Returns collection of genders associated with a number of contacts in the gender. 
+            </summary>
+            <param name="retrieverIdentifier">Specifies which implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/> should be used</param>
+            <exception cref="T:System.ArgumentException"><paramref name="retrieverIdentifier"/> is empty</exception>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactDemographicsController.GetGroupedByAge(System.String)">
+            <summary>
+            Returns collection of age categories associated with a number of contacts in each category.
+            </summary>
+            <param name="retrieverIdentifier">Specifies which implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/> should be used</param>
+            <exception cref="T:System.ArgumentException"><paramref name="retrieverIdentifier"/> is empty</exception>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever">
+            <summary>
+            Provides contract for obtaining source data required by contact demographics control.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever.CanRetrieve(System.String)">
+            <summary>
+            Returns <see langword="true"/> if this retriever matches given <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier">Identifier to match this retriever.</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever.GetContactObjectQuery(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Gets contact object query suitable for contact demographics control.
+            </summary>
+            <param name="parameters">Collection of parameters specifying further the data to be loaded</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever.GetCaption">
+            <summary>
+            Gets caption that can be used as header of the demographics page, in breadcrumbs and in the page title.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetrieverFactory">
+            <summary>
+            Provides a method to retrieve desired implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetrieverFactory.Get(System.String)">
+            <summary>
+            Gets implementation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever"/>.
+            </summary>
+            <param name="identifier">The argument for <see cref="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsDataRetriever.CanRetrieve(System.String)"/> method.</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsLinkBuilder">
+            <summary>
+            Provides method for obtaining the link leading to the contact demographics control.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDemographicsLinkBuilder.GetDemographicsLink(System.String,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Gets the link leading to the contact demographics control.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum">
+            <summary>
+            Represents age category used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum.Unknown">
+            <summary>
+            Represents contact category with unknown age.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._18_24">
+            <summary>
+            Represents contact category with age between 18 and 24.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._25_34">
+            <summary>
+            Represents contact category with age between 25 and 34.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._35_44">
+            <summary>
+            Represents contact category with age between 35 and 44.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._45_54">
+            <summary>
+            Represents contact category with age between 45 and 54.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._55_64">
+            <summary>
+            Represents contact category with age between 55 and 64.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum._65plus">
+            <summary>
+            Represents contact category with age greater or equal to 65.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel">
+            <summary>
+            Represents view model for number of contacts in <see cref="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel.Category"/>
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel.Category">
+            <summary>
+            Gets or sets age category (25–34, 34–44 etc.)
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel.NumberOfContacts">
+            <summary>
+            Number of contacts in <see cref="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel.Category"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByGenderViewModel">
+            <summary>
+            Represents view model for number of contacts in <see cref="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByGenderViewModel.Gender"/>
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByGenderViewModel.Gender">
+            <summary>
+            Contacts' gender.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByGenderViewModel.NumberOfContacts">
+            <summary>
+            Number of contacts in <see cref="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByGenderViewModel.Gender"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByLocationViewModel">
+            <summary>
+            Represents view model for location associated with a number of contacts from the location.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByLocationViewModel.LocationKey">
+            <summary>
+            Code of the location.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByLocationViewModel.NumberOfContacts">
+            <summary>
+            Number of contacts from the location.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactScoringController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact's scorings.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactScoringController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactScoringController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactScoringController.Get(System.Int32)">
+            <summary>
+            Retrieves instances of <see cref="T:CMS.ContactManagement.Web.UI.ContactScoringViewModel"/> for the given <paramref name="contactId"/>.
+            </summary>
+            <param name="contactId">ID of a contact for which the view models are retrieved.</param>
+            <returns>Scoring view models for the given contact.</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.IContactDetailsControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDetailsControllerService.RegisterContactDetailsFieldResolver(System.String,CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver)">
+            <summary>
+            Registers given <paramref name="fieldResolver"/> for given <paramref name="fieldName"/>. Once the field with <paramref name="fieldName"/> will be 
+            proceeded, result of <paramref name="fieldResolver"/> will be used as the field value.
+            </summary>
+            <param name="fieldName">Name of the field the <paramref name="fieldResolver"/> is registered for</param>
+            <param name="fieldResolver">Implementation fo <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver"/> resolving the value for given <paramref name="fieldName"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDetailsControllerService.GetContactDetailsViewModel(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver">
+            <summary>
+            Provides method for resolving special contact detail fields. It can be used in cases the primitive and reference types are not sufficient for contact detail component.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver.ResolveField(CMS.ContactManagement.ContactInfo)">
+            <summary>
+            Resolves detail field for given <paramref name="contact"/>. 
+            </summary>
+            <param name="contact">Contact the detail field is resolved for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="contact"/> is <c>null</c></exception>
+            <returns>Resolved field. This object will be serialized to JSON in contact component</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact card component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactProfileController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactProfileController.#ctor(CMS.ContactManagement.Web.UI.IContactProfileControllerService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/>.
+            </summary>
+            <param name="contactProfileControllerService">Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactProfileController.Get(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> is obtained for</param>
+            <exception cref="T:System.Web.Http.HttpResponseException"><see cref="T:CMS.ContactManagement.ContactInfo"/> with given <paramref name="contactID"/> not found</exception>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact groups membership component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController.#ctor(CMS.ContactManagement.Web.UI.IContactGroupsMembershipService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController"/>.
+            </summary>
+            <param name="contactGroupsMembershipService">Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController.Get(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter">
+            <summary>
+            JSON converter for localizing string representation of <see cref="T:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes localized string representation of given <paramref name="value"/> to the <paramref name="writer"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Not implemented.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedAgeCategoryJsonConverter.CanConvert(System.Type)">
+            <summary>
+            Returns <c>true</c> if given <paramref name="objectType"/> is of type <see cref="T:CMS.ContactManagement.Web.UI.Internal.AgeCategoryEnum"/>; otherwise, <c>false</c>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter">
+            <summary>
+            JSON converter for localizing string representation of <see cref="T:CMS.Membership.UserGenderEnum"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes localized string representation of given <paramref name="value"/> to the <paramref name="writer"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Not implemented.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.Internal.LocalizedGenderJsonConverter.CanConvert(System.Type)">
+            <summary>
+            Returns <c>true</c> if given <paramref name="objectType"/> is of type <see cref="T:CMS.Membership.UserGenderEnum"/>; otherwise, <c>false</c>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel">
+            <summary>
+            Represents a view model of the contact journey component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel.JourneyLengthDaysText">
+            <summary>
+            Gets or sets value representing how many days did the journey take.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel.JourneyLengthStartedDate">
+            <summary>
+            Gets or sets value representing the starting date of the journey.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel.LastActivityDaysAgoText">
+            <summary>
+            Gets or sets value representing how many days ago was the first activity performed.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.Internal.ContactJourneyViewModel.LastActivityDate">
+            <summary>
+            Gets or sets value representing the date of the last activity.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupedByGenderViewModelComparer">
+            <summary>
+            Orders given collection of <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactsGroupedByAgeViewModel"/> int the  following manner: male, female, unknown
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactDetailsController">
+            <summary>
+            Provides endpoint for retrieving the data required for the contact details component.
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsController.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsController.#ctor(CMS.ContactManagement.Web.UI.Internal.IContactDetailsControllerService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsController"/>.
+            </summary>
+            <param name="contactDetailsControllerService">Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsController"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsController.Get(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactDetailsAccountResolver">
+            <summary>
+            Provides method for resolving accounts in contact detail component.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsAccountResolver.#ctor(CMS.PortalEngine.Internal.IUILinkProvider,CMS.ContactManagement.IAccountContactInfoProvider)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsAccountResolver"/>
+            </summary>
+            <param name="uiLinkProvider">Provides methods for generating links to access single objects within the module. (e.g. single Site)</param>
+            <param name="accountContactInfoProvider">Provider for <see cref="T:CMS.ContactManagement.AccountContactInfo"/> management.</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsAccountResolver.ResolveField(CMS.ContactManagement.ContactInfo)">
+            <summary>
+            Resolves accounts detail field for given <paramref name="contact"/>. 
+            </summary>
+            <param name="contact">Contact the detail field is resolved for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="contact"/> is <c>null</c></exception>
+            <returns>Collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsAccountViewModel"/> resolved for given <paramref name="contact"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactDetailsControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.#ctor(CMS.ContactManagement.IContactInfoProvider,CMS.Core.IEventLogService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsControllerService"/>.
+            </summary>
+            <param name="contactInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactInfo"/> management.</param>
+            <param name="eventLogService">Service for logging messages to the event log</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.RegisterContactDetailsFieldResolver(System.String,CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver)">
+            <summary>
+            Registers given <paramref name="fieldResolver"/> for given <paramref name="fieldName"/>. Once the field with <paramref name="fieldName"/> will be 
+            proceeded, result of <paramref name="fieldResolver"/> will be used as the field value.
+            </summary>
+            <param name="fieldName">Name of the field the <paramref name="fieldResolver"/> is registered for</param>
+            <param name="fieldResolver">Implementation fo <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver"/> resolving the value for given <paramref name="fieldName"/></param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.GetContactDetailsViewModel(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.GetFieldValue(CMS.ContactManagement.ContactInfo,System.String)">
+            <summary>
+            Gets field value of given <paramref name="contact"/> for given <paramref name="fieldName"/>. If some <see cref="T:CMS.ContactManagement.Web.UI.Internal.IContactDetailsFieldResolver"/> was registered for
+            <paramref name="fieldName"/>, resolver is used for obtaining the value. If dependency for <paramref name="fieldName "/>is specified in <see cref="F:CMS.ContactManagement.ContactInfo.TYPEINFO"/>,
+            related object is loaded and its <see cref="P:CMS.DataEngine.BaseInfo.GeneralizedInfoWrapper.ObjectDisplayName"/> is returned. Otherwise returns value of the field within <paramref name="contact"/>.
+            </summary>
+            <param name="contact">Contact the field value is obtained for</param>
+            <param name="fieldName">Name of the field the value is obtained for</param>
+            <returns>Desired field value of <paramref name="contact"/> identified by given <paramref name="fieldName"/></returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.IsValueAvailable(System.Object)">
+            <summary>
+            Determines whether the given <paramref name="detailValue"/> is available or not. 
+            </summary>
+            <param name="detailValue">Value to be determined</param>
+            <returns><c>False</c> is <paramref name="detailValue"/> is <c>null</c> or type of the <paramref name="detailValue"/> is <see cref="T:System.String"/> and the value is empty; otherwise, <c>true</c></returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactDetailsControllerService.GetVisibleFormFields">
+            <summary>
+            Gets all visible field defined in the ContactProfile <see cref="T:CMS.FormEngine.AlternativeFormInfo"/>.
+            </summary>
+            <returns>Collection of visible form fields obtained from the <see cref="T:CMS.FormEngine.AlternativeFormInfo"/></returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupsMembershipControllerService.#ctor(CMS.PortalEngine.Internal.IUILinkProvider,CMS.ContactManagement.IContactGroupInfoProvider,CMS.ContactManagement.IContactGroupMemberInfoProvider)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipControllerService"/>.
+            </summary>
+            <param name="uiLinkProvider">Provides link for an object</param>
+            <param name="contactGroupInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactGroupInfo"/> management.</param>
+            <param name="contactGroupMemberInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactGroupMemberInfo"/> management.</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupsMembershipControllerService.GetContactGroupMembershipViewModel(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/>. Returns empty list if no membership is found for given <paramref name="contactID"/>.
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/>, or empty list if no membership is found</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactProfileControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactProfileControllerService.#ctor(CMS.ContactManagement.IContactInfoProvider,CMS.Core.Internal.IDateTimeNowService)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileControllerService"/>.
+            </summary>
+            <param name="contactInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactInfo"/> management.</param>
+            <param name="dateTimeNowService">Service for obtaining current date time</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactProfileControllerService.GetContactViewModel(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/>. Returns <c>null</c> if no <see cref="T:CMS.ContactManagement.ContactInfo"/> is found for given <paramref name="contactID"/>.
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/>, or <c>null</c> is no <see cref="T:CMS.ContactManagement.ContactInfo"/> is found</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.IContactProfileControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IContactProfileControllerService.GetContactViewModel(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/>. Returns <c>null</c> if no <see cref="T:CMS.ContactManagement.ContactInfo"/> is found for given <paramref name="contactID"/>.
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel"/> for the given <paramref name="contactID"/>, or <c>null</c> is no <see cref="T:CMS.ContactManagement.ContactInfo"/> is found</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.IContactScoringService">
+            <summary>
+            Provides manipulation of contact's scoring view models.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IContactScoringService.GetScoringViewModel(System.Int32)">
+            <summary>
+            Retrieves instances of <see cref="T:CMS.ContactManagement.Web.UI.ContactScoringViewModel"/> for a contact.
+            </summary>
+            <param name="contactId">ID of a contact for which the view models are retrieved.</param>
+            <returns>Scoring view models for the given contact.</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactScoringService">
+            <summary>
+            Provides manipulation of contact's scoring view models.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactScoringService.#ctor(CMS.ContactManagement.IScoreContactRuleInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.ContactManagement.Web.UI.ContactScoringService"/> class.
+            </summary>
+            <param name="scoreContactRuleInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ScoreContactRuleInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="scoreContactRuleInfoProvider"/> is null.</exception>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactScoringService.GetScoringViewModel(System.Int32)">
+            <summary>
+            Retrieves instances of <see cref="T:CMS.ContactManagement.Web.UI.ContactScoringViewModel"/> for a contact.
+            </summary>
+            <param name="contactId">ID of a contact for which the view models are retrieved.</param>
+            <returns>Scoring view models for the given contact.</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactDetailsAccountViewModel">
+            <summary>
+            Represents view model for the contact account details field.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsAccountViewModel.Url">
+            <summary>
+            Gets or sets URL leading to the account.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsAccountViewModel.Text">
+            <summary>
+            Gets or sets text representing the account.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsAccountViewModel.ContactRole">
+            <summary>
+            Gets or sets the role contact has in account.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactDetailsViewModel">
+            <summary>
+            Represents view model for the contact details component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsViewModel.FieldCaption">
+            <summary>
+            Gets or sets localized caption of the detail item.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsViewModel.FieldName">
+            <summary>
+            Gets or sets name of the detail item.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsViewModel.FieldValue">
+            <summary>
+            Gets or sets value of the detail item.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactDetailsViewModel.FieldType">
+            <summary>
+            Gets or sets type of the <see cref="P:CMS.ContactManagement.Web.UI.ContactDetailsViewModel.FieldValue"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel">
+            <summary>
+            Represents view model for the contact groups membership component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel.ContactGroupDisplayName">
+            <summary>
+            Gets or sets display name of the contact group.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel.ContactGroupUrl">
+            <summary>
+            Gets or sets URL for the contact group.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactScoringViewModel">
+            <summary>
+            View model for contact's scoring in contact details component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactScoringViewModel.Name">
+            <summary>
+            Name of the scoring.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactScoringViewModel.Points">
+            <summary>
+            Points the contact has accumulated for the given scoring.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactProfileViewModel">
+            <summary>
+            Represents view model for the contact component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactID">
+            <summary>
+            Gets or sets contact ID.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactName">
+            <summary>
+            Gets or sets full name of the contact.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactEmail">
+            <summary>
+            Gets or sets email of the contact.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactType">
+            <summary>
+            Gets or sets value specifying the contact type based on license.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactAddress">
+            <summary>
+            Gets or sets value specifying the contact address.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactAge">
+            <summary>
+            Gets or sets value specifying the contact age.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactGender">
+            <summary>
+            Gets or sets value specifying the contact gender.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.ContactNotes">
+            <summary>
+            Gets or sets value specifying the contact notes.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.EditUrl">
+            <summary>
+            Gets or sets url that leads to contacts edit page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.IsCustomer">
+            <summary>
+            Gets or sets whether the contact is in relation with some user.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactProfileViewModel.IsUser">
+            <summary>
+            Gets or sets whether the contact is in relation with some user.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.IContactGroupsMembershipService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactGroupsMembershipController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IContactGroupsMembershipService.GetContactGroupMembershipViewModel(System.Int32)">
+            <summary>
+            Gets instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/>. Returns empty list if no membership is found for given <paramref name="contactID"/>.
+            </summary>
+            <param name="contactID">ID of contact the <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> is obtained for</param>
+            <returns>Instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactGroupsMembershipViewModel"/> for the given <paramref name="contactID"/>, or empty list if no membership is found</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.OnlineMarketingMacroRuleParametersExtender">
+            <summary>
+            Extender for on-line marketing macro rule parameters editor
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.OnlineMarketingMacroRuleParametersExtender.OnInit">
+            <summary>
+            OnInit event handler
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.OnlineMarketingRulesListExtender">
+            <summary>
+            Macro rule list extender in OM/Configuration. Sets "MacroRuleResourceName" to OM to the edited object, so that
+            right permissions (Contact Management -> Read global configuration) can be set in Contact management module.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.OnlineMarketingRulesListExtender.OnInit">
+            <summary>
+            OnInit event handler
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.OnlineMarketingRulesListExtender.OnExternalDataBound(System.Object,System.String,System.Object)">
+            <summary>
+            Handles external data-bound event of <see cref="T:CMS.UIControls.UniGrid"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.AuthorizationHelper">
+            <summary>
+            Helps authorize current user to read or modify resources contained in module CMS.ContactManagement.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.AuthorizedReadContact(System.Boolean)">
+            <summary>
+            Indicates if current user is authorized for contacts, contact groups and accounts.
+            </summary>
+            <param name="redirectIfNotAuthorized">Indicates if redirect should be done when not enough permissions</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.AuthorizedModifyContact(System.Boolean)">
+            <summary>
+            Returns <c>true</c> if current user is authorized to modify contact, contact groups and accounts.
+            </summary>
+            <param name="redirectIfNotAuthorized">Indicates if redirect should be done when not enough permissions</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.AuthorizedReadConfiguration(System.Boolean)">
+            <summary>
+            Indicates if current user is authorized for configuration.
+            </summary>
+            <param name="redirectIfNotAuthorized">Indicates if redirect should be done when not enough permissions</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.AuthorizedModifyConfiguration(System.Boolean)">
+            <summary>
+            Returns <c>true</c> if current user is authorized to modify configuration.
+            </summary>
+            <param name="redirectIfNotAuthorized">Indicates if redirect should be done when not enough permissions</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.RedirectIfNotAuthorized(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Redirects user to access denied page, if <paramref name="redirectIfNotAuthorized"/> is true and user is not <paramref name="authorized"/>.
+            </summary>
+            <param name="permissionName">Name of the permission that was not granted to the current user.</param>
+            <param name="redirectIfNotAuthorized">Indicates if user will be redirected to access denied page.</param>
+            <param name="authorized">Indicates if user was granted with <paramref name="permissionName"/>.</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AuthorizationHelper.IsAuthorizedForContactManagement(System.String,System.Boolean)">
+            <summary>
+            Indicates if user is granted with <paramref name="permissionName"/> in module <see cref="F:CMS.Core.ModuleName.CONTACTMANAGEMENT"/>.
+            If not and <paramref name="redirectIfNotAuthorized"/> is true, user will be redirected to access denied page.
+            </summary>
+            <param name="permissionName">Name of the permission that is checked for current user.</param>
+            <param name="redirectIfNotAuthorized">Indicates if user will be redirected to access denied page.</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImportData">
+            <summary>
+            Represents data for contact import. 
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportData.Email">
+            <summary>
+            Contact email
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportData.Data">
+            <summary>
+            Represents FieldName, FieldValue pair
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImporter">
+            <summary>
+            Imports contacts into database.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImporter.EmailComparer">
+            <summary>
+            Gets the email comparer which determines email's uniqueness.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.#ctor(CMS.ContactManagement.IContactChangeRepository)">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactImporter"/>.
+            </summary>
+            <param name="contactChangeRepository">Represents contact change repository</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="contactChangeRepository"/> is <c>null</c></exception>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.ImportContacts(System.Collections.Generic.IList{CMS.ContactManagement.Web.UI.ContactImportData})">
+            <summary>
+            Imports contacts into database. Large number of contacts can be imported, because bulk insert is used. Finds existing contacts by ContactEmail and updates them.
+            This method does not check permissions. Contact groups and scoring are recalculated only for updated contacts.
+            Contacts cannot be imported as global.
+            </summary>
+            <example>
+            Input:
+            1@email.cz
+            2@email.cz
+            2@email.cz
+            2@email.cz
+            3@email.cz
+            
+            Already in DB:
+            3@email.cz
+            
+            That's the result, when everything succeeds:
+            2 imported (1@email.cz and 2@email.cz)
+            3 duplicities (twice 2@email.cz and 3@email.cz) 
+            </example>
+            <param name="records">Contacts to be imported</param>
+            <returns>Results of the import</returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.InsertContactsToDatabase(System.Data.DataTable)">
+            <summary>
+            Inserts given dataTable containing contact data to database.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.UpdateExistingContacts(System.Collections.Generic.IEnumerable{CMS.ContactManagement.ContactInfo},CMS.ContactManagement.Web.UI.ContactImportData,CMS.ContactManagement.Web.UI.ContactImportResults)">
+            <summary>
+            Updates <paramref name="contactsToUpdate"/> with values specified in <paramref name="contactImportData"/>.
+            </summary>
+            <param name="contactsToUpdate">Those contacts will be updated</param>
+            <param name="contactImportData">New field values</param>
+            <param name="result">Results of this operation will be stored in this instance</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.SetContactInfoFields(CMS.ContactManagement.ContactInfo,CMS.ContactManagement.Web.UI.ContactImportData)">
+            <summary>
+            Sets <paramref name="contact"/> fields to values specified in <paramref name="contactImportData"/>. 
+            </summary>
+            <param name="contact">Contact whose fields will be updated</param>
+            <param name="contactImportData">New values of the fields</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.AddDataRow(System.Data.DataTable,CMS.ContactManagement.Web.UI.ContactImportData,System.Guid)">
+            <summary>
+            Adds <paramref name="contactImportData"/> as row to <paramref name="contactDataTable"/>. 
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.GetErrorMessageForInvalidCast(System.String,System.String)">
+            <summary>
+            Prepares error message when invalid cast occures while processing contact data.
+            </summary>
+            <param name="fieldDisplayName">Field name</param>
+            <param name="fieldDataType">Type of field</param>
+            <returns>Localized error message.</returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImporter.ValidateFieldLength(System.String,System.String)">
+            <summary>
+            Validates value according to fields parameters.
+            </summary>
+            <param name="fieldName">Field name</param>
+            <param name="value">Field value</param>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportException.UIMessage">
+            <summary>
+            Message displayed in the UI to the user
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider">
+            <summary>
+            Class responsible for filtering out contact fields that are not supported by contact import functionality.
+            </summary>
+        </member>
+        <member name="F:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.SupportedDataTypes">
+            <summary>
+            Contains data types that are supported by contact import functionality
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.#ctor">
+            <summary>
+            Creates instance.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.IsFieldAvailableForImport(System.String)">
+            <summary>
+            Checks whether contact field is available for import.
+            </summary>
+            <param name="fieldName">Name of contact field</param>
+            <returns>True when field is supported</returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.GetCachedAllowedFieldNames">
+            <summary>
+            Contains contact field that are available for import.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.GetCategoriesAndFieldsAvailableForImport">
+            <summary>
+            Gets fields and categories from "om.contact.CMSImportContacts" alternative form without fields that are not supported by contact import (eg. DateTime).
+            <remarks>Supported data types are text, longtext, integer, longinteger.</remarks>
+            <remarks>Categories without visible fields are not returned.</remarks>
+            <remarks>Hidden categories with visible fields are not returned.</remarks>
+            </summary>
+            <returns>Categories and fields that are available for contact import.</returns>
+            <remarks>For instances running on lower than <see cref="F:CMS.DataEngine.FeatureEnum.FullContactManagement"/> it return "om.contact.CMSImportContactsSimple" alternative form</remarks>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactImportFieldsProvider.IsFieldAvailableForImport(CMS.FormEngine.FormFieldInfo)">
+            <summary>
+            Decides whether given <see cref="T:CMS.FormEngine.FormFieldInfo"/> should be available for import.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactImportResults">
+            <summary>
+            Data class carrying results of the import operation. 
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.Duplicities">
+            <summary>
+            Number of contacts from input batch which already existed in DB and were updated or were in the input batch more than once.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.Failures">
+            <summary>
+            Number of contacts from input batch which were not inserted or were not updated if they already existed in DB.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.Imported">
+            <summary>
+            Number of contacts which were created.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.CreatedContactGuids">
+            <summary>
+            Guids of created contacts.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.UpdatedContacts">
+            <summary>
+            Contacts which were successfully updated. Happens when imported contact already exists in DB.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.Exceptions">
+            <summary>
+            All exceptions which happened during import.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.ContactImportResults.FailedData">
+            <summary>
+            Data which were not imported, data correspond to each exception in Exceptions
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ImportDataConvertor">
+            <summary>
+            Converts list of fields and list of values to stream of <see cref="T:CMS.ContactManagement.Web.UI.ContactImportData"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ImportDataConvertor.ConvertToImportData(System.Collections.Generic.IList{System.String},System.Collections.Generic.IList{System.Collections.Generic.List{System.String}},System.Action{System.Collections.Generic.List{System.String},System.Exception})">
+            <summary>
+            Converts list of fields and list of values to stream of <see cref="T:CMS.ContactManagement.Web.UI.ContactImportData"/>. <paramref name="onErrorAction"/> is called for each failed conversion.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ImportDataEmailFixer">
+            <summary>
+            Tries to fix common error in email.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ImportDataEmailFixer.TrimSpaces(CMS.ContactManagement.Web.UI.ContactImportData)">
+            <summary>
+            This method trims spaces in ContactEmail column.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.IContactJourneyService">
+            <summary>
+            Provides method for obtaining the view model suitable for contact journey component.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IContactJourneyService.GetContactJourneyForContact(System.Int32)">
+            <summary>
+            Gets view model suitable for contact journey component for the given <paramref name="contactID"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactManagementLiveTileModelProvider">
+            <summary>
+            Provides live model for the Contact management dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactManagementLiveTileModelProvider.GetModel(CMS.ApplicationDashboard.Web.UI.LiveTileContext)">
+            <summary>
+            Loads model for the dashboard live tile.
+            </summary>
+            <param name="liveTileContext">Context of the live tile. Contains information about the user and the site the model is requested for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="liveTileContext"/> is null</exception>
+            <returns>Live tile model</returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactManagementLiveTileModelProvider.GetNewContactsCount">
+            <summary>
+            Gets total number of new contacts from the last week.
+            </summary>
+            <returns>Number of new contacts</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.MyPendingContactsLiveTileModelProvider">
+            <summary>
+            Provides live tile model for the My pending contacts dashboard tile.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.MyPendingContactsLiveTileModelProvider.GetModel(CMS.ApplicationDashboard.Web.UI.LiveTileContext)">
+            <summary>
+            Loads total number of pending contacts for the given user.
+            </summary>
+            <param name="liveTileContext">Context of the live tile. Contains information about the user and the site the model is requested for</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="liveTileContext"/> is null</exception>
+            <returns>Live tile model</returns>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.MyPendingContactsLiveTileModelProvider.GetPendingContactsCount(CMS.SiteProvider.SiteInfo,CMS.Base.IUserInfo)">
+            <summary>
+            Gets total number of pending contacts for given user.
+            </summary>
+            <param name="site">Contacts' site</param>
+            <param name="user">User the contacts are assigned to</param>
+            <returns>Number of pending contacts</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.AccountTabsExtender">
+            <summary>
+            Extender for account detail tabs UIElement.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AccountTabsExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AccountTabsExtender.OnInitTabs">
+            <summary>
+            Initialization of tabs.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender">
+            <summary>
+            Contact group general page extender
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.OnInit">
+            <summary>
+            Initializes the extender.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.Page_PreRender(System.Object,System.EventArgs)">
+            <summary>
+            Initializes both recalculation button and the status label. 
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.Page_Load(System.Object,System.EventArgs)">
+            <summary>
+            Registers to the header actions events.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.UpdateStatus">
+            <summary>
+            Updates status text according to the contact group status.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.UpdateRecalculationButton">
+            <summary>
+            Updates text and state of the button according to the contact group status.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.SetContactGroupStatus">
+            <summary>
+            Sets status according to the current contact group status state.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupGeneralExtender.RecalculateContactGroup(System.Object,System.EventArgs)">
+            <summary>
+            Performs contact group recalculation.
+            Fires, when recalculate button is clicked.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender">
+            <summary>
+            Extender for editing or adding new contact group.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.ControlLoad(System.Object,System.EventArgs)">
+            <summary>
+            Sets control handlers and change submit button state.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.SetSubmitButtonStatus(System.Object,System.EventArgs)">
+            <summary>
+            Disables save button when recalculation button is hit.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.CheckRebuilding(System.Object,System.EventArgs)">
+            <summary>
+            Checks if contact group is rebuilding. If so, stop processing of form and show proper error.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.SetContactGroupStatus(System.Object,System.EventArgs)">
+            <summary>
+            Sets contact group status to ConditionChanged if condition value differs from its original value.
+            Fires, when save button is clicked.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactGroupObjectExtender.CheckMacros(System.Object,System.EventArgs)">
+            <summary>
+            Check whether all macros in contact group dynamic condition are optimized.
+            Show warning when aren't.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactTabsExtender">
+            <summary>
+            Extender for contact detail tabs UIElement.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactTabsExtender.OnInit">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactTabsExtender.OnInitTabs">
+            <summary>
+            Initialization of tabs.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.ContactManagementWebUIModule">
+            <summary>
+            Represents the Contact management Web UI module.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactManagementWebUIModule.#ctor">
+            <summary>
+            Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactManagementWebUIModule"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactManagementWebUIModule.OnInit">
+            <summary>
+            Initializes the module.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.ContactManagementWebUIModule.RegisterContactDetailAccountResolver">
+            <summary>
+            Registers <see cref="T:CMS.ContactManagement.Web.UI.ContactDetailsAccountResolver"/> for resolving the contact account detail field. 
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSAutomationPage">
+            <summary>
+            Base contact management page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSAutomationPage.AuthorizedForContacts">
+            <summary>
+            Indicates if current user is authorized for reading contacts.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSAutomationPage.OnInit(System.EventArgs)">
+            <summary>
+            Page OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSAutomationPage.CheckPermissions(System.Boolean)">
+            <summary>
+            Checks if on-line marketing is available on site.
+            </summary>
+            <param name="redirectOnError">If set to <c>true</c> then redirect to error permission page when not authorized</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSContactManagementConfigurationPage">
+            <summary>
+            Base page for CMS ContactManagement - Configuration page.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSContactManagementConfigurationPage.GetSiteID(System.String)">
+            <summary>
+            Gets valid site id for current user.
+            </summary>
+            <param name="queryStringSiteId">Site id from querystring</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSContactManagementConfigurationPage.OnInit(System.EventArgs)">
+            <summary>
+            OnInit event handler.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSContactManagementPage">
+            <summary>
+            Base contact management page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSContactManagementPage.SiteID">
+            <summary>
+            Returns correct site id for current user.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSContactManagementPage.GetSiteID(System.String)">
+            <summary>
+            Gets valid site id for current user.
+            </summary>
+            <param name="queryStringSiteId">Site id from querystring</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSContactManagementPage.OnInit(System.EventArgs)">
+            <summary>
+            Page OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSContactManagementPage.AddSiteQuery(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Adds 'siteid' query parameter to provided URL.
+            </summary>
+            <param name="url">Existing url</param>
+            <param name="currentSiteID">Current site ID</param>
+            <returns>Returns modified URL</returns>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage">
+            <summary>
+            Base class for automation process detail master page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.AutomationManager">
+            <summary>
+            Automation manager component.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.MasterPage">
+            <summary>
+            Gets top master page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.DetailPage">
+            <summary>
+            Gets detail page, can return null value;
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.MessagesPlaceHolder">
+            <summary>
+            Messages placeholder from top master page.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.Title">
+            <summary>
+            Page title control from top master page.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.OnInit(System.EventArgs)">
+            <summary>
+            Init event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.OnLoad(System.EventArgs)">
+            <summary>
+            Load event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.OnPreRender(System.EventArgs)">
+            <summary>
+            Pre-render event handler.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSSalesForceDialogPage">
+            <summary>
+            Represents a modal dialog web page of SalesForce module.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSSalesForceDialogPage.AuthorizeRequest">
+            <summary>
+            Checks the license and redirects the user to a special page when the license does not include Salesforce.com Connector.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.CMSScorePage">
+            <summary>
+            Base class for scoring pages.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSScorePage.Score">
+            <summary>
+            Score object.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSScorePage.OnInit(System.EventArgs)">
+            <summary>
+            Page OnInit event handler.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSScorePage.CheckReadPermission">
+            <summary>
+            Checks if user is eligible for reading scoring.
+            </summary>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.IProcessDetailPage">
+            <summary>
+            Interface for process detail pages of marketing automation module.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.SetBreadcrumbs(CMS.FormEngine.Web.UI.CMSAutomationManager)">
+            <summary>
+            Sets breadcrumbs on current page.
+            </summary>
+            <param name="automationManager">Instance of automation manager</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.AfterAutomationManagerAction(System.String,CMS.FormEngine.Web.UI.CMSAutomationManager)">
+            <summary>
+            Handles logic after specified automation manager action.
+            </summary>
+            <param name="actionName">Automation manager action name</param>
+            <param name="automationManager">Instance of automation manager</param>
+        </member>
+        <member name="T:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel">
+            <summary>
+            View model for repeater in Marketing Automation application.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.#ctor(CMS.Automation.AutomationTemplateInfo)">
+            <summary>
+            Initialized a new instance of <see cref="T:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.Id">
+            <summary>
+            Gets template id.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.Name">
+            <summary>
+            Gets template name.
+            </summary>
+            <remarks>
+            Value is localized and encoded.
+            </remarks>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.Description">
+            <summary>
+            Gets template description.
+            </summary>
+            <remarks>
+            Value is localized and encoded.
+            </remarks>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.DescriptionTooltip">
+            <summary>
+            Gets template description for tooltip.
+            </summary>
+            <remarks>
+            Value is localized and encoded.
+            </remarks>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.IconClass">
+            <summary>
+            Gets template description.
+            </summary>
+            <remarks>
+            Value is localized and encoded.
+            </remarks>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.FromScratchCssClass">
+            <summary>
+            Returns "scratch" CSS class for the template which represents "from scratch" template, otherwise returns empty string.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel.Tooltip">
+            <summary>
+            Gets tooltip text.
+            </summary>
+            <remarks>
+            Value is localized and encoded.
+            </remarks>
+        </member>
+    </members>
+</doc>

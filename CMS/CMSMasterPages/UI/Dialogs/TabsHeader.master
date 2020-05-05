@@ -1,0 +1,54 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="CMSMasterPages_UI_Dialogs_TabsHeader"
+     Codebehind="TabsHeader.master.cs" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/PageElements/PageTitle.ascx" TagName="PageTitle"
+    TagPrefix="cms" %>
+<!DOCTYPE html>
+<html>
+<head runat="server" enableviewstate="false">
+    <title>TabsHeaderMasterPage</title>
+    <asp:Literal ID="ltlHeadElements" runat="server" Visible="false"></asp:Literal>
+    <style type="text/css">
+        body
+        {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="<%=mBodyClass%>">
+    <form id="form1" runat="server">
+    <asp:PlaceHolder runat="server" ID="plcManager" />
+    <asp:PlaceHolder runat="server" ID="plcStatus" EnableViewState="false" />
+    <asp:Panel runat="server" ID="pnlBody" CssClass="TabsPageHeader">
+        <asp:Panel runat="server" ID="pnlTitle" CssClass="DialogsPageHeader" EnableViewState="false">
+            <cms:PageTitle ID="titleElem" ShortID="pt" runat="server" IsDialog="true" />
+        </asp:Panel>
+        <asp:Panel ID="pnlActions" runat="server" CssClass="PageHeaderLine" EnableViewState="false">
+            <cms:HeaderActions ID="actionsElem" ShortID="a" runat="server" />
+            <asp:ContentPlaceHolder runat="server" ID="plcActions" />
+            <asp:ContentPlaceHolder ID="plcContent" runat="server" />
+        </asp:Panel>
+        <asp:Panel runat="server" ID="pnlTabsContainer" CssClass="TabsPageTabs LightTabs"
+            EnableViewState="false">
+            <asp:Panel runat="server" ID="pnlLeft" CssClass="FullTabsLeft">
+                &nbsp;
+            </asp:Panel>
+                <asp:Panel runat="server" ID="pnlWhite" CssClass="Tabs">
+                    <cms:UITabs ID="tabControlElem" ShortID="t" runat="server" />
+            </asp:Panel>
+            <asp:Panel runat="server" ID="pnlRight" CssClass="FullTabsRight">
+                &nbsp;
+            </asp:Panel>
+        </asp:Panel>
+        <asp:Panel runat="server" ID="pnlSeparator" CssClass="HeaderSeparator">
+            &nbsp;
+        </asp:Panel>
+    </asp:Panel>
+    </form>
+    <asp:PlaceHolder runat="server" ID="plcAfterForm"></asp:PlaceHolder>
+</body>
+</html>

@@ -1,0 +1,627 @@
+//
+// Tables
+// --------------------------------------------------
+
+
+table {
+    max-width: 100%;
+    background-color: @table-bg;
+}
+
+th {
+    text-align: left;
+}
+
+// UniMatrix first column
+.first-column {
+    width: @table-first-column-width;
+}
+// Main column width 10%
+.main-column-10 {
+    width: @main-column-10;
+}
+// Main column width 20%
+.main-column-20 {
+    width: @main-column-20;
+}
+// Main column width 30%
+.main-column-30 {
+    width: @main-column-30;
+}
+// Main column width 40%
+.main-column-40 {
+    width: @main-column-40;
+}
+// Main column width 50%
+.main-column-50 {
+    width: @main-column-50;
+}
+// Main column width 60%
+.main-column-60 {
+    width: @main-column-60;
+}
+// Main column width 70%
+.main-column-70 {
+    width: @main-column-70;
+}
+// Main column width 80%
+.main-column-80 {
+    width: @main-column-80;
+}
+// Main column width 90%
+.main-column-90 {
+    width: @main-column-90;
+}
+// Main column width 100%
+.main-column-100 {
+    width: @main-column-100;
+}
+
+// Class used in empty columns for filling purposes
+.filling-column {
+    width: @main-column-100;
+}
+
+// Baseline styles
+
+.table {
+    width: 100%;
+    white-space: nowrap;
+    margin-bottom: @table-margin-bottom;
+    font-family: @font-family-base;
+    font-size: @font-size-base;
+    border-collapse: collapse;
+
+    &.rows-middle-vertical-align {
+        td, td.unigrid-actions {
+            vertical-align: middle;
+        }
+    }
+    // Links
+    a {
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    .SelectableItem {
+        color: @link-color;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    // Actions in the table header styled as standard links
+    .table-header-action {
+        color: @link-color;
+    }
+    // Cells
+    thead,
+    tbody,
+    tfoot {
+        > tr {
+            > th,
+            > td {
+                padding: @table-cell-padding;
+                vertical-align: top;
+                line-height: @table-line-height;
+                font-family: @font-family-base;
+                font-size: @font-size-base;
+            }
+        }
+    }
+    // Head cells
+    thead {
+        th {
+            color: @table-th-text-color;
+            font-weight: bold;
+            background-color: @table-th-bg;
+            border-bottom: none;
+            // Icon only - obsolete
+            &.unigrid-actions-header-empty {
+                .unigrid-menu-panel {
+                    padding: @base-unit * 0.125; // (2px)
+                }
+            }
+
+            &.subheader {
+                font-weight: normal;
+            }
+
+            i {
+                color: @table-icon-head-color;
+                padding: 0 0 0 @padding-small-horizontal;
+                cursor: pointer;
+                vertical-align: baseline;
+                // Menu icon
+                &.icon-menu {
+                    padding: 0 @padding-small-horizontal 0 0;
+                }
+                // Sorting icon
+                &.icon-caret-up {
+                    vertical-align: bottom;
+                }
+            }
+
+            a {
+                cursor: pointer;
+                color: @table-th-link-color;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .with-filter th {
+            line-height: @base-unit * 2;
+        }
+    }
+    // Body cells
+    tbody {
+        > tr {
+            border-bottom: 1px solid @table-border-color;
+            border-top: 1px solid transparent;
+
+            > td {
+                // Actions cell - buttons are styled lower in this less file
+                &.unigrid-actions {
+                    vertical-align: top;
+                    padding: @base-unit* 0.25 @base-unit * 0.5;
+                }
+                // Flags exception
+                &.Translated,
+                &.Outdated,
+                &.NotAvailable {
+                    line-height: @base-unit;
+                }
+            }
+            // Row borders
+            &:hover > td {
+                border-top: 1px solid @table-bg-hover-border;
+                border-bottom: 1px solid @table-bg-hover-border;
+            }
+            // Flags in pages listing exception
+            &:hover td.Translated,
+            &:hover td.Outdated,
+            &:hover td.NotAvailable {
+                border: none;
+            }
+
+            a {
+                color: @table-cell-link;
+            }
+        }
+        // Used in unimatrix
+        .highlighted {
+            background-color: @color-orange-100;
+        }
+
+        [class^="cms-icon-"], [class*=" cms-icon-"] {
+            padding: 0;
+        }
+
+        input[type="text"] {
+            height: @table-textbox-height;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+    // Remove top border from thead by default
+    caption + thead,
+    colgroup + thead,
+    thead:first-child {
+        tr:first-child {
+            th, td {
+                border-top: 0;
+            }
+        }
+    }
+    // Account for multiple tbody instances
+    tbody + tbody {
+        border-top: 1px solid @table-border-color;
+    }
+    // Nesting
+    .table {
+        background-color: @body-bg;
+    }
+    // Fix checkbox position in unigrid (bulk actions)
+    .radio,
+    .checkbox {
+        margin: 0;
+        padding: 0;
+
+        label {
+            margin: 0;
+            padding: 0;
+
+            &:before {
+                margin: 0;
+                vertical-align: middle;
+            }
+
+            &:before,
+            &:after {
+                bottom: @base-unit * 0.125; // special alignment
+                top: auto;
+            }
+        }
+    }
+    // Indent between selection checkboxes in table and other content
+    .unigrid-selection {
+        min-width: @base-unit * 0.5;
+        user-select: none;
+    }
+    // Fix nested tables border
+    table tbody > tr:hover > td {
+        border: none;
+    }
+}
+
+.table-width-30 {
+    width: 30%;
+}
+
+// Zebra-striping
+//
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+
+.table-striped {
+    > tbody {
+        > tr:nth-child(odd) {
+            > td,
+            > th {
+                background-color: @table-bg-accent;
+            }
+        }
+    }
+}
+
+
+// Hover effect
+//
+// Placed here since it has to come after the potential zebra striping
+
+.table-hover {
+    > tbody {
+        > tr:hover {
+            > td,
+            > th {
+                background-color: @table-bg-hover;
+            }
+        }
+    }
+}
+
+
+// Table cell sizing
+//
+// Reset default table behavior
+
+table col[class*="col-"] {
+    float: none;
+    display: table-column;
+}
+
+table {
+    td,
+    th {
+        &[class*="col-"] {
+            float: none;
+            display: table-cell;
+        }
+    }
+}
+
+
+// Table backgrounds
+//
+// Exact selectors below required to override `.table-striped` and prevent
+// inheritance to nested tables.
+
+.table > thead > tr,
+.table > tbody > tr,
+.table > tfoot > tr {
+    > td.active,
+    > th.active,
+    &.active > td,
+    &.active > th {
+        background-color: @table-bg-active;
+    }
+}
+
+// Responsive tables
+//
+// Wrap your tables in `.table-scrollable` and we'll make them mobile friendly
+// by enabling horizontal scrolling. Only applies <768px. Everything above that
+// will display normally.
+@media screen and (max-width: @screen-sm) {
+    .table-responsive {
+        width: 100%;
+        margin-bottom: @base-unit;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        border: 1px solid @table-border-color;
+        // Tighten up spacing and give a background color
+        > .table {
+            margin-bottom: 0;
+            background-color: @color-white;
+            // Ensure the content doesn't wrap
+            > thead,
+            > tbody,
+            > tfoot {
+                > tr {
+                    > th,
+                    > td {
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+        // Special overrides for the bordered tables
+        > .table-bordered {
+            border: 0;
+            // Nuke the appropriate borders so that the parent can handle them
+            > thead,
+            > tbody,
+            > tfoot {
+                > tr {
+                    > th:first-child,
+                    > td:first-child {
+                        border-left: 0;
+                    }
+
+                    > th:last-child,
+                    > td:last-child {
+                        border-right: 0;
+                    }
+                }
+
+                    > tr:last-child {
+                        > th,
+                        > td {
+                            border-bottom: 0;
+                        }
+                    }
+            }
+        }
+    }
+}
+
+
+// CMS buttons above the table
+
+.table-buttons {
+    background-color: @color-gray-150;
+    padding: @base-unit;
+    margin-bottom: @base-unit * 0.125;
+}
+
+//Link to simple filter in the advanced filter above the table
+.table-filter-simple-link {
+    padding-top: 2*@padding-base-vertical + 0.5*@base-unit + 1; // align the link with the button
+}
+
+// Width of column for bulk actions
+.table-bulk {
+    width: @base-unit * 1.25;
+}
+
+// Centered checkboxes in permission-matrix
+.permission-matrix {
+    & .content-before {
+        background-color: @color-green-130;
+    }
+
+    & td:first-child, th:first-child {
+        text-align: left;
+    }
+
+    & td, th {
+        text-align: center;
+    }
+
+    .warning-icon {
+        cursor: default;
+        color: @color-warning;
+        padding: 0;
+    }
+}
+
+//
+// Event Log
+// --------------------------------------------------
+.event-log {
+    .error {
+        background-color: @color-red-130;
+    }
+
+    .warning {
+        background-color: @color-orange-100;
+    }
+}
+
+//
+// Web farm - tasks error identifier
+// -------------------------------------------------
+.web-farm {
+    .error {
+        background-color: @color-red-130;
+    }
+}
+
+//
+// Unigrid document and file type icons
+// --------------------------------------------------
+.table {
+    .icon-doctype,
+    .icon-file-default,
+    .icon-folder {
+        padding-right: @padding-small-horizontal;
+        color: @light-bg-icon-color;
+    }
+    // ImportGridView
+    .warning-icon:not(:first-child) {
+        margin-left: @margin-50;
+    }
+}
+
+//
+// Media library - thumbnail view - file type icons
+// -------------------------------------------------
+.ThumbnailsView .icon-file-default {
+    color: @light-bg-icon-color;
+}
+
+// New document type selection table with no borders and background
+// .ContentNew class can be removed from here as soon as unigrid control will support .table-blank instead just .table-hover)
+
+.table-blank tbody > tr, .ContentNewClasses .table tbody > tr {
+    border: none;
+
+    &:hover td {
+        border: none;
+        background: none;
+    }
+}
+
+    // New doc type in Pages
+    .ContentNewClasses .table tbody > tr td {
+        padding: @base-unit * 0.125 @padding-small-horizontal;
+    }
+
+// Unigrid icons
+// -------------
+.unigrid-actions {
+    // Text before/after action button in unigrid
+    .text-unigrid-action {
+        display: inline-table;
+        margin-top: @base-unit * 0.125;
+    }
+    // Unigrid buttons
+    .btn-unigrid-action {
+        height: auto;
+        // Font icons
+        &.icon-only {
+            vertical-align: middle;
+            padding: @base-unit * 0.25;
+        }
+        // Colors
+        // Gray - default
+        i {
+            display: block;
+            color: @color-gray-70;
+        }
+        // Green - e.g. add, play
+        &.icon-style-allow {
+            i {
+                color: @color-green-100;
+            }
+        }
+        // Yellow - e.g. exclamation mark
+        &.icon-style-warning {
+            i {
+                color: @color-warning;
+            }
+        }
+        // Red - e.g. remove, bin
+        &.icon-style-critical {
+            i {
+                color: @color-red-70;
+            }
+        }
+        // Hover for all
+        &:hover {
+            i,
+            .icon-style-allow,
+            .icon-style-warning,
+            .icon-style-critical {
+                color: @color-blue-70;
+            }
+        }
+        // Disabled style for all
+        &:disabled {
+            i,
+            .icon-style-allow,
+            .icon-style-warning,
+            .icon-style-critical {
+                color: @color-gray-70;
+            }
+        }
+    }
+    // Unigrid More actions button (...)
+    .unigrid-actionmenu {
+        display: inline-block;
+    }
+    // Unigrid image icons - customer can use images as well
+    input[type="image"] {
+        vertical-align: middle;
+        padding: @base-unit * 0.25;
+    }
+    // Uploader in unigrid
+    // Inline styles fix for indent
+    >div {
+        width: auto !important;
+    }
+    // Media library files
+    .MediaView,
+    // Attachments
+    .update,
+    // Form tab
+    .direct-file-uploader,
+    [class*="Uploader_"] {
+        // Override inline styles
+        width: @base-unit * 1.5 !important;
+        height: @base-unit * 1.5 !important;
+
+        i {
+            cursor: pointer;
+            padding: @base-unit * 0.25;
+            margin: 0;
+        }
+        // disabled state
+        & .uploader-button-disabled {
+            color: @color-gray-70;
+
+            &:hover {
+                i {
+                    cursor: default;
+                }
+            }
+        }
+    }
+    // Special hover style
+    .MouseOver {
+        i:not(.icon-disabled) {
+            color: @color-blue-70;
+        }
+    }
+}
+// Thumbnail view in Media Libraries
+.DialogThumbnailActions {
+    .unigrid-actions;
+    // All icon buttons
+    .btn-unigrid-action {
+        &.icon-only {
+            padding: @base-unit * 0.5;
+        }
+    }
+    // Uploader icon button
+    .MediaView {
+        padding: @base-unit * 0.25;
+        // Fix for uploader to be fully clickable
+        .DFUframe_MediaView {
+            width: @base-unit * 2 !important;
+            height: @base-unit * 2 !important;
+        }
+    }
+}
+
+// Clear history button on the Versions tab in page properties
+.clear-history {
+    margin-top: @base-unit;
+}
