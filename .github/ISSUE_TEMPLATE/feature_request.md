@@ -7,10 +7,12 @@ about: Suggest an idea for this project
 ### Who
 
 - [x] Anonymous visitor
+- [ ] Patient
 - [ ] Doctor
 - [ ] Content editor
 - [ ] Marketer
 - [ ] Administrator
+- [ ] Developer
 
 ### Needs what
 
