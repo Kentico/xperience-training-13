@@ -32,3 +32,11 @@ Add any other context about the problem here. If you found an issue where a simi
 ### Screenshots
 
 Add links to screenshots, if you deem it appropriate.
+
+### Issue expands upon
+
+This issue expands upon another issue(s): #`issue number`
+
+### Blockers
+
+This issue is blocked by the following issue(s): #`issue number`
