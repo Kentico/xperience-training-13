@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 
 using XperienceAdapter;
 using MedioClinic.Models;
+using Business;
+using MedioClinic.Configuration;
 
 namespace MedioClinic.Controllers
 {
@@ -15,9 +17,10 @@ namespace MedioClinic.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IOptionsService<XperienceOptions> optionsService)
         {
             _logger = logger;
+            _ = optionsService;
         }
 
         public IActionResult Index()
