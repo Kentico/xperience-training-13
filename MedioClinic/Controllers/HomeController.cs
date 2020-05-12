@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using XperienceAdapter;
-using MedioClinic.Models;
 using Business;
+using MedioClinic.Models;
 using MedioClinic.Configuration;
 
 namespace MedioClinic.Controllers
@@ -28,6 +28,16 @@ namespace MedioClinic.Controllers
             var dbConnectivityTest = new DbConnectivityTest();
             var documentGuid = dbConnectivityTest.GetDocumentGuid();
             ViewBag.DocumentGuid = documentGuid;
+
+            _logger.LogInformation("info 1", "params object 1", "params object 2");
+            _logger.LogInformation(99, "info 2");
+            _logger.LogInformation(new Exception(), "info 3");
+            _logger.LogInformation(999, new Exception(), "info 4");
+            _logger.LogDebug("debug 1");
+            _logger.LogError("error 1");
+            _logger.LogTrace("trace 1");
+            _logger.LogCritical("critical 1");
+            _logger.Log<int>(LogLevel.Information, 9999, 99991, new Exception("state 1"), (state, exception) => $"{state}; {exception.Message}");
 
             return View();
         }
