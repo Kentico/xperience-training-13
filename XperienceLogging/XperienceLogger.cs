@@ -34,6 +34,9 @@ namespace XperienceLogging
                 throw new ArgumentNullException(nameof(formatter));
             }
 
+            // Sadly, we can't pass around the original format of "state" into the processor.
+            // There wouldn't be any point in making the whole processor class generic.\
+            // We need to format the state here.
             var message = formatter(state, exception);
 
             if (!string.IsNullOrEmpty(message) || exception != null)

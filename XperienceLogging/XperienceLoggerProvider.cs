@@ -22,6 +22,6 @@ namespace XperienceLogging
         public ILogger CreateLogger(string categoryName) =>
             _loggers.GetOrAdd(categoryName, name => new XperienceLogger(name, _processor));
 
-        public void Dispose() =>_loggers.Clear();
+        public void Dispose() => _loggers.Clear();
     }
 }
