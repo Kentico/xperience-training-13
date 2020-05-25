@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace XperienceLogging
+namespace XperienceAdapter.Logging
 {
     public static class XperienceLoggerExtensions
     {
