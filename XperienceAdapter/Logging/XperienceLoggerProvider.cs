@@ -9,7 +9,7 @@ using CMS.Base;
 
 namespace XperienceAdapter.Logging
 {
-    class XperienceLoggerProvider : ILoggerProvider
+    public class XperienceLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, XperienceLogger> _loggers = new ConcurrentDictionary<string, XperienceLogger>();
 
