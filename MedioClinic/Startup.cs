@@ -49,6 +49,7 @@ namespace MedioClinic
             if (WebHostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {

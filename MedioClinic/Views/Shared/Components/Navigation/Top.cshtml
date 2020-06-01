@@ -1,0 +1,34 @@
+﻿@using MedioClinic.Models.ViewComponents.Navigation
+
+@functions{
+    private string _partialViewPath = $"Components/{nameof(MedioClinic.ViewComponents.Navigation)}/_TopNavigationContents";
+    private string _mainIdStub = "top-navigation";
+    private string _cultureIdStub = "culture-switch";
+    private string _desktopListClass = "right hide-on-med-and-down";
+    private string _mobileListClass = "sidenav";
+    private string _desktopSuffix = "desktop";
+    private string _mobileSuffix = "mobile";
+
+    private TopNavigationContentsModel GetModel(string suffix, string listClass) => new TopNavigationContentsModel
+    {
+        MainId = $"{_mainIdStub}-{suffix}",
+        CultureSwitchId = $"{_cultureIdStub}-{suffix}",
+        ListClass = listClass
+    };
+}
+
+<div class="navbar-fixed mc-opacity-95">
+    <nav role="navigation">
+        <div class="nav-wrapper container">
+            <a class="brand-logo" asp-controller="Home" asp-action="Index">
+                <img class="mc-logo" src="~/images/mc-logo.png" alt="Medio Clinic logo" />
+                <span class="mc-logo-text">Medio Clinic</span>
+            </a>
+            <a class="sidenav-trigger" href="#" data-target="top-navigation-mobile">
+                <i class="material-icons">menu</i>
+            </a>
+            <partial name="@_partialViewPath" model="GetModel(_desktopSuffix, _desktopListClass)" />
+        </div>
+    </nav>
+</div>
+<partial name="@_partialViewPath" model="GetModel(_mobileSuffix, _mobileListClass)" />
