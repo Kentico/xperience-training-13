@@ -67,7 +67,7 @@ public partial class CMSModules_BannedIP_Tools_BannedIP_Edit : CMSBannedIPsPage
                     }
                     else
                     {
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(bannedIPObj.IPAddressSiteID);
+                        SiteInfo si = SiteInfo.Provider.Get(bannedIPObj.IPAddressSiteID);
                         if (si != null)
                         {
                             currentBannedIP += " (" + si.DisplayName + ")";
@@ -99,7 +99,7 @@ public partial class CMSModules_BannedIP_Tools_BannedIP_Edit : CMSBannedIPsPage
             if (SelectedSiteID > 0)
             {
                 // Site banned IP
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SelectedSiteID);
+                SiteInfo si = SiteInfo.Provider.Get(SelectedSiteID);
                 if (si != null)
                 {
                     SetBreadcrumb(1, currentBannedIP + " (" + si.DisplayName + ")", null, null, null);

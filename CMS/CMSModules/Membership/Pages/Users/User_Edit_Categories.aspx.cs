@@ -29,7 +29,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Categories : CM
         if (userId > 0)
         {
             // Check that only global administrator can edit global administrator's accouns
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             CheckUserAvaibleOnSite(ui);
             EditedObject = ui;
         }

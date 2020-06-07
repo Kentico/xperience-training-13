@@ -75,7 +75,7 @@ public partial class CMSModules_Reporting_CMSPages_Unsubscribe : CMSPage
 
             // Send info about successful unsubscription to set email
             String siteName = SiteContext.CurrentSiteName;
-            EmailTemplateInfo eti = EmailTemplateProvider.GetEmailTemplate("Reporting_Unsubscription_template", siteName);
+            EmailTemplateInfo eti = EmailTemplateInfo.Provider.Get("Reporting_Unsubscription_template", SiteContext.CurrentSiteID);
             if (eti != null)
             {
                 // Create email

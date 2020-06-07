@@ -17,7 +17,7 @@
             <ug:Column Source="WorkflowDisplayName" Caption="$ma.processname$" Wrap="false" Localize="true">
                 <Filter Type="text" />
             </ug:Column>
-            <ug:Column Source="WorkflowRecurrenceType" ExternalSourceName="recurrencetype" Caption="$cms.workflow.recurrencytitle$"
+            <ug:Column Source="WorkflowRecurrenceType" ExternalSourceName="recurrencetype" Caption="$cms.workflow.recurrency$"
                 Wrap="false" Localize="true" AllowSorting="false" />
             <ug:Column Source="WorkflowEnabled" ExternalSourceName="#yesno" Caption="$general.enabled$" Localize="true" Wrap="false"/>
             <ug:Column CssClass="filling-column" />

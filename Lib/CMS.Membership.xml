@@ -39,6 +39,14 @@
             Global public user object.
             </summary>
         </member>
+        <member name="P:CMS.Membership.AuthenticationHelper.HttpContext">
+            <summary>
+            Gets the HTTP context.
+            </summary>
+            <value>
+            The HTTP context.
+            </value>
+        </member>
         <member name="P:CMS.Membership.AuthenticationHelper.PrincipalContext">
             <summary>
             Encapsulates the server or domain against which all operations are performed.
@@ -455,6 +463,13 @@
             <summary>
             Authentication service
             </summary>
+        </member>
+        <member name="M:CMS.Membership.AuthenticationService.#ctor(CMS.Membership.IUserInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Membership.AuthenticationService"/> class.
+            </summary>
+            <param name="userInfoProvider">Provider for <see cref="T:CMS.Membership.UserInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="userInfoProvider"/> is null.</exception>
         </member>
         <member name="P:CMS.Membership.AuthenticationService.CurrentUser">
             <summary>
@@ -1219,12 +1234,13 @@
             Service with avatar helper methods.
             </summary>
         </member>
-        <member name="M:CMS.Membership.AvatarService.#ctor(CMS.Core.IEventLogService,CMS.Membership.IAvatarInfoProvider)">
+        <member name="M:CMS.Membership.AvatarService.#ctor(CMS.Core.IEventLogService,CMS.Membership.IAvatarInfoProvider,CMS.Membership.IUserInfoProvider)">
             <summary>
             Creates new instance of <see cref="T:CMS.Membership.AvatarService"/>
             </summary>
             <param name="eventLogService">Event log service</param>
             <param name="avatarInfoProvider">Provider for <see cref="T:CMS.Membership.AvatarInfo"/> management.</param>
+            <param name="userInfoProvider">Provider for <see cref="T:CMS.Membership.UserInfo"/> management.</param>
         </member>
         <member name="M:CMS.Membership.AvatarService.UpdateAvatar(CMS.Base.IUploadedFile,System.Int32,System.String)">
             <summary>
@@ -2899,21 +2915,11 @@
             <param name="user">User to be used as a data source</param>
             <param name="buildFrom">Resolver to build the result from</param>
         </member>
-        <member name="M:CMS.Membership.MembershipResolvers.GetRegistrationApprovalResolver(CMS.Membership.UserInfo,System.String,CMS.MacroEngine.MacroResolver)">
+        <member name="M:CMS.Membership.MembershipResolvers.GetRegistrationApprovalResolver(CMS.Membership.UserInfo,CMS.MacroEngine.MacroResolver)">
             <summary>
             Builds and returns a resolver for email templates of type 'Registration approval'
             </summary>
             <param name="user">User to be used as a data source</param>
-            <param name="homePageUrl">homePageUrl to be used as a data source</param>
-            <param name="buildFrom">Resolver to build the result from</param>
-            <remarks>If <paramref name="buildFrom"/> is null then newly created resolver has culture set to the preferred culture of <paramref name="user"/></remarks>
-        </member>
-        <member name="M:CMS.Membership.MembershipResolvers.GetMembershipRegistrationResolver(CMS.Membership.UserInfo,System.String,CMS.MacroEngine.MacroResolver)">
-            <summary>
-            Builds and returns a resolver for email templates of type 'Membership registration'
-            </summary>
-            <param name="user">User to be used as a data source</param>
-            <param name="confirmaddress">Confirmation address</param>
             <param name="buildFrom">Resolver to build the result from</param>
             <remarks>If <paramref name="buildFrom"/> is null then newly created resolver has culture set to the preferred culture of <paramref name="user"/></remarks>
         </member>
@@ -3100,6 +3106,43 @@
             <summary>
             Declares members for <see cref="T:CMS.Membership.RoleInfo"/> management.
             </summary>
+        </member>
+        <member name="T:CMS.Membership.IUserRoleInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Membership.UserRoleInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.IUserRoleInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Membership.UserRoleInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Membership.UserRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.IUserRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Membership.UserRoleInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Membership.UserRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.IUserRoleInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Membership.UserRoleInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+        </member>
+        <member name="M:CMS.Membership.IUserRoleInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.DateTime})">
+            <summary>
+            Creates <see cref="T:CMS.Membership.UserRoleInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="validTo">Date till user role connection is valid, or null.</param>
         </member>
         <member name="T:CMS.Membership.RoleInfo">
             <summary>
@@ -3491,6 +3534,23 @@
             Class providing UserRoleInfo management.
             </summary>
         </member>
+        <member name="M:CMS.Membership.UserRoleInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Membership.UserRoleInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Membership.UserRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.UserRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Membership.UserRoleInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Membership.UserRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.GetUserRoleInfo(System.Int32,System.Int32)">
             <summary>
             Returns the UserRoleInfo structure for the specified userRole.
@@ -3501,7 +3561,7 @@
         <member name="M:CMS.Membership.UserRoleInfoProvider.GetUserRoles">
             <summary>
             Returns the query for all relationships between users and roles.
-            </summary>   
+            </summary>
         </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.SetUserRoleInfo(CMS.Membership.UserRoleInfo)">
             <summary>
@@ -3509,11 +3569,25 @@
             </summary>
             <param name="userRole">UserRole to set</param>
         </member>
+        <member name="M:CMS.Membership.UserRoleInfoProvider.Delete(CMS.Membership.UserRoleInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.DeleteUserRoleInfo(CMS.Membership.UserRoleInfo)">
             <summary>
             Deletes specified userRole.
             </summary>
             <param name="infoObj">UserRole object</param>
+        </member>
+        <member name="M:CMS.Membership.UserRoleInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Membership.UserRoleInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
         </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.DeleteUserRoleInfo(CMS.Membership.UserInfo,CMS.Membership.RoleInfo)">
             <summary>
@@ -3521,6 +3595,15 @@
             </summary>
             <param name="userInfo">User which will be removed from role</param>
             <param name="roleInfo">Role from which will be the user removed</param>
+        </member>
+        <member name="M:CMS.Membership.UserRoleInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.DateTime})">
+            <summary>
+            Creates <see cref="T:CMS.Membership.UserRoleInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="validTo">Date till user role connection is valid, or null.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="userId"/> or <paramref name="roleId"/> does not identify an existing user or role respectively.</exception>
         </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.AddUserToRole(System.Int32,System.Int32,System.DateTime)">
             <summary>
@@ -3542,7 +3625,7 @@
             Adds specified user to the site.
             </summary>
             <param name="ui">UserInfo</param>
-            <param name="ri">RoleInfo</param>        
+            <param name="ri">RoleInfo</param>
         </member>
         <member name="M:CMS.Membership.UserRoleInfoProvider.AddUserToRole(CMS.Membership.UserInfo,CMS.Membership.RoleInfo,System.DateTime)">
             <summary>
@@ -3962,6 +4045,11 @@
         <member name="T:CMS.Membership.IExternalLoginInfoProvider">
             <summary>
             Declares members for <see cref="T:CMS.Membership.ExternalLoginInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Membership.IUserInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Membership.UserInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.Membership.IUserSettingsInfoProvider">
@@ -5685,6 +5773,13 @@
             </summary>
             <param name="userName">UserName</param>
         </member>
+        <member name="M:CMS.Membership.UserInfoProvider.Set(CMS.Membership.UserInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.Membership.UserInfoProvider.SetUserInfo(CMS.Membership.UserInfo)">
             <summary>
             Sets (updates or inserts) specified user.
@@ -6402,6 +6497,42 @@
             <param name="targetHashTable">Hash table with data</param>
             <param name="membershipValidity">Collection with rows with validity data for memberships</param>
         </member>
+        <member name="T:CMS.Membership.IUserSiteInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Membership.UserSiteInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.IUserSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Membership.UserSiteInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Membership.UserSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.IUserSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Membership.UserSiteInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Membership.UserSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.IUserSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Membership.UserSiteInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
+        <member name="M:CMS.Membership.IUserSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Membership.UserSiteInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="T:CMS.Membership.UserSiteInfo">
             <summary>
             UserSiteInfo data container class.
@@ -6462,6 +6593,23 @@
             Class providing UserSiteInfo management.
             </summary>
         </member>
+        <member name="M:CMS.Membership.UserSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Membership.UserSiteInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Membership.UserSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Membership.UserSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Membership.UserSiteInfo"/> binding structure.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Membership.UserSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Membership.UserSiteInfoProvider.GetUserSiteInfo(System.Int32,System.Int32)">
             <summary>
             Returns the UserSiteInfo structure for the specified userSite.
@@ -6481,12 +6629,27 @@
             </summary>
             <param name="infoObj">UserSite object</param>
         </member>
+        <member name="M:CMS.Membership.UserSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Membership.UserSiteInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="M:CMS.Membership.UserSiteInfoProvider.RemoveUserFromSite(System.Int32,System.Int32)">
             <summary>
             Deletes specified userSite.
             </summary>
             <param name="userId">UserID</param>
             <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.Membership.UserSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Membership.UserSiteInfo"/> binding.
+            </summary>
+            <param name="userId">User ID.</param>
+            <param name="siteId">Site ID.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="userId"/> or <paramref name="siteId"/> does not identify an existing user or site respectively.</exception>
         </member>
         <member name="M:CMS.Membership.UserSiteInfoProvider.AddUserToSite(System.Int32,System.Int32)">
             <summary>
@@ -6505,7 +6668,7 @@
         <member name="M:CMS.Membership.UserSiteInfoProvider.GetUserSites">
             <summary>
             Returns the query for all relationships between users and sites.
-            </summary>   
+            </summary>
         </member>
         <member name="M:CMS.Membership.UserSiteInfoProvider.GetUserSiteInfoInternal(System.Int32,System.Int32)">
             <summary>

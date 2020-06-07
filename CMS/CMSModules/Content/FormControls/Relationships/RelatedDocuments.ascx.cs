@@ -707,12 +707,12 @@ public partial class CMSModules_Content_FormControls_Relationships_RelatedDocume
             // Left side
             if (currentNodeIsOnLeftSide)
             {
-                RelationshipInfoProvider.AddRelationship(TreeNode.NodeID, selectedNodeId, relationshipNameId);
+                RelationshipInfo.Provider.Add(TreeNode.NodeID, selectedNodeId, relationshipNameId);
             }
             // Right side
             else
             {
-                RelationshipInfoProvider.AddRelationship(selectedNodeId, TreeNode.NodeID, relationshipNameId);
+                RelationshipInfo.Provider.Add(selectedNodeId, TreeNode.NodeID, relationshipNameId);
             }
 
             // Log synchronization
@@ -805,7 +805,7 @@ public partial class CMSModules_Content_FormControls_Relationships_RelatedDocume
 
     private int GetRelationshipCount()
     {
-        return RelationshipInfoProvider.GetRelationships()
+        return RelationshipInfo.Provider.Get()
                                        .WhereEquals("RelationshipNameID", GetRelationshipNameId())
                                        .WhereEquals("LeftNodeID", TreeNode.NodeID).GetCount();
     }

@@ -55,7 +55,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Password : CMSU
     {
         get
         {
-            return mUserInfo ?? (mUserInfo = UserInfoProvider.GetUserInfo(UserID));
+            return mUserInfo ?? (mUserInfo = UserInfo.Provider.Get(UserID));
         }
     }
 
@@ -215,7 +215,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Password : CMSU
             };
 
             // Get e-mail template - try to get site specific template if edited user is assigned to current site
-            EmailTemplateInfo template = EmailTemplateProvider.GetEmailTemplate("Membership.ChangedPassword", UserInfo.IsInSite(siteName) ? siteName : null);
+            EmailTemplateInfo template = EmailTemplateInfo.Provider.Get("Membership.ChangedPassword", UserInfo.IsInSite(siteName) ? SiteContext.CurrentSiteID : 0);
             if (template != null)
             {
                 em.Body = template.TemplateText;

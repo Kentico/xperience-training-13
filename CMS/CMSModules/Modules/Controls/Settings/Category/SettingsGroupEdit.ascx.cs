@@ -136,7 +136,7 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsGroup
             group.OnNewKey += group_OnNewKey;
             group.OnKeyAction += group_OnKeyAction;
 
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(ModuleID);
+            ResourceInfo resource = ResourceInfo.Provider.Get(ModuleID);
 
             group.AllowEdit = (resource != null) && ((resource.ResourceIsInDevelopment && (resource.ResourceID == category.CategoryResourceID)) || SystemContext.DevelopmentMode);        
         }

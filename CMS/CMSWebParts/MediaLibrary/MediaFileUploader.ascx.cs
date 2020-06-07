@@ -102,7 +102,7 @@ public partial class CMSWebParts_MediaLibrary_MediaFileUploader : CMSAbstractWeb
         }
         else
         {
-            MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryName, SiteContext.CurrentSiteName);
+            MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(LibraryName, SiteContext.CurrentSiteID);
             if (mli != null)
             {
                 uploader.LibraryID = mli.LibraryID;

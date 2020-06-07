@@ -288,7 +288,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         {
             if ((mLibraryInfo == null) && (LibraryID > 0))
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(LibraryID);
             }
             return mLibraryInfo;
         }
@@ -308,7 +308,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         {
             if ((mLibrarySiteInfo == null) && (LibraryInfo != null))
             {
-                mLibrarySiteInfo = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                mLibrarySiteInfo = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             }
             return mLibrarySiteInfo;
         }
@@ -1105,7 +1105,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         string path = GetCompletePath(LastFolderPath);
 
         // Actualize configuration
-        UserInfo user = UserInfoProvider.GetUserInfo(MembershipContext.AuthenticatedUser.UserID);
+        UserInfo user = UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
         if (user != null)
         {
             user.UserSettings.UserDialogsConfiguration["media.sitename"] = LibrarySiteInfo.SiteName;
@@ -1116,7 +1116,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
             user.UserSettings.UserDialogsConfiguration["selectedtab"] = CMSDialogHelper.GetMediaSource(MediaSourceEnum.MediaLibraries);
 
             // Update user info
-            UserInfoProvider.SetUserInfo(user);
+            UserInfo.Provider.Set(user);
         }
     }
 
@@ -1139,7 +1139,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
             {
                 if ((libraryName != string.Empty) && (siteName != string.Empty))
                 {
-                    MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(libraryName, siteName);
+                    MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(libraryName, SiteInfoProvider.GetSiteID(siteName));
                     if (mli != null)
                     {
                         librarySelector.SelectedSiteName = siteName;
@@ -1250,10 +1250,10 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         // Select site based on selected item 
         if ((MediaSource != null) && (MediaSource.MediaFileLibraryID > 0))
         {
-            LibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaSource.MediaFileLibraryID);
+            LibraryInfo = MediaLibraryInfo.Provider.Get(MediaSource.MediaFileLibraryID);
             if (LibraryInfo != null)
             {
-                siteName = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID).SiteName;
+                siteName = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID).SiteName;
             }
         }
         // Select site based on user's configuration
@@ -1750,7 +1750,7 @@ function imageEdit_Refresh(guid){{
             string siteName = argArr[1];
 
             Guid mediaFileGuid = ValidationHelper.GetGuid(argArr[0], Guid.Empty);
-            MediaFileInfo mfi = MediaFileInfoProvider.GetMediaFileInfo(mediaFileGuid, siteName);
+            MediaFileInfo mfi = MediaFileInfo.Provider.Get(mediaFileGuid, SiteInfoProvider.GetSiteID(siteName));
             if (mfi != null)
             {
                 string url = mediaView.GetItemUrl(LibrarySiteInfo, mfi.FileGUID, mfi.FileName, mfi.FileExtension, mfi.FilePath, false, 0, 0, 0);
@@ -1783,7 +1783,7 @@ function imageEdit_Refresh(guid){{
         {
             int mediaFileId = ValidationHelper.GetInteger(argArr[0], 0);
 
-            MediaFileInfo fileInfo = MediaFileInfoProvider.GetMediaFileInfo(mediaFileId);
+            MediaFileInfo fileInfo = MediaFileInfo.Provider.Get(mediaFileId);
             if (fileInfo != null)
             {
                 if (CMSDialogHelper.IsItemSelectable(SelectableContent, fileInfo.FileExtension))

@@ -46,7 +46,7 @@ namespace CMSApp.CMSModules.ContactManagement.Filters
                 return string.Empty;
             }
 
-            var countryIDs = CountryInfoProvider.GetCountries()
+            var countryIDs = CountryInfo.Provider.Get()
                                                 .Where(originalQuery)
                                                 .AsMaterializedList("CountryID");
 

@@ -239,8 +239,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Contact_Filter : C
 
         // Query with ContactInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = ContactInfo.Provider.Get()
-            .WhereIn("ContactCountryID", CountryInfoProvider
-                .GetCountries()
+            .WhereIn("ContactCountryID", CountryInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(CountryInfo.TYPEINFO.IDColumn)
             );
@@ -268,8 +268,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Contact_Filter : C
 
         // Query with ContactInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = ContactInfo.Provider.Get()
-            .WhereIn("ContactOwnerUserID", UserInfoProvider
-                .GetUsers()
+            .WhereIn("ContactOwnerUserID", UserInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(UserInfo.TYPEINFO.IDColumn)
             );
@@ -297,8 +297,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Contact_Filter : C
 
         // Query with ContactInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = ContactInfo.Provider.Get()
-            .WhereIn("ContactStateID", StateInfoProvider
-                .GetStates()
+            .WhereIn("ContactStateID", StateInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(StateInfo.TYPEINFO.IDColumn)
             );

@@ -222,7 +222,7 @@ public partial class CMSModules_Objects_Controls_Locking_ObjectEditMenu : Object
                         }
 
                         string userName = null;
-                        UserInfo ui = UserInfoProvider.GetUserInfo(settings.ObjectCheckedOutByUserID);
+                        UserInfo ui = UserInfo.Provider.Get(settings.ObjectCheckedOutByUserID);
                         if (ui != null)
                         {
                             userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));

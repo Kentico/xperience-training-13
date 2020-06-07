@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSelector {
-    
+public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSelector
+{
+
     /// <summary>
     /// pnlUpdate control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdate;
-    
+
     /// <summary>
     /// flatElem control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_UniSelector_UniFlatSelector flatElem;
-    
+
     /// <summary>
     /// ltrDescription control.
     /// </summary>
@@ -37,13 +38,4 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltrDescription;
-    
-    /// <summary>
-    /// ltrHidden control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Literal ltrHidden;
 }

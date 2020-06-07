@@ -702,7 +702,7 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_MetaDataEdit : 
 
                         if (IsWorkflowFinished(nextStep))
                         {
-                            attachment = (DocumentAttachment)AttachmentInfoProvider.GetAttachmentInfo(attachment.AttachmentGUID, SiteName);
+                            attachment = (DocumentAttachment)AttachmentInfo.Provider.Get(attachment.AttachmentGUID, SiteInfoProvider.GetSiteID(SiteName));
                         }
                     }
                 }

@@ -327,7 +327,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
                 break;
 
             case EditedObjectTypeEnum.Layout:
-                iconSelector.Value = EditedObject.Generalized.ObjectThumbnailGUID;
                 codeLayoutElem.Editor.AutoSize = true;
                 codeLayoutElem.Editor.ParentElementID = ParentClientID;
                 codeLayoutElem.FullscreenMode = fullScreen;
@@ -353,7 +352,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
                     {
                         PageTemplateInfo pti = EditFormTemplate.EditedObject as PageTemplateInfo;
                         ShowSharedTemplateWarningMessage(pti);
-                        codeElem.ShowMessage();
                     }
                 }
                 break;
@@ -367,7 +365,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
                         {
                             ShowInformation(string.Format(GetString("layout.sharedwarning"), layoutInfo.LayoutDisplayName));
                         }
-                        codeLayoutElem.ShowMessage();
                     }
                 }
                 break;
@@ -746,7 +743,7 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
     /// <param name="pti">The page template info object</param>
     private void ShowSharedTemplateWarningMessage(PageTemplateInfo pti)
     {
-        if ((pti != null) && pti.IsReusable && ShowSharedLayoutWarnings)
+        if ((pti != null) && ShowSharedLayoutWarnings)
         {
             ShowInformation(GetString("template.shared.warning"));
         }

@@ -83,7 +83,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Settings : CMSU
         // Check that only global administrator can edit global administrator's accounts
         if (userId > 0)
         {
-            userInfo = UserInfoProvider.GetUserInfo(userId);
+            userInfo = UserInfo.Provider.Get(userId);
             CheckUserAvaibleOnSite(userInfo);
             EditedObject = userInfo;
 
@@ -123,7 +123,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Settings : CMSU
 
         if ((userInfo.UserSettings != null) && (userInfo.UserSettings.UserActivatedByUserID > 0))
         {
-            UserInfo user = UserInfoProvider.GetUserInfo(userInfo.UserSettings.UserActivatedByUserID);
+            UserInfo user = UserInfo.Provider.Get(userInfo.UserSettings.UserActivatedByUserID);
             if (user != null)
             {
                 lblUserFullName.Text = HTMLHelper.HTMLEncode(user.FullName);
@@ -244,7 +244,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Settings : CMSU
 
         // Set user picture to DB
         UserPictureFormControl.UpdateUserPicture(userInfo);
-        UserInfoProvider.SetUserInfo(userInfo);
+        UserInfo.Provider.Set(userInfo);
 
         if (error)
         {

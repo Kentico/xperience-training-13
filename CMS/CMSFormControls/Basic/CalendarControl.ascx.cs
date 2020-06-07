@@ -89,7 +89,7 @@ public partial class CMSFormControls_Basic_CalendarControl : FormEngineUserContr
             }
             if (GetValue("timezone") != null)
             {
-                timePicker.CustomTimeZone = TimeZoneInfoProvider.GetTimeZoneInfo(GetValue("timezone", String.Empty));
+                timePicker.CustomTimeZone = CMS.Globalization.TimeZoneInfo.Provider.Get(GetValue("timezone", String.Empty));
             }
 
             string strValue = ValidationHelper.GetString(value, string.Empty);

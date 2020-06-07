@@ -58,7 +58,7 @@ public partial class CMSModules_Widgets_Controls_WidgetSecurity : CMSAdminEditCo
         {
             if (mResWidget == null)
             {
-                mResWidget = ResourceInfoProvider.GetResourceInfo("CMS.Widgets");
+                mResWidget = ResourceInfo.Provider.Get("CMS.Widgets");
             }
             return mResWidget;
         }

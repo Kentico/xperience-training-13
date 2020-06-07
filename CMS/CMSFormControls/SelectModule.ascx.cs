@@ -273,7 +273,7 @@ public partial class CMSFormControls_SelectModule : FormEngineUserControl
     {
         get
         {
-            return mSelectedModule ?? (mSelectedModule = ResourceInfoProvider.GetResourceInfo(ValidationHelper.GetInteger(Value, 0)));
+            return mSelectedModule ?? (mSelectedModule = ResourceInfo.Provider.Get(ValidationHelper.GetInteger(Value, 0)));
         }
     }
 

@@ -50,7 +50,7 @@ public partial class CMSModules_OnlineMarketing_Pages_Content_ABTesting_ABTest_S
                 return null;
             }
 
-            SiteInfo site = SiteInfoProvider.GetSiteInfo(ABTest.ABTestSiteID);
+            SiteInfo site = SiteInfo.Provider.Get(ABTest.ABTestSiteID);
             return site.SiteName;
         }
     }

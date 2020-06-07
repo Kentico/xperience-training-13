@@ -99,11 +99,11 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_ResourceString
         CultureInfo ui;
         try
         {
-            ui = CultureInfoProvider.GetCultureInfo(MembershipContext.AuthenticatedUser.PreferredUICultureCode);
+            ui = CultureInfo.Provider.Get(MembershipContext.AuthenticatedUser.PreferredUICultureCode);
         }
         catch
         {
-            ui = CultureInfoProvider.GetCultureInfo(CultureHelper.DefaultUICultureCode);
+            ui = CultureInfo.Provider.Get(CultureHelper.DefaultUICultureCode);
         }
         if (ui != null)
         {

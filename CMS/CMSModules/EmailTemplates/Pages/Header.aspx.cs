@@ -31,7 +31,7 @@ public partial class CMSModules_EmailTemplates_Pages_Header : CMSEmailTemplatesP
         if (isDialog)
         {
             string templateName = QueryHelper.GetString("name", String.Empty);
-            EmailTemplateInfo emailTemplate = EmailTemplateProvider.GetEmailTemplate(templateName, SiteID);
+            EmailTemplateInfo emailTemplate = EmailTemplateInfo.Provider.Get(templateName, SiteID);
             if (emailTemplate != null)
             {
                 EditedObject = emailTemplate;

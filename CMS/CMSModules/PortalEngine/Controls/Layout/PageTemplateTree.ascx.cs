@@ -22,11 +22,9 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateTree : 
     private int mMaxTreeNodes = -1;
     private bool mUseMaxNodeLimit = true;
     private bool mSelectPageTemplates;
-    private bool mShowAdHocCategory = true;
     private bool mShowEmptyCategories = true;
     private int mDocumentID;
     private bool mIsNewPage;
-    private bool mShowOnlySiteTemplates = true;
     private bool mUseGlobalSettings;
     private string mSelectFunctionName = "SelectNode";
 
@@ -52,22 +50,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateTree : 
         set
         {
             mUseMaxNodeLimit = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Indicates whether tree displays all roots
-    /// </summary>
-    public bool MultipleRoots
-    {
-        get
-        {
-            return treeElem.MultipleRoots;
-        }
-        set
-        {
-            treeElem.MultipleRoots = value;
         }
     }
 
@@ -184,22 +166,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateTree : 
 
 
     /// <summary>
-    /// Shows or hides AdHoc category in tree.
-    /// </summary>
-    public bool ShowAdHocCategory
-    {
-        get
-        {
-            return mShowAdHocCategory;
-        }
-        set
-        {
-            mShowAdHocCategory = value;
-        }
-    }
-
-
-    /// <summary>
     /// Shows or hides empty categories in tree.
     /// </summary>
     public bool ShowEmptyCategories
@@ -211,22 +177,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateTree : 
         set
         {
             mShowEmptyCategories = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to show site page templates only.
-    /// </summary>
-    public bool ShowOnlySiteTemplates
-    {
-        get
-        {
-            return mShowOnlySiteTemplates;
-        }
-        set
-        {
-            mShowOnlySiteTemplates = value;
         }
     }
 
@@ -344,6 +294,8 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateTree : 
 
         InitCategoryProvider();
 
+        treeElem.MultipleRoots = false;
+
         if (SelectPageTemplates)
         {
             treeElem.NodeTemplate = "<span id=\"##OBJECTTYPE##_##NODEID##\" onclick=\"" + SelectFunctionName + "(##NODEID##,'##OBJECTTYPE##', ##PARENTNODEID##, '##PARAMETER##');\" name=\"treeNode\" class=\"ContentTreeItem\">##ICON##<span class=\"Name\">##NODENAME##</span></span>";
@@ -397,7 +349,7 @@ function " + SelectFunctionName + @"(nodeid, sender) {
         categoryProvider.ChildCountColumn = "CompleteChildCount";
         categoryProvider.QueryName = "cms.pagetemplatecategory.selectallview";
         categoryProvider.ObjectTypeColumn = "ObjectType";
-        categoryProvider.Columns = "DisplayName, CodeName, ObjectID, ObjectLevel, ParentID, ObjectPath, CompleteChildCount, ObjectType, CategoryChildCount, CategoryImagePath, Parameter";
+        categoryProvider.Columns = "DisplayName, CodeName, ObjectID, ObjectLevel, ParentID, ObjectPath, CompleteChildCount, ObjectType, CategoryChildCount, CategoryImagePath, null as Parameter";
         categoryProvider.ImageColumn = "CategoryImagePath";
         categoryProvider.ParameterColumn = "Parameter";
 
@@ -410,12 +362,6 @@ function " + SelectFunctionName + @"(nodeid, sender) {
         else
         {
             categoryProvider.OrderBy = "ObjectType DESC, DisplayName ASC";
-        }
-
-        // Do not show AdHoc category
-        if (!ShowAdHocCategory)
-        {
-            categoryProvider.WhereCondition = SqlHelper.AddWhereCondition(categoryProvider.WhereCondition, "CodeName <> 'AdHoc' AND CodeName <> 'AdHocUI'");
         }
 
         // Do not show empty categories
@@ -464,12 +410,6 @@ function " + SelectFunctionName + @"(nodeid, sender) {
 
             categoryProvider.WhereCondition += " AND (X.PageTemplateType IS NULL OR X.PageTemplateType <> N'" + PageTemplateInfoProvider.GetPageTemplateTypeCode(PageTemplateTypeEnum.Dashboard) + "')";
 
-
-            if (ShowOnlySiteTemplates)
-            {
-                categoryProvider.WhereCondition += " AND X.ObjectID IN (SELECT PageTemplateID FROM CMS_PageTemplateSite WHERE SiteID = " + SiteContext.CurrentSiteID + ") ";
-            }
-
             categoryProvider.WhereCondition += " AND (X.ObjectPath LIKE View_CMS_PageTemplateCategoryPageTemplate_Joined.ObjectPath + '/%')) IS NOT NULL)";
 
             // Add column count column - minimal number of children
@@ -478,11 +418,6 @@ function " + SelectFunctionName + @"(nodeid, sender) {
             OR ( View_CMS_PageTemplateCategoryPageTemplate_Joined.ObjectType = 'PageTemplateCategory' 
             AND View_CMS_PageTemplateCategoryPageTemplate_Joined.CategoryChildCount > 0 
             AND Y.ObjectType = 'PageTemplate' AND Y.ObjectLevel > View_CMS_PageTemplateCategoryPageTemplate_Joined.ObjectLevel + 1 ";
-
-            if (ShowOnlySiteTemplates)
-            {
-                categoryProvider.Columns += "AND Y.ObjectID IN (SELECT PageTemplateID FROM CMS_PageTemplateSite WHERE SiteID = " + SiteContext.CurrentSiteID + ") ";
-            }
 
             categoryProvider.Columns += " AND Y.ObjectPath LIKE  View_CMS_PageTemplateCategoryPageTemplate_Joined.ObjectPath + '/%')) AS MinNumberOfChilds";
             categoryProvider.ChildCountColumn = "MinNumberOfChilds";

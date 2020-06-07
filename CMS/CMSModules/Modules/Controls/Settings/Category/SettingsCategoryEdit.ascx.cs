@@ -283,7 +283,7 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsCateg
         // Disable edit for category which is not for selected module
         if (SettingsCategoryObj != null)
         {
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(moduleId);
+            ResourceInfo resource = ResourceInfo.Provider.Get(moduleId);
             if ((((resource != null) && !resource.ResourceIsInDevelopment) || (SettingsCategoryObj.CategoryResourceID != moduleId)) && !SystemContext.DevelopmentMode)
             {
                 Enabled = false;

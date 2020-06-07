@@ -2756,7 +2756,7 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_FieldEd
                                                     // Refresh queries only if changes to DB were made
                                                     if (!ffiSelected.External)
                                                     {
-                                                        QueryInfoProvider.ClearDefaultQueries(dci, true, true);
+                                                        QueryInfoProvider.ClearDefaultQueries(dci, true);
                                                     }
                                                 }
 
@@ -3443,7 +3443,7 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_FieldEd
 
             if ((SelectedItemType == FieldEditorSelectedItemEnum.Field) && !updatedFieldInfo.IsDummyField)
             {
-                QueryInfoProvider.ClearDefaultQueries(dci, true, true);
+                QueryInfoProvider.ClearDefaultQueries(dci, true);
             }
         }
         else

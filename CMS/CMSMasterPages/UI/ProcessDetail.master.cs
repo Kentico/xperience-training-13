@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.UI;
 
+using CMS.Base.Web.UI;
 using CMS.ContactManagement.Web.UI;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
@@ -11,6 +12,16 @@ public partial class CMSMasterPages_UI_ProcessDetail : CMSProcessDetailMasterPag
     /// Automation manager component.
     /// </summary>
     protected override CMSAutomationManager AutomationManager => autoMan;
+
+
+    /// <summary>
+    /// HeaderActions control.
+    /// </summary>
+    public override HeaderActions HeaderActions
+    {
+        get => menuElem.HeaderActions;
+        set => menuElem.HeaderActions = value;
+    }
 
 
     protected override void OnInit(EventArgs e)

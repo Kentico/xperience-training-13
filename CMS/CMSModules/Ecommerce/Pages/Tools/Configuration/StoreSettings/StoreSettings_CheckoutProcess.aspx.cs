@@ -19,7 +19,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Configuration_StoreSetting
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        configuredSite = SiteInfoProvider.GetSiteInfo(ConfiguredSiteID);
+        configuredSite = SiteInfo.Provider.Get(ConfiguredSiteID);
 
         // Check UI element
         var elementName = IsMultiStoreConfiguration ? "Tools.Ecommerce.ChackoutSettings" : "Configuration.Settings.CheckoutProcess";

@@ -353,12 +353,6 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
                 string url = ApplicationUrlHelper.GetElementDialogUrl("cms.design", "PageTemplate.EditPageTemplate", templateId);
 
                 btnEditTemplateProperties.OnClientClick = String.Format("modalDialog('{0}', 'Template edit', '95%', '95%'); return false;", url);
-
-                btnClone.OnClientClick = String.Format(
-                    "if (confirm({0})) {1};return false;",
-                    ScriptHelper.GetString(GetString("pageselector.cloneasadhoc")),
-                    Page.ClientScript.GetPostBackEventReference(btnFullPostback, null)
-                );
             }
         }
         else
@@ -469,35 +463,8 @@ function PTS_{0}() {{
 
     protected void btnClear_clicked(object sender, EventArgs e)
     {
-        btnClone.Enabled = false;
         btnEditTemplateProperties.Enabled = false;
-
         btnEditTemplateProperties.OnClientClick = String.Empty;
-        btnClone.OnClientClick = String.Empty;
-    }
-
-
-    /// <summary>
-    /// Clone button event handler
-    /// </summary>
-    protected void btnClone_Click(object sender, EventArgs e)
-    {
-        if (pti != null)
-        {
-            // Clone the info
-            string displayName = "Ad-hoc: " + pti.DisplayName;
-
-            PageTemplateInfo newInfo = PageTemplateInfoProvider.CloneTemplateAsAdHoc(pti, displayName);
-
-            newInfo.Description = String.Format(GetString("uielement.adhocdescription"), ItemName);
-
-            PageTemplateInfoProvider.SetPageTemplateInfo(newInfo);
-
-            PageTemplateID = newInfo.PageTemplateId;
-
-            // Force save upper control
-            Save = true;
-        }
     }
 
 

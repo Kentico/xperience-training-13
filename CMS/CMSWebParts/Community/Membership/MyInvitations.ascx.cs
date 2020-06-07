@@ -118,7 +118,7 @@ public partial class CMSWebParts_Community_Membership_MyInvitations : CMSAbstrac
 
                 if (userInfo == null)
                 {
-                    userInfo = UserInfoProvider.GetUserInfo(userID);
+                    userInfo = UserInfo.Provider.Get(userID);
                 }
 
                 if (userInfo != null)
@@ -291,7 +291,7 @@ public partial class CMSWebParts_Community_Membership_MyInvitations : CMSAbstrac
                         // Transfer user name to user info
                         if (userInfo == null)
                         {
-                            userInfo = UserInfoProvider.GetUserInfo(UserName);
+                            userInfo = UserInfo.Provider.Get(UserName);
                         }
                         if (userInfo != null)
                         {

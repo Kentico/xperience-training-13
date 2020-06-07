@@ -106,7 +106,7 @@ public partial class CMSModules_Staging_Tools_Controls_ViewTask : CMSAdminEditCo
     {
         List<string> usersWhoModifiedObject = new List<string>();
 
-        UserInfoProvider.GetUsers()
+        UserInfo.Provider.Get()
             .Columns("UserID", "UserName")
             .WhereIn("UserID", StagingTaskUserInfoProvider.GetTaskUsers().Column("UserID").WhereEquals("TaskID", ti.TaskID))
             .ForEachObject(u => usersWhoModifiedObject.Add(u.UserName));

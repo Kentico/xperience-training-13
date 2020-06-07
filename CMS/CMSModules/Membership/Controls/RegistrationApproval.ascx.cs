@@ -184,7 +184,7 @@ public partial class CMSModules_Membership_Controls_RegistrationApproval : CMSUs
         }
 
         // Get registered user
-        RegisteredUser = UserInfoProvider.GetUserInfoByGUID(userGuid);
+        RegisteredUser = UserInfo.Provider.Get(userGuid);
 
         // Set default url
         DefaultUrl = ResolveUrl("~/");
@@ -315,7 +315,7 @@ public partial class CMSModules_Membership_Controls_RegistrationApproval : CMSUs
         }
 
         // Save changes
-        UserInfoProvider.SetUserInfo(RegisteredUser);
+        UserInfo.Provider.Set(RegisteredUser);
 
         // Notify administrator if enabled and email confirmation is not required
         if ((!String.IsNullOrEmpty(AdministratorEmail)) && (administrationApproval || NotifyAdministrator))
@@ -343,7 +343,7 @@ public partial class CMSModules_Membership_Controls_RegistrationApproval : CMSUs
     {
         MacroResolver resolver = MembershipResolvers.GetRegistrationResolver(RegisteredUser);
         string currentSiteName = SiteContext.CurrentSiteName;
-        var template = EmailTemplateProvider.GetEmailTemplate(administrationApproval ? "Registration.Approve" : "Registration.New", currentSiteName);
+        var template = EmailTemplateInfo.Provider.Get(administrationApproval ? "Registration.Approve" : "Registration.New", SiteContext.CurrentSiteID);
 
         if (template == null)
         {

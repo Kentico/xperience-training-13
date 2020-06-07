@@ -92,7 +92,7 @@ public partial class CMSModules_Automation_Controls_Process_List : CMSUserContro
                 int stateId = ValidationHelper.GetInteger(actionArgument, 0);
 
                 var obj = ProviderHelper.GetInfoById(ObjectType, ObjectID);
-                var state = AutomationStateInfoProvider.GetAutomationStateInfo(stateId);
+                var state = AutomationStateInfo.Provider.Get(stateId);
 
                 if (!CurrentUser.IsAuthorizedPerResource(ModuleName.ONLINEMARKETING, "RemoveProcess", SiteContext.CurrentSiteName))
                 {

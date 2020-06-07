@@ -641,13 +641,4 @@ public partial class CMSModules_System_Controls_System
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnRestartServices;
-
-    /// <summary>
-    /// btnClearCounters control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnClearCounters;
 }

@@ -428,7 +428,7 @@ select.change(function(){{
         if (operatorID.StartsWith("U", StringComparison.InvariantCulture))
         {
             int userId = int.Parse(operatorID.Substring(1));
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             AclItemInfoProvider.SetUserPermissions(Node, allowed, denied, ui);
             message = "security.documentuserpermissionschange";
         }
@@ -1199,7 +1199,7 @@ select.change(function(){{
         if (operatorID.StartsWith("U", StringComparison.InvariantCulture))
         {
             int userId = int.Parse(operatorID.Substring(1));
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             AclItemInfoProvider.RemoveUser(Node.NodeID, ui);
             message = "security.documentuserpermissionremoved";
         }

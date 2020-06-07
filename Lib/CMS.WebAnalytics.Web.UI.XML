@@ -4,36 +4,6 @@
         <name>CMS.WebAnalytics.Web.UI</name>
     </assembly>
     <members>
-        <member name="T:CMS.WebAnalytics.Web.UI.AnalyticsLog">
-            <summary>
-            Cache log base class.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.Web.UI.AnalyticsLog.Settings">
-            <summary>
-            Debug settings for this particular log
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetIPAndAgent(System.Object,System.Web.UI.WebControls.GridViewRowEventArgs)">
-            <summary>
-            Update footer values
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetInformation(System.Object,System.Object,System.Object)">
-            <summary>
-            Returns information writable to analytics debug.
-            </summary>
-            <paramref name="objectName">Object name</paramref>
-            <paramref name="culture">Culture</paramref>
-            <paramref name="objectId">Object ID</paramref>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.AnalyticsLog.GetCount(System.Object,System.Object)">
-            <summary>
-            Gets the count/value information
-            </summary>
-            <param name="count">Count</param>
-            <param name="value">Value</param>
-        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.AssetController">
             <summary>
             Handles the campaign assets.
@@ -981,49 +951,6 @@
             <param name="value">Object to validate.</param>
             <param name="validationContext">Validation context.</param>
         </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsController">
-            <summary>
-            Handles logging of visitor hits.
-            </summary>
-            <remarks>
-            Only real visitors ban be logged, crawlers which the system is able to recognize are omitted.
-            Adds information to the header to tell the crawlers not to track this controller. This applies only to the crawlers that was
-            not recognized in the <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/>.
-            </remarks>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogHit(CMS.WebAnalytics.LogHitParameters)">
-            <summary>
-            Performs logging of general hit.
-            </summary>
-            <param name="logHitParameters">Parameters required for hit logging</param>
-            <returns>
-            HTTP response message containing the status code dependent on whether the action was successful or not.
-            Returns 200 OK status if logging was successful.
-            Returns 400 Bad request if exception was thrown while trying to log the hit.
-            </returns>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogSearchHit(CMS.WebAnalytics.LogSearchHitParameters)">
-            <summary>
-            Performs logging of search event hit. 
-            </summary>
-            <param name="logSearchHitParameters">Parameters required for hit logging</param>
-            <returns>
-            HTTP response message containing the status code dependent on whether the action was successful or not.
-            Returns 200 OK status if logging was successful.
-            Returns 400 Bad request if exception was thrown while trying to log the hit.
-            </returns>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsController.LogBannerHit(System.Int32)">
-            <summary>
-            Performs logging of banner hit.
-            </summary>
-            <param name="bannerID">ID of the banner the visitor clicked on</param>
-            <returns>
-            HTTP response message containing the status code dependent on whether the action was successful or not.
-            Returns 200 OK status if logging was successful.
-            Returns 400 Bad request if exception was thrown while trying to log the hit.
-            </returns>
-        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.ContactDetailsCampaignResolver">
             <summary>
             Provides method for resolving campaigns in contact detail component.
@@ -1277,56 +1204,6 @@
         <member name="M:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage.CheckWebAnalyticsUI">
             <summary>
             Check UI permission for codename based on query 'datacodename' param. Redirects if check fails
-            </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer">
-            <summary>
-            Contains methods for registering JavaScript code into page which logs web analytics statistics asynchronously via call to WebAnalyticsService.
-            LogHits call is registered automatically for each page request. Other calls have to be registered manually.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.JAVASCRIPT_QUERYPARAMS_SUBSTITUTE">
-            <summary>
-            String to put into HTML to JavaScript code before substitution resolving.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogBannerHitCall(System.Web.UI.Page,System.Int32)">
-            <summary>
-            Registers script which logs banner hit asynchronously.
-            </summary>
-            <param name="page">Page where script should be registered</param>
-            <param name="bannerID">Banner which was viewed</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogSearchCall(System.Web.UI.Page,CMS.PortalEngine.PageInfo,System.String)">
-            <summary>
-            Registers script which logs search hit asynchronously.
-            </summary>
-            <param name="page">Page where script should be registered</param>
-            <param name="pageInfo">PageInfo representing current document/node</param>
-            <param name="searchText">Text which was searched for</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.Init">
-            <summary>
-            Binds to appropriate events, so that LogHits call can be rendered on every page request.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.RegisterLogHitsCall(System.Object,System.EventArgs)">
-            <summary>
-            Registers script which logs page views and other hits asynchronously. The script is registered without the actual parameters.
-            There is a placeholder at the location where parameters would be and this placeholder should be replaced by the actual parameters
-            before sending page output to the client browser. This two-step rendering is required, because of the output cache mechanism.
-            At first, there is a universal script rendered and 
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.ShouldInsertAnalyticsJS(System.String,System.String)">
-            <summary>
-            Checks whether the JavaScript logging snippet should be added to the page.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsServiceScriptsRenderer.ResolveSubstitution(System.Object,CMS.OutputFilter.SubstitutionEventArgs)">
-            <summary>
-            Resolves JavaScript parameters substitution macro.
-            Substitution macro is used because of full page caching, JavaScript snippet is unique for each visitor, because of the Url Referrer parameter.
             </summary>
         </member>
         <member name="T:CMS.WebAnalytics.WebAnalyticsWebUIModuleMetadata">

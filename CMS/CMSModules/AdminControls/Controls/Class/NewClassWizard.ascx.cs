@@ -1462,7 +1462,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
             foreach (string item in classes)
             {
                 int parentClassID = ValidationHelper.GetInteger(item, 0);
-                AllowedChildClassInfoProvider.AddAllowedChildClass(parentClassID, childClassID);
+                AllowedChildClassInfo.Provider.Add(parentClassID, childClassID);
             }
         }
 
@@ -1523,7 +1523,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
         {
             int siteId = ValidationHelper.GetInteger(site, 0);
 
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+            SiteInfo si = SiteInfo.Provider.Get(siteId);
             if (si != null)
             {
                 if (isCustomTable)

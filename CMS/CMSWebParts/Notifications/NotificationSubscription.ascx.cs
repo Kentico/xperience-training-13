@@ -231,7 +231,7 @@ public partial class CMSWebParts_Notifications_NotificationSubscription : CMSAbs
             else if (SiteName != "-")
             {
                 // Try to find given site
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+                SiteInfo si = SiteInfo.Provider.Get(SiteName);
                 if (si != null)
                 {
                     subscriptionElem.SubscriptionSiteID = si.SiteID;

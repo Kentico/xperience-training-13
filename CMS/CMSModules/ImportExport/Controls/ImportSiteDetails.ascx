@@ -18,7 +18,7 @@
                             EnableViewState="false" AssociatedControlID="txtSiteDisplayName" ShowRequiredMark="True"/>
                     </div>
                     <div class="editing-form-value-cell">
-                        <cms:LocalizableTextBox ID="txtSiteDisplayName" runat="server" MaxLength="200" />
+                        <cms:LocalizableTextBox ID="txtSiteDisplayName" runat="server" MaxLength="200" />                        
                         <cms:CMSRequiredFieldValidator ID="rfvSiteDisplayName" runat="server" ControlToValidate="txtSiteDisplayName:cntrlContainer:textbox" />
                     </div>
                 </div>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
@@ -184,7 +183,6 @@ public partial class CMSModules_OnlineMarketing_Pages_Content_ABTesting_ABTest_O
         Controls.Add(DocumentManager as CMSDocumentManager);
 
         MessagesWriter.ShowABTestScheduleInformation(ABTest, TestStatus);
-        MessagesWriter.ShowMissingVariantsTranslationsWarning(ABTest);
 
         RegisterScripts();
         InitializeSelectors();

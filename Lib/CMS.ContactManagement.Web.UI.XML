@@ -641,11 +641,13 @@
             Provides service methods used in <see cref="T:CMS.ContactManagement.Web.UI.Internal.ContactProfileController"/>.
             </summary>
         </member>
-        <member name="M:CMS.ContactManagement.Web.UI.ContactProfileControllerService.#ctor(CMS.ContactManagement.IContactInfoProvider,CMS.Core.Internal.IDateTimeNowService)">
+        <member name="M:CMS.ContactManagement.Web.UI.ContactProfileControllerService.#ctor(CMS.ContactManagement.IContactInfoProvider,CMS.Globalization.ICountryInfoProvider,CMS.Globalization.IStateInfoProvider,CMS.Core.Internal.IDateTimeNowService)">
             <summary>
             Instantiates new instance of <see cref="T:CMS.ContactManagement.Web.UI.ContactProfileControllerService"/>.
             </summary>
             <param name="contactInfoProvider">Provider for <see cref="T:CMS.ContactManagement.ContactInfo"/> management.</param>
+            <param name="countryInfoProvider">Provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.</param>
+            <param name="stateInfoProvider">Provider for <see cref="T:CMS.Globalization.StateInfo"/> management.</param>
             <param name="dateTimeNowService">Service for obtaining current date time</param>
         </member>
         <member name="M:CMS.ContactManagement.Web.UI.ContactProfileControllerService.GetContactViewModel(System.Int32)">
@@ -1299,12 +1301,22 @@
         </member>
         <member name="T:CMS.ContactManagement.Web.UI.CMSAutomationPage">
             <summary>
-            Base contact management page.
+            Base marketing automation page.
             </summary>
         </member>
         <member name="P:CMS.ContactManagement.Web.UI.CMSAutomationPage.AuthorizedForContacts">
             <summary>
             Indicates if current user is authorized for reading contacts.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSAutomationPage.AuthorizedToManageAutomation">
+            <summary>
+            Indicates whether the current user is allowed to manage automation processes.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.CMSAutomationPage.LicenseIsSufficient">
+            <summary>
+            Indicates whether the marketing automation is included in the license for current domain.
             </summary>
         </member>
         <member name="M:CMS.ContactManagement.Web.UI.CMSAutomationPage.OnInit(System.EventArgs)">
@@ -1317,6 +1329,13 @@
             Checks if on-line marketing is available on site.
             </summary>
             <param name="redirectOnError">If set to <c>true</c> then redirect to error permission page when not authorized</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSAutomationPage.CheckLicense">
+            <summary>
+            Checks whether the marketing automation is included in the license for current domain,
+            or the current user is allowed to manage automation processes
+            and displays information message if at least one of the checks fails.
+            </summary>
         </member>
         <member name="T:CMS.ContactManagement.Web.UI.CMSContactManagementConfigurationPage">
             <summary>
@@ -1408,6 +1427,11 @@
             Pre-render event handler.
             </summary>
         </member>
+        <member name="M:CMS.ContactManagement.Web.UI.CMSProcessDetailMasterPage.ShowContactJourney">
+            <summary>
+            Registers javascript code capable of displaying contact data and journey in designer.
+            </summary>
+        </member>
         <member name="T:CMS.ContactManagement.Web.UI.CMSSalesForceDialogPage">
             <summary>
             Represents a modal dialog web page of SalesForce module.
@@ -1443,18 +1467,31 @@
             Interface for process detail pages of marketing automation module.
             </summary>
         </member>
-        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.SetBreadcrumbs(CMS.FormEngine.Web.UI.CMSAutomationManager)">
+        <member name="P:CMS.ContactManagement.Web.UI.IProcessDetailPage.IsContactDetailShown">
+            <summary>
+            Implemented value determines whether contact detail is shown in process designer.
+            </summary>
+        </member>
+        <member name="P:CMS.ContactManagement.Web.UI.IProcessDetailPage.AutomationManager">
+            <summary>
+            Sets instance of <see cref="T:CMS.FormEngine.Web.UI.CMSAutomationManager"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.SetBreadcrumbs">
             <summary>
             Sets breadcrumbs on current page.
             </summary>
-            <param name="automationManager">Instance of automation manager</param>
         </member>
-        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.AfterAutomationManagerAction(System.String,CMS.FormEngine.Web.UI.CMSAutomationManager)">
+        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.AfterAutomationManagerAction(System.String)">
             <summary>
             Handles logic after specified automation manager action.
             </summary>
             <param name="actionName">Automation manager action name</param>
-            <param name="automationManager">Instance of automation manager</param>
+        </member>
+        <member name="M:CMS.ContactManagement.Web.UI.IProcessDetailPage.GetListingPageUrl">
+            <summary>
+            Returns URL of the original listing page from which this detail page was opened.
+            </summary>
         </member>
         <member name="T:CMS.ContactManagement.Web.UI.AutomationTemplateViewModel">
             <summary>

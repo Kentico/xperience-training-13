@@ -479,7 +479,11 @@ public partial class CMSModules_AdminControls_Controls_Documents_Documents : CMS
                     data = UniGridFunctions.GetDataRowView(previewButton.Parent as DataControlFieldCell);
                     site = GetSiteFromRow(data);
                     string type = ValidationHelper.GetString(DataHelper.GetDataRowViewValue(data, SOURCE_TYPE), string.Empty);
-                    if ((site.Status != SiteStatusEnum.Running) || ((ListingType == ListingTypeEnum.All) && (type == LISTINGTYPE_RECYCLEBIN)))
+                    string className = ValidationHelper.GetString(data[SOURCE_CLASSNAME], string.Empty);
+
+                    if ((site.Status != SiteStatusEnum.Running) || 
+                        ((ListingType == ListingTypeEnum.All) && (type == LISTINGTYPE_RECYCLEBIN)) ||
+                        !DataClassInfoProvider.GetDataClassInfo(className).ClassHasURL)
                     {
                         previewButton.Enabled = false;
                         previewButton.Style.Add(HtmlTextWriterStyle.Cursor, "default");
@@ -500,46 +504,48 @@ public partial class CMSModules_AdminControls_Controls_Documents_Documents : CMS
 
             // Document name column
             case EXTERNALSOURCE_DOCUMENTNAME:
-                data = (DataRowView)parameter;
-
-                string name = ValidationHelper.GetString(data[SOURCE_DOCUMENTNAME], string.Empty);
-                string className = ValidationHelper.GetString(data[SOURCE_CLASSNAME], string.Empty);
-
-                if (name == string.Empty)
                 {
-                    name = GetString("general.root");
-                }
-                // Add document type icon
-                string result = string.Empty;
-                switch (ListingType)
-                {
-                    case ListingTypeEnum.DocTypeDocuments:
-                        break;
+                    data = (DataRowView)parameter;
 
-                    default:
-                        var dataClass = DataClassInfoProvider.GetDataClassInfo(className);
+                    string name = ValidationHelper.GetString(data[SOURCE_DOCUMENTNAME], string.Empty);
+                    string className = ValidationHelper.GetString(data[SOURCE_CLASSNAME], string.Empty);
 
-                        if (dataClass != null)
-                        {
-                            var iconClass = (string)dataClass.GetValue(SOURCE_CLASSICONCLASS);
-                            result = UIHelper.GetDocumentTypeIcon(Page, className, iconClass);
-                        }
-                        break;
-                }
-
-                result += "<span>" + HTMLHelper.HTMLEncode(TextHelper.LimitLength(name, 50)) + "</span>";
-
-                // Show document marks only if method is not called from grid export
-                if ((sender != null) && (ListingType != ListingTypeEnum.All))
-                {
-                    bool isLink = (data.Row.Table.Columns.Contains(SOURCE_NODELINKEDNODEID) && (data[SOURCE_NODELINKEDNODEID] != DBNull.Value));
-                    if (isLink)
+                    if (name == string.Empty)
                     {
-                        // Add link icon
-                        result += DocumentUIHelper.GetDocumentMarkImage(Parent.Page, DocumentMarkEnum.Link);
+                        name = GetString("general.root");
                     }
+                    // Add document type icon
+                    string result = string.Empty;
+                    switch (ListingType)
+                    {
+                        case ListingTypeEnum.DocTypeDocuments:
+                            break;
+
+                        default:
+                            var dataClass = DataClassInfoProvider.GetDataClassInfo(className);
+
+                            if (dataClass != null)
+                            {
+                                var iconClass = (string)dataClass.GetValue(SOURCE_CLASSICONCLASS);
+                                result = UIHelper.GetDocumentTypeIcon(Page, className, iconClass);
+                            }
+                            break;
+                    }
+
+                    result += "<span>" + HTMLHelper.HTMLEncode(TextHelper.LimitLength(name, 50)) + "</span>";
+
+                    // Show document marks only if method is not called from grid export
+                    if ((sender != null) && (ListingType != ListingTypeEnum.All))
+                    {
+                        bool isLink = (data.Row.Table.Columns.Contains(SOURCE_NODELINKEDNODEID) && (data[SOURCE_NODELINKEDNODEID] != DBNull.Value));
+                        if (isLink)
+                        {
+                            // Add link icon
+                            result += DocumentUIHelper.GetDocumentMarkImage(Parent.Page, DocumentMarkEnum.Link);
+                        }
+                    }
+                    return result;
                 }
-                return result;
 
             // Class name column
             case EXTERNALSOURCE_CLASSDISPLAYNAME:
@@ -1026,7 +1032,7 @@ public partial class CMSModules_AdminControls_Controls_Documents_Documents : CMS
         // Selected site filter
         if (!String.IsNullOrEmpty(SiteName) && (SiteName != UniGrid.ALL))
         {
-            selectedSiteInfo = SiteInfoProvider.GetSiteInfo(SiteName);
+            selectedSiteInfo = SiteInfo.Provider.Get(SiteName);
             if (selectedSiteInfo != null)
             {
                 gridElem.WhereCondition = SqlHelper.AddWhereCondition(gridElem.WhereCondition, SOURCE_NODESITEID + " = " + selectedSiteInfo.SiteID);
@@ -1067,7 +1073,7 @@ public partial class CMSModules_AdminControls_Controls_Documents_Documents : CMS
     /// <returns>Initialized site info</returns>
     private SiteInfo GetSiteFromRow(DataRowView data)
     {
-        return SiteInfoProvider.GetSiteInfo(ValidationHelper.GetInteger(data[SOURCE_NODESITEID], 0));
+        return SiteInfo.Provider.Get(ValidationHelper.GetInteger(data[SOURCE_NODESITEID], 0));
     }
 
 

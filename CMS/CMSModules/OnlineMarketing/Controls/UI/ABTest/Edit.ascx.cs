@@ -16,7 +16,6 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
 {
     #region "Variables"
 
-    private bool mNewCreated;
     private string mQueryAliasPath;
     private ABTestMessagesWriter mMessagesWriter;
     private ABTestStatusEnum? mTestStatus;
@@ -80,7 +79,7 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
         SetRedirectUrlAfterCreate();
 
         if (ABTest.ABTestID > 0)
-        { 
+        {
             // If this is GET request or POST request called by modal dialog, use test values from DB
             if (!RequestHelper.IsPostBack() || (Request["__EVENTARGUMENT"] == "modalClosed"))
             {
@@ -119,7 +118,6 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
         }
 
         form.Data.SetValue("ABTestSiteID", CurrentSite.SiteID);
-        mNewCreated = (ABTest.ABTestID == 0);
     }
 
 
@@ -140,12 +138,6 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
 
     protected void form_OnAfterSave(object sender, EventArgs e)
     {
-        // For new AB test create default variant
-        if (mNewCreated)
-        {
-            CreateDefaultVariant(ABTest);
-        }
-
         // Set the test status to null so it is re-evaluated using the new values.
         mTestStatus = null;
     }
@@ -166,8 +158,7 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
         {
             MessagesWriter.ShowStatusInfo(ABTest);
             MessagesWriter.ShowABTestScheduleInformation(ABTest, TestStatus);
-            MessagesWriter.ShowMissingVariantsTranslationsWarning(ABTest);
-            
+
             DisableFieldsByTestStatus();
         }
 
@@ -198,26 +189,6 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_AbTest_Edit : CMSAdm
         form.FieldControls["ABTestOpenTo"].Enabled = notFinished;
         form.FieldControls["ABTestVisitorTargeting"].Enabled = notFinished;
         form.FieldControls["ABTestIncludedTraffic"].Enabled = notFinished;
-    }
-
-
-    /// <summary>
-    /// Creates a new AB variant that should be created by default to given AB test
-    /// </summary>
-    private void CreateDefaultVariant(ABTestInfo info)
-    {
-        // Create instance of AB variant
-        ABVariantInfo variant = new ABVariantInfo
-        {
-            ABVariantPath = info.ABTestOriginalPage,
-            ABVariantTestID = info.ABTestID,
-            ABVariantDisplayName = GetString("abtesting.originalvariantdisplayname"),
-            ABVariantName = "Original",
-            ABVariantSiteID = info.ABTestSiteID
-        };
-
-        // Save to the storage
-        ABVariantInfo.Provider.Set(variant);
     }
 
 

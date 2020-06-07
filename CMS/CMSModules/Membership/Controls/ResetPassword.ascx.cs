@@ -152,7 +152,7 @@ public partial class CMSModules_Membership_Controls_ResetPassword : CMSUserContr
             if (ui != null)
             {
                 ui.UserPasswordRequestHash = null;
-                UserInfoProvider.SetUserInfo(ui);
+                UserInfo.Provider.Set(ui);
                 ClearResetRequestID();
 
                 ShowInformation(GetString("membership.passwresetcancelled"));
@@ -181,7 +181,7 @@ public partial class CMSModules_Membership_Controls_ResetPassword : CMSUserContr
             if (userId > 0)
             {
                 // Invalidation forces user info to load user settings from DB and not use cached values.
-                ui = UserInfoProvider.GetUserInfo(userId);
+                ui = UserInfo.Provider.Get(userId);
                 ui?.Generalized.Invalidate(false);
             }
             else
@@ -211,7 +211,7 @@ public partial class CMSModules_Membership_Controls_ResetPassword : CMSUserContr
 
                     // Delete it from user info
                     ui.UserPasswordRequestHash = null;
-                    UserInfoProvider.SetUserInfo(ui);
+                    UserInfo.Provider.Set(ui);
 
                     break;
 
@@ -254,7 +254,7 @@ public partial class CMSModules_Membership_Controls_ResetPassword : CMSUserContr
                     // Check if password expired
                     if (pwdExp > 0)
                     {
-                        UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+                        UserInfo ui = UserInfo.Provider.Get(userId);
                         if (!UserInfoProvider.IsUserPasswordDifferent(ui, passStrength.Text))
                         {
                             ShowError(GetString("passreset.newpasswordrequired"));

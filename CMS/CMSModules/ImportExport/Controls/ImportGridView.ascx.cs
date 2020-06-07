@@ -92,7 +92,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
             return mExistingObjects;
         }
     }
-    
+
 
     /// <summary>
     /// Data source.
@@ -123,13 +123,13 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
     protected void Page_Load(object sender, EventArgs e)
     {
         pagerElem.PagedControl = this;
-        
+
         if (RequestHelper.IsPostBack())
         {
             if (Settings != null)
             {
                 // Process the results of the available tasks
-                string[] available = hdnAvailableItems.Value.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] available = hdnAvailableItems.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (string codeName in available)
                 {
@@ -289,7 +289,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
                 plcGrid.Visible = true;
                 codeNameColumnName = info.CodeNameColumn;
                 displayNameColumnName = info.DisplayNameColumn;
-             
+
                 // Set filter field
                 textFilter.Field = string.IsNullOrEmpty(displayNameColumnName) ? codeNameColumnName : displayNameColumnName;
 
@@ -298,7 +298,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
                 {
                     pnlSearch.Visible = false;
                 }
-                
+
                 string filterWhereCondition = "";
 
                 // Reset filter if current node has changed 
@@ -312,7 +312,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
                     if (!string.IsNullOrEmpty(textFilter.Text))
                     {
                         // Get filter condition
-                        filterWhereCondition = textFilter.GetWhereCondition();                        
+                        filterWhereCondition = textFilter.GetWhereCondition();
                     }
                 }
 
@@ -330,7 +330,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
 
                     // Filter and sort data
                     if (!DataHelper.DataSourceIsEmpty(table))
-                    {                       
+                    {
                         if (!string.IsNullOrEmpty(filterWhereCondition))
                         {
                             // Make filter condition compatible with DataTables
@@ -339,8 +339,8 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
                             query = query.Replace("]", "");
                             query = query.Replace("N'%", "'%");
                             query = query.Replace("N'", "'");
-                        
-                            table.DefaultView.RowFilter = query;                           
+
+                            table.DefaultView.RowFilter = query;
 
                             //Save filter condition to ViewState
                             FilterCurrentWhereCondition = query;
@@ -449,7 +449,7 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
             string codeName = ValidationHelper.GetString(row[codeNameColumnName], "");
 
             CMSCheckBox checkBox = GetCheckBox(codeName);
-            if (!e.Row.Cells[0].Controls.OfType<CMSCheckBox>().Any(ccb=> ccb.ID == checkBox.ID))
+            if (!e.Row.Cells[0].Controls.OfType<CMSCheckBox>().Any(ccb => ccb.ID == checkBox.ID))
             {
                 e.Row.Cells[0].Controls.Add(checkBox);
             }
@@ -479,21 +479,12 @@ public partial class CMSModules_ImportExport_Controls_ImportGridView : ImportExp
     // Get orderby expression
     private string GetOrderByExpression(GeneralizedInfo info)
     {
-        switch (info.TypeInfo.ObjectType)
+        if (info.DisplayNameColumn != ObjectTypeInfo.COLUMN_NAME_UNKNOWN)
         {
-            case PageTemplateInfo.OBJECT_TYPE:
-                return "PageTemplateIsReusable DESC," + info.DisplayNameColumn;
-
-            default:
-                {
-                    if (info.DisplayNameColumn != ObjectTypeInfo.COLUMN_NAME_UNKNOWN)
-                    {
-                        return info.DisplayNameColumn;
-                    }
-
-                    return codeNameColumnName;
-                }
+            return info.DisplayNameColumn;
         }
+
+        return codeNameColumnName;
     }
 
 

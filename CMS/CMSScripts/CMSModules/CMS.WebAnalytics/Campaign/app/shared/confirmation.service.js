@@ -13,6 +13,8 @@
             config = getConfig();
 
         that.canRemoveAsset = can.bind(this, 'remove', 'asset');
+        that.canEditAsset = can.bind(this, 'edit', 'asset');
+
         that.canRemoveObjective = can.bind(this, 'remove', 'objective');
         that.canEditObjective = can.bind(this, 'edit', 'objective');
 

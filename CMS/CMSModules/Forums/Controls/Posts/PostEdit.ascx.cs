@@ -184,7 +184,6 @@ public partial class CMSModules_Forums_Controls_Posts_PostEdit : CMSAdminEditCon
         htmlTemplateBody.ToolbarSet = "Forum";
         htmlTemplateBody.DisableObjectResizing = true; // Disable image resizing
         htmlTemplateBody.RemovePlugins.Add("contextmenu"); // Disable context menu
-        htmlTemplateBody.IsLiveSite = IsLiveSite;
         htmlTemplateBody.MediaDialogConfig.UseFullURL = true;
         htmlTemplateBody.LinkDialogConfig.UseFullURL = true;
 

@@ -34,16 +34,6 @@ public partial class CMSModules_AdminControls_Controls_Class_Layout : CMSUserCon
     #region "Public properties"
 
     /// <summary>
-    /// Sets the validation function for ASCX editing permission
-    /// </summary>
-    public Func<bool> IsAuthorizedForAscxEditingFunction
-    {
-        private get;
-        set;
-    }
-
-
-    /// <summary>
     /// Messages placeholder
     /// </summary>
     public override MessagesPlaceHolder MessagesPlaceHolder
@@ -341,8 +331,6 @@ public partial class CMSModules_AdminControls_Controls_Class_Layout : CMSUserCon
         pnlCustomLayout.Visible = radCustomLayout.Checked;
         pnlLayoutType.Visible = radCustomLayout.Checked;
 
-        pnlCustomLayout.Enabled = IsAuthorizedForAscxEditing();
-
         base.OnPreRender(e);
     }
 
@@ -558,33 +546,10 @@ public partial class CMSModules_AdminControls_Controls_Class_Layout : CMSUserCon
 
 
     /// <summary>
-    /// Returns true if user is authorized to change the ASCX layout
-    /// </summary>
-    private bool IsAuthorizedForAscxEditing()
-    {
-        if (LayoutType == LayoutTypeEnum.Ascx)
-        {
-            if ((IsAuthorizedForAscxEditingFunction != null) && !IsAuthorizedForAscxEditingFunction())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    /// <summary>
     /// Saves form layout.
     /// </summary>
     private bool SaveData()
     {
-        if (!IsAuthorizedForAscxEditing())
-        {
-            ShowError(GetString("EditCode.NotAllowed"));
-            return false;
-        }
-
         bool saved = false;
         bool deleted = false;
 

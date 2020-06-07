@@ -12,6 +12,7 @@
         'cms.contactmanagement/contactprofile/notes.component',
         'cms.contactmanagement/contactprofile/detail.component',
         'cms.contactmanagement/contactprofile/journey.component',
+        'cms.contactmanagement/contactprofile/link.component',
         'CMS/Filters.Resolve'
     ])
     .component('cmsContactProfileFull', contact());
@@ -34,6 +35,11 @@
         this.formModuleAvailable = dataFromServer.formModuleAvailable;
         this.newsletterModuleAvailable = dataFromServer.newsletterModuleAvailable;
         this.activitiesExist = dataFromServer.activitiesExist;
+        this.displayGroupMemberships = dataFromServer.displayGroupMemberships;
+        this.displayNotes = dataFromServer.displayNotes;
+        this.displayContactInformations = dataFromServer.displayContactInformations;
+        this.displayEditButton = dataFromServer.displayEditButton;
+        this.contactUrl = dataFromServer.contactUrl;
     };
 
 }(angular, dataFromServer));

@@ -560,7 +560,7 @@
         </member>
         <member name="T:CMS.Base.Internal.WebPathMapperBase">
             <summary>
-            Base class for objects implementing <see cref="T:CMS.Base.IWebPathMapper"/> interface.
+            Base class for objects implementing <see cref="T:CMS.Base.Internal.IWebPathMapper"/> interface.
             </summary>
         </member>
         <member name="F:CMS.Base.Internal.WebPathMapperBase.TILDA_FORWARDSLASH">
@@ -579,15 +579,10 @@
             <summary>~\</summary>
         </member>
         <member name="M:CMS.Base.Internal.WebPathMapperBase.MapPath(System.String)">
-            <summary>
-            Returns the full physical file path from the <paramref name="relativePath"/>.
-            For the application residing in C:\\folder\\appFolder and "~/AppData" <paramref name="relativePath"/> parameter,
-            the result will be C:\\folder\\appFolder\\AppData.
-            </summary>
-            <param name="relativePath">Relative path to be resolved.</param>
-            <returns>The physical file path that corresponds to <paramref name="relativePath" />.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="relativePath"/> does not specify a relative path.</exception>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="relativePath"/> is <c>null</c>.</exception>
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.Base.Internal.WebPathMapperBase.TryMapPath(System.String,System.String@)">
+            <inheritdoc/>
         </member>
         <member name="M:CMS.Base.Internal.WebPathMapperBase.MapPathInternal(System.String)">
             <summary>
@@ -597,6 +592,9 @@
             </summary>
             <param name="relativePath">Relative path to be resolved.</param>
             <returns>The physical file path that corresponds to <paramref name="relativePath" />.</returns>
+        </member>
+        <member name="M:CMS.Base.Internal.WebPathMapperBase.GetStaticFilesRootPath">
+            <inheritdoc/>
         </member>
         <member name="M:CMS.Base.Internal.WebPathMapperBase.GetRootPath">
             <summary>
@@ -608,54 +606,24 @@
             Returns <see langword="true"/> when <paramref name="relativePath"/> represent a relative path.
             </summary>
         </member>
-        <member name="T:CMS.Base.Internal.HttpHelper">
+        <member name="T:CMS.Base.Internal.QueryCollectionExtensions">
             <summary>
-            Provides an instance of the <see cref="T:CMS.Base.Internal.IHttpContext"/> associated with the current request.
+            Extensions methods over <see cref="T:CMS.Base.Internal.IQueryCollection"/>.
+            <para>
+            This belongs to the internal namespace and is used for Kentico purposes. Avoid using members of internal namespace.
+            </para>
             </summary>
         </member>
-        <member name="F:CMS.Base.Internal.HttpHelper.mLock">
+        <member name="M:CMS.Base.Internal.QueryCollectionExtensions.ToNameValueCollection(CMS.Base.Internal.IQueryCollection)">
             <summary>
-            Object for locking initialization of <see cref="F:CMS.Base.Internal.HttpHelper.mRetriever"/> field.
+            Converts to <see cref="T:System.Collections.Specialized.NameValueCollection"/> as a copy. 
+            The <see cref="T:Microsoft.Extensions.Primitives.StringValues"/> values of the collection are copied by implicit conversion to <see cref="T:System.String"/>.
             </summary>
-        </member>
-        <member name="F:CMS.Base.Internal.HttpHelper.mRetriever">
-            <summary>
-            A reference to implementation of application's <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/> registered
-            in <see cref="T:CMS.Core.IoCContainer"/>. It's stored here as static variable for performance improvement
-            over multiple resolution from container assuming that implementation is registered with
-            <c>Singleton</c> lifestyle.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.HttpHelper.Retriever">
-            <summary>
-            Gets an instance of the <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/> class. On first access the value
-            will be retrieved from the <see cref="T:CMS.Core.IoCContainer"/> and stored locally in <see cref="F:CMS.Base.Internal.HttpHelper.mRetriever"/>
-            backing field for performance reason.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.HttpHelper.Context">
-            <summary>
-            Gets an instance of the <see cref="T:CMS.Base.Internal.IHttpContext"/> class associated with the current request.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.HttpHelper.HasContext">
-            <summary>
-            Gets a value indicating whether any instance of <see cref="T:CMS.Base.Internal.IHttpContext"/> is associated with the current request.
-            </summary>
-            <value>
-            <see langword="true"/> when current <see cref="P:CMS.Base.Internal.HttpHelper.Context"/> value is not <see langword="null"/>.
-            </value>
-        </member>
-        <member name="P:CMS.Base.Internal.HttpHelper.AllowHttpContextForContextContainer">
-            <summary>
-            Gets or sets a value indicating whether the instance of <see cref="T:CMS.Base.Internal.IHttpContext"/> returned by
-            the <see cref="P:CMS.Base.Internal.HttpHelper.Context"/> property is used for backing store of <see cref="T:CMS.Base.ContextContainer`1"/>
-            based instances. Default value is <see langword="true"/>.
-            </summary>
+            <param name="queryCollection">The query collection.</param>
+            <returns>New NameValueCollection that is a copy of the <paramref name="queryCollection"/> keys and values.</returns>
             <remarks>
-            Property should be used just in <see cref="T:CMS.Base.ContextContainer`1"/> implementation to avoid
-            context switching in method <see cref="M:CMS.Base.ContextContainer`1.EnsureContextContainer"/> when
-            the <see cref="P:CMS.Base.Internal.HttpHelper.Context"/> is mocked in tests.
+            The StringValues value of the collection is copied with implicit operator because it converts to comma separated string of the original values.
+            This is for our purposes sufficient, since the Get method over NameValueCollection converts all values assigned to a key to a comma separated string.
             </remarks>
         </member>
         <member name="T:CMS.Base.Internal.UploadedFileExtensions">
@@ -821,17 +789,15 @@
             <param name="value">If the key is found the value associated with the specified key, otherwise the default value for the type of the value parameter.</param>
             <returns>True if query string item was present, otherwise false.</returns>
         </member>
+        <member name="P:CMS.Base.Internal.IFormCollection.Files">
+            <summary>
+            Gets collection of files within the form.
+            </summary>
+        </member>
         <member name="T:CMS.Base.Internal.IHeaderDictionary">
             <summary>
             Represents <see cref="T:CMS.Base.Internal.IRequest"/> and <see cref="T:CMS.Base.Internal.IResponse"/> headers
             </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.IHeaderDictionary.Item(System.String)">
-            <summary>
-            Gets and sets a header.
-            </summary>
-            <param name="key"></param>
-            <returns>The stored value, or StringValues.Empty if the key is not present.</returns>
         </member>
         <member name="P:CMS.Base.Internal.IHeaderDictionary.ContentLength">
             <summary>
@@ -889,8 +855,6 @@
             </summary>
             <remarks>
             The implementation of this interface is expected to have <c>Singleton</c> lifestyle.
-            This is leveraged in performance optimization done in <see cref="T:CMS.Base.Internal.HttpHelper"/> when
-            current context is retrieved by <see cref="P:CMS.Base.Internal.HttpHelper.Context"/> property.
             </remarks>
         </member>
         <member name="M:CMS.Base.Internal.IHttpContextRetriever.GetContext">
@@ -1004,7 +968,7 @@
         </member>
         <member name="P:CMS.Base.Internal.IRequest.RawUrl">
             <summary>
-            Gets un-escaped URL path of the current request.
+            The raw URL of the current request.
             </summary>
         </member>
         <member name="P:CMS.Base.Internal.IRequest.Url">
@@ -1015,11 +979,6 @@
         <member name="P:CMS.Base.Internal.IRequest.Headers">
             <summary>
             Gets the collection of HTTP headers that were sent by the client.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.IRequest.ServerVariables">
-            <summary>
-            Gets a collection of Web server variables.
             </summary>
         </member>
         <member name="P:CMS.Base.Internal.IRequest.QueryString">
@@ -1080,6 +1039,23 @@
         <member name="P:CMS.Base.Internal.IRequest.RequestContext">
             <summary>
             Gets the information about an HTTP request that matches a defined route.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IRequest.ReadRequestBodyAsString">
+            <summary>
+            Reads the body of the request and returns text representation of it.
+            Then sets position of the request stream back to start.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IRequest.GetServerVariableHttpOriginalUrl">
+            <summary>
+            Returns a value of a server variable 'HTTP_X_ORIGINAL_URL'.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IRequest.ReadRequestBodyAsStringAsync">
+            <summary>
+            Reads the body of the request asynchronously and returns text representation of it.
+            Then sets position of the request stream back to start.
             </summary>
         </member>
         <member name="T:CMS.Base.Internal.IRequestContext">
@@ -1217,18 +1193,6 @@
             Gets a collection of URL parameter values and default values for the route.
             </summary>
         </member>
-        <member name="T:CMS.Base.Internal.IServerVariables">
-            <summary>
-            Defines implementation capable of handling collection of Web server variables.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.Internal.IServerVariables.Item(System.String)">
-            <summary>
-            Gets the value of a server variable for the current request.
-            </summary>
-            <param name="variableName">The variable name.</param>
-            <value>May return null or empty if the variable does not exist or is not set.</value>
-        </member>
         <member name="T:CMS.Base.Internal.ISession">
             <summary>
             Defines implementation providing access to session-state values and session-level settings.
@@ -1274,6 +1238,61 @@
             Gets or sets a session value by using the specified name.
             </summary>
             <param name="name">The key name of the session value.</param>
+        </member>
+        <member name="T:CMS.Base.Internal.IUploadedFilesCollection">
+            <summary>
+            Defines a contract for a collection of files uploaded within a request.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IUploadedFilesCollection.Item(System.Int32)">
+            <summary>
+            Returns an <see cref="T:CMS.Base.IUploadedFile"/> object corresponding to an <paramref name="index"/> item within a request.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is outside the valid range of indexes for the collection.</exception>
+        </member>
+        <member name="P:CMS.Base.Internal.IUploadedFilesCollection.Count">
+            <summary>
+            Returns the number of posted file objects within the request.
+            </summary>
+        </member>
+        <member name="T:CMS.Base.Internal.IWebPathMapper">
+            <summary>
+            Defines an interface for mapping paths from the root of the web application.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IWebPathMapper.MapPath(System.String)">
+            <summary>
+            Returns the full physical file path from the <paramref name="relativePath"/>.
+            <para>
+            For the application residing in C:\\folder\\appFolder and "~/AppData" <paramref name="relativePath"/> parameter,
+            the result will be C:\\folder\\appFolder\\AppData.
+            </para>
+            </summary>
+            <param name="relativePath">Relative path to be resolved.</param>
+            <returns>The physical file path that corresponds to <paramref name="relativePath" />.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="relativePath"/> does not specify a relative path.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="relativePath"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.Base.Internal.IWebPathMapper.TryMapPath(System.String,System.String@)">
+            <summary>
+            Converts the provided relative path to a corresponding full physical path. A return value indicates whether the conversion succeeded.
+            <para>
+            For the application residing in C:\\folder\\appFolder and "~/AppData" <paramref name="relativePath"/> parameter,
+            the result will be C:\\folder\\appFolder\\AppData.
+            </para>
+            </summary>
+            <param name="relativePath">Relative path to be resolved.</param>
+            <param name="physicalPath">
+            When this method returns, contains the full physical path from the <paramref name="relativePath"/>, if the conversion succeeded 
+            or <c>null</c> if the <paramref name="relativePath"/> is not a valid relative path.
+            </param>
+            <returns><c>true</c> if the <paramref name="relativePath"/> is converted successfully, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="relativePath"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:CMS.Base.Internal.IWebPathMapper.GetStaticFilesRootPath">
+            <summary>
+            Returns a path to the folder containing static files for the web application.
+            </summary>
         </member>
         <member name="T:CMS.Base.Internal.Benchmark`1">
             <summary>
@@ -5402,11 +5421,6 @@
             Fires when a new security debug item is logged to debug.
             </summary>
         </member>
-        <member name="F:CMS.Base.DebugEvents.AnalyticsDebugItemLogged">
-            <summary>
-            Fires when a new analytics debug item is logged to debug.
-            </summary>
-        </member>
         <member name="F:CMS.Base.DebugEvents.SettingsReset">
             <summary>
             Fires when debug settings are reset. The event arguments do not contain any debug data.
@@ -5760,13 +5774,35 @@
         </member>
         <member name="T:CMS.Base.DefaultWebPathMapper">
             <summary>
-            Fallback implementation if <see cref="T:CMS.Base.IWebPathMapper"/>.
+            Fallback implementation if <see cref="T:CMS.Base.Internal.IWebPathMapper"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.DefaultWebPathMapper.GetStaticFilesRootPath">
+            <summary>
+            Gets the application static files root path. Value is read from <see cref="T:CMS.Base.SystemContext"/> and is the same as value returned from <see cref="M:CMS.Base.DefaultWebPathMapper.GetRootPath"/>.
             </summary>
         </member>
         <member name="M:CMS.Base.DefaultWebPathMapper.GetRootPath">
             <summary>
             Gets the application root path. Value is read from <see cref="T:CMS.Base.SystemContext"/>.
             </summary>
+        </member>
+        <member name="T:CMS.Base.HttpHelper">
+            <summary>
+            Provides an instance of the <see cref="T:CMS.Base.Internal.IHttpContext"/> associated with the current request.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.HttpHelper.AllowHttpContextForContextContainer">
+            <summary>
+            Gets or sets a value indicating whether the instance of <see cref="T:CMS.Base.Internal.IHttpContext"/> returned by
+            the <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/> property is used for backing store of <see cref="T:CMS.Base.ContextContainer`1"/>
+            based instances. Default value is <see langword="true"/>.
+            </summary>
+            <remarks>
+            Property should be used just in <see cref="T:CMS.Base.ContextContainer`1"/> implementation to avoid
+            context switching in method <see cref="M:CMS.Base.ContextContainer`1.EnsureContextContainer"/> when
+            the <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/> is mocked in tests.
+            </remarks>
         </member>
         <member name="T:CMS.Base.ICMSStatic">
             <summary>
@@ -9342,22 +9378,6 @@
             <summary>
             Returns true, if the current context executes on live site.
             </summary>
-        </member>
-        <member name="T:CMS.Base.IWebPathMapper">
-            <summary>
-            Defines an interface for mapping paths from the root of the web application.
-            </summary>
-        </member>
-        <member name="M:CMS.Base.IWebPathMapper.MapPath(System.String)">
-            <summary>
-            Returns the full physical file path from the <paramref name="relativePath"/>.
-            For the application residing in C:\\folder\\appFolder and "~/AppData" <paramref name="relativePath"/> parameter,
-            the result will be C:\\folder\\appFolder\\AppData.
-            </summary>
-            <param name="relativePath">Relative path to be resolved.</param>
-            <returns>The physical file path that corresponds to <paramref name="relativePath" />.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="relativePath"/> does not specify a relative path.</exception>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="relativePath"/> is <c>null</c>.</exception>
         </member>
         <member name="T:CMS.Base.AppSetting`1">
             <summary>

@@ -176,7 +176,7 @@ public partial class CMSModules_MessageBoards_Controls_Boards_BoardList : CMSAdm
                 {
                     string documentName = ValidationHelper.GetString(dr["DocumentName"], "");
                     int siteId = ValidationHelper.GetInteger(dr["NodeSiteID"], 0);
-                    SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+                    SiteInfo site = SiteInfo.Provider.Get(siteId);
 
                     if (string.IsNullOrEmpty(documentName))
                     {

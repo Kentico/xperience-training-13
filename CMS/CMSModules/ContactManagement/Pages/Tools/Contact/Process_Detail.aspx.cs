@@ -7,27 +7,33 @@ using CMS.UIControls;
 [UIElement(ModuleName.ONLINEMARKETING, "ContactProcesses")]
 public partial class CMSModules_ContactManagement_Pages_Tools_Contact_Process_Detail : CMSContactManagementPage, IProcessDetailPage
 {
-    public void SetBreadcrumbs(CMSAutomationManager automationManager)
+    public bool IsContactDetailShown => false;
+
+
+    public CMSAutomationManager AutomationManager { get; set; }
+
+
+    public void SetBreadcrumbs()
     {
-        SetBreadcrumb(0, GetString("ma.contact.processes"), GetListingUrl(automationManager), null, null);
-        SetBreadcrumb(1, HTMLHelper.HTMLEncode(automationManager.Process?.WorkflowDisplayName), null, null, null);
+        SetBreadcrumb(0, GetString("ma.contact.processes"), GetListingPageUrl(), null, null);
+        SetBreadcrumb(1, HTMLHelper.HTMLEncode(AutomationManager.Process?.WorkflowDisplayName), null, null, null);
     }
 
 
-    public void AfterAutomationManagerAction(string actionName, CMSAutomationManager automationManager)
+    public void AfterAutomationManagerAction(string actionName)
     {
         switch (actionName)
         {
             case ComponentEvents.AUTOMATION_REMOVE:
             case ComponentEvents.AUTOMATION_START:
-                URLHelper.Redirect(GetListingUrl(automationManager));
+                URLHelper.Redirect(GetListingPageUrl());
                 break;
         }
     }
 
 
-    private string GetListingUrl(CMSAutomationManager automationManager)
+    public string GetListingPageUrl()
     {
-        return ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Contact/Tab_Processes.aspx?objectid=" + automationManager.ObjectID);
+        return ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Contact/Tab_Processes.aspx?objectid=" + AutomationManager.ObjectID);
     }
 }

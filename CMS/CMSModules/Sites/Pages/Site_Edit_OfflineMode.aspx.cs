@@ -20,7 +20,7 @@ public partial class CMSModules_Sites_Pages_Site_Edit_OfflineMode : GlobalAdminP
     {
         siteId = QueryHelper.GetInteger("siteid", 0);
 
-        si = SiteInfoProvider.GetSiteInfo(siteId);
+        si = SiteInfo.Provider.Get(siteId);
         EditedObject = si;
 
         if (!RequestHelper.IsPostBack())
@@ -125,7 +125,7 @@ public partial class CMSModules_Sites_Pages_Site_Edit_OfflineMode : GlobalAdminP
             si.SiteIsOffline = !si.SiteIsOffline;
         }
 
-        SiteInfoProvider.SetSiteInfo(si);
+        SiteInfo.Provider.Set(si);
 
         ShowChangesSaved();
     }

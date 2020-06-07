@@ -74,9 +74,7 @@ public partial class CMSModules_OnlineMarketing_Controls_Content_CombinationPane
         viewMode = PortalContext.ViewMode;
 
         // Check permissions
-        if ((currentUser == null)
-            || (!currentUser.IsAuthorizedPerResource("CMS.Design", "Design") && PortalContext.IsDesignMode(viewMode))
-            || (!currentUser.IsAuthorizedPerResource("CMS.MVTest", "Read")))
+        if ((currentUser == null) || (!currentUser.IsAuthorizedPerResource("CMS.MVTest", "Read")))
         {
             stopProcessing = true;
         }
@@ -114,11 +112,7 @@ public partial class CMSModules_OnlineMarketing_Controls_Content_CombinationPane
         pnlMvtCombination.Enabled = combinationSelector.HasData;
 
         // Display the "set as result" button when there any MVT variants in the page
-        if ((currentUser != null)
-            && (currentUser.IsAuthorizedPerResource("CMS.Design", "Design")))
-        {
-            plcUseCombination.Visible = combinationSelector.DropDownSelect.Items.Count > 1;
-        }
+        plcUseCombination.Visible = combinationSelector.DropDownSelect.Items.Count > 1;
     }
 
 

@@ -135,7 +135,6 @@ resolve(angular, dataFromServer.resources);
         ctrl.promotionItems = assetsService.getPromotionItems();
 
         ctrl.campaign = campaignService.getCampaign();
-        ctrl.siteIsContentOnly = dataFromServer.siteIsContentOnly;
         ctrl.conversions = dataFromServer.conversions || [];
         ctrl.urlAssetTargetRegex = dataFromServer.urlAssetTargetRegex;
 
@@ -507,8 +506,6 @@ resolve(angular, dataFromServer.resources);
             'cms.webanalytics/campaign/assets.service',
             'cms.webanalytics/campaign/messages.service',
             'cms.webanalytics/campaign/inventory/addUrlAsset.component',
-            'cms.webanalytics/campaign/inventory/createPage.component',
-            'cms.webanalytics/campaign/inventory/selectPage.component',
             'cms.webanalytics/campaign/inventory/item.component',
             'cms.webanalytics/campaign/confirmation.service',
             'CMS/Filters.Resolve',
@@ -520,7 +517,6 @@ resolve(angular, dataFromServer.resources);
         return {
             bindings: {
                 assets: '=',
-                siteIsContentOnly: '<',
                 campaign: '=',
                 urlAssetTargetRegex: '<'
             },
@@ -701,7 +697,6 @@ resolve(angular, dataFromServer.resources);
         return {
             bindings: {
                 items: '=',
-                siteIsContentOnly: '<',
                 campaign: '='
             },
             templateUrl: 'cms.webanalytics/campaign/promotion/promotion.component.html',
@@ -745,57 +740,11 @@ resolve(angular, dataFromServer.resources);
         return {
             bindings: {
                 conversions: '=',
-                siteIsContentOnly: '<',
                 campaign: '<'
             },
             templateUrl: 'cms.webanalytics/campaign/reportSetup/reportSetup.component.html',
             replace: true
         };
-    }
-}(angular));
-(function (angular) {
-    'use strict';
-
-    controller.$inject = ["campaignService", "resolveFilter"];
-    angular.module('cms.webanalytics/campaign/statusMessage.component', [
-        'cms.webanalytics/campaign.service',
-        'CMS/Filters.Resolve'
-    ])
-        .component('cmsCampaignStatusMessage', statusMessage());
-
-    function statusMessage() {
-        return {
-            templateUrl: 'cms.webanalytics/campaign/statusMessage/statusMessage.component.html',
-            replace: true,
-            controller: controller
-        }
-    }
-
-    /*@ngInject*/
-    function controller(campaignService, resolveFilter) {
-        var ctrl = this,
-            campaign = campaignService.getCampaign();
-
-        ctrl.closed = campaign.isDraft();
-
-        ctrl.close = function () {
-            ctrl.closed = true;
-        };
-
-        if (campaign.isFinished() || campaign.isScheduled()) {
-            ctrl.alertMessage = {
-                messageText: campaign.isFinished() ? resolveFilter('campaign.message.finished') : resolveFilter('campaign.message.scheduled'),
-                cssClass : 'alert-info',
-                icon : 'icon-i-circle'
-            }
-        } 
-        else if (campaign.isLaunched()) {
-            ctrl.alertMessage = {
-                messageText: resolveFilter('campaign.message.running'),
-                cssClass: 'alert-warning',
-                icon: 'icon-exclamation-triangle'
-            }
-        }
     }
 }(angular));
 (function (angular, assetResourceFactory, newsletterResourceFactory) {
@@ -986,6 +935,8 @@ resolve(angular, dataFromServer.resources);
             config = getConfig();
 
         that.canRemoveAsset = can.bind(this, 'remove', 'asset');
+        that.canEditAsset = can.bind(this, 'edit', 'asset');
+
         that.canRemoveObjective = can.bind(this, 'remove', 'objective');
         that.canEditObjective = can.bind(this, 'edit', 'objective');
 
@@ -1190,10 +1141,6 @@ resolve(angular, dataFromServer.resources);
             return dataFromServer;
         };
 
-        this.getCreatePageDialogUrl = function () {
-            return dataFromServer.createPageDialogUrl;
-        };
-
         this.getEmailRegexp = function () {
             return dataFromServer.emailRegexp;
         };
@@ -1204,10 +1151,6 @@ resolve(angular, dataFromServer.resources);
 
         this.getAssets = function () {
             return dataFromServer.assets;
-        }
-
-        this.isSiteContentOnly = function () {
-            return dataFromServer.siteIsContentOnly;
         }
 
         this.getUrlAssetTargetRegex = function () {
@@ -1256,26 +1199,46 @@ resolve(angular, dataFromServer.resources);
 (function (angular) {
     'use strict';
 
-    angular.module('cms.webanalytics/campaign/description/textbox.component', [])
-        .component('cmsCampaignTextbox', textbox());
+    controller.$inject = ["campaignService", "resolveFilter"];
+    angular.module('cms.webanalytics/campaign/statusMessage.component', [
+        'cms.webanalytics/campaign.service',
+        'CMS/Filters.Resolve'
+    ])
+        .component('cmsCampaignStatusMessage', statusMessage());
 
-    function textbox() {
+    function statusMessage() {
         return {
-            bindings: {
-                id: '@',
-                label: '@',
-                pattern: '@',
-                required: '@',
-                maxlength: '@',
-                value: '=',
-                patternError: '@',
-                enabled: '<',
-                formElement: '<',
-                serverValidationMessage: '<'
-            },
-            templateUrl: 'cms.webanalytics/campaign/description/textbox/textbox.component.html',
-            replace: true
+            templateUrl: 'cms.webanalytics/campaign/statusMessage/statusMessage.component.html',
+            replace: true,
+            controller: controller
+        }
+    }
+
+    /*@ngInject*/
+    function controller(campaignService, resolveFilter) {
+        var ctrl = this,
+            campaign = campaignService.getCampaign();
+
+        ctrl.closed = campaign.isDraft();
+
+        ctrl.close = function () {
+            ctrl.closed = true;
         };
+
+        if (campaign.isFinished() || campaign.isScheduled()) {
+            ctrl.alertMessage = {
+                messageText: campaign.isFinished() ? resolveFilter('campaign.message.finished') : resolveFilter('campaign.message.scheduled'),
+                cssClass : 'alert-info',
+                icon : 'icon-i-circle'
+            }
+        } 
+        else if (campaign.isLaunched()) {
+            ctrl.alertMessage = {
+                messageText: resolveFilter('campaign.message.running'),
+                cssClass: 'alert-warning',
+                icon: 'icon-exclamation-triangle'
+            }
+        }
     }
 }(angular));
 (function (angular) {
@@ -1301,40 +1264,26 @@ resolve(angular, dataFromServer.resources);
 (function (angular) {
     'use strict';
 
-    controller.$inject = ["serverDataService"];
-    angular.module('cms.webanalytics/campaign/inventory/createPage.component', [
-        'cms.webanalytics/campaign/serverData.service',
-        'cms.webanalytics/campaign/cms.dialogs.module'
-    ])
-        .component('cmsCreatePage', createPage());
+    angular.module('cms.webanalytics/campaign/description/textbox.component', [])
+        .component('cmsCampaignTextbox', textbox());
 
-    function createPage() {
+    function textbox() {
         return {
             bindings: {
-                onCreate: '<',
-                enabled: '<'
+                id: '@',
+                label: '@',
+                pattern: '@',
+                required: '@',
+                maxlength: '@',
+                value: '=',
+                patternError: '@',
+                enabled: '<',
+                formElement: '<',
+                serverValidationMessage: '<'
             },
-            templateUrl: 'cms.webanalytics/campaign/inventory/createPage/createPage.component.html',
-            replace: true,
-            controller: controller
-        }
-    }
-
-    /*@ngInject*/
-    function controller (serverDataService) {
-        var ctrl = this;
-        
-        ctrl.dialogUrl = serverDataService.getCreatePageDialogUrl();
-
-        ctrl.dataChange = function () {
-            if (ctrl.newPageAsset) {
-                ctrl.onCreate(ctrl.newPageAsset);
-            }
+            templateUrl: 'cms.webanalytics/campaign/description/textbox/textbox.component.html',
+            replace: true
         };
-
-        ctrl.dataClick = function () {
-            return true;
-        }
     }
 }(angular));
 (function (angular) {
@@ -1420,99 +1369,51 @@ resolve(angular, dataFromServer.resources);
 (function (angular) {
     'use strict';
 
-    controller.$inject = ["$uibModal"];
-    modalController.$inject = ["$uibModalInstance", "$interpolate", "applicationService"];
-    angular.module('cms.webanalytics/campaign/inventory/selectPage.component', [
-        'cms.webanalytics/campaign/dialogHeader.component',
-        'cms.webanalytics/campaign/dialogFooter.component',
-        'cms.webanalytics/campaign/cms.application.service',
-        'CMS/Filters.Resolve'
+    controller.$inject = ["urlAssetSetupDialogService", "assetsService", "confirmationService"];
+    angular.module('cms.webanalytics/campaign/inventory/editItem.component', [
+        'cms.webanalytics/campaign/inventory/urlAssetSetupDialog.service',
+        'cms.webanalytics/campaign/assets.service',
+        'cms.webanalytics/campaign/confirmation.service'
     ])
-        .component('cmsSelectPage', component());
+        .component('cmsEditItem', editItem());
 
-    function component() {
+    function editItem() {
         return {
             bindings: {
-                enabled: '<',
-                onSelect: '<'
+                asset: '<',
+                campaign: '<',
+                editable: '<',
+                urlAssetTargetRegex: '<',
+                onUpdated: '<'
             },
-            templateUrl: 'cms.webanalytics/campaign/inventory/selectPage/selectPage.component.html',
+            templateUrl: 'cms.webanalytics/campaign/inventory/item/editItem.component.html',
             controller: controller,
             replace: true
         };
     }
 
     /*@ngInject*/
-    function controller($uibModal) {
+    function controller(urlAssetSetupDialogService, assetsService, confirmationService) {
         var ctrl = this;
 
         ctrl.openDialog = function () {
-            $uibModal.open({
-                size: { height: '220px', width: '500px' },
-                templateUrl: 'cms.webanalytics/campaign/inventory/selectPage/selectPage.dialog.html',
-                bindToController: true,
-                controllerAs: '$ctrl',
-                controller: modalController
-            })
-                .result.then(ctrl.onConfirm);
-        };
-
-        ctrl.onConfirm = function (item) {
-            if (item) {
-                ctrl.onSelect(item);
-            }
-        };
-    }
-
-    /*@ngInject*/
-    function modalController($uibModalInstance, $interpolate, applicationService) {
-        var ctrl = this,
-            application = applicationService.application;
-
-        ctrl.restUrl = application.getData('applicationUrl') + 'cmsapi/CampaignConversionPage';
-        ctrl.restUrlParams = { objType: "page" };
-
-        ctrl.resultTemplate = function (selectedPage) {
-            var itemTemplate =
-                    '<div class="campaign-conversion-page-item ">' +
-                    '<div class="campaign-conversion-page-icon"> {{icon}} </div>' +
-                    '<div class="campaign-conversion-page-content">' +
-                    '<strong> {{text}} </strong>' +
-                    '<div> {{path}} </div>' +
-                    '</div>' +
-                    '</div>',
-
-                pageView = angular.copy(selectedPage);
-
-            // Ensure escaping for path and text
-            pageView.path = _.escape(pageView.path);
-            pageView.text = _.escape(pageView.text);
-
-            return $interpolate(itemTemplate)(pageView);
-        };
-
-        ctrl.isSelectionValid = function () {
-            return ctrl.detail != null ? ctrl.detail.id > 0 : true;
-        }
-
-        ctrl.confirm = function () {
-            ctrl.form.$setSubmitted();
-            if (ctrl.isSelectionValid()) {
-                $uibModalInstance.close(ctrl.detail.id);
+            if (confirmationService.canEditAsset()) {
+                urlAssetSetupDialogService.openDialog(ctrl.asset, 'contentedit.header')
+                    .then(updateAsset);
             }
         };
 
-        ctrl.dismiss = function () {
-            $uibModalInstance.dismiss();
+        function updateAsset(asset) {
+            assetsService.updateAsset(asset).then(ctrl.onUpdated);
         }
     }
 }(angular));
-
 (function (angular) {
     'use strict';
 
     angular.module('cms.webanalytics/campaign/inventory/item.component', [
-            'cms.webanalytics/campaign/inventory/item/getLink.component'
+            'cms.webanalytics/campaign/inventory/item/getLink.component',
+            'cms.webanalytics/campaign/inventory/editItem.component'
         ])
         .component('cmsCampaignInventoryItem', item());
 
@@ -1520,12 +1421,12 @@ resolve(angular, dataFromServer.resources);
         return {
             bindings: {
                 asset: '=',
-                siteIsContentOnly: '<',
                 editable: '<',
                 utmCode: '<',
                 removeAsset: '&'
             },
             templateUrl: 'cms.webanalytics/campaign/inventory/item/item.component.html',
+            replace: true,
             controller: controller
         };
     }
@@ -1544,6 +1445,11 @@ resolve(angular, dataFromServer.resources);
         ctrl.isPublished = function () {
             return ctrl.asset.additionalProperties.isPublished;
         };
+
+        ctrl.updateAsset = function (asset) {
+            ctrl.asset.name = asset.Name;
+            ctrl.asset.link = asset.Link;
+        }
     }
 }(angular));
 (function (angular){
@@ -1856,7 +1762,6 @@ resolve(angular, dataFromServer.resources);
             bindings: {
                 isFunnel: '<',
                 conversions: '=',
-                siteIsContentOnly: '<',
                 campaign: '<'
             },
             templateUrl: 'cms.webanalytics/campaign/reportSetup/conversions/conversions.component.html',
@@ -1963,7 +1868,6 @@ resolve(angular, dataFromServer.resources);
     function controller($scope, $uibModalInstance, $interpolate, conversion, title, activityTypes, resolveFilter, applicationService, serverDataService) {
         var ctrl = this,
             application = applicationService.application,
-            isSiteContentOnly = serverDataService.isSiteContentOnly(),
             selectedActivityType = 'pagevisit';
         
         ctrl.title = title;
@@ -1978,7 +1882,7 @@ resolve(angular, dataFromServer.resources);
         };
 
         ctrl.showContentOnlyPageVisitConfiguration = function() {
-            return isSiteContentOnly && (selectedActivityType === 'pagevisit');
+            return selectedActivityType === 'pagevisit';
         };
 
         var resultTemplate = function (selectedPage) {
@@ -2004,7 +1908,7 @@ resolve(angular, dataFromServer.resources);
         var activityTypesConfiguration = {
             pagevisit: {
                 selectorLabel: resolveFilter('campaign.conversion.pageselector'),
-                areParametersRequired: !isSiteContentOnly,
+                areParametersRequired: false,
                 errorMessage: resolveFilter('campaign.conversion.pageisrequired'),
                 configuration: {
                     restUrl: application.getData('applicationUrl') + 'cmsapi/CampaignConversionPage',
@@ -2173,7 +2077,7 @@ resolve(angular, dataFromServer.resources);
     /*@ngInject*/
     function reportSetupDialogService($uibModal, resolveFilter, serverDataService) {
         var that = this,
-            height = serverDataService.isSiteContentOnly() ? '450px' : '280px';
+            height = '450px';
 
         that.openDialog = function (conversion, title) {
             return $uibModal.open({
@@ -2381,6 +2285,79 @@ resolve(angular, dataFromServer.resources);
         }
     }
 }(angular, _));
+(function (angular, _) {
+    'use strict';
+
+    controller.$inject = ["$uibModalInstance", "serverDataService", "asset", "title"];
+    angular.module('cms.webanalytics/campaign/inventory/modifyUrlAsset.controller', [
+        'cms.webanalytics/campaign/cms.application.service'
+    ])
+        .controller('ModifyUrlAssetController', controller);
+
+    /*@ngInject*/
+    function controller($uibModalInstance, serverDataService, asset, title) {
+        var ctrl = this;
+
+        ctrl.title = title;
+        ctrl.urlAssetTargetRegex = serverDataService.getUrlAssetTargetRegex();
+        ctrl.asset = angular.copy(asset)
+
+        if (ctrl.asset != null) {
+            ctrl.asset.campaignID = String(ctrl.asset.campaignID);
+        }
+
+        ctrl.confirm = function () {
+            ctrl.form.$setSubmitted();
+            if (ctrl.form.$valid) {
+
+                if (!assetChanged()) {
+                    ctrl.dismiss();
+                }
+
+                $uibModalInstance.close(ctrl.asset);
+            }
+        };
+
+        ctrl.dismiss = function () {
+            $uibModalInstance.dismiss();
+        };
+
+        function assetChanged() {
+            return !asset
+                || asset.name !== ctrl.asset.pageTitle
+                || asset.link !== ctrl.asset.target;
+        }
+
+    }
+}(angular, _));
+(function (angular) {
+    'use strict';
+
+    urlAssetSetupDialogService.$inject = ["$uibModal", "resolveFilter"];
+    angular.module('cms.webanalytics/campaign/inventory/urlAssetSetupDialog.service', [
+        'cms.webanalytics/campaign/inventory/modifyUrlAsset.controller'
+    ])
+        .service('urlAssetSetupDialogService', urlAssetSetupDialogService);
+
+    /*@ngInject*/
+    function urlAssetSetupDialogService($uibModal, resolveFilter) {
+        var that = this;
+
+        that.openDialog = function (asset, title) {
+            return $uibModal.open({
+                size: { height: '416px', width: '600px' },
+                templateUrl: 'cms.webanalytics/campaign/inventory/item/dialog/modifyUrlAsset.dialog.html',
+                bindToController: true,
+                controllerAs: '$ctrl',
+                controller: 'ModifyUrlAssetController',
+                resolve: {
+                    asset: function () { return asset },
+                    title: function () { return resolveFilter(title) }
+                }
+            }).result;
+        }
+    }
+}(angular));
 (function (angular) {
     'use strict';
 
@@ -2700,36 +2677,35 @@ resolve(angular, dataFromServer.resources);
         }
     }
 }(angular));
-angular.module("cms.webanalytics/campaign/app.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("cms.webanalytics/campaign/additionalResources.html","<!-- Resources used in non-html files (resolveFilter(resString)...) so they would not be automagically resolved by Gulp -->\r\n{{ \"general.empty\" | resolve }}\r\n{{ \"general.searching\" | resolve }}\r\n{{ \"general.cancel\" | resolve }}\r\n{{ \"general.save\" | resolve }}\r\n{{ \"general.close\" | resolve }}\r\n{{ \"general.create\" | resolve }}\r\n{{ \"general.noresults\" | resolve }}\r\n{{ \"general.loading.more\" | resolve }}\r\n{{ \"general.loading.error\" | resolve }}\r\n{{ \"smarttip.expand\" | resolve }}\r\n{{ \"general.select\" | resolve }}\r\n{{ \"campaign.autosave.failed\" | resolve }}\r\n{{ \"campaign.autosave.server.error\" | resolve }}\r\n{{ \"campaign.getcontentlink.dialog.emptyutmsource\" | resolve }}\r\n{{ \"campaign.autosave.finished\" | resolve }}\r\n{{ \"campaign.getcontentlink.dialog.title\" | resolve }}\r\n{{ \"documentselection.title\" | resolve }}\r\n{{ \"campaign.assets.failed\" | resolve }}\r\n{{ \"campaign.conversion.failed\" | resolve }}\r\n{{ \"campaign.autosave.validationFailed\" | resolve }}\r\n{{ \"campaign.initialSave.validationAlert\" | resolve }}\r\n{{ \"campaign.create.email\" | resolve }}\r\n{{ \"campaign.create.email.select.type.new\" | resolve }}\r\n{{ \"campaign.create.email.select.type.assign\" | resolve }}\r\n{{ \"campaign.launch.confirm\" | resolve }}\r\n{{ \"campaign.launch.confirm.summary\" | resolve }}\r\n{{ \"campaign.launch.confirm.delimiter\" | resolve }}\r\n{{ \"campaign.launched\" | resolve }}\r\n{{ \"campaign.launched.failed\" | resolve }}\r\n{{ \"campaign.finish.confirm\" | resolve }}\r\n{{ \"campaign.finished\" | resolve }}\r\n{{ \"campaign.finished.failed\" | resolve }}\r\n{{ \"campaign.conversion.productselector\" | resolve }}\r\n{{ \"campaign.conversion.formselector\" | resolve }}\r\n{{ \"campaign.conversion.pageisrequired\" | resolve }}\r\n{{ \"campaign.conversion.formisrequired\" | resolve }}\r\n{{ \"campaign.conversion.productisrequired\" | resolve }}\r\n{{ \"campaign.conversion.eventselector\" | resolve }}\r\n{{ \"campaign.conversion.eventrequired\" | resolve }}\r\n{{ \"campaign.conversion.emailcampaignselector\" | resolve }}\r\n{{ \"campaign.conversion.emailcampaignisrequired\" | resolve }}\r\n{{ \"campaign.message.running\" | resolve }}\r\n{{ \"campaign.message.finished\" | resolve }}\r\n{{ \"campaign.message.scheduled\" | resolve }}\r\n{{ \"campaign.conversions\" | resolve }}\r\n{{ \"campaign.conversions.description\" | resolve }}\r\n{{ \"campaign.conversions.defineconversion\" | resolve }}\r\n{{ \"campaign.conversions.add\" | resolve }}\r\n{{ \"campaign.conversions.add.title\" | resolve }}\r\n{{ \"campaign.journey\" | resolve }}\r\n{{ \"campaign.journey.description\" | resolve }}\r\n{{ \"campaign.journey.definestep\" | resolve }}\r\n{{ \"campaign.journey.add\" | resolve }}\r\n{{ \"campaign.journey.add.title\" | resolve }}\r\n{{ \"campaign.schedule.link\" | resolve }}\r\n<!-- Confirmation messages -->\r\n{{ \"campaign.asset.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.asset.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.conversion.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.conversion.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.conversion.editconfirmation.running\" | resolve }}\r\n{{ \"campaign.funnelstep.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.funnelstep.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.funnelstep.editconfirmation.running\" | resolve }}\r\n{{ \"campaign.objective.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.objective.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.objective.editconfirmation.running\" | resolve }}\r\n<!-- Campaign objective -->\r\n{{ \"campaign.objective.defineobjective\" | resolve }}");
-$templateCache.put("cms.webanalytics/campaign/campaign.component.html","<div class=\'cms-campaigns-edit form-horizontal\' data-ng-cloak=\'cloak\'>\r\n    <cms-campaign-messages id=\'top\'></cms-campaign-messages>\r\n    <cms-campaign-status-message> </cms-campaign-status-message>\r\n\r\n    <cms-campaign-description campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-description>\r\n\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-inventory assets=\'$ctrl.inventoryItems\' site-is-content-only=\'$ctrl.siteIsContentOnly\' url-asset-target-regex=\'$ctrl.urlAssetTargetRegex\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-inventory>\r\n    </div>\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-promotion items=\'$ctrl.promotionItems\' site-is-content-only=\'$ctrl.siteIsContentOnly\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-promotion>\r\n        <div id=\'promotionSmartTip\'>\r\n            <cms-smart-tip-placeholder smart-tip=\'$ctrl.promotionSmartTip\'>\r\n            </cms-smart-tip-placeholder>\r\n        </div>\r\n    </div>\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-report-setup conversions=\'$ctrl.conversions\' site-is-content-only=\'$ctrl.siteIsContentOnly\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-report-setup>\r\n    </div>\r\n\r\n    <div id=\'launchSmartTip\' class=\'campaign-form-category\' data-ng-show=\'$ctrl.campaign.isDraft() || $ctrl.campaign.isScheduled()\'>\r\n        <cms-smart-tip-placeholder smart-tip=\'$ctrl.launchSmartTip\' on-ready=\'$ctrl.initLaunchLink()\'>\r\n        </cms-smart-tip-placeholder>\r\n    </div>\r\n</div>");
+angular.module("cms.webanalytics/campaign/app.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("cms.webanalytics/campaign/additionalResources.html","<!-- Resources used in non-html files (resolveFilter(resString)...) so they would not be automagically resolved by Gulp -->\r\n{{ \"general.empty\" | resolve }}\r\n{{ \"general.searching\" | resolve }}\r\n{{ \"general.cancel\" | resolve }}\r\n{{ \"general.save\" | resolve }}\r\n{{ \"general.close\" | resolve }}\r\n{{ \"general.create\" | resolve }}\r\n{{ \"general.noresults\" | resolve }}\r\n{{ \"general.loading.more\" | resolve }}\r\n{{ \"general.loading.error\" | resolve }}\r\n{{ \"smarttip.expand\" | resolve }}\r\n{{ \"general.select\" | resolve }}\r\n{{ \"contentedit.header\" | resolve }}\r\n{{ \"campaign.autosave.failed\" | resolve }}\r\n{{ \"campaign.autosave.server.error\" | resolve }}\r\n{{ \"campaign.getcontentlink.dialog.emptyutmsource\" | resolve }}\r\n{{ \"campaign.autosave.finished\" | resolve }}\r\n{{ \"campaign.getcontentlink.dialog.title\" | resolve }}\r\n{{ \"documentselection.title\" | resolve }}\r\n{{ \"campaign.assets.failed\" | resolve }}\r\n{{ \"campaign.conversion.failed\" | resolve }}\r\n{{ \"campaign.autosave.validationFailed\" | resolve }}\r\n{{ \"campaign.initialSave.validationAlert\" | resolve }}\r\n{{ \"campaign.create.email\" | resolve }}\r\n{{ \"campaign.create.email.select.type.new\" | resolve }}\r\n{{ \"campaign.create.email.select.type.assign\" | resolve }}\r\n{{ \"campaign.launch.confirm\" | resolve }}\r\n{{ \"campaign.launch.confirm.summary\" | resolve }}\r\n{{ \"campaign.launch.confirm.delimiter\" | resolve }}\r\n{{ \"campaign.launched\" | resolve }}\r\n{{ \"campaign.launched.failed\" | resolve }}\r\n{{ \"campaign.finish.confirm\" | resolve }}\r\n{{ \"campaign.finished\" | resolve }}\r\n{{ \"campaign.finished.failed\" | resolve }}\r\n{{ \"campaign.conversion.productselector\" | resolve }}\r\n{{ \"campaign.conversion.formselector\" | resolve }}\r\n{{ \"campaign.conversion.pageisrequired\" | resolve }}\r\n{{ \"campaign.conversion.formisrequired\" | resolve }}\r\n{{ \"campaign.conversion.productisrequired\" | resolve }}\r\n{{ \"campaign.conversion.eventselector\" | resolve }}\r\n{{ \"campaign.conversion.eventrequired\" | resolve }}\r\n{{ \"campaign.conversion.emailcampaignselector\" | resolve }}\r\n{{ \"campaign.conversion.emailcampaignisrequired\" | resolve }}\r\n{{ \"campaign.message.running\" | resolve }}\r\n{{ \"campaign.message.finished\" | resolve }}\r\n{{ \"campaign.message.scheduled\" | resolve }}\r\n{{ \"campaign.conversions\" | resolve }}\r\n{{ \"campaign.conversions.description\" | resolve }}\r\n{{ \"campaign.conversions.defineconversion\" | resolve }}\r\n{{ \"campaign.conversions.add\" | resolve }}\r\n{{ \"campaign.conversions.add.title\" | resolve }}\r\n{{ \"campaign.journey\" | resolve }}\r\n{{ \"campaign.journey.description\" | resolve }}\r\n{{ \"campaign.journey.definestep\" | resolve }}\r\n{{ \"campaign.journey.add\" | resolve }}\r\n{{ \"campaign.journey.add.title\" | resolve }}\r\n{{ \"campaign.schedule.link\" | resolve }}\r\n<!-- Confirmation messages -->\r\n{{ \"campaign.asset.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.asset.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.conversion.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.conversion.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.conversion.editconfirmation.running\" | resolve }}\r\n{{ \"campaign.funnelstep.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.funnelstep.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.funnelstep.editconfirmation.running\" | resolve }}\r\n{{ \"campaign.objective.deleteconfirmation\" | resolve }}\r\n{{ \"campaign.objective.deleteconfirmation.running\" | resolve }}\r\n{{ \"campaign.objective.editconfirmation.running\" | resolve }}\r\n<!-- Campaign objective -->\r\n{{ \"campaign.objective.defineobjective\" | resolve }}");
+$templateCache.put("cms.webanalytics/campaign/campaign.component.html","<div class=\'cms-campaigns-edit form-horizontal\' data-ng-cloak=\'cloak\'>\r\n    <cms-campaign-messages id=\'top\'></cms-campaign-messages>\r\n    <cms-campaign-status-message> </cms-campaign-status-message>\r\n\r\n    <cms-campaign-description campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-description>\r\n\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-inventory assets=\'$ctrl.inventoryItems\' url-asset-target-regex=\'$ctrl.urlAssetTargetRegex\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-inventory>\r\n    </div>\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-promotion items=\'$ctrl.promotionItems\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-promotion>\r\n        <div id=\'promotionSmartTip\'>\r\n            <cms-smart-tip-placeholder smart-tip=\'$ctrl.promotionSmartTip\'>\r\n            </cms-smart-tip-placeholder>\r\n        </div>\r\n    </div>\r\n    <div class=\'campaign-form-category\'>\r\n        <cms-campaign-report-setup conversions=\'$ctrl.conversions\' campaign=\'$ctrl.campaign\'>\r\n        </cms-campaign-report-setup>\r\n    </div>\r\n\r\n    <div id=\'launchSmartTip\' class=\'campaign-form-category\' data-ng-show=\'$ctrl.campaign.isDraft() || $ctrl.campaign.isScheduled()\'>\r\n        <cms-smart-tip-placeholder smart-tip=\'$ctrl.launchSmartTip\' on-ready=\'$ctrl.initLaunchLink()\'>\r\n        </cms-smart-tip-placeholder>\r\n    </div>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/dialog/dialogFooter.component.html","<div class=\'dialog-footer control-group-inline\'>\r\n    <button class=\'btn btn-default\' type=\'button\' data-ng-show=\'$ctrl.onDismiss\' data-ng-click=\'$ctrl.onDismiss()\'>{{$ctrl.dismissLabel}}</button>\r\n    <button class=\'btn btn-primary\' type=\'button\' data-ng-show=\'$ctrl.onConfirm\' data-ng-click=\'$ctrl.onConfirm()\'>{{$ctrl.confirmLabel}}</button>\r\n</div>\r\n");
 $templateCache.put("cms.webanalytics/campaign/dialog/dialogHeader.component.html","<div id=\'dialog-header\' class=\'dialog-header non-selectable\'>\r\n    <div class=\'dialog-header-action-buttons\'>\r\n        <div class=\'action-button\' data-ng-if=\'!$ctrl.maximized\'>\r\n            <a data-ng-click=\'$ctrl.maximize()\'>\r\n                <span class=\'sr-only\'>{{ \"general.maximize\" | resolve }}</span>\r\n                <i class=\'cms-icon-80 icon-modal-maximize\' aria-hidden=\'true\' style=\'cursor: pointer\' title=\'{{ \"general.maximize\" | resolve }}\'></i>\r\n            </a>\r\n        </div>\r\n\r\n        <div class=\'action-button\' data-ng-if=\'$ctrl.maximized\'>\r\n            <a data-ng-click=\'$ctrl.restore()\'>\r\n                <span class=\'sr-only\'>{{ \"general.minimize\" | resolve }}</span>\r\n                <i class=\'cms-icon-80 icon-modal-minimize\' aria-hidden=\'true\' style=\'cursor: pointer\' title=\'{{ \"general.minimize\" | resolve }}\'></i>\r\n            </a>\r\n        </div>\r\n\r\n        <div class=\'action-button close-button\'>\r\n            <a data-ng-click=\'$ctrl.onClose()\'>\r\n                <span class=\'sr-only\'>{{ \"general.close\" | resolve }}</span>\r\n                <i class=\'icon-modal-close cms-icon-150\' aria-hidden=\'true\' style=\'cursor: pointer;\' title=\'{{ \"general.close\" | resolve }}\'></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <h2 class=\'dialog-header-title\'>{{::$ctrl.header}}</h2>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/description/description.component.html","<div class=\'editing-form-category campaign-category-description\'>\r\n    <form name=\'campaignForm\' cms-autosave=\'$ctrl.saveCampaign()\'>\r\n        <div class=\'campaign-description-textboxes\'>\r\n            <div class=\'campaign-input-padding\' title=\'{{ \"campaign.displayname.description\" | resolve }}\'>\r\n                <cms-campaign-textbox value=\'$ctrl.campaign.displayName\'\r\n                                      maxlength=\'100\'\r\n                                      required=\'true\'\r\n                                      label=\'{{ \"campaign.displayname\" | resolve }}\'\r\n                                      id=\'campaignDisplayName\'\r\n                                      form-element=\'campaignForm.campaignDisplayName\'\r\n                                      enabled=\'$ctrl.campaign.isDraft()\'>\r\n                </cms-campaign-textbox>\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\'campaign-description-textboxes\'>\r\n            <div class=\'campaign-input-padding\' title=\'{{ \"campaign.utmcampaign.description\" | resolve }}\'>\r\n                <cms-campaign-textbox value=\'$ctrl.campaign.utmCode\'\r\n                              maxlength=\'200\'\r\n                              required=\'true\'\r\n                              pattern=\'[0-9a-zA-Z_.-]+\'\r\n                              pattern-error=\'{{ \"campaign.utmparameter.wrongformat\" | resolve }}\'\r\n                              label=\'{{ \"campaign.utmcampaign\" | resolve }}\'\r\n                              id=\'campaignUtmCode\'\r\n                              form-element=\'campaignForm.campaignUtmCode\'\r\n                              enabled=\'$ctrl.campaign.isDraft()\'\r\n                              server-validation-message=\'$ctrl.serverValidationMessage\'>\r\n                </cms-campaign-textbox>\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\'ClearBoth\'></div>\r\n\r\n        <cms-campaign-textarea value=\'$ctrl.campaign.description\'\r\n                               title=\'{{ \"campaign.description.description\" | resolve }}\'\r\n                               rows=\'4\'\r\n                               id=\'campaignDescription\'\r\n                               label=\'{{ \"campaign.description\" | resolve }}\'>\r\n        </cms-campaign-textarea>\r\n    </form>\r\n</div>\r\n");
-$templateCache.put("cms.webanalytics/campaign/inventory/inventory.component.html","<div data-ng-cloak=\'cloak\'>\r\n    <h3 class=\'control-label\'>{{ \"campaign.inventory\" | resolve }}</h3>\r\n    <p>{{ \"campaign.inventory.description\" | resolve }}</p>\r\n\r\n    <div class=\'campaign-list\' data-ng-repeat=\'asset in $ctrl.assets track by $index\'>\r\n        <cms-campaign-inventory-item asset=\'asset\' site-is-content-only=\'$ctrl.siteIsContentOnly\' editable=\'!$ctrl.campaign.isFinished()\' utm-code=\'$ctrl.campaign.utmCode\' remove-asset=\'$ctrl.removeAsset(asset)\' data-ng-if=\'asset.id != 0\'>\r\n        </cms-campaign-inventory-item>\r\n    </div>\r\n\r\n    <div class=\'content-block-50\'>\r\n        <div class=\'remove-default-space\' data-ng-if=\'!$ctrl.siteIsContentOnly\'>\r\n            <span>\r\n                <cms-select-page enabled=\'!$ctrl.campaign.isFinished()\' on-select=\'$ctrl.addPageAsset\'>\r\n                </cms-select-page>\r\n            </span>\r\n            <span>\r\n                <cms-create-page enabled=\'!$ctrl.campaign.isFinished()\' on-create=\'$ctrl.addPageAsset\'>\r\n                </cms-create-page>\r\n            </span>\r\n        </div>\r\n        <div data-ng-if=\'$ctrl.siteIsContentOnly\'>\r\n            <cms-add-url-asset on-add=\'$ctrl.addUrlAsset\' campaign=\'$ctrl.campaign\' url-asset-target-regex=\'$ctrl.urlAssetTargetRegex\'>\r\n            </cms-add-url-asset>\r\n        </div>\r\n    </div>\r\n</div>\r\n");
+$templateCache.put("cms.webanalytics/campaign/inventory/inventory.component.html","<div data-ng-cloak=\'cloak\'>\r\n    <h3 class=\'control-label\'>{{ \"campaign.inventory\" | resolve }}</h3>\r\n    <p>{{ \"campaign.inventory.description\" | resolve }}</p>\r\n\r\n    <div class=\'campaign-list\' data-ng-repeat=\'asset in $ctrl.assets track by $index\'>\r\n        <cms-campaign-inventory-item asset=\'asset\' editable=\'!$ctrl.campaign.isFinished()\' utm-code=\'$ctrl.campaign.utmCode\' remove-asset=\'$ctrl.removeAsset(asset)\' data-ng-if=\'asset.id != 0\'>\r\n        </cms-campaign-inventory-item>\r\n    </div>\r\n\r\n    <div class=\'content-block-50\'>\r\n        <div>\r\n            <cms-add-url-asset on-add=\'$ctrl.addUrlAsset\' campaign=\'$ctrl.campaign\' url-asset-target-regex=\'$ctrl.urlAssetTargetRegex\'>\r\n            </cms-add-url-asset>\r\n        </div>\r\n    </div>\r\n</div>\r\n");
 $templateCache.put("cms.webanalytics/campaign/messages/messages.component.html","<div class=\'form-autosave-message alert-error\' data-ng-if=\'$ctrl.getPermanentError()\'>\r\n    {{ $ctrl.getPermanentError() }}\r\n</div>\r\n\r\n<div class=\'form-autosave-message\' data-ng-if=\'$ctrl.temporaryMessage && !$ctrl.getPermanentError()\' data-ng-class=\'$ctrl.temporaryMessageClass\'>\r\n    {{ $ctrl.temporaryMessage }}\r\n</div>\r\n");
-$templateCache.put("cms.webanalytics/campaign/reportSetup/reportSetup.component.html","<div data-ng-cloak=\'cloak\'>\r\n    <h3 class=\'control-label\'>{{ \"campaign.reportsetup\" | resolve }}</h3>\r\n\r\n    <!-- Conversions section -->\r\n    <cms-campaign-conversions is-funnel=\'false\' conversions=\'$ctrl.conversions\' site-is-content-only=\'$ctrl.siteIsContentOnly\' campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-conversions>\r\n\r\n    <!-- Campaign journey section -->\r\n    <cms-campaign-conversions is-funnel=\'true\' conversions=\'$ctrl.conversions\' site-is-content-only=\'$ctrl.siteIsContentOnly\' campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-conversions>\r\n\r\n    <!-- Campaign objective -->\r\n    <cms-campaign-objective campaign=\'$ctrl.campaign\' conversions=\'$ctrl.conversions\'>\r\n    </cms-campaign-objective>\r\n</div> ");
-$templateCache.put("cms.webanalytics/campaign/statusMessage/statusMessage.component.html","<div class=\'alert-dismissable {{$ctrl.alertMessage.cssClass}} alert\' data-ng-show=\'!$ctrl.closed\'>\r\n    <span class=\'alert-icon\'>\r\n        <i class=\'{{$ctrl.alertMessage.icon}}\'></i>\r\n        <span class=\'sr-only\'> {{$ctrl.alertMessage.messageText}}</span>\r\n    </span>\r\n    <div class=\'alert-label\'>\r\n        {{ $ctrl.alertMessage.messageText }}\r\n    </div>\r\n    <span class=\'alert-close\'>\r\n        <i class=\'close icon-modal-close\' data-ng-click=\'$ctrl.close()\'></i>\r\n        <span class=\'sr-only\'>{{ \"general.close\" | resolve }}</span>\r\n    </span>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/promotion/promotion.component.html","<h3 class=\'control-label\'>{{ \"campaign.promotion\" | resolve }}</h3>\r\n<p>{{ \"campaign.promotion.description\" | resolve }}</p>\r\n\r\n<div class=\'campaign-list\' data-ng-repeat=\'item in $ctrl.items track by $index\'>\r\n    <cms-campaign-promotion-item asset=\'item\' remove-item=\'$ctrl.removeItem(item)\' editable=\'!$ctrl.campaign.isFinished()\'>\r\n    </cms-campaign-promotion-item>\r\n</div>\r\n\r\n<div class=\'content-block-50 remove-default-space\'>\r\n    <cms-select-email on-select=\'$ctrl.addPromotionItem\' enabled=\'!$ctrl.campaign.isFinished()\'>\r\n    </cms-select-email>\r\n\r\n    <cms-create-email items=\'$ctrl.items\' on-create=\'$ctrl.addPromotionItem\' enabled=\'!$ctrl.campaign.isFinished()\'>\r\n    </cms-create-email>\r\n</div>\r\n");
+$templateCache.put("cms.webanalytics/campaign/reportSetup/reportSetup.component.html","<div data-ng-cloak=\'cloak\'>\r\n    <h3 class=\'control-label\'>{{ \"campaign.reportsetup\" | resolve }}</h3>\r\n\r\n    <!-- Conversions section -->\r\n    <cms-campaign-conversions is-funnel=\'false\' conversions=\'$ctrl.conversions\' campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-conversions>\r\n\r\n    <!-- Campaign journey section -->\r\n    <cms-campaign-conversions is-funnel=\'true\' conversions=\'$ctrl.conversions\' campaign=\'$ctrl.campaign\'>\r\n    </cms-campaign-conversions>\r\n\r\n    <!-- Campaign objective -->\r\n    <cms-campaign-objective campaign=\'$ctrl.campaign\' conversions=\'$ctrl.conversions\'>\r\n    </cms-campaign-objective>\r\n</div> ");
+$templateCache.put("cms.webanalytics/campaign/statusMessage/statusMessage.component.html","<div class=\'alert-dismissable {{$ctrl.alertMessage.cssClass}} alert\' data-ng-show=\'!$ctrl.closed\'>\r\n    <span class=\'alert-icon\'>\r\n        <i class=\'{{$ctrl.alertMessage.icon}}\'></i>\r\n        <span class=\'sr-only\'> {{$ctrl.alertMessage.messageText}}</span>\r\n    </span>\r\n    <div class=\'alert-label\'>\r\n        {{ $ctrl.alertMessage.messageText }}\r\n    </div>\r\n    <span class=\'alert-close\'>\r\n        <i class=\'close icon-modal-close\' data-ng-click=\'$ctrl.close()\'></i>\r\n        <span class=\'sr-only\'>{{ \"general.close\" | resolve }}</span>\r\n    </span>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/description/textarea/textarea.component.html","<div class=\'campaign-input-padding\' title=\'{{$ctrl.title}}\'>\r\n    <label for=\'{{$ctrl.id}}\' class=\'control-label\'>{{$ctrl.label}}:<span class=\'required-mark\' data-ng-if=\'$ctrl.required\'>*</span></label>\r\n    <textarea class=\'form-control\' id=\'{{$ctrl.id}}\' data-ng-model=\'$ctrl.value\'></textarea>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/description/textbox/textbox.component.html","<label for=\'{{$ctrl.id}}\' class=\'control-label\'>{{$ctrl.label}}:<span class=\'required-mark\' data-ng-if=\'$ctrl.required\'>*</span></label>\r\n<input type=\'text\' class=\'form-control\' id=\'{{$ctrl.id}}\' name=\'{{$ctrl.id}}\' data-ng-class=\'{ invalid : $ctrl.serverValidationMessage }\' data-ng-model=\'$ctrl.value\' data-ng-pattern=\'$ctrl.pattern\' data-ng-required=\'$ctrl.required\' data-ng-maxlength=\'$ctrl.maxlength\' data-ng-disabled=\'!$ctrl.enabled\'>\r\n\r\n<span class=\'form-control-error\' data-ng-if=\'$ctrl.formElement.$error.pattern\'>{{$ctrl.patternError}}</span>\r\n<span class=\'form-control-error\' data-ng-if=\'$ctrl.formElement.$error.required\'>{{ \"general.requiresvalue\" | resolve }}</span>\r\n<span class=\'form-control-error\' data-ng-if=\'$ctrl.serverValidationMessage && $ctrl.formElement.$valid\'>{{ $ctrl.serverValidationMessage }}</span>");
 $templateCache.put("cms.webanalytics/campaign/inventory/addUrlAsset/addUrlAsset.component.html","<button class=\'btn btn-default\' title=\'{{ \"campaignAssetUrl.dialog.title\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.campaign.isDraft() || !$ctrl.urlAssetTargetRegex\'>\r\n\r\n    {{ \"campaignAssetUrl.button.title\" | resolve }}\r\n</button>");
 $templateCache.put("cms.webanalytics/campaign/inventory/addUrlAsset/addUrlAsset.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"campaignAssetUrl.dialog.title\" | resolve }}\'></cms-dialog-header>\r\n\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <form class=\'form-horizontal\' name=\'newAssetUrlForm\'>\r\n            <cms-textbox value=\'$ctrl.pageTitle\' maxlength=\'100\'\r\n                         title=\'{{ \"campaignAssetUrl.pageTitle\" | resolve }}\'\r\n                         label=\'{{ \"campaignAssetUrl.pageTitle\" | resolve }}\'\r\n                         required=\'true\'\r\n                         explanation-text=\'{{ \"campaignAssetUrl.pageTitle.explanationText\" | resolve }}\'\r\n                         id=\'pageTitle\'>\r\n\r\n            </cms-textbox>\r\n            <cms-textarea value=\'$ctrl.target\' maxlength=\'4096\' required=\'true\'\r\n                          title=\'{{ \"campaignAssetUrl.target\" | resolve }}\'\r\n                          regex-pattern=\'{{::$ctrl.urlAssetTargetRegex}}\'\r\n                          regex-pattern-modifiers=\'i\'\r\n                          regex-pattern-error=\'{{ \"campaignAssetUrl.target.wrongFormat\" | resolve }}\'\r\n                          label=\'{{ \"campaignAssetUrl.target\" | resolve }}\'\r\n                          explanation-text=\'{{ \"campaignAssetUrl.target.explanationText\" | resolve }}\'\r\n                          id=\'url\'\r\n                          placeholder=\'https://example.com/page\'> \r\n            </cms-textarea> \r\n        </form>\r\n    </div>\r\n</div>\r\n<cms-dialog-footer confirm-label=\'{{ \"general.saveandclose\" | resolve }}\' on-confirm=\'$ctrl.confirm\'></cms-dialog-footer>");
-$templateCache.put("cms.webanalytics/campaign/inventory/createPage/createPage.component.html","<cms-create-page-dialog change=\'$ctrl.dataChange()\' click=\'$ctrl.dataClick()\' id=\'campaignAssetNewLandingPage\' button-id=\'campaignAssetCreatePageButton\' dialog-name=\'newpage\' dialog-url=\'{{$ctrl.dialogUrl}}\' dialog-width=\'90%\' dialog-height=\'90%\' text=\'{{ \"campaign.assets.content.create\" | resolve }}\' title=\'{{ \"campaign.assets.content.create.description\" | resolve }}\' data-disabled=\'!$ctrl.enabled\' data-ng-model=\'$ctrl.newPageAsset\'>\r\n</cms-create-page-dialog>");
-$templateCache.put("cms.webanalytics/campaign/inventory/item/item.component.html","<div class=\'campaign-assetlist-item row\'>\r\n    <div class=\'campaign-assetlist-header\'>\r\n        <span class=\'campaign-assetlist-header-description\'>\r\n            <span class=\'primary-description\' data-ng-if=\'$ctrl.isExistingDocument()\'>\r\n                {{$ctrl.asset.additionalProperties.documentType}}\r\n                <br>\r\n            </span>\r\n\r\n            <span data-ng-if=\'!$ctrl.isDeleted()\'><a target=\'_blank\' data-ng-href=\'{{$ctrl.asset.link}}\'>{{$ctrl.asset.name}}</a></span>\r\n            <span class=\'campaign-assetlist-deleted\' data-ng-if=\'$ctrl.isDeleted()\'>{{$ctrl.asset.name}}</span>\r\n\r\n            <span data-ng-if=\'!$ctrl.siteIsContentOnly && $ctrl.isExistingDocument()\'>\r\n                <i class=\'campaign-assetlist-header-icon icon-check-circle color-green-100\' title=\'{{ \"tree.publishednodetooltip\" | resolve }}\' aria-hidden=\'true\' data-ng-if=\'$ctrl.isPublished()\'>\r\n                </i>\r\n                <i class=\'campaign-assetlist-header-icon icon-times-circle color-red-70\' title=\'{{ \"tree.unpublishednodetooltip\" | resolve }}\' aria-hidden=\'true\' data-ng-if=\'!$ctrl.isPublished()\'>\r\n                </i>\r\n            </span>\r\n        </span>\r\n    </div>\r\n\r\n    <div class=\'campaign-assetlist-icons\'>\r\n        <div title=\'{{ \"campaign.assetlist.removeasset\" | resolve }}\'>\r\n            <button type=\'button\' value=\'\' class=\'icon-only btn-icon btn\' title=\'{{ \"campaign.assetlist.removeasset\" | resolve }}\' data-ng-disabled=\'!$ctrl.editable\' data-ng-click=\'$ctrl.removeAsset()\'>\r\n                <i aria-hidden=\'true\' class=\'icon-bin\'></i>\r\n                <span class=\'sr-only\'>{{ \"campaign.assetlist.removeasset\" | resolve }}</span>\r\n            </button>\r\n        </div>\r\n\r\n        <div title=\'{{ \"general.edit\" | resolve }}\' data-ng-if=\'!$ctrl.isDeleted()\'>\r\n            <a target=\'_blank\' class=\'btn icon-only btn-icon\' data-ng-href=\'{{$ctrl.asset.link}}\'>\r\n                <i class=\'icon-edit\' aria-hidden=\'true\'>\r\n                </i>\r\n            </a>\r\n        </div>\r\n\r\n        <cms-get-link asset-link=\'$ctrl.asset.additionalProperties.liveSiteLink\' utm-code=\'$ctrl.utmCode\' data-ng-if=\'$ctrl.asset.id > 0\'></cms-get-link>\r\n    </div>\r\n</div>");
-$templateCache.put("cms.webanalytics/campaign/inventory/selectPage/selectPage.component.html","<button class=\'btn btn-default\' title=\'{{ \"campaign.assets.landingpage.description\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.enabled\'>\r\n    {{ \"campaign.assets.content.add\" | resolve }}\r\n</button>");
-$templateCache.put("cms.webanalytics/campaign/inventory/selectPage/selectPage.dialog.html","<div id=\'js-page-selector-container\'>\r\n    <cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"documentselection.title\" | resolve }}\'></cms-dialog-header>\r\n    <div class=\'dialog-content\'>\r\n        <form class=\'form-horizontal\' name=\'$ctrl.form\' novalidate=\'\'>\r\n            <div class=\'editing-form-label-cell\'>\r\n                <label for=\'pageSelector\' class=\'control-label editing-form-label\'>\r\n                    {{ \"campaign.conversion.pageselector\" | resolve }}<span class=\'required-mark\'>*</span>\r\n                </label>\r\n            </div>\r\n\r\n            <div class=\'editing-form-value-cell\'>\r\n                <div class=\'editing-form-control-nested-control\'>\r\n                    <select id=\'pageSelector\' name=\'pageSelector\' class=\'form-control\' model-item=\'$ctrl.detail\' result-template=\'$ctrl.resultTemplate\' rest-url=\'{{$ctrl.restUrl}}\' rest-url-params=\'$ctrl.restUrlParams\' dropdown-parent-id=\'js-page-selector-container\' cms-select2=\'\' data-ng-min=\'1\'>\r\n                     </select>\r\n                </div>\r\n                <span class=\'form-control-error\' data-ng-if=\'!$ctrl.isSelectionValid() && ($ctrl.form.pageSelector.$touched || $ctrl.form.$submitted);\'>\r\n                    {{ \"campaign.conversion.pageisrequired\" | resolve }}\r\n                </span>\r\n            </div>\r\n        </form>\r\n    </div>\r\n    <cms-dialog-footer confirm-label=\'{{ \"general.save\" | resolve }}\' on-confirm=\'$ctrl.confirm\' dismiss-label=\'{{ \"general.cancel\" | resolve }}\' on-dismiss=\'$ctrl.dismiss\'></cms-dialog-footer>\r\n</div>");
-$templateCache.put("cms.webanalytics/campaign/reportSetup/conversions/conversions.component.html","<div>\r\n    <h4 class=\'control-label {{ $ctrl.configuration.additionalClass }}\'>{{ $ctrl.configuration.heading }}</h4>\r\n    <p>{{ $ctrl.configuration.description }}</p>\r\n\r\n    <div class=\'campaign-list\' data-ng-repeat=\'conversion in $ctrl.conversions | filter: { isFunnelStep: $ctrl.isFunnel }\'>\r\n        <cms-campaign-conversion is-funnel=\'$ctrl.isFunnel\' conversion=\'conversion\' removable=\'$ctrl.isRemovable()\' editable=\'!$ctrl.campaign.isFinished()\' remove-conversion=\'$ctrl.removeConversion(conversion)\'>\r\n        </cms-campaign-conversion>\r\n    </div>\r\n\r\n    <div class=\'content-block-50\'>\r\n        <cms-add-conversion is-funnel=\'$ctrl.isFunnel\' on-created=\'$ctrl.addConversionToList\' enabled=\'!$ctrl.campaign.isFinished()\' campaign-id=\'$ctrl.campaign.campaignID\'>\r\n        </cms-add-conversion>\r\n    </div>\r\n</div>");
+$templateCache.put("cms.webanalytics/campaign/inventory/item/editItem.component.html","<div>\r\n    <button title=\'{{ \"general.edit\" | resolve }}\' class=\'icon-only btn-icon btn\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.editable\'>\r\n        <i aria-hidden=\'true\' class=\'icon-edit\'></i>\r\n        <span class=\'sr-only\'>{{ \"general.edit\" | resolve }}</span>\r\n    </button>\r\n</div>");
+$templateCache.put("cms.webanalytics/campaign/inventory/item/item.component.html","<div class=\'campaign-assetlist-item row\'>\r\n    <div class=\'campaign-assetlist-header\'>\r\n        <span class=\'campaign-assetlist-header-description\'>\r\n            <span class=\'primary-description\' data-ng-if=\'$ctrl.isExistingDocument()\'>\r\n                {{$ctrl.asset.additionalProperties.documentType}}\r\n                <br>\r\n            </span>\r\n\r\n            <span data-ng-if=\'!$ctrl.isDeleted()\'><a target=\'_blank\' data-ng-href=\'{{$ctrl.asset.link}}\'>{{$ctrl.asset.name}}</a></span>\r\n            <span class=\'campaign-assetlist-deleted\' data-ng-if=\'$ctrl.isDeleted()\'>{{$ctrl.asset.name}}</span>\r\n        </span>\r\n    </div>\r\n\r\n    <div class=\'campaign-assetlist-icons\'>\r\n        <div title=\'{{ \"campaign.assetlist.removeasset\" | resolve }}\'>\r\n            <button type=\'button\' value class=\'icon-only btn-icon btn\' title=\'{{ \"campaign.assetlist.removeasset\" | resolve }}\' data-ng-disabled=\'!$ctrl.editable\' data-ng-click=\'$ctrl.removeAsset()\'>\r\n                <i aria-hidden=\'true\' class=\'icon-bin\'></i>\r\n                <span class=\'sr-only\'>{{ \"campaign.assetlist.removeasset\" | resolve }}</span>\r\n            </button>\r\n        </div>\r\n\r\n        <cms-edit-item asset=\'$ctrl.asset\' editable=\'$ctrl.editable\' url-asset-target-regex=\'$ctrl.urlAssetTargetRegex\' on-updated=\'$ctrl.updateAsset\'>\r\n        </cms-edit-item>\r\n\r\n        <cms-get-link asset-link=\'$ctrl.asset.additionalProperties.liveSiteLink\' utm-code=\'$ctrl.utmCode\' data-ng-if=\'$ctrl.asset.id > 0\'></cms-get-link>\r\n    </div>\r\n</div>");
+$templateCache.put("cms.webanalytics/campaign/promotion/createEmail/createEmail.component.html","<button class=\'btn btn-default\' title=\'{{ \"campaign.create.email.description\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.enabled\'>\r\n    {{ \"campaign.create.email\" | resolve }}\r\n</button>");
+$templateCache.put("cms.webanalytics/campaign/promotion/createEmail/createEmail.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"campaign.create.email\" | resolve }}\'></cms-dialog-header>\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <form class=\'form-horizontal\' name=\'newEmailForm\'>\r\n            <cms-textbox value=\'$ctrl.emailSubject\' maxlength=\'100\' required=\'true\' title=\'{{ \"campaign.create.email.subject\" | resolve }}\' label=\'{{ \"campaign.create.email.subject\" | resolve }}\' id=\'email-subject\'>\r\n            </cms-textbox>\r\n\r\n            <cms-radio-button value=\'$ctrl.emailCampaignType\' options=\'$ctrl.emailCampaignTypeOptions\' name=\'assignOrCreateEmailCampaign\' id=\'email-campaign-select\'>\r\n            </cms-radio-button>\r\n\r\n            <div data-ng-show=\'$ctrl.isNewCampaignType()\'>\r\n                <cms-textbox value=\'$ctrl.emailDisplayName\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newsletterdisplaynamelabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newsletterdisplaynamelabel\" | resolve }}\' id=\'email-display-name\'>\r\n                </cms-textbox>\r\n\r\n                <cms-textbox value=\'$ctrl.emailSenderName\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettersendernamelabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettersendernamelabel\" | resolve }}\' id=\'email-sender-name\'>\r\n                </cms-textbox>\r\n\r\n                <cms-textbox value=\'$ctrl.emailSenderAddress\' input-type=\'email\' pattern=\'$ctrl.emailPattern\' pattern-error=\'{{ \"campaign.create.email.campaign.senderaddress.invalid.email\" | resolve }}\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettersenderemaillabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettersenderemaillabel\" | resolve }}\' id=\'email-sender-address\'>\r\n                </cms-textbox>\r\n\r\n                <cms-select value=\'$ctrl.templateUnsubscription\' options=\'$ctrl.data.emailTemplates.unsubscription\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.unsubscriptiontemplate\" | resolve }}\' label=\'{{ \"newsletter_edit.unsubscriptiontemplate\" | resolve }}\' id=\'template-unsubscription\'>\r\n                </cms-select>\r\n\r\n                <cms-select value=\'$ctrl.templateIssue\' options=\'$ctrl.data.emailTemplates.issue\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' id=\'template-issue\'>\r\n                </cms-select>\r\n            </div>\r\n\r\n            <div data-ng-show=\'!$ctrl.isNewCampaignType()\'>\r\n                <div title=\'{{ \"newsletter_newsletter.select.selectitem\" | resolve }}\' class=\'form-group\'>\r\n                    <div class=\'editing-form-label-cell\'>\r\n                        <label for=\'template-issue\' class=\'control-label editing-form-label\'>\r\n                            {{ \"newsletter_newsletter.select.selectitem\" | resolve }}:<span class=\'required-mark\'>*</span>\r\n                        </label>\r\n                    </div>\r\n                    <div class=\'editing-form-value-cell\'>\r\n                        <div class=\'editing-form-control-nested-control\'>\r\n                            <select class=\'form-control\' id=\'email-newsletter-select\' data-ng-model=\'$ctrl.emailCampaignSelect\' data-ng-required=\'!$ctrl.isNewCampaignType()\' name=\'emailNewsletterSelect\' data-ng-options=\'campaign as campaign.name for campaign in $ctrl.data.emailCampaigns track by campaign.id\' data-ng-change=\'templatesSelector = $ctrl.emailCampaignSelect.templates\'></select>\r\n                            <span class=\'form-control-error\' data-ng-show=\'(newEmailForm.$submitted || $ctrl.emailCampaignSelect.$dirty) && newEmailForm.emailNewsletterSelect.$error.required\'>\r\n                                {{\'general.requiresvalue\'|resolve}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div title=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' class=\'form-group\'>\r\n                    <div class=\'editing-form-label-cell\'>\r\n                        <label for=\'email-template-select\' class=\'control-label editing-form-label\'>\r\n                            {{ \"newsletter_edit.newslettertemplate\" | resolve }}:<span class=\'required-mark\'>*</span>\r\n                        </label>\r\n                    </div>\r\n                    <div class=\'editing-form-value-cell\'>\r\n                        <div class=\'editing-form-control-nested-control\'>\r\n                            <select class=\'form-control\' id=\'email-template-select\' data-ng-model=\'$ctrl.templateIssue\' data-ng-required=\'!$ctrl.isNewCampaignType()\' name=\'emailTemplateSelect\' data-ng-options=\'template as template.displayName for template in templatesSelector track by template.id\'></select>\r\n                            <span class=\'form-control-error\' data-ng-show=\'(newEmailForm.$submitted || $ctrl.templateIssue.$dirty) && newEmailForm.emailTemplateSelect.$error.required\'>\r\n                                {{\'general.requiresvalue\'|resolve}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>\r\n<cms-dialog-footer confirm-label=\'{{ \"general.create\" | resolve }}\' on-confirm=\'$ctrl.confirm\'></cms-dialog-footer>");
+$templateCache.put("cms.webanalytics/campaign/promotion/promotionItem/promotionItem.component.html","<div class=\'campaign-promotionlist-item row form-horizontal\'>\r\n    <div class=\'col-xs-6\'>\r\n        <div class=\'campaign-assetlist-header\'>\r\n            <span class=\'campaign-assetlist-header-description\'>\r\n                <span class=\'primary-description\'>\r\n                    {{ \"campaign.assetlist.email\" | resolve }}\r\n                    <br>\r\n                </span>\r\n\r\n                <span data-ng-if=\'!$ctrl.isDeleted()\'><a target=\'_blank\' data-ng-href=\'{{$ctrl.asset.link}}\'>{{$ctrl.asset.name}}</a> </span>\r\n                <span class=\'campaign-assetlist-deleted\' data-ng-if=\'$ctrl.isDeleted()\'>{{$ctrl.asset.name}}</span>\r\n            </span>\r\n        </div>\r\n    </div>\r\n\r\n    <div class=\'campaign-email-source col-xs-4\' title=\'{{ \"campaign.utmsource\" | resolve }}\'>\r\n        <form name=\'{{$ctrl.formName}}\' cms-autosave=\'$ctrl.save()\'>\r\n            <cms-campaign-textbox value=\'$ctrl.asset.additionalProperties.utmSource\' maxlength=\'\\\'200\\\'\' required=\'true\' pattern=\'[0-9a-zA-Z_.-]+\' pattern-error=\'{{ \"campaign.utmparameter.wrongformat\" | resolve }}\' label=\'{{ \"campaign.utmsource\" | resolve }}\' id=\'{{$ctrl.inputId}}\' enabled=\'$ctrl.editable && $ctrl.asset.additionalProperties.isEditable\' form-element=\'$ctrl.getUtmSourceField()\'>\r\n            </cms-campaign-textbox>\r\n        </form>\r\n    </div>\r\n\r\n    <div class=\'cols-xs-2 promotionlist-icons\'>\r\n        <div title=\'{{ \"general.edit\" | resolve }}\' data-ng-if=\'!$ctrl.isDeleted()\'>\r\n            <a target=\'_blank\' class=\'btn icon-only btn-icon\' data-ng-href=\'{{$ctrl.asset.link}}\'>\r\n                <i class=\'icon-edit\' aria-hidden=\'true\'>\r\n                </i>\r\n            </a>\r\n        </div>\r\n\r\n        <button class=\'icon-only btn-icon btn\' title=\'{{ \"campaign.assetlist.removeemail\" | resolve }}\' data-ng-click=\'$ctrl.removeItem()\' data-ng-disabled=\'!$ctrl.editable\'>\r\n            <i class=\'icon-bin\' aria-hidden=\'true\'></i>\r\n            <span class=\'sr-only\'>{{ \"campaign.assetlist.removeemail\" | resolve }}</span>\r\n        </button>\r\n\r\n    </div>\r\n\r\n</div>");
+$templateCache.put("cms.webanalytics/campaign/promotion/selectEmail/selectEmail.component.html","<cms-select-item-dialog change=\'$ctrl.onChange()\' click=\'$ctrl.onClick()\' id=\'campaignAssetEmail\' button-id=\'campaignAssetEmailButton\' dialog-name=\'ItemSelection\' dialog-url=\'{{$ctrl.dialogUrl}}\' dialog-width=\'700px\' dialog-height=\'725px\' title=\'{{ \"campaign.assets.email.description\" | resolve }}\' text=\'{{ \"campaign.assets.email.add\" | resolve }}\' data-disabled=\'!$ctrl.enabled\' data-ng-model=\'$ctrl.newEmailAsset\'>\r\n</cms-select-item-dialog>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/dialog/modifyConversion.dialog.html","<div id=\'js-page-selector-container\'>\r\n    <cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ $ctrl.title }}\'></cms-dialog-header>\r\n    <div class=\'dialog-content\'>\r\n        <div class=\'campaign-edit-dialog\'>\r\n            <form class=\'form-horizontal\' name=\'$ctrl.form\'>\r\n                <cms-select value=\'$ctrl.conversion.activityType\' options=\'$ctrl.activityTypes\' title=\'{{ \"campaign.conversion.visitoractivity\" | resolve }}\' label=\'{{ \"campaign.conversion.visitoractivity\" | resolve }}\' id=\'selectActivityType\' required=\'true\' info-text=\'{{ \"campaign.conversion.visitoractivityinfo\" | resolve }}\'>\r\n                </cms-select>\r\n\r\n                <div class=\'form-group\' data-ng-if=\'$ctrl.selectedActivity.areParametersRequired\'>\r\n                    <div class=\'editing-form-label-cell\'>\r\n                        <label for=\'pageSelector\' class=\'control-label editing-form-label\'>\r\n                            {{ $ctrl.selectedActivity.selectorLabel }}<span class=\'required-mark\' data-ng-if=\'$ctrl.selectedActivity.configuration.isRequired\'>*</span>\r\n                        </label>\r\n                    </div>\r\n\r\n                    <div class=\'editing-form-value-cell\'>\r\n                        <cms-select-parameter configuration=\'$ctrl.selectedActivity.configuration\' selected-conversion=\'$ctrl.selectedConversionItem\'>\r\n                        </cms-select-parameter>\r\n\r\n                        <span class=\'form-control-error\' data-ng-if=\'!$ctrl.isSelectionValid() &&\r\n                              ($ctrl.form.pageSelector.$touched || $ctrl.form.$submitted);\'>\r\n\r\n                            {{ $ctrl.selectedActivity.errorMessage}}\r\n                        </span>\r\n                    </div>\r\n                </div>\r\n\r\n                <!-- Page visit selector for content only sites -->\r\n                <div data-ng-if=\'$ctrl.showContentOnlyPageVisitConfiguration()\'>\r\n                    <cms-textarea value=\'$ctrl.selectedConversionItem.url\' maxlength=\'4096\' required=\'true\' title=\'{{ \"campaign.conversion.pagevisit.pageurl\" | resolve }}\' regex-pattern=\'{{ ::$ctrl.urlAssetTargetRegex }}\' regex-pattern-modifiers=\'i\' regex-pattern-error=\'{{ \"campaignAssetUrl.target.wrongFormat\" | resolve }}\' label=\'{{ \"campaign.conversion.pagevisit.pageurl\" | resolve }}\' id=\'pageURL\' placeholder=\'https://example.com/page\'>\r\n                    </cms-textarea>\r\n\r\n                    <cms-textbox value=\'$ctrl.selectedConversionItem.text\' maxlength=\'4096\' required=\'true\' title=\'{{ \"campaign.conversion.pagevisit.pagename\" | resolve }}\' label=\'{{ \"campaign.conversion.pagevisit.pagename\" | resolve }}\' explanation-text=\'{{ \"campaign.conversion.pagevisit.explanationText\" | resolve }}\' id=\'pageName\'>\r\n                    </cms-textbox> \r\n                </div>\r\n            </form>\r\n        </div>\r\n    </div>\r\n    <cms-dialog-footer confirm-label=\'{{ \"general.save\" | resolve }}\' on-confirm=\'$ctrl.confirm\' dismiss-label=\'{{ \"general.cancel\" | resolve }}\' on-dismiss=\'$ctrl.dismiss\'></cms-dialog-footer>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/dialog/selectParameter.directive.html","<div class=\'editing-form-control-nested-control\'>\r\n    <select id=\'pageSelector\' name=\'pageSelector\' class=\'form-control\'\r\n            model-item=\'selectedConversion\'\r\n            result-template=\'configuration.resultTemplate\'\r\n            rest-url=\'{{configuration.restUrl}}\'\r\n            rest-url-params=\'configuration.restUrlParams\' \r\n            dropdown-parent-id=\'js-page-selector-container\'\r\n            show-additional-option=\'configuration.allowAny\'\r\n            additional-option-text=\'{{ \"general.selectany\" | resolve }}\'\r\n            cms-select2> \r\n    </select>\r\n</div>\r\n");
+$templateCache.put("cms.webanalytics/campaign/reportSetup/conversions/conversions.component.html","<div>\r\n    <h4 class=\'control-label {{ $ctrl.configuration.additionalClass }}\'>{{ $ctrl.configuration.heading }}</h4>\r\n    <p>{{ $ctrl.configuration.description }}</p>\r\n\r\n    <div class=\'campaign-list\' data-ng-repeat=\'conversion in $ctrl.conversions | filter: { isFunnelStep: $ctrl.isFunnel }\'>\r\n        <cms-campaign-conversion is-funnel=\'$ctrl.isFunnel\' conversion=\'conversion\' removable=\'$ctrl.isRemovable()\' editable=\'!$ctrl.campaign.isFinished()\' remove-conversion=\'$ctrl.removeConversion(conversion)\'>\r\n        </cms-campaign-conversion>\r\n    </div>\r\n\r\n    <div class=\'content-block-50\'>\r\n        <cms-add-conversion is-funnel=\'$ctrl.isFunnel\' on-created=\'$ctrl.addConversionToList\' enabled=\'!$ctrl.campaign.isFinished()\' campaign-id=\'$ctrl.campaign.campaignID\'>\r\n        </cms-add-conversion>\r\n    </div>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/objective/addObjective.component.html","<button class=\'btn btn-default\' title=\'{{ \"campaign.objective.add.title\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.enabled\'>    \r\n    {{ \"campaign.objective.add\" | resolve }}\r\n</button>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/objective/editObjective.component.html","<div>\r\n    <button title=\'{{ \"general.edit\" | resolve }}\' class=\'icon-only btn-icon btn\' data-ng-disabled=\'!$ctrl.enabled\' data-ng-click=\'$ctrl.openDialog()\'>\r\n        <i aria-hidden=\'true\' class=\'icon-edit\'></i>\r\n    </button>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/objective/objective.component.html"," <div>\r\n    <h4 class=\'control-label separator\'>{{ \"campaign.objective\" | resolve }}</h4>\r\n    <p>{{ \"campaign.objective.description\" | resolve }}</p>\r\n\r\n    <div class=\'campaign-list\' data-ng-if=\'$ctrl.objective\'>\r\n        <div class=\'campaign-assetlist-item row\'>\r\n            <div class=\'campaign-assetlist-header\'>\r\n                <span class=\'campaign-assetlist-header-description\'>\r\n                    <span class=\'primary-description\'>\r\n                        {{ \"campaign.objective\" | resolve }}\r\n                    </span>\r\n                    <span>\r\n                        <br>\r\n                        {{ $ctrl.selectedConversionName }}\r\n                    </span>\r\n                </span>\r\n            </div>\r\n            <div class=\'campaign-assetlist-icons\'>                \r\n                <div>\r\n                    <button title=\'{{ \"general.remove\" | resolve }}\' class=\'icon-only btn-icon btn\' data-ng-disabled=\'$ctrl.campaign.isFinished()\' data-ng-click=\'$ctrl.removeObjective()\'>\r\n                        <i aria-hidden=\'true\' class=\'icon-bin\'></i>\r\n                    </button>\r\n                </div>\r\n                <cms-edit-objective objective=\'$ctrl.objective\' objective-conversions=\'$ctrl.conversions\' enabled=\'!$ctrl.campaign.isFinished()\' on-updated=\'$ctrl.updateObjective\'>\r\n                </cms-edit-objective>\r\n                <div class=\'additional-info\'>\r\n                    <span class=\'primary-text\'>{{ $ctrl.objective.value | shortNumber }}</span>\r\n                    <br>\r\n                    <span>{{ \"campaign.objective.target\" | resolve }}</span>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\'content-block-50\'>\r\n        <cms-add-objective enabled=\'$ctrl.canAddObjective()\' objective-conversions=\'$ctrl.conversions\' on-created=\'$ctrl.addObjective\' data-ng-if=\'!$ctrl.objective\'>\r\n        </cms-add-objective>\r\n    </div>\r\n</div>\r\n");
-$templateCache.put("cms.webanalytics/campaign/promotion/createEmail/createEmail.component.html","<button class=\'btn btn-default\' title=\'{{ \"campaign.create.email.description\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\' data-ng-disabled=\'!$ctrl.enabled\'>\r\n    {{ \"campaign.create.email\" | resolve }}\r\n</button>");
-$templateCache.put("cms.webanalytics/campaign/promotion/createEmail/createEmail.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"campaign.create.email\" | resolve }}\'></cms-dialog-header>\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <form class=\'form-horizontal\' name=\'newEmailForm\'>\r\n            <cms-textbox value=\'$ctrl.emailSubject\' maxlength=\'100\' required=\'true\' title=\'{{ \"campaign.create.email.subject\" | resolve }}\' label=\'{{ \"campaign.create.email.subject\" | resolve }}\' id=\'email-subject\'>\r\n            </cms-textbox>\r\n\r\n            <cms-radio-button value=\'$ctrl.emailCampaignType\' options=\'$ctrl.emailCampaignTypeOptions\' name=\'assignOrCreateEmailCampaign\' id=\'email-campaign-select\'>\r\n            </cms-radio-button>\r\n\r\n            <div data-ng-show=\'$ctrl.isNewCampaignType()\'>\r\n                <cms-textbox value=\'$ctrl.emailDisplayName\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newsletterdisplaynamelabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newsletterdisplaynamelabel\" | resolve }}\' id=\'email-display-name\'>\r\n                </cms-textbox>\r\n\r\n                <cms-textbox value=\'$ctrl.emailSenderName\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettersendernamelabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettersendernamelabel\" | resolve }}\' id=\'email-sender-name\'>\r\n                </cms-textbox>\r\n\r\n                <cms-textbox value=\'$ctrl.emailSenderAddress\' input-type=\'email\' pattern=\'$ctrl.emailPattern\' pattern-error=\'{{ \"campaign.create.email.campaign.senderaddress.invalid.email\" | resolve }}\' maxlength=\'100\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettersenderemaillabel\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettersenderemaillabel\" | resolve }}\' id=\'email-sender-address\'>\r\n                </cms-textbox>\r\n\r\n                <cms-select value=\'$ctrl.templateUnsubscription\' options=\'$ctrl.data.emailTemplates.unsubscription\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.unsubscriptiontemplate\" | resolve }}\' label=\'{{ \"newsletter_edit.unsubscriptiontemplate\" | resolve }}\' id=\'template-unsubscription\'>\r\n                </cms-select>\r\n\r\n                <cms-select value=\'$ctrl.templateIssue\' options=\'$ctrl.data.emailTemplates.issue\' required=\'$ctrl.isNewCampaignType()\' title=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' label=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' id=\'template-issue\'>\r\n                </cms-select>\r\n            </div>\r\n\r\n            <div data-ng-show=\'!$ctrl.isNewCampaignType()\'>\r\n                <div title=\'{{ \"newsletter_newsletter.select.selectitem\" | resolve }}\' class=\'form-group\'>\r\n                    <div class=\'editing-form-label-cell\'>\r\n                        <label for=\'template-issue\' class=\'control-label editing-form-label\'>\r\n                            {{ \"newsletter_newsletter.select.selectitem\" | resolve }}:<span class=\'required-mark\'>*</span>\r\n                        </label>\r\n                    </div>\r\n                    <div class=\'editing-form-value-cell\'>\r\n                        <div class=\'editing-form-control-nested-control\'>\r\n                            <select class=\'form-control\' id=\'email-newsletter-select\' data-ng-model=\'$ctrl.emailCampaignSelect\' data-ng-required=\'!$ctrl.isNewCampaignType()\' name=\'emailNewsletterSelect\' data-ng-options=\'campaign as campaign.name for campaign in $ctrl.data.emailCampaigns track by campaign.id\' data-ng-change=\'templatesSelector = $ctrl.emailCampaignSelect.templates\'></select>\r\n                            <span class=\'form-control-error\' data-ng-show=\'(newEmailForm.$submitted || $ctrl.emailCampaignSelect.$dirty) && newEmailForm.emailNewsletterSelect.$error.required\'>\r\n                                {{\'general.requiresvalue\'|resolve}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div title=\'{{ \"newsletter_edit.newslettertemplate\" | resolve }}\' class=\'form-group\'>\r\n                    <div class=\'editing-form-label-cell\'>\r\n                        <label for=\'email-template-select\' class=\'control-label editing-form-label\'>\r\n                            {{ \"newsletter_edit.newslettertemplate\" | resolve }}:<span class=\'required-mark\'>*</span>\r\n                        </label>\r\n                    </div>\r\n                    <div class=\'editing-form-value-cell\'>\r\n                        <div class=\'editing-form-control-nested-control\'>\r\n                            <select class=\'form-control\' id=\'email-template-select\' data-ng-model=\'$ctrl.templateIssue\' data-ng-required=\'!$ctrl.isNewCampaignType()\' name=\'emailTemplateSelect\' data-ng-options=\'template as template.displayName for template in templatesSelector track by template.id\'></select>\r\n                            <span class=\'form-control-error\' data-ng-show=\'(newEmailForm.$submitted || $ctrl.templateIssue.$dirty) && newEmailForm.emailTemplateSelect.$error.required\'>\r\n                                {{\'general.requiresvalue\'|resolve}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>\r\n<cms-dialog-footer confirm-label=\'{{ \"general.create\" | resolve }}\' on-confirm=\'$ctrl.confirm\'></cms-dialog-footer>");
-$templateCache.put("cms.webanalytics/campaign/promotion/promotionItem/promotionItem.component.html","<div class=\'campaign-promotionlist-item row form-horizontal\'>\r\n    <div class=\'col-xs-6\'>\r\n        <div class=\'campaign-assetlist-header\'>\r\n            <span class=\'campaign-assetlist-header-description\'>\r\n                <span class=\'primary-description\'>\r\n                    {{ \"campaign.assetlist.email\" | resolve }}\r\n                    <br>\r\n                </span>\r\n\r\n                <span data-ng-if=\'!$ctrl.isDeleted()\'><a target=\'_blank\' data-ng-href=\'{{$ctrl.asset.link}}\'>{{$ctrl.asset.name}}</a> </span>\r\n                <span class=\'campaign-assetlist-deleted\' data-ng-if=\'$ctrl.isDeleted()\'>{{$ctrl.asset.name}}</span>\r\n            </span>\r\n        </div>\r\n    </div>\r\n\r\n    <div class=\'campaign-email-source col-xs-4\' title=\'{{ \"campaign.assetlist.email\" | resolve }}\'>\r\n        <form name=\'{{$ctrl.formName}}\' cms-autosave=\'$ctrl.save()\'>\r\n            <cms-campaign-textbox value=\'$ctrl.asset.additionalProperties.utmSource\' maxlength=\'\\\'200\\\'\' required=\'true\' pattern=\'[0-9a-zA-Z_.-]+\' pattern-error=\'{{ \"campaign.utmparameter.wrongformat\" | resolve }}\' label=\'{{ \"campaign.utmsource\" | resolve }}\' id=\'{{$ctrl.inputId}}\' enabled=\'$ctrl.editable && $ctrl.asset.additionalProperties.isEditable\' form-element=\'$ctrl.getUtmSourceField()\'>\r\n            </cms-campaign-textbox>\r\n        </form>\r\n    </div>\r\n\r\n    <div class=\'cols-xs-2 promotionlist-icons\'>\r\n        <div title=\'{{ \"general.edit\" | resolve }}\' data-ng-if=\'!$ctrl.isDeleted()\'>\r\n            <a target=\'_blank\' class=\'btn icon-only btn-icon\' data-ng-href=\'{{$ctrl.asset.link}}\'>\r\n                <i class=\'icon-edit\' aria-hidden=\'true\'>\r\n                </i>\r\n            </a>\r\n        </div>\r\n\r\n        <button class=\'icon-only btn-icon btn\' title=\'{{ \"campaign.assetlist.removeemail\" | resolve }}\' data-ng-click=\'$ctrl.removeItem()\' data-ng-disabled=\'!$ctrl.editable\'>\r\n            <i class=\'icon-bin\' aria-hidden=\'true\'></i>\r\n            <span class=\'sr-only\'>{{ \"campaign.assetlist.removeemail\" | resolve }}</span>\r\n        </button>\r\n\r\n    </div>\r\n\r\n</div>");
-$templateCache.put("cms.webanalytics/campaign/promotion/selectEmail/selectEmail.component.html","<cms-select-item-dialog change=\'$ctrl.onChange()\' click=\'$ctrl.onClick()\' id=\'campaignAssetEmail\' button-id=\'campaignAssetEmailButton\' dialog-name=\'ItemSelection\' dialog-url=\'{{$ctrl.dialogUrl}}\' dialog-width=\'700px\' dialog-height=\'725px\' title=\'{{ \"campaign.assets.email.description\" | resolve }}\' text=\'{{ \"campaign.assets.email.add\" | resolve }}\' data-disabled=\'!$ctrl.enabled\' data-ng-model=\'$ctrl.newEmailAsset\'>\r\n</cms-select-item-dialog>");
+$templateCache.put("cms.webanalytics/campaign/inventory/item/dialog/modifyUrlAsset.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ $ctrl.title }}\'></cms-dialog-header>\r\n\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <form class=\'form-horizontal\' name=\'$ctrl.form\'>\r\n            <cms-textbox value=\'$ctrl.asset.name\' maxlength=\'100\'\r\n                         title=\'{{ \"campaignAssetUrl.pageTitle\" | resolve }}\'\r\n                         label=\'{{ \"campaignAssetUrl.pageTitle\" | resolve }}\'\r\n                         required=\'true\'\r\n                         explanation-text=\'{{ \"campaignAssetUrl.pageTitle.explanationText\" | resolve }}\'\r\n                         id=\'pageTitle\'>\r\n            </cms-textbox>\r\n            <cms-textarea value=\'$ctrl.asset.link\' maxlength=\'4096\' required=\'true\'\r\n                          title=\'{{ \"campaignAssetUrl.target\" | resolve }}\'\r\n                          regex-pattern=\'{{ ::$ctrl.urlAssetTargetRegex }}\'\r\n                          regex-pattern-modifiers=\'i\'\r\n                          regex-pattern-error=\'{{ \"campaignAssetUrl.target.wrongFormat\" | resolve }}\'\r\n                          label=\'{{ \"campaignAssetUrl.target\" | resolve }}\'\r\n                          explanation-text=\'{{ \"campaignAssetUrl.target.explanationText\" | resolve }}\'\r\n                          id=\'url\'\r\n                          placeholder=\'https://example.com/page\'>\r\n            </cms-textarea>\r\n        </form>\r\n    </div>\r\n</div>\r\n\r\n<cms-dialog-footer confirm-label=\'{{ \"general.saveandclose\" | resolve }}\' on-confirm=\'$ctrl.confirm\'\r\n                   dismiss-label=\'{{ \"general.cancel\" | resolve }}\' on-dismiss=\'$ctrl.dismiss\'>\r\n</cms-dialog-footer>");
 $templateCache.put("cms.webanalytics/campaign/inventory/item/getLink/getLink.component.html","<div class=\'campaign-assetlist-link\' title=\'{{ \"campaign.getcontentlink.button.title\" | resolve }}\'>\r\n    <a title=\'{{ \"campaign.getcontentlink.button.title\" | resolve }}\' data-ng-click=\'$ctrl.openDialog()\'>\r\n        {{ \"campaign.getcontentlink.urlbuilder\" | resolve }}\r\n    </a>\r\n</div>");
-$templateCache.put("cms.webanalytics/campaign/inventory/item/getLink/getLink.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"campaign.getcontentlink.dialog.title\" | resolve }}\'></cms-dialog-header>\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <p class=\'form-horizontal\'>{{ \"campaign.getcontentlink.dialog.description\" | resolve }}</p>\r\n\r\n        <form class=\'form-horizontal\' name=\'getLinkForm\'>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmsource\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmSource\'>\r\n                        {{ \"campaign.utmsource\" | resolve }}:\r\n                        <span class=\'required-mark\'>*</span>\r\n                    </label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmSource\' id=\'utmSource\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' required data-ng-maxlength=\'100\' data-ng-change=\'$ctrl.onChange()\' data-ng-model=\'$ctrl.utmSource\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmsource.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmSource.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmSource.$error.required && getLinkForm.utmSource.$touched\'>{{ \"general.requiresvalue\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmmedium\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmMedium\'>{{ \"campaign.utmmedium\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmMedium\' id=\'utmMedium\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' data-ng-maxlength=\'100\' data-ng-model=\'$ctrl.utmMedium\' data-ng-change=\'$ctrl.onChange()\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmmedium.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmMedium.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmcontent\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmContent\'>{{ \"campaign.utmcontent\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmContent\' id=\'utmContent\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' data-ng-maxlength=\'100\' data-ng-model=\'$ctrl.utmContent\' data-ng-change=\'$ctrl.onChange()\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmcontent.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmContent.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'ng-isolate-scope form-group\' title=\'{{ \"campaign.getcontentlink.dialog.linktextarea.label\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'get-link-dialog-built-link\'>{{ \"campaign.getcontentlink.dialog.linktextarea.label\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'textarea editing-form-value-cell\'>\r\n                    <textarea id=\'get-link-dialog-built-link\' class=\'form-control\' placeholder=\'\' required=\'required\' name=\'get-link-dialog-built-link\' rows=\'4\' readonly data-ng-click=\'$ctrl.textAreaClick($event)\' data-ng-model=\'$ctrl.link\'></textarea>\r\n                </div>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>\r\n<cms-dialog-footer dismiss-label=\'{{ \"general.close\" | resolve }}\' on-dismiss=\'$ctrl.dismiss\'></cms-dialog-footer>");
+$templateCache.put("cms.webanalytics/campaign/inventory/item/getLink/getLink.dialog.html","<cms-dialog-header on-close=\'$ctrl.dismiss\' header=\'{{ \"campaign.getcontentlink.dialog.title\" | resolve }}\'></cms-dialog-header>\r\n<div class=\'dialog-content\'>\r\n    <div class=\'campaign-edit-dialog\'>\r\n        <p class=\'form-horizontal\'>{{ \"campaign.getcontentlink.dialog.description\" | resolve }}</p>\r\n\r\n        <form class=\'form-horizontal\' name=\'getLinkForm\'>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmsource\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmSource\'>\r\n                        {{ \"campaign.utmsource\" | resolve }}:\r\n                        <span class=\'required-mark\'>*</span>\r\n                    </label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmSource\' id=\'utmSource\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' required data-ng-maxlength=\'100\' data-ng-change=\'$ctrl.onChange()\' data-ng-model=\'$ctrl.utmSource\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmsource.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmSource.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmSource.$error.required && getLinkForm.utmSource.$touched\'>{{ \"general.requiresvalue\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmmedium\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmMedium\'>{{ \"campaign.utmmedium\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmMedium\' id=\'utmMedium\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' data-ng-maxlength=\'100\' data-ng-model=\'$ctrl.utmMedium\' data-ng-change=\'$ctrl.onChange()\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmmedium.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmMedium.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'form-group\' title=\'{{ \"campaign.utmcontent\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'utmContent\'>{{ \"campaign.utmcontent\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'editing-form-value-cell\'>\r\n                    <div class=\'editing-form-control-nested-control\'>\r\n                        <input name=\'utmContent\' id=\'utmContent\' class=\'form-control\' type=\'text\' pattern=\'[0-9a-zA-Z_.-]+\' maxlength=\'100\' data-ng-maxlength=\'100\' data-ng-model=\'$ctrl.utmContent\' data-ng-change=\'$ctrl.onChange()\'>\r\n                        <div class=\'explanation-text\'>{{ \"campaign.getcontentlink.dialog.utmcontent.explanationtext\" | resolve }}</div>\r\n                        <span class=\'form-control-error\' data-ng-if=\'getLinkForm.utmContent.$error.pattern\'>{{ \"campaign.utmparameter.wrongformat\" | resolve }}</span>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\'ng-isolate-scope form-group\' title=\'{{ \"campaign.getcontentlink.dialog.linktextarea.label\" | resolve }}\'>\r\n                <div class=\'editing-form-label-cell\'>\r\n                    <label class=\'control-label editing-form-label\' for=\'get-link-dialog-built-link\'>{{ \"campaign.getcontentlink.dialog.linktextarea.label\" | resolve }}:</label>\r\n                </div>\r\n                <div class=\'textarea editing-form-value-cell\'>\r\n                    <textarea id=\'get-link-dialog-built-link\' class=\'form-control\' placeholder required=\'required\' name=\'get-link-dialog-built-link\' rows=\'4\' readonly data-ng-click=\'$ctrl.textAreaClick($event)\' data-ng-model=\'$ctrl.link\'></textarea>\r\n                </div>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>\r\n<cms-dialog-footer dismiss-label=\'{{ \"general.close\" | resolve }}\' on-dismiss=\'$ctrl.dismiss\'></cms-dialog-footer>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/conversions/conversion/addConversion.component.html","<button class=\'btn btn-default\' title=\'{{ $ctrl.configuration.addButtonTitle }}\' data-ng-disabled=\'!$ctrl.enabled\' data-ng-click=\'$ctrl.openDialog()\'>\r\n    {{ $ctrl.configuration.addButtonLabel }}\r\n</button>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/conversions/conversion/conversion.component.html","<div class=\'campaign-assetlist-item row\'>\r\n    <div class=\'campaign-assetlist-header\'>\r\n        <span class=\'campaign-assetlist-header-description\'>\r\n            <span class=\'primary-description\'>\r\n                {{$ctrl.conversion.activityName}}\r\n            </span>\r\n            <span data-ng-if=\'$ctrl.conversion.name && $ctrl.conversion.name.length > 0\'>\r\n                <br>\r\n                {{$ctrl.conversion.name}}\r\n            </span>\r\n        </span>\r\n    </div>\r\n    <div class=\'campaign-assetlist-icons\'>\r\n        <div>\r\n            <button title=\'{{ \"general.remove\" | resolve }}\' class=\'icon-only btn-icon btn\' data-ng-disabled=\'!$ctrl.removable\' data-ng-click=\'$ctrl.removeConversion()\'>\r\n                <i aria-hidden=\'true\' class=\'icon-bin\'></i>\r\n            </button>\r\n        </div>\r\n        <cms-edit-conversion is-funnel=\'$ctrl.isFunnel\' conversion=\'$ctrl.conversion\' enabled=\'$ctrl.editable\' on-updated=\'$ctrl.updateConversion\'>\r\n        </cms-edit-conversion>\r\n    </div>\r\n</div>");
 $templateCache.put("cms.webanalytics/campaign/reportSetup/conversions/conversion/editConversion.component.html","<div>\r\n    <button title=\'{{ \"general.edit\" | resolve }}\' class=\'icon-only btn-icon btn\' data-ng-disabled=\'!$ctrl.enabled\' data-ng-click=\'$ctrl.openDialog()\'>\r\n        <i aria-hidden=\'true\' class=\'icon-edit\'></i>\r\n    </button>\r\n</div>");

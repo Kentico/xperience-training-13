@@ -21,7 +21,7 @@ public partial class CMSModules_Modules_Pages_Class_AlternativeForm_General : Gl
     {
         get
         {
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+            ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
             return ((resource != null) && resource.ResourceIsInDevelopment) || SystemContext.DevelopmentMode || AlternativeForm.FormIsCustom;
         }
     }

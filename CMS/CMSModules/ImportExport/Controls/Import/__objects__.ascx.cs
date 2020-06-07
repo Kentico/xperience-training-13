@@ -123,7 +123,7 @@ InitCheckboxes();
         var userId = (string) userSelectorMacroResigningUser.Value;
         if (!String.IsNullOrEmpty(userId))
         {
-            var user = UserInfoProvider.GetUserInfo(Int32.Parse(userId));
+            var user = UserInfo.Provider.Get(Int32.Parse(userId));
             ImportSettings.RefreshMacroSecurity = (user != null);
             ImportSettings.MacroSecurityUser = user;
         }

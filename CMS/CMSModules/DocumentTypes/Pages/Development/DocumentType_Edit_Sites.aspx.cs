@@ -26,7 +26,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
         if (DocumentType.ClassResourceID > 0)
         {
             // Page type belongs to module -> display just simple message
-            var moduleName = ResHelper.LocalizeString(ResourceInfoProvider.GetResourceInfo(DocumentType.ClassResourceID).ResourceDisplayName);
+            var moduleName = ResHelper.LocalizeString(ResourceInfo.Provider.Get(DocumentType.ClassResourceID).ResourceDisplayName);
             ShowInformation(String.Format(GetString("DocumentType_Edit_Sites.ModuleInfo"), moduleName));
             classSites.Visible = false;
         }

@@ -8,7 +8,6 @@ using CMS.PortalEngine.Web.UI;
 using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.WebAnalytics;
-using CMS.WebAnalytics.Web.UI;
 
 public partial class CMSWebParts_BannerManagement_BannerRotator : CMSAbstractWebPart
 {
@@ -92,7 +91,7 @@ public partial class CMSWebParts_BannerManagement_BannerRotator : CMSAbstractWeb
             Visible = !HideIfBannerNotFound;
             return;
         }
-        
+
         // Store banner id in the viewstate if the same banner should be used if request is postback
         if (KeepPreviousBannerOnPostBack)
         {
@@ -182,20 +181,13 @@ public partial class CMSWebParts_BannerManagement_BannerRotator : CMSAbstractWeb
     protected void Page_PreRender(object sender, EventArgs e)
     {
         // Log hit only if we are on the live site and banner is not reused from previous request
-        if ((currentViewMode == CMS.PortalEngine.ViewModeEnum.LiveSite) && (banner != null) && !bannerReused)
+        if ((currentViewMode == ViewModeEnum.LiveSite) && (banner != null) && !bannerReused)
         {
             string currentSiteName = SiteContext.CurrentSiteName;
 
             if (AnalyticsHelper.AnalyticsEnabled(currentSiteName))
             {
-                if (AnalyticsHelper.JavascriptLoggingEnabled(SiteContext.CurrentSiteName))
-                {
-                    WebAnalyticsServiceScriptsRenderer.RegisterLogBannerHitCall(Page, banner.BannerID);
-                }
-                else
-                {
-                    HitLogProvider.LogHit("bannerhit", currentSiteName, null, null, banner.BannerID);
-                }
+                HitLogProvider.LogHit("bannerhit", currentSiteName, null, null, banner.BannerID);
             }
         }
     }

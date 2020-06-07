@@ -122,7 +122,7 @@ public partial class CMSModules_Groups_Controls_Security_GroupSecurity : CMSAdmi
         }
 
         // Get group resource info
-        resGroups = ResourceInfoProvider.GetResourceInfo("CMS.Groups");
+        resGroups = ResourceInfo.Provider.Get("CMS.Groups");
         if (resGroups != null)
         {
             // Retrieve permission matrix data
@@ -183,7 +183,7 @@ public partial class CMSModules_Groups_Controls_Security_GroupSecurity : CMSAdmi
         // Get group resource info 
         if (resGroups == null)
         {
-            resGroups = ResourceInfoProvider.GetResourceInfo("CMS.Groups");
+            resGroups = ResourceInfo.Provider.Get("CMS.Groups");
         }
 
         if (resGroups != null)

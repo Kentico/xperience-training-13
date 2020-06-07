@@ -61,7 +61,7 @@ public partial class CMSModules_Content_FormControls_Categories_CategorySelector
             {
                 // Convert ID to name
                 string name = ValidationHelper.GetString(selectCategory.Value, "");
-                CategoryInfo ngi = CategoryInfoProvider.GetCategoryInfo(name, SiteContext.CurrentSiteName);
+                CategoryInfo ngi = CategoryInfo.Provider.Get(name, SiteContext.CurrentSiteID);
                 if (ngi != null)
                 {
                     return ngi.CategoryID;
@@ -83,7 +83,7 @@ public partial class CMSModules_Content_FormControls_Categories_CategorySelector
             if (mUseCategoryNameForSelection)
             {
                 // Covnert ID to name
-                CategoryInfo ngi = CategoryInfoProvider.GetCategoryInfo(value);
+                CategoryInfo ngi = CategoryInfo.Provider.Get(value);
                 if (ngi != null)
                 {
                     selectCategory.Value = ngi.CategoryName;
@@ -112,7 +112,7 @@ public partial class CMSModules_Content_FormControls_Categories_CategorySelector
             {
                 // Convert id to name
                 int id = ValidationHelper.GetInteger(selectCategory.Value, 0);
-                CategoryInfo ngi = CategoryInfoProvider.GetCategoryInfo(id);
+                CategoryInfo ngi = CategoryInfo.Provider.Get(id);
                 if (ngi != null)
                 {
                     return ngi.CategoryName;
@@ -134,7 +134,7 @@ public partial class CMSModules_Content_FormControls_Categories_CategorySelector
             else
             {
                 // Convert name to ID
-                CategoryInfo ngi = CategoryInfoProvider.GetCategoryInfo(value, SiteContext.CurrentSiteName);
+                CategoryInfo ngi = CategoryInfo.Provider.Get(value, SiteContext.CurrentSiteID);
                 if (ngi != null)
                 {
                     selectCategory.Value = ngi.CategoryID;

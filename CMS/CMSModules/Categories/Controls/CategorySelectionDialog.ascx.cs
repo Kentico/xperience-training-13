@@ -123,7 +123,7 @@ public partial class CMSModules_Categories_Controls_CategorySelectionDialog : CM
     {
         get
         {
-            return mSelectedCategory ?? (mSelectedCategory = CategoryInfoProvider.GetCategoryInfo(SelectedCategoryID));
+            return mSelectedCategory ?? (mSelectedCategory = CategoryInfo.Provider.Get(SelectedCategoryID));
         }
     }
 
@@ -319,7 +319,7 @@ public partial class CMSModules_Categories_Controls_CategorySelectionDialog : CM
         }
         else
         {
-            CategoryInfo cat = CategoryInfoProvider.GetCategoryInfo(values[0], SiteContext.CurrentSiteName);
+            CategoryInfo cat = CategoryInfo.Provider.Get(values[0], SiteContext.CurrentSiteID);
             catId = (cat != null) ? cat.CategoryID : 0;
         }
 
@@ -779,7 +779,7 @@ function SelectAllItems(checkbox, hash) {
                 if (id > 0)
                 {
                     // Select created category
-                    CategoryInfo category = CategoryInfoProvider.GetCategoryInfo(id);
+                    CategoryInfo category = CategoryInfo.Provider.Get(id);
                     if (category != null)
                     {
                         SelectedCategoryID = category.CategoryID;
@@ -861,7 +861,7 @@ function SelectAllItems(checkbox, hash) {
             }
 
             // Preselect parent category
-            CategoryInfo parentCategory = CategoryInfoProvider.GetCategoryInfo(categoryObj.CategoryParentID);
+            CategoryInfo parentCategory = CategoryInfo.Provider.Get(categoryObj.CategoryParentID);
             if (parentCategory != null)
             {
                 SelectedCategoryID = parentCategory.CategoryID;
@@ -874,7 +874,7 @@ function SelectAllItems(checkbox, hash) {
             }
 
             // Delete category
-            CategoryInfoProvider.DeleteCategoryInfo(categoryObj);
+            CategoryInfo.Provider.Delete(categoryObj);
 
             pnlUpdateTrees.Update();
         }

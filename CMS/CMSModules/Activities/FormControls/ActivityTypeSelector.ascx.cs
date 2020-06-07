@@ -76,7 +76,7 @@ public partial class CMSModules_Activities_FormControls_ActivityTypeSelector : F
             if (CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) && mCurrentSite == null)
             {
                 var siteId = ValidationHelper.GetInteger(QueryHelper.GetString("siteid", string.Empty), SiteContext.CurrentSiteID);
-                mCurrentSite = SiteInfoProvider.GetSiteInfo(siteId);
+                mCurrentSite = SiteInfo.Provider.Get(siteId);
             }
             return mCurrentSite ?? base.CurrentSite;
         }

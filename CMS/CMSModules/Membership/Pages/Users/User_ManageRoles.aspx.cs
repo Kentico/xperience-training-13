@@ -53,7 +53,7 @@ public partial class CMSModules_Membership_Pages_Users_User_ManageRoles : CMSMod
         userId = QueryHelper.GetInteger("userId", 0);
 
         // Check that only global administrator can edit global administrator's accounts
-        UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+        UserInfo ui = UserInfo.Provider.Get(userId);
         var currentUser = MembershipContext.AuthenticatedUser;
         CheckUserAvaibleOnSite(ui);
         if ((ui != null) && !currentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) && ui.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin) && (ui.UserID != currentUser.UserID))

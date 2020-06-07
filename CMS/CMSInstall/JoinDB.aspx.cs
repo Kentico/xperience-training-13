@@ -548,7 +548,7 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
     /// </summary>
     private void TakeSitesOffline()
     {
-        var sites = SiteInfoProvider.GetSites()
+        var sites = SiteInfo.Provider.Get()
             .WhereNull("SiteIsOffline")
             .Or()
             .WhereEquals("SiteIsOffline", 0)
@@ -558,7 +558,7 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
         foreach (var site in sites)
         {
             site.SiteIsOffline = true;
-            SiteInfoProvider.SetSiteInfo(site);
+            SiteInfo.Provider.Set(site);
             siteIDs.Add(site.SiteID);
         }
         PersistentStorageHelper.SetValue("SeparateDBSites", siteIDs);
@@ -575,9 +575,9 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
         {
             foreach (var siteID in siteIDs)
             {
-                SiteInfo site = SiteInfoProvider.GetSiteInfo(siteID);
+                SiteInfo site = SiteInfo.Provider.Get(siteID);
                 site.SiteIsOffline = false;
-                SiteInfoProvider.SetSiteInfo(site);
+                SiteInfo.Provider.Set(site);
             }
         }
         PersistentStorageHelper.RemoveValue("SeparateDBSites");

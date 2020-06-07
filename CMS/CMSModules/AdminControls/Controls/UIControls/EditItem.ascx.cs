@@ -264,7 +264,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditItem : CMS
                 if (!topDialog)
                 {
                     // Check for layout in parent tab
-                    var ui = UIElementInfoProvider.GetUIElementInfo(UIContext.UIElement.ElementParentID);
+                    var ui = UIElementInfo.Provider.Get(UIContext.UIElement.ElementParentID);
                     if (PortalHelper.ElementIsLayout(ui))
                     {
                         var name = UIContextHelper.GetObjectBreadcrumbsText(UIContext, EditForm.EditedObject);
@@ -395,7 +395,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditItem : CMS
             else if (newItem && String.IsNullOrEmpty(EditForm.RedirectUrlAfterSave))
             {
                 // Find element representing new object
-                UIElementInfo uiPar = UIElementInfoProvider.GetUIElementInfo(UIContext.UIElement.ElementParentID);
+                UIElementInfo uiPar = UIElementInfo.Provider.Get(UIContext.UIElement.ElementParentID);
                 if (uiPar != null)
                 {
                     // Append parameters

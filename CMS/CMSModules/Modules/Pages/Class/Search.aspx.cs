@@ -64,7 +64,7 @@ public partial class CMSModules_Modules_Pages_Class_Search : GlobalAdminPage
             }
 
             // Initialize customization if needed
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+            ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
             if ((className != UserSettingsInfo.OBJECT_TYPE) && !SystemContext.DevelopmentMode && (resource != null) && !resource.ResourceIsInDevelopment)
             {
                 pnlCustomization.MessagesPlaceHolder = MessagesPlaceHolder;

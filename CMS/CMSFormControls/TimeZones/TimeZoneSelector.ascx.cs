@@ -89,7 +89,7 @@ public partial class CMSFormControls_TimeZones_TimeZoneSelector : FormEngineUser
             }
             else
             {
-                TimeZoneInfo tzi = TimeZoneInfoProvider.GetTimeZoneInfo(ValidationHelper.GetInteger(drpTimeZoneSelector.SelectedValue, 0));
+                TimeZoneInfo tzi = TimeZoneInfo.Provider.Get(ValidationHelper.GetInteger(drpTimeZoneSelector.SelectedValue, 0));
                 if (tzi != null)
                 {
                     return tzi.TimeZoneName;
@@ -106,7 +106,7 @@ public partial class CMSFormControls_TimeZones_TimeZoneSelector : FormEngineUser
             }
             else
             {
-                TimeZoneInfo tzi = TimeZoneInfoProvider.GetTimeZoneInfo(value);
+                TimeZoneInfo tzi = TimeZoneInfo.Provider.Get(value);
                 if (tzi != null)
                 {
                     SelectValue(tzi.TimeZoneID.ToString());
@@ -128,7 +128,7 @@ public partial class CMSFormControls_TimeZones_TimeZoneSelector : FormEngineUser
             {
                 string name = ValidationHelper.GetString(drpTimeZoneSelector.SelectedValue, "");
 
-                var tzi = TimeZoneInfoProvider.GetTimeZoneInfo(name);
+                var tzi = TimeZoneInfo.Provider.Get(name);
                 if (tzi != null)
                 {
                     return tzi.TimeZoneID;
@@ -144,7 +144,7 @@ public partial class CMSFormControls_TimeZones_TimeZoneSelector : FormEngineUser
         {
             if (UseZoneNameForSelection)
             {
-                var tzi = TimeZoneInfoProvider.GetTimeZoneInfo(value);
+                var tzi = TimeZoneInfo.Provider.Get(value);
                 if (tzi != null)
                 {
                     SelectValue(tzi.TimeZoneName);
@@ -289,7 +289,7 @@ public partial class CMSFormControls_TimeZones_TimeZoneSelector : FormEngineUser
     {
         if (drpTimeZoneSelector.Items.Count == 0)
         {
-            DataSet ds = TimeZoneInfoProvider.GetTimeZones().OrderBy("TimeZoneGMT").Columns("TimeZoneID ,TimeZoneGMT, TimeZoneName, TimeZoneDisplayName");
+            DataSet ds = TimeZoneInfo.Provider.Get().OrderBy("TimeZoneGMT").Columns("TimeZoneID ,TimeZoneGMT, TimeZoneName, TimeZoneDisplayName");
 
             if (!DataHelper.DataSourceIsEmpty(ds))
             {

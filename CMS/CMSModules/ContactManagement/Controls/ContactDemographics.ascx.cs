@@ -95,18 +95,27 @@ public partial class CMSModules_ContactManagement_Controls_ContactDemographics :
 
     private void SetUpTitle()
     {
-        string caption = GetString("om.contact.demographics");
-        mContactDemographicsDataRetriever.GetCaption();
+        OverwriteBreadcrumbs();
+
+        hdrTitle.InnerText = HTMLHelper.HTMLEncode(mContactDemographicsDataRetriever.GetCaption());
+    }
+
+
+    private void OverwriteBreadcrumbs()
+    {
+        if (!ValidationHelper.GetBoolean(mQueryParameters.Get("overwriteBreadcrumbs"), true))
+        {
+            return;
+        }
+
+        var caption = GetString("om.contact.demographics");
 
         ScriptHelper.RegisterRequireJs(Page);
         ControlsHelper.RegisterClientScriptBlock(this, Page, typeof(string), "BreadcrumbsOverwriting", ScriptHelper.GetScript($@"
         cmsrequire(['CMS/EventHub', 'jQuery'], function(hub, $) {{
-              hub.publish('OverwriteBreadcrumbs', {GetBreadcrumbsData(caption)});
-              window.top.document.title += $('<div/>').html(' / {caption}').text();
+                hub.publish('OverwriteBreadcrumbs', {GetBreadcrumbsData(caption)});
+                window.top.document.title += $('<div/>').html(' / {caption}').text();
         }});"));
-
-
-        hdrTitle.InnerText = HTMLHelper.HTMLEncode(mContactDemographicsDataRetriever.GetCaption());
     }
 
 

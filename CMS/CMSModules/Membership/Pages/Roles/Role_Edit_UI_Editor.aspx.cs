@@ -29,7 +29,7 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_UI_Editor : CMS
 
         editElem.SiteID = siteID;
 
-        ResourceInfo ri = ResourceInfoProvider.GetResourceInfo("CMS.WYSIWYGEditor");
+        ResourceInfo ri = ResourceInfo.Provider.Get("CMS.WYSIWYGEditor");
         if (ri != null)
         {
             editElem.ResourceID = ri.ResourceID;

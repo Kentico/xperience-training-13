@@ -198,7 +198,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryMenu : CMSAbstractWeb
         {
             if ((mStartingCategoryObj == null) && !string.IsNullOrEmpty(StartingCategory))
             {
-                mStartingCategoryObj = CategoryInfoProvider.GetCategoryInfo(StartingCategory, SiteContext.CurrentSiteName);
+                mStartingCategoryObj = CategoryInfo.Provider.Get(StartingCategory, SiteContext.CurrentSiteID);
                 if (mStartingCategoryObj != null)
                 {
                     if (mStartingCategoryObj.CategoryIsPersonal ||

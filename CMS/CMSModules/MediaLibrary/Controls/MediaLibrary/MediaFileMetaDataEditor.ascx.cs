@@ -96,12 +96,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileMeta
     private void metaDataEditor_InitializeObject(Guid objectGuid, string siteName)
     {
         // Get mediafile
-        mediaFileInfo = MediaFileInfoProvider.GetMediaFileInfo(objectGuid, siteName);
+        mediaFileInfo = MediaFileInfo.Provider.Get(objectGuid, SiteInfoProvider.GetSiteID(siteName));
 
         // If media file is not null 
         if (mediaFileInfo != null)
         {
-            MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(ValidationHelper.GetInteger(mediaFileInfo.FileLibraryID, 0));
+            MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(ValidationHelper.GetInteger(mediaFileInfo.FileLibraryID, 0));
 
             // Check permission 'FileModify'
             if (metaDataEditor.CheckPermissions && !MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(mli, "filemodify"))
@@ -215,7 +215,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileMeta
                 mediaFileInfo.FileDescription = description;
 
                 // Save new data
-                MediaFileInfoProvider.SetMediaFileInfo(mediaFileInfo, false);
+                mediaFileInfo.EnsureUniqueFileName(false);
+                MediaFileInfo.Provider.Set(mediaFileInfo);
 
                 saved = true;
             }

@@ -45,7 +45,7 @@ public partial class CMSModules_Modules_Pages_Class_Fields : GlobalAdminPage
                 fieldEditor.Visible = true;
                 fieldEditor.ClassName = dci.ClassName;
 
-                ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+                ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
                 bool devMode = SystemContext.DevelopmentMode;
                 bool resourceIsEditable = (resource != null) && resource.IsEditable;
                 bool classIsEditable = resourceIsEditable || dci.ClassShowAsSystemTable || devMode;

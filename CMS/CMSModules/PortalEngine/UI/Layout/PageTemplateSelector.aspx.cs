@@ -6,7 +6,6 @@ using CMS.DocumentEngine;
 using CMS.Helpers;
 using CMS.Membership;
 using CMS.PortalEngine;
-using CMS.SiteProvider;
 using CMS.UIControls;
 
 using TreeNode = CMS.DocumentEngine.TreeNode;
@@ -20,7 +19,6 @@ public partial class CMSModules_PortalEngine_UI_Layout_PageTemplateSelector : CM
 		string selectedItem = QueryHelper.GetString("selectedPageTemplateId", "");
 	    
 		selectElem.DocumentID = QueryHelper.GetInteger("documentid", 0);
-        selectElem.ShowOnlySiteTemplates = QueryHelper.GetBoolean("onlysitetemplates", selectElem.ShowOnlySiteTemplates);
 
         // If document id is not defined try get id from nodeid if is available
         if (selectElem.DocumentID <= 0)

@@ -59,7 +59,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
         {
             if ((mSelectedUser == null) && (SelectedUserID > 0))
             {
-                mSelectedUser = UserInfoProvider.GetUserInfo(SelectedUserID);
+                mSelectedUser = UserInfo.Provider.Get(SelectedUserID);
             }
 
             return mSelectedUser;
@@ -90,7 +90,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
     {
         get
         {
-            return mElement ?? (mElement = UIElementInfoProvider.GetUIElementInfo(ElementID));
+            return mElement ?? (mElement = UIElementInfo.Provider.Get(ElementID));
         }
     }
 
@@ -106,7 +106,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
             {
                 if (Element != null)
                 {
-                    mElementResource = ResourceInfoProvider.GetResourceInfo(Element.ElementResourceID);
+                    mElementResource = ResourceInfo.Provider.Get(Element.ElementResourceID);
                 }
             }
             return mElementResource;
@@ -261,11 +261,11 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
     {
         if (newState)
         {
-            RoleUIElementInfoProvider.AddRoleUIElementInfo(rowItemId, colItemId);
+            RoleUIElementInfo.Provider.Add(rowItemId, colItemId);
         }
         else
         {
-            RoleUIElementInfoProvider.DeleteRoleUIElementInfo(rowItemId, colItemId);
+            RoleUIElementInfo.Provider.Remove(rowItemId, colItemId);
         }
 
         // Invalidate all users
@@ -347,7 +347,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
             if (element != null)
             {
                 // Delete existing bindings
-                DataSet elemRoles = RoleUIElementInfoProvider.GetRoleUIElements().WhereEquals("ElementID", element.ElementID);
+                DataSet elemRoles = RoleUIElementInfo.Provider.Get().WhereEquals("ElementID", element.ElementID);
                 if (!DataHelper.DataSourceIsEmpty(elemRoles))
                 {
                     foreach (DataRow dr in elemRoles.Tables[0].Rows)
@@ -355,14 +355,14 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
                         // Get role id
                         int roleId = ValidationHelper.GetInteger(dr["RoleID"], 0);
                         // Remove binding
-                        RoleUIElementInfoProvider.DeleteRoleUIElementInfo(roleId, element.ElementID);
+                        RoleUIElementInfo.Provider.Remove(roleId, element.ElementID);
                     }
                 }
 
                 // Add same bindings as parent has
                 int parentElemId = element.ElementParentID;
 
-                DataSet parentRoles = RoleUIElementInfoProvider.GetRoleUIElements().WhereEquals("ElementID", parentElemId);
+                DataSet parentRoles = RoleUIElementInfo.Provider.Get().WhereEquals("ElementID", parentElemId);
                 if (!DataHelper.DataSourceIsEmpty(parentRoles))
                 {
                     foreach (DataRow dr in parentRoles.Tables[0].Rows)
@@ -370,7 +370,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Roles : Globa
                         // Get role id
                         int roleId = ValidationHelper.GetInteger(dr["RoleID"], 0);
                         // Create binding
-                        RoleUIElementInfoProvider.AddRoleUIElementInfo(roleId, element.ElementID);
+                        RoleUIElementInfo.Provider.Add(roleId, element.ElementID);
                     }
                 }
             }

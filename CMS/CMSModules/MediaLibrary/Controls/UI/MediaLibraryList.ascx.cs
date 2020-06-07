@@ -114,7 +114,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSA
                 break;
 
             case "delete":
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(ValidationHelper.GetInteger(actionArgument, 0));
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(ValidationHelper.GetInteger(actionArgument, 0));
                 // Check 'Manage' permission
                 if (!MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(mli, PERMISSION_MANAGE))
                 {
@@ -123,7 +123,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSA
                 }
                 try
                 {
-                    MediaLibraryInfoProvider.DeleteMediaLibraryInfo(ValidationHelper.GetInteger(actionArgument, 0));
+                    MediaLibraryInfo.Provider.Delete(mli);
                 }
                 catch (Exception ex)
                 {

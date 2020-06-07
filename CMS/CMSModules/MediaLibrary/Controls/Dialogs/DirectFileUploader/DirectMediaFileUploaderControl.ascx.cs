@@ -35,7 +35,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
         {
             if (LibraryID > 0)
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(LibraryID);
             }
             return mLibraryInfo;
         }
@@ -138,7 +138,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
             MediaFileInfo mediaFile = null;
 
             // Get the site name
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+            SiteInfo si = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             string siteName = (si != null) ? si.SiteName : SiteContext.CurrentSiteName;
 
             string message = string.Empty;
@@ -159,7 +159,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
                     #endregion
 
 
-                    mediaFile = MediaFileInfoProvider.GetMediaFileInfo(MediaFileID);
+                    mediaFile = MediaFileInfo.Provider.Get(MediaFileID);
                     if (mediaFile != null)
                     {
                         // Ensure object version
@@ -234,7 +234,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
                                 mediaFile = GetUpdatedFile(mediaFile);
 
                                 // Save media file information
-                                MediaFileInfoProvider.SetMediaFileInfo(mediaFile);
+                                MediaFileInfo.Provider.Set(mediaFile);
                             }
                             else
                             {
@@ -269,7 +269,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
                     mediaFile.FileDescription = "";
 
                     // Save the new file info
-                    MediaFileInfoProvider.SetMediaFileInfo(mediaFile);
+                    MediaFileInfo.Provider.Set(mediaFile);
                 }
             }
             catch (Exception ex)

@@ -243,7 +243,7 @@ public partial class CMSModules_Categories_Controls_Categories : CMSAdminEditCon
         {
             if ((mSelectedCategory == null) && (SelectedCategoryID > 0))
             {
-                mSelectedCategory = CategoryInfoProvider.GetCategoryInfo(SelectedCategoryID);
+                mSelectedCategory = CategoryInfo.Provider.Get(SelectedCategoryID);
             }
 
             return mSelectedCategory;
@@ -841,7 +841,7 @@ function NodeSelected(elementId, parentId, isEdit) {
                 int categoryId = ValidationHelper.GetInteger(actionArgument, 0);
 
                 // Get category
-                CategoryInfo categoryObj = CategoryInfoProvider.GetCategoryInfo(categoryId);
+                CategoryInfo categoryObj = CategoryInfo.Provider.Get(categoryId);
                 if (categoryObj != null)
                 {
                     // Delete the category
@@ -1170,7 +1170,7 @@ function NodeSelected(elementId, parentId, isEdit) {
 
                 foreach (int id in ids)
                 {
-                    CategoryInfo currentCategory = CategoryInfoProvider.GetCategoryInfo(id);
+                    CategoryInfo currentCategory = CategoryInfo.Provider.Get(id);
                     if (currentCategory != null)
                     {
                         titleElem.Breadcrumbs.AddBreadcrumb(new BreadcrumbItem
@@ -1300,11 +1300,11 @@ function NodeSelected(elementId, parentId, isEdit) {
         // Check if category
         if ((categoryObj != null) && CanModifyCategory(categoryObj.CategoryIsPersonal, categoryObj.CategoryIsGlobal))
         {
-            var parentCategory = CategoryInfoProvider.GetCategoryInfo(categoryObj.CategoryParentID);
+            var parentCategory = CategoryInfo.Provider.Get(categoryObj.CategoryParentID);
             var isPersonal = categoryObj.CategoryIsPersonal;
 
             // Delete category
-            CategoryInfoProvider.DeleteCategoryInfo(categoryObj);
+            CategoryInfo.Provider.Delete(categoryObj);
 
             // Check if deleted category has parent
             if (parentCategory != null)

@@ -79,21 +79,6 @@
                                     ResourceString="general.codename" DisplayColon="true" />
                                 <cms:FormField runat="server" ID="fDescription" Field="LayoutDescription" FormControl="TextAreaControl"
                                     ResourceString="general.description" DisplayColon="true" />
-                                <cms:FormField runat="server" ID="fThumbnailGUID" Field="LayoutThumbnailGUID" Layout="Inline" UseFFI="false">
-                                    <div class="form-group">
-                                        <div class="editing-form-label-cell">
-                                            <cms:FormLabel CssClass="control-label" ID="lblMetaFile" runat="server" EnableViewState="true" ResourceString="general.thumbnail"
-                                                DisplayColon="true" AssociatedControlID="iconSelector" />
-                                        </div>
-                                        <div class="editing-form-value-cell">
-                                            <cms:FormControl ID="iconSelector" FormControlName="metafileorfonticonselector" runat="server">
-                                                <Properties>
-                                                    <cms:Property Name="IconCssFieldName" Value="LayoutIconClass" />
-                                                </Properties>
-                                            </cms:FormControl>
-                                        </div>
-                                    </div>
-                                </cms:FormField>
                             </cms:FormCategory>
                         </ContentTemplate>
                     </cms:CMSUpdatePanel>

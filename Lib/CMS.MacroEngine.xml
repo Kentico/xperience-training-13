@@ -2311,6 +2311,16 @@
             </summary>
             <param name="number">Number of children</param>
         </member>
+        <member name="T:CMS.MacroEngine.IMacroIdentityInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MacroEngine.MacroIdentityInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.MacroEngine.IUserMacroIdentityInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MacroEngine.UserMacroIdentityInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.MacroEngine.MacroIdentityInfo">
             <summary>
             MacroIdentityInfo data container class.
@@ -2627,6 +2637,32 @@
             Inserts or Updates the object to the database.
             </summary>
             <param name="info">Object to insert / update</param>
+        </member>
+        <member name="T:CMS.MacroEngine.MacroSecurityInstallationHelper">
+            <summary>
+            Determines how the system processes macros in the object's fields.
+            </summary>
+        </member>
+        <member name="M:CMS.MacroEngine.MacroSecurityInstallationHelper.UpdateAllMacroSignatures(System.Action{System.String})">
+            <summary>
+            Loops through all objects and signs all macros via GlobalAdministrator identity. 
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+            <param name="logErrorAction">Action to be executed to log the error message.</param>
+        </member>
+        <member name="M:CMS.MacroEngine.MacroSecurityInstallationHelper.UpdateMacroSignaturesInObjectTypes(System.Collections.Generic.IEnumerable{System.String},System.Action{System.String})">
+            <summary>
+            Loops through all objects of <paramref name="objectTypesToProcess"/> and signs all macros via GlobalAdministrator identity. 
+            </summary>
+            <param name="objectTypesToProcess">Object types where macros should be signed.</param>
+            <param name="logErrorAction">Action to be executed to log the error message.</param>
+        </member>
+        <member name="M:CMS.MacroEngine.MacroSecurityInstallationHelper.ObjectTypeCausesDuplicities(System.String)">
+            <summary>
+            Checks if object type is derived from general data class object type and may cause duplicities upon processing.
+            </summary>
         </member>
         <member name="T:CMS.MacroEngine.IMacroInvisible">
             <summary>
@@ -5104,9 +5140,9 @@
             Gets dictionary containing identity options for macros
             </summary>
         </member>
-        <member name="P:CMS.MacroEngine.IMacroProcessingParameters.Decode">
+        <member name="P:CMS.MacroEngine.IMacroProcessingParameters.MacroProcessingColumnAdapter">
             <summary>
-            Gets true when macro expression has to be decoded
+            Column adapter for preprocessing and postprocessing.
             </summary>
         </member>
         <member name="P:CMS.MacroEngine.IMacroProcessingParameters.OldSalt">
@@ -5176,7 +5212,7 @@
         </member>
         <member name="P:CMS.MacroEngine.MacroProcessingContext.BracketType">
             <summary>
-            Type of the baracket - used for backward compatibility when macros could be nested '{(0)% %(0)}'
+            Type of the bracket - used for backward compatibility when macros could be nested '{(0)% %(0)}'
             </summary>
         </member>
         <member name="M:CMS.MacroEngine.MacroProcessingContext.#ctor">
@@ -5195,6 +5231,11 @@
             Returns macro expression demarcated by macro start and macro end in entire source text
             </summary>
         </member>
+        <member name="M:CMS.MacroEngine.MacroProcessingContext.GetMacroProcessingColumnAdapter">
+            <summary>
+            Returns the column adapter that is used during processing.
+            </summary>
+        </member>
         <member name="T:CMS.MacroEngine.MacroProcessingParameters">
             <summary>
             Default IMacroProcessingParameters implementation
@@ -5206,10 +5247,9 @@
             Can be null
             </summary>
         </member>
-        <member name="P:CMS.MacroEngine.MacroProcessingParameters.Decode">
+        <member name="P:CMS.MacroEngine.MacroProcessingParameters.MacroProcessingColumnAdapter">
             <summary>
-            Gets true when macro expression has to be decoded
-            False in default
+            Column adapter for preprocessing and postprocessing.
             </summary>
         </member>
         <member name="P:CMS.MacroEngine.MacroProcessingParameters.OldSalt">
@@ -5241,11 +5281,6 @@
             Class providing general macro processing methods.
             </summary>
         </member>
-        <member name="F:CMS.MacroEngine.MacroProcessor.XMLColumns">
-            <summary>
-            List of XML columns needed for signing the macros.
-            </summary>
-        </member>
         <member name="F:CMS.MacroEngine.MacroProcessor.NOT_RESOLVE">
             <summary>
             Defines a replacement constant for macro processing to not resolve the macro at all
@@ -5274,11 +5309,12 @@
             <param name="parameters">Custom parameter passed to the callback function</param>
             <param name="processMacro">Callback to handle the macro resolving</param>
         </member>
-        <member name="M:CMS.MacroEngine.MacroProcessor.ProcessMacros(CMS.Base.IDataContainer,System.Func{CMS.MacroEngine.MacroProcessingContext,System.String,System.String},System.Collections.Generic.List{System.String},System.Boolean)">
+        <member name="M:CMS.MacroEngine.MacroProcessor.ProcessMacros(CMS.Base.IDataContainer,CMS.DataEngine.ObjectTypeInfo,System.Func{CMS.MacroEngine.MacroProcessingContext,System.String,System.String},System.Collections.Generic.List{System.String},System.Boolean)">
             <summary>
             Replaces macros with given replacement or resolves them if replacement is null.
             </summary>
             <param name="data">Object to process</param>
+            <param name="typeInfo">Object type info of processed object.</param>
             <param name="lambda">Lambda expression called on each macro</param>
             <param name="type">Type of the macro to resolve (if null, all types are resolved).</param>
             <param name="processOpenExpressions">If true, open expressions such as {% if (true) { %} any HTML code {%}%} are processed</param>
@@ -5437,11 +5473,17 @@
             </summary>
             <param name="text">Text to check</param>
         </member>
-        <member name="M:CMS.MacroEngine.MacroProcessor.IsXMLColumn(System.String)">
+        <member name="T:CMS.MacroEngine.ObjectTypeInfoExtensions">
             <summary>
-            Returns true, if the given column is a XML column
+            Extension methods for <see cref="T:CMS.DataEngine.ObjectTypeInfo"/>.
             </summary>
-            <param name="columnName">Column name</param>
+        </member>
+        <member name="M:CMS.MacroEngine.ObjectTypeInfoExtensions.GetColumnAdapter(CMS.DataEngine.ObjectTypeInfo,System.String)">
+            <summary>
+            Returns the column adapter registered for <paramref name="typeInfo"/> column <paramref name="columnName"/>.
+            </summary>
+            <param name="typeInfo">Object type info.</param>
+            <param name="columnName">Name of the column.</param>
         </member>
         <member name="T:CMS.MacroEngine.ResolverDefinition">
             <summary>
@@ -6346,6 +6388,11 @@
             </summary>
             <param name="expression">Expression to be resolved</param>
         </member>
+        <member name="T:CMS.MacroEngine.IMacroRuleInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MacroEngine.MacroRuleInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.MacroEngine.MacroRuleAvailabilityEnum">
             <summary>
             Indicates in which application can the <see cref="T:CMS.MacroEngine.MacroRuleInfo"/> be evaluated.
@@ -6507,11 +6554,25 @@
             </summary>
             <param name="ruleName">Macro rule name.</param>
         </member>
+        <member name="M:CMS.MacroEngine.MacroRuleInfoProvider.Set(CMS.MacroEngine.MacroRuleInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.MacroEngine.MacroRuleInfoProvider.SetMacroRuleInfo(CMS.MacroEngine.MacroRuleInfo)">
             <summary>
             Sets (updates or inserts) specified macro rule.
             </summary>
             <param name="ruleObj">Macro rule to be set.</param>
+        </member>
+        <member name="M:CMS.MacroEngine.MacroRuleInfoProvider.Delete(CMS.MacroEngine.MacroRuleInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.MacroEngine.MacroRuleInfoProvider.DeleteMacroRuleInfo(CMS.MacroEngine.MacroRuleInfo)">
             <summary>
@@ -6903,15 +6964,15 @@
             Defines a regular expression that detects a complex macro (in case it is matched)
             </summary>
         </member>
-        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.AddSecurityParameters(System.String,CMS.MacroEngine.MacroIdentityOption,System.Collections.Generic.IDictionary{System.String,CMS.MacroEngine.MacroIdentityOption},System.Boolean,System.String)">
+        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.AddSecurityParameters(System.String,CMS.MacroEngine.MacroIdentityOption,System.Collections.Generic.IDictionary{System.String,CMS.MacroEngine.MacroIdentityOption},System.String,CMS.DataEngine.IMacroProcessingColumnAdapter)">
             <summary>
             Adds security parameters to every macro.
             </summary>
             <param name="text">Text with macros</param>
             <param name="identityOption">Identity option to sign with</param>
             <param name="signatures">Dictionary with old identity options indexed by expression</param>
-            <param name="decodeBeforeSign">If true, expression is decoded before the security params are computed</param>
             <param name="saltToUse">Salt to use for hash function</param>
+            <param name="columnAdapter">Column adapter to use.</param>
         </member>
         <member name="M:CMS.MacroEngine.MacroSecurityProcessor.AddSecurityParameter(CMS.MacroEngine.MacroProcessingContext)">
             <summary>
@@ -6919,14 +6980,14 @@
             </summary>
             <param name="context">Macro processing context</param>
         </member>
-        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.AddMacroSecurityParams(System.String,CMS.MacroEngine.MacroIdentityOption,System.String,System.Boolean)">
+        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.AddMacroSecurityParams(System.String,CMS.MacroEngine.MacroIdentityOption,System.String,CMS.DataEngine.IMacroProcessingColumnAdapter)">
             <summary>
             Adds |(hash) and |(user) security parameters to given expression.
             </summary>
             <param name="expression">Macro expression to add the parameters to</param>
             <param name="identityOption">Identity option to sign with</param>
             <param name="saltToUse">Salt to use for hash function</param>
-            <param name="decode">If true, decodes expression before computing signature</param>
+            <param name="columnAdapter">Column adapter to use.</param>
         </member>
         <member name="M:CMS.MacroEngine.MacroSecurityProcessor.RemoveSecurityParameters(System.String,System.Boolean,System.Collections.Generic.IDictionary{System.String,CMS.MacroEngine.MacroIdentityOption})">
             <summary>
@@ -6981,15 +7042,7 @@
             <param name="identityOption">Value of the removed identity option parameter (either macro identity name or user name)</param>
             <param name="hash">Value of the removed hash parameter</param>
         </member>
-        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.RefreshSecurityParameters(System.Data.DataSet,CMS.MacroEngine.MacroIdentityOption)">
-            <summary>
-            Recreates all the macros signatures according to new specified salt in all string columns of each row of the given DataSet (modifies the DataSet).
-            Keeps the owners of the macros untouched (verifies the integrity against old salt).
-            </summary>
-            <param name="ds">DataSet containing macros</param>
-            <param name="identityOption">Identity option to sign with</param>
-        </member>
-        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.RefreshSecurityParameters(System.String,System.String,System.String,System.Boolean)">
+        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.RefreshSecurityParameters(System.String,System.String,System.String,CMS.DataEngine.IMacroProcessingColumnAdapter)">
             <summary>
             Recreates all the macros signatures according to new specified salt.
             Keeps the owners of the macros untouched (verifies the integrity against old salt).
@@ -6997,7 +7050,7 @@
             <param name="text">Text containing macros</param>
             <param name="oldSalt">Old salt used to generate old signatures (to verify integrity of old macros); if null, the integrity is not checked</param>
             <param name="newSalt">New salt which should be used to generate new signatures</param>
-            <param name="decodeBeforeSign">If true, expression is decoded before the security params are computed</param>
+            <param name="columnAdapter">Column adapter to use.</param>
         </member>
         <member name="M:CMS.MacroEngine.MacroSecurityProcessor.RefreshSecurityParameters(CMS.DataEngine.BaseInfo,CMS.MacroEngine.MacroIdentityOption,System.Boolean,System.String)">
             <summary>
@@ -7023,13 +7076,6 @@
             Callback for recreating all the macros signatures according to new specified salt.
             </summary>
             <param name="context">Macro processing context</param>
-        </member>
-        <member name="M:CMS.MacroEngine.MacroSecurityProcessor.TransformAllMacroValues(System.Data.DataSet,System.Func{System.String,System.Boolean,System.String})">
-            <summary>
-            Searches all string macro values in given <see cref="T:System.Data.DataSet"/> and transforms them using <paramref name="transformValue" />.
-            </summary>
-            <param name="ds"><see cref="T:System.Data.DataSet"/> containing macro values to be transformed.</param>
-            <param name="transformValue">Function transforming old macro value into a new one.</param>
         </member>
         <member name="M:CMS.MacroEngine.MacroSecurityProcessor.CheckMacroIntegrity(System.String,CMS.MacroEngine.MacroIdentityOption)">
             <summary>

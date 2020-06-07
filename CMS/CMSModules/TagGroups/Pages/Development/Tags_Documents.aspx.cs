@@ -23,7 +23,7 @@ public partial class CMSModules_TagGroups_Pages_Development_Tags_Documents : Glo
     {
         // Get current tag ID
         mTagId = QueryHelper.GetInteger("tagid", 0);
-        TagInfo ti = TagInfoProvider.GetTagInfo(mTagId);
+        TagInfo ti = TagInfo.Provider.Get(mTagId);
         EditedObject = ti;
 
         if (ti != null)

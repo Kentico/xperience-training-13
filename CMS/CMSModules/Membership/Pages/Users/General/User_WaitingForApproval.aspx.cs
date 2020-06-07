@@ -292,12 +292,12 @@ public partial class CMSModules_Membership_Pages_Users_General_User_WaitingForAp
         // Enable user
         user.Enabled = true;
 
-        UserInfoProvider.SetUserInfo(user);
+        UserInfo.Provider.Set(user);
 
         // Send e-mail to user
         if (!String.IsNullOrEmpty(user.Email))
         {
-            EmailTemplateInfo template = EmailTemplateProvider.GetEmailTemplate("RegistrationUserApproved", SiteContext.CurrentSiteName);
+            EmailTemplateInfo template = EmailTemplateInfo.Provider.Get("RegistrationUserApproved", SiteContext.CurrentSiteID);
             if (template != null)
             {
                 string from = EmailHelper.GetSender(template, SettingsKeyInfoProvider.GetValue(SiteContext.CurrentSiteName + ".CMSNoreplyEmailAddress"));
@@ -309,7 +309,7 @@ public partial class CMSModules_Membership_Pages_Users_General_User_WaitingForAp
                     email.From = from;
                     email.Recipients = user.Email;
 
-                    MacroResolver resolver = MembershipResolvers.GetRegistrationApprovalResolver(user, URLHelper.GetAbsoluteUrl("~/"));
+                    MacroResolver resolver = MembershipResolvers.GetRegistrationApprovalResolver(user);
 
                     // Enable encoding of macro results for HTML mail body
                     resolver.Settings.EncodeResolvedValues = true;
@@ -403,7 +403,7 @@ public partial class CMSModules_Membership_Pages_Users_General_User_WaitingForAp
         }
 
         // Delete user
-        UserInfoProvider.DeleteUser(userID);
+        UserInfo.Provider.Delete(UserInfo.Provider.Get(userID));
     }
 
 

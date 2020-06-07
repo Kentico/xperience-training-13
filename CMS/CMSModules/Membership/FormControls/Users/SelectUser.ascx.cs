@@ -571,8 +571,8 @@ public partial class CMSModules_Membership_FormControls_Users_SelectUser : FormE
         // Select users in role
         if (RoleID > 0)
         {
-            var usersInRoleIDs = UserRoleInfoProvider
-                                        .GetUserRoles()
+            var usersInRoleIDs = UserRoleInfo.Provider
+                                        .Get()
                                         .WhereEquals("RoleID", RoleID)
                                         .Column("UserID");
 
@@ -584,8 +584,8 @@ public partial class CMSModules_Membership_FormControls_Users_SelectUser : FormE
         if (!ShowSiteFilter && (SiteID >= 0) && !DisplayUsersFromAllSites)
         {
             int siteID = (SiteID == 0) ? SiteContext.CurrentSiteID : SiteID;
-            var siteUserIDs = UserSiteInfoProvider
-                                    .GetUserSites()
+            var siteUserIDs = UserSiteInfo.Provider
+                                    .Get()
                                     .WhereEquals("SiteID", siteID)
                                     .Column("UserID");
 

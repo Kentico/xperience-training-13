@@ -422,7 +422,7 @@ public partial class CMSModules_Ecommerce_Controls_ShoppingCart_ShoppingCartPrev
         // City + (State) + Postal Code
         sb.Append("<tr><td>", HTMLHelper.HTMLEncode(address.AddressCity));
 
-        var state = StateInfoProvider.GetStateInfo(address.AddressStateID);
+        var state = StateInfo.Provider.Get(address.AddressStateID);
         if (state != null)
         {
             sb.Append(", ", HTMLHelper.HTMLEncode(ResHelper.LocalizeString(state.StateDisplayName)));
@@ -431,7 +431,7 @@ public partial class CMSModules_Ecommerce_Controls_ShoppingCart_ShoppingCartPrev
         sb.AppendFormat(" {0}</td></tr>", HTMLHelper.HTMLEncode(address.AddressZip));
 
         // Country
-        var country = CountryInfoProvider.GetCountryInfo(address.AddressCountryID);
+        var country = CountryInfo.Provider.Get(address.AddressCountryID);
         if (country != null)
         {
             sb.AppendFormat("<tr><td>{0}</td></tr>", HTMLHelper.HTMLEncode(ResHelper.LocalizeString(country.CountryDisplayName)));

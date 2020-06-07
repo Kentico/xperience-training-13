@@ -196,7 +196,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIElementCheckBoxTree : CMSU
         {
             if (mSiteName == null)
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+                SiteInfo si = SiteInfo.Provider.Get(SiteID);
                 if (si != null)
                 {
                     mSiteName = si.SiteName;
@@ -442,7 +442,7 @@ function DeselectAllSubelements(elem, id, hasChkBox) {{
         treeElem.ProviderObject = elementProvider;
         if (SingleModule)
         {
-            ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(ModuleID);
+            ResourceInfo ri = ResourceInfo.Provider.Get(ModuleID);
             if (ri != null)
             {
                 root = UIElementInfoProvider.GetModuleTopUIElement(ModuleID);
@@ -473,7 +473,7 @@ function DeselectAllSubelements(elem, id, hasChkBox) {{
     AND (NOT EXISTS (SELECT  ElementIDPath FROM CMS_UIElement AS u WHERE CMS_UIElement.ElementIDPath LIKE u.ElementIDPath + '%' AND ElementResourceID = {ModuleID}
     AND u.ElementIDPath != CMS_UIElement.ElementIDPath))";
 
-                var idPaths = UIElementInfoProvider.GetUIElements()
+                var idPaths = UIElementInfo.Provider.Get()
                     .Where(where)
                     .WhereNotEmpty("ElementIDPath")
                     .Columns("ElementIDPath")
@@ -529,7 +529,7 @@ function DeselectAllSubelements(elem, id, hasChkBox) {{
             // Many updates caused deadlocks with CMS_Role table, disable touch parent of the role
             context.TouchParent = false;
 
-            var elementIds = UIElementInfoProvider.GetUIElements()
+            var elementIds = UIElementInfo.Provider.Get()
                 .Where(where)
                 .Columns("ElementID")
                 .GetListResult<int>();
@@ -538,11 +538,11 @@ function DeselectAllSubelements(elem, id, hasChkBox) {{
             {
                 if (select)
                 {
-                    RoleUIElementInfoProvider.AddRoleUIElementInfo(RoleID, id);
+                    RoleUIElementInfo.Provider.Add(RoleID, id);
                 }
                 else
                 {
-                    RoleUIElementInfoProvider.DeleteRoleUIElementInfo(RoleID, id);
+                    RoleUIElementInfo.Provider.Remove(RoleID, id);
                 }
             }
 
@@ -595,11 +595,11 @@ function DeselectAllSubelements(elem, id, hasChkBox) {{
 
                 if (chk)
                 {
-                    RoleUIElementInfoProvider.AddRoleUIElementInfo(RoleID, id);
+                    RoleUIElementInfo.Provider.Add(RoleID, id);
                 }
                 else
                 {
-                    RoleUIElementInfoProvider.DeleteRoleUIElementInfo(RoleID, id);
+                    RoleUIElementInfo.Provider.Remove(RoleID, id);
                 }
             }
 

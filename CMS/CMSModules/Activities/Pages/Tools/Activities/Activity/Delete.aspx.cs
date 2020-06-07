@@ -294,7 +294,7 @@ public partial class CMSModules_Activities_Pages_Tools_Activities_Activity_Delet
         {
             if (!CurrentUser.IsAuthorizedPerObject(PermissionsEnum.Modify, "om.activity", SiteInfoProvider.GetSiteName(activity.ActivitySiteID)))
             {
-                SiteInfo notAllowedSite = SiteInfoProvider.GetSiteInfo(activity.ActivitySiteID);
+                SiteInfo notAllowedSite = SiteInfo.Provider.Get(activity.ActivitySiteID);
                 AddError(String.Format(GetString("accessdeniedtopage.info"), ResHelper.LocalizeString(notAllowedSite.DisplayName)));
 
                 restrictedSitesCondition.WhereNotEquals("ActivitySiteID", activity.ActivitySiteID);

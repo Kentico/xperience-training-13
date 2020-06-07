@@ -142,7 +142,7 @@ public partial class CMSModules_Notifications_Controls_NotificationSubscription_
         // Check public user
         if (EventUserID > 0)
         {
-            UserInfo ui = UserInfoProvider.GetUserInfo(EventUserID);
+            UserInfo ui = UserInfo.Provider.Get(EventUserID);
             if ((ui != null) && (ui.IsPublic()))
             {
                 return GetString("notifications.subscribe.anonymous");
@@ -213,7 +213,7 @@ public partial class CMSModules_Notifications_Controls_NotificationSubscription_
             string[] temp = NotificationTemplateName.Split(new char[] { '.' });
             if (temp.Length == 2)
             {
-                SiteInfo tempSite = SiteInfoProvider.GetSiteInfo(temp[0]);
+                SiteInfo tempSite = SiteInfo.Provider.Get(temp[0]);
                 if (tempSite != null)
                 {
                     templateName = temp[1];

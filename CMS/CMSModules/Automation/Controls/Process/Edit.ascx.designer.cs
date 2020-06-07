@@ -9,17 +9,9 @@
 
 
 
-public partial class CMSModules_Automation_Controls_Process_Edit {
-    
-    /// <summary>
-    /// lblWorkflow control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblWorkflow;
-    
+public partial class CMSModules_Automation_Controls_Process_Edit
+{
+
     /// <summary>
     /// pnlWorkflow control.
     /// </summary>
@@ -28,16 +20,7 @@ public partial class CMSModules_Automation_Controls_Process_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlWorkflow;
-    
-    /// <summary>
-    /// lblSteps control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblSteps;
-    
+
     /// <summary>
     /// ucDesigner control.
     /// </summary>
@@ -46,22 +29,4 @@ public partial class CMSModules_Automation_Controls_Process_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_ContactManagement_Controls_UI_Automation_AutomationDesigner ucDesigner;
-    
-    /// <summary>
-    /// lblHistory control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblHistory;
-    
-    /// <summary>
-    /// gridHistory control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSAdminControls_UI_UniGrid_UniGrid gridHistory;
 }

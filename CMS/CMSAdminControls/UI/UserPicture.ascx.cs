@@ -127,7 +127,7 @@ public partial class CMSAdminControls_UI_UserPicture : CMSUserControl
             if (UserID > 0)
             {
                 // Get user info
-                UserInfo ui = UserInfoProvider.GetUserInfo(UserID);
+                UserInfo ui = UserInfo.Provider.Get(UserID);
                 if (ui != null)
                 {
                     AvatarID = ui.UserAvatarID;

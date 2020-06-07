@@ -7,8 +7,6 @@ using CMS.Activities;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.Internal;
 using CMS.Core;
-using CMS.DataEngine;
-using CMS.DocumentEngine;
 using CMS.Globalization;
 using CMS.Helpers;
 using CMS.MacroEngine;
@@ -48,7 +46,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
     private string PrepareUrlAssetTargetRegex()
     {        
         var site = SiteContext.CurrentSite;
-        var presentationUrls = new PresentationUrlsRetriever(site).Retrieve();
+        var presentationUrls = new PresentationUrlsRetriever(site).Retrieve().Select(url => url.Url.TrimEnd('/'));
 
         var campaignUrlAssetTargetInputRegex = @"^(http(s?)://)(www\.)?(" + presentationUrls.Join("|") + ")";
         campaignUrlAssetTargetInputRegex += @"(|\/[^\?\&\#]*)$";
@@ -115,7 +113,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
             data = breadcrumbsList,
             pin = new
             {
-                elementGuid = UIElementInfoProvider.GetUIElementInfo(UIContext.UIElement.ElementParentID).ElementGUID,
+                elementGuid = UIElementInfo.Provider.Get(UIContext.UIElement.ElementParentID).ElementGUID,
                 applicationGuid = application.ElementGUID,
                 objectType = CampaignInfo.OBJECT_TYPE
             }
@@ -152,10 +150,8 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
             Breadcrumbs = GetBreadcrumbsData(),
             EmailRegexp = ValidationHelper.EmailRegExp.ToString(),
             IsNewsletterModuleLoaded = ModuleEntryManager.IsModuleLoaded(ModuleName.NEWSLETTER),
-            SiteIsContentOnly = true,
             UrlAssetTargetRegex = PrepareUrlAssetTargetRegex(),
             SmartTips = PrepareSmartTips(),
-            CreatePageDialogUrl = GetCreateNewPageDialogUrl(),
             SelectEmailDialogUrl = GetModalDialogUrl("newsletter.issue", "campaignAssetEmail")
         });
     }
@@ -168,34 +164,6 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
             .ToList()
             .Select(service.GetObjectiveViewModel)
             .FirstOrDefault();
-    }
-
-
-    /// <summary>
-    /// Returns URL of modal dialog for creating new page.
-    /// </summary>
-    private string GetCreateNewPageDialogUrl()
-    {
-        var path = SettingsKeyInfoProvider.GetValue("CMSCampaignNewPageLocation", SiteContext.CurrentSiteName);
-        var tree = new TreeProvider(MembershipContext.AuthenticatedUser);
-        var node = tree.SelectSingleNode(SiteContext.CurrentSiteName, path, SiteContext.CurrentSite.DefaultVisitorCulture, true);
-
-        if (node == null)
-        {
-            node = tree.SelectSingleNode(SiteContext.CurrentSiteName, "/", SiteContext.CurrentSite.DefaultVisitorCulture, true);
-        }
-
-        // General url settings
-        var settings = new UIPageURLSettings
-        {
-            AllowSplitview = false,
-            NodeID = node.NodeID,
-            Culture = node.DocumentCulture,
-            Action = "new",
-            AdditionalQuery = "dialog=1&action=new"
-        };
-
-        return DocumentUIHelper.GetDocumentPageUrl(settings);
     }
 
 

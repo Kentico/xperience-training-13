@@ -88,7 +88,7 @@ public partial class CMSModules_Notifications_Controls_TemplateTextEdit : Templa
             // Initialize HTML editor
             htmlText.AutoDetectLanguage = false;
             htmlText.DefaultLanguage = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
-            htmlText.EditorAreaCSS = PortalHelper.GetHtmlEditorAreaCss(SiteContext.CurrentSiteName);
+            htmlText.EditorAreaCSS = string.Empty;
             htmlText.ToolbarSet = "Basic";
             htmlText.MediaDialogConfig.UseFullURL = true;
             htmlText.LinkDialogConfig.UseFullURL = true;

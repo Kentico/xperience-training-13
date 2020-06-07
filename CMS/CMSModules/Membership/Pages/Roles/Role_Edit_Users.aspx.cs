@@ -78,11 +78,11 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
             if (id != 0)
             {
                 DateTime dt = ValidationHelper.GetDateTime(eventArgument, DateTimeHelper.ZERO_TIME);
-                UserRoleInfo uri = UserRoleInfoProvider.GetUserRoleInfo(id, ri.RoleID);
+                UserRoleInfo uri = UserRoleInfo.Provider.Get(id, ri.RoleID);
                 if (uri != null)
                 {
                     uri.ValidTo = dt;
-                    UserRoleInfoProvider.SetUserRoleInfo(uri);
+                    UserRoleInfo.Provider.Set(uri);
 
                     // Invalidate user
                     UserInfo.TYPEINFO.ObjectInvalidated(id);
@@ -159,7 +159,7 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
 
     private string GetRoleUsers()
     {
-        var data = UserRoleInfoProvider.GetUserRoles().Where($"RoleID = {roleID}").Columns("UserID");
+        var data = UserRoleInfo.Provider.Get().Where($"RoleID = {roleID}").Columns("UserID");
         if (data.Any())
         {
             return TextHelper.Join(";", DataHelper.GetStringValues(data.Tables[0], "UserID"));
@@ -203,8 +203,8 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
                     }
                     else
                     {
-                        var uri = UserRoleInfoProvider.GetUserRoleInfo(userId, roleID);
-                        UserRoleInfoProvider.DeleteUserRoleInfo(uri);
+                        var uri = UserRoleInfo.Provider.Get(userId, roleID);
+                        UserRoleInfo.Provider.Delete(uri);
 
                         saved = true;
                     }
@@ -236,7 +236,7 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
                     }
                     else
                     {
-                        UserRoleInfoProvider.AddUserToRole(userId, roleID, dt);
+                        UserRoleInfo.Provider.Add(userId, roleID, dt);
                         saved = true;
                     }
                 }
@@ -276,7 +276,7 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
             return result;
         }
 
-        UserInfo userInfo = UserInfoProvider.GetUserInfo(userId);
+        UserInfo userInfo = UserInfo.Provider.Get(userId);
         if (userInfo == null)
         {
             result = GetString("Administration-User.WrongUserId");

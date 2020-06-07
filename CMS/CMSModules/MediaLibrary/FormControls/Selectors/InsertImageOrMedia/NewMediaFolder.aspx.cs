@@ -31,7 +31,7 @@ public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageO
         {
             if ((mLibrary == null) && (mLibraryId > 0))
             {
-                mLibrary = MediaLibraryInfoProvider.GetMediaLibraryInfo(mLibraryId);
+                mLibrary = MediaLibraryInfo.Provider.Get(mLibraryId);
             }
             return mLibrary;
         }

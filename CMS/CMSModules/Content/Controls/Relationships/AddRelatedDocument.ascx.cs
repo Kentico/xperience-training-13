@@ -397,12 +397,12 @@ function ClearDialogNodeId() {{
                 // Left side
                 if (currentNodeIsOnLeftSide)
                 {
-                    RelationshipInfoProvider.AddRelationship(currentNodeId, selectedNodeId, relationshipNameId);
+                    RelationshipInfo.Provider.Add(currentNodeId, selectedNodeId, relationshipNameId);
                 }
                 // Right side
                 else
                 {
-                    RelationshipInfoProvider.AddRelationship(selectedNodeId, currentNodeId, relationshipNameId);
+                    RelationshipInfo.Provider.Add(selectedNodeId, currentNodeId, relationshipNameId);
                 }
 
                 // Log synchronization for single document

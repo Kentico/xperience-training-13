@@ -664,7 +664,7 @@ function SelectButton(elem) {{
         if (!elements.Any())
         {
             // Try to use group element as button
-            elements = UIElementInfoProvider.GetUIElements()
+            elements = UIElementInfo.Provider.Get()
                 .WhereEquals("ElementID", uiElementId);
 
             var groupElement = elements.FirstOrDefault();

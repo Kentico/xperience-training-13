@@ -59,7 +59,7 @@ public partial class CMSModules_Content_FormControls_Tags_TagGroupSelector : For
             if (UseGroupNameForSelection)
             {
                 string name = ValidationHelper.GetString(UniSelector.Value, "");
-                TagGroupInfo tgi = TagGroupInfoProvider.GetTagGroupInfo(name, SiteContext.CurrentSite.SiteID);
+                TagGroupInfo tgi = TagGroupInfo.Provider.Get(name, SiteContext.CurrentSite.SiteID);
                 if (tgi != null)
                 {
                     return tgi.TagGroupID;
@@ -75,7 +75,7 @@ public partial class CMSModules_Content_FormControls_Tags_TagGroupSelector : For
         {
             if (UseGroupNameForSelection)
             {
-                TagGroupInfo tgi = TagGroupInfoProvider.GetTagGroupInfo(value);
+                TagGroupInfo tgi = TagGroupInfo.Provider.Get(value);
                 if (tgi != null)
                 {
                     UniSelector.Value = tgi.TagGroupName;
@@ -103,7 +103,7 @@ public partial class CMSModules_Content_FormControls_Tags_TagGroupSelector : For
             else
             {
                 int id = ValidationHelper.GetInteger(UniSelector.Value, 0);
-                TagGroupInfo tgi = TagGroupInfoProvider.GetTagGroupInfo(id);
+                TagGroupInfo tgi = TagGroupInfo.Provider.Get(id);
                 if (tgi != null)
                 {
                     return tgi.TagGroupName;
@@ -119,7 +119,7 @@ public partial class CMSModules_Content_FormControls_Tags_TagGroupSelector : For
             }
             else
             {
-                TagGroupInfo tgi = TagGroupInfoProvider.GetTagGroupInfo(value, SiteContext.CurrentSite.SiteID);
+                TagGroupInfo tgi = TagGroupInfo.Provider.Get(value, SiteContext.CurrentSite.SiteID);
                 if (tgi != null)
                 {
                     UniSelector.Value = tgi.TagGroupID;
@@ -308,7 +308,7 @@ public partial class CMSModules_Content_FormControls_Tags_TagGroupSelector : For
             string siteName = ValidationHelper.GetString(Form.GetFieldValue("SiteName"), null);
             if (!String.IsNullOrEmpty(siteName))
             {
-                SiteInfo siteObj = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo siteObj = SiteInfo.Provider.Get(siteName);
                 if (siteObj != null)
                 {
                     SiteID = siteObj.SiteID;

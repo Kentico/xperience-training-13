@@ -21,7 +21,7 @@ public partial class CMSModules_Workflows_Controls_WorkflowDesigner : GraphDesig
 
     #region "Public properties"
 
-    protected override UniGraph UniGraph => uniGraph;
+    public override UniGraph UniGraph => uniGraph;
 
 
     protected override CMSPanel ToolbarContainer => toolbarContainer;

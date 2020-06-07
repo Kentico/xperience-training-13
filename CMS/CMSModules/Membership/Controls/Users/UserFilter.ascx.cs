@@ -416,7 +416,7 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
         // Show group filter only if enabled
         if (SiteID > 0)
         {
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+            SiteInfo si = SiteInfo.Provider.Get(SiteID);
             if ((si != null) && mIsAdvancedMode)
             {
                 mShowGroups = ModuleCommands.CommunitySiteHasGroup(si.SiteID);
@@ -860,14 +860,14 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
         if (siteID > 0 && IncludeSiteCondition())
         {
-            userCondition.WhereIn("UserID", UserSiteInfoProvider.GetUserSites()
+            userCondition.WhereIn("UserID", UserSiteInfo.Provider.Get()
                 .Column("UserID")
                 .WhereEquals("SiteID", siteID));
         }
 
         if (chkDisplayHidden.Visible && !chkDisplayHidden.Checked)
         {
-            userCondition.WhereIn("UserID", UserInfoProvider.GetUsers()
+            userCondition.WhereIn("UserID", UserInfo.Provider.Get()
                 .Column("UserID")
                 .WhereEquals("UserIsHidden", 0)
                 .Or()
@@ -979,7 +979,7 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
         var roleCondition = GetSiteRolesCondition(roles).Or(globalRolesCondition);
 
-        var query = UserRoleInfoProvider.GetUserRoles()
+        var query = UserRoleInfo.Provider.Get()
             .Column("UserID")
             .WhereIn("RoleID", RoleInfo.Provider.Get()
                 .Column("RoleID")

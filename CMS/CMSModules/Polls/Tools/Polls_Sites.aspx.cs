@@ -129,7 +129,7 @@ public partial class CMSModules_Polls_Tools_Polls_Sites : CMSPollsPage
                 foreach (string item in newItems)
                 {
                     int siteId = ValidationHelper.GetInteger(item, 0);
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                    SiteInfo si = SiteInfo.Provider.Get(siteId);
 
                     if (si != null)
                     {

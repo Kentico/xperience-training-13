@@ -27,7 +27,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Sites : CMSUser
         if (userId > 0)
         {
             // Check that only global administrator can edit global administrator's accouns
-            ui = UserInfoProvider.GetUserInfo(userId);
+            ui = UserInfo.Provider.Get(userId);
             EditedObject = ui;
             CheckUserAvaibleOnSite(ui);
 
@@ -57,7 +57,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Sites : CMSUser
     /// </summary>    
     private string GetUserSites()
     {
-        var data = UserSiteInfoProvider.GetUserSites().Where("UserID = " + userId).Columns("SiteID");
+        var data = UserSiteInfo.Provider.Get().Where("UserID = " + userId).Columns("SiteID");
         if (data.Any())
         {
             return TextHelper.Join(";", DataHelper.GetStringValues(data.Tables[0], "SiteID"));
@@ -121,7 +121,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Sites : CMSUser
                 {
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                    SiteInfo si = SiteInfo.Provider.Get(siteId);
                     if (si != null)
                     {
                         if (ui.SiteIndependentPrivilegeLevel == UserPrivilegeLevelEnum.Editor)
@@ -144,7 +144,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Sites : CMSUser
                         // Check if email would be unique in site
                         if (UserInfoProvider.IsEmailUnique(ui.Email, si.SiteName, ui.UserID))
                         {
-                            UserSiteInfoProvider.AddUserToSite(ui, si);
+                            UserSiteInfo.Provider.Add(ui.UserID, si.SiteID);
                         }
                         else
                         {

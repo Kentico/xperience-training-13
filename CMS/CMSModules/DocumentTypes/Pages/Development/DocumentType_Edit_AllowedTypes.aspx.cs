@@ -51,7 +51,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             foreach (string item in newItems)
             {
                 int childId = ValidationHelper.GetInteger(item, 0);
-                AllowedChildClassInfoProvider.RemoveAllowedChildClass(classId, childId);
+                AllowedChildClassInfo.Provider.Remove(classId, childId);
 
                 if (classId == childId)
                 {
@@ -69,7 +69,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             foreach (string item in newItems)
             {
                 int childId = ValidationHelper.GetInteger(item, 0);
-                AllowedChildClassInfoProvider.AddAllowedChildClass(classId, childId);
+                AllowedChildClassInfo.Provider.Add(classId, childId);
 
                 if (classId == childId)
                 {
@@ -106,7 +106,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             foreach (string item in newItems)
             {
                 int parentId = ValidationHelper.GetInteger(item, 0);
-                AllowedChildClassInfoProvider.RemoveAllowedChildClass(parentId, classId);
+                AllowedChildClassInfo.Provider.Remove(parentId, classId);
 
                 if (classId == parentId)
                 {
@@ -124,7 +124,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             foreach (string item in newItems)
             {
                 int parentId = ValidationHelper.GetInteger(item, 0);
-                AllowedChildClassInfoProvider.AddAllowedChildClass(parentId, classId);
+                AllowedChildClassInfo.Provider.Add(parentId, classId);
 
                 if (classId == parentId)
                 {
@@ -164,7 +164,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
     /// </summary>
     private void LoadChildData(bool forceReload = false)
     {
-        DataSet ds = AllowedChildClassInfoProvider.GetAllowedChildClasses().WhereEquals("ParentClassID", classId);
+        DataSet ds = AllowedChildClassInfo.Provider.Get().WhereEquals("ParentClassID", classId);
         if (!DataHelper.DataSourceIsEmpty(ds))
         {
             currentValues = TextHelper.Join(";", DataHelper.GetStringValues(ds.Tables[0], "ChildClassID"));
@@ -189,7 +189,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
     private void LoadParentData(bool forceReload = false)
     {
         // Get the active child classes
-        DataSet ds = AllowedChildClassInfoProvider.GetAllowedChildClasses().WhereEquals("ChildClassID", classId);
+        DataSet ds = AllowedChildClassInfo.Provider.Get().WhereEquals("ChildClassID", classId);
         if (!DataHelper.DataSourceIsEmpty(ds))
         {
             parentValues = TextHelper.Join(";", DataHelper.GetStringValues(ds.Tables[0], "ParentClassID"));

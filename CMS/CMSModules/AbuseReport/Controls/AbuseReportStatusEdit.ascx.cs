@@ -174,7 +174,7 @@ public partial class CMSModules_AbuseReport_Controls_AbuseReportStatusEdit : CMS
                 lblCultureValue.Text = (cultureInfo != null) ? cultureInfo.DisplayName : ResHelper.Dash;
 
                 // Set site value
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(CurrentReport.ReportSiteID);
+                SiteInfo si = SiteInfo.Provider.Get(CurrentReport.ReportSiteID);
                 lblSiteValue.Text = (si != null) ? HTMLHelper.HTMLEncode(si.DisplayName) : ResHelper.Dash;
 
                 // Set title
@@ -210,7 +210,7 @@ public partial class CMSModules_AbuseReport_Controls_AbuseReportStatusEdit : CMS
                 lblReportedByValue.Text = ResHelper.Dash;
                 if (CurrentReport.ReportUserID != 0)
                 {
-                    UserInfo ui = UserInfoProvider.GetUserInfo(CurrentReport.ReportUserID);
+                    UserInfo ui = UserInfo.Provider.Get(CurrentReport.ReportUserID);
                     lblReportedByValue.Text = (ui != null) ? HTMLHelper.HTMLEncode(ui.FullName) : GetString("general.NA");
                 }
 

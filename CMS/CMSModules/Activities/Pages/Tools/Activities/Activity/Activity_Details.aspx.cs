@@ -175,7 +175,7 @@ public partial class CMSModules_Activities_Pages_Tools_Activities_Activity_Activ
         else
         {
             // Retrieve site info and its display name
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(siteName);
+            SiteInfo si = SiteInfo.Provider.Get(siteName);
             if (si != null)
             {
                 siteName = HTMLHelper.HTMLEncode(ResHelper.LocalizeString(si.DisplayName));
@@ -209,7 +209,7 @@ public partial class CMSModules_Activities_Pages_Tools_Activities_Activity_Activ
         // Init link button URL
         if (ai.ActivitySiteID > 0)
         {
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(ai.ActivitySiteID);
+            SiteInfo si = SiteInfo.Provider.Get(ai.ActivitySiteID);
             if (si != null)
             {
                 // Hide view button if URL is blank

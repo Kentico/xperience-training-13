@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
-
+using System.Linq;
 using CMS.Base;
 using CMS.CMSImportExport;
-using CMS.DataEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.IO;
@@ -76,50 +75,28 @@ public partial class CMSModules_Licenses_Pages_License_Export_Domains : GlobalAd
                 {
                     using (StreamWriter sw = StreamWriter.New(file))
                     {
-                        // Array list for duplicity checking
-                        ArrayList allSites = new ArrayList();
+                        ArrayList allRecords = new ArrayList();
 
                         // Get all sites
-                        DataSet sites = SiteInfoProvider.GetSites().Columns("SiteID,SiteDomainName");
+                        DataSet sites = SiteInfo.Provider.Get().Columns("SiteID", "SiteDomainName", "SitePresentationURL");
                         if (!DataHelper.DataSourceIsEmpty(sites))
                         {
                             foreach (DataRow dr in sites.Tables[0].Rows)
                             {
-                                // Get domain
-                                string domain = ValidationHelper.GetString(dr["SiteDomainName"], "");
-                                if (!string.IsNullOrEmpty(domain))
+                                var domain = ValidationHelper.GetString(dr["SiteDomainName"], "");
+                                AddRecord(allRecords, sw, domain);
+
+                                var presentationUrl = ValidationHelper.GetString(dr["SitePresentationURL"], "");
+                                AddRecord(allRecords, sw, presentationUrl);
+
+                                // Add all domain aliases
+                                var siteId = ValidationHelper.GetInteger(dr["SiteID"], 0);
+                                var aliases = SiteDomainAliasInfoProvider.GetDomainAliases(siteId);
+                                foreach (var alias in aliases)
                                 {
-                                    domain = GetDomain(domain);
-                                    // Add to file
-                                    if (!allSites.Contains(domain))
-                                    {
-                                        sw.WriteLine(domain);
-                                        allSites.Add(domain);
-                                    }
-
-                                    // Add all domain aliases
-                                    DataSet aliases = SiteDomainAliasInfoProvider.GetDomainAliases()
-                                        .Column("SiteDomainAliasName")
-                                        .Where("SiteID", QueryOperator.Equals, ValidationHelper.GetInteger(dr["SiteID"], 0));
-
-                                    if (!DataHelper.DataSourceIsEmpty(aliases))
-                                    {
-                                        foreach (DataRow drAlias in aliases.Tables[0].Rows)
-                                        {
-                                            // Get domain
-                                            domain = ValidationHelper.GetString(drAlias["SiteDomainAliasName"], "");
-                                            if (!string.IsNullOrEmpty(domain))
-                                            {
-                                                domain = GetDomain(domain);
-                                                // Add to file
-                                                if (!allSites.Contains(domain))
-                                                {
-                                                    sw.WriteLine(domain);
-                                                    allSites.Add(domain);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    // Get domain
+                                    var record = alias.SiteDomainAliasType == SiteDomainAliasTypeEnum.Administration ? alias.SiteDomainAliasName : alias.SiteDomainPresentationUrl;
+                                    AddRecord(allRecords, sw, record);
                                 }
                             }
                         }
@@ -135,12 +112,29 @@ public partial class CMSModules_Licenses_Pages_License_Export_Domains : GlobalAd
                 ShowConfirmation(GetString("license.export.exported"));
                 ShowInformation(String.Format(GetString("license.export.download"), storageName, relativePath, downloadLink));
 
-                plcTextBox.Visible = false;
+                plcTextBox.Visible = false;                
             }
             catch (Exception ex)
             {
                 ShowError(ex.Message);
             }
+        }
+    }
+
+
+    private void AddRecord(ArrayList allRecords, StreamWriter sw, string domain)
+    {
+        if (string.IsNullOrEmpty(domain))
+        {
+            return;
+        }
+
+        domain = GetDomain(domain);
+        // Add to file
+        if (!allRecords.Contains(domain))
+        {
+            sw.WriteLine(domain);
+            allRecords.Add(domain);
         }
     }
 
@@ -156,7 +150,6 @@ public partial class CMSModules_Licenses_Pages_License_Export_Domains : GlobalAd
     private string GetDomain(string domain)
     {
         // Trim to domain
-        domain = URLHelper.RemovePort(domain);
         domain = URLHelper.RemoveProtocol(domain);
         domain = URLHelper.RemoveWWW(domain);
 
@@ -166,6 +159,8 @@ public partial class CMSModules_Licenses_Pages_License_Export_Domains : GlobalAd
         {
             domain = domain.Substring(0, slash);
         }
+
+        domain = URLHelper.RemovePort(domain);
 
         return domain;
     }

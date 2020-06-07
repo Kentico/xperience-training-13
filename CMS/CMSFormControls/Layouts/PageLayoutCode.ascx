@@ -16,7 +16,7 @@
             <cms:LocalizedLabel runat="server" ID="lblType" ResourceString="PageLayout.Type" DisplayColon="true" CssClass="control-label" AssociatedControlID="drpType" />
         </div>
         <div class="editing-form-value-cell">
-            <cms:CMSDropDownList runat="server" ID="drpType" OnSelectedIndexChanged="drpType_selectedIndexChanged" AutoPostBack="true" />
+            <cms:CMSDropDownList runat="server" ID="drpType" AutoPostBack="true" />
         </div>
     </asp:Panel>
     <div class="ClearBoth">

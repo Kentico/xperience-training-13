@@ -550,19 +550,15 @@ public partial class CMSModules_Newsletters_Controls_SendVariantIssue : CMSAdmin
                     }
 
                     // Check if test options has changed
-                    if (abTestChanged)
+                    if (abTestChanged && mABTest.TestWinnerIssueID > 0)
                     {
-                        if (mABTest.TestWinnerIssueID > 0)
-                        {
-                            // Options has been changed => reset previously selected winner
-                            NewsletterTasksManager.DeleteMailoutTask(mParentIssue.IssueGUID, mParentIssue.IssueSiteID);
-                            mABTest.TestWinnerIssueID = 0;
-                            mABTest.TestWinnerSelected = DateTimeHelper.ZERO_TIME;
-                            // Hide/reload winner selection in issue mail-out grid
-                            ucMailout.ReloadData(false);
-                        }
-                        IssueInfo.Provider.Set(mParentIssue);
-                    }
+                        // Options has been changed => reset previously selected winner
+                        NewsletterTasksManager.DeleteMailoutTask(mParentIssue.IssueGUID, mParentIssue.IssueSiteID);
+                        mABTest.TestWinnerIssueID = 0;
+                        mABTest.TestWinnerSelected = DateTimeHelper.ZERO_TIME;
+                        // Hide/reload winner selection in issue mail-out grid
+                        ucMailout.ReloadData(false);
+                    }                    
 
                     ABTestInfo.Provider.Set(mABTest);
 

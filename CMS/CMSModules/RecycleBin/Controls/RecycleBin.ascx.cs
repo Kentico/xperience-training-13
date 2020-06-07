@@ -185,7 +185,7 @@ public partial class CMSModules_RecycleBin_Controls_RecycleBin : CMSUserControl
         set
         {
             mSiteName = value;
-            SiteInfo siteInfo = SiteInfoProvider.GetSiteInfo(mSiteName);
+            SiteInfo siteInfo = SiteInfo.Provider.Get(mSiteName);
             if (siteInfo != null)
             {
                 mSelectedSite = siteInfo;
@@ -899,7 +899,7 @@ public partial class CMSModules_RecycleBin_Controls_RecycleBin : CMSUserControl
                 {
                     GridViewRow row = (GridViewRow)parameter;
                     object siteId = DataHelper.GetDataRowViewValue((DataRowView)row.DataItem, "NodeSiteID");
-                    SiteInfo siteInfo = SiteInfoProvider.GetSiteInfo(ValidationHelper.GetInteger(siteId, 0));
+                    SiteInfo siteInfo = SiteInfo.Provider.Get(ValidationHelper.GetInteger(siteId, 0));
                     if (siteInfo != null)
                     {
                         if (siteInfo.Status == SiteStatusEnum.Stopped)
@@ -913,7 +913,7 @@ public partial class CMSModules_RecycleBin_Controls_RecycleBin : CMSUserControl
             case "nodesiteid":
                 {
                     int siteId = ValidationHelper.GetInteger(parameter, 0);
-                    SiteInfo siteInfo = SiteInfoProvider.GetSiteInfo(siteId);
+                    SiteInfo siteInfo = SiteInfo.Provider.Get(siteId);
                     return (siteInfo != null) ? HTMLHelper.HTMLEncode(siteInfo.DisplayName) : string.Empty;
                 }
 
@@ -1003,7 +1003,7 @@ public partial class CMSModules_RecycleBin_Controls_RecycleBin : CMSUserControl
 
     private static VersionHistoryInfo GetVersionHistoryInfo(int versionHistoryId)
     {
-        return VersionHistoryInfoProvider.GetVersionHistoryInfo(versionHistoryId);
+        return VersionHistoryInfo.Provider.Get(versionHistoryId);
     }
 
 

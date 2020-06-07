@@ -22,6 +22,15 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit
     protected global::System.Web.UI.WebControls.Panel pnlContainer;
 
     /// <summary>
+    /// btnSubmit control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.FormEngine.Web.UI.FormSubmitButton btnSubmit;
+
+    /// <summary>
     /// editForm control.
     /// </summary>
     /// <remarks>

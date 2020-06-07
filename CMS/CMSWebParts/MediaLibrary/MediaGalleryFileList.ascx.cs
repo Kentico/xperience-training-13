@@ -341,7 +341,7 @@ public partial class CMSWebParts_MediaLibrary_MediaGalleryFileList : CMSAbstract
         }
         else
         {
-            MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryName, SiteContext.CurrentSiteName);
+            MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(MediaLibraryName, SiteContext.CurrentSiteID);
             if (mli != null)
             {
                 // If don't have 'Manage' permission

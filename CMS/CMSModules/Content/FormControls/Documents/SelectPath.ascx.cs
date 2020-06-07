@@ -137,7 +137,7 @@ public partial class CMSModules_Content_FormControls_Documents_SelectPath : Form
                 {
                     // Preselect site name if site identifier is selected
                     mConfig.ContentSites = AvailableSitesEnum.OnlySingleSite;
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+                    SiteInfo si = SiteInfo.Provider.Get(SiteID);
                     if (si != null)
                     {
                         mConfig.ContentSelectedSite = si.SiteName;
@@ -318,7 +318,7 @@ public partial class CMSModules_Content_FormControls_Documents_SelectPath : Form
         {
             if (String.IsNullOrEmpty(Config.ContentSelectedSite))
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+                SiteInfo si = SiteInfo.Provider.Get(SiteID);
                 if (si != null)
                 {
                     return si.SiteName;

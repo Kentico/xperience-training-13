@@ -184,7 +184,7 @@ public partial class CMSModules_MessageBoards_Controls_Boards_BoardSubscription 
         if (userId > 0)
         {
             // Show users email
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             if (ui != null)
             {
                 txtEmailRegistered.Text = ui.Email;

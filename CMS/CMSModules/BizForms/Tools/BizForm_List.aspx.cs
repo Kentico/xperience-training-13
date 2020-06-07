@@ -59,7 +59,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_List : CMSBizFormPage
                                                           .Distinct()
                                                           .Source(s => s.LeftJoin<BizFormRoleInfo>("FormID", "FormID"))
                                                           .Where(new WhereCondition()
-                                                              .WhereIn("RoleID", UserRoleInfoProvider.GetUserRoles().Column("RoleID").WhereEquals("UserID", currentUser.UserID))
+                                                              .WhereIn("RoleID", UserRoleInfo.Provider.Get().Column("RoleID").WhereEquals("UserID", currentUser.UserID))
                                                               .Or()
                                                               .WhereNull("FormAccess")
                                                               .Or()

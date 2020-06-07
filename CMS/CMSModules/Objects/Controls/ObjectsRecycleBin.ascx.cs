@@ -167,7 +167,7 @@ public partial class CMSModules_Objects_Controls_ObjectsRecycleBin : CMSUserCont
         {
             if ((mCurrentSite == null) && !String.IsNullOrEmpty(SiteName) && !SiteName.EqualsCSafe("##global##", true))
             {
-                SiteInfo siteInfo = SiteInfoProvider.GetSiteInfo(SiteName);
+                SiteInfo siteInfo = SiteInfo.Provider.Get(SiteName);
                 if (siteInfo != null)
                 {
                     mCurrentSite = siteInfo;

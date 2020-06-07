@@ -1424,6 +1424,42 @@
             Returns list of the extensions (separated by comma and space) for which there is a content extractor registered in the system.
             </summary>
         </member>
+        <member name="T:CMS.Search.ISearchIndexCultureInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Search.SearchIndexCultureInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexCultureInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Search.SearchIndexCultureInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexCultureInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Search.SearchIndexCultureInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexCultureInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexCultureInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+        </member>
         <member name="T:CMS.Search.SearchIndexCultureInfo">
             <summary>
             Search index culture.
@@ -1494,12 +1530,36 @@
             <param name="topN">TopN items</param>
             <param name="columns">List of columns to get</param>
         </member>
+        <member name="M:CMS.Search.SearchIndexCultureInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Search.SearchIndexCultureInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.SearchIndexCultureInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Search.SearchIndexCultureInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Search.SearchIndexCultureInfoProvider.GetSearchIndexCultureInfo(System.Int32,System.Int32)">
             <summary>
             Returns the SearchIndexCultureInfo structure for the specified searchIndexCulture id.
             </summary>
             <param name="indexId">SearchIndex id</param>
             <param name="cultureId">Culture id</param>
+        </member>
+        <member name="M:CMS.Search.SearchIndexCultureInfoProvider.Set(CMS.Search.SearchIndexCultureInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.Search.SearchIndexCultureInfoProvider.SetSearchIndexCultureInfo(CMS.Search.SearchIndexCultureInfo)">
             <summary>
@@ -1514,12 +1574,26 @@
             </summary>
             <param name="infoObj">SearchIndexCultureInfo object</param>
         </member>
+        <member name="M:CMS.Search.SearchIndexCultureInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
+        </member>
         <member name="M:CMS.Search.SearchIndexCultureInfoProvider.DeleteSearchIndexCultureInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified searchIndexCulture.
             </summary>
             <param name="indexId">SearchIndex id</param>
             <param name="cultureId">Culture id</param>
+        </member>
+        <member name="M:CMS.Search.SearchIndexCultureInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Search.SearchIndexCultureInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="cultureId">Culture ID.</param>
         </member>
         <member name="M:CMS.Search.SearchIndexCultureInfoProvider.AddSearchIndexCulture(System.Int32,System.Int32)">
             <summary>
@@ -1617,6 +1691,11 @@
             <param name="indexProviderName">Name of index provider to retrieve <see cref="T:CMS.Search.IIndexStatisticsProvider"/> implementation for.</param>
             <returns>Index statistics provider for <paramref name="indexProviderName"/>.</returns>
             <seealso cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/>
+        </member>
+        <member name="T:CMS.Search.ISearchIndexInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Search.SearchIndexInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.Search.LuceneIndexStatistics">
             <summary>
@@ -1932,6 +2011,11 @@
             Returns current index path.
             </summary>
         </member>
+        <member name="P:CMS.Search.SearchIndexInfo.SearchIndexProvider">
+            <summary>
+            Gets the search index provider.
+            </summary>
+        </member>
         <member name="P:CMS.Search.SearchIndexInfo.Provider">
             <summary>
             Search index provider
@@ -2072,11 +2156,25 @@
             <param name="searchIndexName">SearchIndex name</param>
             <param name="culture">Culture code</param>
         </member>
+        <member name="M:CMS.Search.SearchIndexInfoProvider.Set(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.Search.SearchIndexInfoProvider.SetSearchIndexInfo(CMS.Search.SearchIndexInfo)">
             <summary>
             Sets (updates or inserts) specified searchIndex.
             </summary>
             <param name="searchIndex">SearchIndex to set</param>
+        </member>
+        <member name="M:CMS.Search.SearchIndexInfoProvider.Delete(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.Search.SearchIndexInfoProvider.DeleteSearchIndexInfo(CMS.Search.SearchIndexInfo)">
             <summary>
@@ -2354,6 +2452,42 @@
             Forcibly unlock current index.
             </summary>
         </member>
+        <member name="T:CMS.Search.ISearchIndexSiteInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Search.SearchIndexSiteInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Search.SearchIndexSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Search.SearchIndexSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
+        <member name="M:CMS.Search.ISearchIndexSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="T:CMS.Search.SearchIndexSiteInfo">
             <summary>
             Search index site.
@@ -2433,12 +2567,36 @@
             </summary>
             <param name="searchIndexIds">Search index IDs</param>        
         </member>
+        <member name="M:CMS.Search.SearchIndexSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Search.SearchIndexSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Search.SearchIndexSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding structure.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Search.SearchIndexSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Search.SearchIndexSiteInfoProvider.GetSearchIndexSiteInfo(System.Int32,System.Int32)">
             <summary>
             Returns search index site binding structure for the specified index and site.
             </summary>
             <param name="indexId">Search index ID</param>
             <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Search.SearchIndexSiteInfoProvider.Set(CMS.Search.SearchIndexSiteInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.Search.SearchIndexSiteInfoProvider.SetSearchIndexSiteInfo(CMS.Search.SearchIndexSiteInfo)">
             <summary>
@@ -2452,6 +2610,13 @@
             </summary>
             <param name="infoObj">SearchIndexSite object</param>
         </member>
+        <member name="M:CMS.Search.SearchIndexSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="M:CMS.Search.SearchIndexSiteInfoProvider.DeleteSearchIndexSiteInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified search index site binding.
@@ -2459,12 +2624,19 @@
             <param name="indexId">Search index ID</param>
             <param name="siteId">Site ID</param>
         </member>
+        <member name="M:CMS.Search.SearchIndexSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Search.SearchIndexSiteInfo"/> binding.
+            </summary>
+            <param name="searchIndexId">Search index ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="M:CMS.Search.SearchIndexSiteInfoProvider.AddSearchIndexToSite(System.Int32,System.Int32)">
             <summary>
             Creates search index site binding. 
             </summary>
             <param name="indexId">Search index ID</param>
-            <param name="siteId">Site ID</param>   
+            <param name="siteId">Site ID</param>
         </member>
         <member name="M:CMS.Search.SearchIndexSiteInfoProvider.SearchIndexHasAnySite(System.Int32)">
             <summary>
@@ -2523,7 +2695,7 @@
             Creates search index site binding. 
             </summary>
             <param name="indexId">Search index ID</param>
-            <param name="siteId">Site ID</param>   
+            <param name="siteId">Site ID</param>
         </member>
         <member name="T:CMS.Search.ICustomSearchIndex">
             <summary>
@@ -4190,6 +4362,11 @@
             <param name="siteIds">Site IDs for search</param>
             <param name="indexes">Indexes to search</param>
         </member>
+        <member name="T:CMS.Search.ISearchTaskInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Search.SearchTaskInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.Search.SearchTaskCreationParameters">
             <summary>
             Wrappes values required to create a new search task.
@@ -4361,6 +4538,13 @@
             Returns the SearchTaskInfo structure for the specified searchTask.
             </summary>
             <param name="searchTaskId">SearchTask id</param>
+        </member>
+        <member name="M:CMS.Search.SearchTaskInfoProvider.Set(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.Search.SearchTaskInfoProvider.SetSearchTaskInfo(CMS.Search.SearchTaskInfo)">
             <summary>

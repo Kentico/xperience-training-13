@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
 
+using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.Helpers;
@@ -296,8 +297,11 @@ public partial class CMSModules_Newsletters_Controls_VariantMailout : CMSAdminCo
             TaskInfoProvider.SetTaskInfo(task);
             if (issue.IssueScheduledTaskID != task.TaskID)
             {
-                issue.IssueScheduledTaskID = task.TaskID;
-                IssueInfo.Provider.Set(issue);
+                using (new CMSActionContext { LogSynchronization = false })
+                { 
+                    issue.IssueScheduledTaskID = task.TaskID;
+                    IssueInfo.Provider.Set(issue);
+                }
             }
         }
 

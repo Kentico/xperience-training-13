@@ -97,7 +97,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileUplo
         {
             if ((mLibraryInfo == null) && (LibraryID > 0))
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(LibraryID);
             }
             return mLibraryInfo;
         }
@@ -133,7 +133,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileUplo
         {
             if ((mFileInfo == null) && (MediaFileID > 0))
             {
-                mFileInfo = MediaFileInfoProvider.GetMediaFileInfo(MediaFileID);
+                mFileInfo = MediaFileInfo.Provider.Get(MediaFileID);
             }
             return mFileInfo;
         }
@@ -355,7 +355,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileUplo
             // Get preview info
             if (IsMediaThumbnail && (FileInfo != null))
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                SiteInfo si = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
                 if (si != null)
                 {
                     previewPath = MediaFileInfoProvider.GetPreviewFilePath(FileInfo.FilePath, si.SiteName, LibraryInfo.LibraryID);
@@ -447,7 +447,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileUplo
 
                             if (FileInfo != null)
                             {
-                                SiteInfo si = SiteInfoProvider.GetSiteInfo(FileInfo.FileSiteID);
+                                SiteInfo si = SiteInfo.Provider.Get(FileInfo.FileSiteID);
                                 if (si != null)
                                 {
                                     // Log synchronization task
@@ -477,7 +477,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileUplo
                             // Delete Media File
                             if (FileInfo != null)
                             {
-                                MediaFileInfoProvider.DeleteMediaFileInfo(FileInfo);
+                                MediaFileInfo.Provider.Delete(FileInfo);
                             }
                         }
                     }

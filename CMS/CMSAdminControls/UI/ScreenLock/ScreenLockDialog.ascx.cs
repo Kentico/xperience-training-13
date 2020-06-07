@@ -351,7 +351,7 @@ public partial class CMSAdminControls_UI_ScreenLock_ScreenLockDialog : CMSUserCo
                 currentUser.UserInvalidLogOnAttempts = 0;
 
                 // Update current user
-                UserInfoProvider.SetUserInfo(currentUser);
+                UserInfo.Provider.Set(currentUser);
             }
         }
     }
@@ -365,7 +365,7 @@ public partial class CMSAdminControls_UI_ScreenLock_ScreenLockDialog : CMSUserCo
     private static UserInfo GetUserForAuthentication()
     {
         // If current user is not impersonated, return pure UserInfo (on which can be called Set) instead of casted CurrentUserInfo.
-        return MembershipContext.GetImpersonatingUser() ?? UserInfoProvider.GetUserInfo(MembershipContext.AuthenticatedUser.UserID);
+        return MembershipContext.GetImpersonatingUser() ?? UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
     }
 
     #endregion

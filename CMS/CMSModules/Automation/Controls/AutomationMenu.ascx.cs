@@ -10,6 +10,7 @@ using CMS.DataEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Membership;
+using CMS.Modules;
 using CMS.PortalEngine.Web.UI;
 using CMS.WorkflowEngine;
 using CMS.WorkflowEngine.Definitions;
@@ -19,17 +20,20 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
     #region "Variables"
 
     // Actions
-    protected NextStepAction next = null;
-    protected PreviousStepAction previous = null;
-    protected HeaderAction delete = null;
-    protected HeaderAction start = null;
-    protected NextStepAction specific = null;
+    protected NextStepAction next;
+    protected PreviousStepAction previous;
+    protected HeaderAction delete;
+    protected HeaderAction start;
+    protected NextStepAction specific;
+    protected HeaderAction history;
 
     private WorkflowStepInfo mStep;
     private CMSAutomationManager mAutomationManager;
 
     private bool? mAllowSave;
     private string originalClientId;
+
+    private readonly string COMMAND_SHOW_HISTORY = "AutomationHistory";
 
     #endregion
 
@@ -305,6 +309,7 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
         previous = null;
         delete = null;
         start = null;
+        history = null;
 
         mStep = null;
 
@@ -329,10 +334,10 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
             if (AutomationManager.RefreshActionContent)
             {
                 // Display action message
-                WorkflowActionInfo action = WorkflowActionInfoProvider.GetWorkflowActionInfo(Step.StepActionID);
+                WorkflowActionInfo action = WorkflowActionInfo.Provider.Get(Step.StepActionID);
                 string name = (action != null) ? action.ActionDisplayName : Step.StepDisplayName;
                 string str = (action != null) ? "workflow.actioninprogress" : "workflow.stepinprogress";
-                string text = string.Format(ResHelper.GetString(str, ResourceCulture), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(name)));
+                string text = string.Format(GetString(str), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(name)));
                 text = ScriptHelper.GetLoaderInlineHtml(text);
 
                 InformationText = text;
@@ -340,254 +345,259 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
             }
 
             // Object update
-            if (AutomationManager.Mode == FormModeEnum.Update)
+            if (AutomationManager.Mode == FormModeEnum.Update && InfoObject != null)
             {
-                if (InfoObject != null)
+                // Get current process
+                WorkflowInfo process = AutomationManager.Process;
+                string objectName = HTMLHelper.HTMLEncode(InfoObject.TypeInfo.GetNiceObjectTypeName().ToLowerInvariant());
+
+                // Next step action
+                if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_NEXT))
                 {
-                    // Get current process
-                    WorkflowInfo process = AutomationManager.Process;
-                    string objectName = HTMLHelper.HTMLEncode(InfoObject.TypeInfo.GetNiceObjectTypeName().ToLowerInvariant());
-
-                    // Next step action
-                    if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_NEXT))
+                    next = new NextStepAction(Page)
                     {
-                        next = new NextStepAction(Page)
-                        {
-                            Tooltip = string.Format(ResHelper.GetString("EditMenu.NextStep", ResourceCulture), objectName),
-                            OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_NEXT, null),
-                        };
-                    }
+                        Tooltip = string.Format(GetString("EditMenu.NextStep"), objectName),
+                        OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_NEXT, null),
+                    };
+                }
 
-                    // Move to specific step action
-                    if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_SPEC))
+                // Move to specific step action
+                if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_SPEC))
+                {
+                    var steps = WorkflowStepInfoProvider.GetWorkflowSteps()
+                        .Where("StepWorkflowID = " + process.WorkflowID + " AND StepType NOT IN (" + (int)WorkflowStepTypeEnum.Start + "," + (int)WorkflowStepTypeEnum.Note + ")")
+                        .OrderBy("StepDisplayName");
+
+                    specific = new NextStepAction(Page)
                     {
-                        var steps = WorkflowStepInfoProvider.GetWorkflowSteps()
-                            .Where("StepWorkflowID = " + process.WorkflowID + " AND StepType NOT IN (" + (int)WorkflowStepTypeEnum.Start + "," + (int)WorkflowStepTypeEnum.Note + ")")
-                            .OrderBy("StepDisplayName");
+                        Text = GetString("AutoMenu.SpecificStepIcon"),
+                        Tooltip = string.Format(GetString("AutoMenu.SpecificStepMultiple"), objectName),
+                        CommandName = ComponentEvents.AUTOMATION_MOVE_SPEC,
+                        EventName = ComponentEvents.AUTOMATION_MOVE_SPEC,
+                        CssClass = "scrollable-menu",
 
-                        specific = new NextStepAction(Page)
+                        // Make action inactive
+                        OnClientClick = null,
+                        Inactive = true
+                    };
+
+                    foreach (var s in steps)
+                    {
+                        string stepName = HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName));
+                        NextStepAction spc = new NextStepAction(Page)
                         {
-                            Text = GetString("AutoMenu.SpecificStepIcon"),
-                            Tooltip = string.Format(ResHelper.GetString("AutoMenu.SpecificStepMultiple", ResourceCulture), objectName),
+                            Text = string.Format(GetString("AutoMenu.SpecificStepTo"), stepName),
+                            Tooltip = string.Format(GetString("AutoMenu.SpecificStep"), objectName),
                             CommandName = ComponentEvents.AUTOMATION_MOVE_SPEC,
                             EventName = ComponentEvents.AUTOMATION_MOVE_SPEC,
-                            CssClass = "scrollable-menu",
-
-                            // Make action inactive
-                            OnClientClick = null,
-                            Inactive = true
+                            CommandArgument = s.StepID.ToString(),
+                            OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_SPEC, "if(!confirm(" + ScriptHelper.GetString(string.Format(GetString("autoMenu.MoveSpecificConfirmation"), objectName, ResHelper.LocalizeString(s.StepDisplayName))) + ")) { return false; }"),
                         };
 
-                        foreach (var s in steps)
+                        // Process action appearance
+                        ProcessAction(spc, Step, s);
+
+                        // Add step
+                        specific.AlternativeActions.Add(spc);
+                    }
+
+                    // Add comment
+                    AddCommentAction(ComponentEvents.AUTOMATION_MOVE_SPEC, specific, objectName);
+                }
+
+                // Previous step action
+                if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_PREVIOUS))
+                {
+                    var prevSteps = Manager.GetPreviousSteps(InfoObject, StateObject);
+                    int prevStepsCount = prevSteps.Count;
+
+                    if (prevStepsCount > 0)
+                    {
+                        previous = new PreviousStepAction(Page)
                         {
-                            string stepName = HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName));
-                            NextStepAction spc = new NextStepAction(Page)
+                            Tooltip = string.Format(GetString("EditMenu.PreviousStep"), objectName),
+                            OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, null)
+                        };
+
+                        // For managers allow move to specified step
+                        if (WorkflowStepInfoProvider.CanUserManageAutomationProcesses(MembershipContext.AuthenticatedUser, InfoObject.Generalized.ObjectSiteName))
+                        {
+                            if (prevStepsCount > 1)
                             {
-                                Text = string.Format(ResHelper.GetString("AutoMenu.SpecificStepTo", ResourceCulture), stepName),
-                                Tooltip = string.Format(ResHelper.GetString("AutoMenu.SpecificStep", ResourceCulture), objectName),
-                                CommandName = ComponentEvents.AUTOMATION_MOVE_SPEC,
-                                EventName = ComponentEvents.AUTOMATION_MOVE_SPEC,
-                                CommandArgument = s.StepID.ToString(),
-                                OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_SPEC, "if(!confirm(" + ScriptHelper.GetString(string.Format(ResHelper.GetString("autoMenu.MoveSpecificConfirmation"), objectName, ResHelper.LocalizeString(s.StepDisplayName))) + ")) { return false; }"),
-                            };
-
-                            // Process action appearance
-                            ProcessAction(spc, Step, s);
-
-                            // Add step
-                            specific.AlternativeActions.Add(spc);
+                                foreach (var s in prevSteps)
+                                {
+                                    previous.AlternativeActions.Add(new PreviousStepAction(Page)
+                                    {
+                                        Text = string.Format(GetString("EditMenu.PreviousStepTo"), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName))),
+                                        Tooltip = string.Format(GetString("EditMenu.PreviousStep"), objectName),
+                                        OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, null),
+                                        CommandArgument = s.RelatedHistoryID.ToString()
+                                    });
+                                }
+                            }
                         }
 
                         // Add comment
-                        AddCommentAction(ComponentEvents.AUTOMATION_MOVE_SPEC, specific, objectName);
+                        AddCommentAction(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, previous, objectName);
                     }
+                }
 
-                    // Previous step action
-                    if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_PREVIOUS))
+                if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_REMOVE))
+                {
+                    delete = new HeaderAction
                     {
-                        var prevSteps = Manager.GetPreviousSteps(InfoObject, StateObject);
-                        int prevStepsCount = prevSteps.Count;
+                        CommandName = ComponentEvents.AUTOMATION_REMOVE,
+                        EventName = ComponentEvents.AUTOMATION_REMOVE,
+                        Text = GetString("autoMenu.RemoveState"),
+                        Tooltip = string.Format(GetString("autoMenu.RemoveStateDesc"), objectName),
+                        OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_REMOVE, "if(!confirm(" + ScriptHelper.GetString(string.Format(GetString("autoMenu.RemoveStateConfirmation"), objectName)) + ")) { return false; }"),
+                        ButtonStyle = ButtonStyle.Default
+                    };
+                }
 
-                        if (prevStepsCount > 0)
+                // Handle multiple next steps
+                if (next != null)
+                {
+                    // Get next step info
+                    List<WorkflowStepInfo> steps = AutomationManager.NextSteps;
+                    int stepsCount = steps.Count;
+                    if (stepsCount > 0)
+                    {
+                        var nextS = steps[0];
+
+                        // Only one next step
+                        if (stepsCount == 1)
                         {
-                            previous = new PreviousStepAction(Page)
+                            if (nextS.StepIsFinished)
                             {
-                                Tooltip = string.Format(ResHelper.GetString("EditMenu.PreviousStep", ResourceCulture), objectName),
-                                OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, null)
-                            };
-
-                            // For managers allow move to specified step
-                            if (WorkflowStepInfoProvider.CanUserManageAutomationProcesses(MembershipContext.AuthenticatedUser, InfoObject.Generalized.ObjectSiteName))
-                            {
-                                if (prevStepsCount > 1)
-                                {
-                                    foreach (var s in prevSteps)
-                                    {
-                                        previous.AlternativeActions.Add(new PreviousStepAction(Page)
-                                                                            {
-                                                                                Text = string.Format(ResHelper.GetString("EditMenu.PreviousStepTo", ResourceCulture), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName))),
-                                                                                Tooltip = string.Format(ResHelper.GetString("EditMenu.PreviousStep", ResourceCulture), objectName),
-                                                                                OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, null),
-                                                                                CommandArgument = s.RelatedHistoryID.ToString()
-                                                                            });
-                                    }
-                                }
+                                next.Text = GetString("EditMenu.IconFinish");
+                                next.Tooltip = string.Format(GetString("EditMenu.Finish"), objectName);
                             }
 
-                            // Add comment
-                            AddCommentAction(ComponentEvents.AUTOMATION_MOVE_PREVIOUS, previous, objectName);
+                            // Process action appearance
+                            ProcessAction(next, Step, nextS);
                         }
-                    }
-
-                    if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_REMOVE))
-                    {
-                        delete = new HeaderAction
-                            {
-                                CommandName = ComponentEvents.AUTOMATION_REMOVE,
-                                EventName = ComponentEvents.AUTOMATION_REMOVE,
-                                Text = ResHelper.GetString("autoMenu.RemoveState", ResourceCulture),
-                                Tooltip = string.Format(ResHelper.GetString("autoMenu.RemoveStateDesc", ResourceCulture), objectName),
-                                OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_REMOVE, "if(!confirm(" + ScriptHelper.GetString(string.Format(ResHelper.GetString("autoMenu.RemoveStateConfirmation"), objectName)) + ")) { return false; }"),
-                                ButtonStyle = ButtonStyle.Default
-                            };
-                    }
-
-                    // Handle multiple next steps
-                    if (next != null)
-                    {
-                        // Get next step info
-                        List<WorkflowStepInfo> steps = AutomationManager.NextSteps;
-                        int stepsCount = steps.Count;
-                        if (stepsCount > 0)
+                        // Multiple next steps
+                        else
                         {
-                            var nextS = steps[0];
-
-                            // Only one next step
-                            if (stepsCount == 1)
+                            // Check if not all steps finish steps
+                            if (steps.Exists(s => !s.StepIsFinished))
                             {
-                                if (nextS.StepIsFinished)
+                                next.Tooltip = string.Format(GetString("EditMenu.NextStepMultiple"), objectName);
+                            }
+                            else
+                            {
+                                next.Text = GetString("EditMenu.IconFinish");
+                                next.Tooltip = string.Format(GetString("EditMenu.NextStepMultiple"), objectName);
+                            }
+
+                            // Make action inactive
+                            next.OnClientClick = null;
+                            next.Inactive = true;
+
+                            // Process action appearance
+                            ProcessAction(next, Step, null);
+
+                            string itemText = "EditMenu.NextStepTo";
+                            string itemDesc = "EditMenu.NextStep";
+
+                            foreach (var s in steps)
+                            {
+                                NextStepAction nxt = new NextStepAction(Page)
                                 {
-                                    next.Text = ResHelper.GetString("EditMenu.IconFinish", ResourceCulture);
-                                    next.Tooltip = string.Format(ResHelper.GetString("EditMenu.Finish", ResourceCulture), objectName);
+                                    Text = string.Format(GetString(itemText), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName))),
+                                    Tooltip = string.Format(GetString(itemDesc), objectName),
+                                    OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_NEXT, null),
+                                    CommandArgument = s.StepID.ToString()
+                                };
+
+                                if (s.StepIsFinished)
+                                {
+                                    nxt.Text = string.Format(GetString("EditMenu.FinishTo"), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName)));
+                                    nxt.Tooltip = string.Format(GetString("EditMenu.Finish"), objectName);
                                 }
 
                                 // Process action appearance
-                                ProcessAction(next, Step, nextS);
+                                ProcessAction(nxt, Step, s);
+
+                                // Add step
+                                next.AlternativeActions.Add(nxt);
                             }
-                            // Multiple next steps
-                            else
+                        }
+
+                        // Add comment
+                        AddCommentAction(ComponentEvents.AUTOMATION_MOVE_NEXT, next, objectName);
+                    }
+                    else
+                    {
+                        bool displayAction = false;
+                        if (!Step.StepAllowBranch)
+                        {
+                            // Transition exists, but condition doesn't match
+                            var transitions = Manager.GetStepTransitions(Step);
+                            if (transitions.Count > 0)
                             {
-                                // Check if not all steps finish steps
-                                if (steps.Exists(s => !s.StepIsFinished))
+                                WorkflowStepInfo s = WorkflowStepInfoProvider.GetWorkflowStepInfo(transitions[0].TransitionEndStepID);
+
+                                // Finish text
+                                if (s.StepIsFinished)
                                 {
-                                    next.Tooltip = string.Format(ResHelper.GetString("EditMenu.NextStepMultiple", ResourceCulture), objectName);
-                                }
-                                else
-                                {
-                                    next.Text = ResHelper.GetString("EditMenu.IconFinish", ResourceCulture);
-                                    next.Tooltip = string.Format(ResHelper.GetString("EditMenu.NextStepMultiple", ResourceCulture), objectName);
+                                    next.Text = GetString("EditMenu.IconFinish");
+                                    next.Tooltip = string.Format(GetString("EditMenu.Finish"), objectName);
                                 }
 
-                                // Make action inactive
-                                next.OnClientClick = null;
-                                next.Inactive = true;
+                                // Inform user
+                                displayAction = true;
+                                next.Enabled = false;
 
                                 // Process action appearance
                                 ProcessAction(next, Step, null);
-
-                                string itemText = "EditMenu.NextStepTo";
-                                string itemDesc = "EditMenu.NextStep";
-
-                                foreach (var s in steps)
-                                {
-                                    NextStepAction nxt = new NextStepAction(Page)
-                                                    {
-                                                        Text = string.Format(ResHelper.GetString(itemText, ResourceCulture), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName))),
-                                                        Tooltip = string.Format(ResHelper.GetString(itemDesc, ResourceCulture), objectName),
-                                                        OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_MOVE_NEXT, null),
-                                                        CommandArgument = s.StepID.ToString()
-                                                    };
-
-                                    if (s.StepIsFinished)
-                                    {
-                                        nxt.Text = string.Format(ResHelper.GetString("EditMenu.FinishTo", ResourceCulture), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(s.StepDisplayName)));
-                                        nxt.Tooltip = string.Format(ResHelper.GetString("EditMenu.Finish", ResourceCulture), objectName);
-                                    }
-
-                                    // Process action appearance
-                                    ProcessAction(nxt, Step, s);
-
-                                    // Add step
-                                    next.AlternativeActions.Add(nxt);
-                                }
-                            }
-
-                            // Add comment
-                            AddCommentAction(ComponentEvents.AUTOMATION_MOVE_NEXT, next, objectName);
-                        }
-                        else
-                        {
-                            bool displayAction = false;
-                            if (!Step.StepAllowBranch)
-                            {
-                                // Transition exists, but condition doesn't match
-                                var transitions = Manager.GetStepTransitions(Step);
-                                if (transitions.Count > 0)
-                                {
-                                    WorkflowStepInfo s = WorkflowStepInfoProvider.GetWorkflowStepInfo(transitions[0].TransitionEndStepID);
-
-                                    // Finish text
-                                    if (s.StepIsFinished)
-                                    {
-                                        next.Text = ResHelper.GetString("EditMenu.IconFinish", ResourceCulture);
-                                        next.Tooltip = string.Format(ResHelper.GetString("EditMenu.Finish", ResourceCulture), objectName);
-                                    }
-
-                                    // Inform user
-                                    displayAction = true;
-                                    next.Enabled = false;
-
-                                    // Process action appearance
-                                    ProcessAction(next, Step, null);
-                                }
-                            }
-
-                            if (!displayAction)
-                            {
-                                // There is not next step
-                                next = null;
                             }
                         }
-                    }
 
-                    // Handle start button
-                    if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_START) && (process.WorkflowRecurrenceType != ProcessRecurrenceTypeEnum.NonRecurring))
-                    {
-                        start = new HeaderAction
+                        if (!displayAction)
                         {
-                            CommandName = ComponentEvents.AUTOMATION_START,
-                            EventName = ComponentEvents.AUTOMATION_START,
-                            Text = ResHelper.GetString("autoMenu.StartState", ResourceCulture),
-                            Tooltip = process.WorkflowEnabled ? ResHelper.GetString("autoMenu.StartStateDesc", ResourceCulture) : ResHelper.GetString("autoMenu.DisabledStateDesc", ResourceCulture),
-                            CommandArgument = process.WorkflowID.ToString(),
-                            Enabled = process.WorkflowEnabled,
-                            OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_START, "if(!confirm(" + ScriptHelper.GetString(string.Format(ResHelper.GetString("autoMenu.startSameProcessConfirmation", ResourceCulture), objectName)) + ")) { return false; }"),
-                            ButtonStyle = ButtonStyle.Default
-                        };
+                            // There is not next step
+                            next = null;
+                        }
                     }
                 }
+
+                // Handle start button
+                if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_START) && (process.WorkflowRecurrenceType != ProcessRecurrenceTypeEnum.NonRecurring))
+                {
+                    start = new HeaderAction
+                    {
+                        CommandName = ComponentEvents.AUTOMATION_START,
+                        EventName = ComponentEvents.AUTOMATION_START,
+                        Text = GetString("autoMenu.StartState"),
+                        Tooltip = process.WorkflowEnabled ? GetString("autoMenu.StartStateDesc") : GetString("autoMenu.DisabledStateDesc"),
+                        CommandArgument = process.WorkflowID.ToString(),
+                        Enabled = process.WorkflowEnabled,
+                        OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_START, "if(!confirm(" + ScriptHelper.GetString(string.Format(GetString("autoMenu.startSameProcessConfirmation"), objectName)) + ")) { return false; }"),
+                        ButtonStyle = ButtonStyle.Default
+                    };
+                }
+
+                // History button
+                history = new HeaderAction
+                {
+                    CommandName = COMMAND_SHOW_HISTORY,
+                    Text = GetString("ma.history.show"),
+                    OnClientClick = $"modalDialog('{GetProcessHistoryDialogUrl()}', 'AutomationHistory', '70%', '70%'); return false;",
+                    ButtonStyle = ButtonStyle.Default
+                };
             }
         }
 
         // Add actions in correct order
-        menu.ActionsList.Clear();
-
         AddAction(previous);
         AddAction(next);
         AddAction(specific);
         AddAction(delete);
         AddAction(start);
-        
+        AddAction(history);
+
         // Set the information text
         if (!String.IsNullOrEmpty(InformationText))
         {
@@ -606,9 +616,9 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
     private void EnsureRefreshScript()
     {
         PostBackOptions options = new PostBackOptions(this)
-                        {
-                            PerformValidation = false
-                        };
+        {
+            PerformValidation = false
+        };
 
         string postback = ControlsHelper.GetPostBackEventReference(menu, options, false, true);
         string externalRefreshScript = null;
@@ -627,72 +637,77 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
             else {
                 data = null;
             }
-        
+
             return data;
         }
         ";
         ScriptHelper.RegisterStartupScript(Page, typeof(string), "refCommon", commonScript, true);
 
-        StringBuilder sb = new StringBuilder();
-        sb.Append(@"
-        var refTimerId_", ClientID, @" = 0;
-        
-        function RfMenu_DoPostBack_", ClientID, @"() {", postback, @"}
-        
-        function RfMenu_Succ_", ClientID, @"(data, textStatus, jqXHR) {
-            if(data != null) {
-                var hdn = document.getElementById('", hdnParam.ClientID, @"');
-                var args = data.split('", CALLBACK_SEP, @"');
+        var refScript = $@"
+        var refTimerId_{ClientID} = 0;
+
+        function RfMenu_DoPostBack_{ClientID}() {{{postback}}}
+
+        function RfMenu_Succ_{ClientID}(data, textStatus, jqXHR) {{
+            if(data != null) {{
+                var hdn = document.getElementById('{hdnParam.ClientID}');
+                var args = data.split('{CALLBACK_SEP}');
                 var stop = (args[1] == 'false');
                 var stepId = args[2];
-        
-                if(stop) {
-                    clearInterval(refTimerId_", ClientID, @");
-                    setTimeout('RfMenu_DoPostBack_", ClientID, "()', ", RefreshInterval, @");
-                }
-                else {
+
+                if(stop) {{
+                    clearInterval(refTimerId_{ClientID});
+                    setTimeout('RfMenu_DoPostBack_{ClientID}()', {RefreshInterval});
+                }}
+                else {{
                     // Step changed
-                    if(hdn.value != stepId) {
-                        var lbl = document.getElementById('", AutomationManager.AutomationInfoLabel.ClientID, @"');
-                        if(lbl != null) {
+                    if(hdn.value != stepId) {{
+                        var lbl = document.getElementById('{AutomationManager.AutomationInfoLabel.ClientID}');
+                        if(lbl != null) {{
                             lbl.innerHTML = args[0];
-                        }",
-                externalRefreshScript, @"
-                    }
-                }
+                        }}
+                    {externalRefreshScript}
+                    }}
+                }}
                 hdn.value = stepId;
-            }
-            else {
-                clearInterval(refTimerId_", ClientID, @");
-                setTimeout('RfMenu_DoPostBack_", ClientID, "()', ", RefreshInterval, @");
-            }
-        }
-        
-        function RfMenu_Err_", ClientID, @"(jqXHR, textStatus, errorThrown) {
+            }}
+            else {{
+                clearInterval(refTimerId_{ClientID});
+                setTimeout('RfMenu_DoPostBack_{ClientID}()', {RefreshInterval});
+            }}
+        }}
+
+        function RfMenu_Err_{ClientID}(jqXHR, textStatus, errorThrown) {{
             var err = '';
-            if ((errorThrown != undefined) && (errorThrown != null) && (errorThrown != '')) {
+            if ((errorThrown != undefined) && (errorThrown != null) && (errorThrown != '')) {{
                 err = ' (' + errorThrown + ')';
-                clearInterval(refTimerId_", ClientID, @");
+                clearInterval(refTimerId_{ClientID});
                 alert(err);
-            }
-        }
-        
-        function RfMenu_", ClientID, @"() {
-            $cmsj.ajax({
+            }}
+        }}
+
+        function RfMenu_{ClientID}() {{
+            $cmsj.ajax({{
                 cache: false,
                 type: 'POST',
-                data: 'params=", CALLBACK_ID + originalClientId, CALLBACK_SEP, AutomationManager.ObjectType, CALLBACK_SEP, AutomationManager.ObjectID, CALLBACK_SEP, @"',
+                data: 'params={CALLBACK_ID + originalClientId + CALLBACK_SEP + AutomationManager.ObjectType + CALLBACK_SEP + AutomationManager.ObjectID + CALLBACK_SEP}',
                 context: document.body,
-                success: RfMenu_Succ_" + ClientID, @",
-                error: RfMenu_Err_", ClientID, @", 
+                success: RfMenu_Succ_{ClientID},
+                error: RfMenu_Err_{ClientID},
                 dataType: 'text',
                 dataFilter: VerifyData
-            });
-        }
-        
-        refTimerId_", ClientID, @" = setInterval('RfMenu_", ClientID, "()', 200);");
+            }});
+        }}
 
-        ScriptHelper.RegisterStartupScript(Page, typeof(string), "ref_" + ClientID, sb.ToString(), true);
+        refTimerId_{ClientID} = setInterval('RfMenu_{ClientID}()', 200);";
+
+        ScriptHelper.RegisterStartupScript(Page, typeof(string), "ref_" + ClientID, refScript, true);
+    }
+
+
+    private string GetProcessHistoryDialogUrl()
+    {
+        return ApplicationUrlHelper.ResolveDialogUrl($"~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Process_History.aspx?stateid={StateObject.StateID}");
     }
 
 
@@ -743,7 +758,7 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
         if (action != null)
         {
             // Action
-            menu.ActionsList.Add(action);
+            menu.AddAction(action);
         }
     }
 
@@ -760,7 +775,7 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
 
         CommentAction comment = new CommentAction(name)
                                    {
-                                       Tooltip = string.Format(ResHelper.GetString("EditMenu.Comment" + name, ResourceCulture), objectName),
+                                       Tooltip = string.Format(GetString("EditMenu.Comment" + name), objectName),
                                        OnClientClick = string.Format("AddComment_{0}('{1}',{2},'{0}');", ClientID, name, StateObject.StateID),
                                    };
         action.AlternativeActions.Add(comment);

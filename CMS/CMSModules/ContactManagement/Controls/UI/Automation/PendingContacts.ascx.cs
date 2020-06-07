@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 using CMS.Automation;
 using CMS.Base;
@@ -14,7 +15,7 @@ using CMS.UIControls;
 using CMS.WorkflowEngine;
 
 
-public partial class CMSModules_ContactManagement_Controls_UI_Automation_PendingContacts : CMSAdminEditControl
+public partial class CMSModules_ContactManagement_Controls_UI_Automation_PendingContacts : CMSAdminControl
 {
     private bool mCanRemoveAutomationProcesses;
 
@@ -53,14 +54,15 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
     #endregion
 
 
-    #region "Page events"
+    #region "Control events"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         if (!StopProcessing)
         {
             SetupControl();
-            listElem.OnBeforeDataReload += listElem_OnBeforeDataReload;
         }
         else
         {
@@ -80,8 +82,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
                 {
                     if (mCanRemoveAutomationProcesses)
                     {
-                        var stateInfo = AutomationStateInfoProvider.GetAutomationStateInfo(stateID);
-                        AutomationStateInfoProvider.DeleteAutomationStateInfo(stateInfo);
+                        var stateInfo = AutomationStateInfo.Provider.Get(stateID);
+                        AutomationStateInfo.Provider.Delete(stateInfo);
                     }
                 }
                 break;
@@ -89,14 +91,58 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
     }
 
 
-    /// <summary>
-    /// Data source needs to be set up on before data reload as where clause is finally available.
-    /// </summary>
-    private void listElem_OnBeforeDataReload()
+    protected DataSet listElem_OnDataReload(string completeWhere, string currentOrder, int currentTopN, string columns, int currentOffset, int currentPageSize, ref int totalRecords)
     {
-        listElem.DataSource = GetPendingContacts(CurrentUser, listElem.WhereClause).TypedResult;
+        return GetPendingContacts(CurrentUser, completeWhere, currentOrder, currentTopN, columns, currentOffset, currentPageSize, ref totalRecords);
     }
 
+
+    protected object listElem_OnExternalDataBound(object sender, string sourceName, object parameter)
+    {
+        CMSGridActionButton btn;
+        switch (sourceName.ToLowerInvariant())
+        {
+            // Set visibility for edit button
+            case "edit":
+                btn = (CMSGridActionButton)sender;
+                btn.Visible = !IsWidget;
+                break;
+
+            // Set visibility for dialog edit button
+            case "dialogedit":
+                btn = (CMSGridActionButton)sender;
+                btn.Visible = IsWidget;
+                break;
+
+            case "view":
+                btn = (CMSGridActionButton)sender;
+                // Ensure accountID parameter value;
+                var objectID = ValidationHelper.GetInteger(btn.CommandArgument, 0);
+                // Contact detail URL
+                string contactURL = ApplicationUrlHelper.GetElementDialogUrl(ModuleName.CONTACTMANAGEMENT, "EditContact", objectID);
+                // Add modal dialog script to onClick action
+                btn.OnClientClick = ScriptHelper.GetModalDialogScript(contactURL, "ContactDetail");
+                break;
+
+            // Delete action
+            case "delete":
+
+                btn = (CMSGridActionButton)sender;
+                btn.OnClientClick = "if(!confirm(" + ScriptHelper.GetString(String.Format(ResHelper.GetString("autoMenu.RemoveStateConfirmation"), HTMLHelper.HTMLEncode(TypeHelper.GetNiceObjectTypeName(ContactInfo.OBJECT_TYPE).ToLowerInvariant()))) + ")) { return false; }" + btn.OnClientClick;
+                if (!mCanRemoveAutomationProcesses)
+                {
+                    btn.Enabled = false;
+                }
+                break;
+        }
+
+        return null;
+    }
+
+    #endregion
+
+
+    #region "Methods"
 
     /// <summary>
     /// Setup control.
@@ -111,9 +157,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
         }
 
         listElem.ZeroRowsText = GetString("ma.pendingcontacts.nowaitingcontacts");
-        listElem.EditActionUrl = "Process_Detail.aspx?stateid={0}";
+        listElem.EditActionUrl = "Process_Detail.aspx?stateid={0}&contactid={1}";
         listElem.RememberStateByParam = String.Empty;
-        listElem.OnExternalDataBound += listElem_OnExternalDataBound;
 
         // Register scripts for contact details dialog
         ScriptHelper.RegisterDialogScript(Page);
@@ -135,88 +180,58 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
 
 
     /// <summary>
-    /// Returns object query of automation states for my pending contacts which can be used as datasource for unigrid.
+    /// Returns data of automation states for my pending contacts.
     /// </summary>
-    /// <param name="user">User for whom pending contacts are shown</param>
-    /// <param name="contactsWhereCondition">Where condition for filtering contacts</param>
-    private ObjectQuery<AutomationStateInfo> GetPendingContacts(UserInfo user, string contactsWhereCondition)
+    private DataSet GetPendingContacts(UserInfo user, string completeWhere, string currentOrder, int currentTopN, string columns, int currentOffset, int currentPageSize, ref int totalRecords)
     {
-        // Get complete where condition for pending steps
-        var condition = WorkflowStepInfoProvider.GetAutomationPendingStepsWhereCondition(user, SiteContext.CurrentSiteID);
-
-        // Get automation steps specified by condition with permission control
-        var automationWorkflowSteps = WorkflowStepInfoProvider.GetWorkflowSteps()
-                                                              .Where(condition)
-                                                              .Column("StepID")
-                                                              .WhereEquals("StepWorkflowType", (int)WorkflowTypeEnum.Automation);
-
-        // Get all pending contacts from automation state where status is Pending and current user is the owner
-        var allPendingContacts = AutomationStateInfoProvider.GetAutomationStates()
-                                                            .WhereIn("StateStepID", automationWorkflowSteps)
+        // Get all pending contacts from automation state where status is Pending
+        var allPendingContacts = AutomationStateInfo.Provider.Get()
                                                             .WhereEquals("StateStatus", (int)ProcessStatusEnum.Pending)
                                                             .WhereEquals("StateObjectType", ContactInfo.OBJECT_TYPE);
+        
 
-        var contactIDs = ContactInfo.Provider.Get()
+        // Get complete where condition for pending steps
+        var condition = WorkflowStepInfoProvider.GetAutomationPendingStepsWhereCondition(user, SiteContext.CurrentSiteID);
+        if (!String.IsNullOrEmpty(condition?.WhereCondition))
+        {
+            // Get automation steps specified by condition with permission control
+            var automationWorkflowSteps = WorkflowStepInfoProvider.GetWorkflowSteps()
+                                                                  .Where(condition)
+                                                                  .Column("StepID")
+                                                                  .WhereEquals("StepWorkflowType", (int)WorkflowTypeEnum.Automation);
+
+            allPendingContacts.WhereIn("StateStepID", automationWorkflowSteps);
+        }
+
+        // Get contact IDs based on filtering or ownership
+        ObjectQuery<ContactInfo> contactIDs = null;
+        if (ShowOnlyMyPendingContacts || !String.IsNullOrEmpty(completeWhere))
+        {
+            contactIDs = ContactInfo.Provider.Get()
                                             .Column("ContactID")
-                                            .Where(contactsWhereCondition);
-        if (ShowOnlyMyPendingContacts)
-        {
-            contactIDs.WhereEquals("ContactOwnerUserID", user.UserID);
+                                            .Where(completeWhere);
+            if (ShowOnlyMyPendingContacts)
+            {
+                contactIDs.WhereEquals("ContactOwnerUserID", user.UserID);
+            }
         }
 
-        return allPendingContacts.WhereIn("StateObjectID", contactIDs.AsMaterializedList("ContactID"));
-    }
+        var query = allPendingContacts.OrderBy(currentOrder).TopN(currentTopN).Columns(columns);
 
-
-    protected object listElem_OnExternalDataBound(object sender, string sourceName, object parameter)
-    {
-        CMSGridActionButton btn;
-        switch (sourceName.ToLowerCSafe())
+        if (contactIDs != null)
         {
-            // Set visibility for edit button
-            case "edit":
-                if (IsWidget)
-                {
-                    btn = sender as CMSGridActionButton;
-                    if (btn != null)
-                    {
-                        btn.Visible = false;
-                    }
-                }
-                break;
-
-            // Set visibility for dialog edit button
-            case "dialogedit":
-                btn = sender as CMSGridActionButton;
-                if (btn != null)
-                {
-                    btn.Visible = IsWidget;
-                }
-                break;
-
-            case "view":
-                btn = (CMSGridActionButton)sender;
-                // Ensure accountID parameter value;
-                var objectID = ValidationHelper.GetInteger(btn.CommandArgument, 0);
-                // Contact detail URL
-                string contactURL = ApplicationUrlHelper.GetElementDialogUrl(ModuleName.CONTACTMANAGEMENT, "EditContact", objectID);
-                // Add modal dialog script to onClick action
-                btn.OnClientClick = ScriptHelper.GetModalDialogScript(contactURL, "ContactDetail");
-                break;
-
-            // Delete action
-            case "delete":
-               
-                btn = (CMSGridActionButton)sender;
-                btn.OnClientClick = "if(!confirm(" + ScriptHelper.GetString(String.Format(ResHelper.GetString("autoMenu.RemoveStateConfirmation"), HTMLHelper.HTMLEncode(TypeHelper.GetNiceObjectTypeName(ContactInfo.OBJECT_TYPE).ToLowerCSafe()))) + ")) { return false; }" + btn.OnClientClick;
-                if (!mCanRemoveAutomationProcesses)
-                {
-                    btn.Enabled = false;
-                }
-                break;
+            // Add restriction based on selected contacts
+            query.WhereIn("StateObjectID", SqlInstallationHelper.DatabaseIsSeparated() ? contactIDs.AsMaterializedList("ContactID") : contactIDs);
         }
 
-        return null;
+        query.IncludeBinaryData = false;
+        query.Offset = currentOffset;
+        query.MaxRecords = currentPageSize;
+
+        var data = query.Result;
+        totalRecords = query.TotalRecords;
+
+        return data;
     }
 
     #endregion

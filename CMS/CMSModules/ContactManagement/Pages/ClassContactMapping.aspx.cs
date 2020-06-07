@@ -65,7 +65,7 @@ public partial class CMSModules_ContactManagement_Pages_ClassContactMapping : Gl
         mapControl.IsLiveSite = false;
         plcMapping.Controls.Add(mapControl);
 
-        ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+        ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
         if (!SystemContext.DevelopmentMode && (resource != null) && !resource.ResourceIsInDevelopment)
         {
             pnlCustomization.MessagesPlaceHolder = MessagesPlaceHolder;

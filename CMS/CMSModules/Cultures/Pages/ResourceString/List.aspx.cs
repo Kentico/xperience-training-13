@@ -31,7 +31,7 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
     /// <summary>
     /// Default UI Culture Info
     /// </summary>
-    private CultureInfo mDefaultUICultureInfo = CultureInfoProvider.GetCultureInfo(CultureHelper.DefaultUICultureCode);
+    private CultureInfo mDefaultUICultureInfo = CultureInfo.Provider.Get(CultureHelper.DefaultUICultureCode);
 
     #endregion
 
@@ -73,7 +73,7 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
         cultureSelector.OnListItemCreated += cultureSelector_OnListItemCreated;
 
         mCultureCode = QueryHelper.GetString("culturecode", CultureHelper.DefaultUICultureCode);
-        mCultureInfo = CultureInfoProvider.GetCultureInfo(mCultureCode);
+        mCultureInfo = CultureInfo.Provider.Get(mCultureCode);
 
         if (mCultureInfo != null && mDefaultUICultureInfo != null)
         {

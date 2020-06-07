@@ -11,7 +11,6 @@
     function controller($scope, $uibModalInstance, $interpolate, conversion, title, activityTypes, resolveFilter, applicationService, serverDataService) {
         var ctrl = this,
             application = applicationService.application,
-            isSiteContentOnly = serverDataService.isSiteContentOnly(),
             selectedActivityType = 'pagevisit';
         
         ctrl.title = title;
@@ -26,7 +25,7 @@
         };
 
         ctrl.showContentOnlyPageVisitConfiguration = function() {
-            return isSiteContentOnly && (selectedActivityType === 'pagevisit');
+            return selectedActivityType === 'pagevisit';
         };
 
         var resultTemplate = function (selectedPage) {
@@ -52,7 +51,7 @@
         var activityTypesConfiguration = {
             pagevisit: {
                 selectorLabel: resolveFilter('campaign.conversion.pageselector'),
-                areParametersRequired: !isSiteContentOnly,
+                areParametersRequired: false,
                 errorMessage: resolveFilter('campaign.conversion.pageisrequired'),
                 configuration: {
                     restUrl: application.getData('applicationUrl') + 'cmsapi/CampaignConversionPage',

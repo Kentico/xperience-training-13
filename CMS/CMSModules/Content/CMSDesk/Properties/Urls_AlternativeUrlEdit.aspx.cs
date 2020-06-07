@@ -8,7 +8,6 @@ using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Internal;
-using CMS.DocumentEngine.Routing;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
@@ -20,6 +19,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_AlternativeUrlEd
 {
     private const string RESOURCE_NAME = "CMS.Content";
     private const string PERMISSION_NAME = "ManageAlternativeURLs";
+    private const string COMMAND_ARGUMENT_SAVE_ANOTHER = "saveandanother";
 
     private bool? mCanManageAlternativeURLs;
     private string mSitePresentationUrl;
@@ -74,18 +74,17 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_AlternativeUrlEd
         txtAltUrl.PlaceholderText = TextHelper.LimitLength(SitePresentationUrl, 45, CutTextEnum.Start);
 
         menu.ActionsList.Add(new SaveAction());
+        menu.ActionsList.Add(new SaveAction()
+        {
+            ButtonStyle = ButtonStyle.Default,
+            Text = GetString("content.ui.properties.saveandaddanotherlternativeurl"),
+            CommandArgument = COMMAND_ARGUMENT_SAVE_ANOTHER
+        });
         menu.ActionsList.Add(new HeaderAction
         {
             ButtonStyle = ButtonStyle.Default,
             RedirectUrl = GetListingUrl(),
             Text = GetString("general.back"),
-            OnClientClick = "if (CheckChanges && !CheckChanges()) {{ return false; }}"
-        });
-        menu.ActionsList.Add(new HeaderAction
-        {
-            ButtonStyle = ButtonStyle.Default,
-            RedirectUrl = $"~/CMSModules/Content/CMSDesk/Properties/Urls_AlternativeUrlEdit.aspx?nodeid={NodeID}",
-            Text = GetString("content.ui.properties.addnewalternativeurl"),
             OnClientClick = "if (CheckChanges && !CheckChanges()) {{ return false; }}"
         });
 
@@ -146,13 +145,16 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_AlternativeUrlEd
         var error = SaveData(alternativeUrl);
         if (String.IsNullOrEmpty(error))
         {
-            var url = UrlResolver.ResolveUrl("~/CMSModules/Content/CMSDesk/Properties/Urls_AlternativeUrlEdit.aspx");
-            url = URLHelper.AddParameterToUrl(url, "nodeid", NodeID.ToString());
-            url = URLHelper.AddParameterToUrl(url, "objectid", alternativeUrl.AlternativeUrlID.ToString());
-            url = URLHelper.AddParameterToUrl(url, "siteid", alternativeUrl.AlternativeUrlSiteID.ToString());
-            url = URLHelper.AddParameterToUrl(url, "saved", "1");
+            var commandArgument = (e as System.Web.UI.WebControls.CommandEventArgs)?.CommandArgument as string;
+            if (String.Equals(commandArgument, COMMAND_ARGUMENT_SAVE_ANOTHER, StringComparison.Ordinal))
+            {
+                var url = UrlResolver.ResolveUrl("~/CMSModules/Content/CMSDesk/Properties/Urls_AlternativeUrlEdit.aspx");
+                url = URLHelper.AddParameterToUrl(url, "nodeid", NodeID.ToString());
+                url = URLHelper.AddParameterToUrl(url, "saved", "1");
+                URLHelper.Redirect(url);
 
-            URLHelper.Redirect(url);
+            }
+            URLHelper.Redirect(GetListingUrl());
         }
         else
         {
@@ -166,7 +168,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_AlternativeUrlEd
     /// If error occurs during saving the <paramref name="alternativeUrl"/>, corresponding error message is returned.
     /// </summary>
     private string SaveData(AlternativeUrlInfo alternativeUrl)
-    {        
+    {
         alternativeUrl.AlternativeUrlUrl = AlternativeUrlHelper.NormalizeAlternativeUrl(txtAltUrl.Text);
 
         if (String.IsNullOrWhiteSpace(alternativeUrl.AlternativeUrlUrl.NormalizedUrl))

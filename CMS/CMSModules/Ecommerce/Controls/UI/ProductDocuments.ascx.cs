@@ -50,7 +50,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductDocuments : CMSUser
             }
             else if (filterDocuments.SelectedSite != TreeProvider.ALL_SITES)
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(filterDocuments.SelectedSite);
+                SiteInfo si = SiteInfo.Provider.Get(filterDocuments.SelectedSite);
                 if (si != null)
                 {
                     noDataMessage = string.Format(GetString("ProductDocuments.Documents.nodataforsite"), HTMLHelper.HTMLEncode(productNameLocalized), HTMLHelper.HTMLEncode(si.DisplayName));

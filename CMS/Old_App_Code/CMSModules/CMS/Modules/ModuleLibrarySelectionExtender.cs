@@ -65,7 +65,7 @@ public class ModuleLibrarySelectionExtender : ControlExtender<CMSUserControl>
 
             return;
         }
-        else if (ResourceLibraryInfoProvider.IsImplicitlyIncludedLibrary(libraryInfo, ResourceInfoProvider.GetResourceInfo(libraryInfo.ResourceLibraryResourceID)))
+        else if (ResourceLibraryInfoProvider.IsImplicitlyIncludedLibrary(libraryInfo, ResourceInfo.Provider.Get(libraryInfo.ResourceLibraryResourceID)))
         {
             page.ShowError(ResHelper.GetString("cms.resourcelibrary.implicitlyincludedlibrary"), null, null, false);
 
@@ -73,7 +73,7 @@ public class ModuleLibrarySelectionExtender : ControlExtender<CMSUserControl>
         }
         else
         {
-            ResourceLibraryInfoProvider.SetResourceLibraryInfo(libraryInfo);
+            ResourceLibraryInfo.Provider.Set(libraryInfo);
         }
 
         SessionHelper.Remove("DialogSelectedParameters");

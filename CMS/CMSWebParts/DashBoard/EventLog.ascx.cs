@@ -276,7 +276,7 @@ public partial class CMSWebParts_DashBoard_EventLog : CMSAbstractWebPart
 
         if (SiteName != TreeProvider.ALL_SITES)
         {
-            siteObj = SiteInfoProvider.GetSiteInfo(SiteName);
+            siteObj = SiteInfo.Provider.Get(SiteName);
         }
 
         // -1: All sites with global events

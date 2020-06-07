@@ -17,7 +17,6 @@
             bindings: {
                 isFunnel: '<',
                 conversions: '=',
-                siteIsContentOnly: '<',
                 campaign: '<'
             },
             templateUrl: 'cms.webanalytics/campaign/reportSetup/conversions/conversions.component.html',

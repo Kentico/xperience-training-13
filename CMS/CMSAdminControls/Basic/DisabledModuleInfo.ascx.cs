@@ -534,7 +534,7 @@ public partial class CMSAdminControls_Basic_DisabledModuleInfo : CMSUserControl
                 break;
 
             case DisabledModuleScope.AllSitesAndGlobal:
-                SiteInfoProvider.GetSites().ForEachObject(site => SettingsKeyInfoProvider.SetValue(key, SiteName, true));
+                SiteInfo.Provider.Get().ForEachObject(site => SettingsKeyInfoProvider.SetValue(key, SiteName, true));
                 SettingsKeyInfoProvider.SetGlobalValue(key, true);
                 break;
         }
@@ -592,7 +592,7 @@ public partial class CMSAdminControls_Basic_DisabledModuleInfo : CMSUserControl
     /// <returns> Return true if all sites have that site setting set true. Otherwise returns false.</returns>
     private bool CheckAllSitesSetting(string settingKey)
     {
-        return !SiteInfoProvider.GetSites().Any(site => !SettingsKeyInfoProvider.GetBoolValue(settingKey, site.SiteName));
+        return !SiteInfo.Provider.Get().Any(site => !SettingsKeyInfoProvider.GetBoolValue(settingKey, site.SiteName));
     }
 
     #endregion

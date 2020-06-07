@@ -36,7 +36,7 @@ public partial class CMSFormControls_Filters_DateTimeFilter : FormEngineUserCont
             }
             if (GetValue("timezone") != null)
             {
-                dtmTimeFrom.CustomTimeZone = TimeZoneInfoProvider.GetTimeZoneInfo(GetValue("timezone", ""));
+                dtmTimeFrom.CustomTimeZone = CMS.Globalization.TimeZoneInfo.Provider.Get(GetValue("timezone", ""));
             }
 
             string strValue = ValidationHelper.GetString(value, "");

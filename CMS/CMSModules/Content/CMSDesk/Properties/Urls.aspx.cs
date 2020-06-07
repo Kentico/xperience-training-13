@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
+
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
@@ -167,14 +168,23 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
 
         if (new PageUrlPathSlugUpdater(Node).TryUpdate(txtSlug.TextBox.Text, out var collisions))
         {
-            DocumentManager.SaveDocument();
+            ShowConfirmation(ResHelper.GetString("General.ChangesSaved"));
+            DocumentManager.ClearContentChanged();
             SetUrlTextbox(true);
+            UpdateLiveSiteButtonUrl();
         }
         else
         {
             ShowCollisionErrorMessage(collisions);
             SetUrlTextbox(false);
-        }
+        }        
+    }
+
+
+    private void UpdateLiveSiteButtonUrl()
+    {
+        var url = DocumentURLProvider.GetAbsoluteUrl(Node);
+        ScriptHelper.RegisterSetLiveSiteURL(this, url);
     }
 
 
@@ -221,7 +231,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         switch (actionName.ToLowerInvariant())
         {
             case "delete":
-                AlternativeUrlInfoProvider.DeleteAlternativeUrlInfo(urlId);
+                AlternativeUrlInfo.Provider.Delete(AlternativeUrlInfo.Provider.Get(urlId));
                 DocumentManager.SaveDocument();
                 break;
         }

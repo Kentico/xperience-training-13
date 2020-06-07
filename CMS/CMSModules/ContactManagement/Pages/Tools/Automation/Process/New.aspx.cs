@@ -100,7 +100,7 @@ function createWorkflow(id) {{
             }
         };
 
-        templates.AddRange(AutomationTemplateInfoProvider.GetAutomationTemplates().Columns("TemplateID", "TemplateDisplayName", "TemplateDescription", "TemplateIconClass"));
+        templates.AddRange(AutomationTemplateInfo.Provider.Get().Columns("TemplateID", "TemplateDisplayName", "TemplateDescription", "TemplateIconClass"));
 
         return templates;
     }
@@ -121,7 +121,7 @@ function createWorkflow(id) {{
             }
             else
             {
-                var template = AutomationTemplateInfoProvider.GetAutomationTemplateInfo(id);
+                var template = AutomationTemplateInfo.Provider.Get(id);
                 if (template != null)
                 {
                     mWorkflow = AutomationTemplateManager.CreateAutomationProcessFromTemplate(template, MacroIdentityOption.FromUserInfo(CurrentUser));

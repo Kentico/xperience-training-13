@@ -47,7 +47,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_ImportCSV 
         get
         {
             // SiteContext.CurrentSite cannot be used, because it recognizes site based on domain name, so even if global is selected in site selector, SiteContext.CurrentSite never shows global site
-            return mCurrentSite ?? (mCurrentSite = SiteInfoProvider.GetSiteInfo(QueryHelper.GetInteger("siteId", SiteContext.CurrentSiteID)));
+            return mCurrentSite ?? (mCurrentSite = SiteInfo.Provider.Get(QueryHelper.GetInteger("siteId", SiteContext.CurrentSiteID)));
         }
     }
 

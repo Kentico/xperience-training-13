@@ -37,7 +37,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
         userId = QueryHelper.GetInteger("objectid", 0);
 
         // Get user info object and check if UI should be displayed
-        ui = UserInfoProvider.GetUserInfo(userId);
+        ui = UserInfo.Provider.Get(userId);
         CheckUserAvaibleOnSite(ui);
 
         // Check that only global administrator can edit other administrator's accounts
@@ -188,7 +188,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
         {
             case "impersonate":
                 // Use user impersonate
-                UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+                UserInfo ui = UserInfo.Provider.Get(userId);
                 AuthenticationHelper.ImpersonateUser(ui);
                 break;
 
@@ -236,7 +236,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
             password = ui.GetValue("UserPassword").ToString();
 
             // Test for unique username
-            UserInfo uiTest = UserInfoProvider.GetUserInfo(userName);
+            UserInfo uiTest = UserInfo.Provider.Get(userName);
             if ((uiTest == null) || (uiTest.UserID == userId))
             {
                 if (ui == null)
@@ -278,7 +278,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
                 else
                 {
 
-                    DataSet siteDs = SiteInfoProvider.GetSites().Columns("SiteDomainName");
+                    DataSet siteDs = SiteInfo.Provider.Get().Columns("SiteDomainName");
                     if (!DataHelper.DataSourceIsEmpty(siteDs))
                     {
                         // Create list of available site domains
@@ -355,7 +355,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
                 else
                 {
                     // Set preferred UI culture
-                    CultureInfo ci = CultureInfoProvider.GetCultureInfo(ValidationHelper.GetInteger(lstUICulture.SelectedValue, 0));
+                    CultureInfo ci = CultureInfo.Provider.Get(ValidationHelper.GetInteger(lstUICulture.SelectedValue, 0));
                     ui.PreferredUICultureCode = ci.CultureCode;
                 }
 
@@ -379,7 +379,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
                         using (var transaction = new CMSLateBoundTransaction())
                         {
                             // Update the user
-                            UserInfoProvider.SetUserInfo(ui);
+                            UserInfo.Provider.Set(ui);
 
                             if (isCurrentUserGlobalAdmin)
                             {
@@ -562,7 +562,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
             // Set UI culture
             try
             {
-                CultureInfo ciUI = CultureInfoProvider.GetCultureInfo(myUICulture);
+                CultureInfo ciUI = CultureInfo.Provider.Get(myUICulture);
                 lstUICulture.SelectedIndex = lstUICulture.Items.IndexOf(lstUICulture.Items.FindByValue(ciUI.CultureID.ToString()));
             }
             catch
@@ -636,7 +636,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
     /// <param name="userId">Modified user</param>
     protected string ValidateGlobalAndDeskAdmin(int userId)
     {
-        var editedUser = UserInfoProvider.GetUserInfo(userId);
+        var editedUser = UserInfo.Provider.Get(userId);
         if (editedUser == null)
         {
             return GetString("Administration-User.WrongUserId");
@@ -749,7 +749,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
         else
         {
             ui.UserInvalidLogOnAttempts = 0;
-            UserInfoProvider.SetUserInfo(ui);
+            UserInfo.Provider.Set(ui);
         }
 
         LoadData();
@@ -788,7 +788,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_General : CMSUs
         }
         else
         {
-            UserInfoProvider.SetUserInfo(ui);
+            UserInfo.Provider.Set(ui);
         }
 
         LoadData();

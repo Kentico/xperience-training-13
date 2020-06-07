@@ -665,7 +665,7 @@ public partial class CMSInstall_SeparateDB : GlobalAdminPage
     /// </summary>
     private void TakeSitesOffline()
     {
-        var sites = SiteInfoProvider.GetSites()
+        var sites = SiteInfo.Provider.Get()
             .WhereNull("SiteIsOffline")
             .Or()
             .WhereEquals("SiteIsOffline", 0)
@@ -675,7 +675,7 @@ public partial class CMSInstall_SeparateDB : GlobalAdminPage
         foreach (var site in sites)
         {
             site.SiteIsOffline = true;
-            SiteInfoProvider.SetSiteInfo(site);
+            SiteInfo.Provider.Set(site);
             siteIDs.Add(site.SiteID);
         }
         PersistentStorageHelper.SetValue("SeparateDBSites", siteIDs);
@@ -692,11 +692,11 @@ public partial class CMSInstall_SeparateDB : GlobalAdminPage
         {
             foreach (var siteID in siteIDs)
             {
-                SiteInfo site = SiteInfoProvider.GetSiteInfo(siteID);
+                SiteInfo site = SiteInfo.Provider.Get(siteID);
                 if (site != null)
                 {
                     site.SiteIsOffline = false;
-                    SiteInfoProvider.SetSiteInfo(site);
+                    SiteInfo.Provider.Set(site);
                 }
             }
         }

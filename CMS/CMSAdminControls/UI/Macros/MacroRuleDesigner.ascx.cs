@@ -225,7 +225,7 @@ public partial class CMSAdminControls_UI_Macros_MacroRuleDesigner : FormEngineUs
             {
                 var where = GetRulesWhereCondition();
 
-                var ds = MacroRuleInfoProvider.GetMacroRules().Where(where).OrderBy("MacroRuleDisplayName")
+                var ds = MacroRuleInfo.Provider.Get().Where(where).OrderBy("MacroRuleDisplayName")
                                               .Columns("MacroRuleID, MacroRuleDisplayName, MacroRuleDescription, MacroRuleRequiredData, MacroRuleAvailability").TypedResult;
                 if (!DataHelper.DataSourceIsEmpty(ds))
                 {
@@ -793,7 +793,7 @@ $cmsj(document).ready(InitDesignerAreaSize);
     /// </summary>
     private void AddClause()
     {
-        MacroRuleInfo rule = MacroRuleInfoProvider.GetMacroRuleInfo(ValidationHelper.GetInteger(lstRules.SelectedValue, 0));
+        MacroRuleInfo rule = MacroRuleInfo.Provider.Get(ValidationHelper.GetInteger(lstRules.SelectedValue, 0));
         if (rule != null)
         {
             List<MacroRuleTree> selected = GetSelected();

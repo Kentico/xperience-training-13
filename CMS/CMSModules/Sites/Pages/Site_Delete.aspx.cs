@@ -142,7 +142,7 @@ public partial class CMSModules_Sites_Pages_Site_Delete : GlobalAdminPage, ICall
             Text = GetString("Site_Edit.DeleteSite"),
         });
 
-        mSiteInfo = SiteInfoProvider.GetSiteInfo(QueryHelper.GetInteger("siteId", 0));
+        mSiteInfo = SiteInfo.Provider.Get(QueryHelper.GetInteger("siteId", 0));
         if (mSiteInfo != null)
         {
             var siteDisplayName = HTMLHelper.HTMLEncode(ResHelper.LocalizeString(mSiteInfo.DisplayName));

@@ -30,6 +30,8 @@ var JsPlumbAbstractNode = $class({
         this.defaultSourcePointDefinition = [{ Type: "standard" }];
         this.sourcePointsMax = 1000;
         this.sourcePointsMin = 0;
+
+        this.isEmphasized = false;
     },
 
 
@@ -305,7 +307,7 @@ var JsPlumbAbstractNode = $class({
     /*
     *   Returns the HTML representation of node description.
     */
-    getDescriptionHtml: function() {
+    getDescriptionHtml: function () {
         if (this.graph.isMarketingAutomationWorkflow()) {
             return this.content ? `<div class="main">${this.content}</div>` : '';
         }
@@ -431,7 +433,7 @@ var JsPlumbAbstractNode = $class({
             this.myJsPlumb.repaint(this.nodeJQ);
         }
 
-        if (this.graph.isMarketingAutomationWorkflow()){
+        if (this.graph.isMarketingAutomationWorkflow()) {
             this.syncZIndexOfNodeEndpoints();
         }
     },
@@ -882,8 +884,10 @@ var JsPlumbAbstractNode = $class({
     /*
     * Sets coordinates for data placeholder.
     */
-    setPlaceholderPosition: function() {
-        if (this.graph.isMarketingAutomationWorkflow() && this.RetrievesData && !this.readOnly) {
+    setPlaceholderPosition: function () {
+        if (this.graph.isMarketingAutomationWorkflow()
+            && ((this.RetrievesData && !this.readOnly) || (this.isEmphasized && this.readOnly))) {
+
             var placeholder = $cmsj(`#nodeData_${this.id}`);
             var top = this.nodeJQ.height() - 20;
             var left = this.nodeJQ.width() + 35;

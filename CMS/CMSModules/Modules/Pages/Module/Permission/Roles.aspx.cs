@@ -56,7 +56,7 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
         {
             if (mSelectedUser == null && SelectedUserID > 0)
             {
-                mSelectedUser = UserInfoProvider.GetUserInfo(SelectedUserID);
+                mSelectedUser = UserInfo.Provider.Get(SelectedUserID);
             }
             return mSelectedUser;
         }
@@ -73,7 +73,7 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
             if (mPermission == null)
             {
                 mPermissionId = QueryHelper.GetInteger("permissionId", 0);
-                mPermission = PermissionNameInfoProvider.GetPermissionNameInfo(mPermissionId);
+                mPermission = PermissionNameInfo.Provider.Get(mPermissionId);
             }
             return mPermission;
         }
@@ -194,11 +194,11 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
     {
         if (newState)
         {
-            RolePermissionInfoProvider.SetRolePermissionInfo(rowItemId, colItemId);
+            RolePermissionInfo.Provider.Add(rowItemId, colItemId);
         }
         else
         {
-            RolePermissionInfoProvider.DeleteRolePermissionInfo(rowItemId, colItemId);
+            RolePermissionInfo.Provider.Remove(rowItemId, colItemId);
         }
         // Invalidate all users
         UserInfo.TYPEINFO.InvalidateAllObjects();
@@ -252,7 +252,7 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
     /// </summary>
     private void GenerateBeforeRowsContent()
     {
-        ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(Permission.ResourceId);
+        ResourceInfo resource = ResourceInfo.Provider.Get(Permission.ResourceId);
 
         // Check if every necessary property is set
         if ((SelectedUser != null) && (Permission != null) && (resource != null))

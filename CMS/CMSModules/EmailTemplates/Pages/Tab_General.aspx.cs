@@ -36,7 +36,7 @@ public partial class CMSModules_EmailTemplates_Pages_Tab_General : CMSEmailTempl
             }
 
             string templateName = QueryHelper.GetString("name", String.Empty);
-            EmailTemplateInfo templateInfo = EmailTemplateProvider.GetEmailTemplate(templateName, SiteID);
+            EmailTemplateInfo templateInfo = EmailTemplateInfo.Provider.Get(templateName, SiteID);
             if (templateInfo != null)
             {
                 EditedObject = templateInfo;

@@ -179,7 +179,7 @@ function IsSubjectEmpty()
     /// <returns>Returns true if site contains group and group selector was loaded</returns>
     private bool AddGroupSelector()
     {
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo si = SiteInfo.Provider.Get(siteId);
         if ((si != null) && (ModuleCommands.CommunitySiteHasGroup(si.SiteID)))
         {
             groupsControl = Page.LoadUserControl("~/CMSModules/Groups/FormControls/MultipleGroupSelector.ascx") as FormEngineUserControl;

@@ -307,7 +307,7 @@ public partial class CMSModules_Forums_FormControls_ForumSelector : FormEngineUs
     {
         SetFormSiteName();
 
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+        SiteInfo si = SiteInfo.Provider.Get(SiteName);
         if (si != null)
         {
             siteId = si.SiteID;

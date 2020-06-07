@@ -99,7 +99,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
         {
             if ((mFileInfo == null) && (FileID > 0))
             {
-                mFileInfo = MediaFileInfoProvider.GetMediaFileInfo(FileID);
+                mFileInfo = MediaFileInfo.Provider.Get(FileID);
             }
             return mFileInfo;
         }
@@ -184,7 +184,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
         {
             if ((mLibraryInfo == null) && (MediaLibraryID > 0))
             {
-                LibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryID);
+                LibraryInfo = MediaLibraryInfo.Provider.Get(MediaLibraryID);
             }
             return mLibraryInfo;
         }
@@ -204,7 +204,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
         {
             if (mLibrarySiteInfo == null)
             {
-                mLibrarySiteInfo = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                mLibrarySiteInfo = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             }
             return mLibrarySiteInfo;
         }
@@ -982,7 +982,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
                 FileInfo.FileDescription = txtEditDescription.Text;
 
                 // Save
-                MediaFileInfoProvider.SetMediaFileInfo(FileInfo);
+                MediaFileInfo.Provider.Set(FileInfo);
                 FilePath = FileInfo.FilePath;
 
                 UpdateLastWriteTime(fileName, origFileName, fi);
@@ -1059,7 +1059,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
                 FileInfo.FileDescription = txtEditDescription.Text.Trim();
 
                 // Save
-                MediaFileInfoProvider.SetMediaFileInfo(FileInfo);
+                MediaFileInfo.Provider.Set(FileInfo);
 
                 // Remove old thumbnails
                 MediaFileInfoProvider.DeleteMediaFileThumbnails(FileInfo);

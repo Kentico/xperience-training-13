@@ -679,6 +679,21 @@
             Gets a where condition to find an existing object based on current object
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfo.ResetChanges">
+            <summary>
+            Resets the object changes and keeps the new values as unchanged according to the asUnchanged parameter.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfo.ResetSearchContent(System.Boolean)">
+            <summary>
+            Sets the value of the flag indicating whether extracted search content of the attachment is to be cleared upon save
+            (causing the search content to be loaded during search indexing).
+            True by default.
+            </summary>
+            <param name="reset">Specifies if search content field is to be set to null to be forced to be loaded again.</param>
+            <seealso cref="M:CMS.DocumentEngine.AttachmentInfoProvider.Set(CMS.DocumentEngine.AttachmentInfo)"/>
+            <seealso cref="M:CMS.DocumentEngine.AttachmentInfoProvider.SetAttachmentInfo(CMS.DocumentEngine.AttachmentInfo,System.Boolean)"/>
+        </member>
         <member name="T:CMS.DocumentEngine.AttachmentInfoProvider">
             <summary>
             Class providing attachment management.
@@ -747,12 +762,26 @@
             <param name="attachmentId">Attachment id</param>
             <param name="getBinary">If false, no binary data is retrieved from the database</param>
         </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfoProvider.Set(CMS.DocumentEngine.AttachmentInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.DocumentEngine.AttachmentInfoProvider.SetAttachmentInfo(CMS.DocumentEngine.AttachmentInfo,System.Boolean)">
             <summary>
             Sets (updates or inserts) specified attachment.
             </summary>
             <param name="attachment">Attachment to set</param>
             <param name="resetSearchContent">If true, the search content field is set to null to be forced to load again</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfoProvider.Delete(CMS.DocumentEngine.AttachmentInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.DocumentEngine.AttachmentInfoProvider.DeleteAttachmentInfo(CMS.DocumentEngine.AttachmentInfo,System.Boolean)">
             <summary>
@@ -1072,6 +1101,29 @@
             <summary>
             Clears the AttachmentSearchContent for all attachments in the DB.
             </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.AttachmentInfoProviderExtensions">
+            <summary>
+            Contains extension methods for <see cref="T:CMS.DocumentEngine.IAttachmentHistoryInfoProvider"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfoProviderExtensions.GetWithoutBinary(CMS.DocumentEngine.IAttachmentInfoProvider,System.Int32)">
+            <summary>
+            Gets an instance of attachment based on its ID.
+            </summary>
+            <param name="attachmentInfoProvider">Provider for <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> management.</param>
+            <param name="id">ID of the attachment to look for.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> corresponding to <paramref name="id"/> or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfoProviderExtensions.GetWithoutBinary(CMS.DocumentEngine.IAttachmentInfoProvider,System.Guid,System.Int32)">
+            <summary>
+            Gets an instance of attachment based on its GUID and site ID.
+            </summary>
+            <param name="attachmentInfoProvider">Provider for <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> management.</param>
+            <param name="guid">GUID of the attachment to look for.</param>
+            <param name="siteId">ID of the site to which to constrain the lookup.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> corresponding to <paramref name="guid"/> and <paramref name="siteId"/> or null.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="attachmentInfoProvider"/> is null.</exception>
         </member>
         <member name="T:CMS.DocumentEngine.AttachmentListInfo">
             <summary>
@@ -2032,7 +2084,7 @@
             <summary>
             Returns document culture data with specified ID.
             </summary>
-            <param name="dataId">Document culture ID.</param>        
+            <param name="dataId">Document culture ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Internal.DocumentCultureDataInfoProvider.SetDocumentCultureInfo(CMS.DocumentEngine.Internal.DocumentCultureDataInfo)">
             <summary>
@@ -2168,6 +2220,9 @@
             <summary>
             Class for managing document custom fields.
             </summary>
+            <remarks>
+            This provider is not managed by the IoC container.
+            </remarks>
         </member>
         <member name="F:CMS.DocumentEngine.Internal.DocumentFieldsInfoProvider.DOCUMENT_FIELDS_PREFIX">
             <summary>
@@ -2571,7 +2626,7 @@
             <summary>
             Returns document node with specified ID.
             </summary>
-            <param name="nodeId">Document node ID.</param>        
+            <param name="nodeId">Document node ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Internal.DocumentNodeDataInfoProvider.SetDocumentNodeDataInfo(CMS.DocumentEngine.Internal.DocumentNodeDataInfo)">
             <summary>
@@ -2687,6 +2742,16 @@
             Checks if the object has unique code name. Returns true if the object has unique code name.
             </summary>
             <param name="infoObj">Info object to check.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.Internal.IDocumentCultureDataInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.Internal.DocumentCultureDataInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Internal.IDocumentNodeDataInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.Internal.DocumentNodeDataInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.DocumentEngine.Internal.AttachmentSendFileEventArgs">
             <summary>
@@ -3721,6 +3786,11 @@
             Attachment variant parent ID.
             </summary>
         </member>
+        <member name="T:CMS.DocumentEngine.IAttachmentInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.TemporaryAttachmentsCleaner">
             <summary>
             Provides an ITask interface for the temporary attachments deletion.
@@ -3737,10 +3807,24 @@
             Represents an attachment variant generator for <see cref="T:CMS.DocumentEngine.AttachmentHistoryInfo"/>.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.AttachmentHistoryInfoVariantGenerator.#ctor(CMS.DocumentEngine.IAttachmentHistoryInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.DocumentEngine.AttachmentHistoryInfoVariantGenerator"/> class.
+            </summary>
+            <param name="attachmentHistoryInfoProvider">Provider for <see cref="T:CMS.DocumentEngine.AttachmentHistoryInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="attachmentHistoryInfoProvider"/> is null.</exception>
+        </member>
         <member name="T:CMS.DocumentEngine.AttachmentInfoVariantGenerator">
             <summary>
             Represents an attachment variant generator for <see cref="T:CMS.DocumentEngine.AttachmentInfo"/>.
             </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.AttachmentInfoVariantGenerator.#ctor(CMS.DocumentEngine.IAttachmentInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.DocumentEngine.AttachmentInfoVariantGenerator"/> class.
+            </summary>
+            <param name="attachmentInfoProvider">Provider for <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="attachmentInfoProvider"/> is null.</exception>
         </member>
         <member name="T:CMS.DocumentEngine.AttachmentVariantGenerator`1">
             <summary>
@@ -5471,6 +5555,12 @@
             <param name="copyPermissions">Indicates if the document permissions should be copied.</param>
             <param name="newDocumentsOwner">ID of the new document owner</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentHelper.InsertDocumentAsLinkInternal(CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters)">
+            <summary>
+            Inserts the page as link based on given parameters.
+            </summary>
+            <param name="parameters">Parameters.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentHelper.DeleteDocument(CMS.DocumentEngine.TreeNode,CMS.DocumentEngine.TreeProvider,System.Boolean,System.Boolean)">
             <summary>
             Deletes the given document.
@@ -5995,7 +6085,7 @@
             <param name="node">Document node</param>
             <param name="tree">Tree provider</param>
         </member>
-        <member name="M:CMS.DocumentEngine.DocumentHelper.GetExistingAttachment(System.Guid,System.Boolean,System.Int32,System.String)">
+        <member name="M:CMS.DocumentEngine.DocumentHelper.GetExistingAttachment(System.Guid,System.Boolean,System.Int32,System.Int32)">
             <summary>
             Returns existing attachment - if <paramref name="usesWorkflow"/> set,
             returns given <paramref name="versionHistoryId"/> of the specified attachment.
@@ -6003,7 +6093,7 @@
             <param name="attachmentGuid">Attachment GUID</param>
             <param name="usesWorkflow">Indicates if attachment under workflow should be returned.</param>
             <param name="versionHistoryId">Specifics history version</param>
-            <param name="siteName">Name of the site attachment should belong to.</param>
+            <param name="siteId">ID of the site attachment should belong to.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentHelper.GetSiteName(CMS.DocumentEngine.TreeNode)">
             <summary>
@@ -6362,6 +6452,46 @@
             <param name="logDocumentFieldChanges">Indicates if log should contain the changes to particular document document fields</param>
             <param name="eventType">Type of the event. Please use predefined constants from <see cref="T:CMS.EventLog.EventType"/> class.</param>
         </member>
+        <member name="T:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters">
+            <summary>
+            Parameters for page insertion as link using <see cref="T:CMS.DocumentEngine.DocumentHelper"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.Page">
+            <summary>
+            Page to insert.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.Provider">
+            <summary>
+            Tree provider.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.Parent">
+            <summary>
+            Parent under which the page is inserted.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.SourceData">
+            <summary>
+            Source data in case the page is being created based on another data.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.NewDocumentsOwner">
+            <summary>
+            Owner of the new documents.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.IncludeChildNodes">
+            <summary>
+            Indicates if child nodes should be linked as well.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentHelperInsertAsLinkParameters.CopyPermissions">
+            <summary>
+            Indicates if the document permissions should be copied.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.DocumentHelperInsertParameters">
             <summary>
             Parameters for page insertion using <see cref="T:CMS.DocumentEngine.DocumentHelper"/>.
@@ -6542,11 +6672,11 @@
             Source data for the <see cref="T:CMS.DocumentEngine.TreeNode"/> insertion.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.InsertSourceData.#ctor(CMS.DocumentEngine.TreeNode)">
+        <member name="M:CMS.DocumentEngine.InsertSourceData.#ctor(System.Int32)">
             <summary>
             Creates an instance of <see cref="T:CMS.DocumentEngine.InsertSourceData"/> class.
             </summary>
-            <param name="page">Source page.</param>
+            <param name="nodeId">Node ID of source page.</param>
         </member>
         <member name="M:CMS.DocumentEngine.InsertSourceData.#ctor(System.Collections.Generic.IEnumerable{CMS.DocumentEngine.Routing.Internal.CulturePageUrlSlug})">
             <summary>
@@ -7776,13 +7906,17 @@
             <param name="newDocumentsOwner">Owner of the new documents</param>
             <param name="useDocumentHelper">If true, the document helper is used</param>
         </member>
-        <member name="M:CMS.DocumentEngine.TreeNode.InsertAsLinkInternal(CMS.DocumentEngine.TreeNode,System.Int32)">
+        <member name="M:CMS.DocumentEngine.TreeNode.InsertAsLinkInternal(CMS.DocumentEngine.TreeNodeInsertAsLinkParameters)">
             <summary>
-            Inserts current node under specified parent node as a document link.
+            Inserts the page as a link based on given parameters.
             </summary>
-            <param name="parent">Parent node</param>
-            <param name="newDocumentsOwner">Owner of the new documents</param>
-            <remarks>Use this method only for creating a new node linked to existing document (the node must be existing document). The standard path properties of the node are not used during the insert operation and they are overwritten with new values.</remarks>
+            <param name="parameters">Parameters.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.TreeNode.InsertNodeAsLink(CMS.DocumentEngine.TreeNodeInsertAsLinkParameters)">
+            <summary>
+            Inserts the page as a link based on given parameters.
+            </summary>
+            <param name="parameters">Parameters.</param>
         </member>
         <member name="M:CMS.DocumentEngine.TreeNode.Update">
             <summary>
@@ -8327,6 +8461,31 @@
             Sets the list of internal components
             </summary>
             <param name="components">List of components</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.TreeNodeInsertAsLinkParameters">
+            <summary>
+            Parameters for <see cref="T:CMS.DocumentEngine.TreeNode"/> insertion as link.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.TreeNodeInsertAsLinkParameters.Parent">
+            <summary>
+            Parent under which the page is inserted.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.TreeNodeInsertAsLinkParameters.SourceData">
+            <summary>
+            Source data in case the page is being created based on another data.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.TreeNodeInsertAsLinkParameters.UseDocumentHelper">
+            <summary>
+            Indicates if <see cref="T:CMS.DocumentEngine.DocumentHelper"/> should be used for the action.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.TreeNodeInsertAsLinkParameters.NewDocumentsOwner">
+            <summary>
+            Owner of the new documents.
+            </summary>
         </member>
         <member name="T:CMS.DocumentEngine.TreeNodeInsertParameters">
             <summary>
@@ -9343,12 +9502,36 @@
             Returns allowed child classes for given parent class ID and site ID.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding structure.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding structure.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.GetAllowedChildClassInfo(System.Int32,System.Int32)">
             <summary>
             Returns the AllowedChildClassInfo structure for the specified allowedChildClass.
             </summary>
             <param name="parentClassId">ParentClassID</param>
             <param name="childClassId">ChildClassID</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.Set(CMS.DocumentEngine.AllowedChildClassInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.SetAllowedChildClassInfo(CMS.DocumentEngine.AllowedChildClassInfo)">
             <summary>
@@ -9362,12 +9545,26 @@
             </summary>
             <param name="infoObj">AllowedChildClass object</param>
         </member>
+        <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.RemoveAllowedChildClass(System.Int32,System.Int32)">
             <summary>
             Deletes specified allowedChildClass.
             </summary>
             <param name="parentClassId">ParentClassID</param>
             <param name="childClassId">ChildClassID</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.AllowedChildClassInfoProvider.AddAllowedChildClass(System.Int32,System.Int32)">
             <summary>
@@ -9401,6 +9598,42 @@
             Deletes the object to the database.
             </summary>
             <param name="info">Object to delete</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IAllowedChildClassInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IAllowedChildClassInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding structure.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IAllowedChildClassInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding structure.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IAllowedChildClassInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IAllowedChildClassInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.AllowedChildClassInfo"/> binding.
+            </summary>
+            <param name="parentClassId">Parent page type ID.</param>
+            <param name="childClassId">Child page type ID.</param>
         </member>
         <member name="T:CMS.DocumentEngine.DocumentFormFieldInfoExtensions">
             <summary>
@@ -9674,12 +9907,6 @@
             Class providing DocumentTypeScopeClass management.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.GetScopeClassInfo(System.Int32)">
-            <summary>
-            Returns document type scope class with specified ID.
-            </summary>
-            <param name="classId">Document type scope class ID.</param>        
-        </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.SetScopeClassInfo(CMS.DocumentEngine.DocumentTypeScopeClassInfo)">
             <summary>
             Sets (updates or inserts) specified document type scope class.
@@ -9691,12 +9918,6 @@
             Deletes specified document type scope class.
             </summary>
             <param name="classObj">Document type scope class to be deleted.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.DeleteScopeClassInfo(System.Int32)">
-            <summary>
-            Deletes document type scope class with specified ID.
-            </summary>
-            <param name="classId">Document type scope class ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.GetScopeClasses">
             <summary>
@@ -9712,6 +9933,23 @@
             <param name="topN">Number of records to be selected.</param>        
             <param name="columns">Columns to be selected.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding structure.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding structure.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.GetScopeClassInfo(System.Int32,System.Int32)">
             <summary>
             Returns the DocumentTypeScopeClassInfo structure for the specified scope and class.
@@ -9719,12 +9957,26 @@
             <param name="scopeId">Scope identifier</param>        
             <param name="classId">Class identifier</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.RemoveClassFromScope(System.Int32,System.Int32)">
             <summary>
             Removes document type from scope.
             </summary>
             <param name="scopeId">Scope identifier</param>        
             <param name="classId">Class identifier</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeClassInfoProvider.AddClassToScope(System.Int32,System.Int32)">
             <summary>
@@ -9844,7 +10096,7 @@
             <summary>
             Returns document type scope with specified ID.
             </summary>
-            <param name="scopeId">Document type scope ID.</param>        
+            <param name="scopeId">Document type scope ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentTypeScopeInfoProvider.SetScopeInfo(CMS.DocumentEngine.DocumentTypeScopeInfo)">
             <summary>
@@ -9943,6 +10195,47 @@
         <member name="P:CMS.DocumentEngine.DocumentTypeScopeResolvers.DocumentTypeScopeResolver">
             <summary>
             Returns document type scope macro resolver with document and current user fields.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IDocumentTypeScopeClassInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTypeScopeClassInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding structure.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTypeScopeClassInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding structure.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTypeScopeClassInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTypeScopeClassInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentTypeScopeClassInfo"/> binding.
+            </summary>
+            <param name="scopeId">Page type scope ID.</param>
+            <param name="classId">Page type ID.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IDocumentTypeScopeInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.DocumentTypeScopeInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.DocumentEngine.SystemDocumentTypes">
@@ -12170,6 +12463,11 @@
             <returns>Returns the configuration source.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="page"/> is null.</exception>
         </member>
+        <member name="T:CMS.DocumentEngine.PageBuilder.ITempPageBuilderWidgetsInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.PageBuilder.ITempPageBuilderWidgetsPropagator">
             <summary>
             Propagates widgets and template configuration from temporary data to page data.
@@ -12405,10 +12703,11 @@
             Propagates widgets and template configuration from temporary data to page data.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsPropagator.#ctor">
+        <member name="M:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsPropagator.#ctor(CMS.DocumentEngine.PageBuilder.ITempPageBuilderWidgetsInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsPropagator"/> class.
             </summary>
+            <param name="tempPageBuilderWidgetsInfoProvider">Provider for <see cref="T:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsInfo"/> management.</param>
         </member>
         <member name="M:CMS.DocumentEngine.PageBuilder.TempPageBuilderWidgetsPropagator.Propagate(CMS.DocumentEngine.TreeNode,System.Guid)">
             <summary>
@@ -14006,6 +14305,46 @@
             </summary>
             <param name="query">Query.</param>
         </member>
+        <member name="T:CMS.DocumentEngine.IRelationshipInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IRelationshipInfoProvider.Get(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding structure.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IRelationshipInfoProvider.GetAsync(System.Int32,System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding structure.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IRelationshipInfoProvider.Remove(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IRelationshipInfoProvider.Add(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.RelationshipInfo">
             <summary>
             RelationshipInfo data container class.
@@ -14135,6 +14474,25 @@
             Returns a query for all the RelationshipInfo objects.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.Get(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding structure.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.GetAsync(System.Int32,System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding structure.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.GetRelationshipInfo(System.Int32,System.Int32,System.Int32)">
             <summary>
             Gets relationship info object.
@@ -14173,6 +14531,14 @@
             </summary>
             <param name="relationship">Relationship</param>
         </member>
+        <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.Add(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding.
+            </summary>
+            <param name="leftNodeId">ID of left node.</param>
+            <param name="rightNodeId">ID of right node.</param>
+            <param name="relationshipNameId">ID of relationship name.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.AddRelationship(System.Int32,System.Int32,System.Int32)">
             <summary>
             Creates the relationship for two nodes.
@@ -14180,6 +14546,14 @@
             <param name="leftNodeId">ID of left node</param>
             <param name="rightNodeId">ID of right node</param>
             <param name="relationshipNameId">ID of relationship name</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.Remove(System.Int32,System.Int32,System.Int32)">
+             <summary>
+             Deletes <see cref="T:CMS.DocumentEngine.RelationshipInfo"/> binding.
+             </summary>
+            <param name="leftNodeId">ID of left node.</param>
+             <param name="rightNodeId">ID of right node.</param>
+             <param name="relationshipNameId">ID of relationship name.</param>
         </member>
         <member name="M:CMS.DocumentEngine.RelationshipInfoProvider.RemoveRelationship(System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -14330,12 +14704,12 @@
             Sets to 0 if you do not wish to cache large files.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.GetAttachmentService.#ctor(CMS.Base.ISiteService,CMS.Base.IWebPathMapper)">
+        <member name="M:CMS.DocumentEngine.GetAttachmentService.#ctor(CMS.Base.ISiteService,CMS.Base.Internal.IWebPathMapper)">
             <summary>
             Initializes new instance of <see cref="T:CMS.DocumentEngine.GetAttachmentService"/> class.
             </summary>
             <param name="siteService">The <see cref="T:CMS.Base.ISiteService"/> implementation.</param>
-            <param name="webPathMapper">The <see cref="T:CMS.Base.IWebPathMapper"/> implementation.</param>
+            <param name="webPathMapper">The <see cref="T:CMS.Base.Internal.IWebPathMapper"/> implementation.</param>
         </member>
         <member name="P:CMS.DocumentEngine.GetAttachmentService.CultureCode">
             <summary>
@@ -14697,13 +15071,14 @@
             </summary>
             <param name="site">Site to manage routing paths for.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.Internal.CulturePageUrlPathsManager.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsGenerator,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsRemover)">
+        <member name="M:CMS.DocumentEngine.Routing.Internal.CulturePageUrlPathsManager.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsGenerator,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsRemover,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger)">
             <summary>
             Creates an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.CulturePageUrlPathsManager"/> class.
             </summary>
             <param name="site">Site.</param>
             <param name="culturePathsGenerator">Culture paths generator.</param>
             <param name="culturePathsRemover">Culture paths remover.</param>
+            <param name="synchronizationLogger">Synchronization tasks logger.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.Internal.CulturePageUrlPathsManager.Generate(System.Int32)">
             <summary>
@@ -14732,6 +15107,32 @@
             Page URL slug.
             </summary>
         </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.IRootRequestDetector">
+            <summary>
+            Detects if the requested path is root path.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.IRootRequestDetector.IsRootRequest(CMS.DocumentEngine.Internal.NormalizedUrlPath,System.String,CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Indicates if the <paramref name="requestedPath"/> represents a request for root page.
+            </summary>
+            <param name="requestedPath">Requested path.</param>
+            <param name="cultureCode">Culture code of the requested path culture.</param>
+            <param name="siteIdentifier">Site identifier.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.RootRequestDetector">
+            <summary>
+            Detects if the requested path is root path.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.RootRequestDetector.IsRootRequest(CMS.DocumentEngine.Internal.NormalizedUrlPath,System.String,CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Indicates if the <paramref name="requestedPath"/> represents a request for root page.
+            </summary>
+            <param name="requestedPath">Requested path.</param>
+            <param name="cultureCode">Culture code of the requested path culture.</param>
+            <param name="siteIdentifier">Site identifier.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.Internal.IPageUrlDataContextExtractor">
             <summary>
             Interface for extracting the page URL data context from data for the router module.
@@ -14758,10 +15159,24 @@
             </summary>
             <param name="site">Site for which URL paths culture format should be changed.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger"/> class.
+            </summary>
+            <param name="site">Site for which URL paths culture format should be changed.</param>
+            <param name="synchronizationLogger">Synchronization tasks logger.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.Change(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum)">
             <summary>
             Changes URL culture format of page URL paths.
             </summary>
+            <param name="newFormat">New URL culture format.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.ChangeForCulture(System.String,CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum)">
+            <summary>
+            Changes URL culture format of page URL paths for given culture.
+            </summary>
+            <param name="cultureCode">Culture code.</param>
             <param name="newFormat">New URL culture format.</param>
         </member>
         <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathSlugUpdater">
@@ -14775,6 +15190,14 @@
             </summary>
             <param name="page">Page to update the page URL slug for.</param>
             <param name="cultureCode">Culture code for which the slug should be updated. If not provided culture from <paramref name="page"/> is used.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathSlugUpdater.#ctor(CMS.DocumentEngine.TreeNode,System.String,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger)">
+            <summary>
+            Initializes an instance of <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathSlugUpdater"/> class.
+            </summary>
+            <param name="page">Page to update the page URL slug for.</param>
+            <param name="cultureCode">Culture code for which the slug should be updated. If not provided culture from <paramref name="page"/> is used.</param>
+            <param name="synchronizationLogger">Synchronization tasks logger.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathSlugUpdater.TryUpdate(System.String,System.Collections.Generic.IEnumerable{CMS.DocumentEngine.Routing.Internal.CollisionData}@)">
             <summary>
@@ -14826,13 +15249,14 @@
             </summary>
             <param name="site">Site to manage routing paths for.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.Internal.SitePageUrlPathsManager.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsGenerator,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsRemover)">
+        <member name="M:CMS.DocumentEngine.Routing.Internal.SitePageUrlPathsManager.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsGenerator,CMS.DocumentEngine.Routing.IPageUrlPathCulturePathsRemover,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger)">
             <summary>
             Creates an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.SitePageUrlPathsManager"/> class.
             </summary>
             <param name="site">Site.</param>
             <param name="culturePathsGenerator">Culture paths generator.</param>
             <param name="culturePathsRemover">Culture paths remover.</param>
+            <param name="synchronizationLogger">Synchronization tasks logger.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.Internal.SitePageUrlPathsManager.Generate">
             <summary>
@@ -14883,6 +15307,41 @@
             </summary>
             <returns>Returns routing paths based on settings configuration for all site cultures.</returns>
         </member>
+        <member name="T:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger">
+            <summary>
+            Interface for synchronization tasks of page URL paths logger.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangePathsFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for page URL paths format change.
+            </summary>
+            <param name="newFormat">New format.</param>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangeSlugTask(CMS.DocumentEngine.TreeNode,System.String,System.String)">
+            <summary>
+            Logs task for page URL path slug change.
+            </summary>
+            <param name="page">Page.</param>
+            <param name="newSlug">New slug value.</param>
+            <param name="cultureCode">Culture code for which the slug was changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogDeletePathsTask(CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for deleting the page URL paths.
+            </summary>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be deleted.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogGeneratePathsTask(CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for generating the page URL paths.
+            </summary>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be generated.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.PageUrlPathPathsManagerForMove">
             <summary>
             Manages page URL paths for a given page within the move action.
@@ -14918,12 +15377,13 @@
             Returns name of the update query
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsUpdateHelper.GetUpdateQueryParameters(CMS.DocumentEngine.Routing.PageUrlPathUpdateParameters,System.Boolean)">
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsUpdateHelper.GetUpdateQueryParameters(CMS.DocumentEngine.Routing.PageUrlPathUpdateParameters,System.Boolean,System.Boolean)">
             <summary>
             Provides SQL parameters for update.
             </summary>
             <param name="updateParameters">Parameters in object representation.</param>
             <param name="resolveConficts">Indicates if collisions should be automatically resoled.</param>
+            <param name="storeFormerUrls">Indicates if former URLs should be preserved.</param>
         </member>
         <member name="T:CMS.DocumentEngine.Routing.PageUrlPathUpdateParameters">
             <summary>
@@ -14955,6 +15415,28 @@
             Culture code.
             </summary>
         </member>
+        <member name="T:CMS.DocumentEngine.Routing.PageRoutingDataManager">
+            <summary>
+            Manages page routing data for the router.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingDataManager.#ctor(System.Data.DataSet)">
+            <summary>
+            Create an instance of <see cref="T:CMS.DocumentEngine.Routing.PageRoutingDataManager"/> class.
+            </summary>
+            <param name="data">Data.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingDataManager.AddPageUrlPathSlugsTable(System.Collections.Generic.IEnumerable{CMS.DocumentEngine.Routing.Internal.CulturePageUrlSlug})">
+            <summary>
+            Adds page URL path slugs to the data.
+            </summary>
+            <param name="slugs">List of page URL path slugs.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingDataManager.GetPageUrlPathSlugs">
+            <summary>
+            Gets the list of page URL path slugs from the data.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.PageRoutingHelper">
             <summary>
             Provides helper methods for page routing.
@@ -14984,6 +15466,22 @@
             <summary>
             Settings key name for home page behavior.
             </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingHelper.STORE_FORMER_URLS_KEY">
+            <summary>
+            Settings key name for generating former URLs.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingHelper.HIDE_PREFIX_FOR_DEFAULT_CULTURE_URL_KEY">
+            <summary>
+            Settings key name for hiding the language prefix for default culture version.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.GetStoreFormerUrls(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Indicates if the former URLs should be stored.
+            </summary>
+            <param name="site">Site identifier.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.GetHomePagePath(CMS.DataEngine.SiteInfoIdentifier)">
             <summary>
@@ -15029,6 +15527,12 @@
             <param name="absoluteUrl">Page absolute URL.</param>
             <param name="site">Site.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.HideLanguagePrefixForDefaultCultureUrl(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Indicates if language prefix should be hidden for URLs of pages in default site culture.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.PageRoutingModeEnum">
             <summary>
             Enumeration representing the page routing mode.
@@ -15064,12 +15568,13 @@
             Extracts the page URL data context from data for the router module and ensures the caching layer for the result.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageUrlDataContextExtractor.#ctor(CMS.DocumentEngine.Internal.IDefaultPreferredCultureEvaluator,CMS.Base.ISiteService)">
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlDataContextExtractor.#ctor(CMS.DocumentEngine.Internal.IDefaultPreferredCultureEvaluator,CMS.Base.ISiteService,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
             Creates an instance of <see cref="T:CMS.DocumentEngine.Routing.PageUrlDataContextExtractor"/> class.
             </summary>
             <param name="cultureEvaluator">Evaluator of preferred culture.</param>
             <param name="siteService">Service to retrieve the site context.</param>
+            <param name="siteInfoProvider">Provider for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.PageUrlDataContextExtractor.TryExtract(System.Uri,CMS.DocumentEngine.Internal.NormalizedUrlPath,System.Boolean,CMS.DocumentEngine.Internal.PageUrlDataContext@)">
             <summary>
@@ -15184,27 +15689,83 @@
             </summary>
             <param name="nodeId">Node ID.</param>
         </member>
-        <member name="T:CMS.DocumentEngine.Routing.PageVersionDataManager">
+        <member name="T:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger">
             <summary>
-            Manages version data for the router.
+            Logger for synchronization tasks of page URL paths.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageVersionDataManager.#ctor(System.Data.DataSet)">
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.UPDATE_TASK_FORMAT">
             <summary>
-            Create an instance of <see cref="T:CMS.DocumentEngine.Routing.PageVersionDataManager"/> class.
+            Type of the update page URL paths task.
             </summary>
-            <param name="data">Version data.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageVersionDataManager.AddPageUrlPathSlugsTable(System.Collections.Generic.IEnumerable{CMS.DocumentEngine.Routing.Internal.CulturePageUrlSlug})">
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.TYPE_PARAM_NAME">
             <summary>
-            Adds page URL path slugs to the version data.
+            Type parameter name.
             </summary>
-            <param name="slugs">List of page URL path slugs.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageVersionDataManager.GetPageUrlPathSlugs">
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.FORMAT_PARAM_NAME">
             <summary>
-            Gets the list of page URL path slugs from the version data.
+            Format parameter name.
             </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.CULTURE_PARAM_NAME">
+            <summary>
+            Culture parameter name.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.SLUG_PARAM_NAME">
+            <summary>
+            New slug parameter key.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogChangePathsFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for page URL paths format change.
+            </summary>
+            <param name="newFormat">New format.</param>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogGeneratePathsTask(CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for generating the page URL paths.
+            </summary>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be generated.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogDeletePathsTask(CMS.DataEngine.SiteInfoIdentifier,System.String)">
+            <summary>
+            Logs task for deleting the page URL paths.
+            </summary>
+            <param name="site">Site.</param>
+            <param name="cultureCode">Culture code for which the paths should be deleted.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogChangeSlugTask(CMS.DocumentEngine.TreeNode,System.String,System.String)">
+            <summary>
+            Logs task for page URL path slug change.
+            </summary>
+            <param name="page">Page.</param>
+            <param name="newSlug">New slug value.</param>
+            <param name="cultureCode">Culture code for which the slug was changed.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationProcessor">
+            <summary>
+            Processor for tasks of page URL paths.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationProcessor.Init">
+            <summary>
+            Initializes the tasks for page URL paths synchronization
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationProcessor.ProcessChangeSlug(CMS.DocumentEngine.TreeNode,CMS.Synchronization.TaskParameters,System.Boolean)">
+            <summary>
+            Process change page URL path slug task.
+            </summary>
+            <param name="page">Page.</param>
+            <param name="parameters">Task parameters.</param>
+            <param name="logSynchronization">Indicates whether staging task should be logged.</param>
         </member>
         <member name="T:CMS.DocumentEngine.Routing.TreeNodeRoutingExtensions">
             <summary>
@@ -16057,6 +16618,16 @@
             <param name="ACLID">ACL ID</param>
             <param name="columns">Columns to select</param>
         </member>
+        <member name="T:CMS.DocumentEngine.IAclInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AclInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IAclItemInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AclItemInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.DocumentSecurityHelper">
             <summary>
             Helper class to check the document security
@@ -16858,16 +17429,6 @@
             Class containing document synchronization logic.
             </summary>
         </member>
-        <member name="F:CMS.DocumentEngine.DocumentSynchronizationHelper.mSynchronizeSharedTemplatesWithDocuments">
-            <summary>
-            Indicates whether shared template should be synchronized with document.
-            </summary>
-        </member>
-        <member name="P:CMS.DocumentEngine.DocumentSynchronizationHelper.SynchronizeSharedTemplatesWithDocuments">
-            <summary>
-            Gets or sets the value that indicates whether shared templates should be synchronized with documents.
-            </summary>
-        </member>
         <member name="M:CMS.DocumentEngine.DocumentSynchronizationHelper.LogContentChanges(System.String)">
             <summary>
             Indicates if logging staging tasks for content is enabled.
@@ -17172,6 +17733,23 @@
             Class providing DocumentCategoryInfo management.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.GetDocumentCategoryInfo(System.Int32,System.Int32)">
             <summary>
             Returns the DocumentCategoryInfo structure for the specified documentCategory.
@@ -17196,6 +17774,13 @@
             </summary>
             <param name="documentCategory">DocumentCategory to set</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.DeleteDocumentCategoryInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified documentCategory.
@@ -17208,6 +17793,13 @@
             Deletes specified documentCategory.
             </summary>
             <param name="infoObj">DocumentCategory object</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentCategoryInfoProvider.AddDocumentToCategory(System.Int32,System.Int32)">
             <summary>
@@ -17372,6 +17964,23 @@
             Regular expression for tags.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.GetDocumentTagInfo(System.Int32,System.Int32)">
             <summary>
             Returns the DocumentTagInfo structure for the specified documentTag.
@@ -17419,12 +18028,26 @@
             <param name="documentId">ID of the document tags are inserted to</param>
             <param name="tags">Set of tags (separated by commas) to insert</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.AddTagToDocument(System.Int32,System.Int32)">
             <summary>
             Adds the specific tag to the specified document.
             </summary>
             <param name="tagId">ID of the tag to add</param>
             <param name="documentId">ID of the document the tag is added for</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentTagInfoProvider.RemoveTagFromDocument(System.Int32,System.Int32)">
             <summary>
@@ -17481,6 +18104,78 @@
             Gets list of tags filtering the multiple occurrence of particular tags.
             </summary>
             <param name="tags">Tags (separated by commas)</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IDocumentCategoryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentCategoryInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentCategoryInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentCategoryInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentCategoryInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentCategoryInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="categoryId">Content category ID.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IDocumentTagInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTagInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTagInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding structure.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTagInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IDocumentTagInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.DocumentTagInfo"/> binding.
+            </summary>
+            <param name="documentId">Page ID.</param>
+            <param name="tagId">Tag ID.</param>
         </member>
         <member name="T:CMS.DocumentEngine.TagsDocumentQueryFilter">
             <summary>
@@ -17574,6 +18269,11 @@
             <param name="query">Document Query which is being extended.</param>
             <param name="categoryNames">Category names</param>
             <param name="onlyEnabled">Indicates if only documents belonging to enabled (sub)categories are to be filtered out.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IPageTemplateConfigurationInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.PageTemplateConfigurationInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.DocumentEngine.PageTemplateConfigurationInfo">
             <summary>
@@ -18209,6 +18909,25 @@
             <param name="siteIdentifier">Site identifier.</param>
             <param name="cultureCode">Culture code.</param>
         </member>
+        <member name="T:CMS.DocumentEngine.PageFormerUrlPathContinuousIntegrationHelper">
+            <summary>
+            Provides helper methods for continuous integration bulk actions of <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathContinuousIntegrationHelper.StorePaths(System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            Stores former URL paths on given <paramref name="urlPath"/>.
+            </summary>
+            <param name="urlPath">URL path of items to store.</param>
+            <param name="startId">Former URL path ID limiting scope of <paramref name="urlPath"/>.</param>
+            <param name="cultureCode">Culture code of items to store.</param>
+            <param name="siteId">Site ID of items to store.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathContinuousIntegrationHelper.GetLastFormerUrlPathId">
+            <summary>
+            Gets the ID of the last former URL path in the database.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.HomePageUrlBehaviorEnum">
             <summary>
             Home page URL behavior options.
@@ -18227,6 +18946,21 @@
         <member name="F:CMS.DocumentEngine.HomePageUrlBehaviorEnum.UsePath">
             <summary>
             Use page URL path.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IAlternativeUrlInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AlternativeUrlInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IPageFormerUrlPathInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IPageUrlPathInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.DocumentEngine.NormalizedAlternativeUrl">
@@ -18257,6 +18991,147 @@
             <returns>
             A string that represents the current object.
             </returns>
+        </member>
+        <member name="T:CMS.DocumentEngine.PageFormerUrlPathInfo">
+            <summary>
+            Data container class for <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.PageFormerUrlPathInfo.OBJECT_TYPE">
+            <summary>
+            Object type.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.PageFormerUrlPathInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathID">
+            <summary>
+            Page former URL path ID.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathUrlPath">
+            <summary>
+            Page former URL path.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathUrlPathHash">
+            <summary>
+            Page former URL path hash.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathCulture">
+            <summary>
+            Page former URL path culture.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathNodeID">
+            <summary>
+            Page former URL path node ID.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathSiteID">
+            <summary>
+            Page former URL path site ID.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.PageFormerUrlPathInfo.PageFormerUrlPathLastModified">
+            <summary>
+            Page former URL path last modified.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.DeleteObject">
+            <summary>
+            Deletes the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.SetObject">
+            <summary>
+            Updates the object using appropriate provider.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.GetExistingWhereCondition">
+            <summary>
+            Gets a where condition to find an existing object based on current object
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor for de-serialization.
+            </summary>
+            <param name="info">Serialization info.</param>
+            <param name="context">Streaming context.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.#ctor">
+            <summary>
+            Creates an empty instance of the <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Creates a new instances of the <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> class from the given <see cref="T:System.Data.DataRow"/>.
+            </summary>
+            <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo">
+            <summary>
+            "Virtual" object for loading former page urls paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.OBJECT_TYPE">
+            <summary>
+            Object type
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.TYPEINFO">
+            <summary>
+            Type information.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.#ctor">
+            <summary>
+            Constructor - Creates an empty PageFormerUrlPathInfoListingInfo object.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.#ctor(System.Data.DataRow)">
+            <summary>
+            Constructor - Creates a new PageFormerUrlPathInfoListingInfo object from the given DataRow.
+            </summary>
+            <param name="dr">DataRow with the object data</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.GetColumnNames">
+            <summary>
+            Gets the default list of column names for this class
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoListingInfo.GetDataQueryInternal">
+            <summary>
+            Gets the data query for this object type.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.PageFormerUrlPathInfoProvider">
+            <summary>
+            Class providing <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoProvider.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfoProvider"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoProvider.DeletePageFormerUrlPaths(System.Int32)">
+            <summary>
+            Deletes all <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> for the given <paramref name="nodeId"/>.
+            </summary>
+            <param name="nodeId">Node ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageFormerUrlPathInfoProvider.DeletePageFormerUrlPathsInternal(System.Int32)">
+            <summary>
+            Deletes all <see cref="T:CMS.DocumentEngine.PageFormerUrlPathInfo"/> for the given <paramref name="nodeId"/>.
+            </summary>
+            <param name="nodeId">Node ID.</param>
         </member>
         <member name="T:CMS.DocumentEngine.PageUrlHandlers">
             <summary>
@@ -18389,23 +19264,6 @@
             Creates an instance of <see cref="T:CMS.DocumentEngine.PageUrlPathInfoProvider"/>.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.GetPageUrlPaths">
-            <summary>
-            Returns a query for all the <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> objects.
-            </summary>
-        </member>
-        <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.GetPageUrlPathInfo(System.Int32)">
-            <summary>
-            Returns <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> with specified ID.
-            </summary>
-            <param name="id"><see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> ID.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.SetPageUrlPathInfo(CMS.DocumentEngine.PageUrlPathInfo)">
-            <summary>
-            Sets (updates or inserts) specified <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/>.
-            </summary>
-            <param name="infoObj"><see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> to be set.</param>
-        </member>
         <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.GetPageUrlPathInfo(System.String,System.String,System.Int32)">
             <summary>
             Returns <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> with specified <paramref name="urlPath"/> and <paramref name="cultureCode"/>.
@@ -18414,23 +19272,11 @@
             <param name="cultureCode">Culture code.</param>
             <param name="siteID">Site ID.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.DeletePageUrlPathInfo(CMS.DocumentEngine.PageUrlPathInfo)">
-            <summary>
-            Deletes specified <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/>.
-            </summary>
-            <param name="infoObj"><see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> to be deleted.</param>
-        </member>
         <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.DeletePageUrlPaths(System.Int32)">
             <summary>
             Deletes all <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> for the given <paramref name="nodeId"/>.
             </summary>
             <param name="nodeId">Node ID.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.DeletePageUrlPathInfo(System.Int32)">
-            <summary>
-            Deletes <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> with specified ID.
-            </summary>
-            <param name="id"><see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.PageUrlPathInfoProvider.GetPageUrlPathInfoInternal(System.String,System.String,System.Int32)">
             <summary>
@@ -19394,6 +20240,52 @@
             Removes all the attachment histories from version.
             </summary>
         </member>
+        <member name="T:CMS.DocumentEngine.IAttachmentHistoryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.AttachmentHistoryInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.IVersionAttachmentInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.IVersionAttachmentInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding structure.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IVersionAttachmentInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding structure.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.IVersionAttachmentInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.IVersionAttachmentInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.IVersionHistoryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DocumentEngine.VersionHistoryInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.VersionAttachmentInfo">
             <summary>
             Version attachment binding info.
@@ -19444,12 +20336,36 @@
             Class providing VersionAttachmentInfo management.
             </summary>
         </member>
+        <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding structure.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding structure.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.GetVersionAttachmentInfo(System.Int32,System.Int32)">
             <summary>
             Returns version attachment with specified ID.
             </summary>
             <param name="versionHistoryId">Document version history ID</param>
-            <param name="attachmentHistoryId">Attachment version history ID</param>     
+            <param name="attachmentHistoryId">Attachment version history ID</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.SetVersionAttachmentInfo(System.Int32,System.Int32)">
             <summary>
@@ -19463,6 +20379,13 @@
             Sets (updates or inserts) specified version attachment binding.
             </summary>
             <param name="attachmentObj">Version attachment to be set.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.DocumentEngine.VersionAttachmentInfo"/> binding.
+            </summary>
+            <param name="versionHistoryId">Version history ID.</param>
+            <param name="attachmentHistoryId">Attachment history ID.</param>
         </member>
         <member name="M:CMS.DocumentEngine.VersionAttachmentInfoProvider.DeleteVersionAttachmentInfo(System.Int32,System.Int32)">
             <summary>

@@ -26,6 +26,8 @@
 
     function controller() {
         this.newsletterModuleAvailable = dataFromServer.newsletterModuleAvailable;
+        this.displayGroupMemberships = dataFromServer.displayGroupMemberships;
+        this.displayEditButton = dataFromServer.displayEditButton;
     };
 
 }(angular, dataFromServer));

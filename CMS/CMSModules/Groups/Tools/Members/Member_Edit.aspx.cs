@@ -28,7 +28,7 @@ public partial class CMSModules_Groups_Tools_Members_Member_Edit : CMSGroupPage
         if (gmi != null)
         {
             memberEditElem.GroupID = gmi.MemberGroupID;
-            UserInfo ui = UserInfoProvider.GetUserInfo(gmi.MemberUserID);
+            UserInfo ui = UserInfo.Provider.Get(gmi.MemberUserID);
             if (ui != null)
             {
                 // Initialize breadcrumbs

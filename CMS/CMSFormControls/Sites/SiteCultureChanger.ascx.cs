@@ -39,7 +39,7 @@ public partial class CMSFormControls_Sites_SiteCultureChanger : FormEngineUserCo
             return;
         }
 
-        CultureInfo ci = CultureInfoProvider.GetCultureInfo(CultureHelper.GetDefaultCultureCode(si.SiteName));
+        CultureInfo ci = CultureInfo.Provider.Get(CultureHelper.GetDefaultCultureCode(si.SiteName));
         string currentCulture = ci.CultureCode;
         if (!RequestHelper.IsPostBack())
         {
@@ -75,7 +75,7 @@ function ChangeCulture(documentChanged) {
             string defaultCultureCode = CultureHelper.GetDefaultCultureCode(si.SiteName);
             if (!String.IsNullOrEmpty(defaultCultureCode))
             {
-                CultureInfo ci = CultureInfoProvider.GetCultureInfo(defaultCultureCode);
+                CultureInfo ci = CultureInfo.Provider.Get(defaultCultureCode);
                 if (ci != null)
                 {
                     // Show a message that the action requires rebuilding search index

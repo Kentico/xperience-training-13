@@ -184,7 +184,7 @@ public partial class CMSModules_Groups_Controls_Members_Members : CMSAdminContro
                 GroupMemberInfo gmi = GroupMemberInfoProvider.GetGroupMemberInfo(memberId);
                 if (gmi != null)
                 {
-                    UserInfo ui = UserInfoProvider.GetUserInfo(gmi.MemberUserID);
+                    UserInfo ui = UserInfo.Provider.Get(gmi.MemberUserID);
                     if (ui != null)
                     {
                         ucBreadcrumbs.Items[1].Text = ui.FullName;
@@ -212,7 +212,7 @@ public partial class CMSModules_Groups_Controls_Members_Members : CMSAdminContro
         UserInfo ui = null;
         if (userId > 0)
         {
-            ui = UserInfoProvider.GetUserInfo(userId);
+            ui = UserInfo.Provider.Get(userId);
         }
 
         ucBreadcrumbs.AddBreadcrumb(new BreadcrumbItem { 

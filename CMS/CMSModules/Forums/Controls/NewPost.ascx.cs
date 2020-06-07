@@ -6,9 +6,6 @@ using System.Threading;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.ContactManagement;
-using CMS.Core;
-using CMS.DocumentEngine;
 using CMS.Forums;
 using CMS.Forums.Web.UI;
 using CMS.Helpers;
@@ -21,8 +18,6 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
 {
     #region "Private variables"
 
-    private bool mUseHTMLEditor = true;
-    private bool mAllowSubscription = true;
     private bool? mEnableSubscription;
 
     private const int POST_USERNAME_LENGTH = 200;
@@ -84,15 +79,9 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
     /// </summary>
     public bool UseHTMLEditor
     {
-        get
-        {
-            return mUseHTMLEditor;
-        }
-        set
-        {
-            mUseHTMLEditor = value;
-        }
-    }
+        get;
+        set;
+    } = true;
 
 
     /// <summary>
@@ -130,15 +119,9 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
     /// </summary>
     public bool AllowSubscription
     {
-        get
-        {
-            return mAllowSubscription;
-        }
-        set
-        {
-            mAllowSubscription = value;
-        }
-    }
+        get;
+        set;
+    } = true;
 
 
     /// <summary>
@@ -268,7 +251,6 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
         htmlTemplateBody.ToolbarSet = "Forum";
         htmlTemplateBody.DisableObjectResizing = true; // Disable image resizing
         htmlTemplateBody.RemovePlugins.Add("contextmenu"); // Disable context menu
-        htmlTemplateBody.IsLiveSite = IsLiveSite;
         htmlTemplateBody.MediaDialogConfig.UseFullURL = true;
         htmlTemplateBody.LinkDialogConfig.UseFullURL = true;
 
@@ -412,7 +394,7 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
             }
         }
 
-        // Hide or display subscription checkbox with dependence 
+        // Hide or display subscription checkbox with dependence
         // on allow subscription property value and security
         if ((!AllowSubscription) || (!ForumInfoProvider.IsAuthorizedPerForum(fi.ForumID, fi.ForumGroupID, "Subscribe", fi.AllowSubscribe, MembershipContext.AuthenticatedUser)))
         {
@@ -599,7 +581,7 @@ public partial class CMSModules_Forums_Controls_NewPost : ForumViewer
 
         #region "Subject"
 
-        // Check whether subject is filled 
+        // Check whether subject is filled
         if (txtSubject.Text.Trim() == "")
         {
             ShowError(rfvSubject.ErrorMessage);

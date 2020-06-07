@@ -126,7 +126,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_Scopes_Edit : Gl
             // Add all new items to site
             foreach (string item in newItems)
             {
-                DocumentTypeScopeClassInfoProvider.RemoveClassFromScope(Scope.ScopeID, ValidationHelper.GetInteger(item, 0));
+                DocumentTypeScopeClassInfo.Provider.Remove(Scope.ScopeID, ValidationHelper.GetInteger(item, 0));
             }
         }
 
@@ -139,7 +139,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_Scopes_Edit : Gl
             // Add all new items to site
             foreach (string item in newItems)
             {
-                DocumentTypeScopeClassInfoProvider.AddClassToScope(Scope.ScopeID, ValidationHelper.GetInteger(item, 0));
+                DocumentTypeScopeClassInfo.Provider.Add(Scope.ScopeID, ValidationHelper.GetInteger(item, 0));
             }
         }
     }

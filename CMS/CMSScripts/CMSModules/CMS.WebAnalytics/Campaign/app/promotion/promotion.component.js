@@ -15,7 +15,6 @@
         return {
             bindings: {
                 items: '=',
-                siteIsContentOnly: '<',
                 campaign: '='
             },
             templateUrl: 'cms.webanalytics/campaign/promotion/promotion.component.html',

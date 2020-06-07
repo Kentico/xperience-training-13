@@ -71,7 +71,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_Tab_Proces
 
         listElem.ObjectID = Contact.ContactID;
         listElem.ObjectType = ContactInfo.OBJECT_TYPE;
-        listElem.EditActionUrl = "Process_Detail.aspx?stateid={0}";
+        listElem.EditActionUrl = $"Process_Detail.aspx?stateid={{0}}&contactid={Contact.ContactID}";
     }
 
 

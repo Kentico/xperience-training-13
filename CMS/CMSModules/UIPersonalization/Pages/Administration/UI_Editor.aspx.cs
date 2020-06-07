@@ -14,7 +14,7 @@ public partial class CMSModules_UIPersonalization_Pages_Administration_UI_Editor
         SiteID = CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) ? 0 : SiteContext.CurrentSiteID;
         editElem.SiteID = SiteID;
         editElem.HideSiteSelector = (SiteID != 0);
-        ResourceInfo ri = ResourceInfoProvider.GetResourceInfo("CMS.WYSIWYGEditor");
+        ResourceInfo ri = ResourceInfo.Provider.Get("CMS.WYSIWYGEditor");
         if (ri != null)
         {
             editElem.ResourceID = ri.ResourceID;

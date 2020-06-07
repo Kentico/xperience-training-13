@@ -318,7 +318,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_L
                             sb.Append(",&nbsp;");
                         }
 
-                        var culture = CultureInfoProvider.GetCultureInfo(cultureCode);
+                        var culture = CultureInfo.Provider.Get(cultureCode);
                         if (culture == null)
                         {
                             continue;

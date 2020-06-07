@@ -132,7 +132,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_OnLineForm_L
         switch (sourceName.ToLowerCSafe())
         {
             case "sitename":
-                var site = SiteInfoProvider.GetSiteInfo(ValidationHelper.GetString(parameter, ""));
+                var site = SiteInfo.Provider.Get(ValidationHelper.GetString(parameter, ""));
                 if (site != null)
                 {
                     return site.DisplayName;

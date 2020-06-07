@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
 using CMS.Helpers;
@@ -18,20 +16,12 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
 
     private WorkflowInfo mWorkflow;
 
-    private WebControl mIcon; 
-
     #endregion
 
 
     #region "Public properties"
 
-    /// <summary>
-    /// Gets the icon control.
-    /// </summary>
-    private WebControl Icon => mIcon ?? (mIcon = GetIcon());
-
-
-    protected override UniGraph UniGraph => uniGraph;
+    public override UniGraph UniGraph => uniGraph;
 
 
     protected override CMSPanel ToolbarContainer => toolbarContainer;
@@ -91,7 +81,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
         {
             base.ReadOnly = value;
             toolbar.Visible = !value;
-            pnlHeader.Visible = !value;
             ToolbarContainer.Visible = !value;
             ServiceChecker.StopProcessing = value;
         }
@@ -127,7 +116,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
         {
             ToolbarContainer.Visible = value;
             toolbar.Visible = value;
-            pnlHeader.Visible = value;
             base.Visible = value;
         }
     }
@@ -153,7 +141,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
         CheckService();
         InitializeToolbar();
         InitializeAutosave();
-        InitializeHeader();
     }
 
 
@@ -209,46 +196,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
     {
         pnlAutosave.AddConfirmation(GetString("general.changessaved"));
         pnlAutosave.ContainerCssClass = "hide";
-    }
-
-
-    private void InitializeHeader()
-    {
-        if (Workflow == null || ReadOnly)
-        {
-            return;
-        }
-
-        Icon.RemoveCssClass(Workflow.WorkflowEnabled ? "disabled" : "enabled");
-        Icon.AddCssClass(Workflow.WorkflowEnabled ? "enabled" : "disabled");
-        lblState.Text = Workflow.WorkflowEnabled ? GetString("automationdesigner.processactive") : GetString("automationdesigner.processinactive");
-        btnToggleState.Text = Workflow.WorkflowEnabled ? GetString("general.disable") : GetString("general.enable");
-    }
-
-
-    private WebControl GetIcon()
-    {
-        var icon = new WebControl(HtmlTextWriterTag.I);
-        icon.Attributes.Add("aria-hidden", "true");
-        icon.AddCssClass("cms-icon-50");
-        icon.AddCssClass("icon-circle");
-        icnState.Controls.AddAt(0, icon);
-
-        return icon;
-    }
-
-
-    protected void ToggleState(object sender, EventArgs args)
-    {
-        if (Workflow == null || ReadOnly)
-        {
-            return;
-        }
-
-        Workflow.WorkflowEnabled = !Workflow.WorkflowEnabled;
-        WorkflowInfoProvider.SetWorkflowInfo(Workflow);
-
-        InitializeHeader();
     }
 
     #endregion

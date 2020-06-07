@@ -45,7 +45,7 @@ public partial class CMSModules_Objects_FormControls_Cloning_CMS_CountrySettings
     /// <param name="settings">Clone settings</param>
     public override bool IsValid(CloneSettings settings)
     {
-        DataSet ds = CountryInfoProvider.GetCountries().WhereEquals("CountryTwoLetterCode", txtTwoLetterCode.Text).Or().WhereEquals("CountryThreeLetterCode", txtThreeLetterCode.Text);
+        DataSet ds = CountryInfo.Provider.Get().WhereEquals("CountryTwoLetterCode", txtTwoLetterCode.Text).Or().WhereEquals("CountryThreeLetterCode", txtThreeLetterCode.Text);
         if (!DataHelper.DataSourceIsEmpty(ds))
         {
             ShowError(GetString("clonning.settings.country.uniquecodes"));

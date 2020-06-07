@@ -236,7 +236,7 @@ public partial class CMSModules_MessageBoards_FormControls_SelectBoard : FormEng
             if (!String.IsNullOrEmpty(siteName))
             {
                 // Get site ID
-                SiteInfo siteObj = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo siteObj = SiteInfo.Provider.Get(siteName);
                 if (siteObj != null)
                 {
                     return siteObj.SiteID;

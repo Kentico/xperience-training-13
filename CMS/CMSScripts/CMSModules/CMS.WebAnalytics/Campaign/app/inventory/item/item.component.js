@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('cms.webanalytics/campaign/inventory/item.component', [
-            'cms.webanalytics/campaign/inventory/item/getLink.component'
+            'cms.webanalytics/campaign/inventory/item/getLink.component',
+            'cms.webanalytics/campaign/inventory/editItem.component'
         ])
         .component('cmsCampaignInventoryItem', item());
 
@@ -10,12 +11,12 @@
         return {
             bindings: {
                 asset: '=',
-                siteIsContentOnly: '<',
                 editable: '<',
                 utmCode: '<',
                 removeAsset: '&'
             },
             templateUrl: 'cms.webanalytics/campaign/inventory/item/item.component.html',
+            replace: true,
             controller: controller
         };
     }
@@ -34,5 +35,10 @@
         ctrl.isPublished = function () {
             return ctrl.asset.additionalProperties.isPublished;
         };
+
+        ctrl.updateAsset = function (asset) {
+            ctrl.asset.name = asset.Name;
+            ctrl.asset.link = asset.Link;
+        }
     }
 }(angular));

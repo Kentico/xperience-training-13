@@ -31,7 +31,7 @@ public partial class CMSModules_Settings_Pages_GetSettings : GlobalAdminPage
         }
 
         // Get site
-        SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo site = SiteInfo.Provider.Get(siteId);
 
         // Export settings
         Export(category, searchForText, searchInDescription, site);

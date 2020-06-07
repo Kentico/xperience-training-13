@@ -352,7 +352,7 @@ function disableLast(disable) {
             {
                 String siteName = SiteContext.CurrentSiteName;
 
-                EmailTemplateInfo eti = EmailTemplateProvider.GetEmailTemplate("Reporting_Subscription_information", siteName);
+                EmailTemplateInfo eti = EmailTemplateInfo.Provider.Get("Reporting_Subscription_information", SiteContext.CurrentSiteID);
                 if (eti != null)
                 {
                     // Send information email

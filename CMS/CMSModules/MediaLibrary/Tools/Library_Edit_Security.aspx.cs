@@ -20,7 +20,7 @@ public partial class CMSModules_MediaLibrary_Tools_Library_Edit_Security : CMSMe
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(libraryId);
+        MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(libraryId);
         EditedObject = mli;
 
         // Check 'Read' permission
@@ -42,7 +42,7 @@ public partial class CMSModules_MediaLibrary_Tools_Library_Edit_Security : CMSMe
 
     private void librarySecurity_OnCheckPermissions(string permissionType, CMSAdminControl sender)
     {
-        MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(libraryId);
+        MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(libraryId);
         if (!MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(mli, "Read"))
         {
             RedirectToAccessDenied("cms.medialibrary", "Read");

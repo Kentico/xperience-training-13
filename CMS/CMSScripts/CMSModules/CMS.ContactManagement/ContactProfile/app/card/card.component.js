@@ -12,7 +12,8 @@
     function card() {
         var component = {
             bindings: {
-                contact: '<'
+                contact: '<',
+                displayEditButton: '<'
             },
             templateUrl: 'cms.contactmanagement/contactprofile/card/card.component.html',
             controller: controller

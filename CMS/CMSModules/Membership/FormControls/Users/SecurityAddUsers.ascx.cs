@@ -353,7 +353,7 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                     }
                     else if (Node != null)
                     {
-                        UserInfo ui = UserInfoProvider.GetUserInfo(userID);
+                        UserInfo ui = UserInfo.Provider.Get(userID);
                         if (ui != null)
                         {
                             // Remove user from treenode
@@ -388,7 +388,7 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                     }
                     else if (Node != null)
                     {
-                        UserInfo ui = UserInfoProvider.GetUserInfo(userID);
+                        UserInfo ui = UserInfo.Provider.Get(userID);
                         if (ui != null)
                         {
                             // Remove user from treenode

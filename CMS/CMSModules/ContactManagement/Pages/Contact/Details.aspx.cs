@@ -3,17 +3,18 @@
 using CMS.Activities;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.Internal;
+using CMS.ContactManagement;
 using CMS.Core;
 using CMS.UIControls;
-using CMS.ContactManagement;
-
 
 [EditedObject(ContactInfo.OBJECT_TYPE, "objectid")]
 [UIElement(ModuleName.CONTACTMANAGEMENT, "ContactProfile", false, true)]
 public partial class CMSModules_ContactManagement_Pages_Contact_Details : CMSPage
 {
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         ContactInfo contact = (ContactInfo)EditedObject;
 
         UpdateBreadcrumbs(contact);
@@ -27,7 +28,11 @@ public partial class CMSModules_ContactManagement_Pages_Contact_Details : CMSPag
             PersonaModuleAvailable = ModuleEntryManager.IsModuleLoaded(ModuleName.PERSONAS),
             FormModuleAvailable = ModuleEntryManager.IsModuleLoaded(ModuleName.BIZFORM),
             NewsletterModuleAvailable = ModuleEntryManager.IsModuleLoaded(ModuleName.NEWSLETTER),
-            ActivitiesExist = DoActivitiesExistForContact(contact)
+            ActivitiesExist = DoActivitiesExistForContact(contact),
+            DisplayGroupMemberships = true,
+            DisplayNotes = true,
+            DisplayContactInformations = true,
+            DisplayEditButton = true
         });
     }
 

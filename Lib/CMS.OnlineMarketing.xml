@@ -87,9 +87,10 @@
             Class providing method for logging A/B test conversions.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.#ctor(CMS.OnlineMarketing.Internal.IABUserStateManagerFactory,CMS.WebAnalytics.IAnalyticsConsentProvider)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.#ctor(CMS.OnlineMarketing.Internal.IABUserStateManagerFactory,CMS.WebAnalytics.IAnalyticsConsentProvider,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
-            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABTestConversionLogger"/> with given <paramref name="abUserStateManagerFactory"/> and <paramref name="analyticsConsentProvider"/>.
+            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABTestConversionLogger"/> with given <paramref name="abUserStateManagerFactory"/>, <paramref name="analyticsConsentProvider"/>
+            and <paramref name="siteInfoProvider"/>.
             </summary>
         </member>
         <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.LogConversion``1(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
@@ -286,25 +287,6 @@
             <summary>
             Returns <c>true</c> when A/B testing related element should be visible.
             </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.Internal.ABRequestManager">
-            <summary>
-            Class managing requests on AB test pages.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABRequestManager.GetABTestVariant(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Gets AB variant from the user's cookie or randomly selects one and assigns it to the user. Also checks whether the user should be excluded or not
-            (see <see cref="P:CMS.OnlineMarketing.ABTestInfo.ABTestIncludedTraffic"/> or <see cref="P:CMS.OnlineMarketing.ABTestInfo.ABTestVisitorTargeting"/>).
-            </summary>
-            <param name="abTest">AB test</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="abTest"/> is null.</exception>
-        </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABRequestManager.SelectRandomTestVariant(System.Collections.Generic.IList{CMS.OnlineMarketing.ABVariantInfo})">
-            <summary>
-            Returns random variant.
-            </summary>
-            <param name="variants">List of AB variants</param>
         </member>
         <member name="T:CMS.OnlineMarketing.Internal.ABSegmentationEvaluator">
             <summary>
@@ -1539,11 +1521,6 @@
             Returns all AB tests using the cached section.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.ABCachedObjects.GetVariants(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Returns AB variants for the given test using the cached section.
-            </summary>
-        </member>
         <member name="M:CMS.OnlineMarketing.ABCachedObjects.GetVariantsData(CMS.OnlineMarketing.ABTestInfo)">
             <summary>
             Returns cached variants for the given AB test.
@@ -1553,27 +1530,6 @@
             <summary>
             Returns cached <see cref="P:CMS.OnlineMarketing.ABVariantDataInfo.ABVariantDisplayName"/> of A/B test variant with given <paramref name="variantIdentifier"/> on site with given <paramref name="siteId"/>.
             </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ABTestContext">
-            <summary>
-            Context for AB tests.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABTestContext.CurrentABTest">
-            <summary>
-            Current AB test.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABTestContext.CurrentABTestVariant">
-            <summary>
-            Current AB test variant.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABTestContext.IsFirstABRequest">
-            <summary>
-            Indicates whether this request is the first AB request for the page.
-            </summary>
-            <remarks>If false, either no AB test is running on the page or the user has already visited it and has valid AB variant saved in the cookie.</remarks>
         </member>
         <member name="T:CMS.OnlineMarketing.ABTestInfo">
             <summary>
@@ -1726,12 +1682,6 @@
             Returns true if AB testing is enabled.
             </summary>
             <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABTestInfoProvider.ContainsVariants(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Determines whether the specified AB test contains variants.
-            </summary>
-            <param name="abTest">The AB test</param>
         </member>
         <member name="M:CMS.OnlineMarketing.ABTestInfoProvider.GetABTestInfo(System.Int32)">
             <summary>
@@ -1949,266 +1899,6 @@
             </summary>
             <param name="info">Object to delete</param>
         </member>
-        <member name="T:CMS.OnlineMarketing.ABVariantInfo">
-            <summary>
-            ABVariantInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABVariantInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABVariantInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantPath">
-            <summary>
-            Variant path.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantLastModified">
-            <summary>
-            Last modification of variant.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantTestID">
-            <summary>
-            Variant's test ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantName">
-            <summary>
-            Variant code name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantDisplayName">
-            <summary>
-            Variant display name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantID">
-            <summary>
-            Variant ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantGUID">
-            <summary>
-            Variant GUID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfo.ABVariantSiteID">
-            <summary>
-            Site ID of test variant.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty ABVariantInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new ABVariantInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ABVariantInfoProvider">
-            <summary>
-            Class providing ABVariantInfo management.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABVariantInfoProvider.mVariantsById">
-            <summary>
-            Variants indexed by ABVariantID.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABVariantInfoProvider.mVariantsByNameSiteTest">
-            <summary>
-            Variants indexed by key in format [ABVariantName]_[ABVariantSiteID]_[ABVariantTestID].
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABVariantInfoProvider.tableLock">
-            <summary>
-            Table lock for loading.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfoProvider.VariantsById">
-            <summary>
-            Variants indexed by ABVariantID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ABVariantInfoProvider.VariantsByNameSiteTest">
-            <summary>
-            Variants indexed by key in format [ABVariantName]_[ABVariantSiteID]_[ABVariantTestID].
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetVariantsForTest(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Returns variants for AB test.
-            </summary>
-            <param name="abTest">AB test info object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.IsABVariantValid(System.String,System.String,System.String)">
-            <summary>
-            Checks whether AB variant is assigned to the specified AB test and AB test is running.
-            </summary>
-            <param name="abTestName">AB test name</param>
-            <param name="abVariantName">AB variant name</param>
-            <param name="siteName">Site name</param>
-            <returns>Returns true if variant is valid</returns>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.Get(System.Int32)">
-            <summary>
-            Gets an instance of info object based on its ID.
-            </summary>
-            <param name="id">ID of the info object to look for.</param>
-            <returns>Returns an instance of <see cref="T:CMS.OnlineMarketing.ABVariantInfo"/> corresponding to <paramref name="id"/> or null.</returns>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetAsync(System.Int32,System.Nullable{System.Threading.CancellationToken})">
-            <summary>
-            Asynchronously gets an instance of info object based on its ID.
-            </summary>
-            <param name="id">ID of the info object to look for.</param>
-            <param name="cancellationToken">The cancellation instruction.</param>
-            <returns>Returns a task returning either an instance of <see cref="T:CMS.OnlineMarketing.ABVariantInfo"/> corresponding to <paramref name="id"/> or null.</returns>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetABVariantInfo(System.Int32)">
-            <summary>
-            Returns AB variant with specified ID.
-            </summary>
-            <param name="variantId">Variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetABVariantInfo(System.String,System.String,System.String)">
-            <summary>
-            Returns cached AB variant with specified name.
-            </summary>
-            <param name="variantName">Variant name</param>
-            <param name="abTestName">AB test name</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetVariants">
-            <summary>
-            Returns a query for all the AB variants.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.SetABVariantInfo(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Sets (updates or inserts) specified Variant.
-            </summary>
-            <param name="variantObj">Variant to be set</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.DeleteABVariantInfo(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Deletes specified Variant.
-            </summary>
-            <param name="variantObj">Variant to be deleted</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.DeleteABVariantInfo(System.Int32)">
-            <summary>
-            Deletes Variant with specified ID.
-            </summary>
-            <param name="variantId">Variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetVariantsWithMissingTranslations(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Returns list of variants which do not have translations into all cultures for multi-cultural test or specific translation for single culture test.
-            Returns empty list if no variants were found.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">abTest is null</exception>
-            <param name="abTest">AB Test</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.ClearHashtables(System.Boolean)">
-            <summary>
-            Clear hashtables.
-            </summary>
-            <param name="logTasks">If true, web farm tasks are logged</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetABVariantInfoInternal(System.Int32)">
-            <summary>
-            Returns Variant with specified ID.
-            </summary>
-            <param name="variantId">Variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetABVariantInfoInternal(System.String,System.String,System.String)">
-            <summary>
-            Returns cached variant with specified name.
-            </summary>
-            <param name="variantName">Variant name</param>
-            <param name="siteName">Site name</param>
-            <param name="abTestName">AB test name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetABVariantInfoFromDBInternal(System.String,System.String,System.String)">
-            <summary>
-            Returns Variant with specified name from database.
-            </summary>
-            <param name="abTestName">ABTest name</param>
-            <param name="variantName">Variant name</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.SetInfo(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Inserts or Updates the object to the database.
-            </summary>
-            <param name="info">Object to insert / update</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.DeleteInfo(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Deletes the object from the database.
-            </summary>
-            <param name="info">Object to delete</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.GetVariantsForTestInternal(CMS.OnlineMarketing.ABTestInfo)">
-            <summary>
-            Get variants for test.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.LoadVariants">
-            <summary>
-            Loads Variants into hashtables.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.RemoveInvalidCacheRecords(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Removes invalid cache records.
-            This happens when code name changes.
-            </summary>
-            <param name="variantObj">AB Variant</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.CheckUniqueDisplayName(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Checks whether the object has unique display name.
-            </summary>
-            <param name="variant">AB variant</param>
-            <exception cref="T:CMS.DataEngine.InfoObjectException">Display name is not unique</exception>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.RenameABVariantStatistics(System.String,System.String,System.Int32,System.String)">
-            <summary>
-            Renames AB variant statistics data when code name changes.
-            </summary>
-            <param name="oldName">Old code name</param>
-            <param name="newName">New code name</param>
-            <param name="siteID">Test site ID </param>
-            <param name="abTestName">ABTest name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantInfoProvider.HandleCodeNameChange(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Checks for code name change and renames statistics if so.
-            </summary>
-            <param name="variantObj">AB Variant</param>
-        </member>
         <member name="T:CMS.OnlineMarketing.ABTestStatusEnum">
             <summary>
             AB test status enumeration.
@@ -2357,13 +2047,6 @@
             <param name="test">AB test to remove</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="test"/> is null</exception>
         </member>
-        <member name="M:CMS.OnlineMarketing.ABVariantColorAssigner.RemoveVariant(CMS.OnlineMarketing.ABVariantInfo)">
-            <summary>
-            Tries to remove AB variant from cache. 
-            </summary>
-            <param name="variant">AB variant to remove</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="variant"/> is null</exception>
-        </member>
         <member name="M:CMS.OnlineMarketing.ABVariantColorAssigner.RemoveVariantData(CMS.OnlineMarketing.ABVariantDataInfo)">
             <summary>
             Tries to remove AB variant data from cache. 
@@ -2394,11 +2077,6 @@
         <member name="T:CMS.OnlineMarketing.IABVariantDataInfoProvider">
             <summary>
             Declares members for <see cref="T:CMS.OnlineMarketing.ABVariantDataInfo"/> management.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.IABVariantInfoProvider">
-            <summary>
-            Declares members for <see cref="T:CMS.OnlineMarketing.ABVariantInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.OnlineMarketing.ABConversionRateInterval">
@@ -2937,49 +2615,9 @@
             AB testing event handlers.
             </summary>
         </member>
-        <member name="F:CMS.OnlineMarketing.ABHandlers.PARAM_ABTEST_NAME">
-            <summary>
-            Used as a query parameter when logging analytics via JavaScript.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABHandlers.PARAM_ABTEST_VARIANT_NAME">
-            <summary>
-            Used as a query parameter when logging analytics via JavaScript.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ABHandlers.PARAM_ABVISIT_FIRST">
-            <summary>
-            Used as a query parameter when logging analytics via JavaScript.
-            </summary>
-        </member>
         <member name="M:CMS.OnlineMarketing.ABHandlers.Init">
             <summary>
             Initializes the events handlers.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABHandlers.LogABVisit(System.Object,System.EventArgs)">
-            <summary>
-            Checks whether the request is on AB test and user got assigned AB test variant.
-            Context properties (<see cref="P:CMS.OnlineMarketing.ABTestContext.CurrentABTest"/>, <see cref="P:CMS.OnlineMarketing.ABTestContext.CurrentABTestVariant"/>, <see cref="P:CMS.OnlineMarketing.ABTestContext.IsFirstABRequest"/>)
-            used are assigned in ABTestInfoProvider when AB variant for a PageInfo is requested (not in this handler).
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABHandlers.LogABVisit(System.String,System.String,System.Boolean)">
-            <summary>
-            Logs AB visit.
-            </summary>
-            <param name="testName">AB test name</param>
-            <param name="variantName">AB variant name</param>
-            <param name="isFirstVisit">Indicates whether the request is user's first visit of the page</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABHandlers.LogABVisitViaJavascript(System.Object,CMS.WebAnalytics.AnalyticsJSEventArgs)">
-            <summary>
-            Logs AB visit via JavaScript snippet.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ABHandlers.InsertABTestJavaScriptWebServiceParameters(System.Object,CMS.WebAnalytics.AnalyticsJSEventArgs)">
-            <summary>
-            Inserts additional query parameters to the web analytics Javascript snippet.
             </summary>
         </member>
         <member name="M:CMS.OnlineMarketing.ABHandlers.LogABConversion(System.Object,CMS.Base.CMSEventArgs{CMS.WebAnalytics.LogRecord})">
@@ -3091,18 +2729,6 @@
             <summary>
             Performs bulk insert of activities currently stored in memory before the application ends to ensure the persistence.
             </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.OnlineMarketingHandlers.LogAbAndMvtContext(System.Object,CMS.WebAnalytics.AnalyticsJSEventArgs)">
-            <summary>
-            Sets AB test and MVTest context from event parameters.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.OnlineMarketingHandlers.SetAbAndMvtContext(System.Collections.Generic.IDictionary{System.String,System.String},CMS.SiteProvider.SiteInfo)">
-            <summary>
-            Sets up ABTestContext and MVTContext according to the parameters in given <paramref name="parameters"/>.
-            </summary>
-            <param name="parameters">Dictionary containing all required parameters</param>
-            <param name="site">Site for which should be the context set up</param>
         </member>
         <member name="T:CMS.OnlineMarketing.OnlineMarketingModule">
             <summary>
@@ -4241,19 +3867,9 @@
             Conversion name.
             </summary>
         </member>
-        <member name="F:CMS.OnlineMarketing.MVTHandlers.PARAM_MVT_COMBINATION_NAME">
-            <summary>
-            Used as a query parameter when logging analytics via JavaScript. 
-            </summary>
-        </member>
         <member name="M:CMS.OnlineMarketing.MVTHandlers.Init">
             <summary>
             Initializes the events handlers.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.InsertMVTestJavaScriptWebServiceParameters(System.Object,CMS.WebAnalytics.AnalyticsJSEventArgs)">
-            <summary>
-            Inserts additional query parameters to the web analytics Javascript snippet.
             </summary>
         </member>
         <member name="M:CMS.OnlineMarketing.MVTHandlers.MoveMVTests(System.Object,CMS.DocumentEngine.DocumentEventArgs)">
@@ -4276,25 +3892,6 @@
             <param name="objectId">Object ID</param>
             <param name="count">Conversions count</param>
             <param name="value">Conversions value</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.HandleMVTestConversion(System.Object,CMS.Base.CMSEventArgs{CMS.WebAnalytics.LogRecord})">
-            <summary>
-            Checks if conversion is applicable for MV Test and saves it.
-            </summary>
-            <param name="sender">Sender</param>
-            <param name="processLogRecordEventArgs">Log record data</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.ConversionExists(System.String,System.String)">
-            <summary>
-            Returns false if conversion does not exists
-            </summary>
-            <param name="conversionName">Conversion name</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.GetNewValue(System.Int32,System.Collections.Generic.IList{System.Double})">
-            <summary>
-            Returns value according to stored conversions.
-            </summary>
         </member>
         <member name="T:CMS.OnlineMarketing.MVTTargetConversionTypeEnum">
             <summary>

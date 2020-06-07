@@ -341,7 +341,7 @@ public partial class CMSFormControls_Sites_SiteSelector : FormEngineUserControl
         {
             if ((mUserId == 0) && !string.IsNullOrEmpty(UserName))
             {
-                var user = UserInfoProvider.GetUserInfo(UserName);
+                var user = UserInfo.Provider.Get(UserName);
                 if (user != null)
                 {
                     mUserId = user.UserID;
@@ -386,7 +386,7 @@ public partial class CMSFormControls_Sites_SiteSelector : FormEngineUserControl
             if (UseCodeNameForSelection)
             {
                 string siteName = ValidationHelper.GetString(uniSelector.Value, null);
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo si = SiteInfo.Provider.Get(siteName);
                 return (si != null) ? si.SiteID : 0;
             }
 
@@ -398,7 +398,7 @@ public partial class CMSFormControls_Sites_SiteSelector : FormEngineUserControl
             if (UseCodeNameForSelection)
             {
                 string siteName = ValidationHelper.GetString(uniSelector.Value, null);
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo si = SiteInfo.Provider.Get(siteName);
                 if (si != null)
                 {
                     uniSelector.Value = si.SiteName;
@@ -426,7 +426,7 @@ public partial class CMSFormControls_Sites_SiteSelector : FormEngineUserControl
             }
 
             int siteId = ValidationHelper.GetInteger(uniSelector.Value, 0);
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+            SiteInfo si = SiteInfo.Provider.Get(siteId);
             return (si != null) ? si.SiteName : String.Empty;
         }
         set
@@ -438,7 +438,7 @@ public partial class CMSFormControls_Sites_SiteSelector : FormEngineUserControl
             }
             else
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(value);
+                SiteInfo si = SiteInfo.Provider.Get(value);
                 if (si != null)
                 {
                     uniSelector.Value = si.SiteID;

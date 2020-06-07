@@ -287,7 +287,7 @@ public partial class CMSModules_Membership_Pages_Membership_Tab_Users : CMSMembe
             return result;
         }
 
-        UserInfo userInfo = UserInfoProvider.GetUserInfo(userId);
+        UserInfo userInfo = UserInfo.Provider.Get(userId);
         if (userInfo == null)
         {
             result = GetString("Administration-User.WrongUserId");

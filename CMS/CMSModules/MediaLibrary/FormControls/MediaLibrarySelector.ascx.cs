@@ -23,7 +23,6 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
     #region "Variables"
 
     private bool mUseLibraryNameForSelection = true;
-    private string mSiteName = null;
 
     #endregion
 
@@ -42,26 +41,6 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
         set
         {
             SetValue("SiteID", value);
-        }
-    }
-
-
-    /// <summary>
-    /// Gets the site name from the site ID.
-    /// </summary>
-    private string SiteName
-    {
-        get
-        {
-            if (mSiteName == null)
-            {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
-                if (si != null)
-                {
-                    mSiteName = si.SiteName;
-                }
-            }
-            return mSiteName;
         }
     }
 
@@ -132,7 +111,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
             if (UseLibraryNameForSelection)
             {
                 string name = ValidationHelper.GetString(CurrentSelector.Value, "");
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(name, SiteName);
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(name, SiteID);
                 if (mli != null)
                 {
                     return mli.LibraryID;
@@ -148,7 +127,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
         {
             if (UseLibraryNameForSelection)
             {
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(value);
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(value);
                 if (mli != null)
                 {
                     CurrentSelector.Value = mli.LibraryID;
@@ -176,7 +155,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
             else
             {
                 int id = ValidationHelper.GetInteger(CurrentSelector.Value, 0);
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(id);
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(id);
                 if (mli != null)
                 {
                     return mli.LibraryName;
@@ -192,7 +171,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
             }
             else
             {
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(value, SiteName);
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(value, SiteID);
                 if (mli != null)
                 {
                     CurrentSelector.Value = mli.LibraryName;
@@ -399,7 +378,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
         uniSelector.OnSelectionChanged += uniSelector_OnSelectionChanged;
         uniSelector.DropDownSingleSelect.AutoPostBack = UseAutoPostBack;
 
-        bool noLibrary = MediaLibraryInfoProvider.GetMediaLibraries()
+        bool noLibrary = MediaLibraryInfo.Provider.Get()
             .Where(GetGroupsWhereCondition())
             .Count == 0;
 

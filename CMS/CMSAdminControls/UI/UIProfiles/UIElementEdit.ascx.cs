@@ -37,7 +37,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIElementEdit : CMSUserContr
         {
             if (mCurrentResourceInfo == null)
             {
-                mCurrentResourceInfo = ResourceInfoProvider.GetResourceInfo(ResourceID);
+                mCurrentResourceInfo = ResourceInfo.Provider.Get(ResourceID);
             }
             return mCurrentResourceInfo;
         }
@@ -153,7 +153,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIElementEdit : CMSUserContr
             }
 
             // Show info for customized elements
-            ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(elementInfo.ElementResourceID);
+            ResourceInfo ri = ResourceInfo.Provider.Get(elementInfo.ElementResourceID);
             if (ri != null)
             {
                 if (elementInfo.ElementIsCustom && !ri.ResourceIsInDevelopment)
@@ -187,7 +187,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIElementEdit : CMSUserContr
             EditForm.FieldControls["ElementParentID"].Value = ParentID;
             EditForm.FieldsToHide.Add("ElementParentID");
 
-            var parent = UIElementInfoProvider.GetUIElementInfo(ParentID);
+            var parent = UIElementInfo.Provider.Get(ParentID);
             if ((parent == null) || (parent.ElementLevel != 2) || !parent.IsInAdministrationScope)
             {
                 EditForm.FieldsToHide.Add("ElementIsGlobalApplication");
@@ -253,7 +253,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIElementEdit : CMSUserContr
             int resourceId = ValidationHelper.GetInteger(ctrl.Value, 0);
             if (resourceId > 0)
             {
-                ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(resourceId);
+                ResourceInfo ri = ResourceInfo.Provider.Get(resourceId);
                 if ((ri != null) && (ri.ResourceIsInDevelopment || ((elementInfo != null) && elementInfo.ElementIsCustom)))
                 {
                     return;
@@ -452,33 +452,6 @@ if (p != null)
         if (refreshTree)
         {
             RefreshTree();
-        }
-
-        // When template was changed, delete all adhoc templates assigned to current UI element (if adhoc template is not assigned).
-        bool templateChanged = ValidationHelper.GetBoolean(EditForm.FieldControls["ElementPageTemplateID"].GetValue("TemplateChanged"), false);
-        if (templateChanged)
-        {
-            bool delete = true;
-            if (elementInfo.ElementType == UIElementTypeEnum.PageTemplate)
-            {
-                PageTemplateInfo pti = PageTemplateInfoProvider.GetPageTemplateInfo(elementInfo.ElementPageTemplateID);
-
-                // Ad hoc template is assigned, do not delete
-                if ((pti != null) && !pti.IsReusable)
-                {
-                    delete = false;
-                }
-            }
-
-            if (delete)
-            {
-                PageTemplateInfo originalTemplate = PageTemplateInfoProvider.GetPageTemplateInfo(PageTemplateID);
-
-                if ((originalTemplate != null) && !originalTemplate.IsReusable)
-                {
-                    originalTemplate.Delete();
-                }
-            }
         }
     }
 

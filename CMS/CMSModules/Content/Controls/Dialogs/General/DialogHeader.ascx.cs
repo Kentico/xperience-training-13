@@ -1,5 +1,7 @@
 ﻿using System;
 
+using AngleSharp.Text;
+
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
@@ -18,11 +20,6 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     private CurrentUserInfo currentUser;
     private string mSelectedTab = "";
     private int mSelectedTabIndex;
-
-    private string mCustomOutputFormat = "";
-
-    private OutputFormatEnum mOutputFormat = OutputFormatEnum.HTMLMedia;
-    private SelectableContentEnum mSelectableContent = SelectableContentEnum.AllContent;
 
     #endregion
 
@@ -61,49 +58,19 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     /// <summary>
     /// Custom output format (used when OuptupFormat is set to Custom).
     /// </summary>
-    public string CustomOutputFormat
-    {
-        get
-        {
-            return mCustomOutputFormat;
-        }
-        set
-        {
-            mCustomOutputFormat = value;
-        }
-    }
+    public string CustomOutputFormat { get; set; } = String.Empty;
 
 
     /// <summary>
     /// CMS dialog output format which determines dialog title, image and visible tabs.
     /// </summary>
-    public OutputFormatEnum OutputFormat
-    {
-        get
-        {
-            return mOutputFormat;
-        }
-        set
-        {
-            mOutputFormat = value;
-        }
-    }
+    public OutputFormatEnum OutputFormat { get; set; }
 
 
     /// <summary>
     /// Type of content which could be selected from the dialog.
     /// </summary>
-    public SelectableContentEnum SelectableContent
-    {
-        get
-        {
-            return mSelectableContent;
-        }
-        set
-        {
-            mSelectableContent = value;
-        }
-    }
+    public SelectableContentEnum SelectableContent { get; set; } = SelectableContentEnum.AllContent;
 
 
     /// <summary>
@@ -177,9 +144,9 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     {
         get
         {
-            return ((QueryHelper.GetInteger("objectid", 0) > 0)
-                && !string.IsNullOrEmpty(QueryHelper.GetString("objecttype", string.Empty))
-                && !string.IsNullOrEmpty(QueryHelper.GetString("objectcategory", string.Empty)));
+            return QueryHelper.GetInteger("objectid", 0) > 0
+                && !String.IsNullOrEmpty(QueryHelper.GetString("objecttype", String.Empty))
+                && !String.IsNullOrEmpty(QueryHelper.GetString("objectcategory", String.Empty));
         }
     }
 
@@ -209,7 +176,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
 
     public void InitFromQueryString()
     {
-        // Get format definition from URL        
+        // Get format definition from URL
         string output = QueryHelper.GetString("output", "html");
         bool link = QueryHelper.GetBoolean("link", false);
         OutputFormat = CMSDialogHelper.GetOutputFormat(output, link);
@@ -228,7 +195,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
         // Get selected tab from URL
         SelectedTab = QueryHelper.GetString("tab", (string)userConfig["selectedtab"]);
 
-        // Get hidden tabs from URL        
+        // Get hidden tabs from URL
         bool hasFormGuid = (QueryHelper.GetGuid("formguid", Guid.Empty) != Guid.Empty);
         bool hasDocumentId = (QueryHelper.GetInteger("documentid", 0) > 0);
         bool hasParentId = (QueryHelper.GetInteger("parentid", 0) > 0);
@@ -360,7 +327,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     /// <summary>
     /// Returns path to the specified tab page.
     /// </summary>
-    /// <param name="fileName">File name of the tab page</param> 
+    /// <param name="fileName">File name of the tab page</param>
     /// <param name="parameterName">Additional parameter name</param>
     /// <param name="parameterValue">Additional parameter value</param>
     private string GetFilePath(string fileName, string parameterName = null, string parameterValue = null)
@@ -397,7 +364,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
 
     /// <summary>
     /// Returns path to the Media libraries tab page.
-    /// </summary>    
+    /// </summary>
     private string GetMediaLibrariesPath()
     {
         string path;
@@ -426,23 +393,13 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
 
     /// <summary>
     /// Creates collection of tabs which should be displayed to the user.
-    /// </summary>    
+    /// </summary>
     private void GetTabs()
     {
         UITabs tabControl = CurrentMaster.Tabs;
 
-        bool checkUI = true;
         // Disable personalization for none-HTML editors
-        if ((CustomOutputFormat == "copy") || (CustomOutputFormat == "move") || (CustomOutputFormat == "link") ||
-            (CustomOutputFormat == "relationship") || (CustomOutputFormat == "selectpath"))
-        {
-            checkUI = false;
-        }
-        else if (IsLiveSite)
-        {
-            // Ensure personalization of the HTML editor on the live site
-            checkUI = ValidationHelper.GetBoolean(Service.Resolve<IAppSettingsService>()["CKEditor:PersonalizeToolbarOnLiveSite"], false);
-        }
+        var checkUI = !new[] { "copy", "move", "link", "relationship", "selectpath" }.Contains(CustomOutputFormat);
 
         if (checkUI)
         {
@@ -464,7 +421,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
         }
 
         // Attachments
-        if ((CustomOutputFormat == "") && (!HasMetaFileObjectInfo) && !HideAttachments &&
+        if (String.IsNullOrEmpty(CustomOutputFormat) && !HasMetaFileObjectInfo && !HideAttachments &&
             (!checkUI || currentUser.IsAuthorizedPerUIElement("CMS.MediaDialog", "AttachmentsTab")))
         {
             tabControl.AddTab(new UITabItem()
@@ -478,7 +435,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
                 mSelectedTabIndex = tabControl.TabItems.Count - 1;
             }
         }
-        else if ((CustomOutputFormat == "") && (HasMetaFileObjectInfo) && !HideAttachments &&
+        else if (String.IsNullOrEmpty(CustomOutputFormat) && HasMetaFileObjectInfo && !HideAttachments &&
             (!checkUI || currentUser.IsAuthorizedPerUIElement("CMS.MediaDialog", "MetafilesTab")))
         {
             // Metafile attachments
@@ -541,7 +498,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
         }
 
         // Web
-        if ((CustomOutputFormat == "") && !HideWeb &&
+        if (String.IsNullOrEmpty(CustomOutputFormat) && !HideWeb &&
             (!checkUI || currentUser.IsAuthorizedPerUIElement("CMS.MediaDialog", "WebTab")))
         {
             tabControl.AddTab(new UITabItem()
@@ -557,9 +514,9 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
         }
 
         // Anchor & E-mail
-        if ((CustomOutputFormat == "") && ((OutputFormat == OutputFormatEnum.BBLink) ||
-                                           (OutputFormat == OutputFormatEnum.HTMLLink) ||
-                                           (OutputFormat == OutputFormatEnum.Custom)))
+        if (String.IsNullOrEmpty(CustomOutputFormat) && (OutputFormat == OutputFormatEnum.BBLink ||
+                                           OutputFormat == OutputFormatEnum.HTMLLink ||
+                                           OutputFormat == OutputFormatEnum.Custom))
         {
             // Anchor
             if (!HideAnchor && (!checkUI || currentUser.IsAuthorizedPerUIElement("CMS.MediaDialog", "AnchorTab")))
@@ -600,7 +557,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
             }
         }
 
-        string selectedUrl = ((mSelectedTabIndex > 0) ? tabControl.TabItems[mSelectedTabIndex].RedirectUrl : ((tabControl.TabItems.Count > 0) ? tabControl.TabItems[0].RedirectUrl : String.Empty));
+        string selectedUrl = mSelectedTabIndex > 0 ? tabControl.TabItems[mSelectedTabIndex].RedirectUrl : (tabControl.TabItems.Count > 0 ? tabControl.TabItems[0].RedirectUrl : String.Empty);
         if (!String.IsNullOrEmpty(selectedUrl))
         {
             ScriptHelper.RegisterStartupScript(this, typeof(string), "frameLoad", ScriptHelper.GetScript("if (window.parent.frames['insertContent']) { window.parent.frames['insertContent'].location= '" + selectedUrl.Replace("&amp;", "&").Replace("'", "%27") + "';} "));

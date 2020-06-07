@@ -187,7 +187,7 @@ public partial class CMSModules_ContactManagement_FormControls_SalesForce_Author
     private string GetCurrentSiteNameForSettings()
     {
         int siteId = QueryHelper.GetInteger("SiteID", 0);
-        SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo site = SiteInfo.Provider.Get(siteId);
         if (site == null)
         {
             return String.Empty;

@@ -778,19 +778,13 @@ public partial class CMSModules_Widgets_Controls_WidgetProperties : CMSUserContr
                     DisplayError("general.modifynotallowed");
                     return false;
                 }
-
-                // Check design permissions
-                if (PortalContext.IsDesignMode(viewMode, false) && !PortalContext.CurrentUserIsDesigner)
-                {
-                    RedirectToAccessDenied("CMS.Design", "Design");
-                }
             }
 
             PageTemplateInfo pti = mTemplateInstance.ParentPageTemplate;
             if (PortalContext.IsDesignMode(viewMode) && SynchronizationHelper.IsCheckedOutByOtherUser(pti))
             {
                 string userName = null;
-                UserInfo ui = UserInfoProvider.GetUserInfo(pti.Generalized.IsCheckedOutByUserID);
+                UserInfo ui = UserInfo.Provider.Get(pti.Generalized.IsCheckedOutByUserID);
                 if (ui != null)
                 {
                     userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));

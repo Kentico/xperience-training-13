@@ -368,33 +368,24 @@
             Item type name based on ItemClassName.
             </summary>
         </member>
-        <member name="P:CMS.FormEngine.ContentItemTemplate.Fields">
-            <summary>
-            Fields collection.
-            </summary>
-        </member>
         <member name="P:CMS.FormEngine.ContentItemTemplate.Usings">
             <summary>
             List of distinct namespaces to be used in using statements.
             </summary>
         </member>
+        <member name="P:CMS.FormEngine.ContentItemTemplate.Fields">
+            <summary>
+            Fields collection.
+            </summary>
+        </member>
         <member name="P:CMS.FormEngine.ContentItemTemplate.CustomSKUFields">
             <summary>
             Custom SKU fields collection.
-            <remarks>Collection is empty if there is no custom field defined in <see cref="F:CMS.FormEngine.ContentItemTemplate.mSkuFormInfo"/>.</remarks>
-            </summary>
-        </member>
-        <member name="P:CMS.FormEngine.ContentItemTemplate.SKUFields">
-            <summary>
-            SKU fields collection.
-            <remarks>Collection contains custom SKU fields and standard system fields if these are defined in <see cref="F:CMS.FormEngine.ContentItemTemplate.mSkuFormInfo"/>.</remarks>
-            <remarks>Empty collection is returned if <see cref="F:CMS.FormEngine.ContentItemTemplate.mSkuFormInfo"/> is <c>null</c>.</remarks>
             </summary>
         </member>
         <member name="P:CMS.FormEngine.ContentItemTemplate.SystemSKUFields">
             <summary>
             Gets collection of chosen system SKU fields which will be generated in the template.
-            <remarks>Empty collection is returned if <see cref="F:CMS.FormEngine.ContentItemTemplate.mSkuFormInfo"/> is <c>null</c></remarks>
             </summary>
         </member>
         <member name="P:CMS.FormEngine.ContentItemTemplate.IsProduct">
@@ -407,18 +398,17 @@
             Gets the default namespace.
             </summary>
         </member>
-        <member name="M:CMS.FormEngine.ContentItemTemplate.#ctor(System.String,System.Type,System.String,System.String,CMS.FormEngine.FormInfo,System.Collections.Generic.IEnumerable{System.String},System.String,CMS.FormEngine.FormInfo,System.Boolean)">
+        <member name="M:CMS.FormEngine.ContentItemTemplate.#ctor(System.String,System.String,System.Type,System.String,System.String,CMS.FormEngine.IContentItemTemplateFieldProvider,System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
             <summary>
             Initializes a new instance of the FormInfoClassGenerator class.
             </summary>
             <param name="itemClassName">Base item class name.</param>
+            <param name="itemTypeName">Item type name based on class name.</param>
             <param name="baseClassType">Base class type.</param>
             <param name="defaultNamespace">Namespace where class will be generated.</param>
             <param name="assemblyRegisterName">Name of register attribute for assembly (f.e. RegisterCustomTable).</param>
-            <param name="formInfo">FormInfo with fields definition.</param>
+            <param name="provider">Provider retrieving generated fields.</param>
             <param name="usings">List of necessary using namespaces.</param>
-            <param name="classNameSuffix">Text that is appended to the class name.</param>
-            <param name="skuFormInfo">FormInfo with SKU fields definition.</param>
             <param name="useClassNameNamespace">If true the class namespace will be used as part of the item type defaultNamespace.</param>
             <exception cref="T:System.ArgumentNullException">Thrown when any required parameter is null.</exception>
             <exception cref="T:System.ArgumentException">Thrown when any required parameter is empty.</exception>
@@ -566,6 +556,63 @@
         <member name="P:CMS.FormEngine.ContentItemTemplateBase.ToStringHelper">
             <summary>
             Helper to produce culture-oriented representation of an object as a string
+            </summary>
+        </member>
+        <member name="T:CMS.FormEngine.ContentItemTemplateFieldProvider">
+            <summary>
+            Field provider for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.#ctor(CMS.FormEngine.FormInfo,System.Type,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.FormEngine.ContentItemTemplateFieldProvider"/>.
+            </summary>
+            <param name="form">Form definition containing all fields.</param>
+            <param name="baseType">Type from which the generated class is derived.</param>
+            <param name="itemTypeName">Item type name needed to determine reserved member names.</param>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.#ctor(CMS.FormEngine.FormInfo,CMS.FormEngine.FormInfo,System.Type,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:CMS.FormEngine.ContentItemTemplateFieldProvider"/>.
+            </summary>
+            <param name="form">Form definition containing all fields.</param>
+            <param name="skuForm">Form definition containing all SKU fields.</param>
+            <param name="baseType">Type from which the generated class is derived.</param>
+            <param name="itemTypeName">Item type name needed to determine reserved member names.</param>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetFields">
+            <summary>
+            Returns all fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetCustomProductFields">
+            <summary>
+            Returns only custom SKU related fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetSystemProductFields">
+            <summary>
+            Returns only system SKU related fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetPropertyName(System.String)">
+            <summary>
+            Returns unique basic property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetNestedPropertyName(System.String)">
+            <summary>
+            Returns unique nested property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetProductPropertyName(System.String)">
+            <summary>
+            Returns unique SKU property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.ContentItemTemplateFieldProvider.CMS#FormEngine#IContentItemTemplateFieldProvider#GetProductNestedPropertyName(System.String)">
+            <summary>
+            Returns unique nested SKU property name for code generation template.
             </summary>
         </member>
         <member name="T:CMS.FormEngine.DataTypeCodeGenerationManager">
@@ -741,6 +788,46 @@
             <returns>Content item provider class for the specified data class.</returns>
             <exception cref="T:System.ArgumentNullException">Data class is null.</exception>
             <exception cref="T:System.ArgumentException">The specified data class is not supported.</exception>
+        </member>
+        <member name="T:CMS.FormEngine.IContentItemTemplateFieldProvider">
+            <summary>
+            Describes interface providing fields for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetFields">
+            <summary>
+            Returns all fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetCustomProductFields">
+            <summary>
+            Returns only custom SKU related fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetSystemProductFields">
+            <summary>
+            Returns only system SKU related fields which will be generated in code template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetPropertyName(System.String)">
+            <summary>
+            Returns unique basic property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetNestedPropertyName(System.String)">
+            <summary>
+            Returns unique nested property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetProductPropertyName(System.String)">
+            <summary>
+            Returns unique SKU property name for code generation template.
+            </summary>
+        </member>
+        <member name="M:CMS.FormEngine.IContentItemTemplateFieldProvider.GetProductNestedPropertyName(System.String)">
+            <summary>
+            Returns unique nested SKU property name for code generation template.
+            </summary>
         </member>
         <member name="T:CMS.FormEngine.SystemDataTypeCodeGeneratorFactory">
             <summary>

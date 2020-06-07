@@ -122,15 +122,15 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
             EnableTranslations = false;
         }
 
-        mResourceStringInfo = ResourceStringInfoProvider.GetResourceStringInfo(EditedResourceStringKey);
+        mResourceStringInfo = ResourceStringInfo.Provider.Get(EditedResourceStringKey);
         if (mResourceStringInfo == null)
         {
-            mResourceStringInfo = ResourceStringInfoProvider.GetResourceStringInfo(QueryHelper.GetInteger("stringid", 0));
+            mResourceStringInfo = ResourceStringInfo.Provider.Get(QueryHelper.GetInteger("stringid", 0));
             if (mResourceStringInfo == null)
             {
                 // Try to load resource string info by string key
                 string stringKey = QueryHelper.GetString("stringkey", String.Empty);
-                mResourceStringInfo = ResourceStringInfoProvider.GetResourceStringInfo(stringKey);
+                mResourceStringInfo = ResourceStringInfo.Provider.Get(stringKey);
 
                 if (mResourceStringInfo == null)
                 {
@@ -250,7 +250,7 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
         if (DefaultTranslationRequired)
         {
             string defaultTranslation = mTranslations[CultureHelper.DefaultUICultureCode.ToLowerInvariant()].Text.Trim();
-            string defaultCultureName = CultureInfoProvider.GetCultureInfo(CultureHelper.DefaultUICultureCode).CultureName;
+            string defaultCultureName = CultureInfo.Provider.Get(CultureHelper.DefaultUICultureCode).CultureName;
             if (String.IsNullOrEmpty(defaultTranslation))
             {
                 base.ShowError(ResHelper.GetStringFormat("localizable.deletedefault", defaultCultureName));
@@ -299,10 +299,10 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
         mResourceStringInfo.StringIsCustom = chkIsCustom.Checked;
         mResourceStringInfo.StringKey = resKey;
 
-        ResourceStringInfoProvider.SetResourceStringInfo(mResourceStringInfo);
+        ResourceStringInfo.Provider.Set(mResourceStringInfo);
 
         // We need reload mResourceStringInfo, because StringId was changed after first save
-        mResourceStringInfo = ResourceStringInfoProvider.GetResourceStringInfo(resKey);
+        mResourceStringInfo = ResourceStringInfo.Provider.Get(resKey);
     }
 
 
@@ -323,13 +323,13 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
         foreach (string cultureCode in mTranslations.Keys)
         {
             string translation = mTranslations[cultureCode.ToLowerInvariant()].Text.Trim();
-            int cultureId = CultureInfoProvider.GetCultureInfo(cultureCode).CultureID;
-            var resTranslation = ResourceTranslationInfoProvider.GetResourceTranslationInfo(mResourceStringInfo.StringID, cultureId);
+            int cultureId = CultureInfo.Provider.Get(cultureCode).CultureID;
+            var resTranslation = ResourceTranslationInfo.Provider.Get(mResourceStringInfo.StringID, cultureId);
 
             // Save translation only if not empty and if the same translation does not exist in resource file 
             if (String.IsNullOrEmpty(translation) || translation.Equals(ResHelper.GetFileString(mResourceStringInfo.StringKey, cultureCode, string.Empty, false), StringComparison.InvariantCultureIgnoreCase))
             {
-                ResourceTranslationInfoProvider.DeleteResourceTranslationInfo(resTranslation);
+                ResourceTranslationInfo.Provider.Delete(resTranslation);
             }
             else
             {
@@ -342,7 +342,7 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
                 resTranslation.TranslationCultureID = cultureId;
                 resTranslation.TranslationText = translation;
 
-                ResourceTranslationInfoProvider.SetResourceTranslationInfo(resTranslation);
+                ResourceTranslationInfo.Provider.Set(resTranslation);
             }
         }
     }
@@ -355,7 +355,7 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
     /// <param name="resKey"></param>
     private bool KeyIsFreeToUse(int stringId, string resKey)
     {
-        ResourceStringInfo rsi = ResourceStringInfoProvider.GetResourceStringInfo(resKey);
+        ResourceStringInfo rsi = ResourceStringInfo.Provider.Get(resKey);
         if (rsi == null)
         {
             return true;

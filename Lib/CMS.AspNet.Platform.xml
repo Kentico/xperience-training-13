@@ -218,6 +218,15 @@
             Wrapper over <see cref="T:System.Web.HttpRequestBase"/> object implementing <see cref="T:CMS.Base.Internal.IRequest"/> interface.
             </summary>
         </member>
+        <member name="P:CMS.AspNet.Platform.RequestImpl.RawUrl">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.AspNet.Platform.RequestImpl.ReadRequestBodyAsString">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.AspNet.Platform.RequestImpl.ReadRequestBodyAsStringAsync">
+            <inheritdoc/>
+        </member>
         <member name="T:CMS.AspNet.Platform.RequestContextImpl">
             <summary>
             Wrapper over <see cref="T:System.Web.Routing.RequestContext"/> object implementing <see cref="T:CMS.Base.Internal.IRequestContext"/> interface.
@@ -234,11 +243,10 @@
             Proxies method calls to underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/> instance.
             </summary>
         </member>
-        <member name="M:CMS.AspNet.Platform.FormCollection.#ctor(System.Collections.Specialized.NameValueCollection)">
+        <member name="M:CMS.AspNet.Platform.FormCollection.#ctor(System.Web.HttpRequestBase)">
             <summary>
             Creates a new instance of <see cref="T:CMS.AspNet.Platform.FormCollection"/> class.
             </summary>
-            <param name="form">Underlying collection to proxy methods to.</param>
         </member>
         <member name="P:CMS.AspNet.Platform.FormCollection.Item(System.String)">
             <summary>
@@ -256,6 +264,9 @@
             <summary>
             Gets collection containing name keys of the form.
             </summary>
+        </member>
+        <member name="P:CMS.AspNet.Platform.FormCollection.Files">
+            <inheritdoc/>
         </member>
         <member name="M:CMS.AspNet.Platform.FormCollection.ContainsKey(System.String)">
             <summary>
@@ -359,25 +370,20 @@
             Returns an enumerator that iterates through the collection.
             </summary>
         </member>
-        <member name="T:CMS.AspNet.Platform.ServerVariablesImpl">
+        <member name="T:CMS.AspNet.Platform.UploadedFilesCollection">
             <summary>
-            Wrapper over <see cref="T:System.Collections.Specialized.NameValueCollection"/> object implementing <see cref="T:CMS.Base.Internal.IServerVariables"/> interface.
+            Collection of files within a request.
             </summary>
         </member>
-        <member name="F:CMS.AspNet.Platform.ServerVariablesImpl.mCollection">
-            <summary>
-            Underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/>.
-            </summary>
+        <member name="P:CMS.AspNet.Platform.UploadedFilesCollection.Item(System.Int32)">
+            <inheritdoc/>
         </member>
-        <member name="M:CMS.AspNet.Platform.ServerVariablesImpl.#ctor(System.Collections.Specialized.NameValueCollection)">
-            <summary>
-            Initializes a new instance of the <see cref="T:CMS.AspNet.Platform.ServerVariablesImpl"/> class.
-            </summary>
-            <param name="collection">Underlying <see cref="T:System.Collections.Specialized.NameValueCollection"/>.</param>
+        <member name="P:CMS.AspNet.Platform.UploadedFilesCollection.Count">
+            <inheritdoc/>
         </member>
-        <member name="P:CMS.AspNet.Platform.ServerVariablesImpl.Item(System.String)">
+        <member name="M:CMS.AspNet.Platform.UploadedFilesCollection.#ctor(System.Web.HttpFileCollectionBase)">
             <summary>
-            Gets the value of a server variable for the current request.
+            Initializes a new instance of an <see cref="T:CMS.AspNet.Platform.UploadedFilesCollection"/>.
             </summary>
         </member>
         <member name="T:CMS.AspNet.Platform.ResponseImpl">
@@ -487,6 +493,11 @@
         <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.#ctor">
             <summary>
             Initializes a new instance of <see cref="T:CMS.AspNet.Platform.WebPathMapperImpl"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.GetStaticFilesRootPath">
+            <summary>
+            Gets the application static files root path. Value is read from <see cref="T:CMS.Base.SystemContext"/> and is the same as value returned from <see cref="M:CMS.AspNet.Platform.WebPathMapperImpl.GetRootPath"/>.
             </summary>
         </member>
         <member name="M:CMS.AspNet.Platform.WebPathMapperImpl.MapPathInternal(System.String)">
@@ -1149,6 +1160,16 @@
         <member name="M:CMS.AspNet.Platform.Routing.ObjectFactoryRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
             <summary>
             Provides the object that processes the request.
+            </summary>
+        </member>
+        <member name="T:CMS.Base.Internal.RequestKenticoExtensions">
+            <summary>
+            Extension methods upon the <see cref="T:System.Web.HttpRequestBase"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.RequestKenticoExtensions.Kentico(System.Web.HttpRequestBase)">
+            <summary>
+            Returns a <seealso cref="T:CMS.Base.Internal.IRequest"/> created out of <paramref name="request"/>.
             </summary>
         </member>
         <member name="T:CMS.Base.UploadExtensions.HttpPostedFileExtensions">

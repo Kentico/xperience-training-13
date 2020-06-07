@@ -77,7 +77,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Action_
         if (ActionInfo != null)
         {
             ActionInfo.ActionParameters = fieldEditor.FormDefinition;
-            WorkflowActionInfoProvider.SetWorkflowActionInfo(ActionInfo);
+            WorkflowActionInfo.Provider.Set(ActionInfo);
         }
     }
 

@@ -177,6 +177,11 @@
             <param name="operationType">Supported operations are Synchronization and Versioning.</param>
             <param name="binaryData">If true, gets the binary data to the DataSet.</param>
         </member>
+        <member name="T:CMS.MediaLibrary.IMediaFileInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MediaLibrary.MediaFileInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.MediaLibrary.MediaFileInfo">
             <summary>
             Media file info data container class.
@@ -306,6 +311,13 @@
             <summary>
             Updates the object using appropriate provider.
             </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.SetValue(System.String,System.Object)">
+            <summary>
+            Sets the field value.
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="value">New value</param>
         </member>
         <member name="M:CMS.MediaLibrary.MediaFileInfo.GetPhysicalFiles(CMS.DataEngine.OperationTypeEnum,System.Boolean)">
             <summary>
@@ -490,6 +502,27 @@
             Sets default values for all possible custom fields.
             </summary>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.ResetChanges">
+            <summary>
+            Resets the object changes and keeps the new values as unchanged according to the asUnchanged parameter.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.EnsureUniqueFileName(System.Boolean)">
+            <summary>
+            Sets whether unique file name is to be ensured upon setting the object. The default value is true.
+            </summary>
+            <param name="ensureUniqueFileName">Indicates if unique file name is to be ensured.</param>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfoProvider.Set(CMS.MediaLibrary.MediaFileInfo)"/>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfoProvider.SetMediaFileInfo(CMS.MediaLibrary.MediaFileInfo,System.Boolean,System.Int32)"/>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfo.SaveFileToDisk(System.Boolean)">
+            <summary>
+            Sets whether binary file is to be saved upon setting the object. The default value is true.
+            </summary>
+            <param name="saveFileToDisk">Indicates if binary file is to be saved.</param>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfoProvider.Set(CMS.MediaLibrary.MediaFileInfo)"/>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfoProvider.SetMediaFileInfo(CMS.MediaLibrary.MediaFileInfo,System.Boolean,System.Int32)"/>
+        </member>
         <member name="T:CMS.MediaLibrary.MediaFileInfoProvider">
             <summary>
             Class providing media file info management.
@@ -558,6 +591,17 @@
             <param name="mediaFilePath">File path</param>
             <param name="libraryFolder">Library folder name</param>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.Set(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfo.EnsureUniqueFileName(System.Boolean)"/>
+            <seealso cref="M:CMS.MediaLibrary.MediaFileInfo.SaveFileToDisk(System.Boolean)"/>
+            <seealso cref="P:CMS.MediaLibrary.MediaFileInfo.FileCreatedByUserID"/>
+            <seealso cref="P:CMS.MediaLibrary.MediaFileInfo.FileModifiedByUserID"/>
+        </member>
         <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.SetMediaFileInfo(CMS.MediaLibrary.MediaFileInfo,System.Boolean,System.Int32)">
             <summary>
             Sets (updates or inserts) specified media file.
@@ -572,6 +616,13 @@
             </summary>
             <param name="mediaFileId">Media file ID</param>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.Delete(CMS.MediaLibrary.MediaFileInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.DeleteMediaFileInfo(CMS.MediaLibrary.MediaFileInfo)">
             <summary>
             Deletes specified media file.
@@ -581,7 +632,7 @@
         <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFiles">
             <summary>
             Returns the query for all media files.
-            </summary>        
+            </summary>
         </member>
         <member name="M:CMS.MediaLibrary.MediaFileInfoProvider.GetMediaFiles(System.String,System.String,System.Int32,System.String)">
             <summary>
@@ -1183,6 +1234,51 @@
             <param name="relative">Relative path from root.</param>
             <param name="siteName">Site name.</param>
         </member>
+        <member name="T:CMS.MediaLibrary.IMediaLibraryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MediaLibrary.MediaLibraryInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.MediaLibrary.IMediaLibraryRolePermissionInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.MediaLibrary.IMediaLibraryRolePermissionInfoProvider.Get(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.IMediaLibraryRolePermissionInfoProvider.GetAsync(System.Int32,System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.IMediaLibraryRolePermissionInfoProvider.Remove(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.IMediaLibraryRolePermissionInfoProvider.Add(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
         <member name="T:CMS.MediaLibrary.LogMediaLibraryChangeSettings">
             <summary>
             Encapsulates settings for staging and integration bus.
@@ -1747,6 +1843,23 @@
             Constructor
             </summary>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.Get(System.String,System.Int32)">
+            <summary>
+            Gets an instance of info object based on its code name and site ID.
+            </summary>
+            <param name="name">Code name of the info object to look for.</param>
+            <param name="siteId">ID of the site to which to constrain the lookup.</param>
+            <returns>Returns an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryInfo"/> corresponding to <paramref name="name"/> and <paramref name="siteId"/> or null.</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetAsync(System.String,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of info object based on its code name and site ID.
+            </summary>
+            <param name="name">Code name of the info object to look for.</param>
+            <param name="siteId">ID of the site to which to constrain the lookup.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryInfo"/> corresponding to <paramref name="name"/> and <paramref name="siteId"/> or null.</returns>
+        </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.String)">
             <summary>
             Returns media library info specified by library name and site name.
@@ -1790,7 +1903,7 @@
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraries">
             <summary>
             Returns the query for all media libraries.
-            </summary>        
+            </summary>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraries(System.String,System.String,System.Int32,System.String)">
             <summary>
@@ -2128,6 +2241,25 @@
             Class providing media library role permission management.
             </summary>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.Get(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetAsync(System.Int32,System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetMediaLibraryRolePermissionInfo(System.Int32,System.Int32,System.Int32)">
             <summary>
             Returns the media library role permission structure matching specified criteria.
@@ -2151,7 +2283,7 @@
         <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetMediaLibraryRolePermissions">
             <summary>
             Returns the query for all media library role permissions.
-            </summary>        
+            </summary>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.GetLibraryRolePermissions(System.String,System.String)">
             <summary>
@@ -2160,6 +2292,14 @@
             <param name="where">Where condition used to filter the data</param>
             <param name="orderBy">Order by statement to use</param>
         </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.Add(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.AddRoleToLibrary(System.Int32,System.Int32,System.Int32)">
             <summary>
             Adds specified role to the library.
@@ -2167,6 +2307,14 @@
             <param name="roleId">Role ID</param>
             <param name="libraryId">Library ID</param>
             <param name="permissionId">Permission ID</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.Remove(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.MediaLibrary.MediaLibraryRolePermissionInfo"/> binding.
+            </summary>
+            <param name="libraryId">Media library ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryRolePermissionInfoProvider.RemoveRoleFromLibrary(System.Int32,System.Int32,System.Int32)">
             <summary>

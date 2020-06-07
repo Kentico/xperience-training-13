@@ -292,7 +292,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_Customers_CustomerLoginDet
     {
         var userName = Customer.CustomerEmail;
 
-        if (UserInfoProvider.GetUserInfo(userName) != null)
+        if (UserInfo.Provider.Get(userName) != null)
         {
             return string.Format(GetString("com.customer.emailnotunique"), Customer.CustomerEmail);
         }

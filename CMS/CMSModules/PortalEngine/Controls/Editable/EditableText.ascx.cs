@@ -11,7 +11,6 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.CKEditor.Web.UI;
 using CMS.DeviceProfiles;
-using CMS.DocumentEngine;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
@@ -96,7 +95,7 @@ public partial class CMSModules_PortalEngine_Controls_Editable_EditableText : CM
     /// <summary>
     /// Get or sets editor's title
     /// </summary>
-    public String Title
+    public string Title
     {
         get;
         set;
@@ -228,7 +227,7 @@ public partial class CMSModules_PortalEngine_Controls_Editable_EditableText : CM
 
 
     /// <summary>
-    /// Gets or sets the design panel 
+    /// Gets or sets the design panel
     /// </summary>
     public Panel DesignPanel
     {
@@ -936,15 +935,15 @@ public partial class CMSModules_PortalEngine_Controls_Editable_EditableText : CM
                                 // Get editor area css file
                                 if (SiteContext.CurrentSite != null)
                                 {
-                                    Editor.EditorAreaCSS = PortalHelper.GetHtmlEditorAreaCss(SiteContext.CurrentSiteName);
+                                    Editor.EditorAreaCSS = string.Empty;
                                 }
 
-                                // Set "Insert image or media" dialog configuration                            
+                                // Set "Insert image or media" dialog configuration
                                 Editor.MediaDialogConfig.ResizeToHeight = ResizeToHeight;
                                 Editor.MediaDialogConfig.ResizeToWidth = ResizeToWidth;
                                 Editor.MediaDialogConfig.ResizeToMaxSideSize = ResizeToMaxSideSize;
 
-                                // Set "Insert link" dialog configuration  
+                                // Set "Insert link" dialog configuration
                                 Editor.LinkDialogConfig.ResizeToHeight = ResizeToHeight;
                                 Editor.LinkDialogConfig.ResizeToWidth = ResizeToWidth;
                                 Editor.LinkDialogConfig.ResizeToMaxSideSize = ResizeToMaxSideSize;
@@ -1077,7 +1076,6 @@ public partial class CMSModules_PortalEngine_Controls_Editable_EditableText : CM
                         case CMSEditableRegionTypeEnum.HtmlEditor:
                             // HTML Editor
                             Editor = new CMSHtmlEditor();
-                            Editor.IsLiveSite = false;
                             Editor.ID = "htmlValue";
                             Editor.AutoDetectLanguage = false;
                             Editor.DefaultLanguage = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;

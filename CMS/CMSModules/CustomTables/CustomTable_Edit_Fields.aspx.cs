@@ -175,7 +175,7 @@ public partial class CMSModules_CustomTables_CustomTable_Edit_Fields : CMSCustom
             }
 
             // Clear the default queries
-            QueryInfoProvider.ClearDefaultQueries(dci, true, false);
+            QueryInfoProvider.ClearDefaultQueries(dci, true);
 
             // Clear the object type hashtable
             AbstractProviderDictionary.ReloadDictionaries(className, true);

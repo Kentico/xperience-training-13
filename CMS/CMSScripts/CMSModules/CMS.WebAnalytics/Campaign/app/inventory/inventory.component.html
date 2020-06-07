@@ -5,7 +5,6 @@
     <div ng-repeat="asset in $ctrl.assets track by $index" class="campaign-list">
         <cms-campaign-inventory-item ng-if="asset.id != 0"
                                      asset="asset"
-                                     site-is-content-only="$ctrl.siteIsContentOnly"
                                      editable="!$ctrl.campaign.isFinished()"
                                      utm-code="$ctrl.campaign.utmCode"
                                      remove-asset="$ctrl.removeAsset(asset)">
@@ -13,19 +12,7 @@
     </div>
 
     <div class="content-block-50">
-        <div ng-if="!$ctrl.siteIsContentOnly" class="remove-default-space">
-            <span>
-                <cms-select-page enabled="!$ctrl.campaign.isFinished()"
-                                 on-select="$ctrl.addPageAsset">
-                </cms-select-page>
-            </span>
-            <span>
-                <cms-create-page enabled="!$ctrl.campaign.isFinished()"
-                                 on-create="$ctrl.addPageAsset">
-                </cms-create-page>
-            </span>
-        </div>
-        <div ng-if="$ctrl.siteIsContentOnly">
+        <div>
             <cms-add-url-asset on-add="$ctrl.addUrlAsset"
                                campaign="$ctrl.campaign"
                                url-asset-target-regex="$ctrl.urlAssetTargetRegex">

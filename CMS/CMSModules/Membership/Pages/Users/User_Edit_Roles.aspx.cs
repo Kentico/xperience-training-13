@@ -62,7 +62,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
         if (mUserId > 0)
         {
             // Check that only global administrator can edit global administrator's accounts
-            mUserInfo = UserInfoProvider.GetUserInfo(mUserId);
+            mUserInfo = UserInfo.Provider.Get(mUserId);
             CheckUserAvaibleOnSite(mUserInfo);
             EditedObject = mUserInfo;
 
@@ -94,7 +94,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
                 mSiteId = SiteContext.CurrentSiteID;
 
                 // If user is member of current site
-                if (UserSiteInfoProvider.GetUserSiteInfo(mUserId, mSiteId) != null)
+                if (UserSiteInfo.Provider.Get(mUserId, mSiteId) != null)
                 {
                     // Force uniselector to preselect current site
                     siteSelector.Value = mSiteId;
@@ -137,7 +137,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
 
         // Get the active roles for this site
         var roleIds = new IDQuery<RoleInfo>().Where(siteIDWhere).Column("RoleID");
-        var data = UserRoleInfoProvider.GetUserRoles().WhereEquals("UserID", mUserId).And().WhereIn("RoleID", roleIds).Columns("RoleID").TypedResult;
+        var data = UserRoleInfo.Provider.Get().WhereEquals("UserID", mUserId).And().WhereIn("RoleID", roleIds).Columns("RoleID").TypedResult;
         if (data.Any())
         {
             mCurrentValues = TextHelper.Join(";", data.Select(i => i.RoleID));
@@ -169,11 +169,11 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
             if (id != 0)
             {
                 DateTime dt = ValidationHelper.GetDateTime(eventArgument, DateTimeHelper.ZERO_TIME);
-                UserRoleInfo uri = UserRoleInfoProvider.GetUserRoleInfo(mUserId, id);
+                UserRoleInfo uri = UserRoleInfo.Provider.Get(mUserId, id);
                 if (uri != null)
                 {
                     uri.ValidTo = dt;
-                    UserRoleInfoProvider.SetUserRoleInfo(uri);
+                    UserRoleInfo.Provider.Set(uri);
 
                     // Invalidate user
                     UserInfoProvider.InvalidateUser(mUserId);
@@ -322,8 +322,8 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
                 {
                     int roleID = ValidationHelper.GetInteger(item, 0);
 
-                    var uri = UserRoleInfoProvider.GetUserRoleInfo(mUserId, roleID);
-                    UserRoleInfoProvider.DeleteUserRoleInfo(uri);
+                    var uri = UserRoleInfo.Provider.Get(mUserId, roleID);
+                    UserRoleInfo.Provider.Delete(uri);
                 }
 
                 saved = true;
@@ -343,7 +343,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
                 foreach (string item in newItems)
                 {
                     int roleID = ValidationHelper.GetInteger(item, 0);
-                    UserRoleInfoProvider.AddUserToRole(mUserId, roleID, dt);
+                    UserRoleInfo.Provider.Add(mUserId, roleID, dt);
                 }
 
                 saved = true;

@@ -32,7 +32,7 @@ public partial class CMSModules_SmartSearch_SearchTaskAzure_Report : GlobalAdmin
     {
         get
         {
-            return mSearchTaskAzureInfo ?? (mSearchTaskAzureInfo = SearchTaskAzureInfoProvider.GetSearchTaskAzureInfo(SearchTaskAzureID));
+            return mSearchTaskAzureInfo ?? (mSearchTaskAzureInfo = SearchTaskAzureInfo.Provider.Get(SearchTaskAzureID));
         }
     }
 

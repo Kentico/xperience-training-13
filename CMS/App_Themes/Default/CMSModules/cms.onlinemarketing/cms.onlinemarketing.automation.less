@@ -59,22 +59,77 @@
     }
 }
 
-div.automation-header {
+.main-view iframe {
+    position: absolute;
+    min-height: calc(~"100% - 48px");
     width: 100%;
-    max-width: 100%;
+}
+
+.analytics-main-content {
+    width: calc(~"70% -"@base-unit * 2);
+    float: left;
+    overflow-x: auto;
+    min-height: calc(~"100vh -"@base-unit * 2);
+    padding: @base-unit 0 @base-unit @base-unit;
+
+    .control-group-inline {
+        margin-bottom: @base-unit;
+    }
+}
+
+.analytics-right-panel {
+    position: fixed;
+    right: 0;
+    width: calc(~"30% - 2px -"@base-unit * 2);
+    height: calc(~"100vh -"@base-unit * 2);
+    border-top: 1px solid @color-gray-140;
+    border-left: 1px solid @color-gray-140;
+    padding: @base-unit;
+
+    div:first-child {
+        height: 100%;
+
+        h3 {
+            display: inline-block;
+            margin: 20px 5px 20px 0;
+        }
+
+        .analytics-chart {
+            height: 60%;
+        }
+    }
+
+}
+
+div.automation-header {
+    width: calc(~"100% -"@base-unit * 2);
     height: @base-unit * 3;
-    max-height: @base-unit * 3;
+    line-height: @base-unit * 3;
     text-align: right;
+    padding: 0 @base-unit;
 
     .btn,
     .btn-default {
-        margin: @base-unit / 2;
+        margin: @base-unit / 2 0 @base-unit / 2 @base-unit / 2;
+    }
+
+    .btn-actions {
+        margin-bottom: 0;
+
+        .btn-group {
+            position: absolute;
+            display: block;
+
+            .btn {
+                margin: @base-unit / 2 0;
+            }
+        }
     }
 
     div.automation-header-icon {
         font-size: @base-unit / 2;
         display: inline;
-        padding: 0px 4px 0px 0px;
+        padding-right: 4px;
 
         .enabled {
             color: @color-green-100;
@@ -103,12 +158,10 @@ div.automation-header {
 
 .automation-toolbar-wrapper {
     background-color: @color-white;
-    flex: 0 0 270px;
     overflow: auto;
     padding: 0vh 0 2vh 2vh;
     width: 270px;
-    height: 92vh;
-    max-height: 92vh;
+    height: calc(~"98vh - 1px");
     z-index: 9997;
     border-left: 1px solid @color-gray-140;
     border-top: 1px solid @color-gray-140;

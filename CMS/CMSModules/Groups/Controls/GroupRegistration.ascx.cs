@@ -429,7 +429,7 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
                 userRole.RoleID = roleInfo.RoleID;
 
                 // Save user as member of admin group role
-                UserRoleInfoProvider.SetUserRoleInfo(userRole);
+                UserRoleInfo.Provider.Set(userRole);
             }
 
             // Clear user session a request
@@ -490,7 +490,7 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
                     var siteName = SiteContext.CurrentSiteName;
 
                     // Create the message
-                    EmailTemplateInfo eti = EmailTemplateProvider.GetEmailTemplate("Groups.WaitingForApproval", siteName);
+                    EmailTemplateInfo eti = EmailTemplateInfo.Provider.Get("Groups.WaitingForApproval", SiteContext.CurrentSiteID);
                     if (eti != null)
                     {
                         MacroResolver resolver = MacroContext.CurrentResolver;
@@ -562,7 +562,7 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
         var ui = MembershipContext.AuthenticatedUser;
         if (ui != null)
         {
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+            SiteInfo si = SiteInfo.Provider.Get(SiteID);
             if (si != null)
             {
                 return ui.IsInRole("CMSCommunityAdmin", si.SiteName) || ui.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin);
@@ -775,7 +775,7 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
 
             try
             {
-                MediaLibraryInfoProvider.SetMediaLibraryInfo(mlInfo);
+                MediaLibraryInfo.Provider.Set(mlInfo);
             }
             catch
             {
@@ -829,11 +829,11 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
             SearchIndexInfoProvider.SetSearchIndexInfo(sii);
 
             // Assign to current website and current culture
-            SearchIndexSiteInfoProvider.AddSearchIndexToSite(sii.IndexID, SiteContext.CurrentSiteID);
+            SearchIndexSiteInfo.Provider.Add(sii.IndexID, SiteContext.CurrentSiteID);
             CultureInfo ci = DocumentContext.CurrentDocumentCulture;
             if (ci != null)
             {
-                SearchIndexCultureInfoProvider.AddSearchIndexCulture(sii.IndexID, ci.CultureID);
+                SearchIndexCultureInfo.Provider.Add(sii.IndexID, ci.CultureID);
             }
 
             // Register rebuild index action
@@ -881,11 +881,11 @@ public partial class CMSModules_Groups_Controls_GroupRegistration : CMSUserContr
             SearchIndexInfoProvider.SetSearchIndexInfo(sii);
 
             // Assing to current website and current culture
-            SearchIndexSiteInfoProvider.AddSearchIndexToSite(sii.IndexID, SiteContext.CurrentSiteID);
+            SearchIndexSiteInfo.Provider.Add(sii.IndexID, SiteContext.CurrentSiteID);
             CultureInfo ci = DocumentContext.CurrentDocumentCulture;
             if (ci != null)
             {
-                SearchIndexCultureInfoProvider.AddSearchIndexCulture(sii.IndexID, ci.CultureID);
+                SearchIndexCultureInfo.Provider.Add(sii.IndexID, ci.CultureID);
             }
         }
     }

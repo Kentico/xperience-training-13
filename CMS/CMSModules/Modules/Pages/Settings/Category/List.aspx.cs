@@ -44,7 +44,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_List : GlobalAdm
     {
         get
         {
-            return mResource ?? (mResource = ResourceInfoProvider.GetResourceInfo(moduleId));
+            return mResource ?? (mResource = ResourceInfo.Provider.Get(moduleId));
         }
     }
 

@@ -809,7 +809,7 @@ public partial class CMSWebParts_Ecommerce_Orders : CMSAbstractWebPart
         if ((split.Length >= 1) && (split.Length <= 2))
         {
             // Country filter
-            var country = CountryInfoProvider.GetCountryInfo(split[0]);
+            var country = CountryInfo.Provider.Get(split[0]);
             if (country != null)
             {
                 addressWhere.WhereEquals("AddressCountryID", country.CountryID);
@@ -817,7 +817,7 @@ public partial class CMSWebParts_Ecommerce_Orders : CMSAbstractWebPart
                 if (split.Length == 2)
                 {
                     // State filter
-                    var state = StateInfoProvider.GetStateInfo(split[1]);
+                    var state = StateInfo.Provider.Get(split[1]);
                     if (state != null)
                     {
                         addressWhere.WhereEquals("AddressStateID", state.StateID);

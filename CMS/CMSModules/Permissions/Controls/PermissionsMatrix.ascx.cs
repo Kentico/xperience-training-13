@@ -290,7 +290,7 @@ public partial class CMSModules_Permissions_Controls_PermissionsMatrix : CMSAdmi
         {
             if (mSelectedUser == null)
             {
-                mSelectedUser = UserInfoProvider.GetUserInfo(SelectedUserID);
+                mSelectedUser = UserInfo.Provider.Get(SelectedUserID);
             }
             return mSelectedUser;
         }
@@ -306,7 +306,7 @@ public partial class CMSModules_Permissions_Controls_PermissionsMatrix : CMSAdmi
         {
             if (mSelectedSite == null)
             {
-                mSelectedSite = SiteInfoProvider.GetSiteInfo(SiteID);
+                mSelectedSite = SiteInfo.Provider.Get(SiteID);
             }
             return mSelectedSite;
         }
@@ -405,7 +405,7 @@ public partial class CMSModules_Permissions_Controls_PermissionsMatrix : CMSAdmi
         int permissionId = ValidationHelper.GetInteger(permId, 0);
 
         // Check how the permission can be edited
-        PermissionNameInfo pni = PermissionNameInfoProvider.GetPermissionNameInfo(permissionId);
+        PermissionNameInfo pni = PermissionNameInfo.Provider.Get(permissionId);
         if (pni != null)
         {
             return currentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) || !pni.PermissionEditableByGlobalAdmin;
@@ -648,11 +648,11 @@ public partial class CMSModules_Permissions_Controls_PermissionsMatrix : CMSAdmi
 
         if (allow)
         {
-            RolePermissionInfoProvider.SetRolePermissionInfo(roleId, permissionId);
+            RolePermissionInfo.Provider.Add(roleId, permissionId);
         }
         else
         {
-            RolePermissionInfoProvider.DeleteRolePermissionInfo(roleId, permissionId);
+            RolePermissionInfo.Provider.Remove(roleId, permissionId);
         }
 
         // Reload content before rows

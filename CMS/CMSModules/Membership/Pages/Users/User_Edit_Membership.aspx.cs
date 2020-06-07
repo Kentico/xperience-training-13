@@ -60,7 +60,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
         }
 
         ScriptHelper.RegisterJQuery(Page);
-        ui = UserInfoProvider.GetUserInfo(UserID);
+        ui = UserInfo.Provider.Get(UserID);
         CheckUserAvaibleOnSite(ui);
         EditedObject = ui;
 
@@ -122,7 +122,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
                 siteID = SiteContext.CurrentSiteID;
 
                 // If user is member of current site
-                if (UserSiteInfoProvider.GetUserSiteInfo(UserID, siteID) != null)
+                if (UserSiteInfo.Provider.Get(UserID, siteID) != null)
                 {
                     // Force uniselector to preselect current site
                     siteSelector.Value = siteID;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
@@ -234,7 +235,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
                 // Set default live site URL in header link
                 string liveURL = DocumentURLProvider.GetAbsoluteUrl(rootNode);
                 liveURL = URLHelper.AddParameterToUrl(liveURL, "viewmode", ((int)ViewModeEnum.LiveSite).ToString());
-                ScriptHelper.RegisterStartupScript(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + liveURL + "');"));
+                ScriptHelper.RegisterStartupScript(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + HttpUtility.JavaScriptStringEncode(liveURL) + "');"));
             }
         }
 

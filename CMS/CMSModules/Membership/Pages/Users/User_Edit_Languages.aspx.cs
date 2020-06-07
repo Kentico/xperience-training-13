@@ -39,7 +39,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Languages : CMS
 
         if (userId > 0)
         {
-            ui = UserInfoProvider.GetUserInfo(userId);
+            ui = UserInfo.Provider.Get(userId);
             CheckUserAvaibleOnSite(ui);
             EditedObject = ui;
 
@@ -196,7 +196,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Languages : CMS
             if (ui != null)
             {
                 ui.UserHasAllowedCultures = radSelectedLanguages.Checked;
-                UserInfoProvider.SetUserInfo(ui);
+                UserInfo.Provider.Set(ui);
                 ui.Generalized.Invalidate(false);
 
                 uniSelector.Value = "";
@@ -219,7 +219,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Languages : CMS
                 // Remove user's allowed cultures
                 UserCultureInfoProvider.RemoveUserFromAllCultures(userId);
                 ui.UserHasAllowedCultures = radSelectedLanguages.Checked;
-                UserInfoProvider.SetUserInfo(ui);
+                UserInfo.Provider.Set(ui);
                 ui.Generalized.Invalidate(false);
 
                 plcCultures.Visible = false;
@@ -297,7 +297,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Languages : CMS
             return result;
         }
 
-        UserInfo userInfo = UserInfoProvider.GetUserInfo(userId);
+        UserInfo userInfo = UserInfo.Provider.Get(userId);
         if (userInfo == null)
         {
             result = GetString("Administration-User.WrongUserId");

@@ -83,7 +83,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaFileUplo
 
     protected void btnUpload_Click(object sender, EventArgs e)
     {
-        MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+        MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(LibraryID);
         if (!MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(mli, "manage"))
         {
             // Check 'File create' permission
@@ -143,7 +143,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaFileUplo
                 MediaFileInfo mfi = new MediaFileInfo(fileUploader.PostedFile.ToUploadedFile(), LibraryID, DestinationPath);
 
                 // Save record to the database
-                MediaFileInfoProvider.SetMediaFileInfo(mfi);
+                MediaFileInfo.Provider.Set(mfi);
 
                 // Save preview if presented
                 if (previewUploader.HasFile)

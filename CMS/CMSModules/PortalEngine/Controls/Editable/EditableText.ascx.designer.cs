@@ -9,5 +9,6 @@
 
 
 
-public partial class CMSModules_PortalEngine_Controls_WebParts_EditableText {
+public partial class CMSModules_PortalEngine_Controls_Editable_EditableText
+{
 }

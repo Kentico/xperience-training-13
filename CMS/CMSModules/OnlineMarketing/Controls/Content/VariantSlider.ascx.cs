@@ -221,8 +221,7 @@ public partial class CMSModules_OnlineMarketing_Controls_Content_VariantSlider :
         base.OnInit(e);
 
         // Check permissions
-        if ((!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("CMS.Design", "Design") && (SliderMode != VariantTypeEnum.Widget))
-            || !CheckPermissions("Read"))
+        if ((SliderMode != VariantTypeEnum.Widget) || !CheckPermissions("Read"))
         {
             stopProcessing = true;
             pnlVariations.Visible = false;

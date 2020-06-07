@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data;
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
-using CMS.DocumentEngine;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
@@ -15,7 +13,6 @@ using CMS.Search;
 using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WebAnalytics;
-using CMS.WebAnalytics.Web.UI;
 
 
 public partial class CMSModules_SmartSearch_Controls_SearchResults : CMSUserControl, ISearchFilterable, IUniPageable
@@ -1378,15 +1375,8 @@ public partial class CMSModules_SmartSearch_Controls_SearchResults : CMSUserCont
                 {
                     if (AnalyticsHelper.AnalyticsEnabled(siteName) && !string.IsNullOrEmpty(searchText))
                     {
-                        if (AnalyticsHelper.JavascriptLoggingEnabled(siteName))
-                        {
-                            WebAnalyticsServiceScriptsRenderer.RegisterLogSearchCall(Page, DocumentContext.CurrentPageInfo, searchText);
-                        }
-                        else
-                        {
-                            // Log on site keywords
-                            AnalyticsHelper.LogOnSiteSearchKeywords(siteName, DocumentContext.CurrentAliasPath, culture, searchText, 0, 1);
-                        }
+                        // Log on site keywords
+                        AnalyticsHelper.LogOnSiteSearchKeywords(siteName, DocumentContext.CurrentAliasPath, culture, searchText, 0, 1);
                     }
                 }
 

@@ -109,9 +109,9 @@ public partial class CMSAdminControls_UI_ObjectParameters : CMSUserControl
                 {
                     string colName = column.ColumnName;
                     // Save macro value
-                    if ((form.MacroTable != null) && (form.MacroTable[colName.ToLowerCSafe()]) != null)
+                    if ((form.MacroTable != null) && (form.MacroTable[colName.ToLowerInvariant()]) != null)
                     {
-                        Parameters[colName] = form.MacroTable[colName.ToLowerCSafe()];
+                        Parameters[colName] = form.MacroTable[colName.ToLowerInvariant()];
                     }
                     else
                     {

@@ -13,7 +13,7 @@
     //]]>
     </script>
     <cms:CMSPanel ID="pnlContentWrap" runat="server" ShortID="p">
-        <cms:UniGrid ID="gridTemplates" runat="server" OrderBy="PageTemplateDisplayName" Columns="PageTemplateID, PageTemplateDisplayName, PageTemplateIsReusable"
+        <cms:UniGrid ID="gridTemplates" runat="server" OrderBy="PageTemplateDisplayName" Columns="PageTemplateID, PageTemplateDisplayName"
             IsLiveSite="false" ObjectType="cms.pagetemplate" ShowObjectMenu="false">
             <GridActions Parameters="PageTemplateID">
                 <ug:Action Name="edit" Caption="$General.Edit$" FontIconClass="icon-edit" FontIconStyle="Allow" OnClick="EditPageTemplate({0}); return false;" />

@@ -84,7 +84,7 @@
         function SetLiveSiteURL(liveSiteURL) {
             if (!liveSiteURL) {
                 // Set default URL to root
-                liveSiteURL = '<%= DefaultLiveSiteUrl %>';
+                liveSiteURL = '<%= HttpUtility.JavaScriptStringEncode(DefaultLiveSiteUrl) %>';
             }
 
             var element = document.getElementById('<%= lnkLiveSite.ClientID %>');

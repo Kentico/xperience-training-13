@@ -109,7 +109,7 @@ public partial class CMSModules_Membership_Pages_Users_User_New : CMSUsersPage
         userName = ValidationHelper.GetString(ucUserName.Value, String.Empty).Trim();
 
         // Check if user with the same user name exists
-        if (UserInfoProvider.GetUserInfo(userName) != null)
+        if (UserInfo.Provider.Get(userName) != null)
         {
             ShowError(GetString("Administration-User_New.UserExists"));
             return;

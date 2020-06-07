@@ -10,21 +10,27 @@ using CMS.UIControls;
 [UIElement(ModuleName.ONLINEMARKETING, "PendingContacts", false, true)]
 public partial class CMSModules_ContactManagement_Pages_Tools_PendingContacts_Process_Detail : CMSContactManagementPage, IProcessDetailPage
 {
-    public void SetBreadcrumbs(CMSAutomationManager automationManager)
+    public bool IsContactDetailShown => true;
+
+
+    public CMSAutomationManager AutomationManager { get; set; }
+
+
+    public void SetBreadcrumbs()
     {
         string bcUrl = null;
 
         if (!IsDialog)
         {
-            bcUrl = GetListingUrl();
+            bcUrl = GetListingPageUrl();
         }
 
         SetBreadcrumb(0, GetString("ma.contact.pendingcontacts"), bcUrl, null, null);
-        SetBreadcrumb(1, HTMLHelper.HTMLEncode(ContactInfoProvider.GetContactFullName(automationManager.ObjectID)), null, null, null);
+        SetBreadcrumb(1, HTMLHelper.HTMLEncode(ContactInfoProvider.GetContactFullName(AutomationManager.ObjectID)), null, null, null);
     }
 
 
-    public void AfterAutomationManagerAction(string actionName, CMSAutomationManager automationManager)
+    public void AfterAutomationManagerAction(string actionName)
     {
         switch (actionName)
         {
@@ -36,14 +42,14 @@ public partial class CMSModules_ContactManagement_Pages_Tools_PendingContacts_Pr
                 }
                 else
                 {
-                    URLHelper.Redirect(GetListingUrl());
+                    URLHelper.Redirect(GetListingPageUrl());
                 }
                 break;
         }
     }
 
 
-    private string GetListingUrl()
+    public string GetListingPageUrl()
     {
         return ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/PendingContacts/List.aspx?siteid=" + SiteID);
     }

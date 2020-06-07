@@ -36,7 +36,7 @@ public partial class CMSModules_CssStylesheets_Pages_CssStylesheet_General : CMS
                 int siteId = QueryHelper.GetInteger("siteid", 0);
                 if (siteId > 0)
                 {
-                    mSite = SiteInfoProvider.GetSiteInfo(siteId);
+                    mSite = SiteInfo.Provider.Get(siteId);
                 }
                 if (mSite == null)
                 {
@@ -57,11 +57,6 @@ public partial class CMSModules_CssStylesheets_Pages_CssStylesheet_General : CMS
         RequireSite = false;
 
         CurrentUserInfo currentUser = MembershipContext.AuthenticatedUser;
-
-        if (!currentUser.IsAuthorizedPerResource("CMS.Design", "ReadCMSCSSStylesheet"))
-        {
-            RedirectToAccessDenied("CMS.Design", "ReadCMSCSSStylesheet");
-        }
 
         // Page has been opened in CMSDesk and only stylesheet style editing is allowed
         isDialog = (QueryHelper.GetBoolean("dialog", false) || QueryHelper.GetBoolean("isindialog", false));
@@ -84,12 +79,6 @@ public partial class CMSModules_CssStylesheets_Pages_CssStylesheet_General : CMS
             if (!QueryHelper.ValidateHash("hash", "objectid", null, true))
             {
                 URLHelper.Redirect(AdministrationUrlHelper.GetErrorPageUrl("dialogs.badhashtitle", "dialogs.badhashtext"));
-            }
-
-            // Check 'Modify CSS stylesheets' permission 
-            if (!currentUser.IsAuthorizedPerResource("CMS.Design", "ModifyCMSCSSStylesheet"))
-            {
-                RedirectToAccessDenied("CMS.Design", "ModifyCMSCSSStylesheet");
             }
         }
 

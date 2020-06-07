@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Tab_Contacts {
-    
+public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Tab_Contacts
+{
+
     /// <summary>
     /// ucSelector control.
     /// </summary>
@@ -19,16 +20,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_ContactManagement_FormControls_ContactSelector ucSelector;
-    
-    /// <summary>
-    /// headerActions control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSAdminControls_UI_PageElements_HeaderActions headerActions;
-    
+
     /// <summary>
     /// pnlUpdate control.
     /// </summary>
@@ -37,7 +29,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdate;
-    
+
     /// <summary>
     /// listContacts control.
     /// </summary>
@@ -46,4 +38,49 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_ContactManagement_Controls_UI_Automation_Contacts listContacts;
+
+    /// <summary>
+    /// pnlUpdateChart control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateChart;
+
+    /// <summary>
+    /// btnDemographics control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSButton btnDemographics;
+
+    /// <summary>
+    /// lblChartHeading control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedHeading lblChartHeading;
+
+    /// <summary>
+    /// iconHelp control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelp;
+
+    /// <summary>
+    /// pnlChart control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlChart;
 }

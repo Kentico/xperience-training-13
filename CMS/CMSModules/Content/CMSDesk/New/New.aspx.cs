@@ -2,7 +2,6 @@
 
 using CMS.Base.Web.UI;
 using CMS.Core;
-using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Localization;
 using CMS.UIControls;
@@ -78,7 +77,6 @@ public partial class CMSModules_Content_CMSDesk_New_New : CMSContentPage
             url = URLHelper.AddParameterToUrl(url, "content", "1");
             ctrl.ProductSelectionUrl = URLHelper.AppendQuery(ResolveUrl(url), RequestContext.CurrentQueryString);
         }
-        ctrl.NewVariantUrl = URLHelper.AppendQuery(ResolveUrl("~/CMSModules/OnlineMarketing/Pages/Content/ABTesting/ABVariant/NewPage.aspx"), RequestContext.CurrentQueryString);
 
         // Current Node ID
         ctrl.ParentNodeID = QueryHelper.GetInteger("parentnodeid", 0);

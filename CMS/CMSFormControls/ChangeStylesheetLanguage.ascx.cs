@@ -131,9 +131,6 @@ public partial class CMSFormControls_ChangeStylesheetLanguage : FormEngineUserCo
             btnOpenSelection.Visible = cssInfo.Generalized.IsCheckedOut && cssInfo.Generalized.IsCheckedOutByUser(MembershipContext.AuthenticatedUser);
         }
 
-        // Hide the change button if the user does not have permissions to modify CSS stylesheets
-        btnOpenSelection.Visible = CurrentUser.IsAuthorizedPerResource("CMS.Design", "ModifyCMSCSSStylesheet");
-
         // Show confirmation if current language is not plain CSS
         if ((cssInfo != null) && !cssInfo.StylesheetDynamicLanguage.EqualsCSafe(CssStylesheetInfo.PLAIN_CSS, true))
         {

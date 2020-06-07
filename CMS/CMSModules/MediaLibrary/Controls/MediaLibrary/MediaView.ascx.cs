@@ -85,7 +85,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         {
             if (mLibraryInfo == null)
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(LibraryID);
             }
             return mLibraryInfo;
         }
@@ -233,7 +233,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         {
             if ((mLibrarySite == null) && (LibraryInfo != null))
             {
-                mLibrarySite = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                mLibrarySite = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             }
             return mLibrarySite;
         }

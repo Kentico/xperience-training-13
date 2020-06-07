@@ -116,7 +116,7 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
         DateTime originalTS = Settings.TimeStamp;
 
         Settings.TimeStamp = DateTimeHelper.ZERO_TIME;
-        
+
         var parameters = new DefaultSelectionParameters
         {
             ObjectType = ObjectType,
@@ -180,7 +180,7 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
             if (Settings != null)
             {
                 // Process the results of the available tasks
-                string[] available = hdnAvailableItems.Value.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] available = hdnAvailableItems.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (string codeName in available)
                 {
@@ -239,8 +239,8 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
                 }
 
                 // Save previous filter where condition (needed for correct offset)
-                var filterPreviousWhereCondition = FilterCurrentWhereCondition;                
-                
+                var filterPreviousWhereCondition = FilterCurrentWhereCondition;
+
                 // Reset filter if current node has changed 
                 if (FilterCurrentObjectType != ObjectType)
                 {
@@ -304,7 +304,7 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
                 {
                     q.Offset = CurrentOffset;
                 }
-                
+
                 q.MaxRecords = CurrentPageSize;
 
                 // Get the data
@@ -397,21 +397,12 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
     // Get orderby expression
     private static string GetOrderByExpression(GeneralizedInfo info)
     {
-        switch (info.TypeInfo.ObjectType)
+        if (info.DisplayNameColumn != ObjectTypeInfo.COLUMN_NAME_UNKNOWN)
         {
-            case PageTemplateInfo.OBJECT_TYPE:
-                return "PageTemplateIsReusable DESC," + info.DisplayNameColumn;
-
-            default:
-                {
-                    if (info.DisplayNameColumn != ObjectTypeInfo.COLUMN_NAME_UNKNOWN)
-                    {
-                        return info.DisplayNameColumn;
-                    }
-
-                    return info.CodeNameColumn;
-                }
+            return info.DisplayNameColumn;
         }
+
+        return info.CodeNameColumn;
     }
 
     // Resets the filter and ViewState property;
@@ -488,6 +479,6 @@ public partial class CMSModules_ImportExport_Controls_ExportGridView : ImportExp
             OnPageChanged(this, null);
         }
     }
-    
+
     #endregion
 }

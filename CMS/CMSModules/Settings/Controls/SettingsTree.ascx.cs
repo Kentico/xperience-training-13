@@ -594,7 +594,7 @@ public partial class CMSModules_Settings_Controls_SettingsTree : CMSUserControl
         }
         else
         {
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(ModuleID);
+            ResourceInfo resource = ResourceInfo.Provider.Get(ModuleID);
 
             StringBuilder sb = new StringBuilder();
             sb.Append(@"

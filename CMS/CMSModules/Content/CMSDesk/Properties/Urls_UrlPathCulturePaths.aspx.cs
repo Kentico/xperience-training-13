@@ -11,6 +11,7 @@ using CMS.DocumentEngine.Routing;
 using CMS.DocumentEngine.Routing.Internal;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
+using CMS.Localization;
 using CMS.Membership;
 using CMS.UIControls;
 
@@ -128,15 +129,28 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_UrlPathCulturePa
 
         if (new PageUrlPathSlugUpdater(Node, urlPathCulture).TryUpdate(newSlug, out var collisions))
         {
-            DocumentManager.SaveDocument();
+            DocumentManager.ClearContentChanged();
             gridUrlsPaths.ReloadData();
             ShowChangesSaved();
+
+            if (!urlPathCulture.Equals(LocalizationContext.PreferredCultureCode, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+            UpdateLiveSiteButtonUrl();
         }
         else
         {
             ShowCollisionErrorMessage(collisions);
             inlineEditingTextBox.ErrorText = ResHelper.GetString("content.ui.properties.pageurlpaths.inlineedit.conflict");
         }
+    }
+
+
+    private void UpdateLiveSiteButtonUrl()
+    {
+        var url = DocumentURLProvider.GetAbsoluteUrl(Node);
+        ScriptHelper.RegisterSetLiveSiteURL(this, url);
     }
 
 

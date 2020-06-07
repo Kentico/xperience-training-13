@@ -20,14 +20,6 @@ public partial class CMSModules_PortalEngine_UI_WebParts_GetWebPartProperties : 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-
-        var currentUser = MembershipContext.AuthenticatedUser;
-
-        // Check content design
-        if (!currentUser.IsAuthorizedPerResource("CMS.Design", "Design"))
-        {
-            RedirectToAccessDenied("CMS.Design", "Design");
-        }
     }
 
 

@@ -212,7 +212,7 @@ public partial class CMSModules_UIPersonalization_Controls_UIPersonalization : C
                 string selectedModule = QueryHelper.GetString("module", null);
                 if (!String.IsNullOrEmpty(selectedModule))
                 {
-                    ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(selectedModule);
+                    ResourceInfo ri = ResourceInfo.Provider.Get(selectedModule);
                     if (ri != null)
                     {
                         selectModule.Value = ri.ResourceID;
@@ -292,7 +292,7 @@ public partial class CMSModules_UIPersonalization_Controls_UIPersonalization : C
     {
         if (SiteID > 0)
         {
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+            SiteInfo si = SiteInfo.Provider.Get(SiteID);
             if (si != null)
             {
                 ucDisabledModule.SiteName = si.SiteName;

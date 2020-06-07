@@ -352,7 +352,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
     /// </summary>
     public string ProcessFolderAction()
     {
-        MediaLibraryInfo libInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+        MediaLibraryInfo libInfo = MediaLibraryInfo.Provider.Get(LibraryID);
         if (libInfo != null)
         {
             if (Action.ToLowerCSafe().Trim() == "new")
@@ -397,7 +397,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                 }
             }
 
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(libInfo.LibrarySiteID);
+            SiteInfo si = SiteInfo.Provider.Get(libInfo.LibrarySiteID);
             if (si != null)
             {
                 // Validate form entry

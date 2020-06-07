@@ -71,11 +71,11 @@ public partial class CMSModules_EmailTemplates_Controls_Edit : CMSAdminEditContr
 
     private void EditForm_OnBeforeSave(object sender, EventArgs e)
     {
-        if(SiteInfoProvider.GetSiteInfo(SiteId) != null)
+        if(SiteInfo.Provider.Get(SiteId) != null)
         {
             EditForm.Data["EmailTemplateSiteID"] = SiteId;
         }
-        else if (SiteInfoProvider.GetSiteInfo(SelectedSiteId) != null)
+        else if (SiteInfo.Provider.Get(SelectedSiteId) != null)
         {
             EditForm.Data["EmailTemplateSiteID"] = SelectedSiteId;
         }

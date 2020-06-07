@@ -360,7 +360,7 @@ public partial class CMSModules_Categories_Controls_MultipleCategoriesSelector :
             foreach (string item in newItems)
             {
                 int categoryId = ValidationHelper.GetInteger(item, 0);
-                DocumentCategoryInfoProvider.RemoveDocumentFromCategory(Node.DocumentID, categoryId);
+                DocumentCategoryInfo.Provider.Remove(Node.DocumentID, categoryId);
             }
             
             logUpdateTask = true;
@@ -377,9 +377,9 @@ public partial class CMSModules_Categories_Controls_MultipleCategoriesSelector :
                 int categoryId = ValidationHelper.GetInteger(item, 0);
 
                 // Make sure, that category still exists
-                if (CategoryInfoProvider.GetCategoryInfo(categoryId) != null)
+                if (CategoryInfo.Provider.Get(categoryId) != null)
                 {
-                    DocumentCategoryInfoProvider.AddDocumentToCategory(Node.DocumentID, categoryId);
+                    DocumentCategoryInfo.Provider.Add(Node.DocumentID, categoryId);
                 }
             }
 
@@ -393,7 +393,7 @@ public partial class CMSModules_Categories_Controls_MultipleCategoriesSelector :
                 foreach (DataRow dr in catsToRemove.Tables[0].Rows)
                 {
                     // Remove categories covered by their children from document
-                    DocumentCategoryInfoProvider.RemoveDocumentFromCategory(Node.DocumentID, ValidationHelper.GetInteger(dr["ID"], 0));
+                    DocumentCategoryInfo.Provider.Remove(Node.DocumentID, ValidationHelper.GetInteger(dr["ID"], 0));
                 }
             }
 

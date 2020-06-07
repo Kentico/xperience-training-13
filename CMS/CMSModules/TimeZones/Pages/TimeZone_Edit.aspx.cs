@@ -34,7 +34,7 @@ public partial class CMSModules_TimeZones_Pages_TimeZone_Edit : GlobalAdminPage
         zoneId = QueryHelper.GetInteger("zoneid", 0);
         if (zoneId > 0)
         {
-            var timeZoneObj = TimeZoneInfoProvider.GetTimeZoneInfo(zoneId);
+            var timeZoneObj = TimeZoneInfo.Provider.Get(zoneId);
             //Set edited object
             EditedObject = timeZoneObj;
 
@@ -131,7 +131,7 @@ public partial class CMSModules_TimeZones_Pages_TimeZone_Edit : GlobalAdminPage
         if (String.IsNullOrEmpty(errorMessage))
         {
             // TimeZoneName must to be unique
-            TimeZoneInfo timeZoneObj = TimeZoneInfoProvider.GetTimeZoneInfo(txtTimeZoneName.Text.Trim());
+            TimeZoneInfo timeZoneObj = TimeZoneInfo.Provider.Get(txtTimeZoneName.Text.Trim());
 
             // If timeZoneName value is unique														
             if ((timeZoneObj == null) || (timeZoneObj.TimeZoneID == zoneId))
@@ -140,7 +140,7 @@ public partial class CMSModules_TimeZones_Pages_TimeZone_Edit : GlobalAdminPage
                 if ((timeZoneObj == null))
                 {
                     // Get TimeZoneInfo object by primary key or create new one
-                    timeZoneObj = TimeZoneInfoProvider.GetTimeZoneInfo(zoneId) ?? new TimeZoneInfo();
+                    timeZoneObj = TimeZoneInfo.Provider.Get(zoneId) ?? new TimeZoneInfo();
                 }
 
                 timeZoneObj.TimeZoneName = txtTimeZoneName.Text.Trim();
@@ -150,7 +150,7 @@ public partial class CMSModules_TimeZones_Pages_TimeZone_Edit : GlobalAdminPage
                 timeZoneObj.TimeZoneRuleEndRule = endRuleEditor.Rule;
                 timeZoneObj.TimeZoneGMT = Convert.ToDouble(txtTimeZoneGMT.Text.Trim());
 
-                TimeZoneInfoProvider.SetTimeZoneInfo(timeZoneObj);
+                TimeZoneInfo.Provider.Set(timeZoneObj);
 
                 URLHelper.Redirect(UrlResolver.ResolveUrl("TimeZone_Edit.aspx?zoneid=" + Convert.ToString(timeZoneObj.TimeZoneID) + "&saved=1"));
             }

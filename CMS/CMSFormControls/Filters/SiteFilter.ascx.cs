@@ -282,7 +282,7 @@ public partial class CMSFormControls_Filters_SiteFilter : CMSAbstractBaseFilterC
                     string where;
 
                     // Set the prefix for the item
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                    SiteInfo si = SiteInfo.Provider.Get(siteId);
                     if (si != null)
                     {
                         filteredControl.SetValue("ItemPrefix", si.SiteName + ".");

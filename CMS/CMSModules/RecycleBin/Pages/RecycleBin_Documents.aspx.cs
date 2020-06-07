@@ -37,7 +37,7 @@ public partial class CMSModules_RecycleBin_Pages_RecycleBin_Documents : GlobalAd
             }
         }
 
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(ValidationHelper.GetInteger(siteSelector.Value, 0));
+        SiteInfo si = SiteInfo.Provider.Get(ValidationHelper.GetInteger(siteSelector.Value, 0));
         if (si != null)
         {
             recycleBin.SiteName = si.SiteName;

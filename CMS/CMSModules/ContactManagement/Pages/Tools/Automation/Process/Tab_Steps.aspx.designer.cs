@@ -13,11 +13,83 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 {
 
     /// <summary>
-    /// designerElem control.
+    /// pnlHeader control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMSModules_ContactManagement_Controls_UI_Automation_AutomationDesigner designerElem;
+    protected global::System.Web.UI.WebControls.Panel pnlHeader;
+
+    /// <summary>
+    /// pnlState control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlState;
+
+    /// <summary>
+    /// navigation control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl navigation;
+
+    /// <summary>
+    /// btnDesigner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSButton btnDesigner;
+
+    /// <summary>
+    /// btnAnalytics control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSButton btnAnalytics;
+
+    /// <summary>
+    /// icnState control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel icnState;
+
+    /// <summary>
+    /// lblState control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblState;
+
+    /// <summary>
+    /// btnToggleState control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSButton btnToggleState;
+
+    /// <summary>
+    /// mainView control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.UIControls.UILayoutPane mainView;
 }

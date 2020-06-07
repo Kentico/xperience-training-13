@@ -113,7 +113,7 @@ public partial class CMSModules_Categories_Controls_CategoryEdit : CMSAdminEditC
         }
         set
         {
-            pnlContext.UIContext.EditedObject = CategoryInfoProvider.GetCategoryInfo(value);
+            pnlContext.UIContext.EditedObject = CategoryInfo.Provider.Get(value);
         }
     }
 
@@ -153,7 +153,7 @@ public partial class CMSModules_Categories_Controls_CategoryEdit : CMSAdminEditC
         {
             if (mParentCategory == null)
             {
-                mParentCategory = CategoryInfoProvider.GetCategoryInfo(ParentCategoryID);
+                mParentCategory = CategoryInfo.Provider.Get(ParentCategoryID);
             }
 
             return mParentCategory;
@@ -216,7 +216,7 @@ public partial class CMSModules_Categories_Controls_CategoryEdit : CMSAdminEditC
         {
             if (mUser == null)
             {
-                mUser = UserInfoProvider.GetUserInfo(UserID);
+                mUser = UserInfo.Provider.Get(UserID);
             }
 
             return mUser;

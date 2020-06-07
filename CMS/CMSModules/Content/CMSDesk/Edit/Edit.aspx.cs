@@ -506,7 +506,7 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
             return;
         }
 
-        var template = PageTemplateConfigurationInfoProvider.GetPageTemplateConfigurationInfoByGUID(templateGuid, SiteContext.CurrentSiteID);
+        var template = PageTemplateConfigurationInfo.Provider.Get(templateGuid, SiteContext.CurrentSiteID);
         if (template == null)
         {
             e.IsValid = false;

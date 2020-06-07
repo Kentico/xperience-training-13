@@ -10,7 +10,7 @@ using CMS.Modules;
 using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.Localization;
-using CMS.DocumentEngine;
+using CMS.Core;
 
 [UIElement("CMS", "Administration")]
 public partial class Admin_CMSAdministration : CMSDeskPage
@@ -31,10 +31,14 @@ public partial class Admin_CMSAdministration : CMSDeskPage
     {
         get
         {
-            var homePageUrl = DocumentUIHelper.GetHomePageUrl(SiteContext.CurrentSiteName, LocalizationContext.PreferredCultureCode);
-            if (string.IsNullOrEmpty(homePageUrl))
+            var homePageUrl = String.Empty;
+            try
             {
-                return DocumentURLProvider.GetPresentationUrl(SiteContext.CurrentSiteName, LocalizationContext.PreferredCultureCode);
+                homePageUrl = DocumentUIHelper.GetHomePageUrl(SiteContext.CurrentSiteName, LocalizationContext.PreferredCultureCode);
+            }
+            catch(Exception ex)
+            {
+                Service.Resolve<IEventLogService>().LogException("Administration", "DEFAULTLIVESITEURL", ex);
             }
 
             return homePageUrl;

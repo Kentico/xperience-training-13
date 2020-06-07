@@ -45,7 +45,7 @@ public partial class CMSModules_MediaLibrary_Controls_Filters_FolderTree : Folde
             int fileId = GetFileID();
             if (fileId > 0)
             {
-                MediaFileInfo mfi = MediaFileInfoProvider.GetMediaFileInfo(fileId);
+                MediaFileInfo mfi = MediaFileInfo.Provider.Get(fileId);
                 if (mfi != null)
                 {
                     // Get folder path from media file info object

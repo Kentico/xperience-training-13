@@ -266,11 +266,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
             previewIsActive = (GetPreviewStateFromCookies(WEBPARTLAYOUT) > 0);
         }
 
-        if (!RequestHelper.IsPostBack() && IsChecked)
-        {
-            ShowMessage();
-        }
-
         if (previewIsActive)
         {
             etaCode.TopOffset = 40;
@@ -295,13 +290,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
         editMenuElem.ObjectManager.OnBeforeAction += ObjectManager_OnBeforeAction;
         editMenuElem.ObjectManager.OnAfterAction += ObjectManager_OnAfterAction;
         editMenuElem.ObjectManager.OnSaveData += ObjectManager_OnSaveData;
-
-        if (!currentUser.IsAuthorizedPerResource("CMS.Design", "EditCode"))
-        {
-            editMenuElem.MessagesPlaceHolder.WrapperControlClientID = pnlBody.ClientID;
-
-            etaCode.Editor.ReadOnly = true;
-        }
 
         // Hide submit button of the form
         EditForm.SubmitButton.Visible = false;
@@ -336,34 +324,25 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
     /// </summary>
     protected void ObjectManager_OnBeforeAction(object sender, SimpleObjectManagerEventArgs e)
     {
-        switch (e.ActionName)
+        if ((e.ActionName == ComponentEvents.SAVE) && (webPart != null) && isDefault)
         {
-            case ComponentEvents.SAVE:
-                if ((webPart != null) && isDefault)
+            if (!isSiteManager)
+            {
+                SetCurrentLayout(true);
+
+                // Reload the parent page after save
+                EnsureParentPageRefresh();
+
+                if (ValidationHelper.GetBoolean(hdnClose.Value, false))
                 {
-                    if (!isSiteManager)
-                    {
-                        SetCurrentLayout(true);
-
-                        // Reload the parent page after save
-                        EnsureParentPageRefresh();
-
-                        if (ValidationHelper.GetBoolean(hdnClose.Value, false))
-                        {
-                            // If window to close, register close script
-                            CloseDialog();
-                        }
-                    }
-
-                    ShowChangesSaved();
-                    // Do not save default layout
-                    e.IsValid = false;
+                    // If window to close, register close script
+                    CloseDialog();
                 }
-                break;
+            }
 
-            case ComponentEvents.CHECKOUT:
-                ShowMessage();
-                break;
+            ShowChangesSaved();
+            // Do not save default layout
+            e.IsValid = false;
         }
     }
 
@@ -466,11 +445,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
         WebPartLayoutInfo li = EditForm.EditedObject as WebPartLayoutInfo;
         if (li != null)
         {
-            if (!currentUser.IsAuthorizedPerResource("CMS.Design", "EditCode"))
-            {
-                li.WebPartLayoutCode = GetDefaultCode();
-            }
-
             if (webPartInfo != null)
             {
                 li.WebPartLayoutWebPartID = webPartInfo.WebPartID;
@@ -501,19 +475,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
 
 
     #region "Methods"
-
-    /// <summary>
-    /// Display info message
-    /// </summary>
-    public void ShowMessage()
-    {
-        // Check the edit code permission
-        if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("CMS.Design", "EditCode"))
-        {
-            ShowWarning(GetString("EditCode.NotAllowed"));
-        }
-    }
-
 
     /// <summary>
     /// Selected index changed.

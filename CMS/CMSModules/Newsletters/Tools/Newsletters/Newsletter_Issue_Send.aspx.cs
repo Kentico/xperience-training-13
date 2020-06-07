@@ -267,7 +267,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_S
 
     private int GetLicenseMaxNumberOfRecipients()
     {
-        var site = SiteInfoProvider.GetSiteInfo(Issue.IssueSiteID);
+        var site = SiteInfo.Provider.Get(Issue.IssueSiteID);
         
         return LicenseKeyInfoProvider.VersionLimitations(site.DomainName, FeatureEnum.SimpleContactManagement, false);
     }

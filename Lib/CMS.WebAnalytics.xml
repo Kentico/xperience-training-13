@@ -392,36 +392,6 @@
             Save single <paramref name="item"/> to database.
             </summary>
         </member>
-        <member name="T:CMS.WebAnalytics.Internal.ILogHitsProvider">
-            <summary>
-            Defines methods which have to be implemented in order to be able to perform logging of visitor hits.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Internal.ILogHitsProvider.LogHit(CMS.WebAnalytics.LogHitParameters)">
-            <summary>
-            Performs logging of general hit.
-            </summary>
-            <param name="logHitParameters">Parameters required for hit logging</param>
-            <exception cref="T:System.ArgumentException">Attempt to found page according to the given <paramref name="logHitParameters"/> was not successful (no page was found).</exception>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="logHitParameters"/> is null</exception>
-        </member>
-        <member name="M:CMS.WebAnalytics.Internal.ILogHitsProvider.LogBannerHit(System.Int32)">
-            <summary>
-            Performs logging of banner hit.
-            </summary>
-            <param name="bannerID">ID of the banner the visitor clicked on</param>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-        </member>
-        <member name="M:CMS.WebAnalytics.Internal.ILogHitsProvider.LogSearchHit(CMS.WebAnalytics.LogSearchHitParameters)">
-            <summary>
-            Performs logging of search event hit. 
-            </summary>
-            <param name="logSearchHitParameters">Parameters required for hit logging</param>
-            <exception cref="T:System.ArgumentException">Attempt to found page according to the given <paramref name="logSearchHitParameters"/> was not successful (no page was found).</exception>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="logSearchHitParameters"/> is null</exception>
-        </member>
         <member name="T:CMS.WebAnalytics.Internal.ISearchEnginesDetector">
             <summary>
             Provides information whether current request was made by search engine
@@ -456,60 +426,6 @@
             <summary>
             Returns <c>true</c> when exist the consent to log analytics data to system; otherwise <c>false</c>.
             </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.AnalyticsDebug">
-            <summary>
-            Analytics debug methods
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.AnalyticsDebug.Settings">
-            <summary>
-            Debug settings
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.AnalyticsDebug.CurrentRequestLog">
-            <summary>
-            Current request log.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.AnalyticsDebug.DebugCurrentRequest">
-            <summary>
-            Debug current request Analytics access.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsDebug.GetDebugSettings">
-            <summary>
-            Gets the debug settings
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsDebug.NewLogTable">
-            <summary>
-            Creates a new table for the analytics log.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsDebug.LogAnalyticsOperation(System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
-            <summary>
-            Logs the analytics operation. Logs the analytics operation to the file and to current request log for debugging.
-            </summary>
-            <param name="codeName">Statistics codename</param>
-            <param name="siteName">Site name</param>
-            <param name="culture">Site culture code</param>
-            <param name="objectName">Object name</param>
-            <param name="objectId">Object ID</param>
-            <param name="count">Hit count</param>
-            <param name="value">Hit value</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsDebug.LogToFile(System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
-            <summary>
-            Logs the analytics operation to the log file.
-            </summary>
-            <param name="codeName">Statistics codename</param>
-            <param name="siteName">Site name</param>
-            <param name="culture">Site culture code</param>
-            <param name="objectName">Object name</param>
-            <param name="objectId">Object ID</param>
-            <param name="count">Hit count</param>
-            <param name="value">Hit value</param>
         </member>
         <member name="T:CMS.WebAnalytics.AnalyticsHelper">
             <summary>
@@ -578,11 +494,6 @@
             Returns visitor status.
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsHelper.JavascriptLoggingEnabled(System.String)">
-            <summary>
-            Returns "Use JavaScript logging" value from the database.
-            </summary>
-        </member>
         <member name="M:CMS.WebAnalytics.AnalyticsHelper.ExcludedIPs(System.String)">
             <summary>
             Returns "Excluded IPs" value from the database.
@@ -616,12 +527,6 @@
         <member name="M:CMS.WebAnalytics.AnalyticsHelper.TrackPageViewsEnabled(System.String)">
             <summary>
             Returns true if page views tracking is enabled for specified site.
-            </summary>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsHelper.TrackAggregatedViewsEnabled(System.String)">
-            <summary>
-            Returns true if aggregated views tracking is enabled for specified site.
             </summary>
             <param name="siteName">Site name</param>
         </member>
@@ -1081,6 +986,11 @@
             Logic connected to <see cref="T:CMS.WebAnalytics.CampaignAssetUrlInfo"/> modeling and storing.
             </summary>
         </member>
+        <member name="M:CMS.WebAnalytics.CampaignAssetUrlModelStrategy.#ctor(CMS.Base.ISiteService,CMS.SiteProvider.ISiteInfoProvider)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.CampaignAssetUrlModelStrategy"/>.
+            </summary>
+        </member>
         <member name="M:CMS.WebAnalytics.CampaignAssetUrlModelStrategy.GetAssetInfo(CMS.WebAnalytics.CampaignAssetViewModel)">
             <summary>
             Returns asset info from view model to check if <see cref="T:CMS.WebAnalytics.CampaignAssetInfo"/> already exists.
@@ -1102,7 +1012,7 @@
         </member>
         <member name="M:CMS.WebAnalytics.CampaignAssetUrlModelStrategy.EnsureAssetUrlInfo(CMS.WebAnalytics.CampaignAssetViewModel)">
             <summary>
-            Returns existing campaign asset url, or creates a new one.
+            Returns updated existing campaign asset url, or creates a new one.
             </summary>
             <param name="model">Model of the campaign asset url.</param>
         </member>
@@ -3321,48 +3231,6 @@
             <param name="time">Time when campaign should be scheduled.</param>
             <returns><c>True</c> if campaign is scheduled.</returns>
         </member>
-        <member name="T:CMS.WebAnalytics.ITrackedCampaignsService">
-            <summary>
-            Provides access to the tracked campaigns.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.ITrackedCampaignsService.TrackedCampaigns">
-            <summary>
-            Gets enumerable of campaigns which should be logged in web analytics service called by Javascript.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.ITrackedCampaignsService.AddTrackedCampaign(System.String)">
-            <summary>
-            Adds new campaign to TrackedCampaigns collection. Adding is performed only when campaign is not already present.
-            </summary>
-            <param name="campaignName">Codename of campaign</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.ITrackedCampaignsService.RemoveTrackedCampaigns">
-            <summary>
-            Removes TrackedCampaign cookie from cookie collection.
-            </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.TrackedCampaignsService">
-            <summary>
-            Provides access to the tracked campaigns.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.TrackedCampaignsService.TrackedCampaigns">
-            <summary>
-            Gets enumerable of campaigns which should be logged in web analytics service called by Javascript.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.TrackedCampaignsService.AddTrackedCampaign(System.String)">
-            <summary>
-            Adds new campaign to TrackedCampaigns collection. Adding is performed only when campaign is not already present.
-            </summary>
-            <param name="campaignName">Codename of campaign</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.TrackedCampaignsService.RemoveTrackedCampaigns">
-            <summary>
-            Removes TrackedCampaign cookie from cookie collection.
-            </summary>
-        </member>
         <member name="T:CMS.WebAnalytics.CampaignLauncherTask">
             <summary>
             Task which is created by API for every campaign in order to ensure scheduled campaign launch.
@@ -3537,16 +3405,6 @@
             Constructor using ID and codename Hashtables.
             </summary>
         </member>
-        <member name="T:CMS.WebAnalytics.AnalyticsJSEventArgs">
-            <summary>
-            Arguments for event handlers related to logging analytics via JS.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.AnalyticsJSEventArgs.QueryParameters">
-            <summary>
-            Parameters to be passed via Ajax request when JavaScript logging is enabled.
-            </summary>
-        </member>
         <member name="T:CMS.WebAnalytics.CampaignLaunchedHandler">
             <summary>
             Handler for campaign being launched.
@@ -3607,105 +3465,9 @@
             Starts the event with given <paramref name="contactId"/>.
             </summary>
         </member>
-        <member name="T:CMS.WebAnalytics.GenerateStatisticsEventArgs">
-            <summary>
-            Arguments for event handlers related to generating sample statistics data. 
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.GenerateStatisticsEventArgs.Date">
-            <summary>
-            Date for which the statistics should be generated.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.GenerateStatisticsEventArgs.Visitors">
-            <summary>
-            Contains number of visitor per every culture.
-            </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.GenerateStatisticsHandler">
-            <summary>
-            Handler for generating sample web analytics statistics.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.GenerateStatisticsHandler.StartEvent(System.DateTime,System.Collections.Generic.IDictionary{System.String,System.Int32})">
-            <summary>
-            Initiates the event handling.
-            </summary>
-            <param name="date">Date for which the statistics should be generated</param>
-            <param name="visitors">Contains number of visitor per every culture</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.InsertAnalyticsJSHandler">
-            <summary>
-            Handler for inserting web analytics javascript snippet to the page.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.InsertAnalyticsJSHandler.StartEvent(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            Initiates the event handling.
-            </summary>
-            <param name="queryParams">Query parameters to be sent via Ajax</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.LogConversionHandler">
-            <summary>
-            Handler for the conversion logging.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.LogConversionHandler.StartEvent(CMS.WebAnalytics.LogRecord)">
-            <summary>
-            Initiates the event handling.
-            </summary>
-            <param name="conversion">Processed log record</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.ProcessAnalyticsServiceHandler">
-            <summary>
-            Handler for the inserting javascript logging snippet to the page.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.ProcessAnalyticsServiceHandler.StartEvent(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            Initiates the event handling.
-            </summary>
-            <param name="queryParams">Query parameters</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.ProcessLogRecordHandler">
-            <summary>
-            Handler for the log processing.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.ProcessLogRecordHandler.StartEvent(CMS.WebAnalytics.LogRecord)">
-            <summary>
-            Initiates the event handling.
-            </summary>
-            <param name="logRecord">Processed log record</param>
-        </member>
         <member name="T:CMS.WebAnalytics.WebAnalyticsEvents">
             <summary>
             Web analytics events.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.ProcessLogRecord">
-            <summary>
-            Fires when analytics log is being processed.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.LogConversion">
-            <summary>
-            Fires when conversion is logged.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.ProcessAnalyticsService">
-            <summary>
-            Fires when analytics are being logged.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.InsertAnalyticsJS">
-            <summary>
-            Fires when web analytics JavaScript snippet is being inserted to the page.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.GenerateStatistics">
-            <summary>
-            Fires when web analytics statistics are being generated.
             </summary>
         </member>
         <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.CampaignLaunched">
@@ -3721,6 +3483,130 @@
         <member name="F:CMS.WebAnalytics.WebAnalyticsEvents.CheckAnalyticsConsent">
             <summary>
             Fires when analytics checks for data protection consent.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.ExitPageCandidate">
+            <summary>
+            Holds exit page related data.
+            </summary>
+            <seealso cref="T:CMS.WebAnalytics.ExitPageCandidatesMemoryQueue"/>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidate.#ctor(System.DateTime,System.Int32,System.String,System.Guid,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.ExitPageCandidate"/>.
+            </summary>
+            <param name="logTime">Logging time</param>
+            <param name="siteId">Site identifier</param>
+            <param name="url">Exit page url</param>
+            <param name="sessionId">Session identifier</param>
+            <param name="culture">Optional culture which will be logged.</param>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidate.LogTime">
+            <summary>
+            Gets time when candidate has been logged.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidate.SiteId">
+            <summary>
+            Gets site identifier on which candidate has been logged.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidate.Url">
+            <summary>
+            Gets full page exit page candidate url.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidate.SessionId">
+            <summary>
+            Gets user session identifier used for exit page candidate evaluation.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidate.Culture">
+            <summary>
+            Gets culture connected to exit page candidate.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.ExitPageCandidatesMemoryQueue">
+            <summary>
+            Memory queue holding exit page candidates data.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueue.EnqueueCandidate(CMS.WebAnalytics.ExitPageCandidate)">
+            <summary>
+            Enqueues given <paramref name="candidate"/> to the end of queue.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"> when <param name="candidate" /> is null.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueue.GetCandidates">
+            <summary>
+            Returns all candidates from the queue.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor">
+            <summary>
+            Analytics data processor capable of aggregating data from <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and persisting them in database.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.#ctor(CMS.WebAnalytics.IExitPageCandidatesMemoryQueue,CMS.Core.IEventLogService,CMS.WebAnalytics.IAnalyticsMemoryQueue,CMS.Core.Internal.IDateTimeNowService,CMS.SiteProvider.ISiteInfoProvider)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.ProcessQueueData">
+            <summary>
+            Performs hit number calculation over underlying <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and saves calculated data into database.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.ProcessExitPageCandidates">
+            <summary>
+            Process exit page candidates persisted in database.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.ExitPageCandidateWorker">
+            <summary>
+            Thread worker processing exit page candidates using <see cref="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueueProcessor"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidateWorker.DefaultInterval">
+            <summary>
+            Gets the interval in milliseconds for the worker.
+            Can be configured by web.config key CMSExitPageCandidateProcessingInterval.
+            Default value is 10 seconds.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageCandidateWorker.MaintenanceInterval">
+            <summary>
+            Gets the maintenance interval in milliseconds for the worker.
+            Can be configured by web.config key CMSExitPageProcessingInterval.
+            Default value is 10 minutes.
+            </summary>
+            <remarks>
+            Maintenance interval is used to process exit page candidates and log exit page analytics.
+            </remarks>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidateWorker.#ctor(CMS.Core.IAppSettingsService,CMS.WebAnalytics.IExitPageCandidatesMemoryQueueProcessor)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.ExitPageCandidateWorker"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidateWorker.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.ExitPageCandidateWorker"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidateWorker.Finish">
+            <summary>
+            Finishes the worker process.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidateWorker.Process">
+            <summary>
+            Method processing actions.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.ExitPageCandidateWorker.DoMaintenance">
+            <summary>
+            Runs the maintenance routine for the worker
             </summary>
         </member>
         <member name="T:CMS.WebAnalytics.ExitPageInfo">
@@ -3743,11 +3629,6 @@
             Session identificator.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.ExitPageInfo.ExitPageNodeID">
-            <summary>
-            Exit page node ID.
-            </summary>
-        </member>
         <member name="P:CMS.WebAnalytics.ExitPageInfo.ExitPageLastModified">
             <summary>
             Exit page last modified.
@@ -3761,6 +3642,11 @@
         <member name="P:CMS.WebAnalytics.ExitPageInfo.ExitPageCulture">
             <summary>
             Exit page culture.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.ExitPageInfo.ExitPageUrl">
+            <summary>
+            Exit page url.
             </summary>
         </member>
         <member name="M:CMS.WebAnalytics.ExitPageInfo.DeleteObject">
@@ -3824,38 +3710,35 @@
             </summary>
             <param name="sessionIdentificator">Exit page session identificator.</param>        
         </member>
-        <member name="T:CMS.WebAnalytics.UserNameFormatter">
+        <member name="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue">
             <summary>
-            Translates <see cref="T:CMS.Membership.UserInfo"/> to human readable format.
+            Describes memory queue holding web analytics data represented by <see cref="T:CMS.WebAnalytics.LogRecord"/>.
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.UserNameFormatter.GetFriendlyUserName(System.Int32)">
+        <member name="M:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue.EnqueueCandidate(CMS.WebAnalytics.ExitPageCandidate)">
             <summary>
-            Joins user name consisting of first, middle, last and e-mail address in one string.
+            Enqueues given <paramref name="candidate"/> to the end of queue.
             </summary>
-            <param name="userId">User ID</param>
         </member>
-        <member name="M:CMS.WebAnalytics.UserNameFormatter.GetFriendlyUserName(CMS.Membership.UserInfo)">
+        <member name="M:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue.GetCandidates">
             <summary>
-            Joins user name consisting of first, middle, last and e-mail address in one string.
+            Returns all candidates from the queue.
             </summary>
-            <param name="ui">User info</param>
         </member>
-        <member name="M:CMS.WebAnalytics.UserNameFormatter.GetFriendlyUserName(CMS.DataEngine.BaseInfo)">
+        <member name="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueueProcessor">
             <summary>
-            Joins user name consisting of first, middle, last and e-mail address in one string.
+            Describes exit page candidates processing over <see cref="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue"/>.
             </summary>
-            <param name="ui">User info</param>
         </member>
-        <member name="M:CMS.WebAnalytics.UserNameFormatter.GetFriendlyUserName(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:CMS.WebAnalytics.IExitPageCandidatesMemoryQueueProcessor.ProcessQueueData">
             <summary>
-            Joins user name consisting of first, middle, last and e-mail address in one string.
+            Dequeues data and persists them to database.
             </summary>
-            <param name="first">First name</param>
-            <param name="middle">Middle name</param>
-            <param name="last">Last name</param>
-            <param name="emailAddress">E-mail address</param>
-            <param name="userName">User name</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.IExitPageCandidatesMemoryQueueProcessor.ProcessExitPageCandidates">
+            <summary>
+            Process exit page candidates persisted in database.
+            </summary>
         </member>
         <member name="T:CMS.WebAnalytics.WebAnalyticsUSageDataSource">
             <summary>
@@ -4189,6 +4072,109 @@
             </summary>
             <param name="fileName">File name.</param>
         </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsHitCollection">
+            <summary>
+            Collection of <see cref="T:CMS.WebAnalytics.AnalyticsHit"/> returning hits grouped by its name.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.AnalyticsHitCollection.Count">
+            <summary>
+            Gets total hit count.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsHitCollection.#ctor(System.Collections.Generic.ICollection{CMS.WebAnalytics.AnalyticsHit})">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsHitCollection"/>
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsHitCollection.GetGroupedHits">
+            <summary>
+            Returns all hits grouped by its name, object name or identifier, site and culture.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsHitCollection.GetMinimumTime">
+            <summary>
+            Gets timestamp of first logged hit.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsMemoryQueue">
+            <summary>
+            Memory queue holding web analytics data.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueue.EnqueueHit(CMS.WebAnalytics.AnalyticsHit)">
+            <summary>
+            Enqueues given <paramref name="hit"/> to the end of queue.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"> when <param name="hit" /> is null.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueue.GetQueuedHits">
+            <summary>
+            Returns all hits from the queue.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor">
+            <summary>
+            Analytics data processor capable of aggregating data from <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and persisting them in database.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor.#ctor(CMS.WebAnalytics.IAnalyticsMemoryQueue,CMS.Core.IEventLogService)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor.ProcessQueueData">
+            <summary>
+            Performs hit number calculation over underlying <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and saves calculated data into database.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor.GetLogHitsTable">
+            <summary>
+            Return <see cref="T:System.Data.DataTable"/> with columns for custom type Type_Analytics_LogHitsTable.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor.AddToTable(System.Data.DataTable,System.DateTime,System.String,System.String,System.Nullable{System.Int32},System.String,System.Int32,System.Int32,System.Decimal)">
+            <summary>
+            Adds given values to new table row.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsMemoryQueueProcessor.SaveHits(System.Data.DataTable)">
+            <summary>
+            Persist hits to database.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsWorker">
+            <summary>
+            Thread worker processing analytics data using <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueueProcessor"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.AnalyticsWorker.DefaultInterval">
+            <summary>
+            Gets the interval in milliseconds for the worker.
+            Can be configured by web.config key CMSWebAnalyticsProcessingInterval.
+            Default value is 10 seconds.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsWorker.#ctor(CMS.Core.IAppSettingsService,CMS.WebAnalytics.IAnalyticsMemoryQueueProcessor)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsWorker"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsWorker.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsWorker"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsWorker.Finish">
+            <summary>
+            Finishes the worker process.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsWorker.Process">
+            <summary>
+            Method processing actions.
+            </summary>
+        </member>
         <member name="T:CMS.WebAnalytics.BrowserHitLogger">
             <summary>
             Represents logging of browser hits.
@@ -4253,6 +4239,11 @@
             <param name="fileName">Log file name</param>
             <param name="codeName">Statistics code name</param>
         </member>
+        <member name="M:CMS.WebAnalytics.HitLogProcessor.GetLogHitsTable">
+            <summary>
+            Return <see cref="T:System.Data.DataTable"/> with columns for custom type Type_Analytics_LogHitsTable.
+            </summary>
+        </member>
         <member name="M:CMS.WebAnalytics.HitLogProcessor.SaveLogToDatabase(CMS.WebAnalytics.LogRecord)">
             <summary>
             Splits log into time intervals (days, hours, etc.) and saves it to the database.
@@ -4291,11 +4282,6 @@
         <member name="F:CMS.WebAnalytics.HitLogProvider.PAGE_VIEWS">
             <summary>
             Page views code name.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.HitLogProvider.AGGREGATED_VIEWS">
-            <summary>
-            Aggregated page views code name.
             </summary>
         </member>
         <member name="F:CMS.WebAnalytics.HitLogProvider.VISITORS_FIRST">
@@ -5419,6 +5405,31 @@
             </summary>
             <param name="where">Where condition to use.</param>
         </member>
+        <member name="T:CMS.WebAnalytics.IAnalyticsMemoryQueue">
+            <summary>
+            Describes memory queue holding web analytics data represented by <see cref="T:CMS.WebAnalytics.AnalyticsHit"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsMemoryQueue.EnqueueHit(CMS.WebAnalytics.AnalyticsHit)">
+            <summary>
+            Enqueues given <paramref name="hit"/> to the end of queue.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsMemoryQueue.GetQueuedHits">
+            <summary>
+            Returns all hits from the queue.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.IAnalyticsMemoryQueueProcessor">
+            <summary>
+            Describes web analytics data processing over <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsMemoryQueueProcessor.ProcessQueueData">
+            <summary>
+            Performs hit number calculation over underlying <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and saves calculated data into database.
+            </summary>
+        </member>
         <member name="T:CMS.WebAnalytics.IHitLogger">
             <summary>
             Service used to log page hits.
@@ -5454,11 +5465,6 @@
         <member name="P:CMS.WebAnalytics.LogRecord.Value">
             <summary>
             Total value.
-            </summary>
-        </member>
-        <member name="P:CMS.WebAnalytics.LogRecord.ValuesSet">
-            <summary>
-            List of hits values.
             </summary>
         </member>
         <member name="P:CMS.WebAnalytics.LogRecord.ObjectName">
@@ -5558,103 +5564,250 @@
              Skip Crawler check
             </summary>
         </member>
-        <member name="T:CMS.WebAnalytics.DefaultLogHitsProvider">
+        <member name="T:CMS.WebAnalytics.AnalyticsData">
             <summary>
-            Default implementation of <see cref="T:CMS.WebAnalytics.Internal.ILogHitsProvider"/>. Contains methods for performing logging of visitor hits.
+            Class holding all analytics data.
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.DefaultLogHitsProvider.LogHit(CMS.WebAnalytics.LogHitParameters)">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.SiteID">
             <summary>
-            Performs logging of general hit.
-            </summary>
-            <param name="logHitParameters">Parameters required for hit logging</param>
-            <exception cref="T:System.ArgumentException">Attempt to found page according to the given <paramref name="logHitParameters"/> was not successful (no page was found).</exception>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="logHitParameters"/> is null</exception>
-        </member>
-        <member name="M:CMS.WebAnalytics.DefaultLogHitsProvider.LogBannerHit(System.Int32)">
-            <summary>
-            Performs logging of banner hit.
-            </summary>
-            <param name="bannerID">ID of the banner the visitor clicked on</param>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-        </member>
-        <member name="M:CMS.WebAnalytics.DefaultLogHitsProvider.LogSearchHit(CMS.WebAnalytics.LogSearchHitParameters)">
-            <summary>
-            Performs logging of search event hit. 
-            </summary>
-            <param name="logSearchHitParameters">Parameters required for hit logging</param>
-            <exception cref="T:System.ArgumentException">Attempt to found page according to the given <paramref name="logSearchHitParameters"/> was not successful (no page was found).</exception>
-            <exception cref="T:System.InvalidOperationException">Javascript logging is not enabled on the current site.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="logSearchHitParameters"/> is null</exception>
-        </member>
-        <member name="T:CMS.WebAnalytics.LogHitParameters">
-            <summary>
-            Data class containing all fields required for asynchronous hit logging.
+            Gets site identifier.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.UrlReferrer">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.ObjectID">
             <summary>
-            Current request referrer.
+            Gets object identifier in case that analytics data are not logged for url.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.NodeAliasPath">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.ObjectName">
             <summary>
-            Alias path to the document from which was the request made.
+            Gets name of analytics.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.DocumentCultureCode">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.Hits">
             <summary>
-            Culture of the document from which was the request made.
+            Gets number of analytics hits.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.ABTestName">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.Value">
             <summary>
-            Name of the AB test to log visit for.
+            Gets additional analytics value.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.ABTestVariantName">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.Culture">
             <summary>
-            Name of the currently selected AB test variant.
+            Gets culture connected to analytics.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.ABTestFirstVisit">
+        <member name="P:CMS.WebAnalytics.AnalyticsData.SessionIdentifier">
             <summary>
-            Decides whether to log first visit or recurring visit for given AB test.
+            Gets session identifier used for exit page candidate logging.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.MVTestCombinationName">
+        <member name="M:CMS.WebAnalytics.AnalyticsData.#ctor(System.Int32,System.Uri,System.Guid,System.String)">
             <summary>
-            Name of the MV test combination to log visit for.
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsData"/>.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogHitParameters.PlainParameters">
+        <member name="M:CMS.WebAnalytics.AnalyticsData.#ctor(System.Int32,System.String,System.Int32,System.Decimal,System.String)">
             <summary>
-            Wrapper around the other fields. This field is used as argument when raising log hit event.
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsData"/>.
+            </summary>
+            <param name="siteId">Site identifier under which the analytics data will be logged.</param>
+            <param name="objectName">Object name which will be logged. It's also used in reports.</param>
+            <param name="hits">Number of hits, has to be positive number.</param>
+            <param name="value">Optional hit value.</param>
+            <param name="culture">Optional culture which will be logged.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsData.#ctor(System.Int32,System.Int32,System.Int32,System.Decimal,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsData"/>.
+            </summary>
+            <param name="siteId">Site identifier under which the analytics data will be logged.</param>
+            <param name="objectId">Object identifier which will be logged.</param>
+            <param name="hits">Number of hits, has to be positive number.</param>
+            <param name="value">Optional hit value.</param>
+            <param name="culture">Optional culture which will be logged.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsData.#ctor(System.Int32,System.Uri,System.Int32,System.Decimal,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsData"/>.
+            </summary>
+            <param name="siteId">Site identifier under which the analytics data will be logged.</param>
+            <param name="uri">Url for which the analytics will be logged. Absolute url is expected, query string is automatically removed.</param>
+            <param name="hits">Number of hits, has to be positive number.</param>
+            <param name="value">Optional hit value.</param>
+            <param name="culture">Optional culture which will be logged.</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsHit">
+            <summary>
+            Represents analytics hit containing data, timestamp and analytics name.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.AnalyticsHit.Name">
+            <summary>
+            Gets the analytics statistics name.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.AnalyticsHit.Time">
+            <summary>
+            Gets logging time.
+            </summary>
+        </member>
+        <member name="P:CMS.WebAnalytics.AnalyticsHit.Data">
+            <summary>
+            Gets analytics data.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsHit.#ctor(System.String,System.DateTime,CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsHit"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsHit.GetKey">
+            <summary>
+            Gets unique aggregation key concatenated from particular properties.
+            </summary>
+        </member>
+        <member name="T:CMS.WebAnalytics.AnalyticsLogger">
+            <summary>
+            Service for logging web analytics.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.#ctor(CMS.WebAnalytics.IAnalyticsConsentProvider,CMS.SiteProvider.ISiteInfoProvider,CMS.WebAnalytics.IAnalyticsMemoryQueue,CMS.WebAnalytics.IExitPageCandidatesMemoryQueue,CMS.Core.Internal.IDateTimeNowService)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsLogger"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.#ctor(CMS.WebAnalytics.IAnalyticsConsentProvider)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebAnalytics.AnalyticsLogger"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogPageView(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs page view with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Page view data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogLandingPageView(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs landing page view with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Landing page view data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogExitPage(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs exit page with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Exit page data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogInvalidPage(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs invalid page with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Invalid page data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogAverageTimeOnPage(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs time spend on page with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Time spend on page data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogExitPageCandidate(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs exit page candidate with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Time spend on page data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AnalyticsLogger.LogCustomAnalytics(System.String,CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs custom analytics.
+            </summary>
+            <param name="name">Custom name used in reporting.</param>
+            <param name="data">Analytics data.</param>
+            <exception cref="T:System.ArgumentException"> when site identifier, hits count or url in <paramref name="data"/> is not valid.</exception>
+            <exception cref="T:System.ArgumentNullException"> when name is empty or data is null.</exception>
+            <exception cref="T:System.InvalidOperationException"> when any of settings is disabled.</exception>
+        </member>
+        <member name="T:CMS.WebAnalytics.DateTimeExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.DateTime"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.DateTimeExtensions.GetLoggingTime(System.DateTime)">
+            <summary>
+            Returns normalized time for web analytics logging.
             </summary>
             <remarks>
-            Keys in dictionary do not match the fields name due to backward compatibility.
+            Same instance of <see cref="T:System.DateTime"/> is returned with stripped seconds and miliseconds.
             </remarks>
         </member>
-        <member name="T:CMS.WebAnalytics.LogSearchHitParameters">
+        <member name="T:CMS.WebAnalytics.IAnalyticsLogger">
             <summary>
-             Data class containing all fields required for asynchronous search hit logging.
+            Describes methods for logging web analytics data.
             </summary>
         </member>
-        <member name="P:CMS.WebAnalytics.LogSearchHitParameters.Keyword">
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogPageView(CMS.WebAnalytics.AnalyticsData)">
             <summary>
-            Keyword representing the search query made by search engine.
+            Logs page view with given <paramref name="data"/>.
             </summary>
+            <param name="data">Page view data.</param>
         </member>
-        <member name="P:CMS.WebAnalytics.LogSearchHitParameters.NodeAliasPath">
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogLandingPageView(CMS.WebAnalytics.AnalyticsData)">
             <summary>
-            Alias path to the document from which was the request made.
+            Logs landing page view with given <paramref name="data"/>.
             </summary>
+            <param name="data">Landing page view data.</param>
         </member>
-        <member name="P:CMS.WebAnalytics.LogSearchHitParameters.DocumentCultureCode">
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogExitPage(CMS.WebAnalytics.AnalyticsData)">
             <summary>
-            Culture of the document from which was the request made.
+            Logs exit page with given <paramref name="data"/>.
             </summary>
+            <param name="data">Exit page data.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogInvalidPage(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs invalid page with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Invalid page data.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogAverageTimeOnPage(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs time spend on page with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Time spend on page data.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogExitPageCandidate(CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs exit page candidate with given <paramref name="data"/>.
+            </summary>
+            <param name="data">Time spend on page data.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.IAnalyticsLogger.LogCustomAnalytics(System.String,CMS.WebAnalytics.AnalyticsData)">
+            <summary>
+            Logs custom analytics.
+            </summary>
+            <param name="name">Custom name used in reporting.</param>
+            <param name="data">Analytics data.</param>
         </member>
         <member name="T:CMS.WebAnalytics.VisitorMethods">
             <summary>
@@ -5716,6 +5869,14 @@
             Web analytics marketing functions.
             </summary>
         </member>
+        <member name="P:CMS.WebAnalytics.WebAnalyticsFunctions.HttpContext">
+            <summary>
+            Gets the HTTP context.
+            </summary>
+            <value>
+            The HTTP context.
+            </value>
+        </member>
         <member name="M:CMS.WebAnalytics.WebAnalyticsFunctions.IsReturningVisitor">
             <summary>
             Returns true if current visitor is returning.
@@ -5746,6 +5907,30 @@
             Returns value of specified URLReferrer query string parameter.
             </summary>
             <param name="parameterName">Query string parameter name</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.AbstractMemoryQueue`1">
+            <summary>
+            Base memory queue implementation.
+            </summary>
+            <typeparam name="TItem"></typeparam>
+        </member>
+        <member name="M:CMS.WebAnalytics.AbstractMemoryQueue`1.EnqueueItem(`0)">
+            <summary>
+            Enqueues given <paramref name="item"/> to the end of queue.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"> when <param name="item" /> is null.</exception>
+        </member>
+        <member name="M:CMS.WebAnalytics.AbstractMemoryQueue`1.ValidateItem(`0)">
+            <summary>
+            Performs validation of given <paramref name="item"/>.
+            Overridden implementation has to throw exception when item is not feasible to be enqueued.
+            </summary>
+            <param name="item">Item being enqueued.</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.AbstractMemoryQueue`1.GetItems">
+            <summary>
+            Returns all records from the queue.
+            </summary>
         </member>
         <member name="T:CMS.WebAnalytics.AnalyticsContext">
             <summary>
@@ -5802,11 +5987,6 @@
             Initializes the events handlers.
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsHandlers.LogPageVisitActivities(System.Object,CMS.WebAnalytics.AnalyticsJSEventArgs)">
-            <summary>
-            Logs landing page and page visit activities.
-            </summary>
-        </member>
         <member name="M:CMS.WebAnalytics.WebAnalyticsHandlers.HandleEndAnalytics(System.Object,System.EventArgs)">
             <summary>
             Logs the necessary analytics at the end of the current request
@@ -5848,14 +6028,14 @@
             Default constructor
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsModule.OnPreInit">
-            <summary>
-            Pre-initializes the module.
-            </summary>
-        </member>
         <member name="M:CMS.WebAnalytics.WebAnalyticsModule.OnInit">
             <summary>
             Initializes the module.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.WebAnalyticsModule.RunThreadWorkers">
+            <summary>
+            Starts <see cref="T:CMS.WebAnalytics.AnalyticsWorker"/> and <see cref="T:CMS.WebAnalytics.ExitPageCandidateWorker"/> if the license allows to.
             </summary>
         </member>
         <member name="M:CMS.WebAnalytics.WebAnalyticsModule.RegisterDataTypes">
@@ -6396,95 +6576,6 @@
             <summary>
             Constructor.
             </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.IWebAnalyticsServiceScriptsGenerator">
-            <summary>
-            Service for generating JavaScript code which is able to call the external web service via AJAX. Before using the generated JS snippet, you need
-            to manually create global WebServiceCall(url, method, parameters) JavaScript function either by calling ScriptHelper.RegisterWebServiceCallFunction(page) or 
-            manually.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.IWebAnalyticsServiceScriptsGenerator.GetLogBannerHitScript(System.Int32)">
-            <summary>
-            Returns script which logs BannerHit asynchronously.
-            </summary>
-            <param name="bannerID">ID of the banner which was viewed</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.IWebAnalyticsServiceScriptsGenerator.GetLogSearchScript(CMS.Base.ITreeNode,System.String)">
-            <summary>
-            Returns script which logs Search statistics asynchronously.
-            </summary>
-            <param name="pageInfo">PageInfo representing current document/node</param>
-            <param name="searchText">Text which was searched for</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.IWebAnalyticsServiceScriptsGenerator.GetLogHitsScriptWithSubstitute(System.String)">
-            <summary>
-            Returns script which logs page views and other hits asynchronously. The script does not contain the actual parameters.
-            There is a placeholder at the location where parameters would be and this placeholder should be replaced by the actual parameters
-            before sending page output to the client browser. This two-step rendering is required, because of the output cache mechanism.
-            At first, there is a universal script rendered and saved into cache. This universal script is then updated with values specific
-            for the current request before sending HTTP response back to the client browser.
-            </summary>
-            <param name="substitute">String which will be placed at the location where parameters would normally be</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.IWebAnalyticsServiceScriptsGenerator.GetLogHitsParameters(CMS.Base.ITreeNode,System.String)">
-            <summary>
-            Returns parameters of the LogHits call in JSON format.
-            </summary>
-            <param name="pageInfo">PageInfo representing current document/node. Cannot be null</param>
-            <param name="urlReferrer">Url of the page where the user came from (http referrer). Can be null</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator">
-            <summary>
-            Service for generating JavaScript code which is able to call the external web service via AJAX. Before using the generated JS snippet, you need
-            to manually create global WebServiceCall(url, method, parameters) JavaScript function either by calling ScriptHelper.RegisterWebServiceCallFunction(page) or
-            manually.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.PARAM_PAGE_NODE_ALIAS_PATH">
-            <summary>
-            Node alias path of the page the visitor requested.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.PARAM_PAGE_CULTURE_CODE">
-            <summary>
-            Culture code of the page the visitor requested.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.PARAM_REFERRER">
-            <summary>
-            Referrer query parameter name.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.GetLogBannerHitScript(System.Int32)">
-            <summary>
-            Returns script which logs BannerHit asynchronously.
-            </summary>
-            <param name="bannerID">ID of the banner which was viewed</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.GetLogSearchScript(CMS.Base.ITreeNode,System.String)">
-            <summary>
-            Returns script which logs Search statistics asynchronously.
-            </summary>
-            <param name="pageInfo">PageInfo representing current document/node</param>
-            <param name="searchText">Text which was searched for</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.GetLogHitsScriptWithSubstitute(System.String)">
-            <summary>
-            Returns script which logs page views and other hits asynchronously. The script does not contain the actual parameters.
-            There is a placeholder at the location where parameters would be and this placeholder should be replaced by the actual parameters
-            before sending page output to the client browser. This two-step rendering is required, because of the output cache mechanism.
-            At first, there is a universal script rendered and saved into cache. This universal script is then updated with values specific
-            for the current request before sending HTTP response back to the client browser.
-            </summary>
-            <param name="substitute">String which will be placed at the location where parameters would normally be</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.WebAnalyticsServiceScriptsGenerator.GetLogHitsParameters(CMS.Base.ITreeNode,System.String)">
-            <summary>
-            Returns parameters of the LogHits call in JSON format.
-            </summary>
-            <param name="pageInfo">PageInfo representing current document/node. Cannot be null</param>
-            <param name="urlReferrer">Url of the page where the user came from (http referrer). Can be null</param>
         </member>
         <member name="T:CMS.WebAnalytics.WebAnalyticsSettingsProvider">
             <summary>

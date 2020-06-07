@@ -191,7 +191,7 @@ public partial class CMSModules_AdminControls_Controls_Class_QueryEdit : CMSUser
     {
         get
         {
-            return mModule ?? (mModule = ResourceInfoProvider.GetResourceInfo(ModuleID));
+            return mModule ?? (mModule = ResourceInfo.Provider.Get(ModuleID));
         }
     }
 

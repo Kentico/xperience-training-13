@@ -151,7 +151,7 @@ public partial class CMSModules_EmailQueue_EmailQueue_Details : CMSModalPage
         }
 
         // Get specific e-mail
-        EmailInfo ei = EmailInfoProvider.GetEmailInfo(mEmailId);
+        EmailInfo ei = EmailInfo.Provider.Get(mEmailId);
         if (ei == null)
         {
             plcDetails.Visible = false;
@@ -286,7 +286,7 @@ public partial class CMSModules_EmailQueue_EmailQueue_Details : CMSModalPage
                 MetaFileInfo mfi = MetaFileInfoProvider.GetMetaFileInfo(mfGuid, null, false);
                 if (mfi != null)
                 {
-                    SiteInfo site = SiteInfoProvider.GetSiteInfo((mfi.MetaFileSiteID > 0) ? mfi.MetaFileSiteID : SiteContext.CurrentSiteID);
+                    SiteInfo site = SiteInfo.Provider.Get((mfi.MetaFileSiteID > 0) ? mfi.MetaFileSiteID : SiteContext.CurrentSiteID);
                     if (site !=null)
                     {
                         // return metafile source

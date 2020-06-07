@@ -9,7 +9,7 @@
     /*@ngInject*/
     function reportSetupDialogService($uibModal, resolveFilter, serverDataService) {
         var that = this,
-            height = serverDataService.isSiteContentOnly() ? '450px' : '280px';
+            height = '450px';
 
         that.openDialog = function (conversion, title) {
             return $uibModal.open({

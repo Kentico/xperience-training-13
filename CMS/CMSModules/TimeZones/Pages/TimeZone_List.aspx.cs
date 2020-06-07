@@ -43,7 +43,7 @@ public partial class CMSModules_TimeZones_Pages_TimeZone_List : GlobalAdminPage
                 break;
 
             case "delete":
-                TimeZoneInfoProvider.DeleteTimeZoneInfo(Convert.ToInt32(actionArgument));
+                CMS.Globalization.TimeZoneInfo.Provider.Delete(CMS.Globalization.TimeZoneInfo.Provider.Get(Convert.ToInt32(actionArgument)));
                 break;
         }
     }

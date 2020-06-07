@@ -259,7 +259,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryBreadcrumbs : CMSAbst
         {
             if (mStartingCategoryObj == null)
             {
-                mStartingCategoryObj = CategoryInfoProvider.GetCategoryInfo(BreadcrumbsStartingCategory, SiteContext.CurrentSiteName);
+                mStartingCategoryObj = CategoryInfo.Provider.Get(BreadcrumbsStartingCategory, SiteContext.CurrentSiteID);
             }
 
             return mStartingCategoryObj;
@@ -448,7 +448,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryBreadcrumbs : CMSAbst
     protected string CreateCategoryPartLink(int categoryId)
     {
         // Get category
-        CategoryInfo category = CategoryInfoProvider.GetCategoryInfo(categoryId);
+        CategoryInfo category = CategoryInfo.Provider.Get(categoryId);
         if (category != null)
         {
             string categoryDisplayName = category.CategoryDisplayName;

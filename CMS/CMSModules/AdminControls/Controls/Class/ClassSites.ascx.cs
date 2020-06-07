@@ -153,7 +153,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassSites : CMSUse
             {
                 int siteId = ValidationHelper.GetInteger(item, 0);
 
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                SiteInfo si = SiteInfo.Provider.Get(siteId);
                 if (si != null)
                 {
                     // Check license

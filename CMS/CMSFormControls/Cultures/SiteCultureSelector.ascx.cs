@@ -454,7 +454,7 @@ public partial class CMSFormControls_Cultures_SiteCultureSelector : FormEngineUs
             if (!MacroProcessor.ContainsMacro(value) && (value != "") && (value != TreeProvider.ALL_CULTURES))
             {
                 // Check if culture exists
-                CultureInfo ci = CultureInfoProvider.GetCultureInfo(value);
+                CultureInfo ci = CultureInfo.Provider.Get(value);
                 if (ci == null)
                 {
                     ValidationError = GetString("formcontrols_selectculture.notexist").Replace("%%code%%", value);

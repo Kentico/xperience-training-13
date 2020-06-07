@@ -50,7 +50,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Properties : 
         }
 
         // Load UI element and element's page template (if any)
-        mUIElementInfo = UIElementInfoProvider.GetUIElementInfo(QueryHelper.GetInteger("elementID", 0));
+        mUIElementInfo = UIElementInfo.Provider.Get(QueryHelper.GetInteger("elementID", 0));
 
         if (mUIElementInfo != null)
         {

@@ -563,7 +563,7 @@ public partial class CMSModules_Groups_Controls_GroupEdit : CMSAdminEditControl
             {
                 plcCreatedBy.Visible = true;
 
-                ui = UserInfoProvider.GetUserInfo(groupInfo.GroupCreatedByUserID);
+                ui = UserInfo.Provider.Get(groupInfo.GroupCreatedByUserID);
                 if (ui != null)
                 {
                     lblCreatedByValue.Text = HTMLHelper.HTMLEncode(Functions.GetFormattedUserName(ui.UserName, IsLiveSite));
@@ -577,7 +577,7 @@ public partial class CMSModules_Groups_Controls_GroupEdit : CMSAdminEditControl
 
                 if (groupInfo.GroupApprovedByUserID != groupInfo.GroupCreatedByUserID)
                 {
-                    ui = UserInfoProvider.GetUserInfo(groupInfo.GroupApprovedByUserID);
+                    ui = UserInfo.Provider.Get(groupInfo.GroupApprovedByUserID);
                 }
 
                 if (ui != null)

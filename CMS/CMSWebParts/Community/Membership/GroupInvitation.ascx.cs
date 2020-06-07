@@ -237,7 +237,7 @@ public partial class CMSWebParts_Community_Membership_GroupInvitation : CMSAbstr
 
                                             if (SendEmailToInviter)
                                             {
-                                                EmailTemplateInfo template = EmailTemplateProvider.GetEmailTemplate("Groups.MemberAcceptedInvitation", SiteContext.CurrentSiteName);
+                                                EmailTemplateInfo template = EmailTemplateInfo.Provider.Get("Groups.MemberAcceptedInvitation", SiteContext.CurrentSiteID);
 
                                                 // Resolve macros
                                                 MacroResolver resolver = MacroContext.CurrentResolver;

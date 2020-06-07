@@ -29,7 +29,7 @@ public partial class CMSModules_Modules_Pages_Class_AlternativeForm_Layout : Glo
         // Form ID
         layoutElem.ObjectID = AlternativeForm.FormID;
 
-        ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+        ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
         if (!SystemContext.DevelopmentMode && (resource != null) && !resource.ResourceIsInDevelopment && !AlternativeForm.FormIsCustom)
         {
             pnlCustomization.MessagesPlaceHolder = layoutElem.MessagesPlaceHolder;

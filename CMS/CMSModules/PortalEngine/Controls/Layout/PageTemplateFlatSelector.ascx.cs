@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 
 using CMS.Base;
@@ -9,7 +9,6 @@ using CMS.Helpers;
 using CMS.Localization;
 using CMS.Membership;
 using CMS.PortalEngine;
-using CMS.SiteProvider;
 using CMS.UIControls;
 
 
@@ -19,8 +18,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
 
     private PageTemplateCategoryInfo mSelectedCategory;
     private string mTreeSelectedItem;
-    private bool mShowOnlyReusable = true;
-    private int mSiteId;
     private int mDocumentID;
     private bool mIsNewPage;
     private bool mMultipleRoots;
@@ -29,38 +26,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
 
 
     #region "Page template properties"
-
-    /// <summary>
-    /// Idticates whether only reusable templates (not in AdHoc cateogory) should be displayed.
-    /// </summary>
-    public bool ShowOnlyReusable
-    {
-        get
-        {
-            return mShowOnlyReusable;
-        }
-        set
-        {
-            mShowOnlyReusable = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets the site id. Only templates of this site will be diplayed if set.
-    /// </summary>
-    public int SiteId
-    {
-        get
-        {
-            return mSiteId;
-        }
-        set
-        {
-            mSiteId = value;
-        }
-    }
-
 
     /// <summary>
     /// Indicates whether selector supports multiple roots
@@ -261,18 +226,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
 
         string where = flatElem.WhereCondition;
 
-        // Show only reusable templates
-        if (ShowOnlyReusable)
-        {
-            where = SqlHelper.AddWhereCondition(where, "PageTemplateIsReusable = 1");
-        }
-
-        // Show only templates of this site
-        if (SiteId > 0)
-        {
-            where = SqlHelper.AddWhereCondition(where, "PageTemplateID IN (SELECT PageTemplateID FROM CMS_PageTemplateSite WHERE SiteID = " + SiteId + ")");
-        }
-
         // Do not display dashboard items
         where = SqlHelper.AddWhereCondition(where, "PageTemplateType IS NULL OR PageTemplateType <> N'" + PageTemplateInfoProvider.GetPageTemplateTypeCode(PageTemplateTypeEnum.Dashboard) + "'");
 
@@ -371,7 +324,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
     private string ShowInDescriptionArea(string selectedValue)
     {
         string description = String.Empty;
-        string reusable = String.Empty;
 
         if (!String.IsNullOrEmpty(selectedValue))
         {
@@ -380,19 +332,15 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateFlatSel
             // Get the template data
             DataSet ds = PageTemplateInfoProvider.GetTemplates()
                 .WhereEquals("PageTemplateID", templateId)
-                .Columns("PageTemplateDisplayName", "PageTemplateDescription", "PageTemplateType", "PageTemplateIsReusable");
+                .Columns("PageTemplateDisplayName", "PageTemplateDescription", "PageTemplateType");
 
             if (!DataHelper.DataSourceIsEmpty(ds))
             {
                 DataRow dr = ds.Tables[0].Rows[0];
 
                 description = ResHelper.LocalizeString(ValidationHelper.GetString(dr["PageTemplateDescription"], ""));
-                reusable = ValidationHelper.GetBoolean(dr["PageTemplateIsReusable"], false).ToString().ToLowerCSafe();
             }
         }
-
-        // Create hidden fields
-        ltrHidden.Text += "<input type=\"hidden\" id=\"selectedTemplateIsReusable\" value=\"" + reusable + "\" />";
 
         if (!String.IsNullOrEmpty(description))
         {

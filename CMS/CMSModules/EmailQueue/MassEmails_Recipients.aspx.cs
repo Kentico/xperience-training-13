@@ -102,7 +102,7 @@ public partial class CMSModules_EmailQueue_MassEmails_Recipients : CMSModalGloba
                 foreach (string userId in list)
                 {
                     // Remove specific recipient
-                    EmailUserInfoProvider.DeleteEmailUserInfo(emailId, ValidationHelper.GetInteger(userId, 0));
+                    EmailUserInfo.Provider.Remove(emailId, ValidationHelper.GetInteger(userId, 0));
                 }
                 gridElem.ResetSelection();
                 gridElem.Pager.UniPager.CurrentPage = 1;
@@ -142,7 +142,7 @@ public partial class CMSModules_EmailQueue_MassEmails_Recipients : CMSModalGloba
         {
             case "userid":
                 // Get user friendly name instead of id
-                UserInfo ui = UserInfoProvider.GetUserInfo(ValidationHelper.GetInteger(parameter, 0));
+                UserInfo ui = UserInfo.Provider.Get(ValidationHelper.GetInteger(parameter, 0));
                 if (ui != null)
                 {
                     return HTMLHelper.HTMLEncode(Functions.GetFormattedUserName(ui.UserName) + " (" + ui.Email + ")");
@@ -165,7 +165,7 @@ public partial class CMSModules_EmailQueue_MassEmails_Recipients : CMSModalGloba
                 int userId = ValidationHelper.GetInteger(actionArgument, 0);
                 if (userId > 0)
                 {
-                    EmailUserInfoProvider.DeleteEmailUserInfo(emailId, userId);
+                    EmailUserInfo.Provider.Remove(emailId, userId);
                 }
                 break;
         }

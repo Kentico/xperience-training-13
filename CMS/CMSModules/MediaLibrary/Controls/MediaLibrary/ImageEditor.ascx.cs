@@ -57,7 +57,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
 
                 siteId = QueryHelper.GetInteger("siteid", 0);
 
-                SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+                SiteInfo site = SiteInfo.Provider.Get(siteId);
                 if (site != null)
                 {
                     mCurrentSiteName = site.SiteName;
@@ -162,11 +162,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
         if (baseImageEditor.ImageType == ImageHelper.ImageTypeEnum.MediaFile)
         {
             // Get mediafile
-            mfi = MediaFileInfoProvider.GetMediaFileInfo(mediafileGuid, CurrentSiteName);
+            mfi = MediaFileInfo.Provider.Get(mediafileGuid, SiteInfoProvider.GetSiteID(CurrentSiteName));
             // If file is not null 
             if (mfi != null)
             {
-                MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(mfi.FileLibraryID);
+                MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(mfi.FileLibraryID);
 
                 if ((mli != null) && (MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(mli, "filemodify")))
                 {
@@ -307,7 +307,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
     {
         if (mfi == null)
         {
-            mfi = MediaFileInfoProvider.GetMediaFileInfo(mediafileGuid, CurrentSiteName);
+            mfi = MediaFileInfo.Provider.Get(mediafileGuid, SiteInfoProvider.GetSiteID(CurrentSiteName));
         }
 
         if (mfi != null)
@@ -344,13 +344,13 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
         // Get media file information
         if (mfi == null)
         {
-            mfi = MediaFileInfoProvider.GetMediaFileInfo(mediafileGuid, CurrentSiteName);
+            mfi = MediaFileInfo.Provider.Get(mediafileGuid, SiteInfoProvider.GetSiteID(CurrentSiteName));
         }
 
         if (mfi != null)
         {
             // Get media library information
-            MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(mfi.FileLibraryID);
+            MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(mfi.FileLibraryID);
 
             if (mli != null)
             {
@@ -396,7 +396,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
         // Process media file
         if (mfi == null)
         {
-            mfi = MediaFileInfoProvider.GetMediaFileInfo(mediafileGuid, CurrentSiteName);
+            mfi = MediaFileInfo.Provider.Get(mediafileGuid, SiteInfoProvider.GetSiteID(CurrentSiteName));
         }
 
         if (mfi == null)
@@ -404,7 +404,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
             return;
         }
 
-        var mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(mfi.FileLibraryID);
+        var mli = MediaLibraryInfo.Provider.Get(mfi.FileLibraryID);
         if (mli == null)
         {
             return;
@@ -431,7 +431,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
 
         try
         {
-            var site = SiteInfoProvider.GetSiteInfo(mfi.FileSiteID);
+            var site = SiteInfo.Provider.Get(mfi.FileSiteID);
             if (site == null)
             {
                 throw new NullReferenceException("Site of media file not specified.");
@@ -552,7 +552,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
                 }
 
                 // Save new data
-                MediaFileInfoProvider.SetMediaFileInfo(mfi, false);
+                mfi.EnsureUniqueFileName(false);
+                MediaFileInfo.Provider.Set(mfi);
             }
         }
         catch (Exception e)
@@ -563,7 +564,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
             baseImageEditor.ShowError(GetString("img.errors.processing"), tooltipText: e.Message);
             SavingFailed = true;
             // Save original media file info
-            MediaFileInfoProvider.SetMediaFileInfo(originalMfi, false);
+            originalMfi.EnsureUniqueFileName(false);
+            MediaFileInfo.Provider.Set(originalMfi);
         }
     }
 

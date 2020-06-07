@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPageTemplate {
-    
+public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPageTemplate
+{
+
     /// <summary>
     /// pnlUpdate control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdate;
-    
+
     /// <summary>
     /// txtTemplate control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtTemplate;
-    
+
     /// <summary>
     /// btnSelect control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnSelect;
-    
+
     /// <summary>
     /// btnClear control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnClear;
-    
+
     /// <summary>
     /// hdnSelected control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnSelected;
-    
+
     /// <summary>
     /// pnlButtons control.
     /// </summary>
@@ -64,25 +65,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder pnlButtons;
-    
-    /// <summary>
-    /// btnSave control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnSave;
-    
-    /// <summary>
-    /// btnClone control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnClone;
-    
+
     /// <summary>
     /// btnEditTemplateProperties control.
     /// </summary>
@@ -91,16 +74,7 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_SelectPa
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnEditTemplateProperties;
-    
-    /// <summary>
-    /// btnFullPostback control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Button btnFullPostback;
-    
+
     /// <summary>
     /// hdnTemplateChanged control.
     /// </summary>

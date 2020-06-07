@@ -534,7 +534,7 @@ public partial class CMSModules_Content_Controls_EditMenu : EditMenu, IExtensibl
                 // Display action message
                 if (Step != null)
                 {
-                    WorkflowActionInfo action = WorkflowActionInfoProvider.GetWorkflowActionInfo(Step.StepActionID);
+                    WorkflowActionInfo action = WorkflowActionInfo.Provider.Get(Step.StepActionID);
                     string name = (action != null) ? action.ActionDisplayName : Step.StepDisplayName;
                     string str = (action != null) ? "workflow.actioninprogress" : "workflow.stepinprogress";
                     string text = String.Format(ResHelper.GetString(str, ResourceCulture), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(name, ResourceCulture)));

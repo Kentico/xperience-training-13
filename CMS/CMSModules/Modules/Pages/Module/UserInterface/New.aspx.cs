@@ -67,7 +67,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_New : GlobalA
     /// </summary>
     private void Form_OnAfterDataLoad(object sender, EventArgs e)
     {
-        var parent = UIElementInfoProvider.GetUIElementInfo(ParentID);
+        var parent = UIElementInfo.Provider.Get(ParentID);
 
         // Show breadcrumbs checkbox depending on element level         
         bool displayBreadcrumbs = (parent != null) && (parent.ElementLevel >= UIElementInfoProvider.APPLICATION_LEVEL);

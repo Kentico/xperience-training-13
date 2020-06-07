@@ -25,7 +25,7 @@ public partial class CMSModules_MediaLibrary_Dialogs_MetaDataEditor : CMSModalPa
 
                 int siteId = QueryHelper.GetInteger("siteid", 0);
 
-                SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+                SiteInfo site = SiteInfo.Provider.Get(siteId);
                 if (site != null)
                 {
                     mCurrentSiteName = site.SiteName;

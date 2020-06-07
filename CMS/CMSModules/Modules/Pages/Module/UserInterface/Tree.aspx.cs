@@ -33,7 +33,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
     {
         get
         {
-            return ResourceInfoProvider.GetResourceInfo(ModuleId);
+            return ResourceInfo.Provider.Get(ModuleId);
         }
     }
 
@@ -161,7 +161,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
 
             if (ElementId > 0)
             {
-                ElementInfo = UIElementInfoProvider.GetUIElementInfo(ElementId);
+                ElementInfo = UIElementInfo.Provider.Get(ElementId);
             }
 
             // If null get root element
@@ -190,9 +190,9 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
             }
 
             // Expand all module elements
-            var allModuleElements = UIElementInfoProvider.GetUIElements().Where("ElementResourceID", QueryOperator.Equals, ModuleId).Columns("ElementID");
+            var allModuleElements = UIElementInfo.Provider.Get().Where("ElementResourceID", QueryOperator.Equals, ModuleId).Columns("ElementID");
 
-            var elementsToExpand = UIElementInfoProvider.GetUIElements()
+            var elementsToExpand = UIElementInfo.Provider.Get()
                 .Where("ElementResourceID", QueryOperator.Equals, ModuleId)
                 .Where(new WhereCondition().WhereNull("ElementParentID").Or().WhereNotIn("ElementParentID", allModuleElements));
 
@@ -365,14 +365,14 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
         GetHiddenValue();
         if ((ElementId > 0) && (ElementInfo.ElementParentID > 0))
         {
-            ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(ElementInfo.ElementResourceID);
+            ResourceInfo ri = ResourceInfo.Provider.Get(ElementInfo.ElementResourceID);
             if ((ri != null) && !ri.ResourceIsInDevelopment)
             {
                 ShowError(GetString("module.action.resourcenotindevelopment"));
                 return;
             }
 
-            UIElementInfoProvider.DeleteUIElementInfo(ElementId);
+            UIElementInfo.Provider.Delete(UIElementInfo.Provider.Get(ElementId));
             AfterAction("delete", ElementInfo.ElementParentID);
         }
     }
@@ -392,7 +392,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
         if ((hiddenElemId > 0) && (ElementId <= 0))
         {
             ElementId = hiddenElemId;
-            ElementInfo = UIElementInfoProvider.GetUIElementInfo(ElementId);
+            ElementInfo = UIElementInfo.Provider.Get(ElementId);
         }
     }
 
@@ -404,7 +404,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
     /// <param name="elementId">Element ID</param>
     private void AfterAction(string actionName, int elementId)
     {
-        UIElementInfo elemInfo = UIElementInfoProvider.GetUIElementInfo(elementId);
+        UIElementInfo elemInfo = UIElementInfo.Provider.Get(elementId);
         if (elemInfo != null)
         {
             ContentTree.SelectPath = elemInfo.ElementIDPath;

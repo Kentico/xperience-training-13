@@ -121,7 +121,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_Scopes_Scopes : 
                 // Remove document types from scope
                 foreach (string item in newItems)
                 {
-                    DocumentTypeScopeClassInfoProvider.RemoveClassFromScope(ValidationHelper.GetInteger(item, 0), DocumentType.ClassID);
+                    DocumentTypeScopeClassInfo.Provider.Remove(ValidationHelper.GetInteger(item, 0), DocumentType.ClassID);
                 }
             }
         }
@@ -136,7 +136,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_Scopes_Scopes : 
                 // Add all new document types to scope
                 foreach (string item in newItems)
                 {
-                    DocumentTypeScopeClassInfoProvider.AddClassToScope(ValidationHelper.GetInteger(item, 0), DocumentType.ClassID);
+                    DocumentTypeScopeClassInfo.Provider.Add(ValidationHelper.GetInteger(item, 0), DocumentType.ClassID);
                 }
             }
         }

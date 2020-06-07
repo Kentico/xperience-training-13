@@ -337,7 +337,7 @@ public partial class CMSModules_Membership_FormControls_Avatars_UserPictureEdit 
             avatarID = user.UserAvatarID = avatar.AvatarID;
         }
 
-        UserInfoProvider.SetUserInfo(user);
+        UserInfo.Provider.Set(user);
         ShowUserAvatar(user);
     }
 
@@ -358,7 +358,7 @@ public partial class CMSModules_Membership_FormControls_Avatars_UserPictureEdit 
                 DeleteCustomAvatar(avatar);
 
                 user.UserAvatarID = 0;
-                UserInfoProvider.SetUserInfo(user);
+                UserInfo.Provider.Set(user);
                 if (user.UserID == MembershipContext.AuthenticatedUser.UserID)
                 {
                     MembershipContext.AuthenticatedUser.UserAvatarID = 0;
@@ -485,7 +485,7 @@ public partial class CMSModules_Membership_FormControls_Avatars_UserPictureEdit 
         {
             // Save avatar type for user given by basic form
             EditedUser.UserAvatarID = avatarID;
-            UserInfoProvider.SetUserInfo(EditedUser);
+            UserInfo.Provider.Set(EditedUser);
 
             ShowUserAvatar(EditedUser);
         }

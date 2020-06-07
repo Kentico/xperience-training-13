@@ -41,7 +41,7 @@ public partial class CMSModules_SmartSearch_SearchTask_Report : GlobalAdminPage
     {
         get
         {
-            return mSearchTaskInfo ?? (mSearchTaskInfo = SearchTaskInfoProvider.GetSearchTaskInfo(SearchTaskID));
+            return mSearchTaskInfo ?? (mSearchTaskInfo = SearchTaskInfo.Provider.Get(SearchTaskID));
         }
     }
 

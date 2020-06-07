@@ -149,7 +149,7 @@ public partial class CMSModules_AdminControls_Controls_Class_AlternativeFormEdit
         if (form.IsInsertMode)
         {
             // Mark alternative form as custom if module is not in development and development mode is off
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+            ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
             form.Data["FormIsCustom"] = !SystemContext.DevelopmentMode && ((resource != null) && !resource.ResourceIsInDevelopment);
         }
     }

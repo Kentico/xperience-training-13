@@ -63,14 +63,14 @@ public class CultureListExtender : ControlExtender<UniGrid>
 
     private void DeleteCulture(int cultureId)
     {
-        CultureInfo culture = CultureInfoProvider.GetCultureInfo(cultureId);
+        CultureInfo culture = CultureInfo.Provider.Get(cultureId);
         Control.EditedObject = culture;
 
         string cultureCode = culture.CultureCode;
         DataSet ds = CultureSiteInfoProvider.GetCultureSites(cultureCode);
         if (DataHelper.DataSourceIsEmpty(ds))
         {
-            CultureInfoProvider.DeleteCultureInfo(cultureCode);
+            CultureInfo.Provider.Delete(CultureInfo.Provider.Get(cultureCode));
         }
         else
         {

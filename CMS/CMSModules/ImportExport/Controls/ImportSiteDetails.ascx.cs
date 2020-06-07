@@ -6,6 +6,7 @@ using CMS.CMSImportExport;
 using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.SiteProvider;
+using CMS.SiteProvider.Internal;
 using CMS.UIControls;
 
 
@@ -315,7 +316,7 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
             Settings.SiteId = ValidationHelper.GetInteger(siteSelector.Value, 0);
 
             // Get site info
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(Settings.SiteId);
+            SiteInfo si = SiteInfo.Provider.Get(Settings.SiteId);
             if (si != null)
             {
                 Settings.SiteDisplayName = si.DisplayName;
@@ -331,7 +332,7 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         Settings.SiteId = 0;
 
         // Existing site            
-        bool isValid = rfvSiteDisplayName.IsValid && rfvDomain.IsValid;
+        bool isValid = rfvSiteDisplayName.IsValid && rfvDomain.IsValid && rfvSitePresentationUrl.IsValid;
 
         // Get site name
         var siteName = txtSiteName.Text.Trim();
@@ -344,7 +345,7 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
             string codeNameError = validator.Result;
 
             // Check if there is site with specified code name
-            if (string.IsNullOrEmpty(codeNameError) && SiteInfoProvider.GetSiteInfo(siteName) != null)
+            if (string.IsNullOrEmpty(codeNameError) && SiteInfo.Provider.Get(siteName) != null)
             {
                 codeNameError = GetString("NewSite_SiteDetails.ErrorSiteExists");
             }
@@ -355,6 +356,18 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
                 lblErrorSiteName.Visible = true;
                 isValid = false;
             }
+        }
+
+        if (!Uri.IsWellFormedUriString(txtSitePresentationUrl.Text, UriKind.Absolute))
+        {
+            isValid = rfvSitePresentationUrl.IsValid = false;
+        }
+
+        var presentationUrl = PresentationUrlNormalizer.Normalize(txtSitePresentationUrl.Text);
+        if (string.Equals(presentationUrl.Url, GetDomainInPresentationUrlFormat(txtDomain.Text).Url, StringComparison.InvariantCultureIgnoreCase))
+        {
+            rfvDomain.ErrorMessage = GetString("importsite.stepsitedetailscollisiondomain");
+            isValid = rfvDomain.IsValid = false;
         }
 
         if (isValid)
@@ -369,5 +382,12 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         }
 
         return isValid;
+    }
+
+
+    private NormalizedPresentationUrl GetDomainInPresentationUrlFormat(string domain)
+    {
+        // Since the presentation URL is schema agnostic the HTTP schema can be used directly to create a fake presentation URL.
+        return PresentationUrlNormalizer.Normalize($"http://{domain}");
     }
 }

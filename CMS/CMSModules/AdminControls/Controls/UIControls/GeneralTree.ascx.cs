@@ -629,7 +629,7 @@ function createFrameUrl(elementId, type, parentId) {
             int selectedItemID = ValidationHelper.GetInteger(UIContext["SelectedItemID"], 0);
             if (selectedItemID != 0)
             {
-                UIElementInfo elem = UIElementInfoProvider.GetUIElementInfo(selectedItemID);
+                UIElementInfo elem = UIElementInfo.Provider.Get(selectedItemID);
                 String newCategory = ValidationHelper.GetString(UIContext["newCategory"], String.Empty);
                 if ((elem != null) && (String.Equals(newCategory, elem.ElementName, StringComparison.InvariantCultureIgnoreCase)))
                 {

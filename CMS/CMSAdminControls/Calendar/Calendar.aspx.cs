@@ -158,7 +158,7 @@ public partial class CMSAdminControls_Calendar_Calendar : CMSPage
         int timeZoneId = QueryHelper.GetInteger("timezoneid", 0);
         if (timeZoneId > 0)
         {
-            TimeZoneInfo tzi = TimeZoneInfoProvider.GetTimeZoneInfo(timeZoneId);
+            TimeZoneInfo tzi = TimeZoneInfo.Provider.Get(timeZoneId);
             if (tzi != null)
             {
                 lblGMTShift.Visible = true;

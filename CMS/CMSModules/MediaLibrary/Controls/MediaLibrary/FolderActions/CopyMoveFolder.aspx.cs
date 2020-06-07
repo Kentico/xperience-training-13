@@ -52,7 +52,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         {
             if ((mLibraryInfo == null) && (MediaLibraryID > 0))
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(MediaLibraryID);
             }
             return mLibraryInfo;
         }
@@ -68,7 +68,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         {
             if ((mLibrarySiteInfo == null) && (LibraryInfo != null))
             {
-                mLibrarySiteInfo = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                mLibrarySiteInfo = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             }
             return mLibrarySiteInfo;
         }

@@ -9,10 +9,6 @@
             return dataFromServer;
         };
 
-        this.getCreatePageDialogUrl = function () {
-            return dataFromServer.createPageDialogUrl;
-        };
-
         this.getEmailRegexp = function () {
             return dataFromServer.emailRegexp;
         };
@@ -23,10 +19,6 @@
 
         this.getAssets = function () {
             return dataFromServer.assets;
-        }
-
-        this.isSiteContentOnly = function () {
-            return dataFromServer.siteIsContentOnly;
         }
 
         this.getUrlAssetTargetRegex = function () {

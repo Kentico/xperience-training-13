@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ImportExport_Controls_Export___objects__ {
-    
+public partial class CMSModules_ImportExport_Controls_Export___objects__
+{
+
     /// <summary>
     /// pnlInfo control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlInfo;
-    
+
     /// <summary>
     /// lblInfo control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblInfo;
-    
+
     /// <summary>
     /// pnlSelection control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlSelection;
-    
+
     /// <summary>
     /// headGlobalSelection control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headGlobalSelection;
-    
+
     /// <summary>
     /// lnkSelectDefault control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton lnkSelectDefault;
-    
+
     /// <summary>
     /// lnkSelectAll control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton lnkSelectAll;
-    
+
     /// <summary>
     /// lnkSelectNone control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton lnkSelectNone;
-    
+
     /// <summary>
     /// pnlCheck control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlCheck;
-    
+
     /// <summary>
     /// headExportSettings control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headExportSettings;
-    
+
     /// <summary>
     /// chkExportTasks control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkExportTasks;
-    
+
     /// <summary>
     /// chkCopyFiles control.
     /// </summary>
@@ -109,7 +110,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyFiles;
-    
+
     /// <summary>
     /// chkCopyGlobalFiles control.
     /// </summary>
@@ -118,7 +119,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyGlobalFiles;
-    
+
     /// <summary>
     /// chkCopyAssemblies control.
     /// </summary>
@@ -127,7 +128,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyAssemblies;
-    
+
     /// <summary>
     /// plcSiteFiles control.
     /// </summary>
@@ -136,7 +137,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcSiteFiles;
-    
+
     /// <summary>
     /// chkCopySiteFiles control.
     /// </summary>
@@ -145,16 +146,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopySiteFiles;
-    
-    /// <summary>
-    /// chkCopyASPXTemplatesFolder control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyASPXTemplatesFolder;
-    
+
     /// <summary>
     /// chkCopyForumCustomLayoutsFolder control.
     /// </summary>
@@ -163,7 +155,7 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyForumCustomLayoutsFolder;
-    
+
     /// <summary>
     /// ltlScript control.
     /// </summary>

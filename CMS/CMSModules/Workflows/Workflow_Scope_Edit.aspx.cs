@@ -81,7 +81,7 @@ public partial class CMSModules_Workflows_Workflow_Scope_Edit : CMSWorkflowPage
 
     private void LicenseCheck()
     {
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo si = SiteInfo.Provider.Get(siteId);
         if (si != null)
         {
             // Check whether workflow is enabled for specified site

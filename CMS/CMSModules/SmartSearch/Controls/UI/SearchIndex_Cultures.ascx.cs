@@ -91,8 +91,8 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Cultures : C
                 foreach (string item in newItems)
                 {
                     int cultureId = ValidationHelper.GetInteger(item, 0);
-                    SearchIndexCultureInfo sici = SearchIndexCultureInfoProvider.GetSearchIndexCultureInfo(indexId, cultureId);
-                    SearchIndexCultureInfoProvider.DeleteSearchIndexCultureInfo(sici);
+                    SearchIndexCultureInfo sici = SearchIndexCultureInfo.Provider.Get(indexId, cultureId);
+                    SearchIndexCultureInfo.Provider.Delete(sici);
                 }
             }
         }
@@ -108,7 +108,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Cultures : C
                 foreach (string item in newItems)
                 {
                     int cultureId = ValidationHelper.GetInteger(item, 0);
-                    SearchIndexCultureInfoProvider.AddSearchIndexCulture(indexId, cultureId);
+                    SearchIndexCultureInfo.Provider.Add(indexId, cultureId);
                 }
             }
         }

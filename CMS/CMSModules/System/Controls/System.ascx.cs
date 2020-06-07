@@ -11,7 +11,6 @@ using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.Globalization;
-using CMS.HealthMonitoring;
 using CMS.Helpers;
 using CMS.IO;
 using CMS.LicenseProvider;
@@ -257,14 +256,6 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
 
         HeaderActions.AddAction(new HeaderAction
         {
-            Text = GetString("Administration-System.btnClearCounters"),
-            ButtonStyle = ButtonStyle.Default,
-            CommandName = "ClearCounters",
-            Visible = LicenseHelper.CheckFeature(RequestContext.CurrentDomain, FeatureEnum.HealthMonitoring),
-        });
-
-        HeaderActions.AddAction(new HeaderAction
-        {
             Text = GetString("Administration-System.btnClear"),
             ButtonStyle = ButtonStyle.Default,
             CommandName = "ClearMemory",
@@ -290,7 +281,6 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
         btnRestart.Visible = true;
         btnRestartWebfarm.Visible = WebFarmButtonVisible;
         btnRestartServices.Visible = WinServiceHelper.ServicesAvailable();
-        btnClearCounters.Visible = LicenseHelper.CheckFeature(RequestContext.CurrentDomain, FeatureEnum.HealthMonitoring);
     }
 
 
@@ -309,9 +299,6 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
                 break;
             case "ClearCache":
                 ClearCache();
-                break;
-            case "ClearCounters":
-                ClearCounters();
                 break;
             case "ClearMemory":
                 ClearMemory();
@@ -399,40 +386,6 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
         string url = URLHelper.UpdateParameterInUrl(RequestContext.CurrentURL, "lastaction", "WebfarmRestarted");
         url = URLHelper.UpdateParameterInUrl(url, "restartedhash", ValidationHelper.GetHashString("WebfarmRestarted", new HashSettings("")));
         URLHelper.Redirect(url);
-    }
-
-
-    /// <summary>
-    /// Clear counters.
-    /// </summary>
-    protected void ClearCounters(object sender = null, EventArgs args = null)
-    {
-        if (StopProcessing)
-        {
-            return;
-        }
-
-        try
-        {
-            // Reset values of health monitoring counters
-            HealthMonitoringManager.ResetCounters();
-            // Clear application counters
-            HealthMonitoringLogHelper.ClearApplicationCounters();
-
-            // Log event
-            Service.Resolve<IEventLogService>().LogInformation("System", "CLEARCOUNTERS", GetString("Administration-System.CountersCleared"));
-
-            string url = URLHelper.UpdateParameterInUrl(RequestContext.CurrentURL, "lastaction", "CounterCleared");
-            URLHelper.Redirect(url);
-        }
-        catch (Exception ex)
-        {
-            // ThreadAbortException is thrown when response is ended (redirect)
-            if (!(ex is ThreadAbortException))
-            {
-                LogAndShowError("System", "CLEARCOUNTERS", ex);
-            }
-        }
     }
 
 

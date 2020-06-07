@@ -396,7 +396,7 @@ public partial class CMSModules_Permissions_Controls_PermissionsFilter : CMSAdmi
                 string selectedModule = QueryHelper.GetString("module", null);
                 if (!String.IsNullOrEmpty(selectedModule))
                 {
-                    ResourceInfo ri = ResourceInfoProvider.GetResourceInfo(selectedModule);
+                    ResourceInfo ri = ResourceInfo.Provider.Get(selectedModule);
                     if (ri != null)
                     {
                         moduleSelector.Value = ri.ResourceID;

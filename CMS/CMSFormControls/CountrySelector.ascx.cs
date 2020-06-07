@@ -225,7 +225,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
             if (UseCodeNameForSelection)
             {
                 // Convert country name to ID
-                CountryInfo ci = CountryInfoProvider.GetCountryInfo(ValidationHelper.GetString(uniSelectorCountry.Value, String.Empty));
+                CountryInfo ci = CountryInfo.Provider.Get(ValidationHelper.GetString(uniSelectorCountry.Value, String.Empty));
                 if (ci != null)
                 {
                     return ci.CountryID;
@@ -243,7 +243,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
             // Check if code name is used for selection
             if (UseCodeNameForSelection)
             {
-                CountryInfo ci = CountryInfoProvider.GetCountryInfo(value);
+                CountryInfo ci = CountryInfo.Provider.Get(value);
                 if (ci != null)
                 {
                     uniSelectorCountry.Value = ci.CountryName;
@@ -272,7 +272,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
                 if (UseCodeNameForSelection)
                 {
                     // Convert state name to ID
-                    StateInfo si = StateInfoProvider.GetStateInfo(ValidationHelper.GetString(uniSelectorState.Value, String.Empty));
+                    StateInfo si = StateInfo.Provider.Get(ValidationHelper.GetString(uniSelectorState.Value, String.Empty));
                     if (si != null)
                     {
                         return si.StateID;
@@ -292,7 +292,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
             if (UseCodeNameForSelection)
             {
                 // Convert state ID to name
-                StateInfo si = StateInfoProvider.GetStateInfo(value);
+                StateInfo si = StateInfo.Provider.Get(value);
                 if (si != null)
                 {
                     uniSelectorState.Value = si.StateName;
@@ -318,7 +318,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
                 return ValidationHelper.GetString(uniSelectorCountry.Value, String.Empty);
             }
 
-            CountryInfo ci = CountryInfoProvider.GetCountryInfo(ValidationHelper.GetInteger(uniSelectorCountry.Value, 0));
+            CountryInfo ci = CountryInfo.Provider.Get(ValidationHelper.GetInteger(uniSelectorCountry.Value, 0));
             if (ci != null)
             {
                 return ci.CountryName;
@@ -334,7 +334,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
             }
             else
             {
-                CountryInfo ci = CountryInfoProvider.GetCountryInfo(value);
+                CountryInfo ci = CountryInfo.Provider.Get(value);
                 if (ci != null)
                 {
                     uniSelectorCountry.Value = ci.CountryID;
@@ -360,7 +360,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
                     return ValidationHelper.GetString(uniSelectorState.Value, String.Empty);
                 }
 
-                StateInfo si = StateInfoProvider.GetStateInfo(ValidationHelper.GetInteger(uniSelectorState.Value, 0));
+                StateInfo si = StateInfo.Provider.Get(ValidationHelper.GetInteger(uniSelectorState.Value, 0));
                 if (si != null)
                 {
                     return si.StateName;
@@ -377,7 +377,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
             }
             else
             {
-                StateInfo si = StateInfoProvider.GetStateInfo(value);
+                StateInfo si = StateInfo.Provider.Get(value);
                 if (si != null)
                 {
                     uniSelectorState.Value = si.StateID;
@@ -441,7 +441,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
                 StateID = stateId;
 
                 // Find country from state info
-                StateInfo state = StateInfoProvider.GetStateInfo(stateId);
+                StateInfo state = StateInfo.Provider.Get(stateId);
                 if (state != null)
                 {
                     CountryID = state.CountryID;
@@ -708,7 +708,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
         int countryId = 0;
         if (UseCodeNameForSelection)
         {
-            CountryInfo ci = CountryInfoProvider.GetCountryInfo(ValidationHelper.GetString(uniSelectorCountry.Value, string.Empty));
+            CountryInfo ci = CountryInfo.Provider.Get(ValidationHelper.GetString(uniSelectorCountry.Value, string.Empty));
             if (ci != null)
             {
                 countryId = ci.CountryID;
@@ -734,7 +734,7 @@ public partial class CMSFormControls_CountrySelector : FormEngineUserControl
         if (ContainsColumn(StateIDColumnName))
         {
             // Select state in stateSelector in the form if StateIDColumnName was supplied
-            var stateInfo = StateInfoProvider.GetStateInfo(ValidationHelper.GetInteger(GetColumnValue(StateIDColumnName), 0));
+            var stateInfo = StateInfo.Provider.Get(ValidationHelper.GetInteger(GetColumnValue(StateIDColumnName), 0));
             if ((stateInfo != null) && (uniSelectorState != null))
             {
                 if (UseCodeNameForSelection)

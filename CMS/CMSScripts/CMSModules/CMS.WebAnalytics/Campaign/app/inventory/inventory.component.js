@@ -6,8 +6,6 @@
             'cms.webanalytics/campaign/assets.service',
             'cms.webanalytics/campaign/messages.service',
             'cms.webanalytics/campaign/inventory/addUrlAsset.component',
-            'cms.webanalytics/campaign/inventory/createPage.component',
-            'cms.webanalytics/campaign/inventory/selectPage.component',
             'cms.webanalytics/campaign/inventory/item.component',
             'cms.webanalytics/campaign/confirmation.service',
             'CMS/Filters.Resolve',
@@ -19,7 +17,6 @@
         return {
             bindings: {
                 assets: '=',
-                siteIsContentOnly: '<',
                 campaign: '=',
                 urlAssetTargetRegex: '<'
             },

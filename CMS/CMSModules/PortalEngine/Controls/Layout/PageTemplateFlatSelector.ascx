@@ -43,6 +43,5 @@
         <div class="selector-flat-description">
             <asp:Literal runat="server" ID="ltrDescription" EnableViewState="false"></asp:Literal>
         </div>
-        <asp:Literal runat="server" ID="ltrHidden" EnableViewState="false"></asp:Literal>
     </ContentTemplate>
 </cms:CMSUpdatePanel>

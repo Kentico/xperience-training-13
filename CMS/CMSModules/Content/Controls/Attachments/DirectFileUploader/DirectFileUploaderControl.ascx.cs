@@ -353,7 +353,7 @@ public partial class CMSModules_Content_Controls_Attachments_DirectFileUploader_
                     string safeName = URLHelper.GetSafeFileName(newAttachment.AttachmentName, SiteContext.CurrentSiteName);
                     if (node != null)
                     {
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(node.NodeSiteID);
+                        SiteInfo si = SiteInfo.Provider.Get(node.NodeSiteID);
                         if (si != null)
                         {
                             bool usePermanent = AttachmentURLProvider.UsePermanentUrls(si.SiteName);

@@ -165,7 +165,7 @@ public partial class CMSModules_AbuseReport_Controls_AbuseReportList : CMSAdminC
             if (WhereCondition == String.Empty)
             {
                 // Site name
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+                SiteInfo si = SiteInfo.Provider.Get(SiteName);
                 if (si != null)
                 {
                     ucAbuseReportGrid.WhereCondition = SqlHelper.AddWhereCondition(ucAbuseReportGrid.WhereCondition, "(ReportSiteID = " + si.SiteID + ")");

@@ -87,7 +87,7 @@ public partial class CMSModules_SmartSearch_SearchIndex_Sites : GlobalAdminPage,
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
                     // Unassign site from index
-                    SearchIndexSiteInfoProvider.DeleteSearchIndexSiteInfo(indexId, siteId);
+                    SearchIndexSiteInfo.Provider.Remove(indexId, siteId);
                 }
             }
         }
@@ -106,7 +106,7 @@ public partial class CMSModules_SmartSearch_SearchIndex_Sites : GlobalAdminPage,
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
                     // Assign site to index
-                    SearchIndexSiteInfoProvider.AddSearchIndexToSite(indexId, siteId);
+                    SearchIndexSiteInfo.Provider.Add(indexId, siteId);
                 }
             }
         }

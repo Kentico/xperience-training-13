@@ -38,7 +38,7 @@ public partial class CMSModules_MediaLibrary_Tools_Library_Edit_Files : CMSMedia
 
     private void libraryElem_OnCheckPermissions(string permissionType, CMSAdminControl sender)
     {
-        MediaLibraryInfo MediaLibrary = MediaLibraryInfoProvider.GetMediaLibraryInfo(libraryId);
+        MediaLibraryInfo MediaLibrary = MediaLibraryInfo.Provider.Get(libraryId);
         if (permissionType.ToLowerCSafe() == "read")
         {
             // Check 'Read' permission

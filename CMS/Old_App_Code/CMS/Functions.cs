@@ -404,7 +404,7 @@ public static class Functions
                 {
                     var typeInfo = ObjectTypeManager.GetTypeInfo(t);
 
-                    return (!typeInfo.IsListingObjectTypeInfo && typeInfo.ContainsMacros);
+                    return (!typeInfo.IsListingObjectTypeInfo && typeInfo.MacroSettings.ContainsMacros);
                 }
                 catch (Exception)
                 {

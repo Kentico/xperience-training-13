@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 using CMS.Base.Web.UI;
 using CMS.Core;
@@ -228,7 +229,7 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
         if (urls.Length > 1)
         {
             // Set default live site URL in header link
-            ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + urls[1] + "');"));
+            ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + HttpUtility.JavaScriptStringEncode(urls[1]) + "');"));
         }
     }
 

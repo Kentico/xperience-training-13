@@ -554,7 +554,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
                     if (siteId != currentSiteId)
                     {
                         // Add the site name to the URL if not current site
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                        SiteInfo si = SiteInfo.Provider.Get(siteId);
                         if (si != null)
                         {
                             url += "&sitename=" + si.SiteName;
@@ -588,7 +588,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
                     int siteId = ValidationHelper.GetInteger(parameter, 0);
                     if (siteId > 0)
                     {
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                        SiteInfo si = SiteInfo.Provider.Get(siteId);
                         if (si != null)
                         {
                             return si.DisplayName;

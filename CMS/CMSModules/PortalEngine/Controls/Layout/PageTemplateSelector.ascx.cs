@@ -11,7 +11,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateSelecto
     #region "Variables"
 
     private PageTemplateCategoryInfo mRootCategory;
-    private bool mShowOnlySiteTemplates = true;
 
     #endregion
 
@@ -25,22 +24,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateSelecto
     {
         get;
         set;
-    }
-
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to show site page templates only.
-    /// </summary>
-    public bool ShowOnlySiteTemplates
-    {
-        get
-        {
-            return mShowOnlySiteTemplates;
-        }
-        set
-        {
-            mShowOnlySiteTemplates = value;
-        }
     }
 
     #endregion
@@ -271,31 +254,12 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateSelecto
             SelectRootCategory();
         }
 
-        if (!ShowAdHoc)
-        {
-            treeElem.ShowAdHocCategory = false;
-            flatElem.ShowOnlyReusable = true;
-        }
-
-        if (ShowOnlySiteTemplates)
-        {
-            // Show only templates belonging to current site
-            flatElem.SiteId = SiteContext.CurrentSiteID;
-        }
-
-        treeElem.ShowOnlySiteTemplates = ShowOnlySiteTemplates;
-
         // Set node id
         flatElem.DocumentID = DocumentID;
         treeElem.DocumentID = DocumentID;
 
         flatElem.IsNewPage = IsNewPage;
         treeElem.IsNewPage = IsNewPage;
-
-        if (!IsNewPage)
-        {
-            treeElem.ShowAdHocCategory = true;
-        }
     }
 
 
@@ -353,11 +317,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_PageTemplateSelecto
     /// </summary>
     protected void SetRootCategory()
     {
-        if (RootCategoryID > 0)
-        {
-            treeElem.MultipleRoots = false;
-        }
-
         if (RootCategory != null)
         {
             // Select and expand root node

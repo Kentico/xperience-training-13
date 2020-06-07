@@ -103,7 +103,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaFilePrev
             MediaFileInfo mfi = new MediaFileInfo(mData);
             SiteInfo currentSite = SiteContext.CurrentSite;
             
-            SiteInfo si = mfi.FileSiteID == currentSite.SiteID ? currentSite : SiteInfoProvider.GetSiteInfo(mfi.FileSiteID);
+            SiteInfo si = mfi.FileSiteID == currentSite.SiteID ? currentSite : SiteInfo.Provider.Get(mfi.FileSiteID);
             if (si != null)
             {
                 if (DisplayActiveContent)
@@ -123,7 +123,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaFilePrev
                     }
                     else
                     {
-                        MediaLibraryInfo li = MediaLibraryInfoProvider.GetMediaLibraryInfo(mfi.FileLibraryID);
+                        MediaLibraryInfo li = MediaLibraryInfo.Provider.Get(mfi.FileLibraryID);
                         if (li != null)
                         {
                             url = completeUrl 

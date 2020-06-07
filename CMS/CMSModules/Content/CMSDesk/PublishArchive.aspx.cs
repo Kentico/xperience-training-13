@@ -713,7 +713,7 @@ public partial class CMSModules_Content_CMSDesk_PublishArchive : CMSContentPage
         if (CurrentUser.UserID != node.DocumentCheckedOutByUserID)
         {
             // Get checked out message
-            var user = UserInfoProvider.GetUserInfo(node.DocumentCheckedOutByUserID);
+            var user = UserInfo.Provider.Get(node.DocumentCheckedOutByUserID);
             string userName = user != null ? user.GetFormattedUserName(false) : "";
             AddError(String.Format(GetString("editcontent.documentnamecheckedoutbyanother"), nodeAliasPath, userName));
         }

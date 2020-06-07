@@ -1,5 +1,6 @@
 ﻿using System;
 
+using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.Helpers;
@@ -71,9 +72,12 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_W
 
     protected void SelectABTestWinnerUsedInMarketingAutomation(object sender, EventArgs e)
     {
-        SetABTestWinnerManually(ABTest, ParentIssue, WinnerVariant);
+        using (new CMSActionContext { LogSynchronization = false })
+        {
+            SetABTestWinnerManually(ABTest, ParentIssue, WinnerVariant);
 
-        CopyDataFromWinnerToParent(WinnerVariant, ParentIssue);
+            CopyDataFromWinnerToParent(WinnerVariant, ParentIssue);
+        }
 
         CloseDialogAndRefreshParentPage();
     }
@@ -100,13 +104,17 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_W
             }
         }
 
-        SetABTestWinnerManually(ABTest, ParentIssue, WinnerVariant);
+        using (new CMSActionContext { LogSynchronization = false })
+        {
 
-        NewsletterSendingStatusModifier.ResetAllEmailsInQueueForIssue(ParentIssue.IssueID);
+            SetABTestWinnerManually(ABTest, ParentIssue, WinnerVariant);
 
-        CopyDataFromWinnerToParent(WinnerVariant, ParentIssue);
+            NewsletterSendingStatusModifier.ResetAllEmailsInQueueForIssue(ParentIssue.IssueID);
 
-        ScheduleSendingOfIssue(ParentIssue);
+            CopyDataFromWinnerToParent(WinnerVariant, ParentIssue);
+
+            ScheduleSendingOfIssue(ParentIssue);
+        }
         
         CloseDialogAndRefreshParentPage();
     }

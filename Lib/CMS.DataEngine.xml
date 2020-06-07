@@ -4415,13 +4415,12 @@
             <param name="className">Class name</param>
             <param name="queryName">Query name</param>
         </member>
-        <member name="M:CMS.DataEngine.QueryInfoProvider.ClearDefaultQueries(CMS.DataEngine.DataClassInfo,System.Boolean,System.Boolean)">
+        <member name="M:CMS.DataEngine.QueryInfoProvider.ClearDefaultQueries(CMS.DataEngine.DataClassInfo,System.Boolean)">
             <summary>
             Clears the default queries for the given class name from hashtable
             </summary>
             <param name="dci">Data class object</param>
             <param name="dataClass">If true, removes DataClass queries</param>
-            <param name="documentType">If true, removes document types queries</param>
         </member>
         <member name="M:CMS.DataEngine.QueryInfoProvider.GetClassName(System.String)">
             <summary>
@@ -5569,6 +5568,11 @@
         <member name="P:CMS.DataEngine.BulkInsertSettings.BulkCopyTimeout">
             <summary>
             Number of seconds for the operation to complete before it times out. The default is 30 seconds. A value of 0 indicates no limit; the bulk copy will wait indefinitely.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.BulkInsertSettings.BatchSize">
+            <summary>
+            Number of rows in each batch. At the end of each batch, the rows in the batch are sent to the server. A value of 0 indicates that batches won't be used.
             </summary>
         </member>
         <member name="P:CMS.DataEngine.BulkInsertSettings.KeepIdentity">
@@ -21872,6 +21876,26 @@
             Restore ACL inheritance.
             </summary>
         </member>
+        <member name="F:CMS.DataEngine.TaskTypeEnum.GeneratePageUrlPaths">
+            <summary>
+            Generate page URL paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.TaskTypeEnum.DeletePageUrlPaths">
+            <summary>
+            Delete page URL paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.TaskTypeEnum.UpdatePageUrlPaths">
+            <summary>
+            Update page URL paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.TaskTypeEnum.ChangePageUrlPathSlug">
+            <summary>
+            Change page URL path slug.
+            </summary>
+        </member>
         <member name="T:CMS.DataEngine.ILicenseService">
             <summary>
             Interface for check license 
@@ -27515,6 +27539,11 @@
             Determines how the system serializes objects of the given type from the database into XML files. Set through the properties of the <see cref="P:CMS.DataEngine.ObjectTypeInfo.SerializationSettings"/> class.
             </summary>
         </member>
+        <member name="P:CMS.DataEngine.ObjectTypeInfo.MacroSettings">
+            <summary>
+            Determines how the system processes macros contained in the fields of the given type. Set through the properties of the <see cref="T:CMS.DataEngine.MacroProcessingSettings"/> class.
+            </summary>
+        </member>
         <member name="P:CMS.DataEngine.ObjectTypeInfo.ContinuousIntegrationSettings">
             <summary>
             Determines how the object behaves within continuous integration. Set through the properties of the <see cref="P:CMS.DataEngine.ObjectTypeInfo.ContinuousIntegrationSettings"/> class.
@@ -28302,6 +28331,11 @@
             Gets the nice object type name for this type
             </summary>
         </member>
+        <member name="M:CMS.DataEngine.ObjectTypeInfo.RegisterColumns">
+            <summary>
+            Registers the Columns of this object
+            </summary>
+        </member>
         <member name="P:CMS.DataEngine.ObjectTypeInfo.Events">
             <summary>
             Events handled by object of this type
@@ -28558,6 +28592,24 @@
             <param name="columnName">The name of the foreign key column of the source object type that stores the IDs of the referenced objects</param>
             <param name="required">Determines how the system handles referential integrity and automatic removal of objects when a referenced object is deleted (Not required reference by default)</param>
         </member>
+        <member name="T:CMS.DataEngine.IMacroProcessingColumnAdapter">
+            <summary>
+            Represents a column adapter for macro processing that converts the value into a format understandable by macro engine via <see cref="M:CMS.DataEngine.IMacroProcessingColumnAdapter.Preprocess(System.String)"/> method (typically, decode or decrypt operation) 
+            and converts the text with resolved macros back to the original column format via  <see cref="M:CMS.DataEngine.IMacroProcessingColumnAdapter.Postprocess(System.String)"/> method (typically a corresponding complementary operation - encode or encrypt).
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.IMacroProcessingColumnAdapter.Preprocess(System.String)">
+            <summary>
+            Operation that is executed on <paramref name="text"/> before the value is processed by macro engine. 
+            Typically, decode or decrypt operation.
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.IMacroProcessingColumnAdapter.Postprocess(System.String)">
+            <summary>
+            A complementary operation to <see cref="M:CMS.DataEngine.IMacroProcessingColumnAdapter.Preprocess(System.String)"/> that brings <paramref name="text"/> with resolved macros back to the original column format before saving the value back to the object. 
+            Typically, encode or encrypt operation.
+            </summary>
+        </member>
         <member name="T:CMS.DataEngine.ImportExportSettings">
             <summary>
             Class representing export/import settings in the type information of objects.
@@ -28725,6 +28777,57 @@
             <summary>
             Creates the object from the given XML value
             </summary>
+        </member>
+        <member name="T:CMS.DataEngine.MacroProcessingSettings">
+            <summary>
+            Determines how the system processes macros in the object's fields.
+            </summary>
+            <remarks>
+            Use in the <see cref="P:CMS.DataEngine.ObjectTypeInfo.MacroSettings"/> property of ObjectTypeInfo.
+            </remarks>
+        </member>
+        <member name="P:CMS.DataEngine.MacroProcessingSettings.ContainsMacros">
+            <summary>
+            Indicates whether the object type has fields that can contain macro expressions in their values. Determines if objects are processed when resigning macros in the system.
+            True by default. You can set the value to False to optimize the performance of the resigning process (during manual resigning and upgrades).
+            Does not affect the resolving of macros.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.MacroProcessingSettings.MacroCollectionName">
+            <summary>
+            Gets or sets name of object collection used for the object type's data in the macro engine.
+            If not set, the <see cref="P:CMS.DataEngine.ObjectTypeInfo.ObjectClassName"/> is used by default.
+            </summary>
+            <remarks>
+            <para>
+            Should be set when info object belongs to <see cref="P:CMS.DataEngine.ObjectTypeManager.MainObjectTypes"/> and has more than 1 <see cref="T:CMS.DataEngine.ObjectTypeInfo"/>.
+            </para>
+            <para>
+            If <see cref="P:CMS.DataEngine.MacroProcessingSettings.MacroCollectionName"/> is set to 'cms.role' then macro intellisense supplies hint for user as 'Roles' because of
+            <see cref="M:CMS.DataEngine.InfoObjectRepository`3.GetNicePropertyName(System.String)"/> method used internally
+            by <see cref="T:CMS.DataEngine.InfoObjectRepository`3" />.
+            </para>
+            <para>
+            Value of this property is used in Kentico macro engine for acquiring objects of given type, e.g. SiteObjects.Roles or GlobalObjects.Roles.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:CMS.DataEngine.MacroProcessingSettings.CheckPermissions">
+            <summary>
+            Determines whether the system checks read permissions for the given module when accessing objects of the type in the macro engine. True by default.
+            The permissions are checked for the user who saved the macro, not the user viewing the result.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.MacroProcessingSettings.ColumnAdapters">
+            <summary>
+            Registers column adapters for fields, which value cannot be processed by macro engine right away and requires additional operations (decode, decrypt, etc.).
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.MacroProcessingSettings.#ctor(CMS.DataEngine.ObjectTypeInfo)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="objectTypeInfo">Related type information</param>
         </member>
         <member name="T:CMS.DataEngine.ObjectDependency">
             <summary>
@@ -29043,6 +29146,32 @@
             Copies the settings properties to another settings instance
             </summary>
             <param name="settings"></param>
+        </member>
+        <member name="T:CMS.DataEngine.XmlColumnMacroProcessingAdapter">
+            <summary>
+            Represents a column adapter for XML columns. Decodes the value in the preprocessing phase and encodes the value in the postprocessing phase.
+            </summary>
+            <seealso cref="P:CMS.DataEngine.ObjectTypeInfo.MacroSettings"/>
+        </member>
+        <member name="P:CMS.DataEngine.XmlColumnMacroProcessingAdapter.Instance">
+            <summary>
+            Instance of <see cref="T:CMS.DataEngine.XmlColumnMacroProcessingAdapter"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.XmlColumnMacroProcessingAdapter.#ctor">
+            <summary>
+            Constructor is private - singleton.
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.XmlColumnMacroProcessingAdapter.Preprocess(System.String)">
+            <summary>
+            Decodes the value of XML column before processing macros.
+            </summary>
+        </member>
+        <member name="M:CMS.DataEngine.XmlColumnMacroProcessingAdapter.Postprocess(System.String)">
+            <summary>
+            Encodes the text with processed macros back to the original XML format.
+            </summary>
         </member>
         <member name="T:CMS.DataEngine.TypeCondition">
             <summary>
@@ -29506,11 +29635,6 @@
         <member name="F:CMS.DataEngine.FeatureEnum.ObjectVersioning">
             <summary>
             Object versioning.
-            </summary>
-        </member>
-        <member name="F:CMS.DataEngine.FeatureEnum.HealthMonitoring">
-            <summary>
-            Health monitoring.
             </summary>
         </member>
         <member name="F:CMS.DataEngine.FeatureEnum.LeadScoring">
@@ -34061,11 +34185,6 @@
         <member name="F:CMS.DataEngine.PredefinedObjectType.ABTEST">
             <summary>
             Code name for tests.
-            </summary>
-        </member>
-        <member name="F:CMS.DataEngine.PredefinedObjectType.ABVARIANT">
-            <summary>
-            Code name for tests' variants.
             </summary>
         </member>
         <member name="F:CMS.DataEngine.PredefinedObjectType.ABVARIANTDATA">

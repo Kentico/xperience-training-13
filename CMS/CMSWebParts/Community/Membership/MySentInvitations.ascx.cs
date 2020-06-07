@@ -116,7 +116,7 @@ public partial class CMSWebParts_Community_Membership_MySentInvitations : CMSAbs
                     return MembershipContext.AuthenticatedUser.UserName;
                 }
 
-                UserInfo ui = UserInfoProvider.GetUserInfo(userID);
+                UserInfo ui = UserInfo.Provider.Get(userID);
                 if (ui != null)
                 {
                     return ui.UserName;

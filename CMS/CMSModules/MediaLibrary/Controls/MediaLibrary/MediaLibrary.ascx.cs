@@ -110,7 +110,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 return mLibraryInfo;
             }
 
-            mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+            mLibraryInfo = MediaLibraryInfo.Provider.Get(LibraryID);
             return mLibraryInfo;
         }
         set
@@ -129,7 +129,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         {
             if ((LibraryInfo != null) && (mLibrarySiteInfo == null))
             {
-                mLibrarySiteInfo = SiteInfoProvider.GetSiteInfo(LibraryInfo.LibrarySiteID);
+                mLibrarySiteInfo = SiteInfo.Provider.Get(LibraryInfo.LibrarySiteID);
             }
             return mLibrarySiteInfo;
         }
@@ -1552,7 +1552,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             string path = argArr[1];
             int mediaFileId = ValidationHelper.GetInteger(argArr[0], 0);
 
-            MediaFileInfo fileInfo = MediaFileInfoProvider.GetMediaFileInfo(mediaFileId);
+            MediaFileInfo fileInfo = MediaFileInfo.Provider.Get(mediaFileId);
             if (fileInfo != null)
             {
                 path = path.Replace('|', '/').Replace('>', '/');
@@ -1604,7 +1604,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             string path = argArr[1];
             int mediaFileId = ValidationHelper.GetInteger(argArr[0], 0);
 
-            MediaFileInfo mfi = MediaFileInfoProvider.GetMediaFileInfo(mediaFileId);
+            MediaFileInfo mfi = MediaFileInfo.Provider.Get(mediaFileId);
             if (mfi != null)
             {
                 path = GetFullFilePath(path.Replace('>', '\\'));
@@ -1781,7 +1781,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             Guid fileGuid = ValidationHelper.GetGuid(argArr[0], Guid.Empty);
             if (fileGuid != Guid.Empty)
             {
-                MediaFileInfo mfi = MediaFileInfoProvider.GetMediaFileInfo(fileGuid, LibrarySiteInfo.SiteName);
+                MediaFileInfo mfi = MediaFileInfo.Provider.Get(fileGuid, LibrarySiteInfo.SiteID);
                 if (mfi != null)
                 {
                     if (LastEditFileGuid == mfi.FileGUID && fileEdit.Visible && (fileEdit.FileID == mfi.FileID))
@@ -1907,7 +1907,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             if (deletedMediaFile != null)
             {
                 // Delete media file info and file
-                MediaFileInfoProvider.DeleteMediaFileInfo(deletedMediaFile);
+                MediaFileInfo.Provider.Delete(deletedMediaFile);
             }
             else
             {
@@ -2090,7 +2090,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         if (mfi != null)
         {
             // Delete media file info and file
-            MediaFileInfoProvider.DeleteMediaFileInfo(mfi);
+            MediaFileInfo.Provider.Delete(mfi);
         }
         else
         {

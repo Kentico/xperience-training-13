@@ -91,8 +91,8 @@ public partial class CMSModules_DataProtection_Pages_Consents_EditItem : CMSPage
 
     private bool HasExistingAgreement()
     {
-        return ConsentAgreementInfoProvider
-                .GetConsentAgreements()
+        return ConsentAgreementInfo.Provider
+                .Get()
                 .WhereEquals("ConsentAgreementConsentID", Consent.ConsentID)
                 .Count > 0;
     }

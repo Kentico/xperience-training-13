@@ -1,10 +1,7 @@
 ﻿using System;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.Core;
 using CMS.Helpers;
-using CMS.Membership;
 using CMS.UIControls;
 
 
@@ -12,20 +9,6 @@ public partial class CMSFormControls_LiveSelectors_InsertImageOrMedia_Tabs_Ancho
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        bool checkUI = ValidationHelper.GetBoolean(Service.Resolve<IAppSettingsService>()["CKEditor:PersonalizeToolbarOnLiveSite"], false);
-        if (checkUI)
-        {
-            // Check UIProfile
-            if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement("CMS.WYSIWYGEditor", "InsertLink"))
-            {
-                RedirectToUIElementAccessDenied("CMS.WYSIWYGEditor", "InsertLink");
-            }
-            else if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement("CMS.MediaDialog", "AnchorTab"))
-            {
-                RedirectToUIElementAccessDenied("CMS.MediaDialog", "AnchorTab");
-            }
-        }
-
         if (QueryHelper.ValidateHash("hash"))
         {
             ScriptHelper.RegisterJQuery(Page);

@@ -29,7 +29,7 @@ public partial class CMSModules_SMTPServers_Pages_Administration_Tab_Sites : CMS
             return;
         }
 
-        EditedObject = smtpServer = SMTPServerInfoProvider.GetSMTPServerInfo(smtpServerId);
+        EditedObject = smtpServer = SMTPServerInfo.Provider.Get(smtpServerId);
 
         if (!RequestHelper.IsPostBack())
         {
@@ -105,7 +105,7 @@ public partial class CMSModules_SMTPServers_Pages_Administration_Tab_Sites : CMS
     /// </summary>
     private void GetCurrentSites()
     {
-        DataSet serverSites = SMTPServerSiteInfoProvider.GetSMTPServerSites().WhereEquals("ServerID", smtpServer.ServerID).OrderBy("SiteID");
+        DataSet serverSites = SMTPServerSiteInfo.Provider.Get().WhereEquals("ServerID", smtpServer.ServerID).OrderBy("SiteID");
 
         if (!DataHelper.DataSourceIsEmpty(serverSites))
         {
@@ -148,7 +148,7 @@ public partial class CMSModules_SMTPServers_Pages_Administration_Tab_Sites : CMS
             {
                 foreach (string item in modifiedItems)
                 {
-                    SMTPServerSiteInfoProvider.RemoveSMTPServerFromSite(smtpServerId, ValidationHelper.GetInteger(item, 0));
+                    SMTPServerSiteInfo.Provider.Remove(smtpServerId, ValidationHelper.GetInteger(item, 0));
                 }
             }
         }
@@ -168,7 +168,7 @@ public partial class CMSModules_SMTPServers_Pages_Administration_Tab_Sites : CMS
             {
                 foreach (string item in modifiedItems)
                 {
-                    SMTPServerSiteInfoProvider.AddSMTPServerToSite(smtpServerId, ValidationHelper.GetInteger(item, 0));
+                    SMTPServerSiteInfo.Provider.Add(smtpServerId, ValidationHelper.GetInteger(item, 0));
                 }
             }
         }

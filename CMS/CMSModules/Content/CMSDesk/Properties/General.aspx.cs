@@ -278,7 +278,7 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
             lblDocID.Text = Convert.ToString(Node.DocumentID);
 
             // Culture
-            CultureInfo ci = CultureInfoProvider.GetCultureInfo(Node.DocumentCulture);
+            CultureInfo ci = CultureInfo.Provider.Get(Node.DocumentCulture);
             lblCulture.Text = ((ci != null) ? ResHelper.LocalizeString(ci.CultureName) : Node.DocumentCulture);
 
             if (Node.IsPublished)
@@ -362,7 +362,7 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
         if (userId > 0)
         {
             // Get the user object
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             if (ui != null)
             {
                 label.Text = HTMLHelper.HTMLEncode(ui.FullName);

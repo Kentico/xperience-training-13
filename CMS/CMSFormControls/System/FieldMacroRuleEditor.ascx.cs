@@ -192,7 +192,7 @@ public partial class CMSFormControls_System_FieldMacroRuleEditor : FormEngineUse
         // Init rule selector
         uniSelector.Value = mSelectedRuleName;
 
-        MacroRuleInfo mri = MacroRuleInfoProvider.GetMacroRuleInfo(mSelectedRuleName);
+        MacroRuleInfo mri = MacroRuleInfo.Provider.Get(mSelectedRuleName);
         if (mri != null)
         {
             // Show rule description
@@ -248,7 +248,7 @@ public partial class CMSFormControls_System_FieldMacroRuleEditor : FormEngineUse
         MacroRuleTree main = null;
         FieldMacroRule fmr = null;
 
-        MacroRuleInfo mri = MacroRuleInfoProvider.GetMacroRuleInfo(mSelectedRuleName);
+        MacroRuleInfo mri = MacroRuleInfo.Provider.Get(mSelectedRuleName);
         if (mri != null)
         {
             main = new MacroRuleTree();

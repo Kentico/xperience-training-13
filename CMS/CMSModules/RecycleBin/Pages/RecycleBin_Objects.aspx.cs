@@ -52,7 +52,7 @@ public partial class CMSModules_RecycleBin_Pages_RecycleBin_Objects : GlobalAdmi
 
         // Set site name to recycle bin control
         int siteId = ValidationHelper.GetInteger(siteSelector.Value, 0);
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo si = SiteInfo.Provider.Get(siteId);
         if (si != null)
         {
             recycleBin.SiteName = si.SiteName;

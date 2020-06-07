@@ -4,6 +4,11 @@
         <name>CMS.Modules</name>
     </assembly>
     <members>
+        <member name="T:CMS.ModuleLicenses.IModuleLicenseKeyInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.ModuleLicenses.ModuleLicenseKeyInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.ModuleLicenses.ModuleLicenseKeyInfo">
             <summary>
             ModuleLicenseKeyInfo data container class.
@@ -97,7 +102,7 @@
             <summary>
             Returns ModuleLicenseKeyInfo with specified GUID.
             </summary>
-            <param name="guid">ModuleLicenseKeyInfo GUID</param>                
+            <param name="guid">ModuleLicenseKeyInfo GUID</param>
         </member>
         <member name="M:CMS.ModuleLicenses.ModuleLicenseKeyInfoProvider.GetResourceModuleLicenseKeyInfos(System.Int32)">
             <summary>
@@ -223,6 +228,47 @@
             Returns data collection with count of licensed modules and count of all module license keys of all modules.
             </summary>
             <returns>Collected data</returns>
+        </member>
+        <member name="T:CMS.Modules.IResourceInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.ResourceInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Modules.IResourceSiteInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.ResourceSiteInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Modules.IResourceSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding structure.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.ResourceSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IResourceSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding structure.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.ResourceSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IResourceSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
+        <member name="M:CMS.Modules.IResourceSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
         </member>
         <member name="T:CMS.Modules.ResourceInfo">
             <summary>
@@ -505,6 +551,23 @@
             Returns all bindings between modules(resources) and sites.
             </summary>
         </member>
+        <member name="M:CMS.Modules.ResourceSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding structure.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.ResourceSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.ResourceSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding structure.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.ResourceSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Modules.ResourceSiteInfoProvider.GetResourceSiteInfo(System.Int32,System.Int32)">
             <summary>
             Returns the ResourceSiteInfo structure for the specified resourceSite.
@@ -524,12 +587,26 @@
             </summary>
             <param name="infoObj">ResourceSite object</param>
         </member>
+        <member name="M:CMS.Modules.ResourceSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="M:CMS.Modules.ResourceSiteInfoProvider.RemoveResourceFromSite(System.Int32,System.Int32)">
             <summary>
             Removes specified resource from site.
             </summary>
             <param name="resourceId">ResourceID</param>
             <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.Modules.ResourceSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.ResourceSiteInfo"/> binding.
+            </summary>
+            <param name="resourceId">Module ID.</param>
+            <param name="siteId">Site ID.</param>
         </member>
         <member name="M:CMS.Modules.ResourceSiteInfoProvider.AddResourceToSite(System.Int32,System.Int32)">
             <summary>
@@ -2341,6 +2418,47 @@
             <param name="targetFramework">Target framework (optional).</param>
             <returns>Target path built from given arguments.</returns>
         </member>
+        <member name="T:CMS.Modules.IPermissionNameInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.PermissionNameInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Modules.IRolePermissionInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.RolePermissionInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Modules.IRolePermissionInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRolePermissionInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRolePermissionInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RolePermissionInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
+        <member name="M:CMS.Modules.IRolePermissionInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RolePermissionInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
         <member name="T:CMS.Modules.PermissionNameInfo">
             <summary>
             Permission info data container.
@@ -2767,6 +2885,23 @@
             Returns all role permissions.
             </summary>
         </member>
+        <member name="M:CMS.Modules.RolePermissionInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.RolePermissionInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RolePermissionInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RolePermissionInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Modules.RolePermissionInfoProvider.GetRolePermissionInfo(System.Int32,System.Int32)">
             <summary>
             Returns the RolePermissionInfo structure for the specified rolePermission.
@@ -2779,6 +2914,13 @@
             Sets (updates or inserts) specified rolePermission.
             </summary>
             <param name="rolePermission">RolePermission to set</param>
+        </member>
+        <member name="M:CMS.Modules.RolePermissionInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RolePermissionInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
         </member>
         <member name="M:CMS.Modules.RolePermissionInfoProvider.SetRolePermissionInfo(System.Int32,System.Int32)">
             <summary>
@@ -2793,6 +2935,13 @@
             </summary>
             <param name="infoObj">RolePermission object</param>
         </member>
+        <member name="M:CMS.Modules.RolePermissionInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RolePermissionInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="permissionId">Permission ID.</param>
+        </member>
         <member name="M:CMS.Modules.RolePermissionInfoProvider.DeleteRolePermissionInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified rolePermission.
@@ -2806,6 +2955,11 @@
             </summary>
             <param name="roleId">RoleID</param>
             <param name="permissionId">PermissionID</param>
+        </member>
+        <member name="T:CMS.Modules.IResourceLibraryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.ResourceLibraryInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.Modules.ResourceLibraryInfo">
             <summary>
@@ -3256,6 +3410,88 @@
             </summary>
             <param name="id">HelpTopicInfo ID</param>
         </member>
+        <member name="T:CMS.Modules.IHelpTopicInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.HelpTopicInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.Modules.IRoleApplicationInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.RoleApplicationInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Modules.IRoleApplicationInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RoleApplicationInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRoleApplicationInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RoleApplicationInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRoleApplicationInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
+        <member name="M:CMS.Modules.IRoleApplicationInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
+        <member name="T:CMS.Modules.IRoleUIElementInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.RoleUIElementInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Modules.IRoleUIElementInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RoleUIElementInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRoleUIElementInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RoleUIElementInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.IRoleUIElementInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
+        <member name="M:CMS.Modules.IRoleUIElementInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
+        <member name="T:CMS.Modules.IUIElementInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.Modules.UIElementInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.Modules.RoleApplicationInfo">
             <summary>
             RoleApplicationInfo data container class.
@@ -3312,12 +3548,29 @@
             Returns all RoleApplicationInfo bindings.
             </summary>
         </member>
+        <member name="M:CMS.Modules.RoleApplicationInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RoleApplicationInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.RoleApplicationInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RoleApplicationInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.GetRoleApplicationInfo(System.Int32,System.Int32)">
             <summary>
             Returns RoleApplicationInfo binding structure.
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>  
+            <param name="uielementId">UI element ID</param>
         </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.SetRoleApplicationInfo(CMS.Modules.RoleApplicationInfo)">
             <summary>
@@ -3331,19 +3584,33 @@
             </summary>
             <param name="infoObj">RoleApplicationInfo object</param>
         </member>
+        <member name="M:CMS.Modules.RoleApplicationInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.RemoveRoleFromUIelement(System.Int32,System.Int32)">
             <summary>
             Deletes RoleApplicationInfo binding.
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>  
+            <param name="uielementId">UI element ID</param>
+        </member>
+        <member name="M:CMS.Modules.RoleApplicationInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RoleApplicationInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
         </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.AddRoleToUIelement(System.Int32,System.Int32)">
             <summary>
             Creates RoleApplicationInfo binding. 
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>   
+            <param name="uielementId">UI element ID</param>
         </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.GetRoleApplicationInfoInternal(System.Int32,System.Int32)">
             <summary>
@@ -3351,21 +3618,21 @@
             Null if binding doesn't exist.
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>  
+            <param name="uielementId">UI element ID</param>
         </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.RemoveRoleFromUIelementInternal(System.Int32,System.Int32)">
             <summary>
             Deletes RoleApplicationInfo binding.
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>  
+            <param name="uielementId">UI element ID</param>
         </member>
         <member name="M:CMS.Modules.RoleApplicationInfoProvider.AddRoleToUIelementInternal(System.Int32,System.Int32)">
             <summary>
             Creates RoleApplicationInfo binding. 
             </summary>
             <param name="roleId">Role ID</param>
-            <param name="uielementId">UI element ID</param>   
+            <param name="uielementId">UI element ID</param>
         </member>
         <member name="T:CMS.Modules.RoleUIElementInfo">
             <summary>
@@ -3422,6 +3689,23 @@
             Returns all role UI elements.
             </summary>
         </member>
+        <member name="M:CMS.Modules.RoleUIElementInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.Modules.RoleUIElementInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.Modules.RoleUIElementInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.Modules.RoleUIElementInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.Modules.RoleUIElementInfoProvider.GetRoleUIElementInfo(System.Int32,System.Int32)">
             <summary>
             Returns the RoleUIElementInfo structure for the specified role UI element.
@@ -3441,12 +3725,26 @@
             </summary>
             <param name="infoObj">RoleUIElement object</param>
         </member>
+        <member name="M:CMS.Modules.RoleUIElementInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
+        </member>
         <member name="M:CMS.Modules.RoleUIElementInfoProvider.DeleteRoleUIElementInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified role UI Element.
             </summary>
             <param name="roleId">RoleID</param>
             <param name="elementId">ElementID</param>
+        </member>
+        <member name="M:CMS.Modules.RoleUIElementInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.Modules.RoleUIElementInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="uiElementId">UI element ID.</param>
         </member>
         <member name="M:CMS.Modules.RoleUIElementInfoProvider.AddRoleUIElementInfo(System.Int32,System.Int32)">
             <summary>
@@ -3720,14 +4018,6 @@
             Constructor, creates an empty UIElementInfo object from the given DataRow data.
             </summary>
             <param name="dr">Datarow with the class info data</param>
-        </member>
-        <member name="M:CMS.Modules.UIElementInfo.RemoveObjectDependencies(System.Boolean,System.Boolean)">
-            <summary>
-            Removes object dependencies. Removes ad-hoc page templates that are used in UIElement.
-            </summary>
-            <param name="deleteAll">If false, only required dependencies are deleted, dependencies with default value are replaced with default value and nullable values are replaced with null</param>
-            <param name="clearHashtables">If true, hashtables of all objecttypes which were potentially modified are cleared</param>
-            <remarks>UI ad-hoc templates are inside UIElement because they extend it from the page template side of view.</remarks>
         </member>
         <member name="M:CMS.Modules.UIElementInfo.BuildObjectPath(System.String,System.String,System.String,System.String,System.Int32@)">
             <summary>

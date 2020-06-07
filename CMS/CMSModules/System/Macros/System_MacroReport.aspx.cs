@@ -190,7 +190,7 @@ public partial class CMSModules_System_Macros_System_MacroReport : GlobalAdminPa
             Action<DataRow> collectMacros = dr =>
             {
                 // Process all expressions
-                MacroProcessor.ProcessMacros(new DataRowContainer(dr), (context, colName) =>
+                MacroProcessor.ProcessMacros(new DataRowContainer(dr), typeInfo, (context, colName) =>
                 {
                     // Get original macro text with hash
                     var expression = context.GetOriginalExpression();
@@ -199,11 +199,11 @@ public partial class CMSModules_System_Macros_System_MacroReport : GlobalAdminPa
                     string originalExpression = MacroProcessor.RemoveMacroBrackets(expression, out _);
                     string processedExpression = context.Expression;
 
-                    // Decode macro from XML if needed
-                    if (MacroProcessor.IsXMLColumn(colName))
+                    var columnAdapter = context.GetMacroProcessingColumnAdapter();
+                    if (columnAdapter != null)
                     {
-                        originalExpression = HTMLHelper.HTMLDecode(originalExpression);
-                        processedExpression = HTMLHelper.HTMLDecode(processedExpression);
+                        originalExpression = columnAdapter.Preprocess(originalExpression);
+                        processedExpression = columnAdapter.Preprocess(processedExpression);
                     }
 
                     MacroExpr e = null;

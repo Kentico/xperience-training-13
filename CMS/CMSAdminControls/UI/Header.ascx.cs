@@ -308,7 +308,7 @@ function CheckChanges() {
     {
         // Create URL
         int siteId = ValidationHelper.GetInteger(siteSelector.Value, 0);
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo si = SiteInfo.Provider.Get(siteId);
         if (si != null)
         {
             string domain = si.DomainName.TrimEnd('/');
@@ -325,7 +325,7 @@ function CheckChanges() {
             // Check if single sign-on is turned on
             if (SettingsKeyInfoProvider.GetBoolValue("CMSAutomaticallySignInUser"))
             {
-                var user = UserInfoProvider.GetUserInfo(MembershipContext.AuthenticatedUser.UserID);
+                var user = UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
                 url = AuthenticationHelper.GetUserAuthenticationUrl(user, url);
             }
 

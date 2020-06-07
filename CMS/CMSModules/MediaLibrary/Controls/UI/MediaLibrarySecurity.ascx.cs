@@ -42,7 +42,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
         {
             if ((mLibraryInfo == null) && (MediaLibraryID > 0))
             {
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(MediaLibraryID);
             }
             return mLibraryInfo;
         }
@@ -58,7 +58,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
         {
             if (mResLibrary == null)
             {
-                mResLibrary = ResourceInfoProvider.GetResourceInfo("CMS.MediaLibrary");
+                mResLibrary = ResourceInfo.Provider.Get("CMS.MediaLibrary");
             }
             return mResLibrary;
         }
@@ -399,11 +399,11 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
         {
             if (allow)
             {
-                MediaLibraryRolePermissionInfoProvider.AddRoleToLibrary(roleId, MediaLibraryID, permissionId);
+                MediaLibraryRolePermissionInfo.Provider.Add(MediaLibraryID, roleId, permissionId);
             }
             else
             {
-                MediaLibraryRolePermissionInfoProvider.RemoveRoleFromLibrary(roleId, MediaLibraryID, permissionId);
+                MediaLibraryRolePermissionInfo.Provider.Remove(MediaLibraryID, roleId, permissionId);
             }
         }
     }
@@ -465,7 +465,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
                 }
 
                 // Save changes to the library
-                MediaLibraryInfoProvider.SetMediaLibraryInfo(LibraryInfo);
+                MediaLibraryInfo.Provider.Set(LibraryInfo);
             }
         }
     }

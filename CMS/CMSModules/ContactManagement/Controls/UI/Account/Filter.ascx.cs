@@ -253,8 +253,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Account_Filter : C
 
         // Query with AccountInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = AccountInfo.Provider.Get()
-            .WhereIn("AccountCountryID", CountryInfoProvider
-                .GetCountries()
+            .WhereIn("AccountCountryID", CountryInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(CountryInfo.TYPEINFO.IDColumn)
             );
@@ -282,8 +282,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Account_Filter : C
 
         // Query with AccountInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = AccountInfo.Provider.Get()
-            .WhereIn("AccountOwnerUserID", UserInfoProvider
-                .GetUsers()
+            .WhereIn("AccountOwnerUserID", UserInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(UserInfo.TYPEINFO.IDColumn)
             );
@@ -311,8 +311,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_Account_Filter : C
 
         // Query with AccountInfo context has to be used in order to be able to determine DB context of the query (otherwise the materialization would not perform).
         var query = AccountInfo.Provider.Get()
-            .WhereIn("AccountStateID", StateInfoProvider
-                .GetStates()
+            .WhereIn("AccountStateID", StateInfo.Provider
+                .Get()
                 .Where(originalQuery)
                 .Column(StateInfo.TYPEINFO.IDColumn)
             );

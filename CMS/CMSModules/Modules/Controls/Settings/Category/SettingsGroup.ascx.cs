@@ -83,8 +83,8 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsGroup
             }
             else
             {
-                ResourceInfo currentModule = ResourceInfoProvider.GetResourceInfo(ModuleID);
-                ResourceInfo categoryModule = ResourceInfoProvider.GetResourceInfo(Category.CategoryResourceID);
+                ResourceInfo currentModule = ResourceInfo.Provider.Get(ModuleID);
+                ResourceInfo categoryModule = ResourceInfo.Provider.Get(Category.CategoryResourceID);
 
                 // Show warning if current module is in development mode, if not global warning is shown on the top of page
                 if ((categoryModule != null) && (currentModule != null) && currentModule.ResourceIsInDevelopment)

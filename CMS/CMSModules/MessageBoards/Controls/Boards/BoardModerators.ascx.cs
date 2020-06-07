@@ -223,7 +223,7 @@ public partial class CMSModules_MessageBoards_Controls_Boards_BoardModerators : 
             return currentValues;
         }
         
-        var userIds = UserInfoProvider.GetUsers()
+        var userIds = UserInfo.Provider.Get()
                     .Column("UserID")
                     .WhereIn("UserID", new IDQuery<BoardModeratorInfo>("UserID").WhereEquals("BoardID", BoardID))
                     .GetListResult<int>();

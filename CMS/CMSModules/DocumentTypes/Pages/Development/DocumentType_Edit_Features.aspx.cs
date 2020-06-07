@@ -70,7 +70,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
 
     private bool ExistsPageCreatedOnPageType()
     {
-        return DocumentNodeDataInfoProvider.GetDocumentNodes()
+        return DocumentNodeDataInfo.Provider.Get()
             .WhereEquals("NodeClassID", DocumentType.ClassID)
             .Count > 0;
     }

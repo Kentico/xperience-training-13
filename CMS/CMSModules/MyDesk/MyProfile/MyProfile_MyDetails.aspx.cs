@@ -17,7 +17,7 @@ public partial class CMSModules_MyDesk_MyProfile_MyProfile_MyDetails : CMSConten
         base.OnInit(e);
 
         // Get up-to-date info of current user and use it for the form
-        var user = UserInfoProvider.GetUserInfo(CurrentUser.UserID);
+        var user = UserInfo.Provider.Get(CurrentUser.UserID);
         if (user != null)
         {
             editProfileForm.Info = user.Clone();

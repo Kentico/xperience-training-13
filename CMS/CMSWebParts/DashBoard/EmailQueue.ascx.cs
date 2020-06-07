@@ -204,7 +204,7 @@ public partial class CMSWebParts_DashBoard_EmailQueue : CMSAbstractWebPart
         string whereCond = "";
 
         // Append site condition if siteid given
-        SiteInfo siteObj = SiteInfoProvider.GetSiteInfo(SiteName);
+        SiteInfo siteObj = SiteInfo.Provider.Get(SiteName);
         int siteId = -1;
 
         if (siteObj != null)

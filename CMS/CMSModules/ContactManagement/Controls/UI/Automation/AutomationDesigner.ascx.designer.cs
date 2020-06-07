@@ -22,51 +22,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
     protected global::CMSAdminControls_UI_WebServiceChecker serviceChecker;
 
     /// <summary>
-    /// pnlHeader control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlHeader;
-
-    /// <summary>
-    /// pnlState control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlState;
-
-    /// <summary>
-    /// icnState control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel icnState;
-
-    /// <summary>
-    /// lblState control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblState;
-
-    /// <summary>
-    /// btnToggleState control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSButton btnToggleState;
-
-    /// <summary>
     /// pnlAutosaveWrapper control.
     /// </summary>
     /// <remarks>

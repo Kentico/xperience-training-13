@@ -11516,7 +11516,7 @@
         </member>
         <member name="M:CMS.Ecommerce.IMultiBuyDiscountsService.EvaluateDiscounts(System.Collections.Generic.IEnumerable{CMS.Ecommerce.MultiBuyItem},CMS.Ecommerce.DiscountsParameters,CMS.Ecommerce.IMultiBuyDiscountsApplicator)">
             <summary>
-            Evaluates multibuy discounts specified by the <paramref name="parameters"/> on the given <paramref name="items"/> collection 
+            Evaluates multibuy discounts specified by the <paramref name="parameters"/> on the given <paramref name="items"/> collection
             using the <paramref name="applicator"/>.
             </summary>
             <param name="items">Items to be evaluated.</param>
@@ -13844,9 +13844,19 @@
             Gets strongly typed payment result.
             </summary>
         </member>
+        <member name="P:CMS.Ecommerce.CMSAuthorizeNetProvider.CountryInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.
+            </summary>
+        </member>
         <member name="P:CMS.Ecommerce.CMSAuthorizeNetProvider.CustomerInfoProvider">
             <summary>
             Gets the provider for <see cref="T:CMS.Ecommerce.CustomerInfo"/> management.
+            </summary>
+        </member>
+        <member name="P:CMS.Ecommerce.CMSAuthorizeNetProvider.StateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.StateInfo"/> management.
             </summary>
         </member>
         <member name="M:CMS.Ecommerce.CMSAuthorizeNetProvider.CreatePaymentResultInfo">
@@ -14333,9 +14343,19 @@
             Returns instance of <see cref="T:CMS.Ecommerce.TaxCalculationRequest"/> needed for further tax calculation.
             </summary>
         </member>
+        <member name="P:CMS.Ecommerce.CMSPayPalProvider.CountryInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.
+            </summary>
+        </member>
         <member name="P:CMS.Ecommerce.CMSPayPalProvider.CustomerInfoProvider">
             <summary>
             Gets the provider for <see cref="T:CMS.Ecommerce.CustomerInfo"/> management.
+            </summary>
+        </member>
+        <member name="P:CMS.Ecommerce.CMSPayPalProvider.StateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.StateInfo"/> management.
             </summary>
         </member>
         <member name="P:CMS.Ecommerce.CMSPayPalProvider.PayPalPaymentResult">
@@ -16937,7 +16957,7 @@
             Represents a service providing current shopping cart functionality.
             </summary>
         </member>
-        <member name="M:CMS.Ecommerce.CurrentShoppingCartService.#ctor(CMS.Ecommerce.ICurrentShoppingCartStrategy,CMS.Ecommerce.IShoppingCartRepository,CMS.Ecommerce.IShoppingCartFactory,CMS.Ecommerce.IShoppingCartCache,CMS.Ecommerce.IShoppingCartClientStorage,CMS.Ecommerce.IShoppingCartSession)">
+        <member name="M:CMS.Ecommerce.CurrentShoppingCartService.#ctor(CMS.Ecommerce.ICurrentShoppingCartStrategy,CMS.Ecommerce.IShoppingCartRepository,CMS.Ecommerce.IShoppingCartFactory,CMS.Ecommerce.IShoppingCartCache,CMS.Ecommerce.IShoppingCartClientStorage,CMS.Ecommerce.IShoppingCartSession,CMS.Base.Internal.IHttpContextRetriever)">
             <summary>
             Constructor. Creates new instance of <see cref="T:CMS.Ecommerce.CurrentShoppingCartService"/>.
             </summary>
@@ -16947,6 +16967,7 @@
             <param name="cartFactory">Factory used to create new shopping cart when visitor has no cart.</param>
             <param name="cartStrategy">Strategy used for evaluation of candidate shopping cart and its preparation for use.</param>
             <param name="cartRepository">Persistent storage of shopping cart objects.</param>
+            <param name="httpContextRetriever">Retrieves IHttpContext of current request.</param>
         </member>
         <member name="M:CMS.Ecommerce.CurrentShoppingCartService.GetCurrentShoppingCart(CMS.Membership.UserInfo,CMS.DataEngine.SiteInfoIdentifier)">
             <summary>
@@ -17354,6 +17375,12 @@
             <summary>
             Represents a shopping cart cache.
             </summary>
+        </member>
+        <member name="M:CMS.Ecommerce.ShoppingCartCache.#ctor(CMS.Base.Internal.IHttpContextRetriever)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Ecommerce.ShoppingCartCache"/> class.
+            </summary>
+            <param name="httpContextRetriever">The HTTP context retriever.</param>
         </member>
         <member name="M:CMS.Ecommerce.ShoppingCartCache.GetCart">
             <summary>
@@ -23303,6 +23330,11 @@
             If started as global scheduled task, it sends notifications about expiring e-products on all sites.
             </summary>
         </member>
+        <member name="P:CMS.Ecommerce.EProductReminder.EmailTemplateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.EmailEngine.EmailTemplateInfo"/> management.
+            </summary>
+        </member>
         <member name="P:CMS.Ecommerce.EProductReminder.OrderItemInfoProvider">
             <summary>
             Gets the provider for <see cref="T:CMS.Ecommerce.OrderItemInfo"/> management.
@@ -23491,11 +23523,12 @@
             Provides functionality for customer and user management while working with shopping cart.
             </summary>
         </member>
-        <member name="M:CMS.Ecommerce.CustomerShoppingService.#ctor(CMS.Ecommerce.ICustomerRegistrationRepositoryFactory)">
+        <member name="M:CMS.Ecommerce.CustomerShoppingService.#ctor(CMS.Ecommerce.ICustomerRegistrationRepositoryFactory,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Ecommerce.CustomerShoppingService"/> class.
             </summary>
             <param name="customerRegistrationRepositoryFactory"></param>
+            <param name="siteInfoProvider">Provider for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.</param>
         </member>
         <member name="M:CMS.Ecommerce.CustomerShoppingService.AutoRegisterCustomer(CMS.Ecommerce.CustomerInfo)">
             <summary>
@@ -23750,7 +23783,7 @@
             Provides interaction with shopping cart.
             </summary>
         </member>
-        <member name="M:CMS.Ecommerce.ShoppingService.#ctor(CMS.Ecommerce.IEcommerceActivityLogger,CMS.Ecommerce.ICartItemChecker,CMS.Ecommerce.ICurrentShoppingCartService,CMS.Ecommerce.ICustomerShoppingService,CMS.Ecommerce.IShoppingCartAdapterService,CMS.Ecommerce.IShippingPriceService,CMS.Ecommerce.IAddressInfoProvider,CMS.Ecommerce.ICustomerInfoProvider,CMS.Ecommerce.IPaymentOptionInfoProvider,CMS.Ecommerce.IShippingOptionInfoProvider,CMS.Ecommerce.IShoppingCartInfoProvider,CMS.Ecommerce.IShoppingCartItemInfoProvider,CMS.Ecommerce.ISKUInfoProvider)">
+        <member name="M:CMS.Ecommerce.ShoppingService.#ctor(CMS.Ecommerce.IEcommerceActivityLogger,CMS.Ecommerce.ICartItemChecker,CMS.Ecommerce.ICurrentShoppingCartService,CMS.Ecommerce.ICustomerShoppingService,CMS.Ecommerce.IShoppingCartAdapterService,CMS.Ecommerce.IShippingPriceService,CMS.Ecommerce.IAddressInfoProvider,CMS.Ecommerce.ICustomerInfoProvider,CMS.Ecommerce.IPaymentOptionInfoProvider,CMS.Ecommerce.IShippingOptionInfoProvider,CMS.Ecommerce.IShoppingCartInfoProvider,CMS.Ecommerce.IShoppingCartItemInfoProvider,CMS.Ecommerce.ISKUInfoProvider,CMS.Globalization.ICountryInfoProvider,CMS.Globalization.IStateInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Ecommerce.ShoppingService"/> class with supplied activity logger.
             </summary>
@@ -23767,6 +23800,8 @@
             <param name="shoppingCartInfoProvider">Provider for <see cref="T:CMS.Ecommerce.ShoppingCartInfo"/> management.</param>
             <param name="shoppingCartItemInfoProvider">Provider for <see cref="T:CMS.Ecommerce.ShoppingCartItemInfo"/> management.</param>
             <param name="skuInfoProvider">Provider for <see cref="T:CMS.Ecommerce.SKUInfo"/> management.</param>
+            <param name="countryInfoProvider">Provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.</param>
+            <param name="stateInfoProvider">Provider for <see cref="T:CMS.Globalization.StateInfo"/> management.</param>
         </member>
         <member name="M:CMS.Ecommerce.ShoppingService.GetCurrentShoppingCart">
             <summary>
@@ -24679,6 +24714,16 @@
             Gets shopping cart this validator was initialized for.
             </summary>
         </member>
+        <member name="P:CMS.Ecommerce.CartAddressesValidator.CountryInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.
+            </summary>
+        </member>
+        <member name="P:CMS.Ecommerce.CartAddressesValidator.StateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.StateInfo"/> management.
+            </summary>
+        </member>
         <member name="P:CMS.Ecommerce.CartAddressesValidator.Errors">
             <summary>
             Gets an enumeration of validation errors associated with this validator. An empty enumeration is returned
@@ -24691,11 +24736,13 @@
             </summary>
             <exception cref="T:System.InvalidOperationException">Thrown when <see cref="M:CMS.Ecommerce.CartAddressesValidator.Validate"/> has not been called yet.</exception>
         </member>
-        <member name="M:CMS.Ecommerce.CartAddressesValidator.#ctor(CMS.Ecommerce.ShoppingCartInfo)">
+        <member name="M:CMS.Ecommerce.CartAddressesValidator.#ctor(CMS.Ecommerce.ShoppingCartInfo,CMS.Globalization.ICountryInfoProvider,CMS.Globalization.IStateInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Ecommerce.CartAddressesValidator"/> class for given <paramref name="cart"/>.
             </summary>
             <param name="cart">Shopping cart for which to perform the validation.</param>
+            <param name="countryInfoProvider">Provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.</param>
+            <param name="stateInfoProvider">Provider for <see cref="T:CMS.Globalization.StateInfo"/> management.</param>
         </member>
         <member name="M:CMS.Ecommerce.CartAddressesValidator.Validate">
             <summary>
@@ -24773,12 +24820,24 @@
             Gets the provider for <see cref="T:CMS.Ecommerce.SKUInfo"/> management.
             </summary>
         </member>
-        <member name="M:CMS.Ecommerce.CreateOrderValidator.#ctor(CMS.Ecommerce.ShoppingCartInfo,CMS.Ecommerce.ISKUInfoProvider)">
+        <member name="P:CMS.Ecommerce.CreateOrderValidator.CountryInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.
+            </summary>
+        </member>
+        <member name="P:CMS.Ecommerce.CreateOrderValidator.StateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.StateInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Ecommerce.CreateOrderValidator.#ctor(CMS.Ecommerce.ShoppingCartInfo,CMS.Ecommerce.ISKUInfoProvider,CMS.Globalization.ICountryInfoProvider,CMS.Globalization.IStateInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Ecommerce.CreateOrderValidator"/> class for given <paramref name="cart"/>.
             </summary>
             <param name="cart">Shopping cart for which to perform the validation.</param>
             <param name="skuInfoProvider">Provider for <see cref="T:CMS.Ecommerce.SKUInfo"/> management.</param>
+            <param name="countryInfoProvider">Provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.</param>
+            <param name="stateInfoProvider">Provider for <see cref="T:CMS.Globalization.StateInfo"/> management.</param>
         </member>
         <member name="M:CMS.Ecommerce.CreateOrderValidator.Validate">
             <summary>
@@ -24842,11 +24901,23 @@
             Gets address this validator was initialized for.
             </summary>
         </member>
-        <member name="M:CMS.Ecommerce.CustomerAddressValidator.#ctor(CMS.Ecommerce.AddressInfo)">
+        <member name="P:CMS.Ecommerce.CustomerAddressValidator.CountryInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.
+            </summary>
+        </member>
+        <member name="P:CMS.Ecommerce.CustomerAddressValidator.StateInfoProvider">
+            <summary>
+            Gets the provider for <see cref="T:CMS.Globalization.StateInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.Ecommerce.CustomerAddressValidator.#ctor(CMS.Ecommerce.AddressInfo,CMS.Globalization.ICountryInfoProvider,CMS.Globalization.IStateInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Ecommerce.CustomerAddressValidator"/> class.
             </summary>
             <param name="address"><see cref="T:CMS.Ecommerce.AddressInfo"/> object representing a customer address that is validated.</param>
+            <param name="countryInfoProvider">Provider for <see cref="T:CMS.Globalization.CountryInfo"/> management.</param>
+            <param name="stateInfoProvider">Provider for <see cref="T:CMS.Globalization.StateInfo"/> management.</param>
         </member>
         <member name="M:CMS.Ecommerce.CustomerAddressValidator.Validate">
             <summary>

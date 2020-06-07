@@ -750,6 +750,9 @@
             <summary>
             E-mail addresses that have been already added to the queue. Used to remove duplicates throughout different subscriber types.
             </summary>
+            <remarks>
+            Used only for <see cref="F:CMS.Newsletters.EmailCommunicationTypeEnum.Newsletter"/> issue type when issue is being sent to all subscribers (<see cref="M:CMS.Newsletters.EmailQueueManager.GenerateEmails(CMS.Newsletters.IssueInfo)"/>).
+            </remarks>
         </member>
         <member name="T:CMS.Newsletters.GenerateQueueItemsHandler">
             <summary>
@@ -1108,7 +1111,7 @@
             Ratio of <see cref="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.OpenedEmails"/> to <see cref="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.DeliveredEmails"/>.
             </summary>
         </member>
-        <member name="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.UniqueClickThroughRatio">
+        <member name="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.UniqueClickRatio">
             <summary>
             Ratio of unique clicks on email links (<see cref="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.UniqueClicks"/>) to <see cref="P:CMS.Newsletters.Internal.IIssueStatisticsCalculator.DeliveredEmails"/>.
             </summary>
@@ -1160,7 +1163,7 @@
             Ratio of <see cref="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.OpenedEmails"/> to <see cref="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.DeliveredEmails"/>.
             </summary>
         </member>
-        <member name="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.UniqueClickThroughRatio">
+        <member name="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.UniqueClickRatio">
             <summary>
             Ratio of unique clicks on email links (<see cref="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.UniqueClicks"/>) to <see cref="P:CMS.Newsletters.Internal.IssueStatisticsCalculator.DeliveredEmails"/>.
             </summary>
@@ -1886,12 +1889,6 @@
             <param name="email">Email of the contact</param>
             <returns>Contact ID of found <see cref="T:CMS.ContactManagement.ContactInfo"/></returns>
         </member>
-        <member name="M:CMS.Newsletters.NewsletterHandlers.GetValueOrNull(System.Collections.Generic.IDictionary{System.String,Microsoft.Extensions.Primitives.StringValues},System.String)">
-            <summary>
-            Returns value of <paramref name="key"/> from <paramref name="dict"/> or
-            <see langword="null"/> if key was not found.
-            </summary>
-        </member>
         <member name="T:CMS.Newsletters.NewsletterModule">
             <summary>
             Represents the Newsletter module.
@@ -2026,6 +2023,11 @@
         <member name="T:CMS.Newsletters.EmailCampaignEmailGenerator">
             <summary>
             Provides method for generating emails for given <see cref="T:CMS.Newsletters.IssueInfo"/>.
+            </summary>
+        </member>
+        <member name="F:CMS.Newsletters.EmailCampaignEmailGenerator.mBatchSize">
+            <summary>
+            Batch-size for recipients generation process.
             </summary>
         </member>
         <member name="M:CMS.Newsletters.EmailCampaignEmailGenerator.GenerateEmailsForIssue(System.Data.DataTable,CMS.Newsletters.IssueInfo)">
@@ -2341,6 +2343,11 @@
             <param name="bounceLimit">Limit for bounced e-mails</param>
             <param name="generatedEmails">E-mails addresses that are to be ignored (that have already been generated)</param>
             <param name="emailAddressBlocker">Every email will be checked using this email address blocker before it is added to the email queue</param>
+        </member>
+        <member name="M:CMS.Newsletters.EmailQueueManager.GetRecipientsBatchSize">
+            <summary>
+            Returns batch-size for recipients generation process.
+            </summary>
         </member>
         <member name="M:CMS.Newsletters.EmailQueueManager.GenerateDynamicIssue(System.Int32)">
             <summary>
@@ -3620,7 +3627,7 @@
             Class for sending newsletter issues confirmation.
             </summary>
         </member>
-        <member name="M:CMS.Newsletters.ConfirmationSender.#ctor(CMS.Newsletters.INewsletterInfoProvider,CMS.Newsletters.IEmailTemplateInfoProvider,CMS.Newsletters.ISubscriberInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider)">
+        <member name="M:CMS.Newsletters.ConfirmationSender.#ctor(CMS.Newsletters.INewsletterInfoProvider,CMS.Newsletters.IEmailTemplateInfoProvider,CMS.Newsletters.ISubscriberInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Newsletters.ConfirmationSender"/> class.
             </summary>
@@ -3628,7 +3635,10 @@
             <param name="emailTemplateInfoProvider">Provider for <see cref="T:CMS.Newsletters.EmailTemplateInfo"/> management.</param>
             <param name="subscriberInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberInfo"/> management.</param>
             <param name="subscriberNewsletterInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberNewsletterInfo"/> management.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="newsletterInfoProvider"/>, <paramref name="emailTemplateInfoProvider"/> or <paramref name="subscriberInfoProvider"/> is null.</exception>
+            <param name="siteInfoProvider">Provider for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="newsletterInfoProvider"/>, <paramref name="emailTemplateInfoProvider"/>, <paramref name="subscriberInfoProvider"/>
+            or <paramref name="siteInfoProvider"/> is null.
+            </exception>
         </member>
         <member name="M:CMS.Newsletters.ConfirmationSender.SendConfirmationEmail(System.Boolean,System.Int32,System.Int32)">
             <summary>
@@ -4697,22 +4707,24 @@
             Service retrieving URLs for issue content.
             </summary>
         </member>
-        <member name="M:CMS.Newsletters.IssueUrlService.#ctor(CMS.Newsletters.IIssueInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider)">
+        <member name="M:CMS.Newsletters.IssueUrlService.#ctor(CMS.Newsletters.IIssueInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
             Creates an instance of <see cref="T:CMS.Newsletters.IssueUrlService"/> class.
             </summary>
             <param name="issueInfoProvider">Provider for <see cref="T:CMS.Newsletters.IssueInfo"/> management.</param>
             <param name="subscriberNewsletterInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberNewsletterInfo"/> management.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="issueInfoProvider"/> or <paramref name="subscriberNewsletterInfoProvider"/> is null.</exception>
+            <param name="siteInfoProvider">Provider for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="issueInfoProvider"/>, <paramref name="subscriberNewsletterInfoProvider"/> or <paramref name="siteInfoProvider"/> is null.</exception>
         </member>
-        <member name="M:CMS.Newsletters.IssueUrlService.#ctor(CMS.Newsletters.IIssueInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,System.DateTime)">
+        <member name="M:CMS.Newsletters.IssueUrlService.#ctor(CMS.Newsletters.IIssueInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,CMS.SiteProvider.ISiteInfoProvider,System.DateTime)">
             <summary>
             Creates an instance of <see cref="T:CMS.Newsletters.IssueUrlService"/> class.
             </summary>
             <param name="issueInfoProvider">Provider for <see cref="T:CMS.Newsletters.IssueInfo"/> management.</param>
             <param name="subscriberNewsletterInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberNewsletterInfo"/> management.</param>
+            <param name="siteInfoProvider">Provider for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.</param>
             <param name="time">Custom time used to evaluate activation URL hash.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="issueInfoProvider"/> or <paramref name="subscriberNewsletterInfoProvider"/> is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="issueInfoProvider"/>, <paramref name="subscriberNewsletterInfoProvider"/> or <paramref name="siteInfoProvider"/> is null.</exception>
         </member>
         <member name="M:CMS.Newsletters.IssueUrlService.GetBaseUrl(CMS.Newsletters.NewsletterInfo)">
             <summary>
@@ -7913,7 +7925,7 @@
             Handles all work with subscriptions and unsubscriptions.
             </summary>
         </member>
-        <member name="M:CMS.Newsletters.SubscriptionService.#ctor(CMS.Newsletters.ISubscriptionHelper,CMS.Newsletters.IUnsubscriptionProvider,CMS.Newsletters.ISubscriberEmailRetriever,CMS.Newsletters.IConfirmationSender,CMS.Newsletters.INewslettersActivityLogger,CMS.Newsletters.IBounceDetection,CMS.Newsletters.INewsletterInfoProvider,CMS.Newsletters.ISubscriberInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,CMS.Newsletters.IUnsubscriptionInfoProvider)">
+        <member name="M:CMS.Newsletters.SubscriptionService.#ctor(CMS.Newsletters.ISubscriptionHelper,CMS.Newsletters.IUnsubscriptionProvider,CMS.Newsletters.ISubscriberEmailRetriever,CMS.Newsletters.IConfirmationSender,CMS.Newsletters.INewslettersActivityLogger,CMS.Newsletters.IBounceDetection,CMS.Newsletters.INewsletterInfoProvider,CMS.Newsletters.ISubscriberInfoProvider,CMS.Newsletters.ISubscriberNewsletterInfoProvider,CMS.Newsletters.IUnsubscriptionInfoProvider,CMS.Base.Internal.IHttpContextRetriever)">
             <summary>
             Constructor.
             </summary>
@@ -7927,6 +7939,7 @@
             <param name="subscriberInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberInfo"/> management.</param>
             <param name="subscriberNewsletterInfoProvider">Provider for <see cref="T:CMS.Newsletters.SubscriberNewsletterInfo"/> management.</param>
             <param name="unsubscriptionInfoProvider">Provider for <see cref="T:CMS.Newsletters.UnsubscriptionInfo"/> management.</param>
+            <param name="httpContextRetriever">Implementation of <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/>.</param>
         </member>
         <member name="M:CMS.Newsletters.SubscriptionService.IsMarketable(System.Int32,System.Int32)">
             <summary>

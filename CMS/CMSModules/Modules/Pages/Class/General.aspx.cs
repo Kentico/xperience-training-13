@@ -60,7 +60,7 @@ public partial class CMSModules_Modules_Pages_Class_General : GlobalAdminPage
     {
         get
         {
-            ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+            ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
             return ((resource != null) && resource.ResourceIsInDevelopment) || SystemContext.DevelopmentMode;
         }
     }

@@ -509,7 +509,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryList : CMSAbstractWeb
         {
             if ((mStartingCategoryObj == null) && !string.IsNullOrEmpty(StartingCategory))
             {
-                mStartingCategoryObj = CategoryInfoProvider.GetCategoryInfo(StartingCategory, SiteContext.CurrentSiteName);
+                mStartingCategoryObj = CategoryInfo.Provider.Get(StartingCategory, SiteContext.CurrentSiteID);
                 if (mStartingCategoryObj != null)
                 {
                     if (mStartingCategoryObj.CategoryIsPersonal ||
@@ -814,7 +814,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryList : CMSAbstractWeb
     /// <param name="categoryId">ID of the category to create link for.</param>
     protected string CreateCategoryPartLink(int categoryId)
     {
-        CategoryInfo cat = CategoryInfoProvider.GetCategoryInfo(categoryId);
+        CategoryInfo cat = CategoryInfo.Provider.Get(categoryId);
 
         if (cat != null)
         {
@@ -980,7 +980,7 @@ public partial class CMSWebParts_TaggingCategories_CategoryList : CMSAbstractWeb
                 // Add categories from path to tree
                 foreach (int id in ids)
                 {
-                    CategoryInfo category = CategoryInfoProvider.GetCategoryInfo(id);
+                    CategoryInfo category = CategoryInfo.Provider.Get(id);
 
                     if (category != null)
                     {

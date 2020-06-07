@@ -98,7 +98,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
     private void LoadFormData()
     {
-        var template = AutomationTemplateInfoProvider.GetAutomationTemplateInfo(EditedTemplateId);
+        var template = AutomationTemplateInfo.Provider.Get(EditedTemplateId);
 
         UIContext["EnableEditedObjectReset"] = true;
         editForm.EditedObject = template;

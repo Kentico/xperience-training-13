@@ -73,7 +73,7 @@ public partial class CMSModules_EventManager_CMSPages_AddToOutlook : LivePage
             var eventGuid = (Guid)data.GetValue("NodeGUID");
 
             // Get current site
-            var currentSite = SiteInfoProvider.GetSiteInfo(CurrentSiteName);
+            var currentSite = SiteInfo.Provider.Get(CurrentSiteName);
 
             // Create content
             var content = new StringBuilder();

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
+using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.FormEngine;
@@ -16,7 +17,8 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
 {
     #region "Private variables"
 
-    private bool? mShowTimeout;
+    private bool? mShowActionParametersForm;
+    private bool? mShowTimeoutForm;
 
     #endregion
 
@@ -35,19 +37,40 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
     private WorkflowInfo CurrentWorkflow => (WorkflowInfo)editForm.ParentObject;
 
 
-    /// <summary>
-    /// Indicates if timeout settings should be visible.
-    /// </summary>
-    private bool ShowTimeout
+    private bool ShowEditForm => ShowAdvancedProperties;
+
+
+    private bool ShowSourcePointForm => ShowAdvancedProperties;
+
+
+    private bool ShowActionParametersForm
     {
         get
         {
-            if (mShowTimeout == null)
+            if (mShowActionParametersForm == null)
             {
                 // All steps except 
-                mShowTimeout = CurrentStepInfo.StepAllowTimeout && (CurrentWorkflow != null) && !CurrentWorkflow.IsBasic;
+                mShowActionParametersForm = ShowGeneralProperties && CurrentStepInfo.StepIsAction;
             }
-            return mShowTimeout.Value;
+            return mShowActionParametersForm.Value;
+        }
+    }
+
+
+    /// <summary>
+    /// Indicates if timeout settings should be visible.
+    /// </summary>
+    private bool ShowTimeoutForm
+    {
+        get
+        {
+            if (mShowTimeoutForm == null)
+            {
+                // All steps except 
+                mShowTimeoutForm = CurrentStepInfo.StepAllowTimeout && (CurrentWorkflow != null) && !CurrentWorkflow.IsBasic &&
+                    ((ShowAdvancedProperties && CurrentStepInfo.StepType != WorkflowStepTypeEnum.Wait) || (ShowGeneralProperties && CurrentStepInfo.StepType == WorkflowStepTypeEnum.Wait));
+            }
+            return mShowTimeoutForm.Value;
         }
     }
 
@@ -63,26 +86,45 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
     /// </summary>
     public BasicForm ParametersForm => ucActionParameters.BasicForm;
 
+
+    /// <summary>
+    /// Indicates if advanced step properties should be displayed.
+    /// </summary>
+    public bool ShowAdvancedProperties 
+    { 
+        get; 
+        set; 
+    }
+
+
+    /// <summary>
+    /// Indicates if general step properties should be displayed.
+    /// </summary>
+    public bool ShowGeneralProperties 
+    { 
+        get; 
+        set; 
+    }
+
     #endregion
 
 
     #region "Methods"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         if (StopProcessing)
         {
             // Do nothing!
         }
         else
         {
-            ParametersForm.MarkRequiredFields = true;    
+            btnSubmit.Visible = !ShowEditForm;
+            editForm.Visible = ShowEditForm;
 
-            editForm.OnAfterValidate += editForm_OnAfterValidate;
-            editForm.OnBeforeSave += editForm_OnBeforeSave;
-            editForm.OnAfterSave += editForm_OnAfterSave;
-
-            pnlTimeout.Visible = ShowTimeout;
+            pnlTimeout.Visible = ShowTimeoutForm;
             if (CurrentStepInfo != null)
             {
                 LoadData(CurrentStepInfo);
@@ -99,6 +141,14 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 {
                     WorkflowScriptHelper.RegisterRefreshDesignerFunction(Page, CurrentStepInfo.StepID, QueryHelper.GetString("graph", String.Empty));
                 }
+
+                HeaderActions.ActionControlCreated.Before += (sender, actionEventArgs) =>
+                {
+                    if (actionEventArgs.Action is SaveAction saveAction)
+                    {
+                        saveAction.Text = ResHelper.GetString("general.apply");
+                    }
+                };
             }
             else
             {
@@ -115,7 +165,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
         if (CurrentStepInfo != null)
         {
             // Display timeout target source point selector
-            plcTimeoutTarget.Visible = ucTimeout.TimeoutEnabled && ucTimeoutTarget.IsVisible();
+            plcTimeoutTarget.Visible = ShowGeneralProperties && ucTimeout.TimeoutEnabled && ucTimeoutTarget.IsVisible();
         }
     }
 
@@ -129,9 +179,9 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
         ucTimeout.AllowNoTimeout = (wsi.StepType != WorkflowStepTypeEnum.Wait);
 
         // Display action parameters form only for action step type
-        if (wsi.StepIsAction)
+        if (ShowActionParametersForm)
         {
-            WorkflowActionInfo action = WorkflowActionInfoProvider.GetWorkflowActionInfo(wsi.StepActionID);
+            WorkflowActionInfo action = WorkflowActionInfo.Provider.Get(wsi.StepActionID);
             if (action != null)
             {
                 if (!RequestHelper.IsPostBack())
@@ -142,13 +192,12 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 lblParameters.Text = String.Format(GetString("workflowstep.parameters"), HTMLHelper.HTMLEncode(ResHelper.LocalizeString(action.ActionDisplayName)));
             }
 
-            ucActionParameters.BasicForm.AllowMacroEditing = true;
-            ucActionParameters.BasicForm.ShowValidationErrorMessage = false;
-            ucActionParameters.BasicForm.ResolverName = WorkflowHelper.GetResolverName(CurrentWorkflow);
+            ParametersForm.AllowMacroEditing = true;
+            ParametersForm.ShowValidationErrorMessage = false;
+            ParametersForm.ResolverName = WorkflowHelper.GetResolverName(CurrentWorkflow);
             ucActionParameters.Parameters = wsi.StepActionParameters;
             ucActionParameters.ReloadData(!RequestHelper.IsPostBack());
             ucActionParameters.Visible = ucActionParameters.CheckVisibility();
-
         }
 
         plcParameters.Visible = ucActionParameters.Visible;
@@ -170,7 +219,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 var sourcePoint = CurrentStepInfo.StepDefinition.DefinitionPoint;
                 if (sourcePoint != null)
                 {
-                    plcCondition.Visible = true;
+                    plcCondition.Visible = ShowSourcePointForm;
                     lblCondition.ResourceString = conditionStep ? "workflowstep.conditionsettings" : "workflowstep.advancedsettings";
 
                     ucSourcePointEdit.StopProcessing = false;
@@ -184,11 +233,26 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
 
         if (!RequestHelper.IsPostBack())
         {
-            if (ShowTimeout)
+            if (ShowTimeoutForm)
             {
                 ucTimeout.TimeoutEnabled = wsi.StepDefinition.TimeoutEnabled;
                 ucTimeout.ScheduleInterval = wsi.StepDefinition.TimeoutInterval;
             }
+        }
+    }
+
+
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        if (!editForm.Visible && ValidateData())
+        {
+            ucSourcePointEdit.SaveData(false);
+            ucActionParameters.SaveData(false);
+            SetFormValues(CurrentStepInfo);
+
+            WorkflowStepInfoProvider.SetWorkflowStepInfo(CurrentStepInfo);
+
+            RefreshDesigner();
         }
     }
 
@@ -218,6 +282,12 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
     protected void editForm_OnAfterSave(object sender, EventArgs e)
     {
         // Refresh updated node
+        RefreshDesigner();
+    }
+
+
+    private void RefreshDesigner()
+    {
         WorkflowScriptHelper.RefreshDesignerFromDialog(Page, CurrentStepInfo.StepID, QueryHelper.GetString("graph", String.Empty));
     }
 
@@ -283,7 +353,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
             return;
         }
 
-        if (ShowTimeout)
+        if (ShowTimeoutForm)
         {
             Step definition = step.StepDefinition;
             definition.TimeoutEnabled = ucTimeout.TimeoutEnabled;
@@ -320,7 +390,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
             }
         }
 
-        if (step.StepIsAction)
+        if (step.StepIsAction && ucActionParameters.Visible)
         {
             step.StepActionParameters.LoadData(ucActionParameters.Parameters.GetData());
         }

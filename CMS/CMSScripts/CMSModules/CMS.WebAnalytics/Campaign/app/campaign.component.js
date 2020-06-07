@@ -33,7 +33,6 @@
         ctrl.promotionItems = assetsService.getPromotionItems();
 
         ctrl.campaign = campaignService.getCampaign();
-        ctrl.siteIsContentOnly = dataFromServer.siteIsContentOnly;
         ctrl.conversions = dataFromServer.conversions || [];
         ctrl.urlAssetTargetRegex = dataFromServer.urlAssetTargetRegex;
 

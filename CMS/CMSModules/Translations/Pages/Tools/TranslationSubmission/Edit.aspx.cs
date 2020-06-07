@@ -456,7 +456,7 @@ public partial class CMSModules_Translations_Pages_Tools_TranslationSubmission_E
             return null;
         }
 
-        var submissionSite = SiteInfoProvider.GetSiteInfo(submission.SubmissionSiteID);
+        var submissionSite = SiteInfo.Provider.Get(submission.SubmissionSiteID);
         if (submissionSite == null)
         {
             return null;

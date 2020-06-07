@@ -232,24 +232,6 @@ function InsertLayoutElement()
     }
 
 
-    /// <summary>
-    /// Display info message
-    /// </summary>
-    public void ShowMessage()
-    {
-        string type = ValidationHelper.GetString(Form.GetFieldValue(TypeColumn), "ascx").ToLowerCSafe();
-
-        if ((type == "ascx") && !MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("cms.design", "editcode"))
-        {
-            // Display info message for active UI form
-            if (Visible)
-            {
-                ShowWarning(GetString("design.editcodemissing"));
-            }
-        }
-    }
-
-
     protected override void OnPreRender(EventArgs e)
     {
         base.OnPreRender(e);
@@ -258,7 +240,7 @@ function InsertLayoutElement()
 
         if (Enabled)
         {
-            Enabled = !isAscx || MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("cms.design", "editcode");
+            Enabled = !isAscx;
             drpType.Enabled = true;
         }
 
@@ -277,20 +259,6 @@ function InsertLayoutElement()
         plcDirectives.Visible = isAscx;
 
         InitZoneElementsScript();
-    }
-
-
-    protected void drpType_selectedIndexChanged(object sender, EventArgs ea)
-    {
-        // If not ascx authorized only change to HTML is allowed
-        if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("cms.design", "editcode"))
-        {
-            drpType.SelectedIndex = 1;
-            ShowWarning(GetString("design.editcodemissing"));
-            return;
-        }
-
-        ShowMessage();
     }
 
     #endregion

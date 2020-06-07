@@ -265,7 +265,6 @@ public partial class CMSModules_ImportExport_Controls_ExportConfiguration : CMSU
             Settings.SetSettings(ImportExportHelper.SETTINGS_BOARD_MESSAGES, true);
             Settings.SetSettings(ImportExportHelper.SETTINGS_GLOBAL_FOLDERS, true);
             Settings.SetSettings(ImportExportHelper.SETTINGS_SITE_FOLDERS, true);
-            Settings.SetSettings(ImportExportHelper.SETTINGS_COPY_ASPX_TEMPLATES_FOLDER, true);
 
             ExportTypeEnum exportType = (SiteId != 0) ? ExportTypeEnum.Site : ExportTypeEnum.All;
 

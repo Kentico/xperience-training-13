@@ -1,31 +1,47 @@
-﻿using CMS.ContactManagement;
+﻿using System;
+
+using CMS.ContactManagement;
 using CMS.ContactManagement.Web.UI;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 
 public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Process_Detail : CMSAutomationPage, IProcessDetailPage
 {
-    public void SetBreadcrumbs(CMSAutomationManager automationManager)
+    public bool IsContactDetailShown => true;
+
+
+    public CMSAutomationManager AutomationManager { get;  set; }
+
+
+    protected override void OnLoad(EventArgs e)
     {
-        SetBreadcrumb(0, GetString("ma.contact.contacts"), GetListingUrl(automationManager), null, null);
-        SetBreadcrumb(1, HTMLHelper.HTMLEncode(ContactInfoProvider.GetContactFullName(automationManager.ObjectID)), null, null, null);
+        base.OnLoad(e);
+
+        AutomationManager.AutomationInfoLabel.Visible = false;
     }
 
 
-    public void AfterAutomationManagerAction(string actionName, CMSAutomationManager automationManager)
+    public void SetBreadcrumbs()
+    {
+        SetBreadcrumb(0, GetString("ma.contact.contacts"), GetListingPageUrl(), null, null);
+        SetBreadcrumb(1, HTMLHelper.HTMLEncode(ContactInfoProvider.GetContactFullName(AutomationManager.ObjectID)), null, null, null);
+    }
+
+
+    public void AfterAutomationManagerAction(string actionName)
     {
         switch (actionName)
         {
             case ComponentEvents.AUTOMATION_REMOVE:
             case ComponentEvents.AUTOMATION_START:
-                URLHelper.Redirect(GetListingUrl(automationManager));
+                URLHelper.Redirect(GetListingPageUrl());
                 break;
         }
     }
 
 
-    private string GetListingUrl(CMSAutomationManager automationManager)
+    public string GetListingPageUrl()
     {
-        return ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Tab_Contacts.aspx?processid=" + automationManager.Process?.WorkflowID);
+        return ResolveUrl(string.Format("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Tab_Contacts.aspx?objectid={0}&processid={0}", AutomationManager.Process?.WorkflowID));
     }
 }

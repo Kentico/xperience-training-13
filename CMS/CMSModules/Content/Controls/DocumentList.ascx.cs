@@ -834,7 +834,7 @@ function RefreshGrid()
         }
 
         // Get the site
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(Node.NodeSiteID);
+        SiteInfo si = SiteInfo.Provider.Get(Node.NodeSiteID);
         if (si == null)
         {
             return null;
@@ -1000,10 +1000,19 @@ function RefreshGrid()
                     // Existing document culture
                     if (culture.ToLowerCSafe() == CultureCode.ToLowerCSafe())
                     {
-                        var relativeUrl = isRootDocument ? "~/" : DocumentUIHelper.GetPageHandlerPreviewPath(currentNodeId, culture, CurrentUser.UserName);
-                        string url = ResolveUrl(relativeUrl);
+                        string className = ValidationHelper.GetString(data["ClassName"], string.Empty);
+                        if (DataClassInfoProvider.GetDataClassInfo(className).ClassHasURL)
+                        {
+                            var relativeUrl = isRootDocument ? "~/" : DocumentUIHelper.GetPageHandlerPreviewPath(currentNodeId, culture, CurrentUser.UserName);
+                            string url = ResolveUrl(relativeUrl);
 
-                        btn.OnClientClick = "ViewItem(" + ScriptHelper.GetString(url) + "); return false;";
+                            btn.OnClientClick = "ViewItem(" + ScriptHelper.GetString(url) + "); return false;";
+                        }
+                        else
+                        {
+                            btn.Enabled = false;
+                            btn.Style.Add(HtmlTextWriterStyle.Cursor, "default");
+                        }
                     }
                     // New culture version
                     else
@@ -1475,7 +1484,7 @@ function RefreshGrid()
                     IPAddress = RequestContext.UserHostAddress,
                     SiteID = SiteContext.CurrentSite.SiteID
                 };
-                
+
                 Service.Resolve<IEventLogService>().LogEvent(logData);
 
                 ShowError(GetString("ContentRequest.MoveFailed") + " : " + ex.Message);

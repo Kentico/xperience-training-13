@@ -176,7 +176,7 @@ public partial class CMSModules_AdminControls_Controls_Class_AlternativeFormFiel
                 }
             }
 
-            var resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+            var resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
 
             // Allow development mode only for non-system tables
             fieldEditor.DevelopmentMode = (resource != null) && resource.IsEditable;

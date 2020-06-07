@@ -310,7 +310,7 @@ public partial class CMSWebParts_Notifications_ContentSubscription : CMSAbstract
                 else if (SiteName != "-")
                 {
                     // Try to find given site
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+                    SiteInfo si = SiteInfo.Provider.Get(SiteName);
                     if (si != null)
                     {
                         subscriptionElem.SubscriptionSiteID = si.SiteID;
@@ -391,7 +391,7 @@ public partial class CMSWebParts_Notifications_ContentSubscription : CMSAbstract
                 templateName = templateName.Remove(0, siteName.Length + 1);
 
                 // Site template
-                SiteInfo tempSite = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo tempSite = SiteInfo.Provider.Get(siteName);
                 if (tempSite != null)
                 {
                     return NotificationTemplateInfoProvider.GetNotificationTemplateInfo(templateName, tempSite.SiteID);

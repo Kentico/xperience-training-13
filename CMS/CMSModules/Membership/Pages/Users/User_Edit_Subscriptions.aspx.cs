@@ -36,7 +36,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Subscriptions :
         if (userId > 0)
         {
             // Check that only global administrator can edit global administrator's accouns
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             EditedObject = ui;
             CheckUserAvaibleOnSite(ui);
 
@@ -78,7 +78,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Subscriptions :
         if (!RequestHelper.IsPostBack())
         {
             // If user is member of current site
-            if (UserSiteInfoProvider.GetUserSiteInfo(userId, SiteID) != null)
+            if (UserSiteInfo.Provider.Get(userId, SiteID) != null)
             {
                 // Force uniselector to preselect current site
                 siteSelector.Value = SiteID;

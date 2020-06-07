@@ -689,7 +689,7 @@ public partial class CMSModules_PortalEngine_Controls_WebParts_WebpartProperties
             if (SynchronizationHelper.IsCheckedOutByOtherUser(pti))
             {
                 string userName = null;
-                UserInfo ui = UserInfoProvider.GetUserInfo(pti.Generalized.IsCheckedOutByUserID);
+                UserInfo ui = UserInfo.Provider.Get(pti.Generalized.IsCheckedOutByUserID);
                 if (ui != null)
                 {
                     userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));

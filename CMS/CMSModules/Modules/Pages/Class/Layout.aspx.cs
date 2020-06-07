@@ -52,7 +52,7 @@ public partial class CMSModules_Modules_Pages_Class_Layout : GlobalAdminPage
             layoutElem.ObjectID = ClassInfo.ClassID;
         }
 
-        ResourceInfo resource = ResourceInfoProvider.GetResourceInfo(QueryHelper.GetInteger("moduleid", 0));
+        ResourceInfo resource = ResourceInfo.Provider.Get(QueryHelper.GetInteger("moduleid", 0));
         if (!SystemContext.DevelopmentMode && (resource != null) && !resource.ResourceIsInDevelopment)
         {
             pnlCustomization.MessagesPlaceHolder = layoutElem.MessagesPlaceHolder;

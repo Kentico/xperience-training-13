@@ -789,6 +789,50 @@ var JsPlumbGraph = $class({
                 posOffsetY: 20
             });
         }
+    },
+
+    /*
+     * Makes given nodes emphasized.
+     * @param {int} current - identifier of current step for contact, following parameters are previous step identifiers.
+     */
+    emphasizeNodes: function (current) {
+        if (this.isMarketingAutomationWorkflow() && this.readOnly) {
+            var node = this.nodes[current];
+            if (node) {
+                node.nodeJQ.addClass("visited-current");
+                node.isEmphasized = true;
+            }
+
+            for (var i = 1; i < arguments.length; i++) {
+                node = this.nodes[arguments[i]]
+                if (node) {
+                    node.nodeJQ.addClass("visited-past");
+                }
+            }
+        }
+    },
+
+    /*
+     * Shows contact given contact data in node with given identifier.
+     * @param {int} current
+     * @param {html string} data
+     */
+    showContactData: function (current, data) {
+        if (this.isMarketingAutomationWorkflow() && this.readOnly) {
+            var node = this.nodes[current];
+            if (node && node.isEmphasized) {
+                node.nodeJQ.append(data);
+                node.setPlaceholderPosition();
+                this.initNodeZIndex(node);
+                node.syncZIndexOfNodeEndpoints();
+
+                var nodeIcon = $cmsj('#nodeDataIcon_' + current);
+                nodeIcon.click(function () {
+                    var id = this.getAttribute("data-id");
+                    $cmsj('#nodeData_' + id).toggle();
+                });
+            }
+        }
     }
 });
 
@@ -1079,5 +1123,4 @@ var JsPlumbGraphWrapper = $class({
             nodeJQ.click();
         }
     }
-
 });

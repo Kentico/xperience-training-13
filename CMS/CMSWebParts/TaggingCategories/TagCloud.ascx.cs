@@ -53,7 +53,7 @@ public partial class CMSWebParts_TaggingCategories_TagCloud : CMSAbstractWebPart
                 }
 
                 // Get tag group information
-                TagGroupInfo tagGroup = TagGroupInfoProvider.GetTagGroupInfo(tagGroupId);
+                TagGroupInfo tagGroup = TagGroupInfo.Provider.Get(tagGroupId);
                 if (tagGroup != null)
                 {
                     // Get tag group name
@@ -444,7 +444,7 @@ public partial class CMSWebParts_TaggingCategories_TagCloud : CMSAbstractWebPart
                         int minSize = Math.Min(MaxTagSize, MinTagSize);
 
                         // Get the tags
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteName);
+                        SiteInfo si = SiteInfo.Provider.Get(siteName);
                         int siteId = 0;
                         if (si != null)
                         {
@@ -452,7 +452,7 @@ public partial class CMSWebParts_TaggingCategories_TagCloud : CMSAbstractWebPart
                         }
 
                         // Get tag group info
-                        tgi = TagGroupInfoProvider.GetTagGroupInfo(TagGroupName, siteId);
+                        tgi = TagGroupInfo.Provider.Get(TagGroupName, siteId);
 
                         // Get the data
                         DataSet ds = null;

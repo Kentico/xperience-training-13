@@ -185,7 +185,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
             libraryFiles.LibraryID = LibraryID;
 
             libraryEdit.MediaLibraryID = LibraryID;
-            pnlContext.UIContext.EditedObject = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+            pnlContext.UIContext.EditedObject = MediaLibraryInfo.Provider.Get(LibraryID);
         }
 
         libraryEdit.ReloadData();
@@ -267,7 +267,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
 
         if (LibraryID > 0)
         {
-            MediaLibraryInfo library = MediaLibraryInfoProvider.GetMediaLibraryInfo(LibraryID);
+            MediaLibraryInfo library = MediaLibraryInfo.Provider.Get(LibraryID);
             if (library != null)
             {
                 itemText = HTMLHelper.HTMLEncode(library.LibraryDisplayName);

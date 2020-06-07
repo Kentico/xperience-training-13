@@ -116,6 +116,11 @@
             </summary>
             <param name="id"><see cref="T:CMS.DataProtection.ConsentArchiveInfo"/> ID.</param>
         </member>
+        <member name="T:CMS.DataProtection.IConsentArchiveInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DataProtection.ConsentArchiveInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DataProtection.Consent">
             <summary>
             Represents a consent which contains text either from <see cref="T:CMS.DataProtection.ConsentInfo"/> or <see cref="T:CMS.DataProtection.ConsentArchiveInfo"/>,
@@ -388,6 +393,12 @@
             Deletes <see cref="T:CMS.DataProtection.ConsentInfo"/> with specified ID.
             </summary>
             <param name="id"><see cref="T:CMS.DataProtection.ConsentInfo"/> ID.</param>
+        </member>
+        <member name="M:CMS.DataProtection.ConsentInfoProvider.SetInfo(CMS.DataProtection.ConsentInfo)">
+            <summary>
+            Inserts or Updates the object to the database.
+            </summary>
+            <param name="info">Object to insert / update</param>
         </member>
         <member name="T:CMS.DataProtection.ConsentText">
             <summary>
@@ -703,6 +714,16 @@
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="shortText"/> is <c>null</c>.</exception>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="fullText"/> is <c>null</c>.</exception>
         </member>
+        <member name="T:CMS.DataProtection.IConsentAgreementInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DataProtection.ConsentAgreementInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.DataProtection.IConsentInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.DataProtection.ConsentInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.DataProtection.InternalLicenseHelper">
             <summary>
             Provides helper methods for license checking.
@@ -760,6 +781,14 @@
             <summary>
             Service for archiving consent versions.
             </summary>
+        </member>
+        <member name="M:CMS.DataProtection.ConsentArchiveService.#ctor(CMS.DataProtection.IConsentAgreementInfoProvider,CMS.DataProtection.IConsentArchiveInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.DataProtection.ConsentArchiveService"/> class.
+            </summary>
+            <param name="consentAgreementInfoProvider">Provider for <see cref="T:CMS.DataProtection.ConsentAgreementInfo"/> management.</param>
+            <param name="consentArchiveInfoProvider">Provider for <see cref="T:CMS.DataProtection.ConsentArchiveInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="consentAgreementInfoProvider"/> or <paramref name="consentArchiveInfoProvider"/> is null.</exception>
         </member>
         <member name="M:CMS.DataProtection.ConsentArchiveService.Archive(CMS.DataProtection.ConsentInfo)">
             <summary>
@@ -992,6 +1021,14 @@
             <summary>
             Service for managing language versions of consent content.
             </summary>
+        </member>
+        <member name="M:CMS.DataProtection.ConsentContentService.#ctor(CMS.DataProtection.IConsentArchiveService,CMS.DataProtection.IConsentInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.DataProtection.ConsentContentService"/> class.
+            </summary>
+            <param name="consentArchiveService">Service for archiving consent versions.</param>
+            <param name="consentInfoProvider">Provider for <see cref="T:CMS.DataProtection.ConsentInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="consentArchiveService"/> or <paramref name="consentInfoProvider"/> is null.</exception>
         </member>
         <member name="M:CMS.DataProtection.ConsentContentService.AddOrUpdateText(CMS.DataProtection.ConsentInfo,System.String,System.String,System.String)">
             <summary>

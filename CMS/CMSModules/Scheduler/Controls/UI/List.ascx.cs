@@ -131,7 +131,7 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
                     TaskInfo taskInfo = TaskInfoProvider.GetTaskInfo(Convert.ToInt32(actionArgument));
                     if (taskInfo != null)
                     {
-                        SiteInfo siteInfo = SiteInfoProvider.GetSiteInfo(SiteID);
+                        SiteInfo siteInfo = SiteInfo.Provider.Get(SiteID);
                         if (!taskInfo.TaskEnabled)
                         {
                             // Task is not enabled (won't be executed at the end of request), run it now

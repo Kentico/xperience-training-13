@@ -4,6 +4,16 @@
         <name>CMS.SiteProvider</name>
     </assembly>
     <members>
+        <member name="T:CMS.SiteProvider.SiteDomainAliasesEnums">
+            <summary>
+            Wrapper class to provide site domain aliases enumerations.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasesEnums.RegisterFields">
+            <summary>
+            Registers the site domain aliases enumerations.
+            </summary>
+        </member>
         <member name="T:CMS.SiteProvider.SiteContext">
             <summary>
             Site related context methods and variables.
@@ -284,6 +294,196 @@
             Fires when the site with all the document structure and object is being deleted
             </summary>
         </member>
+        <member name="T:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker">
+            <summary>
+            Check administration domain uniqueness of site domain alias.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker.CanBeStarted(System.Collections.Generic.IEnumerable{CMS.SiteProvider.SiteInfo}@)">
+            <summary>
+            Checks whether the site's administration domains are unique so the site can be started.
+            </summary>
+            <param name="collisions">Collection of colliding sites.</param>
+            <returns><c>true</c> when the site's administration domains aren't colliding with and another site.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker.IsInCollision(System.String,System.Collections.Generic.IEnumerable{CMS.SiteProvider.SiteInfo}@,System.Boolean)">
+            <summary>
+            Checks whether the given <paramref name="domain"/> of the site is in collision with an another site.
+            </summary>
+            <param name="domain">Domain to be checked.</param>
+            <param name="collisions">Collection of colliding sites.</param>
+            <param name="checkPresentationUrls">Indicates if the given <paramref name="domain"/> should be checked also against presentation URLs.</param>
+            <returns><c>true</c> when the given <paramref name="domain"/> is in collision.</returns>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever">
+            <summary>
+            Retrieves site domain alias based on given parameters.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of <see cref="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByUrl(System.Uri)">
+            <summary>
+            Retrieves the site alias based on given presentation URL.
+            </summary>
+            <param name="url">URL to detect matching site domain alias.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByCulture(System.String)">
+            <summary>
+            Retrieves the site alias based on given culture code.
+            </summary>
+            <param name="cultureCode">Culture code to detect matching site domain alias.</param>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.NormalizedPresentationUrl">
+            <summary>
+            Normalized presentation URL.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.Internal.NormalizedPresentationUrl.Url">
+            <summary>
+            Gets normalized presentation URL.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.NormalizedPresentationUrl.#ctor(System.String)">
+            <summary>
+            Initializes an instance of <see cref="T:CMS.SiteProvider.Internal.NormalizedPresentationUrl"/>.
+            </summary>
+            <param name="normalizedPresentationUrl">Presentation URL in normalized state.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.NormalizedPresentationUrl.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>
+            A string that represents the current object.
+            </returns>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.NormalizedPresentationUrl.Matches(System.String)">
+            <summary>
+            Indicates if the given URL starts with presentation URL.
+            </summary>
+            <param name="url">URL.</param>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker">
+            <summary>
+            Checks presentation URL uniqueness.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker.IsInCollision(CMS.SiteProvider.Internal.NormalizedPresentationUrl,System.Collections.Generic.IEnumerable{CMS.SiteProvider.SiteInfo}@,System.Boolean)">
+            <summary>
+            Checks whether the given <paramref name="presentationUrl"/> of the site is in collision with an another site.
+            </summary>
+            <param name="presentationUrl">Presentation URL to be checked.</param>
+            <param name="collisions">Collection of colliding sites.</param>
+            <param name="checkDomainNames">Indicates if the given <paramref name="presentationUrl"/> should be checked also against domain names.</param>
+            <returns><c>true</c> when the given <paramref name="presentationUrl"/> is in collision.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker.CanBeStarted(System.Collections.Generic.IEnumerable{CMS.SiteProvider.SiteInfo}@)">
+            <summary>
+            Checks whether the site's presentation URLs are unique so the site can be started.
+            </summary>
+            <param name="collisions">Collection of colliding sites.</param>
+            <returns><c>true</c> when the site's presentation URLs aren't colliding with and another site.</returns>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.PresentationUrlNormalizer">
+            <summary>
+            Normalizes presentation URL.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlNormalizer.Normalize(System.String)">
+            <summary>
+            Ensures correct format of the <paramref name="presentationUrl"/>.
+            </summary>
+            <remarks>
+            <para>
+            Following rules are applied
+            <para>
+            Protocol is removed.
+            </para>
+            <para>
+            'www' is removed.
+            </para>
+            <para>
+            Trailing slash is ensured.
+            </para>
+            </para>
+            </remarks>
+            <param name="presentationUrl">URL</param>        
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever">
+            <summary>
+            Encapsulates presentation URLs loading from given site. 
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.Retrieve">
+            <summary>
+            Returns presentation URLs assigned to the given site.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker">
+            <summary>
+            Checks uniqueness of administration domains and presentation URLs within a site.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker"/> class.
+            </summary>
+            <param name="site">Site.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsAliasPresentationUrlInCollision(System.String,System.Int32)">
+            <summary>
+            Checks collisions for given domain alias presentation URL.
+            </summary>
+            <param name="presentationUrl">Presentation URL.</param>
+            <param name="domainAliasId">Domain alias ID.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsAliasAdministrationDomainInCollision(System.String,System.Int32)">
+            <summary>
+            Checks collisions for given domain alias administration domain.
+            </summary>
+            <param name="domain">Administration domain.</param>
+            <param name="domainAliasId">Domain alias ID.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsSitePresentationUrlInCollision(System.String)">
+            <summary>
+            Checks collisions for given site presentation URL.
+            </summary>
+            <param name="presentationUrl">Presentation URL.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsSiteAdministrationDomainInCollision(System.String)">
+            <summary>
+            Checks collisions for given site administration domain.
+            </summary>
+            <param name="domain">Administration domain.</param>
+        </member>
+        <member name="T:CMS.SiteProvider.ISiteDomainAliasInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.SiteProvider.SiteDomainAliasInfo">
             <summary>
             Site domain alias.
@@ -291,12 +491,22 @@
         </member>
         <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.OBJECT_TYPE">
             <summary>
-            Object type
+            Object type.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.OBJECT_TYPE_LIVESITE">
+            <summary>
+            Object type for live site domain alias.
             </summary>
         </member>
         <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.TYPEINFO">
             <summary>
-            Type information.
+            Type information for administration aliases.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.SiteDomainAliasInfo.TYPEINFO_LIVESITE">
+            <summary>
+            Type information for live site aliases.
             </summary>
         </member>
         <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainAliasID">
@@ -334,6 +544,16 @@
             Presentation URL.
             </summary>
         </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainAliasType">
+            <summary>
+            Site domain alias type.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteDomainAliasInfo.TypeInfo">
+            <summary>
+            Type information.
+            </summary>
+        </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.DeleteObject">
             <summary>
             Deletes the object using appropriate provider.
@@ -346,12 +566,18 @@
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.#ctor">
             <summary>
-            Constructor - Creates an empty SiteDomainAlias object.
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> class of type <see cref="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.Administration"/>.
             </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.#ctor(System.String)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> class.
+            </summary>
+            <param name="objectType">Object type.</param>
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfo.#ctor(System.Data.DataRow)">
             <summary>
-            Constructor - Creates a new SiteDomainAlias object from the given DataRow.
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> class of type <see cref="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.Administration"/>.
             </summary>
         </member>
         <member name="T:CMS.SiteProvider.SiteDomainAliasInfoProvider">
@@ -373,23 +599,23 @@
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfo(System.Int32)">
             <summary>
-            Returns the SiteDomainAliasInfo structure for the specified site domain alias ID.
+            Returns the <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> for the specified <paramref name="domainAliasId"/>.
             </summary>
-            <param name="domainAliasId">Site domain alias id</param>
+            <param name="domainAliasId">Site domain alias id.</param>
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.GetSiteDomainAliasInfo(System.String,System.Int32)">
             <summary>
-            Returns the SiteDomainAliasInfo structure for the specified site domain alias name.
+            Returns the <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> of type <see cref="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.Administration"/> for the specified site domain alias name.
             </summary>
-            <param name="domainAlias">Site domain alias name</param>
-            <param name="siteId">Site ID</param>
+            <param name="domainAlias">Site administration alias name.</param>
+            <param name="siteId">Site ID.</param>
         </member>
-        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfo(CMS.SiteProvider.SiteDomainAliasInfo,System.String)">
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.Set(CMS.SiteProvider.SiteDomainAliasInfo)">
             <summary>
-            Sets (updates or inserts) specified site domain alias.
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
             </summary>
-            <param name="siteDomain">SiteDomainAliasInfo object to set</param>
-            <param name="originalDomainAlias">Original domain alias name</param>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfo(CMS.SiteProvider.SiteDomainAliasInfo)">
             <summary>
@@ -428,10 +654,10 @@
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DomainAliasExists(System.String,System.Int32)">
             <summary>
-            Checks if domain alias exists for specified site.
+            Checks if administration alias exists for specified site.
             </summary>
-            <param name="domainAlias">Domain alias</param>
-            <param name="siteId">Site ID</param>
+            <param name="domainAlias">Domain alias.</param>
+            <param name="siteId">Site ID.</param>
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteSiteAliases(System.Int32)">
             <summary>
@@ -474,12 +700,11 @@
             <param name="domainAlias">Site domain alias name</param>
             <param name="siteId">Site ID</param>
         </member>
-        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfoInternal(CMS.SiteProvider.SiteDomainAliasInfo,System.String)">
+        <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.SetSiteDomainAliasInfoInternal(CMS.SiteProvider.SiteDomainAliasInfo)">
             <summary>
             Sets (updates or inserts) specified site domain alias.
             </summary>
             <param name="siteDomain">SiteDomainAliasInfo object to set</param>
-            <param name="originalDomainAlias">Original domain alias name</param>
         </member>
         <member name="M:CMS.SiteProvider.SiteDomainAliasInfoProvider.DeleteInfo(CMS.SiteProvider.SiteDomainAliasInfo)">
             <summary>
@@ -493,43 +718,24 @@
             </summary>
             <param name="siteId">Site ID</param>
         </member>
-        <member name="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever">
+        <member name="T:CMS.SiteProvider.SiteDomainAliasTypeEnum">
             <summary>
-            Retrieves site domain alias based on given parameters.
+            Enumeration representing the site domain alias type.
             </summary>
         </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+        <member name="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.Administration">
             <summary>
-            Initializes an instance of <see cref="T:CMS.SiteProvider.Internal.SiteDomainAliasRetriever"/> class.
-            </summary>
-            <param name="site">Site.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByUrl(System.Uri)">
-            <summary>
-            Retrieves the site alias based on given presentation URL.
-            </summary>
-            <param name="url">URL to detect matching site domain alias.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByCulture(System.String)">
-            <summary>
-            Retrieves the site alias based on given culture code.
-            </summary>
-            <param name="cultureCode">Culture code to detect matching site domain alias.</param>
-        </member>
-        <member name="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever">
-            <summary>
-            Encapsulates presentation URLs loading from given site. 
+            Site domain alias for administration interface.
             </summary>
         </member>
-        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+        <member name="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.LiveSite">
             <summary>
-            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever"/> class.
+            Site domain alias for live site.
             </summary>
-            <param name="site">Site.</param>
         </member>
-        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.Retrieve">
+        <member name="T:CMS.SiteProvider.ISiteInfoProvider">
             <summary>
-            Returns presentation URLs assigned to the given site.
+            Declares members for <see cref="T:CMS.SiteProvider.SiteInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.SiteProvider.RunningSiteException">
@@ -537,15 +743,22 @@
             Running site exception.
             </summary>
         </member>
+        <member name="P:CMS.SiteProvider.RunningSiteException.CollidingSite">
+            <summary>
+            The colliding site.
+            </summary>
+        </member>
         <member name="M:CMS.SiteProvider.RunningSiteException.#ctor">
             <summary>
             Constructor.
             </summary>
         </member>
-        <member name="M:CMS.SiteProvider.RunningSiteException.#ctor(System.String)">
+        <member name="M:CMS.SiteProvider.RunningSiteException.#ctor(CMS.SiteProvider.SiteInfo,System.String)">
             <summary>
             Constructor with message.
             </summary>
+            <param name="collidingSite">The site which is in collision.</param>
+            <param name="message">Exception message.</param>
         </member>
         <member name="T:CMS.SiteProvider.CultureSiteInfo">
             <summary>
@@ -646,12 +859,36 @@
             <param name="orderBy">Order by statement</param>
             <param name="topN">Specifies number of returned records</param>
         </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding structure.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding structure.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.GetCultureSiteInfo(System.Int32,System.Int32)">
             <summary>
             Returns the CultureSiteInfo structure for the specified cultureSite.
             </summary>
             <param name="cultureId">CultureID</param>
             <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.Set(CMS.SiteProvider.CultureSiteInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.SetCultureSiteInfo(CMS.SiteProvider.CultureSiteInfo)">
             <summary>
@@ -665,12 +902,26 @@
             </summary>
             <param name="infoObj">CultureSite object</param>
         </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.RemoveCultureFromSite(System.Int32,System.Int32)">
             <summary>
             Deletes specified cultureSite.
             </summary>
             <param name="cultureId">CultureID</param>
             <param name="siteId">SiteID</param>
+        </member>
+        <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
         </member>
         <member name="M:CMS.SiteProvider.CultureSiteInfoProvider.AddCultureToSite(System.Int32,System.Int32)">
             <summary>
@@ -833,6 +1084,42 @@
             <param name="data">Custom data</param>
             <param name="binary">Binary data</param>
         </member>
+        <member name="T:CMS.SiteProvider.ICultureSiteInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.ICultureSiteInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding structure.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.ICultureSiteInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding structure.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.SiteProvider.ICultureSiteInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
+        <member name="M:CMS.SiteProvider.ICultureSiteInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.SiteProvider.CultureSiteInfo"/> binding.
+            </summary>
+            <param name="cultureId">Culture ID.</param>
+            <param name="siteId">Site ID.</param>
+        </member>
         <member name="T:CMS.SiteProvider.SiteInfo">
             <summary>
             Represents a site.
@@ -878,11 +1165,6 @@
             Site ID.
             </summary>
         </member>
-        <member name="P:CMS.SiteProvider.SiteInfo.SiteDefaultEditorStylesheet">
-            <summary>
-            Site default editor stylesheet.
-            </summary>
-        </member>
         <member name="P:CMS.SiteProvider.SiteInfo.Description">
             <summary>
             Site description.
@@ -920,7 +1202,17 @@
         </member>
         <member name="P:CMS.SiteProvider.SiteInfo.SiteDomainAliases">
             <summary>
-            Hash table contains site's domain aliases. [alias.ToLowerInvariant()] -> [DomainAliasInfo]
+            Gets <see cref="T:System.Collections.Hashtable"/> containing site's administration aliases.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.AdministrationAliases">
+            <summary>
+            Collection of <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> that are of type <see cref="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.Administration"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfo.LiveSiteAliases">
+            <summary>
+            Collection of <see cref="T:CMS.SiteProvider.SiteDomainAliasInfo"/> that are of type <see cref="F:CMS.SiteProvider.SiteDomainAliasTypeEnum.LiveSite"/>.
             </summary>
         </member>
         <member name="P:CMS.SiteProvider.SiteInfo.SiteTimeZone">
@@ -975,13 +1267,6 @@
             <param name="si">Source site info</param>
             <param name="keepSourceData">If true, source data are kept in the object</param>
         </member>
-        <member name="M:CMS.SiteProvider.SiteInfo.CreateDomainAliasesTable(System.Data.DataSet)">
-            <summary>
-            Creates hashtable from given dataset.
-            </summary>
-            <param name="ds">Dataset contains with document aliases</param>
-            <returns>Created hashtable.</returns>
-        </member>
         <member name="M:CMS.SiteProvider.SiteInfo.ConvertServerDateTime(System.DateTime)">
             <summary>
             Returns server date time in dependence on site time zone.
@@ -1020,6 +1305,16 @@
         <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSiteByDomainAliasPresentationUrls">
             <summary>
             A collection of all domain presentation URLs and their running sites.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSiteByDomainAliasNames">
+            <summary>
+            A collection of all domain alias names and their running sites.
+            </summary>
+        </member>
+        <member name="P:CMS.SiteProvider.SiteInfoProvider.RunningSiteByDomainNames">
+            <summary>
+            A collection of all site domain names and their running sites.
             </summary>
         </member>
         <member name="M:CMS.SiteProvider.SiteInfoProvider.#ctor">
@@ -1075,6 +1370,13 @@
             Sets the specified site data.
             </summary>
             <param name="siteInfo">New site info data</param>
+        </member>
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.Delete(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.SiteProvider.SiteInfoProvider.DeleteSiteInfo(CMS.SiteProvider.SiteInfo)">
             <summary>
@@ -1185,15 +1487,15 @@
         </member>
         <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByPresentationUrlsInternal">
             <summary>
-            Gets a list of running site infos ordered by their presentation URL (without protocol).
+            Gets a list of running site infos ordered by their presentation URL (without protocol and www).
             </summary>
         </member>
         <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByDomainAliasPresentationUrlsInternal">
             <summary>
-            Gets a structured list of <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>(without protocol) and running site infos ordered by <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>.
+            Gets a structured list of <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>(without protocol and www) and running site infos ordered by <see cref="P:CMS.SiteProvider.SiteDomainAliasInfo.SiteDomainPresentationUrl"/>.
             </summary>
         </member>
-        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByDomain(System.String)">
+        <member name="M:CMS.SiteProvider.SiteInfoProvider.GetRunningSiteByAdministrationDomain(System.String)">
             <summary>
             Gets the running site by matching a main domain or a domain alias.
             </summary>

@@ -125,7 +125,7 @@ public partial class CMSAdminControls_UI_UserMenu : CMSUserControl
             if (userName != String.Empty)
             {
                 // Get selected user info
-                UserInfo iui = UserInfoProvider.GetUserInfo(userName);
+                UserInfo iui = UserInfo.Provider.Get(userName);
                 if (!iui.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin))
                 {
                     // Indicates whether user will be able to continue in the administration interface    
@@ -180,8 +180,8 @@ public partial class CMSAdminControls_UI_UserMenu : CMSUserControl
     /// </summary>
     private ObjectQuery<UserSiteInfo> GetSiteUserIDs()
     {
-        var dataQuery = UserSiteInfoProvider
-            .GetUserSites()
+        var dataQuery = UserSiteInfo.Provider
+            .Get()
             .Column(UserSiteInfo.TYPEINFO.ParentIDColumn);
 
         if (IsCMSDesk)
@@ -208,10 +208,10 @@ public partial class CMSAdminControls_UI_UserMenu : CMSUserControl
             string cultureName = ValidationHelper.GetString(ucUICultures.Value, String.Empty);
             if (!String.IsNullOrEmpty(cultureName))
             {
-                var user = UserInfoProvider.GetUserInfo(MembershipContext.AuthenticatedUser.UserID);
+                var user = UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
                 user.PreferredUICultureCode = cultureName;
 
-                UserInfoProvider.SetUserInfo(user);
+                UserInfo.Provider.Set(user);
 
                 // Enforce reload of authenticated user instance
                 MembershipContext.AuthenticatedUser = null;

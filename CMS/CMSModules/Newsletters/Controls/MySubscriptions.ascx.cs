@@ -438,7 +438,7 @@ public partial class CMSModules_Newsletters_Controls_MySubscriptions : CMSAdminC
         // Get specified user if used instead of current user
         if (UserID > 0)
         {
-            userInfo = UserInfoProvider.GetUserInfo(UserID);
+            userInfo = UserInfo.Provider.Get(UserID);
         }
         else
         {

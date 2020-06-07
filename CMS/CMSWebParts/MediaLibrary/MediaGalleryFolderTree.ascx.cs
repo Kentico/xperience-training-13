@@ -148,7 +148,7 @@ public partial class CMSWebParts_MediaLibrary_MediaGalleryFolderTree : CMSAbstra
     /// </summary>
     protected void SetupControl()
     {
-        MediaLibraryInfo mli = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryName, SiteContext.CurrentSiteName);
+        MediaLibraryInfo mli = MediaLibraryInfo.Provider.Get(MediaLibraryName, SiteContext.CurrentSiteID);
 
         if (mli != null)
         {

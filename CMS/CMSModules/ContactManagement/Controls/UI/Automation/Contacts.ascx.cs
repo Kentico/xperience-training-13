@@ -4,16 +4,13 @@ using CMS.Automation;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.ContactManagement;
-using CMS.Core;
 using CMS.DataEngine;
 using CMS.Helpers;
-using CMS.Modules;
 using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WorkflowEngine;
 
-
-public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contacts : CMSAdminEditControl
+public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contacts : CMSAdminControl
 {
     /// <summary>
     /// Gets or sets current identifier.
@@ -23,6 +20,12 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contact
         get;
         set;
     }
+
+
+    /// <summary>
+    /// Gets the current unigrid.
+    /// </summary>
+    public UniGrid UniGrid => listElem;
 
 
     /// <summary>
@@ -39,6 +42,21 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contact
         else
         {
             listElem.StopProcessing = true;
+        }
+    }
+
+
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
+
+        if (!SqlInstallationHelper.DatabaseIsSeparated() && !StopProcessing)
+        {
+            var filterLabel = listElem.FilterForm.FieldLabels["ContactFirstName"];
+            if (filterLabel != null)
+            {
+                filterLabel.ResourceString = "filter.searchbyname";
+            }
         }
     }
 
@@ -64,9 +82,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contact
         // returns couldn't be executed anyways
         if (SqlInstallationHelper.DatabaseIsSeparated())
         {
-            listElem.FilterForm.FieldsToHide.Add("ContactLastName");
             listElem.FilterForm.FieldsToHide.Add("ContactFirstName");
-            listElem.FilterForm.FieldsToHide.Add("ContactEmail");
         }
     }
 
@@ -87,16 +103,6 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Contact
                         btn.Enabled = false;
                     }
                 }
-                break;
-
-            case "view":
-                btn = (CMSGridActionButton)sender;
-                // Ensure accountID parameter value;
-                var objectID = ValidationHelper.GetInteger(btn.CommandArgument, 0);
-                // Contact detail URL
-                string contactURL = ApplicationUrlHelper.GetElementDialogUrl(ModuleName.CONTACTMANAGEMENT, "EditContact", objectID);
-                // Add modal dialog script to onClick action
-                btn.OnClientClick = ScriptHelper.GetModalDialogScript(contactURL, "ContactDetail");
                 break;
 
             // Process status column

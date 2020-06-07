@@ -372,7 +372,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
             if (CurrentMember.MemberID > 0)
             {
                 // Get user info
-                UserInfo ui = UserInfoProvider.GetUserInfo(CurrentMember.MemberUserID);
+                UserInfo ui = UserInfo.Provider.Get(CurrentMember.MemberUserID);
                 if (ui != null)
                 {
                     // Save user roles
@@ -469,7 +469,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
         if (CurrentMember != null)
         {
             // Get user roles
-            var data = UserRoleInfoProvider.GetUserRoles().Where("UserID = " + CurrentMember.MemberUserID + "AND RoleID IN (SELECT RoleID FROM CMS_Role WHERE RoleGroupID = " + CurrentMember.MemberGroupID + ")").Columns("RoleID");
+            var data = UserRoleInfo.Provider.Get().Where("UserID = " + CurrentMember.MemberUserID + "AND RoleID IN (SELECT RoleID FROM CMS_Role WHERE RoleGroupID = " + CurrentMember.MemberGroupID + ")").Columns("RoleID");
             if (data.Any())
             {
                 currentValues = TextHelper.Join(";", DataHelper.GetStringValues(data.Tables[0], "RoleID"));
@@ -550,7 +550,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
         {
             // Fill controls with data from existing user
             int userId = ValidationHelper.GetInteger(groupMemberInfo.MemberUserID, 0);
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             if (ui != null)
             {
                 lblFullName.Text = HTMLHelper.HTMLEncode(ui.FullName);
@@ -599,7 +599,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
             // Get current time
             retval = TimeZoneUIMethods.ConvertDateTime(date, this).ToString();
 
-            UserInfo ui = UserInfoProvider.GetUserInfo(userId);
+            UserInfo ui = UserInfo.Provider.Get(userId);
             if (ui != null)
             {
                 // Add user's full name
@@ -632,8 +632,8 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
             {
                 int roleID = ValidationHelper.GetInteger(item, 0);
 
-                var uri = UserRoleInfoProvider.GetUserRoleInfo(userID, roleID);
-                UserRoleInfoProvider.DeleteUserRoleInfo(uri);
+                var uri = UserRoleInfo.Provider.Get(userID, roleID);
+                UserRoleInfo.Provider.Delete(uri);
             }
         }
 
@@ -646,7 +646,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
             foreach (string item in newItems)
             {
                 int roleID = ValidationHelper.GetInteger(item, 0);
-                UserRoleInfoProvider.AddUserToRole(userID, roleID);
+                UserRoleInfo.Provider.Add(userID, roleID);
             }
         }
     }
@@ -668,7 +668,7 @@ public partial class CMSModules_Groups_Controls_Members_MemberEdit : CMSAdminEdi
 
         if (CurrentMember != null)
         {
-            UserInfo ui = UserInfoProvider.GetUserInfo(CurrentMember.MemberUserID);
+            UserInfo ui = UserInfo.Provider.Get(CurrentMember.MemberUserID);
             if (ui != null)
             {
                 // Save user roles

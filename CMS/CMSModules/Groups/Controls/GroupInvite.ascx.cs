@@ -393,7 +393,7 @@ public partial class CMSModules_Groups_Controls_GroupInvite : CMSAdminControl
                     int userId = ValidationHelper.GetInteger(userSelector.Value, 0);
                     if (userId > 0)
                     {
-                        InvitedUser = UserInfoProvider.GetUserInfo(userId);
+                        InvitedUser = UserInfo.Provider.Get(userId);
 
                         bool userNotFound = true;
 
@@ -434,7 +434,7 @@ public partial class CMSModules_Groups_Controls_GroupInvite : CMSAdminControl
                                 if (!DataHelper.DataSourceIsEmpty(ds))
                                 {
                                     int invitedByuserId = ValidationHelper.GetInteger(ds.Tables[0].Rows[0]["InvitedByUserID"], 0);
-                                    UserInfo ui = UserInfoProvider.GetUserInfo(invitedByuserId);
+                                    UserInfo ui = UserInfo.Provider.Get(invitedByuserId);
                                     if (ui != null)
                                     {
                                         ShowError(GetString("groupinvitation.invitationunsuccesinvexists").Replace("##GROUPNAME##", HTMLHelper.HTMLEncode(Group.GroupDisplayName)).Replace("##USERNAME##", HTMLHelper.HTMLEncode(InvitedUser.UserName)).Replace("##INVITEDBY##", HTMLHelper.HTMLEncode(Functions.GetFormattedUserName(ui.UserName, IsLiveSite))));
@@ -489,7 +489,7 @@ public partial class CMSModules_Groups_Controls_GroupInvite : CMSAdminControl
                         }
                     }
 
-                    InvitedUser = UserInfoProvider.GetUserInfo(InvitedUserID);
+                    InvitedUser = UserInfo.Provider.Get(InvitedUserID);
 
                     if ((GroupID != 0) || (InvitedUser != null) || (radNewUser.Checked))
                     {
@@ -543,7 +543,7 @@ public partial class CMSModules_Groups_Controls_GroupInvite : CMSAdminControl
                                 if (!DataHelper.DataSourceIsEmpty(ds))
                                 {
                                     int invitedByuserId = ValidationHelper.GetInteger(ds.Tables[0].Rows[0]["InvitedByUserID"], 0);
-                                    UserInfo ui = UserInfoProvider.GetUserInfo(invitedByuserId);
+                                    UserInfo ui = UserInfo.Provider.Get(invitedByuserId);
                                     if (ui != null)
                                     {
                                         ShowError(GetString("groupinvitation.invitationunsuccesinvexists").Replace("##GROUPNAME##", HTMLHelper.HTMLEncode(Group.GroupDisplayName)).Replace("##USERNAME##", username).Replace("##INVITEDBY##", HTMLHelper.HTMLEncode(Functions.GetFormattedUserName(ui.UserName, IsLiveSite))));

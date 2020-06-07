@@ -171,7 +171,7 @@ public partial class CMSModules_Content_Controls_ViewVersion : VersionHistoryCon
             try
             {
                 // Get original version of document
-                var version = VersionHistoryInfoProvider.GetVersionHistoryInfo(versionHistoryId);
+                var version = VersionHistoryInfo.Provider.Get(versionHistoryId);
                 slugs = version.GetPageUrlPathSlugs();
                 Node = VersionManager.GetVersion(version, null);
                 CompareNode = VersionManager.GetVersion(versionCompare);
@@ -504,7 +504,7 @@ public partial class CMSModules_Content_Controls_ViewVersion : VersionHistoryCon
                 }
                 dsAttachments.Path = node.NodeAliasPath;
                 dsAttachments.CultureCode = LocalizationContext.PreferredCultureCode;
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(node.NodeSiteID);
+                SiteInfo si = SiteInfo.Provider.Get(node.NodeSiteID);
                 dsAttachments.SiteName = si.SiteName;
                 dsAttachments.OrderBy = "AttachmentOrder, AttachmentName, AttachmentHistoryID";
                 dsAttachments.SelectedColumns = "AttachmentHistoryID, AttachmentGUID, AttachmentImageWidth, AttachmentImageHeight, AttachmentExtension, AttachmentName, AttachmentSize, AttachmentOrder, AttachmentTitle, AttachmentDescription";
@@ -667,7 +667,7 @@ public partial class CMSModules_Content_Controls_ViewVersion : VersionHistoryCon
                         first = false;
                     }
 
-                    leftValueCell.Text = $"{slug.Slug} ({CultureInfoProvider.GetCultureInfo(slug.CultureCode)?.CultureName})";
+                    leftValueCell.Text = $"{slug.Slug} ({CultureInfo.Provider.Get(slug.CultureCode)?.CultureName})";
 
                     AddRow(labelCell, leftValueCell);
                 }

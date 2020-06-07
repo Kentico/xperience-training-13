@@ -425,7 +425,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// </summary>
     private void StoreDialogsConfiguration()
     {
-        UserInfo ui = UserInfoProvider.GetUserInfo(MembershipContext.AuthenticatedUser.UserID);
+        UserInfo ui = UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
         if (ui != null)
         {
             var userSettings = ui.UserSettings;
@@ -450,7 +450,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
 
             userSettings.UserDialogsConfiguration["selectedtab"] = CMSDialogHelper.GetMediaSource(SourceType);
 
-            UserInfoProvider.SetUserInfo(ui);
+            UserInfo.Provider.Set(ui);
         }
     }
 
@@ -526,7 +526,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         else
         {
             // Select first site from users sites
-            DataSet ds = SiteInfoProvider.GetSites()
+            DataSet ds = SiteInfo.Provider.Get()
                                          .Where(siteWhereCondition)
                                          .OrderBy("SiteDisplayName");
 
@@ -677,7 +677,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
             if (!string.IsNullOrEmpty(siteName) && string.IsNullOrEmpty(config.ContentSelectedSite))
             {
                 // Check if site from user settings exists and is running
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo si = SiteInfo.Provider.Get(siteName);
                 if ((si == null) || (si.Status == SiteStatusEnum.Stopped) || !currentUser.IsInSite(siteName))
                 {
                     // If not, use current site
@@ -801,7 +801,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
             int siteId = siteSelector.SiteID;
             if (siteId > 0)
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                SiteInfo si = SiteInfo.Provider.Get(siteId);
                 if (si != null)
                 {
                     siteName = si.SiteName;
@@ -1610,7 +1610,7 @@ function RaiseHiddenPostBack(){{
             if (TreeNodeObj != null)
             {
                 // Get selected node site info
-                var si = SiteInfoProvider.GetSiteInfo(node.NodeSiteID);
+                var si = SiteInfo.Provider.Get(node.NodeSiteID);
                 if (si != null)
                 {
                     bool fullDisplay = false;
@@ -1823,7 +1823,7 @@ function RaiseHiddenPostBack(){{
                 nodeId = ValidationHelper.GetInteger(argTable["nodeid"], 0);
             }
 
-            var ai = AttachmentInfoProvider.GetAttachmentInfo(attachmentGuid, SiteName);
+            var ai = AttachmentInfo.Provider.Get(attachmentGuid, SiteID);
             if (ai != null)
             {
                 var node = GetAttachmentNodeById(nodeId, ai);
@@ -1833,7 +1833,7 @@ function RaiseHiddenPostBack(){{
                     // Check node site
                     if (node.NodeSiteID != SiteContext.CurrentSiteID)
                     {
-                        mediaView.SiteObj = SiteInfoProvider.GetSiteInfo(node.NodeSiteID);
+                        mediaView.SiteObj = SiteInfo.Provider.Get(node.NodeSiteID);
                     }
 
                     // Get node URL
@@ -1904,7 +1904,7 @@ function RaiseHiddenPostBack(){{
                     {
                         // Get only main attachments for given version
                         var query =
-                            AttachmentHistoryInfoProvider.GetAttachmentHistories()
+                            AttachmentHistoryInfo.Provider.Get()
                                 .InVersionExceptVariants(versionHistoryId)
                                 .Where(where)
                                 .OrderBy(mediaView.ListViewControl.SortDirect)
@@ -1918,7 +1918,7 @@ function RaiseHiddenPostBack(){{
                     {
                         // Get only main attachments for published document
                         var query =
-                            AttachmentInfoProvider.GetAttachments()
+                            AttachmentInfo.Provider.Get()
                                 .ExceptVariants()
                                 .Where(where)
                                 .WhereEquals("AttachmentDocumentID", TreeNodeObj.DocumentID)
@@ -1936,7 +1936,7 @@ function RaiseHiddenPostBack(){{
         else if (AttachmentsAreTemporary)
         {
             var query =
-                AttachmentInfoProvider.GetAttachments()
+                AttachmentInfo.Provider.Get()
                     .ExceptVariants()
                     .Where(where)
                     .WhereEquals("AttachmentFormGUID", Config.AttachmentFormGUID)
@@ -2013,7 +2013,7 @@ function RaiseHiddenPostBack(){{
 
             if (versionHistoryId == 0)
             {
-                ai = (DocumentAttachment)AttachmentInfoProvider.GetAttachmentInfo(attachmentGuid, SiteContext.CurrentSiteName);
+                ai = (DocumentAttachment)AttachmentInfo.Provider.Get(attachmentGuid, SiteContext.CurrentSiteID);
             }
             else
             {
@@ -2062,7 +2062,7 @@ function RaiseHiddenPostBack(){{
             var si = SiteContext.CurrentSite;
             if ((TreeNodeObj != null) && (si.SiteID != TreeNodeObj.NodeSiteID))
             {
-                si = SiteInfoProvider.GetSiteInfo(TreeNodeObj.NodeSiteID);
+                si = SiteInfo.Provider.Get(TreeNodeObj.NodeSiteID);
             }
 
             var ai = DocumentHelper.GetAttachment(attachmentGuid, si.SiteName, false);
@@ -2482,7 +2482,7 @@ function RaiseHiddenPostBack(){{
         SiteID = siteSelector.SiteID;
         if (SiteID > 0)
         {
-            mediaView.SiteObj = SiteInfoProvider.GetSiteInfo(SiteID);
+            mediaView.SiteObj = SiteInfo.Provider.Get(SiteID);
         }
 
         // Reset selected node to root node
@@ -2702,7 +2702,7 @@ function RaiseHiddenPostBack(){{
 
         var nodeId = ValidationHelper.GetInteger(argTable["nodeid"], 0);
         var isChecked = ValidationHelper.GetBoolean(argTable["ischecked"], false);
-        var nodeData = DocumentNodeDataInfoProvider.GetDocumentNodeDataInfo(nodeId);
+        var nodeData = DocumentNodeDataInfo.Provider.Get(nodeId);
 
         if (isChecked)
         {

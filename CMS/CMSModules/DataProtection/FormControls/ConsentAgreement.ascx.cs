@@ -22,7 +22,7 @@ public partial class CMSModules_DataProtection_FormControls_ConsentAgreement : F
                 return mSelectedConsent;
             }
 
-            return mSelectedConsent = ConsentInfoProvider.GetConsentInfo(FieldInfo?.Settings["Consent"] as string);
+            return mSelectedConsent = ConsentInfo.Provider.Get(FieldInfo?.Settings["Consent"] as string);
         }
     }
 
@@ -130,7 +130,7 @@ public partial class CMSModules_DataProtection_FormControls_ConsentAgreement : F
     private bool IsConsentAgreed()
     {
         var agreementGuid = ValidationHelper.GetGuid(Value, Guid.Empty);
-        var isRevoked = ConsentAgreementInfoProvider.GetConsentAgreements()
+        var isRevoked = ConsentAgreementInfo.Provider.Get()
                                                     .WithGuid(agreementGuid)
                                                     .Column("ConsentAgreementRevoked")
                                                     .GetScalarResult(true);

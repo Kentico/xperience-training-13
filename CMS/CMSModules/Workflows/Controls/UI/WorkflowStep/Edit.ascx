@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="Edit.ascx.cs" Inherits="CMSModules_Workflows_Controls_UI_WorkflowStep_Edit" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false" Codebehind="Edit.ascx.cs" Inherits="CMSModules_Workflows_Controls_UI_WorkflowStep_Edit" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/Selectors/TimeoutSelector.ascx" TagName="TimeoutSelector"
     TagPrefix="cms" %>
@@ -10,7 +10,9 @@
     TagName="SourcePointEdit" TagPrefix="cms" %>
 
 <asp:Panel ID="pnlContainer" runat="server">
-    <cms:UIForm runat="server" ID="editForm" ObjectType="cms.workflowstep" RefreshHeader="True" FieldGroupHeadingIsAnchor="false" />
+    <cms:FormSubmitButton ID="btnSubmit" OnClick="btnSubmit_Click" Visible="false" runat="server" />
+    <cms:UIForm runat="server" ID="editForm" ObjectType="cms.workflowstep" RefreshHeader="True" FieldGroupHeadingIsAnchor="false"
+        OnOnAfterValidate="editForm_OnAfterValidate" OnOnBeforeSave="editForm_OnBeforeSave" OnOnAfterSave="editForm_OnAfterSave" />
     <asp:PlaceHolder runat="server" ID="plcCondition" Visible="false">
         <cms:LocalizedHeading runat="server" ID="lblCondition" Level="4" />
         <cms:SourcePointEdit runat="server" ID="ucSourcePointEdit" allowconfirmation="false" />

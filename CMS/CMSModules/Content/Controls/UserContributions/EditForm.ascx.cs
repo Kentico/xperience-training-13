@@ -839,7 +839,7 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
                         btnOk.Text = GetString("ContentNewCultureVersion.Create");
 
                         // Load culture versions
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(Node.NodeSiteID);
+                        SiteInfo si = SiteInfo.Provider.Get(Node.NodeSiteID);
                         if (si != null)
                         {
                             lstCultures.Items.Clear();
@@ -848,7 +848,7 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
                             foreach (DataRow nodeCulture in nodes.Tables[0].Rows)
                             {
                                 ListItem li = new ListItem();
-                                li.Text = CultureInfoProvider.GetCultureInfo(nodeCulture["DocumentCulture"].ToString()).CultureName;
+                                li.Text = CultureInfo.Provider.Get(nodeCulture["DocumentCulture"].ToString()).CultureName;
                                 li.Value = nodeCulture["DocumentID"].ToString();
                                 lstCultures.Items.Add(li);
                             }

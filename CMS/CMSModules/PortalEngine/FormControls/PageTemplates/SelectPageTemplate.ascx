@@ -11,11 +11,9 @@
         <asp:HiddenField ID="hdnSelected" runat="server" />
         <asp:PlaceHolder runat="server" ID="pnlButtons">
             <div class="btns-vertical btns-vertical-page-template">
-                <cms:LocalizedButton ID="btnClone" runat="server" EnableViewState="false" ButtonStyle="Default" ResourceString="PageProperties.Clone" ToolTipResourceString="pagetemplateselector.clone" />
                 <cms:LocalizedButton ID="btnEditTemplateProperties" runat="server" ButtonStyle="Default" ResourceString="PageProperties.EditTemplateProperties" EnableViewState="false" ToolTipResourceString="pagetemplateselector.edit" />
             </div>
         </asp:PlaceHolder>
     </ContentTemplate>
 </cms:CMSUpdatePanel>
-<asp:Button runat="server" ID="btnFullPostback" CssClass="HiddenButton" OnClick="btnClone_Click" EnableViewState="false" />
 <asp:HiddenField runat="server" ID="hdnTemplateChanged" />

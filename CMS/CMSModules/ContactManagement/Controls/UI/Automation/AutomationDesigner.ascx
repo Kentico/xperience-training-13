@@ -4,16 +4,6 @@
 
 <cms:WebServiceChecker ID="serviceChecker" runat="server" />
 
-<asp:Panel ID="pnlHeader" runat="server" class="automation-header">
-    <cms:CMSUpdatePanel ID="pnlState" runat="server">
-        <ContentTemplate>
-            <asp:Panel ID="icnState" runat="server" class="automation-header-icon" />
-            <asp:Label ID="lblState" runat="server" EnableViewState="false" CssClass="bold-label" />
-            <cms:CMSButton ID="btnToggleState" runat="server" ButtonStyle="Default" EnableViewState="false" OnClick="ToggleState" />
-        </ContentTemplate>
-    </cms:CMSUpdatePanel>
-</asp:Panel>
-
 <div class="automation-wrapper">
     <div class="automation-graph-wrapper">
         <cms:CMSUpdatePanel ID="pnlAutosaveWrapper" runat="server">

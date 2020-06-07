@@ -32,7 +32,7 @@ public partial class CMSModules_Notifications_Administration_Users_User_Edit_Not
         // Check that only global administrator can edit global administrator's accouns
         if (mUserId > 0)
         {
-            UserInfo ui = UserInfoProvider.GetUserInfo(mUserId);
+            UserInfo ui = UserInfo.Provider.Get(mUserId);
             EditedObject = ui;
 
             if (!CheckGlobalAdminEdit(ui))

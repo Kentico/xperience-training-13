@@ -19,7 +19,7 @@ public partial class CMSModules_Modules_Pages_Module_Sites : GlobalAdminPage
 
         if (moduleId > 0)
         {
-            var module = ResourceInfoProvider.GetResourceInfo(moduleId);
+            var module = ResourceInfo.Provider.Get(moduleId);
             if ((module != null) && (module.ResourceName.EqualsCSafe("cms", true)))
             {
                 ShowInformation(GetString("resource.cmsmoduleassignedtoallsites"));
@@ -29,7 +29,7 @@ public partial class CMSModules_Modules_Pages_Module_Sites : GlobalAdminPage
             }
 
             // Get the active sites
-            DataSet ds = ResourceSiteInfoProvider.GetResourceSites().WhereEquals("ResourceID", moduleId).Column("SiteID");
+            DataSet ds = ResourceSiteInfo.Provider.Get().WhereEquals("ResourceID", moduleId).Column("SiteID");
             if (!DataHelper.DataSourceIsEmpty(ds))
             {
                 currentValues = TextHelper.Join(";", DataHelper.GetStringValues(ds.Tables[0], "SiteID"));
@@ -67,7 +67,7 @@ public partial class CMSModules_Modules_Pages_Module_Sites : GlobalAdminPage
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
                     // Remove
-                    ResourceSiteInfoProvider.RemoveResourceFromSite(moduleId, siteId);
+                    ResourceSiteInfo.Provider.Remove(moduleId, siteId);
                 }
             }
         }
@@ -85,7 +85,7 @@ public partial class CMSModules_Modules_Pages_Module_Sites : GlobalAdminPage
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
                     // Add
-                    ResourceSiteInfoProvider.AddResourceToSite(moduleId, siteId);
+                    ResourceSiteInfo.Provider.Add(moduleId, siteId);
                 }
             }
         }

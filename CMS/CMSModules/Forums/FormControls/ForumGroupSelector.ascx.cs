@@ -238,7 +238,7 @@ public partial class CMSModules_Forums_FormControls_ForumGroupSelector : FormEng
             string siteName = ValidationHelper.GetString(Form.GetFieldValue("SiteName"), null);
             if (!String.IsNullOrEmpty(siteName))
             {
-                SiteInfo siteObj = SiteInfoProvider.GetSiteInfo(siteName);
+                SiteInfo siteObj = SiteInfo.Provider.Get(siteName);
                 if (siteObj != null)
                 {
                     SiteId = siteObj.SiteID;

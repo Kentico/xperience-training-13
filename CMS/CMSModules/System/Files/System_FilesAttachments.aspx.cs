@@ -219,7 +219,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
     protected bool CopyToDatabase(int attachmentId, ref string name)
     {
         // Copy the file from file system to the database
-        var ai = AttachmentInfoProvider.GetAttachmentInfo(attachmentId, true);
+        var ai = AttachmentInfo.Provider.Get(attachmentId);
         if (ai != null)
         {
             name = ai.AttachmentName;
@@ -246,7 +246,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
     protected bool CopyToFileSystem(int attachmentId, ref string name)
     {
         // Copy the file from database to the file system
-        var ai = AttachmentInfoProvider.GetAttachmentInfo(attachmentId, true);
+        var ai = AttachmentInfo.Provider.Get(attachmentId);
         if (ai != null)
         {
             name = ai.AttachmentName;
@@ -269,7 +269,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
     protected bool DeleteFromDatabase(int attachmentId, ref string name)
     {
         // Delete the file in database and ensure it in the file system
-        var ai = AttachmentInfoProvider.GetAttachmentInfo(attachmentId, false);
+        var ai = AttachmentInfo.Provider.GetWithoutBinary(attachmentId);
         if (ai != null)
         {
             name = ai.AttachmentName;
@@ -295,13 +295,13 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
     protected bool DeleteFromFileSystem(int attachmentId, ref string name)
     {
         // Delete the file in file system
-        var ai = AttachmentInfoProvider.GetAttachmentInfo(attachmentId, false);
+        var ai = AttachmentInfo.Provider.GetWithoutBinary(attachmentId);
         if (ai != null)
         {
             name = ai.AttachmentName;
 
             // Ensure the binary column first (check if exists)
-            DataSet ds = AttachmentInfoProvider.GetAttachments()
+            DataSet ds = AttachmentInfo.Provider.Get()
                 .WhereEquals("AttachmentID", attachmentId)
                 .BinaryData(true)
                 .Columns("CASE WHEN AttachmentBinary IS NULL THEN 0 ELSE 1 END AS HasBinary");
@@ -522,7 +522,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
                     int siteId = ValidationHelper.GetInteger(parameter, 0);
                     if (siteId > 0)
                     {
-                        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+                        SiteInfo si = SiteInfo.Provider.Get(siteId);
                         if (si != null)
                         {
                             return si.DisplayName;
@@ -574,7 +574,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
         if (siteId != currentSiteId)
         {
             // Add the site name to the URL if not current site
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+            SiteInfo si = SiteInfo.Provider.Get(siteId);
             if (si != null)
             {
                 url += "&sitename=" + si.SiteName;
@@ -653,7 +653,7 @@ public partial class CMSModules_System_Files_System_FilesAttachments : GlobalAdm
                 }
 
                 // Get all, build the list of items
-                DataSet ds = AttachmentInfoProvider.GetAttachments()
+                DataSet ds = AttachmentInfo.Provider.Get()
                     .Where(whereCondition)
                     .OrderBy(gridFiles.SortDirect)
                     .BinaryData(false)

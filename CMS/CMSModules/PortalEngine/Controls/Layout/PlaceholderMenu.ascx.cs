@@ -109,24 +109,13 @@ function ShowVersionsDialog(objectType, objectId, objectName) {
 
         if (pti != null)
         {
-            if (documentExists && pti.IsReusable)
+            if (documentExists)
             {
                 if (!SynchronizationHelper.UseCheckinCheckout || DocumentContext.CurrentPageInfo.UsedPageTemplateInfo.Generalized.IsCheckedOutByUser(MembershipContext.AuthenticatedUser))
                 {
                     iClone.Text = ResHelper.GetString("PlaceholderMenu.IconClone", culture);
                     iClone.OnClientClick = "CloneTemplate(GetContextMenuParameter('pagePlaceholderMenu'));";
                 }
-            }
-            else
-            {
-                iSaveAsNew.Text = ResHelper.GetString("PageProperties.Save", culture);
-
-                int templateId = pi.UsedPageTemplateInfo.PageTemplateId;
-                iSaveAsNew.OnClientClick = String.Format(
-                    "modalDialog('{0}?refresh=1&templateId={1}&siteid={2}', 'SaveNewTemplate', 720, 430); return false;",
-                    ResolveUrl("~/CMSModules/PortalEngine/UI/Layout/SaveNewPageTemplate.aspx"),
-                    templateId,
-                    SiteContext.CurrentSiteID);
             }
         }
 

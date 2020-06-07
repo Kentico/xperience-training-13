@@ -42,7 +42,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         issueLinks.NoDataText = GetString("newsletter.issue.overviewnoclicks");
 
         mStatisticsCalculator = new IssueStatisticsCalculator(mIssue);
-        
+
         if (!ShouldDisplayOverviewPage())
         {
             ShowInformation(GetString("newsletter.issue.overviewnotsentyet"));
@@ -63,17 +63,17 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         {
             bool areCampaignsAvailable = LicenseKeyInfoProvider.IsFeatureAvailable(RequestContext.CurrentDomain, FeatureEnum.CampaignAndConversions);
 
-            issueForm.FieldControls["IssueUTMCampaign"].Value = 
-                areCampaignsAvailable ? 
-                GetUtmCampaignNameHtmlOutput() : 
+            issueForm.FieldControls["IssueUTMCampaign"].Value =
+                areCampaignsAvailable ?
+                GetUtmCampaignNameHtmlOutput() :
                 mIssue.IssueUTMCampaign;
         }
-     
+
         // Init engagement statistics
         InitEngagement();
         InitFunnel();
         InitOverview();
-        
+
         pnlDelivery.Visible = mMonitorBouncedEmails;
 
         // Ensure tooltips
@@ -132,8 +132,8 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
 
     private bool ShouldDisplayOverviewPage()
     {
-        return ((mIssue.IssueStatus == IssueStatusEnum.Finished) 
-             || (mIssue.IssueStatus == IssueStatusEnum.Sending) 
+        return ((mIssue.IssueStatus == IssueStatusEnum.Finished)
+             || (mIssue.IssueStatus == IssueStatusEnum.Sending)
              || (mIssue.IssueStatus == IssueStatusEnum.TestPhase));
     }
 
@@ -182,10 +182,10 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         CreateAndSetColumn(table, "openrate", mStatisticsCalculator.OpenRatio);
         CreateAndSetColumn(table, "totalclicks", mStatisticsCalculator.TotalClicks);
         CreateAndSetColumn(table, "clicks", mStatisticsCalculator.UniqueClicks);
-        CreateAndSetColumn(table, "clickrate", mStatisticsCalculator.UniqueClickThroughRatio);
+        CreateAndSetColumn(table, "clickrate", mStatisticsCalculator.UniqueClickRatio);
         CreateAndSetColumn(table, "unsubscriptions", mIssue.IssueUnsubscribed);
         CreateAndSetColumn(table, "unsubscriptionrate", mStatisticsCalculator.UnsubscriptionRatio);
-        
+
 
         // Assign dataset to unigrid source
         var ds = new DataSet();
@@ -207,7 +207,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
             ugContactLoss.NamedColumns["sent"].Visible = !mMonitorBouncedEmails;
         };
 
-        // Create rate labels with tooltips 
+        // Create rate labels with tooltips
         ugEngagement.OnExternalDataBound += ExternalDataBound;
         ugDelivery.OnExternalDataBound += ExternalDataBound;
         ugContactLoss.OnExternalDataBound += ExternalDataBound;
@@ -248,8 +248,8 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
 
     private string GetHyperLinkOrOriginalStringIfInsufficientLicense(string uiElementName, string text)
     {
-        return (ObjectFactory<ILicenseService>.StaticSingleton().IsFeatureAvailable(FeatureEnum.FullContactManagement) && text.ToInteger(0) > 0) ? 
-            GetHyperLink(uiElementName, text) : 
+        return (ObjectFactory<ILicenseService>.StaticSingleton().IsFeatureAvailable(FeatureEnum.FullContactManagement) && text.ToInteger(0) > 0) ?
+            GetHyperLink(uiElementName, text) :
             text;
     }
 
@@ -286,7 +286,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
 
         return URLHelper.GetAbsoluteUrl(Service.Resolve<IContactDemographicsLinkBuilder>().GetDemographicsLink(retrieverIdentifier, parameters));
     }
-    
+
 
     private void CreateAndSetColumn(DataTable dt, string colName, object value)
     {
@@ -302,7 +302,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         }
     }
 
-    
+
     private string GetUtmCampaignNameHtmlOutput()
     {
         CampaignInfo campaign = CampaignInfoProvider.GetCampaignByUTMCode(mIssue.IssueUTMCampaign, CurrentSiteName);
@@ -310,7 +310,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         // Is issue linked to an existing campaign
         if (campaign != null)
         {
-            var campaignDetailUrl = Service.Resolve<IUILinkProvider>().GetSingleObjectLink(CampaignInfo.TYPEINFO.ModuleName, CAMPAIGN_ELEMENT_CODENAME, 
+            var campaignDetailUrl = Service.Resolve<IUILinkProvider>().GetSingleObjectLink(CampaignInfo.TYPEINFO.ModuleName, CAMPAIGN_ELEMENT_CODENAME,
                                                                         new ObjectDetailLinkParameters
                                                                         {
                                                                             ObjectIdentifier = campaign.CampaignID,
@@ -353,7 +353,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
             {
                 Title = HTMLHelper.HTMLEncode(GetString("unigrid.newsletter_issue_trackedlinks.columns.uniqueclicks")),
                 Value = mStatisticsCalculator.UniqueClicks,
-                RateText = String.Format(RATE_TEXT_FORMAT, GetString("newsletter.issue.uniqueclickrate"), mStatisticsCalculator.UniqueClickThroughRatio),
+                RateText = String.Format(RATE_TEXT_FORMAT, GetString("newsletter.issue.uniqueclickrate"), mStatisticsCalculator.UniqueClickRatio),
             }
         };
 

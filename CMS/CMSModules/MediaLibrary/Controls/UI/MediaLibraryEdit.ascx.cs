@@ -36,7 +36,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
             if ((mLibraryInfo == null) && (MediaLibraryID > 0))
             {
                 // Get data
-                mLibraryInfo = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryID);
+                mLibraryInfo = MediaLibraryInfo.Provider.Get(MediaLibraryID);
 
                 // Check whether library belongs to requested group when entered 
                 if ((mLibraryInfo != null) && (MediaLibraryGroupID > 0) && (mLibraryInfo.LibraryGroupID != MediaLibraryGroupID))
@@ -288,7 +288,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
     /// <param name="folderName">A name of the media library root folder.</param>
     private bool IsFolderNameUnique(string folderName)
     {
-        MediaLibraryInfo library = MediaLibraryInfoProvider.GetMediaLibraries()
+        MediaLibraryInfo library = MediaLibraryInfo.Provider.Get()
                                                             .TopN(1)
                                                             .Column("LibraryID")
                                                             .WhereEquals("LibraryFolder", folderName)

@@ -152,7 +152,7 @@ public partial class CMSModules_Content_Controls_NewCultureVersion : CMSUserCont
         {
             EnsureScripts();
 
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(Node.NodeSiteID);
+            SiteInfo si = SiteInfo.Provider.Get(Node.NodeSiteID);
             if (si == null)
             {
                 return;

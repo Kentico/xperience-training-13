@@ -60,7 +60,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Design : CMSU
         // Init the page components
         manPortal.SetMainPagePlaceholder(plc);
 
-        var ui = UIElementInfoProvider.GetUIElementInfo(QueryHelper.GetInteger("elementid", 0));
+        var ui = UIElementInfo.Provider.Get(QueryHelper.GetInteger("elementid", 0));
 
         // Clear UIContext data of element "Modules.UserInterface.Design" (put by UIElement attribute to check permissions)
         var ctx = pnlContext.UIContext;

@@ -170,7 +170,7 @@ public partial class CMSModules_Forums_Controls_Forums_ForumSecurity : CMSAdminE
         }
 
         // Get forum resource
-        resForums = ResourceInfoProvider.GetResourceInfo("CMS.Forums");
+        resForums = ResourceInfo.Provider.Get("CMS.Forums");
 
         if ((resForums != null) && (forum != null))
         {
@@ -243,7 +243,7 @@ public partial class CMSModules_Forums_Controls_Forums_ForumSecurity : CMSAdminE
         // Get forum resource info     
         if (resForums == null)
         {
-            resForums = ResourceInfoProvider.GetResourceInfo("CMS.Forums");
+            resForums = ResourceInfo.Provider.Get("CMS.Forums");
         }
 
         // Get forum object

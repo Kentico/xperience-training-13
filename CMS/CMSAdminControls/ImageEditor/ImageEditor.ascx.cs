@@ -83,7 +83,7 @@ public partial class CMSAdminControls_ImageEditor_ImageEditor : CMSUserControl
 
                 siteId = QueryHelper.GetInteger("siteid", 0);
 
-                SiteInfo site = SiteInfoProvider.GetSiteInfo(siteId);
+                SiteInfo site = SiteInfo.Provider.Get(siteId);
                 if (site != null)
                 {
                     mCurrentSiteName = site.SiteName;
@@ -913,7 +913,7 @@ public partial class CMSAdminControls_ImageEditor_ImageEditor : CMSUserControl
 
                 if (IsWorkflowFinished(nextStep))
                 {
-                    attachment = (DocumentAttachment)AttachmentInfoProvider.GetAttachmentInfo(attachmentGuid, CurrentSiteName);
+                    attachment = (DocumentAttachment)AttachmentInfo.Provider.Get(attachmentGuid, SiteInfoProvider.GetSiteID(CurrentSiteName));
                 }
             }
         }

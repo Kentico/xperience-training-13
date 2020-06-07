@@ -220,7 +220,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Properties_CopyMoveLink
             {
                 if ((tn != null) && (tn.NodeSiteID != CurrentSite.SiteID))
                 {
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(tn.NodeSiteID);
+                    SiteInfo si = SiteInfo.Provider.Get(tn.NodeSiteID);
                     if (si != null)
                     {
                         targetSite = si;

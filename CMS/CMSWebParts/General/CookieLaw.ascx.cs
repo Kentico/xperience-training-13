@@ -465,7 +465,7 @@ public partial class CMSWebParts_General_CookieLaw : CMSAbstractWebPart
             return;
         }
 
-        var consent = ConsentInfoProvider.GetConsentInfo(TrackingConsent);
+        var consent = ConsentInfo.Provider.Get(TrackingConsent);
         var contact = ContactManagementContext.CurrentContact;
 
         if (consent != null && contact != null)
@@ -480,7 +480,7 @@ public partial class CMSWebParts_General_CookieLaw : CMSAbstractWebPart
 
     private void DisplayTrackingConsent()
     {
-        var consent = ConsentInfoProvider.GetConsentInfo(TrackingConsent);
+        var consent = ConsentInfo.Provider.Get(TrackingConsent);
         if (consent != null)
         {
             var cultureCode = LocalizationContext.CurrentCulture.CultureCode;
@@ -579,7 +579,7 @@ public partial class CMSWebParts_General_CookieLaw : CMSAbstractWebPart
 
     private void AgreeConsent()
     {
-        var consent = ConsentInfoProvider.GetConsentInfo(TrackingConsent);
+        var consent = ConsentInfo.Provider.Get(TrackingConsent);
         if ((consent != null) && (ContactManagementContext.CurrentContact != null))
         {
             Service.Resolve<IConsentAgreementService>().Agree(ContactManagementContext.CurrentContact, consent);
@@ -589,7 +589,7 @@ public partial class CMSWebParts_General_CookieLaw : CMSAbstractWebPart
 
     private void RevokeConsent(ContactInfo contact)
     {
-        var consent = ConsentInfoProvider.GetConsentInfo(TrackingConsent);
+        var consent = ConsentInfo.Provider.Get(TrackingConsent);
         if ((consent != null) && contact != null)
         {
             Service.Resolve<IConsentAgreementService>().Revoke(contact, consent);

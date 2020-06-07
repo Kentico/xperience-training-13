@@ -467,7 +467,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaGallery 
     {
         get
         {
-            return mMediaLibrary ?? (mMediaLibrary = MediaLibraryInfoProvider.GetMediaLibraryInfo(MediaLibraryName, SiteContext.CurrentSiteName));
+            return mMediaLibrary ?? (mMediaLibrary = MediaLibraryInfo.Provider.Get(MediaLibraryName, SiteContext.CurrentSiteID));
         }
     }
 

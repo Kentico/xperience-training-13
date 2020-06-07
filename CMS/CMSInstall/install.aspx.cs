@@ -1105,10 +1105,7 @@ function Finished(sender) {{
                 {
                     if (DBInstalled)
                     {
-                        SetAppConnectionString();
-
-                        // Continue with next step
-                        CheckLicense();
+                        FinalizeDBInstallation();
                     }
                     else
                     {
@@ -1321,7 +1318,18 @@ function Finished(sender) {{
             return;
         }
 
+        FinalizeDBInstallation();
+    }
+
+
+    /// <summary>
+    /// Sets connection string, inits application and finalizes the database data (macro signatures, time zones, license). 
+    /// </summary>
+    private void FinalizeDBInstallation()
+    {
         SetAppConnectionString();
+
+        UpdateMacroSignatures();
 
         // Recalculate time zone daylight saving start and end.
         TimeZoneInfoProvider.GenerateTimeZoneRules();
@@ -1694,8 +1702,6 @@ function Finished(sender) {{
         {
             TryResetUninstallationTokens();
 
-            SqlInstallationHelper.AfterDataGet += OnAfterGetDefaultData;
-
             var settings = new DatabaseInstallationSettings
             {
                 ConnectionString = Info.ConnectionString,
@@ -1706,8 +1712,6 @@ function Finished(sender) {{
                 Logger = Log
             };
             bool success = SqlInstallationHelper.InstallDatabase(settings);
-
-            SqlInstallationHelper.AfterDataGet -= OnAfterGetDefaultData;
 
             if (success)
             {
@@ -1739,10 +1743,22 @@ function Finished(sender) {{
     }
 
 
-    private void OnAfterGetDefaultData(object sender, DataSetPostProcessingEventArgs args)
+    /// <summary>
+    /// Signs all macros using global administrator identity.
+    /// </summary>
+    private static void UpdateMacroSignatures()
     {
-        // We use the default admin user name for installation as the users may not yet be ready and we count with administrator account to be installed
-        MacroSecurityProcessor.RefreshSecurityParameters(args.Data, new MacroIdentityOption { IdentityName = MacroIdentityInfoProvider.DEFAULT_GLOBAL_ADMINISTRATOR_IDENTITY_NAME });
+        var eventLogService = Service.Resolve<IEventLogService>();
+        
+        void logErrorAction(string message)
+        {
+            using (new CMSActionContext { LogEvents = true })
+            {
+                eventLogService.LogError("Macros - Refresh security parameters", "ERROR", message);
+            }
+        }
+
+        MacroSecurityInstallationHelper.UpdateAllMacroSignatures(logErrorAction);
     }
 
     #endregion

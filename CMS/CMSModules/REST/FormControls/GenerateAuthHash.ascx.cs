@@ -41,7 +41,7 @@ public partial class CMSModules_REST_FormControls_GenerateAuthHash : FormEngineU
             {
                 var siteId = QueryHelper.GetInteger("siteId", -1);
                 mSelectedSite = (siteId > 0)
-                    ? SiteInfoProvider.GetSiteInfo(siteId)
+                    ? SiteInfo.Provider.Get(siteId)
                     : SiteContext.CurrentSite;
             }
 

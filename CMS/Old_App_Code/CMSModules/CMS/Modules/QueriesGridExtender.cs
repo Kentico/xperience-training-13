@@ -48,7 +48,7 @@ public class QueriesGridExtender : ControlExtender<UniGrid>
                 bool result = classInfo.ClassShowAsSystemTable;
                 if (!result)
                 {
-                    ResourceInfo resourceInfo = ResourceInfoProvider.GetResourceInfo(classInfo.ClassResourceID);
+                    ResourceInfo resourceInfo = ResourceInfo.Provider.Get(classInfo.ClassResourceID);
                     result = resourceInfo.IsEditable;
                 }
                 mQueriesCanBeModified = result;

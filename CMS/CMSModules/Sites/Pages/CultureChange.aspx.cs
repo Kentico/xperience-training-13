@@ -4,6 +4,8 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
+using CMS.DocumentEngine.Routing;
+using CMS.DocumentEngine.Routing.Internal;
 using CMS.Helpers;
 using CMS.LicenseProvider;
 using CMS.Membership;
@@ -27,7 +29,7 @@ public partial class CMSModules_Sites_Pages_CultureChange : CMSModalGlobalAdminP
         lblNewCulture.Text = GetString("SiteDefaultCultureChange.NewCulture");
 
         PageTitle.TitleText = GetString("SiteDefaultCultureChange.Title");
-        SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+        SiteInfo si = SiteInfo.Provider.Get(siteId);
         if (si != null)
         {
             // Check licensing policy
@@ -73,13 +75,19 @@ public partial class CMSModules_Sites_Pages_CultureChange : CMSModalGlobalAdminP
         if ((culture != "") && ((currentCulture.ToLowerCSafe() != culture.ToLowerCSafe()) || chkDocuments.Checked))
         {
             // Set new culture
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(siteId);
+            SiteInfo si = SiteInfo.Provider.Get(siteId);
             if (si != null)
             {
                 try
                 {
                     // Set default culture and change current culture label
                     SettingsKeyInfoProvider.SetValue("CMSDefaultCultureCode", si.SiteName, culture.Trim());
+
+                    if (PageRoutingHelper.HideLanguagePrefixForDefaultCultureUrl(si.SiteName))
+                    {
+                        new PageUrlPathCultureFormatChanger(siteId).ChangeForCulture(currentCulture, PageRoutingUrlCultureFormatEnum.LanguagePrefix);
+                        new PageUrlPathCultureFormatChanger(siteId).ChangeForCulture(culture, PageRoutingUrlCultureFormatEnum.DomainDriven);
+                    }
 
                     // Change culture of documents
                     if (chkDocuments.Checked)

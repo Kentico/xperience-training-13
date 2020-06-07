@@ -6,6 +6,7 @@ using CMS;
 using CMS.Base;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
+using CMS.DocumentEngine.Routing.Internal;
 using CMS.Base.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
@@ -144,7 +145,7 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
         {
             foreach (int siteId in siteIds)
             {
-                var site = SiteInfoProvider.GetSiteInfo(siteId);
+                var site = SiteInfo.Provider.Get(siteId);
                 if (site == null)
                 {
                     continue;
@@ -152,7 +153,8 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
 
                 if (CultureSiteInfoProvider.LicenseVersionCheck(site.DomainName, FeatureEnum.Multilingual, ObjectActionEnum.Insert))
                 {
-                    CultureSiteInfoProvider.AddCultureToSite(cultureInfo.CultureID, siteId);
+                    CultureSiteInfo.Provider.Add(cultureInfo.CultureID, siteId);
+                    new CulturePageUrlPathsManager(siteId).Generate(cultureInfo.CultureID);
                     changed = true;
                 }
                 else
@@ -193,7 +195,7 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
         // Remove all selected items
         foreach (int siteId in siteIds)
         {
-            var site = SiteInfoProvider.GetSiteInfo(siteId);
+            var site = SiteInfo.Provider.Get(siteId);
             if (site == null)
             {
                 continue;
@@ -222,7 +224,8 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
                 continue;
             }
 
-            CultureSiteInfoProvider.RemoveCultureFromSite(cultureInfo.CultureID, site.SiteID);
+            CultureSiteInfo.Provider.Remove(cultureInfo.CultureID, site.SiteID);
+            new CulturePageUrlPathsManager(siteId).Delete(cultureInfo.CultureID);
             changed = true;
         }
 
@@ -245,7 +248,7 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
 
         try
         {
-            return CultureInfoProvider.GetCultureInfo(cultureId);
+            return CultureInfo.Provider.Get(cultureId);
         }
         catch (Exception)
         {
@@ -259,7 +262,7 @@ public class CultureSitesExtender : ControlExtender<UniSelector>
     /// </summary>
     private IList<int> GetCurrentSiteIds()
     {
-        return CultureSiteInfoProvider.GetCultureSites()
+        return CultureSiteInfo.Provider.Get()
                                       .Column("SiteID")
                                       .WhereEquals("CultureID", cultureInfo.CultureID)
                                       .GetListResult<int>();

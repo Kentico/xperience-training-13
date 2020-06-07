@@ -191,7 +191,7 @@ public partial class CMSModules_EventLog_EventLog_Details : CMSEventLogPage
 
             if (ev.SiteID > 0)
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(ev.SiteID);
+                SiteInfo si = SiteInfo.Provider.Get(ev.SiteID);
                 if (si != null)
                 {
                     lblSiteNameValue.Text = HTMLHelper.HTMLEncode(si.DisplayName);

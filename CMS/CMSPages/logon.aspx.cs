@@ -380,7 +380,7 @@ function UpdateLabel_", ClientID, @"(content, context) {
         string userName = Login1.UserName;
 
         // Get info on the authenticated user
-        UserInfo ui = UserInfoProvider.GetUserInfo(userName);
+        UserInfo ui = UserInfo.Provider.Get(userName);
 
         // Check whether safe user name is required and if so get safe username
         if (ui == null && AuthenticationMode.IsMixedAuthentication() && UserInfoProvider.UseSafeUserName)
@@ -403,7 +403,7 @@ function UpdateLabel_", ClientID, @"(content, context) {
                 if (ui != null)
                 {
                     ui.PreferredUICultureCode = selectedCulture;
-                    UserInfoProvider.SetUserInfo(ui);
+                    UserInfo.Provider.Set(ui);
                 }
 
                 // Update current user
@@ -709,7 +709,7 @@ function UpdateLabel_", ClientID, @"(content, context) {
     public string GetCallbackResult()
     {
         string result = "";
-        UserInfo user = UserInfoProvider.GetUserInfo(Login1.UserName);
+        UserInfo user = UserInfo.Provider.Get(Login1.UserName);
         if (user != null)
         {
             string siteName = SiteContext.CurrentSiteName;

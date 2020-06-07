@@ -103,7 +103,7 @@ public partial class CMSModules_TagGroups_Controls_TagSelectorDialog : CMSUserCo
         var items = gridElem.SelectedItems;
         if (items.Count > 0)
         {
-            var savedTagNames = TagInfoProvider.GetTags()
+            var savedTagNames = TagInfo.Provider.Get()
                                 .WhereIn("TagID", items)
                                 .Column("TagName")
                                 .OrderBy("TagName")
@@ -156,7 +156,7 @@ public partial class CMSModules_TagGroups_Controls_TagSelectorDialog : CMSUserCo
         }
 
         // Get tag IDs for given tag names
-        var tags = TagInfoProvider.GetTags()
+        var tags = TagInfo.Provider.Get()
                                     .WhereIn("TagName", selectedTags)
                                     .WhereEquals("TagGroupID", groupId)
                                     .Columns("TagID", "TagName")

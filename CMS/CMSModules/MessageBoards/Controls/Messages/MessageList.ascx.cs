@@ -407,7 +407,7 @@ public partial class CMSModules_MessageBoards_Controls_Messages_MessageList : CM
 
         if (!ShowFilter)
         {
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+            SiteInfo si = SiteInfo.Provider.Get(SiteName);
             if (si != null)
             {
                 siteId = si.SiteID;

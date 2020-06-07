@@ -1,8 +1,8 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="PendingContacts.ascx.cs" Inherits="CMSModules_ContactManagement_Controls_UI_Automation_PendingContacts" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false"  Codebehind="PendingContacts.ascx.cs" Inherits="CMSModules_ContactManagement_Controls_UI_Automation_PendingContacts" %>
 <%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid" TagPrefix="cms" %>
 <%@ Register Namespace="CMS.UIControls.UniGridConfig" TagPrefix="ug" Assembly="CMS.UIControls" %>
-<cms:UniGrid runat="server" ID="listElem" OrderBy="StateStatus, StateStepID" Columns="StateID, StateStepID, StateObjectID, StateWorkflowID, StateStatus, StateCreated, StateSiteID, StateUserID"
-    IsLiveSite="false" RememberStateByParam="issitemanager" OnOnAction="listElem_OnAction">
+<cms:UniGrid runat="server" ID="listElem" OrderBy="StateStatus, StateStepID" Columns="StateID, StateStepID, StateObjectID, StateWorkflowID, StateStatus, StateCreated, StateUserID"
+    IsLiveSite="false" RememberStateByParam="issitemanager" OnOnAction="listElem_OnAction" OnOnExternalDataBound="listElem_OnExternalDataBound" OnOnDataReload="listElem_OnDataReload">
     <GridActions Parameters="StateID;StateObjectID">
         <ug:Action Name="edit" Caption="$ma.process.manage$" ExternalSourceName="edit" FontIconClass="icon-edit" FontIconStyle="Allow" />
         <ug:Action Name="dialogedit" Caption="$ma.process.manage$" ExternalSourceName="dialogedit" OnClick="viewPendingContactProcess({0}); return false;" FontIconClass="icon-edit" FontIconStyle="Allow" />

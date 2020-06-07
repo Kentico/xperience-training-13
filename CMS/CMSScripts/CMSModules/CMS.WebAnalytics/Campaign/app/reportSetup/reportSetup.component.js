@@ -12,7 +12,6 @@
         return {
             bindings: {
                 conversions: '=',
-                siteIsContentOnly: '<',
                 campaign: '<'
             },
             templateUrl: 'cms.webanalytics/campaign/reportSetup/reportSetup.component.html',

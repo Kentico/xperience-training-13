@@ -103,7 +103,7 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_LocalizeField 
         if (lstExistingOrNew.SelectedValue == "new")
         {
             key = SystemContext.DevelopmentMode ? txtNewResource.Text.Trim() : resourceKeyPrefix + txtNewResource.Text.Trim();
-            ri = ResourceStringInfoProvider.GetResourceStringInfo(key);
+            ri = ResourceStringInfo.Provider.Get(key);
 
             // Resource string doesn't exists yet
             if (ri == null)
@@ -120,7 +120,7 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_LocalizeField 
                     ri.CultureCode = cultureCode;
                     ri.TranslationText = plainText;
                     ri.StringIsCustom = !SystemContext.DevelopmentMode;
-                    ResourceStringInfoProvider.SetResourceStringInfo(ri);
+                    ResourceStringInfo.Provider.Set(ri);
                 }
             }
 
@@ -131,7 +131,7 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_LocalizeField 
         else
         {
             key = ValidationHelper.GetString(resourceSelector.Value, String.Empty);
-            ri = ResourceStringInfoProvider.GetResourceStringInfo(key);
+            ri = ResourceStringInfo.Provider.Get(key);
 
             // Key not found in DB
             if (ri == null)
@@ -153,7 +153,7 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_LocalizeField 
                                 CultureCode = cultureCode,
                                 TranslationText = translation
                             };
-                            ResourceStringInfoProvider.SetResourceStringInfo(ri);
+                            ResourceStringInfo.Provider.Set(ri);
                         }
 
                         string script = ScriptHelper.GetScript("CloseDialog(); wopener.SetResource('" + hdnValue + "', '" + key + "', '" + textbox + "', " + ScriptHelper.GetString(translation) + ", '" + btnLocalizeField + "', '" + btnLocalizeString + "', '" + btnRemoveLocalization + "', '" + localizedInputContainer + "');");

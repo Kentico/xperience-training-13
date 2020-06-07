@@ -8328,9 +8328,9 @@
             Indicates if security parameters in macros are handled automatically.
             </summary>
         </member>
-        <member name="P:CMS.Base.Web.UI.CMSTextBox.DecodeMacrosBeforeSign">
+        <member name="P:CMS.Base.Web.UI.CMSTextBox.MacroProcessingColumnAdapter">
             <summary>
-            Indicates if macro expressions should be decoded before security parameters are computed. Default <c>False</c>.
+            Column adapter to be used when signing macros.
             </summary>
         </member>
         <member name="P:CMS.Base.Web.UI.CMSTextBox.IsLiveSite">
@@ -11703,6 +11703,13 @@
             </summary>
             <param name="page">Page to register</param>
         </member>
+        <member name="M:CMS.Base.Web.UI.ScriptHelper.RegisterSetLiveSiteURL(CMS.Base.Web.UI.PageElement,System.String)">
+            <summary>
+            Ensures registration of the update live site URL script for the application list.
+            </summary>
+            <param name="element">Page element.</param>
+            <param name="url">URL of the live site page.</param>
+        </member>
         <member name="M:CMS.Base.Web.UI.ScriptHelper.RegisterApplicationConstants(System.Web.UI.Page)">
             <summary>
             Ensures registration of the application constants script. It provides constants applicationUrl, imagesUrl, isRTL.
@@ -13065,8 +13072,8 @@
              The default value is "~/CMSAdminControls/CKEditor/".
              </p>
             <p>
-             The base path can be also set in the Web.config file using the 
-             appSettings section. Just set the "CKEditor:BasePath" for that. 
+             The base path can be also set in the Web.config file using the
+             appSettings section. Just set the "CKEditor:BasePath" for that.
              For example:
              codeconfigurationappSettingsadd key="CKEditor:BasePath" value="/scripts/ckeditor/" //appSettings/configuration/code>
              </p>
@@ -13095,11 +13102,6 @@
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResolvedValue">
             <summary>
             Resolved editor content.
-            </summary>
-        </member>
-        <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.IsLiveSite">
-            <summary>
-            Indicates if CKEditor is on live site.
             </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResolverName">
@@ -13145,21 +13147,21 @@
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.AutoGrowMaxHeight">
              <summary>
              The maximum height to which the editor can reach using AutoGrow.
-             Zero means unlimited. 
+             Zero means unlimited.
             
              Default value: 0
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.AutoGrowMinHeight">
              <summary>
-             The minimum height to which the editor can reach using AutoGrow.  
+             The minimum height to which the editor can reach using AutoGrow.
             
              Default value: 200
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.AutoUpdateElement">
              <summary>
-             Whether the replaced element (usually a textarea) is to be 
+             Whether the replaced element (usually a textarea) is to be
              updated automatically when posting the form containing the editor.
             
              Default value: true
@@ -13174,79 +13176,79 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.BaseHref">
              <summary>
-             The base href URL used to resolve relative and 
+             The base href URL used to resolve relative and
              absolute URLs in the editor content.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.BlockedKeystrokes">
              <summary>
-             The keystrokes that are blocked by default as the browser 
+             The keystrokes that are blocked by default as the browser
              implementation is buggy. These default keystrokes are handled by the editor.
             
-             Default value: 
+             Default value:
              [ CKEDITOR.CTRL + 66, CKEDITOR.CTRL + 73, CKEDITOR.CTRL + 85 ] // CTRL+B,I,U
             
              NOTE: This is a pure javascript value, so be careful not to break things!
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.BodyClass">
              <summary>
-             Sets the "class" attribute to be used on the body 
+             Sets the "class" attribute to be used on the body
              element of the editing area.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.BodyId">
              <summary>
-             Sets the "id" attribute to be used on the body 
+             Sets the "id" attribute to be used on the body
              element of the editing area.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.BrowserContextMenuOnCtrl">
              <summary>
-             Whether to show the browser native context menu when 
-             the CTRL or the META (Mac) key is pressed while opening 
-             the context menu. 
+             Whether to show the browser native context menu when
+             the CTRL or the META (Mac) key is pressed while opening
+             the context menu.
             
              Default value: true
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ContentsCss">
              <summary>
-             The CSS file(s) to be used to apply style to the contents. 
-             It should reflect the CSS used in the final pages where the 
+             The CSS file(s) to be used to apply style to the contents.
+             It should reflect the CSS used in the final pages where the
              contents are to be used.
             
              This can be a string or a string[] (Array).
             
              Default value: CKEDITOR.basePath + 'contents.css'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ContentsLangDirection">
              <summary>
-             The writing direction of the language used to write the 
-             editor contents. 
-             Allowed values are 'ltr' for Left-To-Right language 
+             The writing direction of the language used to write the
+             editor contents.
+             Allowed values are 'ltr' for Left-To-Right language
              (like English), or 'rtl' for Right-To-Left languages (like Arabic).
             
              Default value: ltr (LanguageDirection.LeftToRight)
@@ -13259,37 +13261,37 @@
              CKEditor will recursively load custom configuration files defined inside other custom configuration files.
             
              Default value: CKEDITOR.basePath + 'config.js'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DataIndentationChars">
-            <summary>
-            The characters to be used for indenting the HTML produced by the editor. 
-            Using characters different than ' ' (space) and '\t' (tab) is definitely a bad idea as it'll mess the code.
+             <summary>
+             The characters to be used for indenting the HTML produced by the editor.
+             Using characters different than ' ' (space) and '\t' (tab) is definitely a bad idea as it'll mess the code.
             
-            Default value: '\t'
+             Default value: '\t'
             
-            Set to null for default value
-            </summary>
-            <returns>null if the default value is set</returns>
+             Set to null for default value
+             </summary>
+             <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DefaultLanguage">
              <summary>
-             The language to be used if CKEDITOR.config.language is left 
-             empty and it's not possible to localize the editor to the 
+             The language to be used if CKEDITOR.config.language is left
+             empty and it's not possible to localize the editor to the
              user language.
             
              Default value: 'en'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DialogBackgroundCoverColor">
              <summary>
-             The color of the dialog background cover. 
+             The color of the dialog background cover.
              It should be a valid CSS color string.
             
              Default value: 'white'
@@ -13297,8 +13299,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DialogBackgroundCoverOpacity">
              <summary>
-             The opacity of the dialog background cover. 
-             It should be a number within the range [0.0, 1.0]. 
+             The opacity of the dialog background cover.
+             It should be a number within the range [0.0, 1.0].
             
              Default value: 0.5
              </summary>
@@ -13315,7 +13317,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DialogMagnetDistance">
              <summary>
-             The distance of magnetic borders used in moving and 
+             The distance of magnetic borders used in moving and
              resizing dialogs, measured in pixels.
             
              Default value: 20
@@ -13323,7 +13325,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DialogNoConfirmCancel">
              <summary>
-             Tells if user should not be asked to confirm close, if any dialog field was modified. 
+             Tells if user should not be asked to confirm close, if any dialog field was modified.
              By default it is set to false meaning that the confirmation dialog will be shown.
             
              Default value: false
@@ -13331,10 +13333,10 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DisableNativeSpellChecker">
              <summary>
-             Disables the built-in words spell checker if browser provides one. 
-             
-             Note: Although word suggestions provided by browsers (natively) will not appear in CKEditor's default 
-             context menu, users can always reach the native context menu by holding the Ctrl key when right-clicking 
+             Disables the built-in words spell checker if browser provides one.
+            
+             Note: Although word suggestions provided by browsers (natively) will not appear in CKEditor's default
+             context menu, users can always reach the native context menu by holding the Ctrl key when right-clicking
              if browserContextMenuOnCtrl is enabled or you're simply not using the context menu plugin.
             
              Default value: true
@@ -13342,8 +13344,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DisableNativeTableHandles">
              <summary>
-             Disables the "table tools" offered natively by the 
-             browser (currently Firefox only) to make quick table 
+             Disables the "table tools" offered natively by the
+             browser (currently Firefox only) to make quick table
              editing operations, like adding or deleting rows and columns.
             
              Default value: true
@@ -13351,7 +13353,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DisableObjectResizing">
              <summary>
-             Disables the ability of resize objects (image and tables) 
+             Disables the ability of resize objects (image and tables)
              in the editing area.
             
              Default value: false
@@ -13359,7 +13361,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.DisableReadonlyStyling">
              <summary>
-             Disables inline styling on read-only elements. 
+             Disables inline styling on read-only elements.
             
              Default value: false
              </summary>
@@ -13369,44 +13371,44 @@
              Sets the DOCTYPE to be used when loading the editor content as HTML.
             
              Default value: '&lt;!DOCTYPE html&gt;'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EditingBlock">
              <summary>
-             Whether to render or not the editing block area in 
-             the editor interface. 
+             Whether to render or not the editing block area in
+             the editor interface.
             
              Default value: true
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EmailProtection">
-            <summary>
-            The e-mail address anti-spam protection option. The protection will be applied when creating or modifying e-mail links through the editor interface.
+             <summary>
+             The e-mail address anti-spam protection option. The protection will be applied when creating or modifying e-mail links through the editor interface.
             
-            Two methods of protection can be chosen:
-            The e-mail parts (name, domain and any other query string) are assembled into a 
-            function call pattern. Such function must be provided by the developer in 
-            the pages that will use the contents.
+             Two methods of protection can be chosen:
+             The e-mail parts (name, domain and any other query string) are assembled into a
+             function call pattern. Such function must be provided by the developer in
+             the pages that will use the contents.
             
-            Only the e-mail address is obfuscated into a special string that has no 
-            meaning for humans or spam bots, but which is properly rendered and 
-            accepted by the browser.
+             Only the e-mail address is obfuscated into a special string that has no
+             meaning for humans or spam bots, but which is properly rendered and
+             accepted by the browser.
             
-            Both approaches require JavaScript to be enabled.
+             Both approaches require JavaScript to be enabled.
             
-            Default value: empty string = disabled
+             Default value: empty string = disabled
             
-            Set to null for default value
-            </summary>
-            <returns>null if the default value is set</returns>
+             Set to null for default value
+             </summary>
+             <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EnableTabKeyTools">
              <summary>
              Allow context-sensitive tab key behaviors, including the following scenarios:
-             
+            
              When selection is anchored inside table cells:
              If TAB is pressed, select the contents of the "next" cell. If in the last cell in the table, add a new row to it and focus its first cell.
              If SHIFT+TAB is pressed, select the contents of the "previous" cell. Do nothing when it's in the first cell.
@@ -13416,18 +13418,18 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EnterMode">
              <summary>
-             Sets the behavior for the ENTER key. 
-             It also dictates other behavior rules in the editor, 
-             like whether the br element is to be used as a paragraph 
-             separator when indenting text. 
-             The allowed values are the following constants, 
+             Sets the behavior for the ENTER key.
+             It also dictates other behavior rules in the editor,
+             like whether the br element is to be used as a paragraph
+             separator when indenting text.
+             The allowed values are the following constants,
              and their relative behavior:
              * CKEDITOR.ENTER_P (1): new p paragraphs are created; (EnterMode.P)
              * CKEDITOR.ENTER_BR (2): lines are broken with br elements; (EnterMode.BR)
              * CKEDITOR.ENTER_DIV (3): new div blocks are created. (EnterMode.DIV)
             
-             Note: It's recommended to use the CKEDITOR.ENTER_P value because 
-             of its semantic value and correctness. 
+             Note: It's recommended to use the CKEDITOR.ENTER_P value because
+             of its semantic value and correctness.
              The editor is optimized for this value.
             
              Default value: CKEDITOR.ENTER_P
@@ -13442,22 +13444,22 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EntitiesAdditional">
              <summary>
-             A comma separated list of additional entities to be used. 
-             Entity names or numbers must be used in a form that 
+             A comma separated list of additional entities to be used.
+             Entity names or numbers must be used in a form that
              excludes the '&amp;' prefix and the ';' ending.
             
              Default value: '#39' (The single quote (') character)
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EntitiesGreek">
              <summary>
-             Whether to convert some symbols, mathematical symbols, 
-             and Greek letters to HTML entities. 
-             This may be more relevant for users typing text written in Greek. 
-             The list of entities can be found at the 
+             Whether to convert some symbols, mathematical symbols,
+             and Greek letters to HTML entities.
+             This may be more relevant for users typing text written in Greek.
+             The list of entities can be found at the
             <a href="http://www.w3.org/TR/html4/sgml/entities.html#h-24.3.1">W3C HTML 4.01 Specification, section 24.3.1.</a>
             
              Default value: true
@@ -13465,9 +13467,9 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EntitiesLatin">
              <summary>
-             Whether to convert some Latin characters (Latin 
-             alphabet No. 1, ISO 8859-1) to HTML entities. 
-             The list of entities can be found at the 
+             Whether to convert some Latin characters (Latin
+             alphabet No. 1, ISO 8859-1) to HTML entities.
+             The list of entities can be found at the
             <a href="http://www.w3.org/TR/html4/sgml/entities.html#h-24.2.1">W3C HTML 4.01 Specification, section 24.2.1.</a>
             
              Default value: true
@@ -13475,42 +13477,42 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.EntitiesProcessNumerical">
              <summary>
-             Whether to convert all remaining characters, 
-             not comprised in the ASCII character table, 
-             to their relative numeric representation of HTML entity. 
-             For example, the phrase "This is Chinese: 汉语." is outputted 
-             as "This is Chinese: ." 
+             Whether to convert all remaining characters,
+             not comprised in the ASCII character table,
+             to their relative numeric representation of HTML entity.
+             For example, the phrase "This is Chinese: 汉语." is outputted
+             as "This is Chinese: ."
             
              Default value: false
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ExtraPlugins">
             <summary>
-            A list of additional plugins to be loaded. This setting makes it easier 
+            A list of additional plugins to be loaded. This setting makes it easier
             to add new plugins without having to touch plugins setting.
             </summary>
             <remarks>Contains "CMSPlugins" as the first item by default.</remarks>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserBrowseUrl">
-            <summary>
-            The location of an external file browser that should be launched when the 
-            Browse Server button is pressed. If configured, the Browse Server button 
-            will appear in the Link and Image dialog windows.
+             <summary>
+             The location of an external file browser that should be launched when the
+             Browse Server button is pressed. If configured, the Browse Server button
+             will appear in the Link and Image dialog windows.
             
-            Default value: empty string = disabled
+             Default value: empty string = disabled
             
-            Set to null for default value
-            </summary>
-            <returns>null if the default value is set</returns>
+             Set to null for default value
+             </summary>
+             <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserImageBrowseLinkUrl">
              <summary>
              The location of an external file browser, that should be launched
-             when "Browse Server" button is pressed in the Link tab of Image dialog. 
+             when "Browse Server" button is pressed in the Link tab of Image dialog.
              If not set, CKEditor will use FilebrowserBrowseUrl
             
              Default value: undefined
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -13521,7 +13523,7 @@
              If not set, CKEditor will use FilebrowserBrowseUrl
             
              Default value: undefined
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -13532,22 +13534,22 @@
              If not set, CKEditor will use FileBrowserUploadUrl
             
              Default value: undefined
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserImageWindowHeight">
              <summary>
-             The default height of file browser window in CKEditor is set 
-             to 70% of screen height. 
-             If for some reasons, the default values are not suitable for you, 
+             The default height of file browser window in CKEditor is set
+             to 70% of screen height.
+             If for some reasons, the default values are not suitable for you,
              you can change it to any other value.
             
-             To set the size of the window in pixels, 
-             just set the number value (e.g. "800"). 
-             If you prefer to set height and width of the window 
-             in percentage of the screen, remember to add percent 
+             To set the size of the window in pixels,
+             just set the number value (e.g. "800").
+             If you prefer to set height and width of the window
+             in percentage of the screen, remember to add percent
              sign at the end (e.g. "60%").
             
              Default value: undefined (Unit.Empty)
@@ -13557,15 +13559,15 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserImageWindowWidth">
              <summary>
-             The default width of file browser window in CKEditor is set 
+             The default width of file browser window in CKEditor is set
              to 80% of screen width.
-             If for some reasons, the default values are not suitable for you, 
+             If for some reasons, the default values are not suitable for you,
              you can change it to any other value.
             
-             To set the size of the window in pixels, 
-             just set the number value (e.g. "800"). 
-             If you prefer to set height and width of the window 
-             in percentage of the screen, remember to add percent 
+             To set the size of the window in pixels,
+             just set the number value (e.g. "800").
+             If you prefer to set height and width of the window
+             in percentage of the screen, remember to add percent
              sign at the end (e.g. "60%").
             
              Default value: undefined (Unit.Empty)
@@ -13575,8 +13577,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserLinkBrowseUrl">
              <summary>
-             The location of an external file browser, that should be launched when "Browse Server" button is pressed in the Link dialog. 
-             If not set, CKEditor will use see cref="CKEDITOR.config.filebrowserBrowseUrl"/ 
+             The location of an external file browser, that should be launched when "Browse Server" button is pressed in the Link dialog.
+             If not set, CKEditor will use see cref="CKEDITOR.config.filebrowserBrowseUrl"/
             
              Default value: undefined
             
@@ -13597,15 +13599,15 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserLinkWindowHeight">
              <summary>
-             The default height of file browser window in CKEditor is set 
-             to 70% of screen height. 
-             If for some reasons, the default values are not suitable for you, 
+             The default height of file browser window in CKEditor is set
+             to 70% of screen height.
+             If for some reasons, the default values are not suitable for you,
              you can change it to any other value.
             
-             To set the size of the window in pixels, 
-             just set the number value (e.g. "800"). 
-             If you prefer to set height and width of the window 
-             in percentage of the screen, remember to add percent 
+             To set the size of the window in pixels,
+             just set the number value (e.g. "800").
+             If you prefer to set height and width of the window
+             in percentage of the screen, remember to add percent
              sign at the end (e.g. "60%").
             
              Default value: undefined (Unit.Empty)
@@ -13615,15 +13617,15 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserLinkWindowWidth">
              <summary>
-             The default width of file browser window in CKEditor is set 
+             The default width of file browser window in CKEditor is set
              to 80% of screen width.
-             If for some reasons, the default values are not suitable for you, 
+             If for some reasons, the default values are not suitable for you,
              you can change it to any other value.
             
-             To set the size of the window in pixels, 
-             just set the number value (e.g. "800"). 
-             If you prefer to set height and width of the window 
-             in percentage of the screen, remember to add percent 
+             To set the size of the window in pixels,
+             just set the number value (e.g. "800").
+             If you prefer to set height and width of the window
+             in percentage of the screen, remember to add percent
              sign at the end (e.g. "60%").
             
              Default value: undefined (Unit.Empty)
@@ -13636,45 +13638,45 @@
              The "features" to use in the file browser popup window.
             
              Default value: "location=no,menubar=no,toolbar=no,dependent=yes,minimizable=no,modal=yes,alwaysRaised=yes,resizable=yes,scrollbars=yes"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserWindowHeight">
-            <summary>
-            The height of the file browser popup window.
+             <summary>
+             The height of the file browser popup window.
             
-            Default value: 70%
-            </summary>
+             Default value: 70%
+             </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserWindowWidth">
-            <summary>
-            The width of the file browser popup window.
+             <summary>
+             The width of the file browser popup window.
             
-            Default value: 80%
-            </summary>
+             Default value: 80%
+             </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FileBrowserUploadUrl">
              <summary>
              The location of the script that handles file uploads.
              If set, the Upload tab will appear in the Link, Image, and Flash dialog windows.
             
-             It is also possible to set a separate url for a selected dialog box, 
+             It is also possible to set a separate url for a selected dialog box,
              using the dialog name in file browser settings: filebrowser[dialogName]UploadUrl.
             
              Default value: undefined
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FillEmptyBlocks">
              <summary>
-             Whether a filler text (non-breaking space entity — &amp;nbsp;) will be inserted into 
-             empty block elements in HTML output. This is used to render block elements properly 
-             with line-height. When a function is specified instead, it will be 
-             passed a CKEDITOR.htmlParser.element to decide whether adding the 
+             Whether a filler text (non-breaking space entity — &amp;nbsp;) will be inserted into
+             empty block elements in HTML output. This is used to render block elements properly
+             with line-height. When a function is specified instead, it will be
+             passed a CKEDITOR.htmlParser.element to decide whether adding the
              filler text by expecting a Boolean return value.
             
              Default value: true
@@ -13682,11 +13684,11 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FindHighlight">
              <summary>
-             Defines the style to be used to highlight results with the find dialog. 
+             Defines the style to be used to highlight results with the find dialog.
              NOTE: This is a pure javascript value, so be careful not to break things!
             
              Default value: {element: 'span', styles: {'background-color': '#004', color: '#fff'}}
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -13698,8 +13700,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FontSizeDefaultLabel">
              <summary>
-             The text to be displayed in the Font Size combo if none of the 
-             available values matches the current cursor position or text 
+             The text to be displayed in the Font Size combo if none of the
+             available values matches the current cursor position or text
              selection.
             
              Default value: empty string
@@ -13710,23 +13712,23 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FontSizeSizes">
              <summary>
-             The list of fonts size to be displayed in the Font Size combo in the toolbar. 
-             Entries are separated by semi-colons (';'). Any kind of "CSS like" size can 
+             The list of fonts size to be displayed in the Font Size combo in the toolbar.
+             Entries are separated by semi-colons (';'). Any kind of "CSS like" size can
              be used, like '12px', '2.3em', '130%', 'larger' or 'x-small'.
             
              A display name may be optionally defined by prefixing the entries with the
-             name and the slash character. For example,'Bigger Font/14px' will be 
+             name and the slash character. For example,'Bigger Font/14px' will be
              displayed as 'Bigger Font' in the list, but will be outputted as '14px'.
             
              Default value: "8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FontSizeStyle">
              <summary>
-             The style definition to be used to apply the font size in the text. 
+             The style definition to be used to apply the font size in the text.
             
              Default value:
              {
@@ -13734,39 +13736,39 @@
              styles    : { 'font-size' : '#(size)' },
              overrides : [ { element : 'font', attributes : { 'size' : null } } ]
              }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FontDefaultLabel">
              <summary>
-             The text to be displayed in the Font combo if none of the 
-             available values matches the current cursor position or text 
-             selection. 
+             The text to be displayed in the Font combo if none of the
+             available values matches the current cursor position or text
+             selection.
             
              Default value empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FontNames">
              <summary>
-             The list of fonts names to be displayed in the Font combo in the toolbar. 
-             Entries are separated by semi-colons (';'), while it's possible to have 
+             The list of fonts names to be displayed in the Font combo in the toolbar.
+             Entries are separated by semi-colons (';'), while it's possible to have
              more than one font for each entry, in the HTML way (separated by comma).
-             
-             A display name may be optionally defined by prefixing the entries with the 
-             name and the slash character. 
-             For example,'Arial/Arial, Helvetica, sans-serif' will be displayed as 'Arial' in the 
+            
+             A display name may be optionally defined by prefixing the entries with the
+             name and the slash character.
+             For example,'Arial/Arial, Helvetica, sans-serif' will be displayed as 'Arial' in the
              list, but will be outputted as 'Arial, Helvetica, sans-serif'.
             
-             Default value: "Arial/Arial, Helvetica, sans-serif;Comic Sans MS/Comic Sans MS, cursive;Courier New/Courier New, Courier, 
-             monospace;Georgia/Georgia, serif;Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, 
-             sans-serif;Tahoma/Tahoma, Geneva, sans-serif;Times New Roman/Times New Roman, Times, 
+             Default value: "Arial/Arial, Helvetica, sans-serif;Comic Sans MS/Comic Sans MS, cursive;Courier New/Courier New, Courier,
+             monospace;Georgia/Georgia, serif;Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande,
+             sans-serif;Tahoma/Tahoma, Geneva, sans-serif;Times New Roman/Times New Roman, Times,
              serif;Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;Verdana/Verdana, Geneva, sans-serif"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -13781,14 +13783,14 @@
              styles                : { 'font-family' : '#(family)' },
              overrides        : [ { element : 'font', attributes : { 'face' : null } } ]
              }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ForcePasteAsPlainText">
              <summary>
-             Whether to force all pasting operations to insert on plain text into the 
+             Whether to force all pasting operations to insert on plain text into the
              editor, loosing any formatting information possibly available in the source text.
              Note: paste from word (dialog) is not affected by this configuration.
             
@@ -13797,8 +13799,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ForceSimpleAmpersand">
              <summary>
-             Whether to force using '&amp;' instead of '&amp;amp;' in elements 
-             attributes values, it's not recommended to change this 
+             Whether to force using '&amp;' instead of '&amp;amp;' in elements
+             attributes values, it's not recommended to change this
              setting for compliance with the W3C XHTML 1.0 standards (C.12, XHTML 1.0).
             
              Default value: false
@@ -13806,113 +13808,113 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatAddress">
              <summary>
-             The style definition to be used to apply the "Address" format. 
+             The style definition to be used to apply the "Address" format.
             
              Default value: { element: 'address' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatDiv">
              <summary>
-             The style definition to be used to apply the "Normal (DIV)" format. 
+             The style definition to be used to apply the "Normal (DIV)" format.
             
              Default value: {element:'div'}
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH1">
              <summary>
-             The style definition to be used to apply the "Heading 1" format. 
+             The style definition to be used to apply the "Heading 1" format.
             
              Default value: { element: 'h1' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH2">
              <summary>
-             The style definition to be used to apply the "Heading 2" format. 
+             The style definition to be used to apply the "Heading 2" format.
             
              Default value: { element: 'h2' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH3">
              <summary>
-             The style definition to be used to apply the "Heading 3" format. 
+             The style definition to be used to apply the "Heading 3" format.
             
              Default value: { element: 'h3' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH4">
              <summary>
-             The style definition to be used to apply the "Heading 4" format. 
+             The style definition to be used to apply the "Heading 4" format.
             
              Default value: { element: 'h4' }
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH5">
              <summary>
-             The style definition to be used to apply the "Heading 5" format. 
+             The style definition to be used to apply the "Heading 5" format.
             
              Default value: { element: 'h5' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatH6">
              <summary>
-             The style definition to be used to apply the "Heading 6" format. 
+             The style definition to be used to apply the "Heading 6" format.
             
              Default value: { element: 'h6' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatP">
              <summary>
-             The style definition to be used to apply the "Normal" format. 
+             The style definition to be used to apply the "Normal" format.
             
              Default value: { element: 'p' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatPre">
              <summary>
-             The style definition to be used to apply the "Formatted" format.  
+             The style definition to be used to apply the "Formatted" format.
             
              Default value: { element: 'pre' }
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FormatTags">
              <summary>
-             A list of semi colon separated style names (by default tags) 
-             representing the style definition for each entry to be 
-             displayed in the Format combo in the toolbar. 
-             Each entry must have its relative definition configuration 
-             in a setting named "format_(tagName)". 
-             For example, the "p" entry has its definition taken from 
-             config.format_p. 
+             A list of semi colon separated style names (by default tags)
+             representing the style definition for each entry to be
+             displayed in the Format combo in the toolbar.
+             Each entry must have its relative definition configuration
+             in a setting named "format_(tagName)".
+             For example, the "p" entry has its definition taken from
+             config.format_p.
             
              Default value: "p;h1;h2;h3;h4;h5;h6;pre;address;div"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -13924,9 +13926,9 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.FullPage">
              <summary>
-             Indicates whether the contents to be edited are being input as a full 
-             HTML page. A full page includes the &lt;html&gt;, &lt;head&gt;, and &lt;body&gt; 
-             elements. The final output will also reflect this setting, including 
+             Indicates whether the contents to be edited are being input as a full
+             HTML page. A full page includes the &lt;html&gt;, &lt;head&gt;, and &lt;body&gt;
+             elements. The final output will also reflect this setting, including
              the &lt;body&gt; contents only if this setting is disabled.
             
              Default value: false
@@ -13934,7 +13936,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Height">
              <summary>
-             The height of the editing area (that includes the editor content). 
+             The height of the editing area (that includes the editor content).
              This can be an integer, for pixel sizes, or any CSS-defined length unit.
             
              Note: Percentage unit is not supported yet. e.g. 30%.
@@ -13944,7 +13946,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.HtmlEncodeOutput">
              <summary>
-             Whether escape HTML when editor update original input element. 
+             Whether escape HTML when editor update original input element.
             
              Default value: false
              </summary>
@@ -13952,26 +13954,26 @@
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.IgnoreEmptyParagraph">
              <summary>
              Whether the editor must output an empty value (empty string) if
-             it's contents is made by an empty paragraph only. 
+             it's contents is made by an empty paragraph only.
             
              Default value: true
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ImageRemoveLinkByEmptyURL">
              <summary>
-             Whether to remove links when emptying the link URL field 
-             in the image dialog. 
+             Whether to remove links when emptying the link URL field
+             in the image dialog.
             
              Default value: true
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Keystrokes">
              <summary>
-             A list associating keystrokes to editor commands. 
-             Each element in the list is an array where the first item is 
-             the keystroke, and the second is the name of the command to be executed. 
+             A list associating keystrokes to editor commands.
+             Each element in the list is an array where the first item is
+             the keystroke, and the second is the name of the command to be executed.
             
-             Default value: 
+             Default value:
              [
              [ CKEDITOR.ALT + 121 /*F10*/, 'toolbarFocus' ],
              [ CKEDITOR.ALT + 122 /*F11*/, 'elementsPathFocus' ],
@@ -13989,66 +13991,66 @@
              Set to null for default value
             
              NOTE: This is a pure javascript value, so be careful not to break things!
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Language">
              <summary>
-             The user interface language localization to use. If left empty, the 
-             editor will automatically be localized to the user language. If the 
+             The user interface language localization to use. If left empty, the
+             editor will automatically be localized to the user language. If the
              user language is not supported, the language specified in the
              defaultLanguage configuration setting is used.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.MenuGroups">
              <summary>
-             A comma separated list of items group names to be 
-             displayed in the context menu. The order of items will 
-             reflect the order specified in this list if no priority was 
+             A comma separated list of items group names to be
+             displayed in the context menu. The order of items will
+             reflect the order specified in this list if no priority was
              defined in the groups.
             
              Default value: 'clipboard,table,anchor,link,image'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.MenuSubMenuDelay">
              <summary>
-             The amount of time, in milliseconds, the editor waits before 
-             showing submenu options when moving the mouse over options 
-             that contains submenus, like the "Cell Properties" entry for tables. 
+             The amount of time, in milliseconds, the editor waits before
+             showing submenu options when moving the mouse over options
+             that contains submenus, like the "Cell Properties" entry for tables.
             
              Default value: 400
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.NewpageHtml">
              <summary>
-             The HTML to load in the editor when the "new page" command 
-             is executed. 
+             The HTML to load in the editor when the "new page" command
+             is executed.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.PasteFromWordCleanupFile">
              <summary>
-             The file that provides the MS Word cleanup function for 
-             pasting operations. 
-             Note: This is a global configuration shared by all editor instances 
-             present in the page. 
+             The file that provides the MS Word cleanup function for
+             pasting operations.
+             Note: This is a global configuration shared by all editor instances
+             present in the page.
             
              Default value: &lt;plugin path&gt; + 'filter/default.js'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14062,7 +14064,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.PasteFromWordPromptCleanup">
              <summary>
-             Whether to prompt the user about the clean up of content being pasted from MS Word. 
+             Whether to prompt the user about the clean up of content being pasted from MS Word.
             
              Default value: false
              </summary>
@@ -14079,29 +14081,29 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.PasteFromWordRemoveStyles">
              <summary>
-             Whether to remove element styles that can't be 
+             Whether to remove element styles that can't be
              managed with the editor.
-             Note that this doesn't handle the font specific styles, 
-             which depends on the pasteFromWordRemoveFontStyles setting instead. 
+             Note that this doesn't handle the font specific styles,
+             which depends on the pasteFromWordRemoveFontStyles setting instead.
             
              Default value: false
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Plugins">
              <summary>
-             Comma separated list of plugins to be used for an editor 
-             instance, besides, the actual plugins that to be loaded could 
+             Comma separated list of plugins to be used for an editor
+             instance, besides, the actual plugins that to be loaded could
              be still affected by two other settings: extraPlugins and removePlugins.
             
              Default value: "&lt;default list of plugins&gt;"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ProtectedSource">
              <summary>
-             List of regular expressions to be executed over the input HTML, 
+             List of regular expressions to be executed over the input HTML,
              indicating code that must stay untouched.
             
              Default value: [] (empty array)
@@ -14109,7 +14111,7 @@
              Set to null for default value
             
              NOTE: This is a pure javascript value, so be careful not to break things!
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14121,46 +14123,46 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.RemoveButtons">
             <summary>
-            List of toolbar button names that must not be rendered. 
+            List of toolbar button names that must not be rendered.
             This will work as well for non-button toolbar items, like the Font combos.
             <remarks>This setting is case sensitive</remarks>
             </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.RemoveDialogTabs">
              <summary>
-             The dialog contents to removed. It's a string composed by 
+             The dialog contents to removed. It's a string composed by
              dialog name and tab name with a colon between them.
-             
+            
              Separate each pair with semicolon.
              Note: All names are case-sensitive.
-             Note: Be cautious when specifying dialog tabs that are 
+             Note: Be cautious when specifying dialog tabs that are
              mandatory, like 'info', dialog functionality might be broken because of this!
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.RemoveFormatAttributes">
              <summary>
-             A comma separated list of elements attributes to be 
-             removed when executing the "remove format" command. 
+             A comma separated list of elements attributes to be
+             removed when executing the "remove format" command.
             
              Default value: "class,style,lang,width,height,align,hspace,valign"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.RemoveFormatTags">
              <summary>
-             A comma separated list of elements to be removed when 
-             executing the remove format command. Note that only 
+             A comma separated list of elements to be removed when
+             executing the remove format command. Note that only
              inline elements are allowed.
             
              Default value: "b,big,code,del,dfn,em,font,i,ins,kbd,q,s,samp,small,span,strike,strong,sub,sup,tt,u,var"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14168,13 +14170,13 @@
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.RemovePlugins">
             <summary>
             List of plugins that must not be loaded.
-            This is a tool setting which makes it easier to avoid loading plugins defined in the CKEDITOR.config.plugins setting, 
+            This is a tool setting which makes it easier to avoid loading plugins defined in the CKEDITOR.config.plugins setting,
             without having to touch it and potentially breaking it.
             </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeDir">
              <summary>
-             The dimensions for which the editor resizing is enabled. 
+             The dimensions for which the editor resizing is enabled.
              Possible values are both, vertical, and horizontal.
             
              Default value: vertical
@@ -14182,7 +14184,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeEnabled">
              <summary>
-             Whether to enable the resizing feature. 
+             Whether to enable the resizing feature.
              If this feature is disabled, the resize handle will not be visible.
             
              Default value: true
@@ -14190,24 +14192,24 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeMaxHeight">
              <summary>
-             The maximum editor height, in pixels, when resizing it with 
-             the resize handle. 
+             The maximum editor height, in pixels, when resizing it with
+             the resize handle.
             
              Default value: 3000
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeMaxWidth">
              <summary>
-             The maximum editor width, in pixels, when resizing it 
-             with the resize handle. 
+             The maximum editor width, in pixels, when resizing it
+             with the resize handle.
             
              Default value: 3000
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeMinHeight">
              <summary>
-             The minimum editor height, in pixels, when resizing the 
-             editor interface by using the resize handle. Note: It falls back 
+             The minimum editor height, in pixels, when resizing the
+             editor interface by using the resize handle. Note: It falls back
              to editor's actual height if it is smaller than the default value.
             
              Default value: 250
@@ -14215,8 +14217,8 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ResizeMinWidth">
              <summary>
-             The minimum editor width, in pixels, when resizing the editor 
-             interface by using the resize handle. Note: It falls back 
+             The minimum editor width, in pixels, when resizing the editor
+             interface by using the resize handle. Note: It falls back
              to editor's actual width if it is smaller than the default value.
             
              Default value: 750
@@ -14231,9 +14233,9 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytContextCommands">
              <summary>
-             Customizes the display of SCAYT context menu commands 
-             ("Add Word", "Ignore" and "Ignore All"). 
-             It must be a string with one or more of the following words 
+             Customizes the display of SCAYT context menu commands
+             ("Add Word", "Ignore" and "Ignore All").
+             It must be a string with one or more of the following words
              separated by a pipe ("|"):
             
              "off": disables all options.
@@ -14243,63 +14245,63 @@
              "add": enables the "Add Word" option.
             
              Default value: "all"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytContextMenuItemsOrder">
              <summary>
-             Defines the order SCAYT context menu items by groups. 
-             This must be a string with one or more of the following 
+             Defines the order SCAYT context menu items by groups.
+             This must be a string with one or more of the following
              words separated by a pipe character ('|'):
-             
+            
              suggest – main suggestion word list,
              moresuggest – more suggestions word list,
              control – SCAYT commands, such as "Ignore" and "Add Word".
             
              Default value: "suggest|moresuggest|control"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytCustomDictionaryIds">
              <summary>
-             Links SCAYT to custom dictionaries. 
-             It's a string containing dictionary ids separated by commas (","). 
-             Available only for licensed version. 
-             Further details at http://wiki.spellchecker.net/doku.php?id=custom_dictionary_support . 
+             Links SCAYT to custom dictionaries.
+             It's a string containing dictionary ids separated by commas (",").
+             Available only for licensed version.
+             Further details at http://wiki.spellchecker.net/doku.php?id=custom_dictionary_support .
             
              Example: Scayt_CustomDictionaryIds = "3021,3456,3478";
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytCustomerid">
              <summary>
-             Sets the customer ID for SCAYT. 
-             Required for migration from free version with banner to paid version. 
-             Further details at http://wiki.spellchecker.net/doku.php?id=custom_dictionary_support . 
+             Sets the customer ID for SCAYT.
+             Required for migration from free version with banner to paid version.
+             Further details at http://wiki.spellchecker.net/doku.php?id=custom_dictionary_support .
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytMaxSuggestions">
              <summary>
-             Defines the number of SCAYT suggestions to show in the main context menu. 
+             Defines the number of SCAYT suggestions to show in the main context menu.
              Possible values are:
-             
+            
              0 (zero) – All suggestions are displayed in the main context menu.
-             Positive number – The maximum number of suggestions to show in the 
+             Positive number – The maximum number of suggestions to show in the
              context menu. Other entries will be shown in the "More Suggestions" sub-menu.
-             Negative number – No suggestions are shown in the main context menu. All 
+             Negative number – No suggestions are shown in the main context menu. All
              entries will be listed in the the "Suggestions" sub-menu.
             
              Default value: 5
@@ -14307,7 +14309,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytMoreSuggestions">
              <summary>
-             Enables/disables the "More Suggestions" sub-menu in the context 
+             Enables/disables the "More Suggestions" sub-menu in the context
              menu. Possible values are 'on' and 'off'.
             
              Default value: "on"
@@ -14315,52 +14317,52 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytSLang">
              <summary>
-             Sets the default spell checking language for SCAYT. 
-             Possible values are: 'en_US', 'en_GB', 'pt_BR', 'da_DK', 'nl_NL', 
-             'en_CA', 'fi_FI', 'fr_FR', 'fr_CA', 'de_DE', 'el_GR', 
+             Sets the default spell checking language for SCAYT.
+             Possible values are: 'en_US', 'en_GB', 'pt_BR', 'da_DK', 'nl_NL',
+             'en_CA', 'fi_FI', 'fr_FR', 'fr_CA', 'de_DE', 'el_GR',
              'it_IT', 'nb_NO', 'pt_PT', 'es_ES', 'sv_SE'.
             
              Default value: "en_US"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytSrcUrl">
              <summary>
-             Sets the URL to SCAYT core. Required to switch to 
+             Sets the URL to SCAYT core. Required to switch to
              the licensed version of SCAYT application.
-             
+            
              Further details available at http://wiki.webspellchecker.net/doku.php?id=migration:hosredfreetolicensedck
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytUiTabs">
              <summary>
-             Sets the visibility of particular tabs in the SCAYT dialog window 
-             and toolbar button. This setting must contain a 1 (enabled) 
-             or 0 (disabled) value for each of the following entries, in 
-             this precise order, separated by a 
+             Sets the visibility of particular tabs in the SCAYT dialog window
+             and toolbar button. This setting must contain a 1 (enabled)
+             or 0 (disabled) value for each of the following entries, in
+             this precise order, separated by a
              comma (','): 'Options', 'Languages', and 'Dictionary'.
             
              Default value: "1,1,1"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ScaytUserDictionaryName">
              <summary>
-             Makes it possible to activate a custom dictionary in SCAYT. 
-             The user dictionary name must be used. 
+             Makes it possible to activate a custom dictionary in SCAYT.
+             The user dictionary name must be used.
              Available only for the licensed version.
             
              Default value: empty string
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14395,7 +14397,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ShiftEnterMode">
              <summary>
-             Similarly to the enterMode setting, it defines the behavior 
+             Similarly to the enterMode setting, it defines the behavior
              of the Shift+Enter key combination.
             
              Default value: EnterMode.BR
@@ -14403,48 +14405,48 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Skin">
              <summary>
-             The editor skin name. Note that it is not possible to have 
-             editors with different skin settings in the same page. In 
+             The editor skin name. Note that it is not possible to have
+             editors with different skin settings in the same page. In
              such case just one of the skins will be used for all editors.
-             
+            
              This is a shortcut to CKEDITOR.skinName.
-             
-             It is possible to install skins outside the default skin folder in 
-             the editor installation. In that case, the absolute URL path to 
+            
+             It is possible to install skins outside the default skin folder in
+             the editor installation. In that case, the absolute URL path to
              that folder should be provided, separated by a comma ('skin_name,skin_path').
             
              Default value: "moono"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.SmileyColumns">
              <summary>
-             The number of columns to be generated by the smiles matrix. 
+             The number of columns to be generated by the smiles matrix.
             
              Default value: 8
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.SmileyDescriptions">
              <summary>
-             The description to be used for each of the smiles 
-             defined in the CKEDITOR.config.smiley_images setting. 
-             Each entry in this array list must match its relative pair 
-             in the CKEDITOR.config.smiley_images setting.  
+             The description to be used for each of the smiles
+             defined in the CKEDITOR.config.smiley_images setting.
+             Each entry in this array list must match its relative pair
+             in the CKEDITOR.config.smiley_images setting.
             
-             Default value: 
+             Default value:
              {'smiley', 'sad', 'wink', 'laugh', 'frown',  'cheeky', 'blush', 'surprise', 'indecision', 'angry', 'angel',
              'cool',  'devil', 'crying', 'enlightened', 'no', 'yes', 'heart', 'broken heart',  'kiss', 'mail' }
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.SmileyImages">
              <summary>
-             The file names for the smileys to be displayed. 
-             These files must be contained inside the URL path defined 
-             with the CKEDITOR.config.smiley_path setting. 
+             The file names for the smileys to be displayed.
+             These files must be contained inside the URL path defined
+             with the CKEDITOR.config.smiley_path setting.
             
-             Default value: 
+             Default value:
              {'regular_smile.png', 'sad_smile.png',  'wink_smile.png', 'teeth_smile.png', 'confused_smile.png',
              'tongue_smile.png', 'embarrassed_smile.png', 'omg_smile.png',  'whatchutalkingabout_smile.png',
              'angry_smile.png', 'angel_smile.png',  'shades_smile.png', 'devil_smile.png', 'cry_smile.png',
@@ -14453,11 +14455,11 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.SmileyPath">
              <summary>
-             The base path used to build the URL for the smiley images. 
-             It must end with a slash. 
+             The base path used to build the URL for the smiley images.
+             It must end with a slash.
             
              Default value: CKEDITOR.basePath + 'plugins/smiley/images/'
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14480,20 +14482,20 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.StartupMode">
              <summary>
-             The mode to load at the editor startup. 
-             It depends on the plugins loaded. 
-             By default, the "wysiwyg" and "source" modes are available. 
+             The mode to load at the editor startup.
+             It depends on the plugins loaded.
+             By default, the "wysiwyg" and "source" modes are available.
             
              Default value: "wysiwyg"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.StartupOutlineBlocks">
              <summary>
-             Whether to automatically enable the "show block" command 
-             when the editor loads. 
+             Whether to automatically enable the "show block" command
+             when the editor loads.
             
              Default value: false
              </summary>
@@ -14538,37 +14540,37 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.TabSpaces">
              <summary>
-             Instructs the editor to add a number of spaces (&amp;nbsp;) to 
-             the text when hitting the TAB key. 
-             If set to zero, the TAB key will be used to move the cursor 
-             focus to the next element in the page, out of the editor focus. 
+             Instructs the editor to add a number of spaces (&amp;nbsp;) to
+             the text when hitting the TAB key.
+             If set to zero, the TAB key will be used to move the cursor
+             focus to the next element in the page, out of the editor focus.
             
              Default value: 0
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Templates">
              <summary>
-             The templates definition set to use. 
-             It accepts a list of names separated by comma. 
-             It must match definitions loaded with the templates_files setting. 
+             The templates definition set to use.
+             It accepts a list of names separated by comma.
+             It must match definitions loaded with the templates_files setting.
             
              Default value: "default"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.TemplatesFiles">
              <summary>
-             The list of templates definition files to load. 
+             The list of templates definition files to load.
             
              Default value: Array of "plugins/templates/templates/default.js"
              </summary>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.TemplatesReplaceContent">
              <summary>
-             Whether the "Replace actual contents" checkbox 
-             is checked by default in the Templates dialog. 
+             Whether the "Replace actual contents" checkbox
+             is checked by default in the Templates dialog.
             
              Default value: true
              </summary>
@@ -14578,69 +14580,69 @@
              The theme to be used to build the UI.
             
              Default value: "default"
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Title">
              <summary>
-             Customizes the human-readable title of this editor. This title 
-             is displayed in tooltips and impacts various accessibility 
-             aspects, e.g. it is commonly used by screen readers for 
-             distinguishing editor instances and for navigation. 
+             Customizes the human-readable title of this editor. This title
+             is displayed in tooltips and impacts various accessibility
+             aspects, e.g. it is commonly used by screen readers for
+             distinguishing editor instances and for navigation.
              Accepted values are a string or false.
-             
-             Note: When config.title is set globally, the same value 
-             will be applied to all editor instances loaded with this 
-             config. This may severely affect accessibility as screen 
-             reader users will be unable to distinguish particular 
+            
+             Note: When config.title is set globally, the same value
+             will be applied to all editor instances loaded with this
+             config. This may severely affect accessibility as screen
+             reader users will be unable to distinguish particular
              editor instances and navigate between them.
-             
-             Note: Setting config.title = false may also impair 
+            
+             Note: Setting config.title = false may also impair
              accessibility in a similar way.
-             
-             Note: Please do not confuse this property with 
-             CKEDITOR.editor.name which identifies the instance 
+            
+             Note: Please do not confuse this property with
+             CKEDITOR.editor.name which identifies the instance
              in the CKEDITOR.instances literal.
             
              Default value: based on editor.name
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.Toolbar">
              <summary>
-             The toolbox (alias toolbar) definition. 
-             It is a toolbar name or an array of toolbars (strips), 
-             each one being also an array, containing a list of UI items. 
+             The toolbox (alias toolbar) definition.
+             It is a toolbar name or an array of toolbars (strips),
+             each one being also an array, containing a list of UI items.
             
              If set to null, generate toolbar automatically using all available buttons
              and toolbarGroups as a toolbar groups layout.
             
              Value type: This is pure javascript, so be careful with it!
-             You can easily break that code if you do not escape characters or 
+             You can easily break that code if you do not escape characters or
              you misplace an important character.
-             
+            
              Default value: null
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ToolbarBasic">
              <summary>
-             The toolbar definition. 
-             It is an array of toolbars (strips), each one being also an array, 
-             containing a list of UI items. 
-             Note that this setting is composed by "toolbar_" added by the 
-             toolbar name, which in this case is called "Basic". 
-             This second part of the setting name can be anything. 
-             You must use this name in the Toolbar setting, so you instruct the 
-             editor which toolbar_(name) setting to you. 
+             The toolbar definition.
+             It is an array of toolbars (strips), each one being also an array,
+             containing a list of UI items.
+             Note that this setting is composed by "toolbar_" added by the
+             toolbar name, which in this case is called "Basic".
+             This second part of the setting name can be anything.
+             You must use this name in the Toolbar setting, so you instruct the
+             editor which toolbar_(name) setting to you.
             
-             Default value: 
+             Default value:
              [
              ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'InsertLink', 'Unlink']
              ];
@@ -14648,14 +14650,14 @@
              Set to null for default value
             
              NOTE: This is a pure javascript value, so be careful not to break things!
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ToolbarCanCollapse">
              <summary>
-             Whether the toolbar can be collapsed by the user. 
+             Whether the toolbar can be collapsed by the user.
              If disabled, the Collapse Toolbar button will not be displayed.
             
              Default value: false
@@ -14663,9 +14665,9 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ToolbarFull">
              <summary>
-             This is the default toolbar definition used by the editor. It contains all editor features. 
+             This is the default toolbar definition used by the editor. It contains all editor features.
             
-             Default value: 
+             Default value:
              [
              ['Source', '-'],
              ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Scayt', '-'],
@@ -14684,7 +14686,7 @@
              Set to null for default value
             
              NOTE: This is a pure javascript value, so be careful not to break things!
-             
+            
              Set to null for default value
              </summary>
              <returns>null if the default value is set</returns>
@@ -14704,7 +14706,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.ToolbarStartupExpanded">
              <summary>
-             Whether the toolbar must start expanded when the editor is loaded. 
+             Whether the toolbar must start expanded when the editor is loaded.
              Setting this option to false will affect toolbar only when ToolbarCanCollapse is set to true.
             
              Default value: true
@@ -14717,7 +14719,7 @@
         </member>
         <member name="P:CMS.CKEditor.Web.UI.CKEditorControl.UndoStackSize">
              <summary>
-             The number of undo steps to be saved. The higher this setting value the more memory is used for it. 
+             The number of undo steps to be saved. The higher this setting value the more memory is used for it.
             
              Default value: 20
              </summary>

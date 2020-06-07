@@ -173,7 +173,7 @@ public partial class CMSModules_Chat_Controls_UI_ChatRoomUser_Edit : CMSAdminEdi
         {
             int userID = ValidationHelper.GetInteger(fUserSelector.Value, 0);
 
-            chatUserID = ChatUserHelper.GetChatUserFromCMSUser(UserInfoProvider.GetUserInfo(userID)).ChatUserID;
+            chatUserID = ChatUserHelper.GetChatUserFromCMSUser(UserInfo.Provider.Get(userID)).ChatUserID;
         }
 
         AdminLevelEnum adminLevel = ChatHelper.GetEnum(Convert.ToInt32(fdrpAdminLevel.SelectedValue), AdminLevelEnum.None);
@@ -200,7 +200,7 @@ public partial class CMSModules_Chat_Controls_UI_ChatRoomUser_Edit : CMSAdminEdi
         {
             int userID = ValidationHelper.GetInteger(fUserSelector.Value, 0);
 
-            UserInfo user = UserInfoProvider.GetUserInfo(userID);
+            UserInfo user = UserInfo.Provider.Get(userID);
             if (user == null)
             {
                 ShowErrorAndStopProcessing("chat.pleaseselectuser");

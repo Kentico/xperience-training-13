@@ -4,6 +4,7 @@ using System.Text;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
+using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Globalization;
 using CMS.Helpers;
@@ -224,6 +225,7 @@ function DF_Redir(nodeId, culture, translated, url) {
                 ++colsInRow;
                 DateTime lastModification = DateTimeHelper.ZERO_TIME;
                 string versionNumber = null;
+                string className = null;
                 TranslationStatusEnum status = TranslationStatusEnum.NotAvailable;
                 string cultureName = DataHelper.GetStringValue(dr, "CultureName", "-");
                 string cultureCode = DataHelper.GetStringValue(dr, "CultureCode", "-");
@@ -235,6 +237,7 @@ function DF_Redir(nodeId, culture, translated, url) {
                     // Document doesn't exist
                     if (rows.Length != 0)
                     {
+                        className = DataHelper.GetStringValue(rows[0], "ClassName", null);
                         versionNumber = DataHelper.GetStringValue(rows[0], "DocumentLastVersionNumber", null);
 
                         // Check if document is outdated
@@ -253,7 +256,7 @@ function DF_Redir(nodeId, culture, translated, url) {
 
                 sb.Append("<span class=\"", GetStatusCSSClass(status), "\">");
 
-                var itemUrl = UrlResolver.ResolveUrl(DocumentUIHelper.GetPageHandlerLivePath(NodeID, cultureCode));
+                var itemUrl = (className != null && DataClassInfoProvider.GetDataClassInfo(className).ClassHasURL) ? UrlResolver.ResolveUrl(DocumentUIHelper.GetPageHandlerLivePath(NodeID, cultureCode)) : "#";
                 sb.Append("<img onmouseout=\"UnTip()\" style=\"cursor:pointer;\" onclick=\"", SelectJSFunction, "('", NodeID, "','", cultureCode, "'," + Convert.ToInt32((status != TranslationStatusEnum.NotAvailable)) + "," + ScriptHelper.GetString(itemUrl) + ")\" onmouseover=\"DF_Tip('", GetFlagIconUrl(cultureCode, "48x48"), "', '", cultureName, "', '", GetStatusString(status), "', '");
 
                 sb.Append(versionNumber ?? string.Empty);

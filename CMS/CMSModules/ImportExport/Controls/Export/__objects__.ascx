@@ -50,7 +50,6 @@
                         <asp:PlaceHolder ID="plcSiteFiles" runat="server">
                             <cms:CMSCheckBox ID="chkCopySiteFiles" runat="server" />
                         </asp:PlaceHolder>
-                        <cms:CMSCheckBox ID="chkCopyASPXTemplatesFolder" runat="server" />
                         <cms:CMSCheckBox ID="chkCopyForumCustomLayoutsFolder" runat="server" />
                     </div>
                 </div>

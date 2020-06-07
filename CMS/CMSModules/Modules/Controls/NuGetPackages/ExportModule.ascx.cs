@@ -31,7 +31,7 @@ public partial class CMSModules_Modules_Controls_NuGetPackages_ExportModule : Ex
     {
         get
         {
-            return mResource ?? (mResource = ResourceInfoProvider.GetResourceInfo(ResourceID));
+            return mResource ?? (mResource = ResourceInfo.Provider.Get(ResourceID));
         }
     }
 

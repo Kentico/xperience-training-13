@@ -723,7 +723,7 @@ function LocalizationDialog", ClientID, @"(value) {
                 if (IsTranslationChanged(resKey, cultureCode, translationText))
                 {
                     // Update / insert key
-                    var ri = ResourceStringInfoProvider.GetResourceStringInfo(resKey) ?? new ResourceStringInfo
+                    var ri = ResourceStringInfo.Provider.Get(resKey) ?? new ResourceStringInfo
                     {
                         StringKey = resKey,
                         StringIsCustom = !SystemContext.DevelopmentMode
@@ -732,7 +732,7 @@ function LocalizationDialog", ClientID, @"(value) {
                     ri.TranslationText = translationText;
                     ri.CultureCode = cultureCode;
 
-                    ResourceStringInfoProvider.SetResourceStringInfo(ri);
+                    ResourceStringInfo.Provider.Set(ri);
                     return true;
                 }
 

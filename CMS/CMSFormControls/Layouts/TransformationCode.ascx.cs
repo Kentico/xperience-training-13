@@ -38,7 +38,6 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
     private readonly int transformationID = QueryHelper.GetInteger("transformationid", 0);
     private TransformationInfo transformationInfo;
     private CurrentUserInfo user;
-    private bool? mAscxEditAllowed;
 
     #endregion
 
@@ -105,7 +104,7 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
     {
         get
         {
-            if (IsAscx && !AscxEditAllowed)
+            if (IsAscx)
             {
                 // Ignore value from user input to avoid a forgery
                 return transformationInfo.TransformationCode;
@@ -167,23 +166,6 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
         }
     }
 
-
-    /// <summary>
-    /// Returns true if currently authenticated user is authorized to edit ASCX code.
-    /// </summary>
-    private bool AscxEditAllowed
-    {
-        get
-        {
-            if (mAscxEditAllowed == null)
-            {
-                mAscxEditAllowed = user.IsAuthorizedPerResource("CMS.Design", "EditCode");
-            }
-
-            return mAscxEditAllowed.Value;
-        }
-    }
-
     #endregion
 
 
@@ -209,15 +191,6 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
         values[1, 0] = "TransformationType";
 
         String type = (drpType.SelectedValue == null ? TransformationTypeEnum.Ascx.ToStringRepresentation() : drpType.SelectedValue.ToLowerCSafe());
-
-        // Ignore currently selected value for transformation type if the type equaled 'ASCX' originally and current user doesn't have permission to edit ASCX code.
-        if (IsAscx && !AscxEditAllowed)
-        {
-            if ((transformationInfo != null) && (transformationID > 0) && (transformationInfo.TransformationType == TransformationTypeEnum.Ascx))
-            {
-                type = TransformationTypeEnum.Ascx.ToStringRepresentation();
-            }
-        }
 
         values[1, 1] = type;
         values[2, 0] = "TransformationCSS";
@@ -446,12 +419,6 @@ function GenerateDefaultCode(type){
         if (IsAscx)
         {
             txtCode.Editor.Language = LanguageEnum.ASPNET;
-
-            // Check the edit code permission
-            if (!AscxEditAllowed)
-            {
-                txtCode.Editor.Enabled = false;
-            }
         }
         else
         {
@@ -470,12 +437,6 @@ function GenerateDefaultCode(type){
         {
             return;
         }
-
-        // Check the edit code permission
-        if (!AscxEditAllowed)
-        {
-            ShowWarning(GetString("EditCode.NotAllowed"));
-        }
     }
 
 
@@ -487,15 +448,6 @@ function GenerateDefaultCode(type){
         switch (TransformationType)
         {
             case TransformationTypeEnum.Ascx:
-
-                if (!AscxEditAllowed)
-                {
-                    // Ignore type change and reset transformation type selector
-                    drpType.SelectedValue = transformationInfo.TransformationType.ToStringRepresentation();
-                    ShowWarning(GetString("EditCode.NotAllowed"));
-                    break;
-                }
-
                 // Convert to ASCX syntax
                 code = MacroSecurityProcessor.RemoveSecurityParameters(code, false, null);
                 code = code.Replace("{% Register", "<%@ Register").Replace("{%", "<%#").Replace("%}", "%>");

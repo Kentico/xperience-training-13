@@ -64,7 +64,7 @@ public partial class CMSModules_Workflows_Pages_WorkflowAction_Tab_Parameters : 
         if (ActionInfo != null)
         {
             ActionInfo.ActionParameters = fieldEditor.FormDefinition;
-            WorkflowActionInfoProvider.SetWorkflowActionInfo(ActionInfo);
+            WorkflowActionInfo.Provider.Set(ActionInfo);
         }
     }
 

@@ -79,7 +79,7 @@ public partial class CMSModules_Content_Controls_LanguageMenu : CMSUserControl
         if (cultures.Count > 1)
         {
             string defaultCulture = CultureHelper.GetDefaultCultureCode(currentSiteName);
-            CultureInfo ci = CultureInfoProvider.GetCultureInfo(SelectedCulture);
+            CultureInfo ci = CultureInfo.Provider.Get(SelectedCulture);
 
             imgLanguage.ImageUrl = GetFlagIconUrl(SelectedCulture, "16x16");
             imgLanguage.AlternateText = imgLanguage.ToolTip = ResHelper.LocalizeString(ci.CultureName);

@@ -23,7 +23,7 @@ public partial class CMSModules_PortalEngine_UI_PageLayouts_PageLayout_Templates
         CurrentMaster.PanelContent.AddCssClass("dialog-content");
 
         // Filter templates for current layout
-        gridTemplates.WhereCondition = "PageTemplateLayoutID = " + QueryHelper.GetInteger("layoutid", 0) + " OR PageTemplateID IN (SELECT PageTemplateID FROM CMS_TemplateDeviceLayout WHERE LayoutID = " + QueryHelper.GetInteger("layoutid", 0) + ")";
+        gridTemplates.WhereCondition = "PageTemplateLayoutID = " + QueryHelper.GetInteger("layoutid", 0);
         gridTemplates.ZeroRowsText = GetString("layout.notemplates");
         gridTemplates.FilteredZeroRowsText = GetString("layout.notemplates");
 

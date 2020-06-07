@@ -180,7 +180,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
                 }
                 else
                 {
-                    SiteInfo si = SiteInfoProvider.GetSiteInfo(ri.SiteID);
+                    SiteInfo si = SiteInfo.Provider.Get(ri.SiteID);
                     if (si != null)
                     {
                         if (!user.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin) && !MembershipContext.AuthenticatedUser.IsInSite(si.SiteName))
@@ -264,7 +264,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
             }
             else
             {
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteID);
+                SiteInfo si = SiteInfo.Provider.Get(SiteID);
                 if (si != null)
                 {
                     // Check unique name

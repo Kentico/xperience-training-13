@@ -76,11 +76,11 @@ public class ModuleListControlExtender : ControlExtender<UniGrid>
             // Check if module has any classes (including page types...)
             var classes = DataClassInfoProvider.GetClasses().Where("ClassResourceID", QueryOperator.Equals, resourceId);
             var settings = SettingsCategoryInfoProvider.GetSettingsCategories().Where("CategoryResourceID", QueryOperator.Equals, resourceId);
-            var elements = UIElementInfoProvider.GetUIElements().Where("ElementResourceID", QueryOperator.Equals, resourceId);
+            var elements = UIElementInfo.Provider.Get().Where("ElementResourceID", QueryOperator.Equals, resourceId);
 
             if (!classes.HasResults() && !settings.HasResults() && !elements.HasResults())
             {
-                ResourceInfoProvider.DeleteResourceInfo(resourceId);
+                ResourceInfo.Provider.Delete(ResourceInfo.Provider.Get(resourceId));
             }
             else
             {

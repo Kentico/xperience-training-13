@@ -217,7 +217,7 @@ public partial class CMSWebParts_Forums_ForumFavorites : CMSAbstractWebPart
             if (SiteName != String.Empty)
             {
                 // Get site ID
-                SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+                SiteInfo si = SiteInfo.Provider.Get(SiteName);
                 if (si != null)
                 {
                     siteId = si.SiteID;
@@ -366,7 +366,7 @@ public partial class CMSWebParts_Forums_ForumFavorites : CMSAbstractWebPart
         if (SiteName != String.Empty)
         {
             // Get site ID
-            SiteInfo si = SiteInfoProvider.GetSiteInfo(SiteName);
+            SiteInfo si = SiteInfo.Provider.Get(SiteName);
             if (si != null)
             {
                 siteId = si.SiteID;

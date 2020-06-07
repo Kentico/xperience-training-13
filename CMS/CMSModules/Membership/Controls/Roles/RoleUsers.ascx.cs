@@ -130,7 +130,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleUsers : CMSAdminEd
 
     private string GetRoleUsers()
     {
-        var data = UserRoleInfoProvider.GetUserRoles().Where("RoleID = " + RoleID).Columns("UserID");
+        var data = UserRoleInfo.Provider.Get().Where("RoleID = " + RoleID).Columns("UserID");
         if (data.Any())
         {
             return TextHelper.Join(";", DataHelper.GetStringValues(data.Tables[0], "UserID"));
@@ -174,8 +174,8 @@ public partial class CMSModules_Membership_Controls_Roles_RoleUsers : CMSAdminEd
                     }
                     else
                     {
-                        var uri = UserRoleInfoProvider.GetUserRoleInfo(userId, RoleID);
-                        UserRoleInfoProvider.DeleteUserRoleInfo(uri);
+                        var uri = UserRoleInfo.Provider.Get(userId, RoleID);
+                        UserRoleInfo.Provider.Delete(uri);
 
                         saved = true;
                     }
@@ -205,7 +205,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleUsers : CMSAdminEd
                     }
                     else
                     {
-                        UserRoleInfoProvider.AddUserToRole(userId, RoleID);
+                        UserRoleInfo.Provider.Add(userId, RoleID);
                         saved = true;
                     }
                 }
@@ -243,7 +243,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleUsers : CMSAdminEd
             return result;
         }
 
-        UserInfo userInfo = UserInfoProvider.GetUserInfo(userId);
+        UserInfo userInfo = UserInfo.Provider.Get(userId);
         if (userInfo == null)
         {
             result = GetString("Administration-User.WrongUserId");

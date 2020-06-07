@@ -11,11 +11,10 @@ using CMS.IO;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSelector_EditFile : CMSPreviewControl
+public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSelector_EditFile : CMSAdminControl
 {
     #region "Variables"
 
-    private int previewState;
     private string filePath;
     private string fileName;
     private string extension;
@@ -48,7 +47,6 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
     {
         // Init
         ICMSMasterPage currentMaster = Page.Master as ICMSMasterPage;
-        previewState = GetPreviewStateFromCookies(THEME);
         InitHeaderActions();
         ScriptHelper.RegisterClientScriptBlock(Page, typeof(String), "performAction", ScriptHelper.GetScript("function actionPerformed(action) { " + Page.ClientScript.GetPostBackEventReference(btnAction, "#").Replace("'#'", "action") + ";}"));
 
@@ -151,8 +149,6 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
                 }
             }
         }
-
-        RegisterInitScripts(pnlContent.ClientID, pnlMenu.ClientID, ((previewState != 0) && !newFile));
     }
 
 
@@ -164,16 +160,6 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
         // Save action
         SaveAction save = new SaveAction();
         headerActions.ActionsList.Add(save);
-
-        // Preview
-        HeaderAction preview = new HeaderAction
-        {
-            Text = GetString("general.preview"),
-            OnClientClick = "performToolbarAction('split');return false;",
-            Visible = (previewState == 0),
-            Tooltip = GetString("preview.tooltip")
-        };
-        headerActions.ActionsList.Add(preview);
 
         headerActions.ActionPerformed += (sender, e) =>
         {
@@ -290,8 +276,6 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
                 script += "CloseDialog()";
             }
             ScriptHelper.RegisterStartupScript(Page, typeof(String), "closescript", ScriptHelper.GetScript(script));
-
-            RegisterRefreshScript();
         }
     }
 
