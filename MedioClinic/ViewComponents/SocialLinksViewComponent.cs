@@ -9,7 +9,7 @@ namespace MedioClinic.ViewComponents
 {
     public class SocialLinksViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             // TODO: Retrieve link data.
             return View();

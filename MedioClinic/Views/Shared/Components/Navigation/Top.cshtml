@@ -1,7 +1,9 @@
 ﻿@using MedioClinic.Models.ViewComponents.Navigation
+@using MedioClinic.ViewComponents 
+@model Abstractions.NavigationItem
 
 @functions{
-    private string _partialViewPath = $"Components/{nameof(MedioClinic.ViewComponents.Navigation)}/_TopNavigationContents";
+    private string _partialViewPath = $"{Navigation.PartialViewPath}/_TopNavigationContents";
     private string _mainIdStub = "top-navigation";
     private string _cultureIdStub = "culture-switch";
     private string _desktopListClass = "right hide-on-med-and-down";
@@ -13,7 +15,9 @@
     {
         MainId = $"{_mainIdStub}-{suffix}",
         CultureSwitchId = $"{_cultureIdStub}-{suffix}",
-        ListClass = listClass
+        ListClass = listClass,
+        NavigationItem = Model,
+        DisplaySecondLevel = true
     };
 }
 

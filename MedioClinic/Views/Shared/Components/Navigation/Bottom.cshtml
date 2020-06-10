@@ -1,7 +1,16 @@
-﻿<h5 class="white-text">Navigation</h5>
+﻿@model Abstractions.NavigationItem
+
+@{ 
+    var childItems = Model?.ChildItems;
+}
+
+<h5 class="white-text">Navigation</h5>
 <ul>
-    <li><a class="white-text" href="#!">Link 1</a></li>
-    <li><a class="white-text" href="#!">Link 2</a></li>
-    <li><a class="white-text" href="#!">Link 3</a></li>
-    <li><a class="white-text" href="#!">Link 4</a></li>
+    @if (childItems != null && childItems.Any())
+    {
+        foreach (var item in childItems)
+        {
+            <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Title, "white-text")" />
+        }
+    }
 </ul>

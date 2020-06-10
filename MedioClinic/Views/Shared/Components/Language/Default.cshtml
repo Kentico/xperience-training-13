@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using MedioClinic.ViewComponents
+@model (string cultureSwitchId, IEnumerable<Abstractions.SiteCulture> cultures)
+
+@{
+    var triggerViewName = $"{Navigation.PartialViewPath}/_DropdownTrigger";
+    var routeValues = ViewContext.RouteData.Values;
+    var actionName = routeValues["action"]?.ToString();
+    var controllerName = routeValues["controller"]?.ToString();
+
+    var cultureDtos = Model.cultures
+        .OrderBy(culture => culture.IsDefault)
+        .ThenBy(culture => culture.FriendlyName, StringComparer.CurrentCultureIgnoreCase)
+        .Select(culture =>
+        {
+            var currentRouteValues = new RouteValueDictionary(Url.ActionContext.RouteData.Values)
+            {
+                ["culture"] = culture.IsoCode
+            };
+
+            var url = Url.Action(actionName, controllerName, currentRouteValues);
+
+
+            return (url, culture.FriendlyName);
+        });
+
+    var currentCulture = Model.cultures
+        .FirstOrDefault(culture =>
+            !string.IsNullOrEmpty(culture.IsoCode) &&
+            string.Equals(culture.IsoCode, System.Threading.Thread.CurrentThread.CurrentUICulture.Name, StringComparison.OrdinalIgnoreCase))
+        .ShortName;
+}
+
+<partial name="@triggerViewName" model="@(Model.cultureSwitchId, currentCulture, cultureDtos)" />

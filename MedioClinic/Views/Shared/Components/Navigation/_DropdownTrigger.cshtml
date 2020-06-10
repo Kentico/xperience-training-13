@@ -1,0 +1,15 @@
+﻿@model (string DomId, string Title, IEnumerable<(string Url, string Title)> ChildItems)
+
+<li>
+    <a class="dropdown-trigger" href="#!" data-target="@Model.DomId">
+        @Html.DisplayFor(model => model.Title)
+        <i class="material-icons right">arrow_drop_down</i>
+    </a>
+
+    <ul id="@Model.DomId" class="dropdown-content">
+        @foreach (var item in Model.ChildItems)
+        {
+            <partial name="_ListItemWithLink" model="@(item.Url, item.Title, string.Empty)" />
+        }
+    </ul>
+</li>

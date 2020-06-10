@@ -4,18 +4,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Mvc;
+
+using XperienceAdapter;
 
 namespace MedioClinic.ViewComponents
 {
     public class Navigation : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(string placement)
+        public static string PartialViewPath => $"Components/{nameof(Navigation)}";
+
+        public INavigationRepository NavigationRepository { get; }
+
+        public Navigation(INavigationRepository navigationRepository)
         {
-            // TODO: Retrieve menu items.
-            // TODO: Separate the language switch into a component of its own.
-            return View(placement);
+            NavigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
+        }
+
+        public IViewComponentResult Invoke(string placement, string nodeAliasPath = null!)
+        {
+            var navigation = !string.IsNullOrEmpty(nodeAliasPath)
+                ? NavigationRepository.GetSecondaryNavigation(nodeAliasPath)
+                : NavigationRepository.GetContentTreeNavigation();
+
+            return View(placement, navigation);
         }
     }
 }

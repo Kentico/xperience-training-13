@@ -9,7 +9,7 @@ namespace MedioClinic.ViewComponents
 {
     public class ContactViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             // TODO: Retrieve address information.
             return View();

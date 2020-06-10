@@ -1,16 +1,33 @@
-﻿@model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
+﻿@using MedioClinic.ViewComponents
+@model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
 
-<ul id="@Model.CultureSwitchId" class="dropdown-content">
-    <li><a href="#">English</a></li>
-    <li><a href="#">Spanish</a></li>
-</ul>
-<ul id="@Model.MainId" class="@Model.ListClass">
-    <li><a asp-controller="Doctors" asp-action="Index">Doctors</a></li>
-    <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
-    <li>
-        <a class="dropdown-trigger" href="#!" data-target="@Model.CultureSwitchId">
-            EN
-            <i class="material-icons right">arrow_drop_down</i>
-        </a>
-    </li>
+@{
+    var navigationItems = Model?.NavigationItem?.ChildItems;
+}
+
+<ul id="@Model?.MainId" class="@Model?.ListClass">
+    @{
+        var triggerViewName = $"{Navigation.PartialViewPath}/_DropdownTrigger";
+    }
+
+    @if (navigationItems != null && navigationItems.Any())
+    {
+        foreach (var item in navigationItems)
+        {
+            if (Model?.DisplaySecondLevel == true && item.ChildItems != null && item.ChildItems.Any())
+            {
+                var childItemDtos = item.ChildItems.Select(item => (item.RelativeUrl, item.Title));
+                <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), item.Title, childItemDtos)" />
+            }
+            else
+            {
+                <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Title)" />
+            }
+        }
+    }
+
+    @if (Model?.CultureSwitchId != null)
+    {
+        <vc:language culture-switch-id="@Model?.CultureSwitchId" />
+    }
 </ul>
