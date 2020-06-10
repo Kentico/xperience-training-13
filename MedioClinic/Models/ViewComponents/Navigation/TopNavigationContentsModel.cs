@@ -1,4 +1,4 @@
-﻿using Abstractions;
+﻿using XperienceAdapter;
 
 namespace MedioClinic.Models.ViewComponents.Navigation
 {

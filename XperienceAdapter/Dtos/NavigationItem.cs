@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Abstractions
+namespace XperienceAdapter
 {
     public class NavigationItem
     {

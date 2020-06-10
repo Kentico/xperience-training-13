@@ -1,4 +1,4 @@
-﻿namespace Abstractions
+﻿namespace XperienceAdapter
 {
     public class SiteCulture
     {

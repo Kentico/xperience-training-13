@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using Abstractions;
 using XperienceAdapter;
 using MedioClinic.ViewComponents;
 
@@ -19,8 +18,8 @@ namespace MedioClinic.Tests.ViewComponents
         [Fact]
         public void Invoke_ReturnsResult()
         {
-            var cultureRepository = GetCultureRepository();
-            var component = new LanguageViewComponent(cultureRepository.Object);
+            var repositoryMock = GetCultureRepository();
+            var component = new LanguageViewComponent(repositoryMock.Object);
 
             var result = component.Invoke(CultureSwitchId);
 
@@ -48,7 +47,7 @@ namespace MedioClinic.Tests.ViewComponents
             };
 
             var cultureRepository = new Mock<ICultureRepository>();
-            cultureRepository.Setup(service => service.GetAll()).Returns(cultures);
+            cultureRepository.Setup(repository => repository.GetAll()).Returns(cultures);
 
             return cultureRepository;
         }

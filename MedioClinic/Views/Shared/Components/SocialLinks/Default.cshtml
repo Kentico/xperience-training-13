@@ -1,5 +1,14 @@
-﻿<h5 class="white-text">Follow us</h5>
+﻿@model IEnumerable<XperienceAdapter.SocialLink>
+
+<h5 class="white-text">Follow us</h5>
 <p>
-    <a href="#"><img src="/images/social/fb.png" alt="..." /></a>
-    <a href="#"><img src="/images/social/tw.png" alt="..." /></a>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var socialLink in Model)
+        {
+            <a href="@Html.Raw(socialLink.Url)">
+                <img src="@Html.Raw(socialLink.IconUrl)" alt="@Html.DisplayFor(model => socialLink.Name)" />
+            </a>
+        }
+    }
 </p>

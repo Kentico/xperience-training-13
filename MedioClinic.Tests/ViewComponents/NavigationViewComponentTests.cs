@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using Abstractions;
 using XperienceAdapter;
 using MedioClinic.ViewComponents;
 
@@ -18,8 +17,8 @@ namespace MedioClinic.Tests.ViewComponents
         [Fact]
         public void Invoke_ReturnsResult()
         {
-            var navigationRepository = GetNavigationRepository().Object;
-            var component = new Navigation(navigationRepository);
+            var repositoryMock = GetNavigationRepository();
+            var component = new Navigation(repositoryMock.Object);
 
             var result = component.Invoke("Top", NodeAliasPath);
 
