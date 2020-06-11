@@ -12,6 +12,8 @@ namespace XperienceAdapter
 
         public NavigationItem? Parent { get; set; }
 
+        public IEnumerable<NavigationItem>? AllParents { get; set; }
+
         public IEnumerable<NavigationItem>? ChildItems { get; set; }
     }
 }

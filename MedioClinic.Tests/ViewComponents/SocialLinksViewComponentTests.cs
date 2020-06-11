@@ -17,7 +17,7 @@ namespace MedioClinic.Tests.ViewComponents
         public void Invoke_ReturnsResult()
         {
             var repositoryMock = GetSocialLinkRepository();
-            var component = new SocialLinksViewComponent(repositoryMock.Object);
+            var component = new SocialLinks(repositoryMock.Object);
 
             var result = component.Invoke();
 

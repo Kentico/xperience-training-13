@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define no_suffix
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,11 +11,11 @@ using XperienceAdapter;
 
 namespace MedioClinic.ViewComponents
 {
-    public class SocialLinksViewComponent : ViewComponent
+    public class SocialLinks : ViewComponent
     {
         public IRepository<SocialLink> SocialLinkRepository { get; }
 
-        public SocialLinksViewComponent(IRepository<SocialLink> socialLinkRepository)
+        public SocialLinks(IRepository<SocialLink> socialLinkRepository)
         {
             SocialLinkRepository = socialLinkRepository ?? throw new ArgumentNullException(nameof(socialLinkRepository));
         }

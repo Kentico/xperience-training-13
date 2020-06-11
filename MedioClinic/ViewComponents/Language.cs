@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define no_suffix
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,11 +10,11 @@ using XperienceAdapter;
 
 namespace MedioClinic.ViewComponents
 {
-    public class LanguageViewComponent : ViewComponent
+    public class Language : ViewComponent
     {
         public ICultureRepository CultureRepository { get; }
 
-        public LanguageViewComponent(ICultureRepository cultureRepository)
+        public Language(ICultureRepository cultureRepository)
         {
             CultureRepository = cultureRepository ?? throw new ArgumentNullException(nameof(cultureRepository));
         }

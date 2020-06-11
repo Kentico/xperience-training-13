@@ -19,7 +19,7 @@ namespace MedioClinic.Tests.ViewComponents
         public void Invoke_ReturnsResult()
         {
             var repositoryMock = GetCultureRepository();
-            var component = new LanguageViewComponent(repositoryMock.Object);
+            var component = new Language(repositoryMock.Object);
 
             var result = component.Invoke(CultureSwitchId);
 
