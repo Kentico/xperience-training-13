@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter;
+using XperienceAdapter.Dtos;
 using MedioClinic.ViewComponents;
 using Abstractions;
 

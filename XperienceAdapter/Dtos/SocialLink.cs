@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XperienceAdapter
+﻿namespace XperienceAdapter.Dtos
 {
     public class SocialLink
     {

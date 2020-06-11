@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 
 using XperienceAdapter;
+using XperienceAdapter.Dtos;
 using MedioClinic.ViewComponents;
 
 namespace MedioClinic.Tests.ViewComponents

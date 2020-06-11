@@ -1,4 +1,4 @@
-﻿namespace XperienceAdapter
+﻿namespace XperienceAdapter.Dtos
 {
     public class SiteCulture
     {

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Abstractions;
+using XperienceAdapter.Dtos;
 
 namespace XperienceAdapter
 {

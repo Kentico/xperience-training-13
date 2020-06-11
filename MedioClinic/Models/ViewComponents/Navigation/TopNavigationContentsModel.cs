@@ -1,4 +1,4 @@
-﻿using XperienceAdapter;
+﻿using XperienceAdapter.Dtos;
 
 namespace MedioClinic.Models.ViewComponents.Navigation
 {

@@ -1,6 +1,7 @@
 ﻿@using MedioClinic.Models.ViewComponents.Navigation
-@using MedioClinic.ViewComponents 
-@model XperienceAdapter.NavigationItem
+@using MedioClinic.ViewComponents
+@model XperienceAdapter.Dtos.NavigationItem
+@inject Microsoft.Extensions.Options.IOptions<MedioClinic.Configuration.XperienceOptions> Options
 
 @functions{
     private string _partialViewPath = $"{Navigation.PartialViewPath}/_TopNavigationContents";
@@ -26,7 +27,7 @@
         <div class="nav-wrapper container">
             <a class="brand-logo" asp-controller="Home" asp-action="Index">
                 <img class="mc-logo" src="~/images/mc-logo.png" alt="Medio Clinic logo" />
-                <span class="mc-logo-text">Medio Clinic</span>
+                <span class="mc-logo-text">@Options?.Value?.CompanyName</span>
             </a>
             <a class="sidenav-trigger" href="#" data-target="top-navigation-mobile">
                 <i class="material-icons">menu</i>

@@ -4,6 +4,8 @@
     {
         public string? SiteName { get; set; }
 
+        public string? CompanyName { get; set; }
+
         public MediaLibraryOptions? MediaLibraryOptions { get; set; }
 
         public ContentTreeLocationOptions? ContentTreeLocationOptions { get; set; }

@@ -7,6 +7,7 @@ using Xunit;
 using Moq;
 
 using XperienceAdapter;
+using XperienceAdapter.Dtos;
 using MedioClinic.ViewComponents;
 
 namespace MedioClinic.Tests.ViewComponents
@@ -46,10 +47,10 @@ namespace MedioClinic.Tests.ViewComponents
                 }
             };
 
-            var cultureRepository = new Mock<ICultureRepository>();
-            cultureRepository.Setup(repository => repository.GetAll()).Returns(cultures);
+            var repository = new Mock<ICultureRepository>();
+            repository.Setup(repository => repository.GetAll()).Returns(cultures);
 
-            return cultureRepository;
+            return repository;
         }
     }
 }

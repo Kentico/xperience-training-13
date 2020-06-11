@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using XperienceAdapter.Dtos;
+
 namespace XperienceAdapter
 {
     public class TempSocialLinkRepository : IRepository<SocialLink>
