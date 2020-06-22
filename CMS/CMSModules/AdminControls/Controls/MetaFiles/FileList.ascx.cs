@@ -485,7 +485,7 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_FileList : CMSU
                                        };
 
                 // Save meta file
-                MetaFileInfoProvider.SetMetaFileInfo(mfi);
+                MetaFileInfo.Provider.Set(mfi);
 
                 CurrentlyHandledMetaFile = mfi;
                 RaiseOnAfterUpload();
@@ -508,7 +508,7 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_FileList : CMSU
             int fileId = ValidationHelper.GetInteger(hdnField.Value, 0);
             if (fileId > 0)
             {
-                CurrentlyHandledMetaFile = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+                CurrentlyHandledMetaFile = MetaFileInfo.Provider.Get(fileId);
                 RaiseOnAfterUpload();
 
                 gridFiles.ReloadData();
@@ -816,7 +816,7 @@ function ConfirmDelete() {{
                     int metaFileId = ValidationHelper.GetInteger(actionArgument, 0);
 
                     // Get meta file
-                    MetaFileInfo mfi = MetaFileInfoProvider.GetMetaFileInfo(metaFileId);
+                    MetaFileInfo mfi = MetaFileInfo.Provider.Get(metaFileId);
 
                     // Set currently handled meta file
                     CurrentlyHandledMetaFile = mfi;
@@ -832,7 +832,7 @@ function ConfirmDelete() {{
                     if (!beforeDeleteArgs.Cancel)
                     {
                         // Delete meta file
-                        MetaFileInfoProvider.DeleteMetaFileInfo(metaFileId);
+                        MetaFileInfo.Provider.Get(metaFileId)?.Delete();
 
                         // Fire after delete event
                         if (OnAfterDelete != null)

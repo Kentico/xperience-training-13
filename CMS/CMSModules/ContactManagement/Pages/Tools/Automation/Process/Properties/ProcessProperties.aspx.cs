@@ -18,7 +18,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     {
         base.OnLoad(e);
 
-        var workflowStep = WorkflowStepInfoProvider.GetWorkflowStepInfo(QueryHelper.GetInteger("objectId", -1));
+        var workflowStep = WorkflowStepInfo.Provider.Get(QueryHelper.GetInteger("objectId", -1));
         if (workflowStep != null)
         {
             if (workflowStep.StepWorkflowType != WorkflowTypeEnum.Automation)

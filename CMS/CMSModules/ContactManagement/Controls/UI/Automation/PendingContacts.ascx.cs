@@ -195,7 +195,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Pending
         if (!String.IsNullOrEmpty(condition?.WhereCondition))
         {
             // Get automation steps specified by condition with permission control
-            var automationWorkflowSteps = WorkflowStepInfoProvider.GetWorkflowSteps()
+            var automationWorkflowSteps = WorkflowStepInfo.Provider.Get()
                                                                   .Where(condition)
                                                                   .Column("StepID")
                                                                   .WhereEquals("StepWorkflowType", (int)WorkflowTypeEnum.Automation);

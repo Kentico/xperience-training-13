@@ -30,7 +30,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Rela
 
         // Check if relationship exists
         bool anyRelationshipsFound = true;
-        RelationshipNameInfo defaultRelNameInfo = RelationshipNameInfoProvider.GetRelationshipNameInfo(defaultRelName);
+        RelationshipNameInfo defaultRelNameInfo = RelationshipNameInfo.Provider.Get(defaultRelName);
         if (defaultRelNameInfo != null)
         {
             relatedDocuments.RelationshipName = defaultRelName;

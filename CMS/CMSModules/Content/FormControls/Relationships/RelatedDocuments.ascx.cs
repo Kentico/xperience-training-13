@@ -792,7 +792,7 @@ public partial class CMSModules_Content_FormControls_Relationships_RelatedDocume
     private int GetRelationshipNameId()
     {
         var relationshipName = UseAdHocRelationshipName ? RelationshipNameInfoProvider.GetAdHocRelationshipNameCodeName(TreeNode.ClassName, FieldInfo) : RelationshipName;
-        var relationshipNameInfo = RelationshipNameInfoProvider.GetRelationshipNameInfo(relationshipName);
+        var relationshipNameInfo = RelationshipNameInfo.Provider.Get(relationshipName);
 
         if (relationshipNameInfo == null)
         {

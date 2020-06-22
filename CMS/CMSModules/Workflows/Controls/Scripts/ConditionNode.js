@@ -25,7 +25,7 @@
 
         // Redefines inherited templates
         this.switchCaseSourcePointTemplate = {
-            dynamicAnchors: this.graph.isMarketingAutomationWorkflow() ? ["TrueSource"] : ["RightMiddle", "LeftMiddle"],
+            dynamicAnchors: this.graph.isMarketingAutomationWorkflow() ? ["CaseSource"] : ["RightMiddle", "LeftMiddle"],
             endpoint: this.graph.isMarketingAutomationWorkflow()
                 ? ["Dot", { radius: 8, paintStyle: { fillStyle: "#2CB14E", icon: "case" }}]
                 : ["Image", { url: this.graph.addresses["ImagesUrl"] + "/endpoint_case.png"}],
@@ -41,7 +41,7 @@
         };
 
         this.switchDefaultSourcePointTemplate = {
-            anchor: this.graph.isMarketingAutomationWorkflow() ? "FalseSource" : "BottomCenter",
+            anchor: this.graph.isMarketingAutomationWorkflow() ? "CenterSource" : "BottomCenter",
             endpoint: this.graph.isMarketingAutomationWorkflow()
                 ? ["Dot", { radius: 8, paintStyle: { fillStyle: "#EF5350", icon: "else" }}]
                 : ["Image", { url: this.graph.addresses["ImagesUrl"] + "/endpoint_else.png"}],

@@ -15,7 +15,7 @@ public partial class CMSModules_Workflows_Workflow_Step_Emails : CMSWorkflowPage
         if (stepId > 0)
         {
             // Set edited object
-            EditedObject = WorkflowStepInfoProvider.GetWorkflowStepInfo(stepId);
+            EditedObject = WorkflowStepInfo.Provider.Get(stepId);
             ucEmails.WorkflowStepID = stepId;
         }
     }

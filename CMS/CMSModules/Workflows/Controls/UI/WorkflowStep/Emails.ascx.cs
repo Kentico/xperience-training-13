@@ -38,7 +38,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Emails : CMSU
         {
             if (mWorkflowStep == null)
             {
-                mWorkflowStep = WorkflowStepInfoProvider.GetWorkflowStepInfo(WorkflowStepID);
+                mWorkflowStep = WorkflowStepInfo.Provider.Get(WorkflowStepID);
             }
 
             return mWorkflowStep;
@@ -55,7 +55,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Emails : CMSU
         {
             if (mWorkflow == null)
             {
-                mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowStep.StepWorkflowID);
+                mWorkflow = WorkflowInfo.Provider.Get(WorkflowStep.StepWorkflowID);
             }
 
             return mWorkflow;
@@ -210,7 +210,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Emails : CMSU
             WorkflowStep.StepRejectedTemplateName = ValidationHelper.GetString(ucReject.Value, null);
 
             // Save workflow info
-            WorkflowStepInfoProvider.SetWorkflowStepInfo(WorkflowStep);
+            WorkflowStepInfo.Provider.Set(WorkflowStep);
 
             ShowChangesSaved();
         }

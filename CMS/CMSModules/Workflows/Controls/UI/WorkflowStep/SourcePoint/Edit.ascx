@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="Edit.ascx.cs" Inherits="CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_Edit" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false"  Codebehind="Edit.ascx.cs" Inherits="CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_Edit" %>
 
 <%@ Register Src="~/CMSFormControls/System/LocalizableTextBox.ascx" TagName="LocalizableTextBox"
     TagPrefix="cms" %>
@@ -44,4 +44,13 @@
             <cms:LocalizableTextBox ID="txtTooltip" runat="server" MaxLength="450" TextMode="MultiLine" />
         </div>
     </div>
+    <asp:Panel ID="plcStepAllowReject" runat="server" CssClass="form-group">
+        <div class="editing-form-label-cell">
+            <cms:LocalizedLabel ID="lblStepAllowReject" runat="server" EnableViewState="false" ResourceString="WorkflowStep.AllowMoveToPrevious"
+                                CssClass="control-label" AssociatedControlID="cbCondition" DisplayColon="true" />
+        </div>
+        <div class="editing-form-value-cell">
+            <cms:CMSCheckBox ID="chkStepAllowReject" runat="server" />
+        </div>
+    </asp:Panel>
 </div>

@@ -340,7 +340,7 @@ public partial class CMSModules_AdminControls_Controls_Class_QueryEdit : CMSUser
 
         if ((Query == null) && (QueryID > 0))
         {
-            Query = QueryInfoProvider.GetQueryInfo(QueryID);
+            Query = QueryInfo.Provider.Get(QueryID);
         }
         if (Query != null)
         {
@@ -375,7 +375,7 @@ public partial class CMSModules_AdminControls_Controls_Class_QueryEdit : CMSUser
         if (QueryID > 0)
         {
             // Get information on existing query
-            Query = QueryInfoProvider.GetQueryInfo(QueryID);
+            Query = QueryInfo.Provider.Get(QueryID);
             if (Query != null)
             {
                 queryClass = DataClassInfoProvider.GetDataClassInfo(Query.ClassID);
@@ -566,7 +566,7 @@ public partial class CMSModules_AdminControls_Controls_Class_QueryEdit : CMSUser
             return false;
         }
 
-        QueryInfo newQuery = existing ? QueryInfoProvider.GetQueryInfo(QueryID) : new QueryInfo();
+        QueryInfo newQuery = existing ? QueryInfo.Provider.Get(QueryID) : new QueryInfo();
 
         // Sets query object's properties
         newQuery.QueryName = txtQueryName.Text;
@@ -591,7 +591,7 @@ public partial class CMSModules_AdminControls_Controls_Class_QueryEdit : CMSUser
         newQuery.QueryConnectionString = ValidationHelper.GetString(ucSelectString.Value, String.Empty);
 
         // Insert new / update existing query
-        QueryInfoProvider.SetQueryInfo(newQuery);
+        QueryInfo.Provider.Set(newQuery);
 
         Query = newQuery;
 

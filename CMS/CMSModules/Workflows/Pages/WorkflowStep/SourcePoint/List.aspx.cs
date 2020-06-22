@@ -15,7 +15,7 @@ public partial class CMSModules_Workflows_Pages_WorkflowStep_SourcePoint_List : 
     private WorkflowStepSourcePointListControl mListControl;
 
 
-    private WorkflowStepInfo CurrentWorkflowStep => mCurrentWorkflowStep ?? (mCurrentWorkflowStep = WorkflowStepInfoProvider.GetWorkflowStepInfo(QueryHelper.GetInteger("workflowStepId", 0)));
+    private WorkflowStepInfo CurrentWorkflowStep => mCurrentWorkflowStep ?? (mCurrentWorkflowStep = WorkflowStepInfo.Provider.Get(QueryHelper.GetInteger("workflowStepId", 0)));
 
 
     private WorkflowStepSourcePointListControl ListControl

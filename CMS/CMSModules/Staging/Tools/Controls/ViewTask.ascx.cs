@@ -34,7 +34,7 @@ public partial class CMSModules_Staging_Tools_Controls_ViewTask : CMSAdminEditCo
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        StagingTaskInfo ti = StagingTaskInfoProvider.GetTaskInfo(TaskId);
+        StagingTaskInfo ti = StagingTaskInfo.Provider.Get(TaskId);
         // Set edited object
         EditedObject = ti;
 
@@ -108,7 +108,7 @@ public partial class CMSModules_Staging_Tools_Controls_ViewTask : CMSAdminEditCo
 
         UserInfo.Provider.Get()
             .Columns("UserID", "UserName")
-            .WhereIn("UserID", StagingTaskUserInfoProvider.GetTaskUsers().Column("UserID").WhereEquals("TaskID", ti.TaskID))
+            .WhereIn("UserID", StagingTaskUserInfo.Provider.Get().Column("UserID").WhereEquals("TaskID", ti.TaskID))
             .ForEachObject(u => usersWhoModifiedObject.Add(u.UserName));
 
         return usersWhoModifiedObject;
@@ -124,9 +124,9 @@ public partial class CMSModules_Staging_Tools_Controls_ViewTask : CMSAdminEditCo
     {
         List<string> taskGroups = new List<string>();
 
-        TaskGroupInfoProvider.GetTaskGroups()
+        TaskGroupInfo.Provider.Get()
             .Columns("TaskGroupID", "TaskGroupCodeName")
-            .WhereIn("TaskGroupID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().WhereEquals("TaskID", ti.TaskID).Column("TaskGroupID"))
+            .WhereIn("TaskGroupID", TaskGroupTaskInfo.Provider.Get().WhereEquals("TaskID", ti.TaskID).Column("TaskGroupID"))
             .ForEachObject(t => taskGroups.Add(t.TaskGroupCodeName));
 
         return taskGroups;

@@ -140,10 +140,16 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
 
     private void SetUrlTextbox(bool refreshSlug = true)
     {
-        var urlPath = Node.GetPageUrlPath();
+        var urlPath = Node.GetPageUrlPath();       
+
+        var formattedPath = string.Empty;
+        if (!string.IsNullOrEmpty(urlPath.ParentPath))
+        {
+            PageRoutingHelper.EnsurePathFormat(urlPath.ParentPath, Node.NodeSiteID, out formattedPath);
+        }
+
         txtSlug.MaxLength = PageUrlPath.SLUG_LENGTH;
-        var parentPathInCorrectCase = PageRoutingHelper.EnsurePathFormat(urlPath.ParentPath, Node.NodeSiteID);
-        txtSlug.PlaceholderText = TextHelper.LimitLength(SitePresentationUrl + parentPathInCorrectCase, 45, CutTextEnum.Start);
+        txtSlug.PlaceholderText = TextHelper.LimitLength(SitePresentationUrl + formattedPath, 45, CutTextEnum.Start);
         if (refreshSlug)
         {
             txtSlug.Value = urlPath.Slug;
@@ -177,7 +183,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         {
             ShowCollisionErrorMessage(collisions);
             SetUrlTextbox(false);
-        }        
+        }
     }
 
 
@@ -255,11 +261,8 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
                 {
                     var row = (DataRowView)parameter;
                     var altUrl = DataHelper.GetStringValue(row.Row, "AlternativeUrlUrl");
-                    altUrl = PageRoutingHelper.EnsurePathFormat(altUrl, Node.NodeSiteID);
-
-                    var altUrlId = DataHelper.GetIntValue(row.Row, "AlternativeUrlID");
-
                     var completeUrl = HTMLHelper.HTMLEncode($"{SitePresentationUrl}{altUrl}");
+                    var altUrlId = DataHelper.GetIntValue(row.Row, "AlternativeUrlID");
 
                     SetOpenUrlAction(altUrlId, completeUrl);
 

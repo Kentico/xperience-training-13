@@ -117,7 +117,7 @@ postbackRef.Replace("'##'", "'newwidget;' + webpartId + ';' + selectedItemId") +
                 mfi.MetaFileObjectID = wi.WidgetID;
                 mfi.MetaFileObjectType = WidgetInfo.OBJECT_TYPE;
 
-                MetaFileInfoProvider.SetMetaFileInfo(mfi);
+                MetaFileInfo.Provider.Set(mfi);
             }
 
             // Return ID of newly created widget

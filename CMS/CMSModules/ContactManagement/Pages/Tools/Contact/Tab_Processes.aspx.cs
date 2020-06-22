@@ -7,7 +7,6 @@ using CMS.ContactManagement.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.Helpers;
-using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WorkflowEngine;
 
@@ -44,8 +43,10 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_Tab_Proces
     }
 
 
-    protected void Page_Init(object sender, EventArgs e)
+    protected override void OnInit(EventArgs e)
     {
+        base.OnInit(e);
+
         if (Contact == null)
         {
             RedirectToAccessDenied(GetString("general.invalidparameters"));
@@ -61,13 +62,13 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_Tab_Proces
         {
             ucSelector.UniSelector.OnItemsSelected += UniSelector_OnItemsSelected;
             ucSelector.UniSelector.SetValue("IsLiveSite", false);
+            ucSelector.UniSelector.DialogInformationMessage = GetString("ma.automationprocess.startprocessinfo");
             ucSelector.Enabled = true;
         }
         else
         {
             ucSelector.Enabled = false;
         }
-
 
         listElem.ObjectID = Contact.ContactID;
         listElem.ObjectType = ContactInfo.OBJECT_TYPE;

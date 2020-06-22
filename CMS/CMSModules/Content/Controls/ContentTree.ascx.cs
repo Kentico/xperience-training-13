@@ -888,7 +888,7 @@ function MoveNodeAsync(nodeId, targetNodeId, position, copy, link) {
 
                 if (workflowStepId > 0)
                 {
-                    WorkflowStepInfo stepInfo = WorkflowStepInfoProvider.GetWorkflowStepInfo(workflowStepId);
+                    WorkflowStepInfo stepInfo = WorkflowStepInfo.Provider.Get(workflowStepId);
                     if (stepInfo != null)
                     {
                         stepType = stepInfo.StepType;

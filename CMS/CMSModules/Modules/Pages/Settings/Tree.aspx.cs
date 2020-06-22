@@ -16,7 +16,7 @@ public partial class CMSModules_Modules_Pages_Settings_Tree : GlobalAdminPage
             treeSettings.SelectPath = "/";
 
             int categoryId = QueryHelper.GetInteger("categoryid", -1);
-            SettingsCategoryInfo category = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+            SettingsCategoryInfo category = SettingsCategoryInfo.Provider.Get(categoryId);
             // Select requested category
             if (category != null)
             {

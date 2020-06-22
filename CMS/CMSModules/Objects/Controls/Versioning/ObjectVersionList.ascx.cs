@@ -441,7 +441,7 @@ public partial class CMSModules_Objects_Controls_Versioning_ObjectVersionList : 
                         try
                         {
                             var newVersionId = ObjectVersionManager.RollbackVersion(versionHistoryId, (actionName == "fullrollback"));
-                            ObjectVersionHistoryInfo newVersion = ObjectVersionHistoryInfoProvider.GetVersionHistoryInfo(newVersionId);
+                            ObjectVersionHistoryInfo newVersion = ObjectVersionHistoryInfo.Provider.Get(newVersionId);
 
                             // Set object to null because after rollback it doesn't contain current data
                             Object = null;

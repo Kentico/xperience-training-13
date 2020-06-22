@@ -283,7 +283,7 @@ public partial class CMSModules_Modules_Controls_Settings_Key_SettingsKeyEdit : 
         // Disable editing for keys not assigned to current module
         if (SettingsKeyObj != null)
         {
-            SettingsCategoryInfo parentCategory = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(SettingsKeyObj.KeyCategoryID);
+            SettingsCategoryInfo parentCategory = SettingsCategoryInfo.Provider.Get(SettingsKeyObj.KeyCategoryID);
             ResourceInfo resource = ResourceInfo.Provider.Get(ModuleID);
             plnEdit.Enabled = btnOk.Enabled = (resource != null) && (((parentCategory != null) && (parentCategory.CategoryResourceID == resource.ResourceID) && resource.ResourceIsInDevelopment) || SystemContext.DevelopmentMode);
 

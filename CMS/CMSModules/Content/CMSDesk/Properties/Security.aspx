@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_Content_CMSDesk_Properties_Security"
-    Theme="Default"  Codebehind="Security.aspx.cs" MaintainScrollPositionOnPostback="true"
+    Theme="Default" CodeBehind="Security.aspx.cs" MaintainScrollPositionOnPostback="true"
     MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" %>
 
 <%@ Register Src="~/CMSModules/Content/Controls/Security.ascx" TagName="Security"
@@ -8,8 +8,15 @@
     TagPrefix="cms" %>
 <%@ Register Src="~/CMSModules/Content/Controls/editmenu.ascx" TagName="editmenu"
     TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/SmartTip.ascx" TagName="SmartTip"
+    TagPrefix="cms" %>
+
 <asp:Content ContentPlaceHolderID="plcBeforeContent" runat="server">
-    <cms:editmenu ID="menuElem" runat="server" HandleWorkflow="false" IsLiveSite="false" />
+    <cms:CMSUpdatePanel ID="pnlUpdateMenu" runat="server">
+        <ContentTemplate>
+            <cms:editmenu ID="menuElem" runat="server" HandleWorkflow="false" IsLiveSite="false" />
+        </ContentTemplate>
+    </cms:CMSUpdatePanel>
 </asp:Content>
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">
     <cms:CMSUpdatePanel ID="pnlUpdate" runat="server">
@@ -23,12 +30,16 @@
                     <asp:PlaceHolder ID="plcContainer" runat="server">
                         <asp:Panel ID="pnlPermissionsPart" runat="server" CssClass="NodePermissions">
                             <cms:LocalizedHeading runat="server" ID="headPermissionsPart" Level="4" ResourceString="Security.Permissions" EnableViewState="false" />
+                            <cms:SmartTip ID="ctrSmartTip" runat="server" EnableViewState="false" Content="{$security.smarttip.content$}"
+                                ExpandedHeader="{$security.smarttip.header$}" CollapsedHeader="{$security.smarttip.header$}" />
                             <asp:Panel ID="pnlPermissionsPartBox" runat="server">
                                 <asp:Label ID="lblLicenseInfo" runat="server" Visible="False" EnableViewState="false" CssClass="InfoLabel" />
                                 <asp:Panel ID="pnlPermissions" runat="server">
                                     <asp:Label ID="lblInheritanceInfo" CssClass="InfoLabel" runat="server" EnableViewState="false" />
-                                    <cms:LocalizedLinkButton ID="lnkInheritance" runat="server" OnClick="lnkInheritance_Click"
-                                        EnableViewState="false" ResourceString="Security.Inheritance" CssClass="InfoLabel" />
+                                    <div class="content-block">
+                                        <cms:LocalizedLinkButton ID="lnkInheritance" runat="server" OnClick="lnkInheritance_Click"
+                                            EnableViewState="false" ResourceString="Security.Inheritance" />
+                                    </div>
                                     <cms:Security ID="securityElem" runat="server" IsLiveSite="false" />
                                 </asp:Panel>
                             </asp:Panel>
@@ -44,7 +55,7 @@
                                     <cms:LocalizedLabel ID="lblReqAuthent" runat="server" EnableViewState="false" ResourceString="Security.RadioCaption" CssClass="control-label" />
                                 </div>
                                 <div class="editing-form-value-cell">
-                                    <div class="radio-list-vertical">
+                                    <div class="radio-list-vertical FloatLeft">
                                         <cms:CMSRadioButton GroupName="reqAuth" ID="radYes" runat="server" ResourceString="general.yes" />
                                         <cms:CMSRadioButton GroupName="reqAuth" ID="radNo" runat="server" ResourceString="general.no" />
                                         <asp:PlaceHolder ID="plcAuthParent" runat="server">
@@ -52,6 +63,10 @@
                                         </asp:PlaceHolder>
 
                                     </div>
+                                    <span class="info-icon">
+                                        <asp:Label runat="server" ID="spanScreenReader" CssClass="sr-only"></asp:Label>
+                                        <cms:CMSIcon runat="server" ID="iconHelp" EnableViewState="false" CssClass="icon-question-circle" aria-hidden="true"></cms:CMSIcon>
+                                    </span>
                                 </div>
                             </div>
                         </cms:UIPlaceHolder>
@@ -82,10 +97,6 @@
                                     EnableViewState="false" ResourceString="Security.BreakWithClear" /><br />
                             </div>
                         </asp:PlaceHolder>
-                        <div>
-                            <cms:LocalizedButton ID="btnCancelAction" runat="server" ButtonStyle="Primary"
-                                OnClick="btnCancelAction_Click" EnableViewState="false" ResourceString="general.cancel" />
-                        </div>
                     </asp:Panel>
                 </asp:Panel>
             </asp:Panel>
@@ -95,7 +106,6 @@
             <asp:PostBackTrigger ControlID="lnkRestoreInheritance" />
             <asp:PostBackTrigger ControlID="lnkBreakWithCopy" />
             <asp:PostBackTrigger ControlID="lnkBreakWithClear" />
-            <asp:PostBackTrigger ControlID="btnCancelAction" />
         </Triggers>
     </cms:CMSUpdatePanel>
 </asp:Content>

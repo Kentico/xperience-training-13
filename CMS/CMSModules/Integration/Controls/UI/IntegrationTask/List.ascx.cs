@@ -235,7 +235,7 @@ public partial class CMSModules_Integration_Controls_UI_IntegrationTask_List : C
         drpAction.Items.Add(new ListItem(GetString("general." + Action.SelectAction), Convert.ToInt32(Action.SelectAction).ToString()));
 
         // Add synchronize option only when task processing is enabled
-        IntegrationConnectorInfo connector = IntegrationConnectorInfoProvider.GetIntegrationConnectorInfo(ConnectorID);
+        IntegrationConnectorInfo connector = IntegrationConnectorInfo.Provider.Get(ConnectorID);
         if ((TasksAreInbound ? IntegrationHelper.IntegrationProcessExternal : IntegrationHelper.IntegrationProcessInternal) && ((ConnectorID <= 0) || (connector != null) && connector.ConnectorEnabled && (IntegrationHelper.GetConnector(connector.ConnectorName) != null)))
         {
             drpAction.Items.Add(new ListItem(GetString("general." + Action.Synchronize), Convert.ToInt32(Action.Synchronize).ToString()));
@@ -305,7 +305,7 @@ public partial class CMSModules_Integration_Controls_UI_IntegrationTask_List : C
                     drv = UniGridFunctions.GetDataRowView(runButton.Parent as DataControlFieldCell);
 
                     int connectorId = ValidationHelper.GetInteger(drv["SynchronizationConnectorID"], 0);
-                    var connector = IntegrationConnectorInfoProvider.GetIntegrationConnectorInfo(connectorId);
+                    var connector = IntegrationConnectorInfo.Provider.Get(connectorId);
 
                     bool processingDisabled = TasksAreInbound ? !IntegrationHelper.IntegrationProcessExternal : !IntegrationHelper.IntegrationProcessInternal;
                     if (processingDisabled || (connector == null) || !connector.ConnectorEnabled)
@@ -346,17 +346,17 @@ public partial class CMSModules_Integration_Controls_UI_IntegrationTask_List : C
         {
             case "delete":
                 // Delete synchronization
-                IntegrationSynchronizationInfoProvider.DeleteIntegrationSynchronizationInfo(synchronizationId);
+                IntegrationSynchronizationInfo.Provider.Get(synchronizationId)?.Delete();
                 break;
 
             case "run":
                 // Get synchronization
-                IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfoProvider.GetIntegrationSynchronizationInfo(synchronizationId);
+                IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfo.Provider.Get(synchronizationId);
                 if (synchronization != null)
                 {
                     // Get connector and task
-                    IntegrationConnectorInfo connectorInfo = IntegrationConnectorInfoProvider.GetIntegrationConnectorInfo(synchronization.SynchronizationConnectorID);
-                    IntegrationTaskInfo taskInfo = IntegrationTaskInfoProvider.GetIntegrationTaskInfo(synchronization.SynchronizationTaskID);
+                    IntegrationConnectorInfo connectorInfo = IntegrationConnectorInfo.Provider.Get(synchronization.SynchronizationConnectorID);
+                    IntegrationTaskInfo taskInfo = IntegrationTaskInfo.Provider.Get(synchronization.SynchronizationTaskID);
                     if ((connectorInfo != null) && (taskInfo != null))
                     {
                         // Get connector instance
@@ -464,7 +464,7 @@ public partial class CMSModules_Integration_Controls_UI_IntegrationTask_List : C
             {
                 // Get synchronization
                 int synchronizationId = ValidationHelper.GetInteger(taskIdString, 0);
-                IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfoProvider.GetIntegrationSynchronizationInfo(synchronizationId);
+                IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfo.Provider.Get(synchronizationId);
                 if (synchronization != null)
                 {
                     result.Append(ProcessSynchronization(synchronization.SynchronizationConnectorID, synchronization.SynchronizationTaskID));
@@ -522,11 +522,11 @@ public partial class CMSModules_Integration_Controls_UI_IntegrationTask_List : C
                 int synchronizationId = ValidationHelper.GetInteger(synchronizationIdString, 0);
                 if (synchronizationId > 0)
                 {
-                    IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfoProvider.GetIntegrationSynchronizationInfo(synchronizationId);
+                    IntegrationSynchronizationInfo synchronization = IntegrationSynchronizationInfo.Provider.Get(synchronizationId);
 
                     if (synchronization != null)
                     {
-                        IntegrationTaskInfo task = IntegrationTaskInfoProvider.GetIntegrationTaskInfo(synchronization.SynchronizationTaskID);
+                        IntegrationTaskInfo task = IntegrationTaskInfo.Provider.Get(synchronization.SynchronizationTaskID);
 
                         if (task != null)
                         {
@@ -821,8 +821,8 @@ function PerformAction(){{
         if ((taskId > 0) && (connectorId > 0))
         {
             // Get connector and task
-            IntegrationConnectorInfo connectorInfo = IntegrationConnectorInfoProvider.GetIntegrationConnectorInfo(connectorId);
-            IntegrationTaskInfo taskInfo = IntegrationTaskInfoProvider.GetIntegrationTaskInfo(taskId);
+            IntegrationConnectorInfo connectorInfo = IntegrationConnectorInfo.Provider.Get(connectorId);
+            IntegrationTaskInfo taskInfo = IntegrationTaskInfo.Provider.Get(taskId);
             if ((connectorInfo != null) && (taskInfo != null))
             {
                 if (connectorInfo.ConnectorEnabled)
@@ -867,7 +867,7 @@ function PerformAction(){{
     private void DeleteSynchronization(int synchronizationId, string taskTitle)
     {
         AddLog(String.Format(ResHelper.GetAPIString("deletion.running", "Deleting '{0}' task"), HTMLHelper.HTMLEncode(taskTitle)));
-        IntegrationSynchronizationInfoProvider.DeleteIntegrationSynchronizationInfo(synchronizationId);
+        IntegrationSynchronizationInfo.Provider.Get(synchronizationId)?.Delete();
     }
 
     #endregion

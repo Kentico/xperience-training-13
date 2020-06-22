@@ -9,7 +9,6 @@ using CMS.CMSImportExport;
 using CMS.ContactManagement.Internal;
 using CMS.Core;
 using CMS.DataEngine;
-using CMS.EventLog;
 using CMS.FormEngine;
 using CMS.Globalization;
 using CMS.Helpers;
@@ -20,7 +19,7 @@ using CMS.Modules;
 using CMS.PortalEngine;
 using CMS.UIControls.Internal;
 using CMS.WorkflowEngine;
-
+using CMS.WorkflowEngine.Internal;
 
 [assembly: RegisterModule(typeof(UpgradeModule))]
 
@@ -423,7 +422,7 @@ internal static class UpgradeProcedure
                         }
 
                         // Save new meta file
-                        MetaFileInfoProvider.SetMetaFileInfo(mfInfo);
+                        MetaFileInfo.Provider.Set(mfInfo);
                     }
 
                     // Remove existing files after successful finish
@@ -452,6 +451,8 @@ internal static class UpgradeProcedure
     private static bool Upgrade120To130()
     {
         new PersonaRuleUpgrade().Upgrade();
+        new WorkflowStepsUpgrade().Upgrade();
+
         return true;
     }
 

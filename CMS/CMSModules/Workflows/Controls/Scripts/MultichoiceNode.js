@@ -7,10 +7,6 @@
 
         this.defaultSourcePointDefinition = [{ Type: "switchCase" }, { Type: "switchCase" }, { Type: "switchDefault"}];
         this.defaultCaseContent = "New condition";
-
-        if (this.graph.isMarketingAutomationWorkflow()) {
-            this.switchDefaultSourcePointTemplate.anchor = "CenterSource";
-        }
     },
 
 
@@ -54,7 +50,7 @@
     *   Returns node icon HTML representation.
     */
     getNodeIconClass: function () {
-        if (this.definition.TypeName === 'MultichoiceFirstWin')
+        if (this.isFirstWinStepType())
             return 'icon-choice-single-scheme';
         return 'icon-choice-multi-scheme';
     },
@@ -117,7 +113,17 @@
     *   Overrides default behavior.
     */
     setTimeout: function () {
-        this.hasTimeout = true;
-        this.setTimeoutProperties();
+        if (!this.isFirstWinStepType()) {
+            this.hasTimeout = true;
+            this.setTimeoutProperties();
+        }
+    },
+
+
+    /*
+    *   Returns true if the current step type is 'First win'.
+    */
+    isFirstWinStepType: function () {
+        return this.definition.TypeName === 'MultichoiceFirstWin';
     }
 });

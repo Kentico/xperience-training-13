@@ -9,80 +9,9 @@
 
 
 
-public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_Edit {
-    
-    /// <summary>
-    /// plcLabel control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel plcLabel;
-    
-    /// <summary>
-    /// lblLabel control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblLabel;
-    
-    /// <summary>
-    /// txtLabel control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSFormControls_System_LocalizableTextBox txtLabel;
-    
-    /// <summary>
-    /// RequiredFieldValidatorLabel control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator RequiredFieldValidatorLabel;
-    
-    /// <summary>
-    /// lblText control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblText;
-    
-    /// <summary>
-    /// txtText control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSFormControls_System_LocalizableTextBox txtText;
-    
-    /// <summary>
-    /// lblTooltip control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblTooltip;
-    
-    /// <summary>
-    /// txtTooltip control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSFormControls_System_LocalizableTextBox txtTooltip;
-    
+public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_Edit
+{
+
     /// <summary>
     /// plcCondition control.
     /// </summary>
@@ -91,7 +20,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel plcCondition;
-    
+
     /// <summary>
     /// lblCondition control.
     /// </summary>
@@ -100,7 +29,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblCondition;
-    
+
     /// <summary>
     /// cbCondition control.
     /// </summary>
@@ -109,4 +38,103 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Macros_ConditionBuilder cbCondition;
+
+    /// <summary>
+    /// plcLabel control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel plcLabel;
+
+    /// <summary>
+    /// lblLabel control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblLabel;
+
+    /// <summary>
+    /// txtLabel control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSFormControls_System_LocalizableTextBox txtLabel;
+
+    /// <summary>
+    /// RequiredFieldValidatorLabel control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator RequiredFieldValidatorLabel;
+
+    /// <summary>
+    /// lblText control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblText;
+
+    /// <summary>
+    /// txtText control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSFormControls_System_LocalizableTextBox txtText;
+
+    /// <summary>
+    /// lblTooltip control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblTooltip;
+
+    /// <summary>
+    /// txtTooltip control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSFormControls_System_LocalizableTextBox txtTooltip;
+
+    /// <summary>
+    /// plcStepAllowReject control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel plcStepAllowReject;
+
+    /// <summary>
+    /// lblStepAllowReject control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblStepAllowReject;
+
+    /// <summary>
+    /// chkStepAllowReject control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSCheckBox chkStepAllowReject;
 }

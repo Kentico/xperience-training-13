@@ -814,7 +814,7 @@ public partial class CMSModules_Content_Controls_EditMenu : EditMenu, IExtensibl
                                     transitions = WorkflowManager.GetStepTransitions(Step, WorkflowTransitionTypeEnum.Manual);
                                     if (transitions.Count > 0)
                                     {
-                                        WorkflowStepInfo s = WorkflowStepInfoProvider.GetWorkflowStepInfo(transitions[0].TransitionEndStepID);
+                                        WorkflowStepInfo s = WorkflowStepInfo.Provider.Get(transitions[0].TransitionEndStepID);
                                         if (!s.StepIsArchived)
                                         {
                                             // Publish text
@@ -915,7 +915,7 @@ public partial class CMSModules_Content_Controls_EditMenu : EditMenu, IExtensibl
 
                                     if (transitions.Count > 0)
                                     {
-                                        WorkflowStepInfo s = WorkflowStepInfoProvider.GetWorkflowStepInfo(transitions[0].TransitionEndStepID);
+                                        WorkflowStepInfo s = WorkflowStepInfo.Provider.Get(transitions[0].TransitionEndStepID);
                                         if (s.StepIsArchived)
                                         {
                                             // Inform user
@@ -1091,7 +1091,7 @@ public partial class CMSModules_Content_Controls_EditMenu : EditMenu, IExtensibl
         // Check workflow count
         if (allowed)
         {
-            allowed = WorkflowInfoProvider.GetWorkflows()
+            allowed = WorkflowInfo.Provider.Get()
                                           .WhereTrue("WorkflowEnabled")
                                           .Where(new WhereCondition().WhereNotEquals("WorkflowType", (int)WorkflowTypeEnum.Automation).Or().WhereNull("WorkflowType"))
                                           .Count > 0;

@@ -654,7 +654,7 @@ public partial class CMSAdminControls_ImageEditor_ImageEditor : CMSUserControl
                         UpdateMetafileProperties(name, extension, mimetype, title, description, binary, width, height);
 
                         // Save new data
-                        MetaFileInfoProvider.SetMetaFileInfo(metafile);
+                        MetaFileInfo.Provider.Set(metafile);
 
                         if (RefreshAfterAction)
                         {

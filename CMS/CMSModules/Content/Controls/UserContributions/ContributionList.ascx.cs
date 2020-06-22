@@ -835,7 +835,7 @@ public partial class CMSModules_Content_Controls_UserContributions_ContributionL
                 if (stepId > 0)
                 {
                     // Get workflow step display name
-                    WorkflowStepInfo wsi = WorkflowStepInfoProvider.GetWorkflowStepInfo(stepId);
+                    WorkflowStepInfo wsi = WorkflowStepInfo.Provider.Get(stepId);
                     if (wsi != null)
                     {
                         return ResHelper.LocalizeString(wsi.StepDisplayName);

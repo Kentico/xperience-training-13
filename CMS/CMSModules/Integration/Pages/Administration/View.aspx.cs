@@ -35,7 +35,7 @@ public partial class CMSModules_Integration_Pages_Administration_View : CMSInteg
         PageTitle.TitleText = GetString("Task.ViewHeader");
         RegisterModalPageScripts();
 
-        IntegrationTaskInfo ti = IntegrationTaskInfoProvider.GetIntegrationTaskInfo(TaskID);
+        IntegrationTaskInfo ti = IntegrationTaskInfo.Provider.Get(TaskID);
         // Set edited object
         EditedObject = ti;
 

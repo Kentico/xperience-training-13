@@ -68,7 +68,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
         {
             if (mCurrentTaskGroup == null)
             {
-                mCurrentTaskGroup = TaskGroupInfoProvider.GetTaskGroupInfo(UIContext.ObjectID);
+                mCurrentTaskGroup = TaskGroupInfo.Provider.Get(UIContext.ObjectID);
             }
 
             return mCurrentTaskGroup;
@@ -101,7 +101,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
         }
 
         InitServerSelector();
-        mCurrentTaskGroup = TaskGroupInfoProvider.GetTaskGroupInfo(UIContext.ObjectID);
+        mCurrentTaskGroup = TaskGroupInfo.Provider.Get(UIContext.ObjectID);
 
         // Register script for pendingCallbacks repair
         ScriptHelper.FixPendingCallbacks(Page);
@@ -162,7 +162,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
 
     private DataSet gridTasks_OnDataReload(string completeWhere, string currentOrder, int currentTopN, string columns, int currentOffset, int currentPageSize, ref int totalRecords)
     {
-        completeWhere = new WhereCondition(completeWhere).And().WhereIn("TaskID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID")).ToString(true);
+        completeWhere = new WhereCondition(completeWhere).And().WhereIn("TaskID", TaskGroupTaskInfo.Provider.Get().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID")).ToString(true);
 
         // Get the tasks
         var tasksQuery = StagingTaskInfoProvider.SelectTaskList(CurrentSiteID, SelectedServerID, completeWhere, currentOrder, currentTopN, columns, currentOffset, currentPageSize);
@@ -201,7 +201,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
 
         // Get the tasks
         DataSet ds = StagingTaskInfoProvider.SelectTaskList(CurrentSiteID, SelectedServerID, GridTasks.CustomFilter.WhereCondition, "TaskID", -1, "TaskID")
-                                            .WhereIn("TaskID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID"));
+                                            .WhereIn("TaskID", TaskGroupTaskInfo.Provider.Get().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID"));
 
         // Run the synchronization
         return StagingTaskRunner.RunSynchronization(ds);
@@ -270,7 +270,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
 
         // Get the tasks
         DataSet ds = StagingTaskInfoProvider.SelectTaskList(CurrentSiteID, SelectedServerID, GridTasks.CustomFilter.WhereCondition, "TaskID", -1, "TaskID, TaskTitle")
-                                            .WhereIn("TaskID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID"));
+                                            .WhereIn("TaskID", TaskGroupTaskInfo.Provider.Get().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID"));
 
         DeleteTasks(ds);
 
@@ -392,7 +392,7 @@ public partial class CMSModules_Staging_Tools_TaskGroup_TaskGroup : CMSStagingTa
         gridTasks.OnDataReload += gridTasks_OnDataReload;
         gridTasks.ShowActionsMenu = true;
         gridTasks.Columns = "TaskID, TaskSiteID, TaskDocumentID, TaskNodeAliasPath, TaskTitle, TaskTime, TaskType, TaskObjectType, TaskObjectID, TaskRunning, (SELECT COUNT(*) FROM Staging_Synchronization WHERE SynchronizationTaskID = TaskID AND SynchronizationErrorMessage IS NOT NULL AND (SynchronizationServerID = @ServerID OR (@ServerID = 0 AND (@TaskSiteID = 0 OR SynchronizationServerID IN (SELECT ServerID FROM Staging_Server WHERE ServerSiteID = @TaskSiteID AND ServerEnabled=1))))) AS FailedCount";
-        gridTasks.WhereCondition = new WhereCondition().WhereIn("TaskID", TaskGroupInfoProvider.GetTaskGroups().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID")).ToString(true);
+        gridTasks.WhereCondition = new WhereCondition().WhereIn("TaskID", TaskGroupInfo.Provider.Get().WhereEquals("TaskGroupID", CurrentTaskGroup.TaskGroupID).Column("TaskID")).ToString(true);
         StagingTaskInfo ti = new StagingTaskInfo();
         gridTasks.AllColumns = SqlHelper.MergeColumns(ti.ColumnNames);
     }

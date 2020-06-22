@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using CMS.DocumentEngine;
+using CMS.DocumentEngine.Types.MedioClinic;
+
 using XperienceAdapter;
-using Business;
+using Business.Dtos;
 using MedioClinic.Models;
-using MedioClinic.Configuration;
 
 namespace MedioClinic.Controllers
 {
@@ -17,17 +19,25 @@ namespace MedioClinic.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IOptionsService<XperienceOptions> optionsService)
+        private readonly IPageRepository<HomePageDto, HomePage> _homePageRepository;
+
+        private readonly IPageRepository<CompanyServiceDto, CompanyService> _companyServiceRepository;
+
+        public HomeController(
+            ILogger<HomeController> logger, 
+            IPageRepository<HomePageDto, HomePage> homePageRepository,
+            IPageRepository<CompanyServiceDto, CompanyService> companyServiceRepository)
         {
-            _logger = logger;
-            _ = optionsService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));
+            _companyServiceRepository = companyServiceRepository ?? throw new ArgumentNullException(nameof(companyServiceRepository));
+
         }
 
         public IActionResult Index()
         {
-            var dbConnectivityTest = new DbConnectivityTest();
-            var documentGuid = dbConnectivityTest.GetDocumentGuid();
-            ViewBag.DocumentGuid = documentGuid;
+            var companyServices = _companyServiceRepository.GetPages(query => 
+                query.Path("/Home/", PathTypeEnum.Children));
 
             _logger.LogInformation("info 1", "params object 1", "params object 2");
             _logger.LogInformation(99, "info 2");

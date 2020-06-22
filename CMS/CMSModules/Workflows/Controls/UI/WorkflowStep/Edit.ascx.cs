@@ -140,6 +140,8 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 if (CurrentStepInfo != null)
                 {
                     WorkflowScriptHelper.RegisterRefreshDesignerFunction(Page, CurrentStepInfo.StepID, QueryHelper.GetString("graph", String.Empty));
+
+                    lblTimeout.ResourceString = CurrentStepInfo.StepIsWait ? "workflowstep.waitsettings" : "workflowstep.timeoutsettings";
                 }
 
                 HeaderActions.ActionControlCreated.Before += (sender, actionEventArgs) =>
@@ -165,7 +167,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
         if (CurrentStepInfo != null)
         {
             // Display timeout target source point selector
-            plcTimeoutTarget.Visible = ShowGeneralProperties && ucTimeout.TimeoutEnabled && ucTimeoutTarget.IsVisible();
+            plcTimeoutTarget.Visible = ucTimeout.TimeoutEnabled && ucTimeoutTarget.IsVisible();
         }
     }
 
@@ -220,12 +222,12 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 if (sourcePoint != null)
                 {
                     plcCondition.Visible = ShowSourcePointForm;
-                    lblCondition.ResourceString = conditionStep ? "workflowstep.conditionsettings" : "workflowstep.advancedsettings";
+                    lblCondition.ResourceString = GetHeaderResourceString(wsi.StepType);
 
                     ucSourcePointEdit.StopProcessing = false;
                     ucSourcePointEdit.SourcePointGuid = sourcePoint.Guid;
                     ucSourcePointEdit.SimpleMode = !conditionStep;
-                    ucSourcePointEdit.ShowCondition = (wsi.StepType != WorkflowStepTypeEnum.Userchoice) && (wsi.StepType != WorkflowStepTypeEnum.Multichoice) && (wsi.StepType != WorkflowStepTypeEnum.MultichoiceFirstWin);
+                    ucSourcePointEdit.ShowCondition = GetShowCondition(wsi);
                     ucSourcePointEdit.RuleCategoryNames = CurrentWorkflow.IsAutomation ? ModuleName.ONLINEMARKETING : WorkflowInfo.OBJECT_TYPE;
                 }
             }
@@ -250,7 +252,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
             ucActionParameters.SaveData(false);
             SetFormValues(CurrentStepInfo);
 
-            WorkflowStepInfoProvider.SetWorkflowStepInfo(CurrentStepInfo);
+            WorkflowStepInfo.Provider.Set(CurrentStepInfo);
 
             RefreshDesigner();
         }
@@ -292,6 +294,28 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
     }
 
 
+    private string GetHeaderResourceString(WorkflowStepTypeEnum stepType)
+    {
+        if (CurrentWorkflow.IsAutomation)
+        {
+            return "workflowstep.contactmanagement";
+        }
+
+        return stepType == WorkflowStepTypeEnum.Condition ? "workflowstep.conditionsettings" : "workflowstep.advancedsettings";
+    }
+
+
+    private bool GetShowCondition(WorkflowStepInfo step)
+    {
+        if (CurrentWorkflow.IsAutomation && step.StepType == WorkflowStepTypeEnum.Wait)
+        {
+            return false;
+        }
+
+        return step.StepType != WorkflowStepTypeEnum.Userchoice && step.StepType != WorkflowStepTypeEnum.Multichoice && step.StepType != WorkflowStepTypeEnum.MultichoiceFirstWin;
+    }
+
+
     /// <summary>
     /// Ensures correct steps order
     /// </summary>
@@ -307,14 +331,14 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
                 CurrentStepInfo.StepOrder = psi.StepOrder;
                 // Move the published step down
                 psi.StepOrder += 1;
-                WorkflowStepInfoProvider.SetWorkflowStepInfo(psi);
+                WorkflowStepInfo.Provider.Set(psi);
 
                 // Move the archived step down
                 WorkflowStepInfo asi = WorkflowStepInfoProvider.GetArchivedStep(CurrentWorkflow.WorkflowID);
                 if (asi != null)
                 {
                     asi.StepOrder += 1;
-                    WorkflowStepInfoProvider.SetWorkflowStepInfo(asi);
+                    WorkflowStepInfo.Provider.Set(asi);
                 }
             }
         }

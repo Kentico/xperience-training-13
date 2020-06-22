@@ -50,7 +50,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
     /// <summary>
     /// Workflow step
     /// </summary>
-    public WorkflowStepInfo WorkflowStep => mWorkflowStep ?? (mWorkflowStep = WorkflowStepInfoProvider.GetWorkflowStepInfo(WorkflowStepID));
+    public WorkflowStepInfo WorkflowStep => mWorkflowStep ?? (mWorkflowStep = WorkflowStepInfo.Provider.Get(WorkflowStepID));
 
 
     /// <summary>
@@ -62,7 +62,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
         {
             if (mWorkflow == null && WorkflowStep != null)
             {
-                mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowStep.StepWorkflowID);
+                mWorkflow = WorkflowInfo.Provider.Get(WorkflowStep.StepWorkflowID);
             }
 
             return mWorkflow;
@@ -236,14 +236,14 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
         // Get the active roles for this site
         string where = $"[StepID] = {WorkflowStepID} AND [StepSourcePointGuid] {(SourcePointGuid == null ? "IS NULL" : $"= '{SourcePointGuid}'")}";
 
-        var roles = WorkflowStepRoleInfoProvider.GetWorkflowStepRoles()
+        var roles = WorkflowStepRoleInfo.Provider.Get()
             .Where(where)
             .Column("RoleID")
             .GetListResult<int>();
         currentRoles = string.Join(";", roles.ToArray());
 
         // Get the active users for this site
-        var users = WorkflowStepUserInfoProvider.GetWorkflowStepUsers()
+        var users = WorkflowStepUserInfo.Provider.Get()
             .Where(where)
             .Column("UserID")
             .GetListResult<int>();
@@ -355,7 +355,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
                 int roleId = ValidationHelper.GetInteger(item, 0);
 
                 // If role is authorized, remove it
-                WorkflowStepRoleInfo wsr = WorkflowStepRoleInfoProvider.GetWorkflowStepRoleInfo(WorkflowStepID, roleId, stepSourcePointGuid);
+                WorkflowStepRoleInfo wsr = WorkflowStepRoleInfo.Provider.Get(WorkflowStepID, roleId, stepSourcePointGuid);
                 wsr?.Delete();
             }
         }
@@ -372,9 +372,9 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
                 int roleId = ValidationHelper.GetInteger(item, 0);
 
                 // If role is not authorized, authorize it
-                if (WorkflowStepRoleInfoProvider.GetWorkflowStepRoleInfo(WorkflowStepID, roleId, stepSourcePointGuid) == null)
+                if (WorkflowStepRoleInfo.Provider.Get(WorkflowStepID, roleId, stepSourcePointGuid) == null)
                 {
-                    WorkflowStepRoleInfoProvider.AddRoleToWorkflowStep(WorkflowStepID, roleId, stepSourcePointGuid);
+                    WorkflowStepRoleInfo.Provider.Add(WorkflowStepID, roleId, stepSourcePointGuid);
                 }
             }
         }
@@ -402,7 +402,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
             {
                 int userId = ValidationHelper.GetInteger(item, 0);
                 // If user is authorized, remove it
-                WorkflowStepUserInfo wsu = WorkflowStepUserInfoProvider.GetWorkflowStepUserInfo(WorkflowStepID, userId, stepSourcePointGuid);
+                WorkflowStepUserInfo wsu = WorkflowStepUserInfo.Provider.Get(WorkflowStepID, userId, stepSourcePointGuid);
                 wsu?.Delete();
             }
         }
@@ -419,9 +419,9 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
                 int userId = ValidationHelper.GetInteger(item, 0);
 
                 // If user is not authorized, authorize it
-                if (WorkflowStepUserInfoProvider.GetWorkflowStepUserInfo(WorkflowStepID, userId, stepSourcePointGuid) == null)
+                if (WorkflowStepUserInfo.Provider.Get(WorkflowStepID, userId, stepSourcePointGuid) == null)
                 {
-                    WorkflowStepUserInfoProvider.AddUserToWorkflowStep(WorkflowStepID, userId, stepSourcePointGuid);
+                    WorkflowStepUserInfo.Provider.Add(WorkflowStepID, userId, stepSourcePointGuid);
                 }
             }
         }

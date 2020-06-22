@@ -39,7 +39,7 @@ public partial class CMSModules_Integration_Pages_Administration_Log : CMSIntegr
     {
         get
         {
-            return mSynchronizationInfo ?? (mSynchronizationInfo = IntegrationSynchronizationInfoProvider.GetIntegrationSynchronizationInfo(SynchronizationID));
+            return mSynchronizationInfo ?? (mSynchronizationInfo = IntegrationSynchronizationInfo.Provider.Get(SynchronizationID));
         }
     }
 
@@ -66,8 +66,8 @@ public partial class CMSModules_Integration_Pages_Administration_Log : CMSIntegr
     {
         if (SynchronizationInfo != null)
         {
-            IntegrationTaskInfo ti = IntegrationTaskInfoProvider.GetIntegrationTaskInfo(SynchronizationInfo.SynchronizationTaskID);
-            IntegrationConnectorInfo si = IntegrationConnectorInfoProvider.GetIntegrationConnectorInfo(SynchronizationInfo.SynchronizationConnectorID);
+            IntegrationTaskInfo ti = IntegrationTaskInfo.Provider.Get(SynchronizationInfo.SynchronizationTaskID);
+            IntegrationConnectorInfo si = IntegrationConnectorInfo.Provider.Get(SynchronizationInfo.SynchronizationConnectorID);
             // Prepare task description
             StringBuilder sbTaskInfo = new StringBuilder();
             sbTaskInfo.Append("<div class=\"form-horizontal\">");
@@ -105,7 +105,7 @@ public partial class CMSModules_Integration_Pages_Administration_Log : CMSIntegr
                 int logid = ValidationHelper.GetInteger(actionArgument, 0);
                 if (logid > 0)
                 {
-                    IntegrationSyncLogInfoProvider.DeleteIntegrationSyncLogInfo(logid);
+                    IntegrationSyncLogInfo.Provider.Get(logid)?.Delete();
                 }
                 break;
         }

@@ -240,7 +240,7 @@ public partial class CMSModules_Content_Controls_Relationships_AddRelatedDocumen
         }
         else
         {
-            relationshipNameInfo = RelationshipNameInfoProvider.GetRelationshipNameInfo(RelationshipName);
+            relationshipNameInfo = RelationshipNameInfo.Provider.Get(RelationshipName);
             if (relationshipNameInfo != null)
             {
                 lblRelName.Text = relationshipNameInfo.RelationshipDisplayName;

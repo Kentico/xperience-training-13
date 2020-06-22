@@ -40,15 +40,15 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
 
 
     /// <summary>
+    /// Get workflow based on <see cref="CurrentStepInfo"/>.
+    /// </summary>
+    private WorkflowInfo CurrentWorkflow => CurrentStepInfo != null ? WorkflowInfo.Provider.Get(CurrentStepInfo.StepWorkflowID) : null;
+
+
+    /// <summary>
     /// Current workflow step info
     /// </summary>
-    private WorkflowStepInfo CurrentStepInfo
-    {
-        get
-        {
-            return (WorkflowStepInfo)UIContext.EditedObject;
-        }
-    }
+    private WorkflowStepInfo CurrentStepInfo => (WorkflowStepInfo)UIContext.EditedObject;
 
 
     /// <summary>
@@ -141,45 +141,50 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
     }
 
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         if (StopProcessing)
         {
-            // Do nothing!
+            return;
         }
-        else
+
+        plcLabel.Visible = !SimpleMode;
+        plcStepAllowReject.Visible = IsRejectPlaceholderVisible();
+        RequiredFieldValidatorLabel.ErrorMessage = GetString("workflowstep.sourcepoint.requireslabel");
+
+        if (CurrentSourcePoint != null)
         {
-            plcLabel.Visible = !SimpleMode;
-            RequiredFieldValidatorLabel.ErrorMessage = GetString("workflowstep.sourcepoint.requireslabel");
-
-            if (CurrentSourcePoint != null)
+            // Switch default doesn't have condition
+            if ((CurrentSourcePoint.Type == SourcePointTypeEnum.SwitchDefault) || (CurrentSourcePoint.Type == SourcePointTypeEnum.Timeout))
             {
-                // Switch default doesn't have condition
-                if ((CurrentSourcePoint.Type == SourcePointTypeEnum.SwitchDefault) || (CurrentSourcePoint.Type == SourcePointTypeEnum.Timeout))
-                {
-                    lblCondition.Visible = cbCondition.Visible = false;
-                }
-
-                if (!RequestHelper.IsPostBack())
-                {
-                    txtLabel.Text = CurrentSourcePoint.Label;
-                    txtText.Text = CurrentSourcePoint.Text;
-                    txtTooltip.Text = CurrentSourcePoint.Tooltip;
-                    cbCondition.Text = CurrentSourcePoint.Condition;
-                }
+                lblCondition.Visible = cbCondition.Visible = false;
             }
 
-            if (cbCondition.Visible)
+            if (!RequestHelper.IsPostBack())
             {
-                WorkflowInfo wi = WorkflowInfoProvider.GetWorkflowInfo(CurrentStepInfo.StepWorkflowID);
-                cbCondition.ResolverName = WorkflowHelper.GetResolverName(wi);
+                txtLabel.Text = CurrentSourcePoint.Label;
+                txtText.Text = CurrentSourcePoint.Text;
+                txtTooltip.Text = CurrentSourcePoint.Tooltip;
+                cbCondition.Text = CurrentSourcePoint.Condition;
 
-                // In marketing automation the context is not available,
-                // so the context dependent rules should remain hidden
-                if (wi.IsAutomation)
+                if (CurrentStepInfo != null && IsRejectPlaceholderVisible())
                 {
-                    cbCondition.DisplayRuleType = 1;
+                    chkStepAllowReject.Checked = CurrentStepInfo.StepAllowReject;
                 }
+            }
+        }
+
+        if (cbCondition.Visible)
+        {
+            cbCondition.ResolverName = WorkflowHelper.GetResolverName(CurrentWorkflow);
+
+            // In marketing automation the context is not available,
+            // so the context dependent rules should remain hidden
+            if (CurrentWorkflow.IsAutomation)
+            {
+                cbCondition.DisplayRuleType = 1;
             }
         }
     }
@@ -238,7 +243,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
                 if (CurrentSourcePoint == null)
                 {
                     // Create new source point
-                    SourcePoint sp = WorkflowHelper.CreateSourcePoint(CurrentStepInfo.StepType);
+                    SourcePoint sp = WorkflowHelper.CreateSourcePoint(CurrentWorkflow.WorkflowType, CurrentStepInfo.StepType);
                     SetValues(sp);
 
                     // AddSourcePoint saves the workflow step to database
@@ -284,7 +289,7 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
                 SaveData(false);
             }
 
-            WorkflowStepInfoProvider.SetWorkflowStepInfo(CurrentStepInfo);
+            WorkflowStepInfo.Provider.Set(CurrentStepInfo);
             ShowChangesSaved();
         }
     }
@@ -301,11 +306,23 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_SourcePoint_E
             sourcePoint.Label = txtLabel.Text;
             sourcePoint.Text = txtText.Text;
             sourcePoint.Tooltip = txtTooltip.Text;
+
             if (ShowCondition && (sourcePoint.Type != SourcePointTypeEnum.SwitchDefault))
             {
                 sourcePoint.Condition = cbCondition.Text;
             }
+
+            if (CurrentStepInfo != null && IsRejectPlaceholderVisible())
+            {
+                CurrentStepInfo.SetValue("StepAllowReject", chkStepAllowReject.Checked);
+            }
         }
+    }
+
+
+    private bool IsRejectPlaceholderVisible()
+    {
+        return CurrentWorkflow != null && CurrentWorkflow.IsAutomation && !CurrentStepInfo.StepIsAction;
     }
 
     #endregion

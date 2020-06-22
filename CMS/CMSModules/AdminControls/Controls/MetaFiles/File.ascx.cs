@@ -523,7 +523,7 @@ function ConfirmDelete() {{
                 {
                     // Delete the meta file
                     int metaFileId = ValidationHelper.GetInteger(actionArgument, 0);
-                    MetaFileInfoProvider.DeleteMetaFileInfo(metaFileId);
+                    MetaFileInfo.Provider.Get(metaFileId)?.Delete();
 
                     RaiseOnAfterDelete();
                 }
@@ -561,7 +561,7 @@ function ConfirmDelete() {{
                         var mfi = new MetaFileInfo(dr);
                         if (string.Equals(mfi.MetaFileName, uploader.CurrentFileName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            MetaFileInfoProvider.DeleteMetaFileInfo(mfi.MetaFileID);
+                            MetaFileInfo.Provider.Get(mfi.MetaFileID)?.Delete();
                         }
                     }
                 }
@@ -656,7 +656,7 @@ function OpenEditor(queryString) {{
                 {
                     // Get existing record ID and delete it
                     existing = new MetaFileInfo(ds.Tables[0].Rows[0]);
-                    MetaFileInfoProvider.DeleteMetaFileInfo(existing);
+                    MetaFileInfo.Provider.Delete(existing);
                 }
 
                 // Create new meta file
@@ -671,7 +671,7 @@ function OpenEditor(queryString) {{
                 mfi.MetaFileSiteID = SiteID;
 
                 // Save to the database
-                MetaFileInfoProvider.SetMetaFileInfo(mfi);
+                MetaFileInfo.Provider.Set(mfi);
 
                 CurrentlyHandledMetaFile = mfi;
                 RaiseOnAfterUpload();
@@ -708,7 +708,7 @@ function OpenEditor(queryString) {{
             int fileId = ValidationHelper.GetInteger(hdnField.Value, 0);
             if (fileId > 0)
             {
-                CurrentlyHandledMetaFile = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+                CurrentlyHandledMetaFile = MetaFileInfo.Provider.Get(fileId);
                 RaiseOnAfterUpload();
 
                 gridFile.ReloadData();

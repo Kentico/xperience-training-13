@@ -32,18 +32,20 @@ public partial class CMSAdminControls_UI_SmartTip : SmartTipControl
             ExpandedHeader = CollapsedHeader;
         }
 
-        if (!RequestHelper.IsAsyncPostback())
+        if (RequestHelper.IsAsyncPostback() && !ControlsHelper.IsInUpdatePanel(this))
         {
-            ScriptHelper.RegisterModule(this, "CMS/SmartTips/SmartTip", new
-            {
-                selector = "#" + pnlTooltip.ClientID,
-                expandedHeader = ResHelper.LocalizeString(ExpandedHeader),
-                collapsedHeader = ResHelper.LocalizeString(CollapsedHeader),
-                content = ResHelper.LocalizeString(Content),
-                isCollapsed = UserSmartTipManager.IsSmartTipDismissed(CollapsedStateIdentifier),
-                identifier = CollapsedStateIdentifier,
-                resources
-            });
+            return;
         }
+
+        ScriptHelper.RegisterModule(this, "CMS/SmartTips/SmartTip", new
+        {
+            selector = "#" + pnlTooltip.ClientID,
+            expandedHeader = ResHelper.LocalizeString(ExpandedHeader),
+            collapsedHeader = ResHelper.LocalizeString(CollapsedHeader),
+            content = ResHelper.LocalizeString(Content),
+            isCollapsed = UserSmartTipManager.IsSmartTipDismissed(CollapsedStateIdentifier),
+            identifier = CollapsedStateIdentifier,
+            resources
+        });
     }
 }

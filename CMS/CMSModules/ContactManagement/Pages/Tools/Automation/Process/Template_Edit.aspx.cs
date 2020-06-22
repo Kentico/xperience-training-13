@@ -75,7 +75,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     protected void editForm_OnAfterSave(object sender, EventArgs e)
     {
         var processId = QueryHelper.GetInteger("processid", 0);
-        var processInfo = WorkflowInfoProvider.GetWorkflowInfo(processId);
+        var processInfo = WorkflowInfo.Provider.Get(processId);
         if (processInfo != null)
         {
             AutomationTemplateManager.UpsertConfigurationFromWorkflow(editForm.EditedObject as AutomationTemplateInfo, processInfo);

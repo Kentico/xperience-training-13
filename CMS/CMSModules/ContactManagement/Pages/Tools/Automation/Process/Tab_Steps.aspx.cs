@@ -27,7 +27,6 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     private const string ANALYTICS_VIEW_NAME = "AnalyticsView";
 
     private const string CHANGE_VIEW_CLIENT_SCRIPT = "ChangeView(this); return false;";
-    private const string SELECTED_VIEW_COOKIE_NAME = "CMSMASelectedView";
     private const string UNDERLYING_VIEW_ATTR_KEY_NAME = "UnderlyingView";
 
     #endregion
@@ -108,7 +107,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         {
             if (mWorkflow == null)
             {
-                mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowID);
+                mWorkflow = WorkflowInfo.Provider.Get(WorkflowID);
                 if ((mWorkflow != null) && (mWorkflow.WorkflowType != WorkflowTypeEnum.Automation))
                 {
                     RedirectToAccessDenied(GetString("workflow.type.notsupported"));
@@ -177,7 +176,7 @@ function SaveNavigationState(viewName) {{
     var cookieValue = {JsonConvert.SerializeObject(GetCookieValue())};
     cookieValue[{WorkflowID}] = viewName;
 
-    document.cookie = '{SELECTED_VIEW_COOKIE_NAME}=' + JSON.stringify(cookieValue) + ';Domain={SiteContext.CurrentSite.DomainName};Path=/;SameSite=Lax;Expires=' + expiration.toGMTString();
+    document.cookie = '{CookieName.MarketingAutomationSelectedView}=' + JSON.stringify(cookieValue) + ';Domain={URLHelper.RemovePort(SiteContext.CurrentSite.DomainName)};Path=/;SameSite=Lax;Expires=' + expiration.toGMTString();
 }}
 
 
@@ -202,7 +201,7 @@ function LoadView(viewUrl) {{
 
         try
         {
-            var cookieValue = CookieHelper.GetValue(SELECTED_VIEW_COOKIE_NAME);
+            var cookieValue = CookieHelper.GetValue(CookieName.MarketingAutomationSelectedView);
 
             if (!String.IsNullOrEmpty(cookieValue))
             {
@@ -270,7 +269,7 @@ function LoadView(viewUrl) {{
             var cookieValue = GetCookieValue();
             if (cookieValue.Remove(WorkflowID))
             {
-                CookieHelper.SetValue(SELECTED_VIEW_COOKIE_NAME, JsonConvert.SerializeObject(cookieValue), "/", DateTime.Now.AddMonths(2), false);
+                CookieHelper.SetValue(CookieName.MarketingAutomationSelectedView, JsonConvert.SerializeObject(cookieValue), "/", DateTime.Now.AddMonths(2), false);
             }
         }
     }
@@ -321,7 +320,7 @@ function LoadView(viewUrl) {{
         }
 
         Workflow.WorkflowEnabled = !Workflow.WorkflowEnabled;
-        WorkflowInfoProvider.SetWorkflowInfo(Workflow);
+        WorkflowInfo.Provider.Set(Workflow);
 
         InitializeHeader();
         RefreshView();

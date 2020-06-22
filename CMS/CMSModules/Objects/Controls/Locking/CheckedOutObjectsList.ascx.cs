@@ -80,7 +80,7 @@ public partial class CMSModules_Objects_Controls_Locking_CheckedOutObjectsList :
 
         if ((tmpObjectSettings == null) || (tmpObjectSettings.ObjectSettingsID != objectSettingsId))
         {
-            tmpObjectSettings = ObjectSettingsInfoProvider.GetObjectSettingsInfo(objectSettingsId);
+            tmpObjectSettings = ObjectSettingsInfo.Provider.Get(objectSettingsId);
             if (tmpObjectSettings != null)
             {
                 tmpInfo = ProviderHelper.GetInfoById(tmpObjectSettings.ObjectSettingsObjectType, tmpObjectSettings.ObjectSettingsObjectID);

@@ -211,7 +211,7 @@ public partial class CMSModules_PortalEngine_UI_WebParts_Development_WebPart_New
                     // Write the files
                     try
                     {
-                        var generator = new WebPartCodeGenerator(SystemContext.ApplicationPath, SystemContext.IsWebApplicationProject);
+                        var generator = new WebPartCodeGenerator(SystemContext.ApplicationPath);
                         var result = generator.GenerateWebPartCode(wi);
 
                         string folder = Path.GetDirectoryName(physicalFile);

@@ -166,7 +166,7 @@ public partial class CMSAdminControls_UI_StagingTaskGroupMenu : CMSUserControl, 
             if (GetRaisedCallbackControlID(callbackData).Equals(UniSelectorClientID, StringComparison.InvariantCultureIgnoreCase))
             {
                 // If given task group does not exists on the server anymore null is set, and return that selector is inconsistent
-                CurrentStagingTaskGroup = TaskGroupInfoProvider.GetTaskGroupInfo(GetRaisedCallbackTaskGroupID(callbackData));
+                CurrentStagingTaskGroup = TaskGroupInfo.Provider.Get(GetRaisedCallbackTaskGroupID(callbackData));
 
                 if ((CurrentStagingTaskGroup == null) && (GetRaisedCallbackTaskGroupID(callbackData) != 0))
                 {
@@ -331,7 +331,7 @@ public partial class CMSAdminControls_UI_StagingTaskGroupMenu : CMSUserControl, 
     /// <param name="callbackData">Data sent from browser in key-value pair format</param>
     private void PrepareLinkForRedirect(Dictionary<string, string> callbackData)
     {
-        CurrentStagingTaskGroup = TaskGroupInfoProvider.GetTaskGroupInfo(GetRaisedCallbackTaskGroupID(callbackData));
+        CurrentStagingTaskGroup = TaskGroupInfo.Provider.Get(GetRaisedCallbackTaskGroupID(callbackData));
         callbackResult.Add("redirect", true);
 
         if (CurrentStagingTaskGroup != null)
@@ -351,7 +351,7 @@ public partial class CMSAdminControls_UI_StagingTaskGroupMenu : CMSUserControl, 
     /// <param name="nameOfCreatedstagingTaskGroup">Name of staging task group</param>
     private TaskGroupInfo CreateNewTaskGroup(string nameOfCreatedstagingTaskGroup)
     {
-        TaskGroupInfo taskGroup = TaskGroupInfoProvider.GetTaskGroupInfo(nameOfCreatedstagingTaskGroup);
+        TaskGroupInfo taskGroup = TaskGroupInfo.Provider.Get(nameOfCreatedstagingTaskGroup);
 
         if (taskGroup != null)
         {
@@ -366,7 +366,7 @@ public partial class CMSAdminControls_UI_StagingTaskGroupMenu : CMSUserControl, 
                 TaskGroupGuid = Guid.NewGuid(),
                 TaskGroupCodeName = nameOfCreatedstagingTaskGroup.Truncate(TaskGroupInfo.TYPEINFO.MaxCodeNameLength),
             };
-            TaskGroupInfoProvider.SetTaskGroupInfo(taskGroup);
+            TaskGroupInfo.Provider.Set(taskGroup);
             callbackResult.Add("stagingTaskGroupCreated", true);
             callbackResult.Add("stagingTaskGroupDisplayName", HTMLHelper.HTMLEncode(taskGroup.TaskGroupCodeName));
         }

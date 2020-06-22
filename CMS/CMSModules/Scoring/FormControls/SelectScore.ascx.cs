@@ -1,34 +1,24 @@
 ﻿using System;
 
+using CMS.DataEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.SiteProvider;
-using CMS.DataEngine;
 
 public partial class CMSModules_Scoring_FormControls_SelectScore : FormEngineUserControl
 {
-    #region "Variables"
+    #region "Variables & Properties"
 
-    int mSiteID;
+    private int mSiteID;
 
-    #endregion
-
-
-    #region "Properties"
 
     /// <summary>
     /// Gets or sets the enabled state of the control.
     /// </summary>
     public override bool Enabled
     {
-        get
-        {
-            return uniSelector.Enabled;
-        }
-        set
-        {
-            uniSelector.Enabled = value;
-        }
+        get => uniSelector.Enabled;
+        set => uniSelector.Enabled = value;
     }
 
 
@@ -37,15 +27,15 @@ public partial class CMSModules_Scoring_FormControls_SelectScore : FormEngineUse
     /// </summary>
     public override object Value
     {
-        get
-        {
-            return uniSelector.Value;
-        }
-        set
-        {
-            uniSelector.Value = value;
-        }
+        get => uniSelector.Value;
+        set => uniSelector.Value = value;
     }
+
+
+    /// <summary>
+    /// Indicates whether the selector contains some options.
+    /// </summary>
+    public bool HasData => uniSelector.HasData;
 
 
     /// <summary>
@@ -68,8 +58,10 @@ public partial class CMSModules_Scoring_FormControls_SelectScore : FormEngineUse
 
     #region "Methods"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         if (!StopProcessing)
         {
             InitSelector();

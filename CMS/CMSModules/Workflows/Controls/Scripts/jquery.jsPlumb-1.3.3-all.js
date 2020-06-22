@@ -3996,8 +3996,6 @@
     /* Marketing automation anchor definitions */
     jsPlumb.Anchors["TimeoutSource"] = _curryAnchor(0.32, 1, 0, 1);
     jsPlumb.Anchors["CenterSource"] = _curryAnchor(0.615, 1, 0, 1);
-    jsPlumb.Anchors["FalseSource"] = _curryAnchor(0.4, 1, 0, 1);
-    jsPlumb.Anchors["TrueSource"] = _curryAnchor(0.76, 1, 0, 1);
     jsPlumb.Anchors["CaseSource"] = _curryAnchor(1, 0.5, 1, 0);
     jsPlumb.Anchors["CenterTarget"] = _curryAnchor(0.615, 0, 0, -1);
     /* CMS EDIT END */

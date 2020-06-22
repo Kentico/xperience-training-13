@@ -90,7 +90,7 @@ public partial class CMSModules_Objects_Controls_Versioning_ViewObjectVersion : 
             {
                 if (VersionID > 0)
                 {
-                    mVersion = ObjectVersionHistoryInfoProvider.GetVersionHistoryInfo(VersionID);
+                    mVersion = ObjectVersionHistoryInfo.Provider.Get(VersionID);
                 }
             }
             return mVersion;
@@ -113,7 +113,7 @@ public partial class CMSModules_Objects_Controls_Versioning_ViewObjectVersion : 
             {
                 if (VersionCompareID > 0)
                 {
-                    mVersionCompare = ObjectVersionHistoryInfoProvider.GetVersionHistoryInfo(VersionCompareID);
+                    mVersionCompare = ObjectVersionHistoryInfo.Provider.Get(VersionCompareID);
                 }
             }
             return mVersionCompare;

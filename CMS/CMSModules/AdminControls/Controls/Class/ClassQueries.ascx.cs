@@ -129,7 +129,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassQueries : CMSU
             int queryId = ValidationHelper.GetInteger(actionArgument, -1);
             if (queryId > 0)
             {
-                QueryInfoProvider.DeleteQueryInfo(queryId);
+                QueryInfo.Provider.Get(queryId)?.Delete();
             }
         }
     }

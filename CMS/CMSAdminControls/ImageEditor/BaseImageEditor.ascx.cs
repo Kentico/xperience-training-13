@@ -1558,7 +1558,7 @@ function afterResize() {
                     TempFileInfoProvider.DeleteTempFiles(TempFileInfoProvider.IMAGE_EDITOR_FOLDER, InstanceGUID, CurrentVersion - 1, MaxVersionsCount);
 
                     // Save new temporary file
-                    TempFileInfoProvider.SetTempFileInfo(tfi);
+                    TempFileInfo.Provider.Set(tfi);
 
                     // Oldest version is always current if creating new version
                     OldestVersion = CurrentVersion;

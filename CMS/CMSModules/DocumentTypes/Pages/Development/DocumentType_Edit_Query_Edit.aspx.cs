@@ -131,7 +131,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             int queryId = QueryHelper.GetInteger("objectid", 0);
             if (queryId > 0)
             {
-                mQuery = QueryInfoProvider.GetQueryInfo(queryId);
+                mQuery = QueryInfo.Provider.Get(queryId);
             }
         }
 

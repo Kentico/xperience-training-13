@@ -131,7 +131,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     private void UniSelector_OnItemsSelected(object sender, EventArgs e)
     {
         var contacts = ValidationHelper.GetString(ucSelector.Value, null);
-        if (String.IsNullOrEmpty(contacts))
+        if (String.IsNullOrEmpty(contacts) || !WorkflowStepInfoProvider.CanUserStartAutomationProcess(CurrentUser, CurrentSiteName))
         {
             return;
         }
@@ -148,16 +148,13 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
                 foreach (var contactId in contactIds)
                 {
                     var contact = ContactInfo.Provider.Get(contactId);
-                    if (WorkflowStepInfoProvider.CanUserStartAutomationProcess(CurrentUser, CurrentSiteName))
+                    try
                     {
-                        try
-                        {
-                            manager.StartProcess(contact, processId);
-                        }
-                        catch (ProcessRecurrenceException ex)
-                        {
-                            warningBuilder.AppendFormat("<div>{0}</div>", ex.Message);
-                        }
+                        manager.StartProcess(contact, processId);
+                    }
+                    catch (ProcessRecurrenceException ex)
+                    {
+                        warningBuilder.AppendFormat("<div>{0}</div>", ex.Message);
                     }
                 }
             }
@@ -202,6 +199,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
             ucSelector.UniSelector.OnItemsSelected += UniSelector_OnItemsSelected;
             ucSelector.Enabled = true;
             ucSelector.UniSelector.DialogButton.ToolTipResourceString = "ma.automationprocess.addcontacts.tooltip";
+            ucSelector.UniSelector.DialogInformationMessage = GetString("ma.automationprocess.startprocessinfo");
         }
         else
         {

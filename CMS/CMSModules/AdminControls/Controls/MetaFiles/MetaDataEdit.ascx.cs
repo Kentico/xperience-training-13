@@ -793,7 +793,7 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_MetaDataEdit : 
 
                 // Save new metadata
                 metaFileInfo.AllowPartialUpdate = true;
-                MetaFileInfoProvider.SetMetaFileInfo(metaFileInfo);
+                MetaFileInfo.Provider.Set(metaFileInfo);
 
                 saved = true;
                 LtlScript.Text = ScriptHelper.GetScript("RefreshMetaFile();");

@@ -384,19 +384,24 @@
         </member>
         <member name="T:CMS.WorkflowEngine.Definitions.CaseSourcePoint">
             <summary>
-            Class handling initial values for user choice source point.
+            Class handling initial values for case source point.
             </summary>
         </member>
         <member name="M:CMS.WorkflowEngine.Definitions.CaseSourcePoint.#ctor">
             <summary>
-            Default constructor
+            Default constructor ensuring default label.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Definitions.CaseSourcePoint.#ctor(System.String)">
+            <summary>
+            Constructor ensuring arbitrary label.
             </summary>
         </member>
         <member name="M:CMS.WorkflowEngine.Definitions.CaseSourcePoint.#ctor(System.Int32)">
             <summary>
-            Constructor ensuring numbered default labels
+            Constructor ensuring numbered default labels.
             </summary>
-            <param name="order">Number to be added to label</param>
+            <param name="order">Number to be added to label.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.Definitions.CaseSourcePoint.CloneInternal">
             <summary>
@@ -1974,6 +1979,91 @@
             Finished status
             </summary>
         </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowStepInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowStepRoleInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowStepInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepRoleInfoProvider.Get(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Guid},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepRoleInfoProvider.Remove(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepRoleInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowStepUserInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepUserInfoProvider.Get(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepUserInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Guid},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepUserInfoProvider.Remove(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowStepUserInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
         <member name="T:CMS.WorkflowEngine.WorkflowStepInfo">
             <summary>
             Class to hold the workflow step record data.
@@ -2403,6 +2493,13 @@
             Returns object with specified GUID.
             </summary>
             <param name="guid">Object GUID</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepInfoProvider.Set(CMS.WorkflowEngine.WorkflowStepInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepInfoProvider.SetWorkflowStepInfo(CMS.WorkflowEngine.WorkflowStepInfo)">
             <summary>
@@ -2915,6 +3012,25 @@
             Returns workflow step roles.
             </summary>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.Get(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Guid},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.GetWorkflowStepRoleInfo(System.Int32,System.Int32)">
             <summary>
             Returns the WorkflowStepRoleInfo structure for the specified workflowStepRole.
@@ -2936,6 +3052,14 @@
             </summary>
             <param name="workflowStepRole">WorkflowStepRole to set</param>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.Remove(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.RemoveRoleFromWorkflowStep(System.Int32,System.Int32)">
             <summary>
             Deletes specified workflowStepRole.
@@ -2950,6 +3074,14 @@
             <param name="stepId">Step ID</param>
             <param name="roleId">Role ID</param>
             <param name="sourcePointGuid">Source point GUID</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowStepRoleInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepRoleInfoProvider.AddRoleToWorkflowStep(System.Int32,System.Int32)">
             <summary>
@@ -3062,6 +3194,25 @@
             Returns workflow step users.
             </summary>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.Get(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Guid},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.GetWorkflowStepUserInfo(System.Int32,System.Int32)">
             <summary>
             Returns the WorkflowStepUserInfo structure for the specified workflowStepUser.
@@ -3083,6 +3234,14 @@
             </summary>
             <param name="workflowStepUser">WorkflowStepUser to set</param>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.Remove(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.RemoveUserFromWorkflowStep(System.Int32,System.Int32)">
             <summary>
             Deletes specified workflowStepUser.
@@ -3097,6 +3256,14 @@
             <param name="stepId">Step ID</param>
             <param name="userId">User ID</param>
             <param name="sourcePointGuid">Source point GUID</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.Add(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowStepUserInfo"/> binding.
+            </summary>
+            <param name="workflowStepId">Workflow step ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="sourcePointGuid">Source point GUID, or null.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowStepUserInfoProvider.AddUserToWorkflowStep(System.Int32,System.Int32)">
             <summary>
@@ -3132,6 +3299,11 @@
             Deletes the workflow step users in the database based on the given where condition.
             </summary>
             <param name="where">Where condition to filter data</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowTransitionInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowTransitionInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.WorkflowEngine.WorkflowTransitionInfo">
             <summary>
@@ -3233,13 +3405,13 @@
             <summary>
             Returns workflow transition with specified ID.
             </summary>
-            <param name="transitionId">Workflow transition ID.</param>        
+            <param name="transitionId">Workflow transition ID.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowTransitionInfoProvider.GetWorkflowTransitionInfo(System.Guid)">
             <summary>
             Returns workflow transition with specified GUID.
             </summary>
-            <param name="transitionGuid">Workflow transition GUID.</param>                
+            <param name="transitionGuid">Workflow transition GUID.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowTransitionInfoProvider.SetWorkflowTransitionInfo(CMS.WorkflowEngine.WorkflowTransitionInfo)">
             <summary>
@@ -3308,6 +3480,11 @@
             Performs validation for given <paramref name="transition"/>.
             </summary>
             <exception cref="T:System.InvalidOperationException">When step has invalid combination of data</exception>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowHistoryInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowHistoryInfo"/> management.
+            </summary>
         </member>
         <member name="T:CMS.WorkflowEngine.WorkflowHistoryInfo">
             <summary>
@@ -3543,6 +3720,11 @@
             Gets the data query for this object type
             </summary>
         </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowScopeInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowScopeInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.WorkflowEngine.WorkflowScopeInfo">
             <summary>
             Class to hold the workflow scope data.
@@ -3742,6 +3924,47 @@
             <summary>
             Gets the data query for this object type
             </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowInfo"/> management.
+            </summary>
+        </member>
+        <member name="T:CMS.WorkflowEngine.IWorkflowUserInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowUserInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowUserInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowUserInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.IWorkflowUserInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
         </member>
         <member name="T:CMS.WorkflowEngine.WorkflowInfo">
             <summary>
@@ -4181,6 +4404,23 @@
             Returns all workflow users.
             </summary>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding structure.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.GetWorkflowUserInfo(System.Int32,System.Int32)">
             <summary>
             Returns the WorkflowUserInfo structure for the specified workflowUser.
@@ -4194,12 +4434,26 @@
             </summary>
             <param name="workflowUser">WorkflowUser to set</param>
         </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
+        </member>
         <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.RemoveUserFromWorkflow(System.Int32,System.Int32)">
             <summary>
             Deletes specified workflowUser.
             </summary>
             <param name="workflowId">Workflow ID</param>
             <param name="userId">User ID</param>
+        </member>
+        <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.WorkflowEngine.WorkflowUserInfo"/> binding.
+            </summary>
+            <param name="workflowId">Workflow ID.</param>
+            <param name="userId">User ID.</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowUserInfoProvider.AddUserToWorkflow(System.Int32,System.Int32)">
             <summary>
@@ -4382,10 +4636,11 @@
             </summary>
             <param name="step">Workflow step.</param>
         </member>
-        <member name="M:CMS.WorkflowEngine.WorkflowHelper.CreateSourcePoint(CMS.DataEngine.WorkflowStepTypeEnum)">
+        <member name="M:CMS.WorkflowEngine.WorkflowHelper.CreateSourcePoint(CMS.WorkflowEngine.WorkflowTypeEnum,CMS.DataEngine.WorkflowStepTypeEnum)">
             <summary>
-            Creates source point with respect to workflow step type.
+            Creates source point with respect to the workflow step type.
             </summary>
+            <param name="workflowType">Workflow type</param>
             <param name="stepType">Workflow step type</param>
         </member>
         <member name="M:CMS.WorkflowEngine.WorkflowHelper.GetWorkflowTypeString(CMS.WorkflowEngine.WorkflowTypeEnum,System.Boolean)">
@@ -4487,6 +4742,22 @@
             </summary>
             <param name="objectType">Object type</param>
             <param name="objectId">Object ID</param>
+        </member>
+        <member name="T:CMS.WorkflowEngine.Internal.WorkflowStepsUpgrade">
+            <summary>
+            Class to handle upgrade and object import of workflow steps.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Internal.WorkflowStepsUpgrade.Upgrade">
+            <summary>
+            Performs upgrade of existing workflow steps.
+            </summary>
+        </member>
+        <member name="M:CMS.WorkflowEngine.Internal.WorkflowStepsUpgrade.UpgradeStep(CMS.WorkflowEngine.WorkflowStepInfo)">
+            <summary>
+            Upgrades the workflow step to ensure its definition is valid.
+            </summary>
+            <param name="step">The step to upgrade.</param>
         </member>
     </members>
 </doc>

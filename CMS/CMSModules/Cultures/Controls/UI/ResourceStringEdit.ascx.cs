@@ -329,7 +329,7 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
             // Save translation only if not empty and if the same translation does not exist in resource file 
             if (String.IsNullOrEmpty(translation) || translation.Equals(ResHelper.GetFileString(mResourceStringInfo.StringKey, cultureCode, string.Empty, false), StringComparison.InvariantCultureIgnoreCase))
             {
-                ResourceTranslationInfo.Provider.Delete(resTranslation);
+                resTranslation?.Delete();
             }
             else
             {

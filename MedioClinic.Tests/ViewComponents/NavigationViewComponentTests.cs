@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter;
-using XperienceAdapter.Dtos;
+using Business.Repositories;
 using MedioClinic.ViewComponents;
+using Business.Dtos;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -29,76 +29,57 @@ namespace MedioClinic.Tests.ViewComponents
 
         private Mock<INavigationRepository> GetNavigationRepository()
         {
-            var navigationItem = new NavigationItem
+            var childrenOf11 = new List<NavigationItemDto>
             {
-                RelativeUrl = NodeAliasPath,
-                Title = "Test navigation section",
-                ChildItems = new List<NavigationItem>
+                new NavigationItemDto
                 {
-                    new NavigationItem
-                    {
-                        RelativeUrl = "/Child1-1",
-                        Title = "Child 1-1",
-                        ChildItems = new List<NavigationItem>
-                        {
-                            new NavigationItem
-                            {
-                                RelativeUrl = "/Child1-1-1",
-                                Title = "Child 1-1-1",
-                                ChildItems = new List<NavigationItem>
-                                {
-                                    new NavigationItem
-                                    {
-                                        RelativeUrl = "/Child1-1-1-1",
-                                        Title = "Child 1-2-1"
-                                    },
-                                    new NavigationItem
-                                    {
-                                        RelativeUrl = "/Child1-1-1-2",
-                                        Title = "Child 1-1-1-2"
-                                    }
-                                }
-                            },
-                            new NavigationItem
-                            {
-                                RelativeUrl = "/Child1-1-2",
-                                Title = "Child 1-1-2",
-                                ChildItems = new List<NavigationItem>
-                                {
-                                    new NavigationItem
-                                    {
-                                        RelativeUrl = "/Child1-1-2-1",
-                                        Title = "Child 1-1-2-1"
-                                    },
-                                    new NavigationItem
-                                    {
-                                        RelativeUrl = "/Child1-1-2-2",
-                                        Title = "Child 1-1-2-2"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    new NavigationItem
-                    {
-                        RelativeUrl = "/Child1-2",
-                        Title = "Child 1-2",
-                        ChildItems = new List<NavigationItem>
-                        {
-                            new NavigationItem
-                            {
-                                RelativeUrl = "/Child1-2-1",
-                                Title = "Child 1-2-1"
-                            },
-                            new NavigationItem
-                            {
-                                RelativeUrl = "/Child1-2-2",
-                                Title = "Child 1-2-2"
-                            }
-                        }
-                    },
+                    RelativeUrl = "/Child1-1-1",
+                    Name = "Child 1-1-1"
+                },
+                new NavigationItemDto
+                {
+                    RelativeUrl = "/Child1-1-2",
+                    Name = "Child 1-1-2"
                 }
             };
+
+            var childrenOf12 = new List<NavigationItemDto>
+            {
+                new NavigationItemDto
+                {
+                    RelativeUrl = "/Child1-2-1",
+                    Name = "Child 1-2-1"
+                },
+                new NavigationItemDto
+                {
+                    RelativeUrl = "/Child1-2-2",
+                    Name = "Child 1-2-2"
+                }
+            };
+
+            var childrenOfRoot = new List<NavigationItemDto>
+            {
+                new NavigationItemDto
+                {
+                    RelativeUrl = "/Child1-1",
+                    Name = "Child 1-1"
+                },
+                new NavigationItemDto
+                {
+                    RelativeUrl = "/Child1-2",
+                    Name = "Child 1-2"
+                }
+            };
+
+            var navigationItem = new NavigationItemDto
+            {
+                RelativeUrl = NodeAliasPath,
+                Name = "Test navigation section"
+            };
+
+            navigationItem.ChildItems.AddRange(childrenOfRoot);
+            childrenOfRoot[0].ChildItems.AddRange(childrenOf11);
+            childrenOfRoot[1].ChildItems.AddRange(childrenOf12);
 
             var navigationRepository = new Mock<INavigationRepository>();
             navigationRepository.Setup(repository => repository.GetSecondaryNavigation(NodeAliasPath)).Returns(navigationItem);

@@ -196,7 +196,7 @@ function ProcessAction(action) {
                 break;
 
             case ComponentEvents.AUTOMATION_MOVE_SPEC:
-                var allSteps = WorkflowStepInfoProvider.GetWorkflowSteps()
+                var allSteps = WorkflowStepInfo.Provider.Get()
                     .Where("StepWorkflowID=" + AutomationManager.StateObject.StateWorkflowID + " AND StepType NOT IN (" + (int)WorkflowStepTypeEnum.Start + "," + (int)WorkflowStepTypeEnum.Note + ")")
                     .OrderBy("StepDisplayName");
 

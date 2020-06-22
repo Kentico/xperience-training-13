@@ -32,7 +32,7 @@ public partial class CMSModules_Objects_Dialogs_ViewObjectVersion : CMSObjectVer
         viewVersion.VersionCompareID = ValidationHelper.GetInteger(QueryHelper.GetString("comparehistoryid", string.Empty), 0);
 
         // Get version to initialize title
-        ObjectVersionHistoryInfo version = ObjectVersionHistoryInfoProvider.GetVersionHistoryInfo(versionId);
+        ObjectVersionHistoryInfo version = ObjectVersionHistoryInfo.Provider.Get(versionId);
         if (version != null)
         {
             string objectType = version.VersionObjectType;

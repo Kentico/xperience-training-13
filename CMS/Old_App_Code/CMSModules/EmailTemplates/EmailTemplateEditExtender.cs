@@ -134,7 +134,7 @@ public class EmailTemplateEditExtender : ControlExtender<UIForm>
 
     private static int GetAttachmentsCount(EmailTemplateInfo emailTemplate)
     {
-        var objectQuery = MetaFileInfoProvider.GetMetaFiles();
+        var objectQuery = MetaFileInfo.Provider.Get();
         objectQuery.WhereCondition = MetaFileInfoProvider.GetWhereCondition(emailTemplate.TemplateID, EmailTemplateInfo.OBJECT_TYPE, ObjectAttachmentsCategories.TEMPLATE);
         objectQuery.Columns(MetaFileInfo.TYPEINFO.IDColumn);
 

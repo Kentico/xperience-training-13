@@ -38,7 +38,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// <summary>
     /// Current process.
     /// </summary>
-    public WorkflowInfo Process => mProcess ?? (mProcess = WorkflowInfoProvider.GetWorkflowInfo(QueryHelper.GetInteger("processid", 0)));
+    public WorkflowInfo Process => mProcess ?? (mProcess = WorkflowInfo.Provider.Get(QueryHelper.GetInteger("processid", 0)));
 
 
     /// <summary>
@@ -116,6 +116,12 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
         // Activity selector settings
         ucActivityType.UniSelector.ReturnColumnName = "ActivityTypeID";
+        ucActivityType.ShowAll = false;
+        ucActivityType.UniSelector.SpecialFields.Add(new SpecialField
+        {
+            Text = GetString("general.selectany"),
+            Value = SpecialFieldValue.NONE.ToString()
+        });
 
         // IScore type selector settings
         ucScoreType.SetValue("AllowAll", false);
@@ -347,6 +353,8 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         plcActivityType.Visible = SelectedObjectType == ActivityInfo.OBJECT_TYPE;
         plcScoreCondition.Visible = SelectedObjectType == ScoreInfo.OBJECT_TYPE;
         plcScheduleInterval.Visible = SelectedObjectType == TaskInfo.OBJECT_TYPE_OBJECTTASK;
+
+        ucScoreProperties.Visible = ucScoreType.HasData;
     }
 
 

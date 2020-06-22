@@ -539,7 +539,7 @@ StartSelectionTimer();");
                         ExportUserID = MembershipContext.AuthenticatedUser.UserID
                     };
 
-                    ExportHistoryInfoProvider.SetExportHistoryInfo(history);
+                    ExportHistoryInfo.Provider.Set(history);
                 }
                 catch (Exception ex)
                 {

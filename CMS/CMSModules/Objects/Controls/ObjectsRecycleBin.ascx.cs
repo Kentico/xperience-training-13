@@ -1043,7 +1043,7 @@ function ContextBinAction_", ugRecycleBin.ClientID, @"(action, versionId) {
                 break;
 
             case "destroy":
-                ObjectVersionHistoryInfo verInfo = ObjectVersionHistoryInfoProvider.GetVersionHistoryInfo(versionHistoryId);
+                ObjectVersionHistoryInfo verInfo = ObjectVersionHistoryInfo.Provider.Get(versionHistoryId);
                 if (verInfo != null)
                 {
                     // Get object site name

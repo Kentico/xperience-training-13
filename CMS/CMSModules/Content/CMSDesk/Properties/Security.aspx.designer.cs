@@ -13,6 +13,15 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security
 {
 
     /// <summary>
+    /// pnlUpdateMenu control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateMenu;
+
+    /// <summary>
     /// menuElem control.
     /// </summary>
     /// <remarks>
@@ -92,6 +101,15 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headPermissionsPart;
+
+    /// <summary>
+    /// ctrSmartTip control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_SmartTip ctrSmartTip;
 
     /// <summary>
     /// pnlPermissionsPartBox control.
@@ -229,6 +247,24 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security
     protected global::CMS.Base.Web.UI.CMSRadioButton radParent;
 
     /// <summary>
+    /// spanScreenReader control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label spanScreenReader;
+
+    /// <summary>
+    /// iconHelp control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelp;
+
+    /// <summary>
     /// pnlInheritance control.
     /// </summary>
     /// <remarks>
@@ -317,13 +353,4 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLinkButton lnkBreakWithClear;
-
-    /// <summary>
-    /// btnCancelAction control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnCancelAction;
 }

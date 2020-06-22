@@ -145,13 +145,13 @@ $cmsj('#{txtSearch.ClientID}')
 
         yield return new Group
         {
-            Caption = GetString("general.basic"),
+            Caption = GetString("ma.designertoolbar.flowstepsgroup"),
             Items = GetGroupItemsFromEnum(GetBasicItems(), filterText)
         };
 
         yield return new Group
         {
-            Caption = GetString("general.advanced"),
+            Caption = GetString("ma.designertoolbar.contactactionsgroup"),
             Items = GetGroupItemsFromDB(filterText)
         };
 
@@ -168,8 +168,6 @@ $cmsj('#{txtSearch.ClientID}')
         return new List<WorkflowStepTypeEnum>
         {
             WorkflowStepTypeEnum.Standard,
-            WorkflowStepTypeEnum.Condition,
-            WorkflowStepTypeEnum.Multichoice,
             WorkflowStepTypeEnum.MultichoiceFirstWin,
             WorkflowStepTypeEnum.Userchoice,
             WorkflowStepTypeEnum.Wait,

@@ -214,8 +214,8 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_UrlPathCulturePa
                     var urlPath = DataHelper.GetStringValue(row.Row, "PageUrlPathUrlPath");
                     var urlPathCulture = DataHelper.GetStringValue(row.Row, "PageUrlPathCulture");
 
-                    var urlPathInCorrectCase = PageRoutingHelper.EnsurePathFormat(urlPath, Node.NodeSiteID);
-                    var completeUrl = $"{GetSitePresentationUrl(urlPathCulture)}{urlPathInCorrectCase}";
+                    PageRoutingHelper.EnsurePathFormat(urlPath, Node.NodeSiteID, out var formattedPath);
+                    var completeUrl = $"{GetSitePresentationUrl(urlPathCulture)}{formattedPath}";
                     var escapedUrl = Uri.EscapeUriString(completeUrl);
 
                     var eyeButton = (CMSGridActionButton)sender;
@@ -247,8 +247,8 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_UrlPathCulturePa
                     var urlPath = DataHelper.GetStringValue(row.Row, "PageUrlPathUrlPath");
                     var urlPathCulture = DataHelper.GetStringValue(row.Row, "PageUrlPathCulture");
 
-                    var urlPathInCorrectCase = PageRoutingHelper.EnsurePathFormat(urlPath, Node.NodeSiteID);
-                    var completeUrl = HTMLHelper.HTMLEncode($"{GetSitePresentationUrl(urlPathCulture)}{urlPathInCorrectCase}");
+                    PageRoutingHelper.EnsurePathFormat(urlPath, Node.NodeSiteID, out var formattedPath);
+                    var completeUrl = HTMLHelper.HTMLEncode($"{GetSitePresentationUrl(urlPathCulture)}{formattedPath}");
 
                     // Ensure correct values for unigrid export
                     if (sender == null)

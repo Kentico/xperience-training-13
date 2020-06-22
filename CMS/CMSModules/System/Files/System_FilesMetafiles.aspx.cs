@@ -172,7 +172,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
         // Used object types
         var whereCondition = siteId > 0 ? new WhereCondition().WhereEquals("MetaFileSiteID", siteId) : new WhereCondition();
 
-        var objTypes = MetaFileInfoProvider.GetMetaFiles().Column("MetaFileObjectType").Distinct().Where(whereCondition).GetListResult<string>();
+        var objTypes = MetaFileInfo.Provider.Get().Column("MetaFileObjectType").Distinct().Where(whereCondition).GetListResult<string>();
         ListItem[] items = new ListItem[objTypes.Count];
         int i = 0;
 
@@ -257,7 +257,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
     protected bool CopyToDatabase(int fileId, ref string name)
     {
         // Copy the file from file system to the database
-        MetaFileInfo mi = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+        MetaFileInfo mi = MetaFileInfo.Provider.Get(fileId);
         if (mi != null)
         {
             name = mi.MetaFileName;
@@ -284,7 +284,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
     protected bool CopyToFileSystem(int fileId, ref string name)
     {
         // Copy the file from database to the file system
-        MetaFileInfo mi = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+        MetaFileInfo mi = MetaFileInfo.Provider.Get(fileId);
         if (mi != null)
         {
             name = mi.MetaFileName;
@@ -307,7 +307,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
     protected bool DeleteFromDatabase(int fileId, ref string name)
     {
         // Delete the file in database and ensure it in the file system
-        MetaFileInfo mi = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+        MetaFileInfo mi = MetaFileInfo.Provider.Get(fileId);
         if (mi != null)
         {
             name = mi.MetaFileName;
@@ -333,7 +333,7 @@ public partial class CMSModules_System_Files_System_FilesMetafiles : GlobalAdmin
     protected bool DeleteFromFileSystem(int fileId, ref string name)
     {
         // Delete the file in file system
-        MetaFileInfo mi = MetaFileInfoProvider.GetMetaFileInfo(fileId);
+        MetaFileInfo mi = MetaFileInfo.Provider.Get(fileId);
         if (mi != null)
         {
             name = mi.MetaFileName;

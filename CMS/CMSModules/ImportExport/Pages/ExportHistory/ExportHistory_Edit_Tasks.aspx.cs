@@ -98,7 +98,7 @@ public partial class CMSModules_ImportExport_Pages_ExportHistory_ExportHistory_E
         if (actionName == "delete")
         {
             // delete ExportHistoryTaskInfo object from database
-            ExportTaskInfoProvider.DeleteExportTaskInfo(Convert.ToInt32(actionArgument));
+            ExportTaskInfo.Provider.Get(Convert.ToInt32(actionArgument))?.Delete();
         }
     }
 

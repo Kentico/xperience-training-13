@@ -3544,7 +3544,7 @@
         </member>
         <member name="T:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor">
             <summary>
-            Analytics data processor capable of aggregating data from <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and persisting them in database.
+            Exit page candidates processor capable of processing data represented by <see cref="T:CMS.WebAnalytics.ExitPageCandidate"/>.
             </summary>
         </member>
         <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.#ctor(CMS.WebAnalytics.IExitPageCandidatesMemoryQueue,CMS.Core.IEventLogService,CMS.WebAnalytics.IAnalyticsMemoryQueue,CMS.Core.Internal.IDateTimeNowService,CMS.SiteProvider.ISiteInfoProvider)">
@@ -3554,12 +3554,12 @@
         </member>
         <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.ProcessQueueData">
             <summary>
-            Performs hit number calculation over underlying <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> and saves calculated data into database.
+            Performs processing over underlying <see cref="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue"/> and saves exit page candidates data into database.
             </summary>
         </member>
         <member name="M:CMS.WebAnalytics.ExitPageCandidatesMemoryQueueProcessor.ProcessExitPageCandidates">
             <summary>
-            Process exit page candidates persisted in database.
+            Processes exit page candidates persisted in database and enqueues them into <see cref="T:CMS.WebAnalytics.IAnalyticsMemoryQueue"/> for further processing.
             </summary>
         </member>
         <member name="T:CMS.WebAnalytics.ExitPageCandidateWorker">
@@ -3712,7 +3712,7 @@
         </member>
         <member name="T:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue">
             <summary>
-            Describes memory queue holding web analytics data represented by <see cref="T:CMS.WebAnalytics.LogRecord"/>.
+            Describes memory queue holding exit page candidates data represented by <see cref="T:CMS.WebAnalytics.ExitPageCandidate"/>.
             </summary>
         </member>
         <member name="M:CMS.WebAnalytics.IExitPageCandidatesMemoryQueue.EnqueueCandidate(CMS.WebAnalytics.ExitPageCandidate)">
@@ -4090,11 +4090,6 @@
         <member name="M:CMS.WebAnalytics.AnalyticsHitCollection.GetGroupedHits">
             <summary>
             Returns all hits grouped by its name, object name or identifier, site and culture.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.AnalyticsHitCollection.GetMinimumTime">
-            <summary>
-            Gets timestamp of first logged hit.
             </summary>
         </member>
         <member name="T:CMS.WebAnalytics.AnalyticsMemoryQueue">

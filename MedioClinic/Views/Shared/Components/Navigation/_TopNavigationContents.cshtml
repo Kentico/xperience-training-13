@@ -16,12 +16,12 @@
         {
             if (Model?.DisplaySecondLevel == true && item.ChildItems != null && item.ChildItems.Any())
             {
-                var childItemDtos = item.ChildItems.Select(item => (item.RelativeUrl, item.Title));
-                <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), item.Title, childItemDtos)" />
+                var childItemDtos = item.ChildItems.Select(item => (item.RelativeUrl, item.Name));
+                <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), item.Name, childItemDtos)" />
             }
             else
             {
-                <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Title)" />
+                <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Name, string.Empty)" />
             }
         }
     }

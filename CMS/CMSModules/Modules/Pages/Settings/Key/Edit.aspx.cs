@@ -47,7 +47,7 @@ public partial class CMSModules_Modules_Pages_Settings_Key_Edit : GlobalAdminPag
         {
             if (mParentGroup != null)
             {
-                SettingsCategoryInfo parentCat = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName(mParentGroup);
+                SettingsCategoryInfo parentCat = SettingsCategoryInfo.Provider.Get(mParentGroup);
                 if (parentCat != null)
                 {
                     skeEditKey.SelectedGroupID = parentCat.CategoryID;
@@ -76,7 +76,7 @@ public partial class CMSModules_Modules_Pages_Settings_Key_Edit : GlobalAdminPag
         // Set bradcrumbs for editing
         if (skeEditKey.SettingsKeyObj != null)
         {
-            var sci = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(skeEditKey.SettingsKeyObj.KeyCategoryID);
+            var sci = SettingsCategoryInfo.Provider.Get(skeEditKey.SettingsKeyObj.KeyCategoryID);
 
             categoryBreadcrumb.Text = sci.CategoryDisplayName;
             categoryBreadcrumb.RedirectUrl = URLHelper.AppendQuery(UIContextHelper.GetElementUrl(ModuleName.CMS, "Modules.Settings.EditKeys", false), "categoryid=" + sci.CategoryParentID + "&moduleid=" + mModuleId);
@@ -88,7 +88,7 @@ public partial class CMSModules_Modules_Pages_Settings_Key_Edit : GlobalAdminPag
         {
             if (mParentGroup != null)
             {
-                var parentCat = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName(mParentGroup);
+                var parentCat = SettingsCategoryInfo.Provider.Get(mParentGroup);
                 if (parentCat != null)
                 {
                     categoryBreadcrumb.Text = parentCat.CategoryDisplayName;

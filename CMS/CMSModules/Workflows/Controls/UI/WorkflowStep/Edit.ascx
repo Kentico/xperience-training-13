@@ -20,7 +20,7 @@
     <cms:CMSUpdatePanel ID="pnlTimeout" runat="server">
         <ContentTemplate>
             <asp:Panel ID="pnlTimeoutForm" runat="server">
-                <cms:LocalizedHeading runat="server" ID="lblTimeout" Level="4" ResourceString="workflowstep.timeoutsettings" />
+                <cms:LocalizedHeading runat="server" ID="lblTimeout" Level="4" />
                 <cms:TimeoutSelector ID="ucTimeout" runat="server" AutomaticallyDisableInactiveControl="true" IsLiveSite="false" />
                 <asp:PlaceHolder ID="plcTimeoutTarget" runat="server">
                     <div class="form-group">

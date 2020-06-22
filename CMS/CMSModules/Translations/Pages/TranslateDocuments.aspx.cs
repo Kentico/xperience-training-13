@@ -545,9 +545,6 @@ public partial class CMSModules_Translations_Pages_TranslateDocuments : CMSTrans
                 return;
             }
 
-            // Set if we need target tag (Translations.com workaround)
-            settings.GenerateTargetTag = service.TranslationServiceGenerateTargetTag;
-
             if (service.TranslationServiceIsMachine)
             {
                 machineService = AbstractMachineTranslationService.GetTranslationService(service, CurrentSiteName);

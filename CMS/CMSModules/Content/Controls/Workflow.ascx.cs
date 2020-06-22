@@ -479,7 +479,7 @@ public partial class CMSModules_Content_Controls_Workflow : CMSUserControl
                     }
                     else
                     {
-                        stepInfo = WorkflowStepInfoProvider.GetWorkflowStepInfo(currentStepId) ?? WorkflowStepInfoProvider.GetFirstStep(WorkflowInfo.WorkflowID);
+                        stepInfo = WorkflowStepInfo.Provider.Get(currentStepId) ?? WorkflowStepInfoProvider.GetFirstStep(WorkflowInfo.WorkflowID);
                     }
                 }
 

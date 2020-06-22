@@ -82,7 +82,7 @@ public class QueriesGridExtender : ControlExtender<UniGrid>
             case "delete":
                 if (QueriesCanBeModified)
                 {
-                    QueryInfo queryInfo = QueryInfoProvider.GetQueryInfo(ValidationHelper.GetInteger(actionArgument, 0));
+                    QueryInfo queryInfo = QueryInfo.Provider.Get(ValidationHelper.GetInteger(actionArgument, 0));
                     DataClassInfo classInfo = ((DataClassInfo)Page.EditedObjectParent);
                     if ((queryInfo != null) && (classInfo != null) && (queryInfo.ClassID == classInfo.ClassID))
                     {

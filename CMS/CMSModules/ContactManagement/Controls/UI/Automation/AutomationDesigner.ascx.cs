@@ -56,7 +56,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
         {
             if (mWorkflow == null)
             {
-                mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowID);
+                mWorkflow = WorkflowInfo.Provider.Get(WorkflowID);
                 if ((mWorkflow != null) && (mWorkflow.WorkflowType != WorkflowTypeEnum.Automation))
                 {
                     RedirectToAccessDenied(GetString("workflow.type.notsupported"));

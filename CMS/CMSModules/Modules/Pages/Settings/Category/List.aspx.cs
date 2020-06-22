@@ -62,13 +62,13 @@ public partial class CMSModules_Modules_Pages_Settings_Category_List : GlobalAdm
         // Find category
         if (categoryId >= 0)
         {
-            mCategory = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+            mCategory = SettingsCategoryInfo.Provider.Get(categoryId);
         }
 
         // Use root category for Settings if category not found or specified
         if ((categoryId == -1) || (mCategory == null))
         {
-            mCategory = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName("CMS.Settings");
+            mCategory = SettingsCategoryInfo.Provider.Get("CMS.Settings");
         }
 
         // Set edited object
@@ -138,7 +138,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_List : GlobalAdm
         {
             case ("edit"):
                 // Redirect to category edit page
-                SettingsCategoryInfo sci = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+                SettingsCategoryInfo sci = SettingsCategoryInfo.Provider.Get(categoryId);
                 if (sci != null)
                 {
                     URLHelper.Redirect(URLHelper.AppendQuery(UIContextHelper.GetElementUrl(ModuleName.CMS, "Modules.Settings.EditCategory", false), "isgroup=1&categoryid=" + categoryId + "&moduleid=" + moduleId));
@@ -148,7 +148,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_List : GlobalAdm
             case ("delete"):
                 try
                 {
-                    SettingsCategoryInfo settingGroup = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+                    SettingsCategoryInfo settingGroup = SettingsCategoryInfo.Provider.Get(categoryId);
                     if (settingGroup != null)
                     {
                         // Register refresh tree script
@@ -164,7 +164,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_List : GlobalAdm
 
                         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "treeGroupRefresh", ScriptHelper.GetScript(sb.ToString()));
 
-                        SettingsCategoryInfoProvider.DeleteSettingsCategoryInfo(settingGroup);
+                        SettingsCategoryInfo.Provider.Delete(settingGroup);
                     }
                 }
                 catch

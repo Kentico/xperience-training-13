@@ -628,7 +628,7 @@ if (window.{0} != null) {{
             {
                 if (MetaFileID > 0)
                 {
-                    mfi = MetaFileInfoProvider.GetMetaFileInfo(MetaFileID);
+                    mfi = MetaFileInfo.Provider.Get(MetaFileID);
                 }
                 else
                 {
@@ -665,7 +665,7 @@ if (window.{0} != null) {{
             if (mfi != null)
             {
                 // Save file to the database
-                MetaFileInfoProvider.SetMetaFileInfo(mfi);
+                MetaFileInfo.Provider.Set(mfi);
             }
         }
         catch (Exception ex)

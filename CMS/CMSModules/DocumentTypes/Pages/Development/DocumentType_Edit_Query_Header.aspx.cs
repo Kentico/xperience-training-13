@@ -53,7 +53,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
                 int queryId = QueryHelper.GetInteger("queryid", 0);
                 if (queryId > 0)
                 {
-                    PersistentEditedObject = QueryInfoProvider.GetQueryInfo(queryId);
+                    PersistentEditedObject = QueryInfo.Provider.Get(queryId);
                 }
             }
         }

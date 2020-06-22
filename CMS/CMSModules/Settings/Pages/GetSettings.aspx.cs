@@ -22,7 +22,7 @@ public partial class CMSModules_Settings_Pages_GetSettings : GlobalAdminPage
         bool searchInDescription = QueryHelper.GetBoolean("description", false);
 
         // Get category
-        SettingsCategoryInfo category = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+        SettingsCategoryInfo category = SettingsCategoryInfo.Provider.Get(categoryId);
 
         // Either category or search text needs to be set
         if ((category == null) && (!string.IsNullOrEmpty(searchForText)))

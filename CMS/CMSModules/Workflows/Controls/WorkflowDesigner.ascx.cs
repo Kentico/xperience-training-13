@@ -56,7 +56,7 @@ public partial class CMSModules_Workflows_Controls_WorkflowDesigner : GraphDesig
         {
             if (mWorkflow == null)
             {
-                mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowID);
+                mWorkflow = WorkflowInfo.Provider.Get(WorkflowID);
                 if (mWorkflow != null && !mWorkflow.IsDocumentWorkflow)
                 {
                     RedirectToAccessDenied(GetString("workflow.type.notsupported"));

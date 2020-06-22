@@ -154,7 +154,7 @@ public partial class CMSModules_Automation_Controls_Process_List : CMSUserContro
     private WorkflowStepInfo GetStep(object id)
     {
         int stepId = ValidationHelper.GetInteger(id, 0);
-        return WorkflowStepInfoProvider.GetWorkflowStepInfo(stepId);
+        return WorkflowStepInfo.Provider.Get(stepId);
     }
 
 
@@ -166,7 +166,7 @@ public partial class CMSModules_Automation_Controls_Process_List : CMSUserContro
     private WorkflowInfo GetProcess(object id)
     {
         int workflowID = ValidationHelper.GetInteger(id, 0);
-        return WorkflowInfoProvider.GetWorkflowInfo(workflowID);
+        return WorkflowInfo.Provider.Get(workflowID);
     }
 
     #endregion

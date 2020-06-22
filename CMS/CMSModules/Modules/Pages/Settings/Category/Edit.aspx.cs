@@ -47,7 +47,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_Edit : GlobalAdm
         catEdit.TreeRefreshUrl = "~/CMSModules/Modules/Pages/Settings/Tree.aspx?moduleid=" + moduleId;
 
         // Get root category: Settings or CustomSettings
-        SettingsCategoryInfo settingsRoot = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName("CMS.Settings");
+        SettingsCategoryInfo settingsRoot = SettingsCategoryInfo.Provider.Get("CMS.Settings");
 
         if (mCategoryId <= 0)
         {
@@ -119,7 +119,7 @@ public partial class CMSModules_Modules_Pages_Settings_Category_Edit : GlobalAdm
 
         var parentCategoryBreadcrumb = new BreadcrumbItem();
 
-        parentCategoryInfo = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(catEdit.SelectedParentCategory);
+        parentCategoryInfo = SettingsCategoryInfo.Provider.Get(catEdit.SelectedParentCategory);
 
         // Set up title and breadcrumbs
         if (parentCategoryInfo != null)

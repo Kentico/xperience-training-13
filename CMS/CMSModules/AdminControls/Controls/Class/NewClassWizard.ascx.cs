@@ -1468,7 +1468,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
 
         if (Mode == NewClassWizardModeEnum.DocumentType)
         {
-            ClassSiteInfoProvider.AddClassToSite(childClassID, SiteContext.CurrentSiteID);
+            ClassSiteInfo.Provider.Add(childClassID, SiteContext.CurrentSiteID);
 
             if (DataClassInfo.ClassIsCoupledClass)
             {
@@ -1539,7 +1539,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
 
                 if (licenseCheck)
                 {
-                    ClassSiteInfoProvider.AddClassToSite(classId, siteId);
+                    ClassSiteInfo.Provider.Add(classId, siteId);
 
                     // Clear custom tables count
                     if (isCustomTable)

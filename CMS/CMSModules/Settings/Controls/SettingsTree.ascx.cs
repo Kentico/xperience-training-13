@@ -384,7 +384,7 @@ public partial class CMSModules_Settings_Controls_SettingsTree : CMSUserControl
                 else
                 {
                     // Get the specified category
-                    mRoot = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName(CategoryName);
+                    mRoot = SettingsCategoryInfo.Provider.Get(CategoryName);
                 }
             }
 
@@ -546,7 +546,7 @@ public partial class CMSModules_Settings_Controls_SettingsTree : CMSUserControl
 
             if (QueryHelper.GetBoolean("reloadtreeselect", false))
             {
-                var category = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(CategoryID);
+                var category = SettingsCategoryInfo.Provider.Get(CategoryID);
                 // Select requested category
                 RegisterSelectNodeScript(category);
             }
@@ -579,7 +579,7 @@ public partial class CMSModules_Settings_Controls_SettingsTree : CMSUserControl
             script += "var doNotReloadContent = false;\n";
 
             // Select category
-            SettingsCategoryInfo sci = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(CategoryID);
+            SettingsCategoryInfo sci = SettingsCategoryInfo.Provider.Get(CategoryID);
             if (sci != null)
             {
                 // Stop reloading of right frame, if explicitly set
@@ -796,7 +796,7 @@ function deleteConfirm() {
     /// </summary>
     protected void AfterAction(string actionName, int categoryId, int tabIndex = 0)
     {
-        SettingsCategoryInfo category = SettingsCategoryInfoProvider.GetSettingsCategoryInfo(categoryId);
+        SettingsCategoryInfo category = SettingsCategoryInfo.Provider.Get(categoryId);
         if ((category.CategoryResourceID != ModuleID) && !SystemContext.DevelopmentMode)
         {
             // If parent doesn't belong to current module, try find first module category
@@ -868,7 +868,7 @@ function deleteConfirm() {
         GetHiddenValues();
         if ((CategoryID > 0) && (ParentID > 0))
         {
-            SettingsCategoryInfoProvider.DeleteSettingsCategoryInfo(CategoryID);
+            SettingsCategoryInfo.Provider.Get(CategoryID)?.Delete();
             AfterAction("delete", ParentID);
         }
     }

@@ -101,7 +101,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassSites : CMSUse
     /// </summary>    
     private string GetClassSites()
     {
-        DataSet ds = ClassSiteInfoProvider.GetClassSites().WhereEquals("ClassID", ClassId).Column("SiteID");
+        DataSet ds = ClassSiteInfo.Provider.Get().WhereEquals("ClassID", ClassId).Column("SiteID");
         if (!DataHelper.DataSourceIsEmpty(ds))
         {
             return TextHelper.Join(";", DataHelper.GetStringValues(ds.Tables[0], "SiteID"));
@@ -135,7 +135,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassSites : CMSUse
                 {
                     int siteId = ValidationHelper.GetInteger(item, 0);
 
-                    ClassSiteInfoProvider.RemoveClassFromSite(ClassId, siteId);
+                    ClassSiteInfo.Provider.Remove(ClassId, siteId);
                 }
             }
         }
@@ -159,7 +159,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassSites : CMSUse
                     // Check license
                     if (CheckLicense && !CustomTableItemProvider.LicenseVersionCheck(si.DomainName, ObjectActionEnum.Insert))
                     {
-                        if (ClassSiteInfoProvider.GetClassSiteInfo(ClassId, siteId) == null)
+                        if (ClassSiteInfo.Provider.Get(ClassId, siteId) == null)
                         {
                             // Show error message
                             ShowError(GetString("LicenseVersion.CustomTables"));
@@ -170,7 +170,7 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassSites : CMSUse
 
                     try
                     {
-                        ClassSiteInfoProvider.AddClassToSite(ClassId, siteId);
+                        ClassSiteInfo.Provider.Add(ClassId, siteId);
                     }
                     catch (Exception ex)
                     {

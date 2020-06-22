@@ -364,7 +364,7 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
                 // Move to specific step action
                 if (AutomationManager.IsActionAllowed(ComponentEvents.AUTOMATION_MOVE_SPEC))
                 {
-                    var steps = WorkflowStepInfoProvider.GetWorkflowSteps()
+                    var steps = WorkflowStepInfo.Provider.Get()
                         .Where("StepWorkflowID = " + process.WorkflowID + " AND StepType NOT IN (" + (int)WorkflowStepTypeEnum.Start + "," + (int)WorkflowStepTypeEnum.Note + ")")
                         .OrderBy("StepDisplayName");
 
@@ -537,7 +537,7 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
                             var transitions = Manager.GetStepTransitions(Step);
                             if (transitions.Count > 0)
                             {
-                                WorkflowStepInfo s = WorkflowStepInfoProvider.GetWorkflowStepInfo(transitions[0].TransitionEndStepID);
+                                WorkflowStepInfo s = WorkflowStepInfo.Provider.Get(transitions[0].TransitionEndStepID);
 
                                 // Finish text
                                 if (s.StepIsFinished)

@@ -5,6 +5,7 @@ using System.Threading;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
+using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
@@ -26,7 +27,9 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
 
     protected bool inheritsPermissions = false;
     protected string ipAddress = null;
-    protected string eventUrl = null;
+    protected string currentUrl = null;
+
+    protected HeaderAction backHeaderAction = null;
 
     #endregion
 
@@ -143,7 +146,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
         currentUser = MembershipContext.AuthenticatedUser;
 
         ipAddress = RequestContext.UserHostAddress;
-        eventUrl = RequestContext.RawURL;
+        currentUrl = RequestContext.RawURL;
 
         if (!RequestHelper.IsCallback())
         {
@@ -206,6 +209,27 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
         ctlAsyncLog.OnCancel += ctlAsyncLog_OnCancel;
 
         pnlPageContent.Enabled = !DocumentManager.ProcessingAction;
+
+        InitializeBackButton();
+
+        ScriptHelper.RegisterTooltip(Page);
+        ScriptHelper.AppendTooltip(iconHelp, GetString("security.access.tooltip"), null);
+    }
+
+
+    private void InitializeBackButton()
+    {
+        if (backHeaderAction == null)
+        {
+            backHeaderAction = new HeaderAction
+            {
+                ButtonStyle = ButtonStyle.Default,
+                Text = GetString("general.back"),
+                RedirectUrl = currentUrl,
+                Visible = false,
+            };
+            menuElem.AddExtraAction(backHeaderAction);
+        }
     }
 
 
@@ -343,6 +367,9 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
         pnlAccessPart.Visible = false;
         pnlInheritance.Visible = true;
 
+        backHeaderAction.Visible = true;
+        menuElem.ShowSave = false;
+
         // Test if current document inherits permissions
         if (inheritsPermissions)
         {
@@ -360,12 +387,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
         // Clear and reload
         securityElem.InvalidateAcls();
         securityElem.LoadOperators(true);
-    }
-
-
-    protected void btnCancelAction_Click(Object sender, EventArgs e)
-    {
-        SwitchBackToPermissionsMode();
     }
 
 
@@ -388,7 +409,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
             var logData = new EventLogData(EventTypeEnum.Information, "Content", "DOCPERMISSIONSMODIFIED")
             {
                 EventDescription = ResHelper.GetAPIString("security.documentpermissionsbreakcopy", "Inheritance of the parent page permissions have been broken. Parent page permissions have been copied."),
-                EventUrl = eventUrl,
+                EventUrl = currentUrl,
                 UserID = DocumentManager.Tree.UserInfo.UserID,
                 UserName = DocumentManager.Tree.UserInfo.UserName,
                 NodeID = Node.NodeID,
@@ -396,7 +417,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
                 IPAddress = ipAddress,
                 SiteID = Node.NodeSiteID
             };
-            
+
             Service.Resolve<IEventLogService>().LogEvent(logData);
         }
 
@@ -427,7 +448,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
             var logData = new EventLogData(EventTypeEnum.Information, "Content", "DOCPERMISSIONSMODIFIED")
             {
                 EventDescription = ResHelper.GetAPIString("security.documentpermissionsbreakclear", "Inheritance of the parent page permissions have been broken."),
-                EventUrl = eventUrl,
+                EventUrl = currentUrl,
                 UserID = currentUser.UserID,
                 UserName = currentUser.UserName,
                 NodeID = Node.NodeID,
@@ -435,7 +456,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
                 IPAddress = ipAddress,
                 SiteID = Node.NodeSiteID
             };
-            
+
             Service.Resolve<IEventLogService>().LogEvent(logData);
         }
 
@@ -550,7 +571,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
                                 var logData = new EventLogData(EventTypeEnum.Information, "Content", "DOCPERMISSIONSMODIFIED")
                                 {
                                     EventDescription = ResHelper.GetAPIString("security.documentpermissionsrestored", "Permissions have been restored to the parent page permissions."),
-                                    EventUrl = eventUrl,
+                                    EventUrl = currentUrl,
                                     UserID = user.UserID,
                                     UserName = user.UserName,
                                     NodeID = treeNode.NodeID,
@@ -558,7 +579,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
                                     IPAddress = ipAddress,
                                     SiteID = Node.NodeSiteID
                                 };
-                                
+
                                 Service.Resolve<IEventLogService>().LogEvent(logData);
                             }
                         }
@@ -663,7 +684,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Security : CMSPropert
                 var logData = new EventLogData(EventTypeEnum.Information, "Content", "DOCPERMISSIONSMODIFIED")
                 {
                     EventDescription = message,
-                    EventUrl = eventUrl,
+                    EventUrl = currentUrl,
                     UserID = currentUser.UserID,
                     UserName = currentUser.UserName,
                     NodeID = node.NodeID,

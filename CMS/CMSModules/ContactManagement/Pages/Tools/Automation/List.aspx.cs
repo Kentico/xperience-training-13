@@ -132,7 +132,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
                 }
 
                 // Delete the workflow with all the dependencies
-                WorkflowInfoProvider.DeleteWorkflowInfo(processId);
+                WorkflowInfo.Provider.Get(processId)?.Delete();
 
                 ShowConfirmation(GetString("ma.process.delete.confirmation"));
                 break;

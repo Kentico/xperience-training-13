@@ -1,4 +1,4 @@
-﻿using XperienceAdapter.Dtos;
+﻿using Business.Dtos;
 
 namespace MedioClinic.Models.ViewComponents.Navigation
 {
@@ -10,7 +10,7 @@ namespace MedioClinic.Models.ViewComponents.Navigation
 
         public string? ListClass { get; set; }
 
-        public NavigationItem? NavigationItem { get; set; }
+        public NavigationItemDto? NavigationItem { get; set; }
 
         public bool DisplaySecondLevel { get; set; }
     }

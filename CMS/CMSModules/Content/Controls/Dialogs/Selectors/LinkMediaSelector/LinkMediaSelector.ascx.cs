@@ -2274,12 +2274,12 @@ function RaiseHiddenPostBack(){{
             {
                 Guid mfGuid = Guid.Empty;
 
-                MetaFileInfo mf = MetaFileInfoProvider.GetMetaFileInfo(metaFileId);
+                MetaFileInfo mf = MetaFileInfo.Provider.Get(metaFileId);
                 if (mf != null)
                 {
                     mfGuid = mf.MetaFileGUID;
                     // Delete meta file
-                    MetaFileInfoProvider.DeleteMetaFileInfo(mf);
+                    MetaFileInfo.Provider.Delete(mf);
                 }
 
                 // Reload data
@@ -2361,7 +2361,7 @@ function RaiseHiddenPostBack(){{
 
             Guid mfGuid = Guid.Empty;
 
-            MetaFileInfo mf = MetaFileInfoProvider.GetMetaFileInfo(metaFileId);
+            MetaFileInfo mf = MetaFileInfo.Provider.Get(metaFileId);
             if (mf != null)
             {
                 mfGuid = mf.MetaFileGUID;

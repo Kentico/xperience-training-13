@@ -260,7 +260,7 @@ public partial class CMSFormControls_Classes_SelectClass : FormEngineUserControl
 
         if (mSiteId != null)
         {
-            where.WhereIn("ClassID", ClassSiteInfoProvider.GetClassSites().Column("ClassID").WhereEquals("SiteID", mSiteId));
+            where.WhereIn("ClassID", ClassSiteInfo.Provider.Get().Column("ClassID").WhereEquals("SiteID", mSiteId));
         }
 
         // Combine default where condition with external

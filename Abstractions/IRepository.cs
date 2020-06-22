@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Abstractions
 {
-    public interface IRepository<TModel>
+    public interface IRepository<TDto>
     {
-        IEnumerable<TModel> GetAll();
+        IEnumerable<TDto> GetAll();
     }
 }

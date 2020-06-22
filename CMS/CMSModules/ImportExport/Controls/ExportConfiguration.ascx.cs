@@ -171,7 +171,7 @@ public partial class CMSModules_ImportExport_Controls_ExportConfiguration : CMSU
             where.WhereNull("ExportSiteID");
         }
 
-        var histories = ExportHistoryInfoProvider.GetExportHistories()
+        var histories = ExportHistoryInfo.Provider.Get()
             .Where(where)
             .OrderByDescending("ExportDateTime")
             .Columns(new [] { "ExportDateTime", "ExportFileName", "ExportID" });
@@ -314,7 +314,7 @@ public partial class CMSModules_ImportExport_Controls_ExportConfiguration : CMSU
                 }
                 else
                 {
-                    ExportHistoryInfo history = ExportHistoryInfoProvider.GetExportHistoryInfo(historyId);
+                    ExportHistoryInfo history = ExportHistoryInfo.Provider.Get(historyId);
                     if (history != null)
                     {
                         // Load history settings

@@ -37,7 +37,7 @@ public partial class CMSModules_CustomTables_Tools_CustomTable_Data_List : CMSCu
         DataClassInfo dci = null;
 
         // Read data only if user is site manager global admin or table is bound to current site
-        if (CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) || (ClassSiteInfoProvider.GetClassSiteInfo(customTableId, SiteContext.CurrentSiteID) != null))
+        if (CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) || (ClassSiteInfo.Provider.Get(customTableId, SiteContext.CurrentSiteID) != null))
         {
             // Get CustomTable class
             dci = DataClassInfoProvider.GetDataClassInfo(customTableId);

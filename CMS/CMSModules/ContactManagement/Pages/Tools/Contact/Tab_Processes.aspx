@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_ContactManagement_Pages_Tools_Contact_Tab_Processes"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Inherits="CMSModules_ContactManagement_Pages_Tools_Contact_Tab_Processes"
     Theme="Default"  Codebehind="Tab_Processes.aspx.cs" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" %>
 
 <%@ Register Src="~/CMSModules/Automation/Controls/Process/List.ascx" TagName="ProcessList"

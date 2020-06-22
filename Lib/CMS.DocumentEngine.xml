@@ -6401,6 +6401,11 @@
             </summary>
             <param name="nodeParentId">Node parent ID.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.DocumentDependencyCacheKeysBuilder.GetOrderDependencyCacheKey">
+            <summary>
+            Returns the cache dependency key for order change of a page.
+            </summary>
+        </member>
         <member name="M:CMS.DocumentEngine.DocumentDependencyCacheKeysBuilder.GetPathDependencyCacheKeys(System.String,System.String,CMS.DocumentEngine.PathTypeEnum)">
             <summary>
             Returns the cache dependencies keys array for document path.
@@ -6426,10 +6431,17 @@
         </member>
         <member name="M:CMS.DocumentEngine.DocumentDependencyCacheKeysBuilder.GetChildNodesDependencyCacheKey(System.String,System.String)">
             <summary>
-            Returns the cache keys for all children on given path.
+            Returns the cache key for all children on given path.
             </summary>
             <param name="siteName">Site name.</param>
             <param name="path">Page node alias path.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentDependencyCacheKeysBuilder.GetAllNodesCacheKey(System.String,System.String)">
+            <summary>
+            Returns the cache key for all pages of given type on given site.
+            </summary>
+            <param name="siteName">Site name.</param>
+            <param name="className">Class name.</param>
         </member>
         <member name="T:CMS.DocumentEngine.DocumentEventLogger">
             <summary>
@@ -7106,11 +7118,6 @@
         <member name="P:CMS.DocumentEngine.TreeNode.RelativeURL">
             <summary>
             Gets document relative URL.
-            </summary>
-        </member>
-        <member name="P:CMS.DocumentEngine.TreeNode.RequiresAuthentication">
-            <summary>
-            Requires authentication  property.
             </summary>
         </member>
         <member name="P:CMS.DocumentEngine.TreeNode.Owner">
@@ -15457,6 +15464,11 @@
             Settings key name for lowercase paths mode.
             </summary>
         </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingHelper.TRAILING_SLASH_MODE_KEY">
+            <summary>
+            Settings key name for trailing slash mode.
+            </summary>
+        </member>
         <member name="F:CMS.DocumentEngine.Routing.PageRoutingHelper.HOME_PAGE_PATH_KEY">
             <summary>
             Settings key name for home page path.
@@ -15513,19 +15525,29 @@
             </summary>
             <param name="site">Site identifier.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.EnsurePathFormat(System.String,CMS.DataEngine.SiteInfoIdentifier)">
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.UseURLsWithTrailingSlash(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Gets the settings for the URL trailing slash rules.
+            </summary>
+            <param name="site">Site identifier.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.EnsurePathFormat(System.String,CMS.DataEngine.SiteInfoIdentifier,System.String@)">
             <summary>
             Ensures correct page URL path format based on settings configuration for the content tree based router.
             </summary>
             <param name="path">Page URL path.</param>
             <param name="site">Site.</param>
+            <param name="formattedPath">When the return value is <c>true</c> formatted path is returned otherwise the original path is returned.</param>
+            <returns><c>True</c> if the given path was formatted.</returns>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.EnsureAbsoluteUrlFormat(System.String,CMS.DataEngine.SiteInfoIdentifier)">
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.EnsureAbsoluteUrlFormat(System.String,CMS.DataEngine.SiteInfoIdentifier,System.String@)">
             <summary>
             Ensures correct page absolute URL format based on settings configuration for the content tree based router.
             </summary>
             <param name="absoluteUrl">Page absolute URL.</param>
             <param name="site">Site.</param>
+            <param name="formattedAbsoluteUrl">When the return value is <c>true</c> formatted URL is returned otherwise the original URL is returned.</param>
+            <returns><c>True</c> if the given path URL formatted.</returns>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.HideLanguagePrefixForDefaultCultureUrl(CMS.DataEngine.SiteInfoIdentifier)">
             <summary>
@@ -16790,6 +16812,11 @@
         <member name="T:CMS.DocumentEngine.PageSecurityHelper">
             <summary>
             Page security methods
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.PageSecurityHelper.CHECK_PAGE_PERMISSIONS_KEY">
+            <summary>
+            Settings key name for page permissions mode.
             </summary>
         </member>
         <member name="M:CMS.DocumentEngine.PageSecurityHelper.CheckPagePermissions(System.String)">
@@ -18822,6 +18849,13 @@
             </summary>
             <param name="page">Page to return the URL for.</param>
             <param name="cultureCode">Culture code.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.DocumentURLProvider.GetPresentationUrl(CMS.DocumentEngine.TreeNode,System.String)">
+            <summary>
+            Returns presentation URL for the specified node. This is the absolute URL where live presentation of given node can be found.
+            </summary>
+            <param name="node">Tree node to return presentation URL for.</param>
+            <param name="preferredDomainName">A preferred domain name that should be used as the host part of the URL.</param>
         </member>
         <member name="M:CMS.DocumentEngine.DocumentURLProvider.GetPresentationUrlHandlerPath(System.String,System.Int32,System.String)">
             <summary>

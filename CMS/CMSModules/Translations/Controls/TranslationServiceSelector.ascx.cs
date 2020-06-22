@@ -510,7 +510,7 @@ function SelectService(serviceName, displaySeparateSubmission, supportsInstructi
         }
 
         // Get services
-        var data = TranslationServiceInfoProvider.GetTranslationServices(where, "TranslationServiceIsMachine DESC, TranslationServiceDisplayName ASC", 0, "TranslationServiceDisplayName, TranslationServiceName, TranslationServiceIsMachine, TranslationServiceSupportsPriority, TranslationServiceSupportsInstructions, TranslationServiceSupportsDeadline, TranslationServiceGenerateTargetTag");
+        var data = TranslationServiceInfoProvider.GetTranslationServices(where, "TranslationServiceIsMachine DESC, TranslationServiceDisplayName ASC", 0, "TranslationServiceDisplayName, TranslationServiceName, TranslationServiceIsMachine, TranslationServiceSupportsPriority, TranslationServiceSupportsInstructions, TranslationServiceSupportsDeadline");
         if (DataHelper.DataSourceIsEmpty(data))
         {
             return;

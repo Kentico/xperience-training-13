@@ -45,6 +45,11 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_WorkflowStep_SourceP
             {
                 WorkflowScriptHelper.RefreshDesignerFromDialog(Page, CurrentStepInfo.StepID, QueryHelper.GetString("graph", String.Empty));
             }
+
+            if (CurrentStepInfo?.StepType == WorkflowStepTypeEnum.Multichoice)
+            {
+                ShowInformation(GetString("workflow.multichoicenotsupported"));
+            }
         }
     }
 
@@ -108,5 +113,11 @@ public partial class CMSModules_OnlineMarketing_Controls_UI_WorkflowStep_SourceP
         }
 
         return parameter;
+    }
+
+
+    protected override bool CanShowDefaultStepInformation()
+    {
+        return base.CanShowDefaultStepInformation() && CurrentStepInfo?.StepType != WorkflowStepTypeEnum.Multichoice;
     }
 }

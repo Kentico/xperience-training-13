@@ -270,7 +270,7 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
         string errorMessage = null;
 
         // Check if document type is registered under current site
-        DataSet ds = ClassSiteInfoProvider.GetClassSites().WhereEquals("ClassID", TransformationInfo.TransformationClassID).WhereEquals("SiteID", SiteContext.CurrentSiteID).Column("ClassID");
+        DataSet ds = ClassSiteInfo.Provider.Get().WhereEquals("ClassID", TransformationInfo.TransformationClassID).WhereEquals("SiteID", SiteContext.CurrentSiteID).Column("ClassID");
         if (DataHelper.DataSourceIsEmpty(ds) && !CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin))
         {
             // Set error message

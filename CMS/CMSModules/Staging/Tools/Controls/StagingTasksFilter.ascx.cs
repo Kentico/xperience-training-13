@@ -203,11 +203,11 @@ public partial class CMSModules_Staging_Tools_Controls_StagingTasksFilter : Stag
         if (taskGroupSelected > 0)
         {
             // Get tasks for given task group
-            where.WhereIn("TaskID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().WhereEquals("TaskGroupID", taskGroupSelected).Column("TaskID"));
+            where.WhereIn("TaskID", TaskGroupTaskInfo.Provider.Get().WhereEquals("TaskGroupID", taskGroupSelected).Column("TaskID"));
         }
         else if (taskGroupSelected == UniSelector.US_NONE_RECORD)
         {
-            where.WhereNotIn("TaskID", TaskGroupTaskInfoProvider.GetTaskGroupTasks().Column("TaskID"));
+            where.WhereNotIn("TaskID", TaskGroupTaskInfo.Provider.Get().Column("TaskID"));
         }
     }
 
@@ -217,12 +217,12 @@ public partial class CMSModules_Staging_Tools_Controls_StagingTasksFilter : Stag
         if (selected > 0)
         {
             // Get tasks for current user
-            where.WhereIn("TaskID", StagingTaskUserInfoProvider.GetTaskUsers().WhereEquals("UserID", selected).Column("TaskID"));
+            where.WhereIn("TaskID", StagingTaskUserInfo.Provider.Get().WhereEquals("UserID", selected).Column("TaskID"));
         }
         else if (selected == UniSelector.US_NONE_RECORD)
         {
             // Get all tasks without any assigned user
-            where.WhereNotIn("TaskID", StagingTaskUserInfoProvider.GetTaskUsers().Column("TaskID"));
+            where.WhereNotIn("TaskID", StagingTaskUserInfo.Provider.Get().Column("TaskID"));
         }
     }
 

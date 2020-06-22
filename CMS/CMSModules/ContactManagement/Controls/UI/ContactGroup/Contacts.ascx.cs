@@ -148,8 +148,10 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
 
     #region "Page events"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         // Get edited object (contact group)
         if (UIContext.EditedObject != null)
         {
@@ -190,7 +192,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
                     drpAction.Items.Add(new ListItem(GetString("om.account." + Action.ChangeStatus), Convert.ToInt32(Action.ChangeStatus).ToString()));
                 }
 
-                if (MembershipContext.AuthenticatedUser.IsAuthorizedPerResource(ModuleName.ONLINEMARKETING, "StartProcess") 
+                if (MembershipContext.AuthenticatedUser.IsAuthorizedPerResource(ModuleName.ONLINEMARKETING, "StartProcess")
                     && IsFullContactManagementAvailable())
                 {
                     drpAction.Items.Add(new ListItem(GetString("ma.automationprocess.select"), Convert.ToInt32(Action.StartNewProcess).ToString()));
@@ -210,7 +212,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
             contactSelector.UniSelector.SelectionMode = SelectionModeEnum.MultipleButton;
 
             // Register JS scripts
-            RegisterScripts();           
+            RegisterScripts();
         }
         else
         {
@@ -219,8 +221,10 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
     }
 
 
-    protected void Page_PreRender(object sender, EventArgs e)
+    protected override void OnPreRender(EventArgs e)
     {
+        base.OnPreRender(e);
+
         // Hide mass actions if there are no contacts shown or no mass action is allowed (first action is always there, so comparison with 1 has to be made)
         pnlFooter.Visible = !gridElem.IsEmpty && (drpAction.Items.Count > 1);
         HideUiPartsNotRelevantInLowerEditions();
@@ -437,7 +441,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
     {
         var confirmationMessage = String.Empty;
         var workflowId = ValidationHelper.GetInteger(hdnIdentifier.Value, 0);
-        var selectedAutomationProcess = WorkflowInfoProvider.GetWorkflowInfo(workflowId);
+        var selectedAutomationProcess = WorkflowInfo.Provider.Get(workflowId);
 
         if(selectedAutomationProcess == null || !selectedAutomationProcess.IsAutomation){
             ShowError(ResHelper.GetString("ma.action.initiateprocess.noprocess"));
@@ -713,6 +717,7 @@ function PerformAction(selectionFunction, selectionField, actionId, actionLabel,
                         mParameters["SelectionMode"] = SelectionModeEnum.SingleButton;
                         mParameters["ObjectType"] = WorkflowInfo.OBJECT_TYPE_AUTOMATION;
                         mParameters["WhereCondition"] = "WorkflowEnabled = 1";
+                        mParameters["DialogInfoMessage"] = GetString("ma.automationprocess.startprocessinfo");
                         break;
 
                     default:

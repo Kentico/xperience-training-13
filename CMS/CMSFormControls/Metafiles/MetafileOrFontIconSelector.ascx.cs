@@ -216,7 +216,7 @@ public partial class CMSFormControls_Metafiles_MetafileOrFontIconSelector : Form
                     if (metaFileguid != Guid.Empty)
                     {
                         MetaFileInfo metaFile = MetaFileInfoProvider.GetMetaFileInfo(metaFileguid, FormObject.Generalized.ObjectSiteName, true);
-                        MetaFileInfoProvider.DeleteMetaFileInfo(metaFile);
+                        MetaFileInfo.Provider.Delete(metaFile);
                     }
 
                     // Delete the metafile thumbnail

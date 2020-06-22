@@ -111,7 +111,7 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsCateg
     {
         get
         {
-            return mSettingsCategoryObj ?? (mSettingsCategoryObj = (mSettingsCategoryId > 0) ? SettingsCategoryInfoProvider.GetSettingsCategoryInfo(mSettingsCategoryId) : null);
+            return mSettingsCategoryObj ?? (mSettingsCategoryObj = (mSettingsCategoryId > 0) ? SettingsCategoryInfo.Provider.Get(mSettingsCategoryId) : null);
         }
         set
         {
@@ -343,7 +343,7 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsCateg
         if (IsValid())
         {
             // Get category by name
-            SettingsCategoryInfo categoryObj = SettingsCategoryInfoProvider.GetSettingsCategoryInfoByName(txtCategoryName.Text.Trim());
+            SettingsCategoryInfo categoryObj = SettingsCategoryInfo.Provider.Get(txtCategoryName.Text.Trim());
             // If name is unique OR ids are same
             if ((categoryObj == null) || (categoryObj.CategoryID == SettingsCategoryID))
             {
@@ -367,7 +367,7 @@ public partial class CMSModules_Modules_Controls_Settings_Category_SettingsCateg
                 sci.CategoryIsGroup = IsGroupEdit;
                 sci.CategoryResourceID = ValidationHelper.GetInteger(ucSelectModule.Value, ModuleID);
 
-                SettingsCategoryInfoProvider.SetSettingsCategoryInfo(sci);
+                SettingsCategoryInfo.Provider.Set(sci);
                 SettingsCategoryObj = sci;
                 RaiseOnSaved();
 

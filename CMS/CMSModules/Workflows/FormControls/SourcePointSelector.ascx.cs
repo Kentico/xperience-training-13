@@ -96,7 +96,7 @@ public partial class CMSModules_Workflows_FormControls_SourcePointSelector : For
     {
         if (ddlSourcePoints.Items.Count == 0)
         {
-            WorkflowStepInfo step = WorkflowStepInfoProvider.GetWorkflowStepInfo(WorkflowStepID);
+            WorkflowStepInfo step = WorkflowStepInfo.Provider.Get(WorkflowStepID);
             if (step != null)
             {
                 Step definition = step.StepDefinition;
@@ -159,7 +159,7 @@ public partial class CMSModules_Workflows_FormControls_SourcePointSelector : For
         WorkflowTransitionInfo conn = connections.FirstOrDefault(i => i.TransitionSourcePointGUID == sp.Guid);
         if (conn != null)
         {
-            WorkflowStepInfo target = WorkflowStepInfoProvider.GetWorkflowStepInfo(conn.TransitionEndStepID);
+            WorkflowStepInfo target = WorkflowStepInfo.Provider.Get(conn.TransitionEndStepID);
             if (target != null)
             {
                 label = String.Format("{0} {1}", label, string.Format(GetString("wf.sourcepoint.step"), target.StepDisplayName));

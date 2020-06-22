@@ -33,7 +33,7 @@ public partial class CMSModules_Workflows_Controls_UI_Workflow_Emails : CMSUserC
     /// <summary>
     /// Workflow
     /// </summary>
-    public WorkflowInfo Workflow => mWorkflow ?? (mWorkflow = WorkflowInfoProvider.GetWorkflowInfo(WorkflowID));
+    public WorkflowInfo Workflow => mWorkflow ?? (mWorkflow = WorkflowInfo.Provider.Get(WorkflowID));
 
 
     /// <summary>
@@ -112,7 +112,7 @@ public partial class CMSModules_Workflows_Controls_UI_Workflow_Emails : CMSUserC
         ucNotif.TemplateType = WorkflowModule.WORKFLOW_EMAIL_TEMPLATE_TYPE_NAME;
 
         // Get the active users for this site
-        var users = WorkflowUserInfoProvider.GetWorkflowUsers()
+        var users = WorkflowUserInfo.Provider.Get()
             .WhereEquals("WorkflowID", WorkflowID)
             .Column("UserID")
             .GetListResult<int>();
@@ -221,7 +221,7 @@ public partial class CMSModules_Workflows_Controls_UI_Workflow_Emails : CMSUserC
             Workflow.WorkflowSendPublishEmails = chkPublish.Checked;
 
             // Save workflow info
-            WorkflowInfoProvider.SetWorkflowInfo(Workflow);
+            WorkflowInfo.Provider.Set(Workflow);
 
             // Save selected users
             SaveUsersData();
@@ -252,10 +252,10 @@ public partial class CMSModules_Workflows_Controls_UI_Workflow_Emails : CMSUserC
             {
                 int userId = ValidationHelper.GetInteger(item, 0);
                 // If user is authorized, remove it
-                WorkflowUserInfo wsu = WorkflowUserInfoProvider.GetWorkflowUserInfo(WorkflowID, userId);
+                WorkflowUserInfo wsu = WorkflowUserInfo.Provider.Get(WorkflowID, userId);
                 if (wsu != null)
                 {
-                    WorkflowUserInfoProvider.DeleteWorkflowUserInfo(wsu);
+                    WorkflowUserInfo.Provider.Delete(wsu);
                 }
             }
         }
@@ -272,9 +272,9 @@ public partial class CMSModules_Workflows_Controls_UI_Workflow_Emails : CMSUserC
                 int userId = ValidationHelper.GetInteger(item, 0);
 
                 // If user is not authorized, authorize it
-                if (WorkflowUserInfoProvider.GetWorkflowUserInfo(WorkflowID, userId) == null)
+                if (WorkflowUserInfo.Provider.Get(WorkflowID, userId) == null)
                 {
-                    WorkflowUserInfoProvider.AddUserToWorkflow(WorkflowID, userId);
+                    WorkflowUserInfo.Provider.Add(WorkflowID, userId);
                 }
             }
         }

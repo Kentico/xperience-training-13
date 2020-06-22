@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true"  Codebehind="Contacts.ascx.cs" Inherits="CMSModules_ContactManagement_Controls_UI_ContactGroup_Contacts" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false"  Codebehind="Contacts.ascx.cs" Inherits="CMSModules_ContactManagement_Controls_UI_ContactGroup_Contacts" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid" TagPrefix="cms" %>
 <%@ Register Namespace="CMS.UIControls.UniGridConfig" TagPrefix="ug" Assembly="CMS.UIControls" %>
