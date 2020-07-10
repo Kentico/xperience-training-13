@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
-namespace Business
+namespace Business.Services
 {
+    /// <summary>
+    /// Provides app options in development.
+    /// </summary>
+    /// <typeparam name="TOptions">App options.</typeparam>
     public class DevelopmentOptionsService<TOptions> : IOptionsService<TOptions>
         where TOptions : class, new()
     {
+        /// <summary>
+        /// Reloads options for each request.
+        /// </summary>
         protected IOptionsSnapshot<TOptions> OptionsSnapshot { get; }
 
         public DevelopmentOptionsService(IOptionsSnapshot<TOptions> optionsSnapshot)
@@ -19,9 +22,16 @@ namespace Business
         public TOptions Options => OptionsSnapshot.Value;
     }
 
+    /// <summary>
+    /// Provides app options in production.
+    /// </summary>
+    /// <typeparam name="TOptions">App options.</typeparam>
     public class ProductionOptionsService<TOptions> : IOptionsService<TOptions>
         where TOptions : class, new()
     {
+        /// <summary>
+        /// Uses a singleton to provide options.
+        /// </summary>
         protected IOptionsMonitor<TOptions> OptionsMonitor { get; }
 
         public ProductionOptionsService(IOptionsMonitor<TOptions> optionsMonitor)

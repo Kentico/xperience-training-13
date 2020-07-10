@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter;
 using XperienceAdapter.Dtos;
+using XperienceAdapter.Repositories;
 using MedioClinic.ViewComponents;
+using Business.Repositories;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -19,16 +20,18 @@ namespace MedioClinic.Tests.ViewComponents
         [Fact]
         public void Invoke_ReturnsResult()
         {
-            var repositoryMock = GetCultureRepository();
-            var component = new Language(repositoryMock.Object);
+            var cultureRepositoryMock = GetCultureRepository();
+            var navigationRepositoryMock = new Mock<INavigationRepository>();
+            var component = new Language(cultureRepositoryMock.Object, navigationRepositoryMock.Object);
 
+            // TODO: Mock HttpRequest.
             var result = component.Invoke(CultureSwitchId);
 
             Assert.NotNull(result);
             Assert.IsType<ViewViewComponentResult>(result);
         }
 
-        private Mock<ICultureRepository> GetCultureRepository()
+        private Mock<ISiteCultureRepository> GetCultureRepository()
         {
             var cultures = new List<SiteCulture>
             {
@@ -47,7 +50,7 @@ namespace MedioClinic.Tests.ViewComponents
                 }
             };
 
-            var repository = new Mock<ICultureRepository>();
+            var repository = new Mock<ISiteCultureRepository>();
             repository.Setup(repository => repository.GetAll()).Returns(cultures);
 
             return repository;

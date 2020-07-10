@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace XperienceAdapter.Dtos
+using XperienceAdapter.Dtos;
+
+namespace Business.Dtos
 {
-    public class Company
+    public class Company : BasePage
     {
-        public string? Name { get; set; }
-
         public string? Street { get; set; }
 
         public string? City { get; set; }
 
         public string? Country { get; set; }
-
-        public string? Region { get; set; }
 
         public string? PostalCode { get; set; }
 

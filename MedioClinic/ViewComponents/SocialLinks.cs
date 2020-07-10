@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using Abstractions;
-using XperienceAdapter.Dtos;
+using Business.Dtos;
 
 namespace MedioClinic.ViewComponents
 {

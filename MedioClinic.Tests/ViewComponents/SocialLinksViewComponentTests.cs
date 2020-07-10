@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter.Dtos;
-using MedioClinic.ViewComponents;
 using Abstractions;
+using Business.Dtos;
+using MedioClinic.ViewComponents;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -40,13 +40,13 @@ namespace MedioClinic.Tests.ViewComponents
                 {
                     new SocialLink
                     {
-                        IconUrl = "/images/social/fb.png",
+                        IconServerPath = "/images/social/fb.png",
                         Name = "Facebook",
                         Url = "http://example.com"
                     },
                     new SocialLink
                     {
-                        IconUrl = "/images/social/tw.png",
+                        IconServerPath = "/images/social/tw.png",
                         Name = "Twitter",
                         Url = "http://example.com"
                     }

@@ -29,49 +29,49 @@ namespace MedioClinic.Tests.ViewComponents
 
         private Mock<INavigationRepository> GetNavigationRepository()
         {
-            var childrenOf11 = new List<NavigationItemDto>
+            var childrenOf11 = new List<NavigationItem>
             {
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-1-1",
                     Name = "Child 1-1-1"
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-1-2",
                     Name = "Child 1-1-2"
                 }
             };
 
-            var childrenOf12 = new List<NavigationItemDto>
+            var childrenOf12 = new List<NavigationItem>
             {
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-2-1",
                     Name = "Child 1-2-1"
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-2-2",
                     Name = "Child 1-2-2"
                 }
             };
 
-            var childrenOfRoot = new List<NavigationItemDto>
+            var childrenOfRoot = new List<NavigationItem>
             {
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-1",
                     Name = "Child 1-1"
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
                     RelativeUrl = "/Child1-2",
                     Name = "Child 1-2"
                 }
             };
 
-            var navigationItem = new NavigationItemDto
+            var navigationItem = new NavigationItem
             {
                 RelativeUrl = NodeAliasPath,
                 Name = "Test navigation section"
@@ -80,9 +80,14 @@ namespace MedioClinic.Tests.ViewComponents
             navigationItem.ChildItems.AddRange(childrenOfRoot);
             childrenOfRoot[0].ChildItems.AddRange(childrenOf11);
             childrenOfRoot[1].ChildItems.AddRange(childrenOf12);
+            var set = new Dictionary<string, NavigationItem>
+            {
+                { "en-US", navigationItem },
+                { "cs-CZ", navigationItem }
+            };
 
             var navigationRepository = new Mock<INavigationRepository>();
-            navigationRepository.Setup(repository => repository.GetSecondaryNavigation(NodeAliasPath)).Returns(navigationItem);
+            navigationRepository.Setup(repository => repository.GetSecondaryNavigation(NodeAliasPath)).Returns(set);
 
             return navigationRepository;
         }

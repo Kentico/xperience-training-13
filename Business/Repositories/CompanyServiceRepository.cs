@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Kentico.Content.Web.Mvc;
 
-using CMS.DocumentEngine.Types.MedioClinic;
-using Kentico.Content.Web.Mvc;
-
-using Business.Dtos;
 using XperienceAdapter;
+using XperienceAdapter.Repositories;
 
 namespace Business.Repositories
 {
-    public class CompanyServiceRepository :
-        BasePageRepository<CompanyServiceDto, CompanyService>,
-        IPageRepository<CompanyServiceDto, CompanyService>
+    /// <summary>
+    /// Stores company services.
+    /// </summary>
+    public class CompanyServiceRepository : BasePageRepository<Dtos.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService>
     {
-        public override Func<CompanyService, CompanyServiceDto, CompanyServiceDto> Mapper { get; } = (document, dto) =>
+        public override Dtos.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Dtos.CompanyService dto)
         {
-            dto.ServiceDescription = document.ServiceDescription;
-            dto.IconPath = document.Fields.Icon.GetPath();
+            dto.ServiceDescription = page.ServiceDescription;
+            dto.IconServerPath = page.Fields.Icon.GetPath();
 
             return dto;
-        };
+        }
 
         public CompanyServiceRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
         {

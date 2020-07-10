@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Routing
 @using MedioClinic.ViewComponents
-@model (string cultureSwitchId, IEnumerable<XperienceAdapter.Dtos.SiteCulture> cultures)
+@model (string CultureSwitchId, Dictionary<XperienceAdapter.Dtos.SiteCulture, (string, string)> variants)
 
 @{
     var triggerViewName = $"{Navigation.PartialViewPath}/_DropdownTrigger";
@@ -8,27 +8,29 @@
     var actionName = routeValues["action"]?.ToString();
     var controllerName = routeValues["controller"]?.ToString();
 
-    var cultureDtos = Model.cultures
+    var orderedItems = Model.variants.Keys
         .OrderBy(culture => culture.IsDefault)
         .ThenBy(culture => culture.FriendlyName, StringComparer.CurrentCultureIgnoreCase)
-        .Select(culture =>
-        {
-            var currentRouteValues = new RouteValueDictionary(Url.ActionContext.RouteData.Values)
-            {
-                ["culture"] = culture.IsoCode
-            };
+        //.Select(culture =>
+        //{
+        //    var currentRouteValues = new RouteValueDictionary(Url.ActionContext.RouteData.Values)
+        //    {
+        //        ["culture"] = culture.IsoCode
+        //    };
 
-            var url = Url.Action(actionName, controllerName, currentRouteValues);
+        //    var url = Url.Action(actionName, controllerName, currentRouteValues);
+
+        //    return (url, culture.FriendlyName);
+        //});
+        .Select(culture => (Url.Content(Model.variants[culture].Item1), Model.variants[culture].Item2));
 
 
-            return (url, culture.FriendlyName);
-        });
 
-    var currentCulture = Model.cultures
+    var currentCulture = Model.variants.Keys
         .FirstOrDefault(culture =>
             !string.IsNullOrEmpty(culture.IsoCode) &&
             string.Equals(culture.IsoCode, System.Threading.Thread.CurrentThread.CurrentUICulture.Name, StringComparison.OrdinalIgnoreCase))
         .ShortName;
 }
 
-<partial name="@triggerViewName" model="@(Model.cultureSwitchId, currentCulture, cultureDtos)" />
+<partial name="@triggerViewName" model="@(Model.CultureSwitchId, currentCulture, orderedItems)" />

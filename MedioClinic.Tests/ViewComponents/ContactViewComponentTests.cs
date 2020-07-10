@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter;
-using XperienceAdapter.Dtos;
-using MedioClinic.ViewComponents;
 using Abstractions;
+using Business.Dtos;
+using MedioClinic.ViewComponents;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -44,7 +43,6 @@ namespace MedioClinic.Tests.ViewComponents
                 Name = "Company name",
                 PhoneNumber = "1234567890",
                 PostalCode = "12345",
-                Region = "Region",
                 Street = "Street"
             };
         }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using CMS.Base;
+﻿using CMS.Base;
 using Kentico.Content.Web.Mvc;
 
 using Abstractions;
 
 namespace XperienceAdapter
 {
+    /// <summary>
+    /// Common repository dependencies.
+    /// </summary>
     public interface IRepositoryDependencies
     {
         ISiteService SiteService { get; }

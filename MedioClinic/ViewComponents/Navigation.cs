@@ -14,18 +14,22 @@ namespace MedioClinic.ViewComponents
     {
         public static string PartialViewPath => $"Components/{nameof(Navigation)}";
 
-        public INavigationRepository NavigationRepository { get; }
+        protected readonly INavigationRepository _navigationRepository;
 
         public Navigation(INavigationRepository navigationRepository)
         {
-            NavigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
+            _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
-        public IViewComponentResult Invoke(string placement, string nodeAliasPath = null!)
+        public IViewComponentResult Invoke(string placement, string? nodeAliasPath = default)
         {
-            var navigation = !string.IsNullOrEmpty(nodeAliasPath)
-                ? NavigationRepository.GetSecondaryNavigation(nodeAliasPath)
-                : NavigationRepository.GetContentTreeNavigation();
+            // Content tree-based routing
+            //var navigation = !string.IsNullOrEmpty(nodeAliasPath)
+            //    ? _navigationRepository.GetSecondaryNavigation(nodeAliasPath)
+            //    : _navigationRepository.GetContentTreeNavigation();
+
+            // Conventional routing
+            var navigation = _navigationRepository.GetConventionalRoutingNavigation();
 
             return View(placement, navigation);
         }

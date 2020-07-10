@@ -63,18 +63,52 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// Page title.
+		/// Perex.
 		/// </summary>
 		[DatabaseField]
-		public string PageTitle
+		public string Perex
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("PageTitle"), @"");
+				return ValidationHelper.GetString(GetValue("Perex"), @"");
 			}
 			set
 			{
-				SetValue("PageTitle", value);
+				SetValue("Perex", value);
+			}
+		}
+
+
+		/// <summary>
+		/// Text.
+		/// </summary>
+		[DatabaseField]
+		public string Text
+		{
+			get
+			{
+				return ValidationHelper.GetString(GetValue("Text"), @"");
+			}
+			set
+			{
+				SetValue("Text", value);
+			}
+		}
+
+
+		/// <summary>
+		/// URL slug.
+		/// </summary>
+		[DatabaseField]
+		public string UrlSlug
+		{
+			get
+			{
+				return ValidationHelper.GetString(GetValue("UrlSlug"), @"");
+			}
+			set
+			{
+				SetValue("UrlSlug", value);
 			}
 		}
 
@@ -148,17 +182,61 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// Page title.
+			/// Perex.
 			/// </summary>
-			public string PageTitle
+			public string Perex
 			{
 				get
 				{
-					return mInstance.PageTitle;
+					return mInstance.Perex;
 				}
 				set
 				{
-					mInstance.PageTitle = value;
+					mInstance.Perex = value;
+				}
+			}
+
+
+			/// <summary>
+			/// Text.
+			/// </summary>
+			public string Text
+			{
+				get
+				{
+					return mInstance.Text;
+				}
+				set
+				{
+					mInstance.Text = value;
+				}
+			}
+
+
+			/// <summary>
+			/// URL slug.
+			/// </summary>
+			public string UrlSlug
+			{
+				get
+				{
+					return mInstance.UrlSlug;
+				}
+				set
+				{
+					mInstance.UrlSlug = value;
+				}
+			}
+
+
+			/// <summary>
+			/// Doctors page link.
+			/// </summary>
+			public IEnumerable<TreeNode> DoctorsLink
+			{
+				get
+				{
+					return mInstance.GetRelatedDocuments("DoctorsLink");
 				}
 			}
 

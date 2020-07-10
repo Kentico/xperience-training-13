@@ -5,13 +5,13 @@ using System.Text;
 using Xunit;
 using Moq;
 
-using CMS.Base;
+using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
-using Abstractions;
-using XperienceAdapter;
+using XperienceAdapter.Repositories;
 using Business.Dtos;
 using Business.Repositories;
+using XperienceAdapter.Dtos;
 
 namespace Business.Tests
 {
@@ -30,7 +30,7 @@ namespace Business.Tests
             // Assert.
             Assert.NotNull(result);
             Assert.True(result.Count() == 4);
-            Assert.DoesNotContain(result, item => item.Id == 1);
+            Assert.DoesNotContain(result, item => item.NodeId == 1);
         }
 
         [Fact]
@@ -41,12 +41,12 @@ namespace Business.Tests
             var items = new[] { GetRootItem() }.Concat(GetCyclicItems());
 
             // Act.
-            var result = repository.BuildHierarchyLevel(GetRootItem(), items);
+            var result = repository.BuildHierarchyLevel(GetRootItem(), items, dto => string.Empty);
 
             // Assert.
             Assert.NotNull(result);
-            Assert.True(result.Id == 0);
-            Assert.Collection(result.ChildItems, item => Assert.Equal(1, item.Id));
+            Assert.True(result.NodeId == 0);
+            Assert.Collection(result.ChildItems, item => Assert.Equal(1, item.NodeId));
         }
 
         [Fact]
@@ -57,84 +57,84 @@ namespace Business.Tests
             var items = new[] { GetRootItem() }.Concat(GetItems());
 
             // Act.
-            var result = repository.BuildHierarchyLevel(GetRootItem(), items);
+            var result = repository.BuildHierarchyLevel(GetRootItem(), items, dto => string.Empty);
 
             // Assert.
             Assert.NotNull(result);
-            Assert.True(result.Id == 0);
-            Assert.Contains(result.ChildItems, item => item.Id == 2);
-            Assert.DoesNotContain(result.ChildItems, item => item.Id == 1);
+            Assert.True(result.NodeId == 0);
+            Assert.Contains(result.ChildItems, item => item.NodeId == 2);
+            Assert.DoesNotContain(result.ChildItems, item => item.NodeId == 1);
             Assert.True(result.ChildItems[0].Parent == result);
-            Assert.Contains(result.ChildItems[0].ChildItems, item => item.Id == 3);
-            Assert.DoesNotContain(result.ChildItems[0].ChildItems, item => item.Id == 1);
+            Assert.Contains(result.ChildItems[0].ChildItems, item => item.NodeId == 3);
+            Assert.DoesNotContain(result.ChildItems[0].ChildItems, item => item.NodeId == 1);
             Assert.True(result.ChildItems[0].ChildItems[0].Parent == result.ChildItems[0]);
             Assert.True(result.ChildItems[0].ChildItems[0].AllParents.Count() == 2);
         }
 
         private static NavigationRepository GetRepository()
         {
-            var siteService = new Mock<ISiteService>().Object;
-            var siteContextService = new Mock<ISiteContextService>().Object;
-            var pageRetriever = new Mock<IPageRetriever>().Object;
             var pageUrlRetriever = new Mock<IPageUrlRetriever>().Object;
-            var repository = new NavigationRepository(new RepositoryDependencies(siteService, siteContextService, pageRetriever), pageUrlRetriever);
+            var basePageRepository = new Mock<IPageRepository<BasePage, TreeNode>>().Object;
+            var urlSlugPageRepository = new Mock<IPageRepository<BasicPageWithUrlSlug, TreeNode>>().Object;
+            var cultureRepository = new Mock<ISiteCultureRepository>().Object;
+            var repository = new NavigationRepository(pageUrlRetriever, basePageRepository, urlSlugPageRepository, cultureRepository);
 
             return repository;
         }
 
-        private static NavigationItemDto GetRootItem() => new NavigationItemDto
+        private static NavigationItem GetRootItem() => new NavigationItem
         {
-            Id = 0,
+            NodeId = 0,
             Name = "RootItem"
         };
 
-        private static IEnumerable<NavigationItemDto> GetItems() =>
-            new List<NavigationItemDto>
+        private static IEnumerable<NavigationItem> GetItems() =>
+            new List<NavigationItem>
             {
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 1,
+                    NodeId = 1,
                     ParentId = -1
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 2,
+                    NodeId = 2,
                     ParentId = 0
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 3,
+                    NodeId = 3,
                     ParentId = 2
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 4,
+                    NodeId = 4,
                     ParentId = 0
                 }
 
             };
 
-        private static IEnumerable<NavigationItemDto> GetCyclicItems() =>
-            new List<NavigationItemDto>
+        private static IEnumerable<NavigationItem> GetCyclicItems() =>
+            new List<NavigationItem>
             {
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 1,
+                    NodeId = 1,
                     ParentId = 0
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 2,
+                    NodeId = 2,
                     ParentId = 4
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 3,
+                    NodeId = 3,
                     ParentId = 2
                 },
-                new NavigationItemDto
+                new NavigationItem
                 {
-                    Id = 4,
+                    NodeId = 4,
                     ParentId = 3
                 }
             };

@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.Logging;
 
 using CMS.Core;
-using CMS.Base;
 
 namespace XperienceAdapter.Logging
 {
+    /// <summary>
+    /// Provides <see cref="XperienceLogger"/> as an implementation of <see cref="ILogger{TCategoryName}"/>.
+    /// </summary>
     public class XperienceLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, XperienceLogger> _loggers = new ConcurrentDictionary<string, XperienceLogger>();
 
         private readonly IEventLogService _eventLogService;
 
-        private readonly ISiteService _siteService;
-
-        public XperienceLoggerProvider(IEventLogService eventLogService, ISiteService siteService)
+        public XperienceLoggerProvider(IEventLogService eventLogService)
         {
             _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
-            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
         }
 
+        /// <summary>
+        /// Creates the logger instance for a category.
+        /// </summary>
+        /// <param name="categoryName">Logging category.</param>
+        /// <returns>The logger.</returns>
         public ILogger CreateLogger(string categoryName) =>
-            _loggers.GetOrAdd(categoryName, name => new XperienceLogger(name, _eventLogService, _siteService));
+            _loggers.GetOrAdd(categoryName, name => new XperienceLogger(name, _eventLogService/*, _siteService*/));
 
         public void Dispose() => _loggers.Clear();
     }

@@ -1,88 +1,213 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
+using XperienceAdapter.Dtos;
+using XperienceAdapter.Repositories;
 using Business.Dtos;
-using XperienceAdapter;
 
 namespace Business.Repositories
 {
-    public class NavigationRepository : BasePageRepository<NavigationItemDto, TreeNode>, INavigationRepository
+    public class NavigationRepository : INavigationRepository
     {
+        protected const string RootPath = "/";
+
+        protected static readonly string[] NodeOrdering = new string[] { "NodeLevel", "NodeOrder" };
+
         protected readonly IPageUrlRetriever _pageUrlRetriever;
 
-        public NavigationRepository(IRepositoryDependencies repositoryDependencies, IPageUrlRetriever pageUrlRetriever) : base(repositoryDependencies)
+        protected readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
+
+        protected readonly IPageRepository<BasicPageWithUrlSlug, TreeNode> _urlSlugPageRepository;
+
+        protected readonly ISiteCultureRepository _cultureRepository;
+
+        protected readonly string[] _slugEnabledPageTypes = new string[]
+        {
+            "MedioClinic.BasicPageWithUrlSlug", "MedioClinic.SiteSection", "MedioClinic.NamePerexText", "MedioClinic.User", "MedioClinic.Doctor"
+        };
+
+        protected NavigationItem RootDto => _basePageRepository.GetPages(query =>
+            query
+                .Path(RootPath, PathTypeEnum.Single)
+                .TopN(1),
+            buildCacheAction: cache => GetCacheBuilder(cache, nameof(RootDto), RootPath, PathTypeEnum.Single))
+                .Select(basePageDto => new NavigationItem
+                {
+                    NodeId = basePageDto.NodeId,
+                    Name = basePageDto.Name
+                })
+                .FirstOrDefault();
+
+        public NavigationRepository(
+            IPageUrlRetriever pageUrlRetriever,
+            IPageRepository<BasePage, TreeNode> basePageRepository,
+            IPageRepository<BasicPageWithUrlSlug, TreeNode> urlSlugPageRepository,
+            ISiteCultureRepository siteCultureRepository)
         {
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
+            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
+            _urlSlugPageRepository = urlSlugPageRepository ?? throw new ArgumentNullException(nameof(urlSlugPageRepository));
+            _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
-        public NavigationItemDto GetContentTreeNavigation()
+        public Dictionary<string, NavigationItem> GetContentTreeNavigation()
         {
-            var rootPath = "/";
             var cacheKeySuffix = $"{nameof(GetContentTreeNavigation)}";
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
 
-            var root = GetPages(
-                query => query.Path(rootPath, PathTypeEnum.Single),
-                buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|root", rootPath, PathTypeEnum.Single))
-                .FirstOrDefault();
+            if (cultures != null && cultures.Any())
+            {
+                foreach (var culture in cultures)
+                {
+                    // We need to fetch across different page types, without the need for coupled data.
+                    var allItems = _basePageRepository.GetPages(
+                        query => GetDefaultQuery(query)
+                            .MenuItems(),
+                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, RootPath, PathTypeEnum.Children))
+                            .Select(dto => MapBaseToNavigationDto(dto));
 
-            var allItems = GetPages(
-                query => GetDefaultQuery(query)
-                    .MenuItems(),
-                MapItems,
-                cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|children", rootPath, PathTypeEnum.Children));
+                    var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
 
-            return DecorateItems(root, allItems);
+                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                }
+            }
+
+            return cultureSpecificNavigations;
         }
 
-        public NavigationItemDto GetSecondaryNavigation(string nodeAliasPath)
+        public Dictionary<string, NavigationItem> GetSecondaryNavigation(string nodeAliasPath)
         {
             var cacheKeySuffix = $"{nameof(GetSecondaryNavigation)}|{nodeAliasPath}";
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
 
-            var root = GetPages(query => query
-                .Path(nodeAliasPath, PathTypeEnum.Single),
-                buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|root", nodeAliasPath, PathTypeEnum.Single))
-                .FirstOrDefault();
+            if (cultures != null && cultures.Any())
+            {
+                foreach (var culture in cultures)
+                {
+                    // We need to fetch across different page types, without the need for coupled data.
+                    var allItems = _basePageRepository.GetPages(
+                        query => GetDefaultQuery(query)
+                            .Path(nodeAliasPath, PathTypeEnum.Children),
+                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, nodeAliasPath, PathTypeEnum.Children))
+                            .Select(dto => MapBaseToNavigationDto(dto));
 
-            var allItems = GetPages(
-                query => GetDefaultQuery(query)
-                    .Path(nodeAliasPath, PathTypeEnum.Children),
-                MapItems,
-                cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|children", nodeAliasPath, PathTypeEnum.Children));
+                    var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
 
-            return DecorateItems(root, allItems);
+                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                }
+            }
+
+            return cultureSpecificNavigations;
         }
+
+        public Dictionary<string, NavigationItem> GetConventionalRoutingNavigation()
+        {
+            string cacheKeySuffix = $"{nameof(GetConventionalRoutingNavigation)}";
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
+
+            if (cultures != null && cultures.Any())
+            {
+                foreach (var culture in cultures)
+                {
+                    var allItems = _urlSlugPageRepository.GetPagesOfMultitpleTypes(
+                        _slugEnabledPageTypes,
+                        query => query
+                            .FilterDuplicates()
+                            .OrderByAscending(NodeOrdering),
+                        buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|{culture.IsoCode}", RootPath, PathTypeEnum.Section),
+                        culture: culture.IsoCode)
+                            .Select(dto => new NavigationItem
+                            {
+                                NodeId = dto.NodeId,
+                                Guid = dto.Guid,
+                                ParentId = dto.ParentId,
+                                Name = dto.Name,
+                                NodeAliasPath = dto.NodeAliasPath,
+                                UrlSlug = dto.UrlSlug
+                            });
+
+                    var decorated = DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
+
+                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                }
+            }
+
+            return cultureSpecificNavigations;
+        }
+
+        /// <summary>
+        /// Prepares cultures and a new dictionary for navigation sets.
+        /// </summary>
+        /// <param name="cultures">All site cultures.</param>
+        /// <param name="cultureSpecificNavigations">Empty dictionary with navigation sets for each culture.</param>
+        protected void GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations)
+        {
+            cultures = _cultureRepository.GetAll();
+            cultureSpecificNavigations = new Dictionary<string, NavigationItem>();
+        }
+
+        /// <summary>
+        /// Maps the <see cref="BasePage"/> onto a new <see cref="NavigationItem"/>.
+        /// </summary>
+        /// <param name="dto">The input DTO.</param>
+        /// <returns>The <see cref="NavigationItem"/>.</returns>
+        protected static NavigationItem MapBaseToNavigationDto(BasePage dto) => new NavigationItem
+        {
+            NodeId = dto.NodeId,
+            Guid = dto.Guid,
+            Name = dto.Name,
+            NodeAliasPath = dto.NodeAliasPath,
+            ParentId = dto.ParentId
+        };
+
+        /// <summary>
+        /// Gets default <see cref="DocumentQuery{TDocument}"/> configuration.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>The modified query.</returns>
+        protected static DocumentQuery<TreeNode> GetDefaultQuery(DocumentQuery<TreeNode> query) =>
+            query
+                .FilterDuplicates()
+                .OrderByAscending(NodeOrdering);
+
+        protected static IPageCacheBuilder<TreeNode> GetCacheBuilder(
+            IPageCacheBuilder<TreeNode> pageCacheBuilder, 
+            string cacheKeySuffix, 
+            string path, 
+            PathTypeEnum pathType) =>
+                pageCacheBuilder
+                    .Key($"{nameof(NavigationRepository)}|{cacheKeySuffix}")
+                    .Dependencies((_, builder) => builder
+                        .PagePath(path, pathType)
+                        .ObjectType("cms.documenttype")
+                        .PageOrder());
 
         /// <summary>
         /// Decorates items with references and URLs.
         /// </summary>
         /// <param name="root">Root navigation item.</param>
-        /// <param name="navigationItems">A flat sequence of all other items.</param>
+        /// <param name="defaultCultureItems">A flat sequence of all other items.</param>
         /// <returns></returns>
-        public NavigationItemDto DecorateItems(NavigationItemDto root, IEnumerable<NavigationItemDto> navigationItems)
+        public NavigationItem DecorateItems(NavigationItem root, IEnumerable<NavigationItem> navigationItems, Func<NavigationItem, string> urlDecorator)
         {
             var connectableItems = GetConnectableItems(navigationItems.Concat(new[] { root })).ToList();
 
-            foreach (var item in connectableItems)
-            {
-                DecorateWithUrl(item);
-            }
-
-            return BuildHierarchyLevel(root, connectableItems);
+            return BuildHierarchyLevel(root, connectableItems, urlDecorator);
         }
 
         /// <summary>
-        /// Filters out items with orphaned <see cref="NavigationItemDto.ParentId"/> values.
+        /// Filters out items with orphaned <see cref="NavigationItem.ParentId"/> values.
         /// </summary>
         /// <param name="navigationItems">Navigation items.</param>
         /// <returns></returns>
-        public IEnumerable<NavigationItemDto> GetConnectableItems(IEnumerable<NavigationItemDto> navigationItems) =>
+        public IEnumerable<NavigationItem> GetConnectableItems(IEnumerable<NavigationItem> navigationItems) =>
             from navigationItem in navigationItems
-            where navigationItems.Select(item => item.Id).Contains(navigationItem.ParentId.GetValueOrDefault())
+            where navigationItems.Select(item => item.NodeId).Contains(navigationItem.ParentId.GetValueOrDefault())
             select navigationItem;
 
         /// <summary>
@@ -90,11 +215,11 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="parent">Current parent item.</param>
         /// <param name="allItems">A flat sequence of all items.</param>
-        /// <returns></returns>
-        public NavigationItemDto BuildHierarchyLevel(NavigationItemDto parent, IEnumerable<NavigationItemDto> allItems)
+        /// <returns>Hierarchical navigation item.</returns>
+        public NavigationItem BuildHierarchyLevel(NavigationItem parent, IEnumerable<NavigationItem> allItems, Func<NavigationItem, string> urlDecorator)
         {
             var children = allItems
-                .Where(item => item.ParentId.HasValue && item.ParentId == parent.Id);
+                .Where(item => item.ParentId.HasValue && item.ParentId == parent.NodeId);
 
             parent.ChildItems.AddRange(children);
 
@@ -105,37 +230,45 @@ namespace Business.Repositories
                     item.Parent = parent;
                     item.AllParents.AddRange(parent.AllParents);
                     item.AllParents.Add(parent);
-                    BuildHierarchyLevel(item, allItems);
+                    item.RelativeUrl = urlDecorator(item);
+                    BuildHierarchyLevel(item, allItems, urlDecorator);
                 }
             }
 
             return parent;
         }
 
-        protected void DecorateWithUrl(NavigationItemDto item) =>
-            item.RelativeUrl = _pageUrlRetriever.Retrieve(item.NodeAliasPath).RelativePath;
-        //item.RelativeUrl = "test-url";
+        /// <summary>
+        /// Gets URL for a content tree-based navigation item.
+        /// </summary>
+        /// <param name="item">Item to get the URL for.</param>
+        /// <returns>URL.</returns>
+        protected string GetContentTreeBasedUrl(NavigationItem item) => GetPageUrl(item);
 
-        protected static NavigationItemDto MapItems(TreeNode page, NavigationItemDto dto)
+        /// <summary>
+        /// Gets URL for conventional routing.
+        /// </summary>
+        /// <param name="item">Item to get the URL for.</param>
+        /// <returns>URL.</returns>
+        protected string GetConventionalRoutingUrl(NavigationItem item)
         {
-            dto.ParentId = page.NodeParentID;
+            var patternBasedUrl = GetPageUrl(item);
 
-            return dto;
+            if (string.IsNullOrEmpty(patternBasedUrl))
+            {
+                var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
+
+                return $"~/{Thread.CurrentThread.CurrentCulture.Name.ToLowerInvariant()}{trailingPath}/";
+            }
+
+            return patternBasedUrl;
         }
 
-        protected static DocumentQuery<TreeNode> GetDefaultQuery(DocumentQuery<TreeNode> query) =>
-            query
-                .CombineWithDefaultCulture()
-                .FilterDuplicates()
-                .OrderByAscending("NodeLevel", "NodeOrder");
+        protected string GetPageUrl(NavigationItem item)
+        {
+            var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
 
-        protected static IPageCacheBuilder<TreeNode> GetCacheBuilder
-            (IPageCacheBuilder<TreeNode> pageCacheBuilder, string cacheKeySuffix, string path, PathTypeEnum pathType) =>
-                pageCacheBuilder
-                    .Key($"{nameof(NavigationRepository)}|{cacheKeySuffix}")
-                    .Dependencies((_, builder) => builder
-                        .PagePath(path, pathType)
-                        .ObjectType("cms.documenttype")
-                        .PageOrder());
+            return _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture).RelativePath;
+        }
     }
 }

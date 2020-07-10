@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.Logging;
 
 using CMS.Core;
@@ -9,19 +6,19 @@ using CMS.Base;
 
 namespace XperienceAdapter.Logging
 {
+    /// <summary>
+    /// Xperience implementation of <see cref="ILogger{TCategoryName}"/>.
+    /// </summary>
     public class XperienceLogger : ILogger
     {
         private readonly string _name;
 
         private readonly IEventLogService _eventLogService;
 
-        private readonly ISiteService _siteService;
-
-        public XperienceLogger(string name, IEventLogService eventLogService, ISiteService siteService)
+        public XperienceLogger(string name, IEventLogService eventLogService)
         {
             _name = name ?? throw new ArgumentNullException(nameof(name));
             _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
-            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
         }
 
         public IDisposable BeginScope<TState>(TState state) => null!;
@@ -48,7 +45,7 @@ namespace XperienceAdapter.Logging
             if (!string.IsNullOrEmpty(message) || exception != null)
             {
                 var eventType = MapLogLevel(logLevel);
-                var siteId = _siteService?.CurrentSite?.SiteID ?? default;
+                var siteId = Service.ResolveOptional<ISiteService>().CurrentSite?.SiteID ?? default;
 
                 var eventData = new EventLogData(eventType, _name, message)
                 {
