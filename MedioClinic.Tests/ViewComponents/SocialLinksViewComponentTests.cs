@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using Abstractions;
+using XperienceAdapter.Repositories;
 using Business.Dtos;
 using MedioClinic.ViewComponents;
 
@@ -25,9 +25,9 @@ namespace MedioClinic.Tests.ViewComponents
             Assert.IsType<ViewViewComponentResult>(result);
         }
 
-        private Mock<IRepository<SocialLink>> GetSocialLinkRepository()
+        private Mock<IPageRepository<SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink>> GetSocialLinkRepository()
         {
-            var repository = new Mock<IRepository<SocialLink>>();
+            var repository = new Mock<IPageRepository<SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink>>();
             repository.Setup(repository => repository.GetAll()).Returns(SocialLinks);
 
             return repository;

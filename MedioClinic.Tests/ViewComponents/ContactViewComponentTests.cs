@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using Abstractions;
+using XperienceAdapter.Repositories;
 using Business.Dtos;
 using MedioClinic.ViewComponents;
 
@@ -25,9 +25,9 @@ namespace MedioClinic.Tests.ViewComponents
             Assert.IsType<ViewViewComponentResult>(result);
         }
 
-        private Mock<IRepository<Company>> GetCompanyRepository()
+        private Mock<IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company>> GetCompanyRepository()
         {
-            var repository = new Mock<IRepository<Company>>();
+            var repository = new Mock<IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company>>();
             repository.Setup(repository => repository.GetAll()).Returns(new List<Company> { Company });
 
             return repository;

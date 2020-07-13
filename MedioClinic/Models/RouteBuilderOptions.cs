@@ -19,7 +19,7 @@ namespace MedioClinic.Models
             RouteName = routeName ?? throw new ArgumentNullException(nameof(routeName));
             RouteDefaults = routeDefaults ?? throw new ArgumentNullException(nameof(routeDefaults));
 
-            if (culturePatterns != null && culturePatterns.Any())
+            if (culturePatterns?.Any() == true)
             {
                 var test01 = culturePatterns.Select(pattern => new CulturePattern
                 {

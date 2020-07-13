@@ -3,13 +3,16 @@
 
 <h5 class="white-text">@LocalizationService.GetString("ViewComponent.SocialLink.FollowUs")</h5>
 <p>
-    @if (Model != null && Model.Any())
+    @if (Model?.Any() == true)
     {
         foreach (var socialLink in Model)
         {
-            <a href="@Html.Raw(socialLink.Url)">
-                <img src="@Html.Raw(socialLink.IconServerPath)" alt="@Html.DisplayFor(model => socialLink.Name)" />
-            </a>
+            if (!string.IsNullOrEmpty(socialLink.IconServerPath))
+            {
+                <a href="@Html.Raw(socialLink.Url)">
+                    <img src="@Url.Kentico().ImageUrl(socialLink.IconServerPath, SizeConstraint.Empty)" alt="@Html.DisplayFor(model => socialLink.Name)" />
+                </a>
+            }
         }
     }
 </p>

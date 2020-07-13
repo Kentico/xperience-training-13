@@ -1,13 +1,14 @@
-﻿@model Business.Dtos.NavigationItem
+﻿@model Dictionary<string, Business.Dtos.NavigationItem>
 @inject CMS.Core.ILocalizationService LocalizationService
 
 @{
-    var childItems = Model?.ChildItems;
+    var currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+    var childItems = Model?[currentCulture].ChildItems;
 }
 
 <h5 class="white-text">@LocalizationService.GetString("ViewComponent.Navigation.Bottom.Navigation")</h5>
 <ul>
-    @if (childItems != null && childItems.Any())
+    @if (childItems?.Any() == true)
     {
         foreach (var item in childItems)
         {

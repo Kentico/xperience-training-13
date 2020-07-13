@@ -33,8 +33,28 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index()
         {
-            var home = _homePageRepository.GetPages(query => query.Path("/Home"), includeAttachments: true).FirstOrDefault();
-            var companyServices = _companyServiceRepository.GetPages(query => query.Path("/Home/", PathTypeEnum.Children));
+            var homePath = "/Home";
+
+            var home = _homePageRepository.GetPages(
+                query => query
+                    .Path(homePath),
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(HomeController)}|HomePage")
+                    .Dependencies((_, builder) => builder
+                        .PageType("MedioClinic.HomePage")),
+                includeAttachments: true)
+                    .FirstOrDefault();
+
+            var companyServices = _companyServiceRepository.GetPages(
+                query => query
+                    .Path(homePath, PathTypeEnum.Children),
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(HomeController)}|CompanyServices")
+                    .Dependencies((_, builder) => builder
+                        .PageType("MedioClinic.CompanyService")
+                        .PagePath(homePath, PathTypeEnum.Children)
+                        .PageOrder()));
+
             var viewModel = (home, companyServices);
 
             return View(viewModel);

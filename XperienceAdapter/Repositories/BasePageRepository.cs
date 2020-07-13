@@ -32,7 +32,10 @@ namespace XperienceAdapter.Repositories
             _repositoryDependencies = repositoryDependencies ?? throw new ArgumentNullException(nameof(repositoryDependencies));
         }
 
-        public virtual IEnumerable<TPageDto> GetAll() => GetPages();
+        // TODO: How to access CLASS_NAME to set .PageType()?
+        public virtual IEnumerable<TPageDto> GetAll() => GetPages(
+            buildCacheAction: cache => cache
+                .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{typeof(TPage).Name}"));
 
         public virtual Task<IEnumerable<TPageDto>> GetAllAsync() => Task.FromResult(GetAll());
 
@@ -77,15 +80,19 @@ namespace XperienceAdapter.Repositories
         }
 
         public IEnumerable<TPageDto> GetPage(Guid nodeGuid, bool includeAttachments) =>
-            GetPages(query => query
-                .WhereEquals("NodeGUID", nodeGuid)
-                .TopN(1),
+            GetPages(
+                query => query
+                    .WhereEquals("NodeGUID", nodeGuid)
+                    .TopN(1),
+                buildCacheAction: cache => GetCacheBuilder(cache, $"{nameof(GetPage)}|{nodeGuid}|{includeAttachments}", nodeGuid.ToString()),
                 includeAttachments: includeAttachments);
 
         public IEnumerable<TPageDto> GetPage(string pageAlias, bool includeAttachments) =>
-            GetPages(query => query
-                .WhereEquals("NodeAlias", pageAlias)
-                .TopN(1),
+            GetPages(
+                query => query
+                    .WhereEquals("NodeAlias", pageAlias)
+                    .TopN(1),
+                buildCacheAction: cache => GetCacheBuilder(cache, $"{nameof(GetPage)}|{pageAlias}|{includeAttachments}", pageAlias),
                 includeAttachments: includeAttachments);
 
         /// <summary>
@@ -118,6 +125,15 @@ namespace XperienceAdapter.Repositories
 
             return query;
         }
+
+        protected static IPageCacheBuilder<TPage> GetCacheBuilder(
+            IPageCacheBuilder<TPage> pageCacheBuilder,
+            string cacheKeySuffix,
+            string identifier) =>
+                pageCacheBuilder
+                    .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{cacheKeySuffix}")
+                    .Dependencies((_, builder) => builder
+                        .Custom(identifier));
 
         /// <summary>
         /// Adds default filters for <see cref="DocumentQuery{TDocument}"/> queries.

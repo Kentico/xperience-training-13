@@ -27,34 +27,22 @@ namespace MedioClinic.ViewComponents
         public IViewComponentResult Invoke(string cultureSwitchId)
         {
             var cultures = _siteCultureRepository.GetAll();
+            var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
             var navigation = _navigationRepository.GetConventionalRoutingNavigation();
-            var pageCultureVariants = new Dictionary<SiteCulture, (string, string)>();
+            var pageCultureVariants = new Dictionary<SiteCulture, string>();
 
-            if (cultures != null && cultures.Any())
+            if (cultures?.Any() == true)
             {
+                var searchPath = Request.Path.Equals("/") ? $"/{defaultCulture.IsoCode}/home/" : Request.Path.Value;
+
                 foreach (var culture in cultures)
                 {
-                    if (Request.Path.Equals("/"))
-                    {
-                        if (culture.IsDefault)
-                        {
-                            pageCultureVariants.Add(culture, ("/", culture.ShortName!));
-                        }
-                        else
-                        {
-                            pageCultureVariants.Add(culture, ($"/{culture.IsoCode}", culture.ShortName!));
-                        }
-                    }
-                    else
-                    {
-                        var cultureVariantNavigation = navigation[culture.IsoCode!];
-                        var navigationItem = GetNavigationItemByUrl(Request.Path, cultureVariantNavigation);
+                    var cultureVariantNavigation = navigation[culture.IsoCode!];
+                    var navigationItem = GetNavigationItemByUrl(searchPath, cultureVariantNavigation);
 
-                        if (navigationItem != null)
-                        {
-                            pageCultureVariants.Add(culture, (navigationItem.RelativeUrl!, culture.ShortName!));
-                        }
-
+                    if (navigationItem != null)
+                    {
+                        pageCultureVariants.Add(culture, navigationItem.RelativeUrl!);
                     }
                 }
             }
@@ -68,7 +56,7 @@ namespace MedioClinic.ViewComponents
         {
             var parsed = Url.Content(currentItem.RelativeUrl);
 
-            if (!string.IsNullOrEmpty(parsed) && parsed.Equals(url, StringComparison.OrdinalIgnoreCase))
+            if (parsed?.Equals(url, StringComparison.OrdinalIgnoreCase) == true)
             {
                 return currentItem;
             }

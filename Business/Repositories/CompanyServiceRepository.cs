@@ -12,8 +12,8 @@ namespace Business.Repositories
     {
         public override Dtos.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Dtos.CompanyService dto)
         {
-            dto.ServiceDescription = page.ServiceDescription;
-            dto.IconServerPath = page.Fields.Icon.GetPath();
+            dto.ServiceDescription = page?.ServiceDescription;
+            dto.IconServerPath = page?.Fields?.Icon?.GetPath();
 
             return dto;
         }

@@ -97,16 +97,19 @@ namespace MedioClinic
         private void RegisterInitializationHandler(ContainerBuilder builder) =>
             CMS.Base.ApplicationEvents.Initialized.Execute += (sender, eventArgs) => AutoFacConfig.ConfigureContainer(builder);
 
-        private static string AddCulturePrefix(string defaultCulture, string pattern) =>
-            $"{{culture={defaultCulture}}}/{pattern}";
-
         private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptionsService<XperienceOptions> optionsService)
         {
             var defaultCulture = optionsService.Options.DefaultCulture ?? "en-US";
             var spanishCulture = "es-ES";
 
-            var test = new List<RouteBuilderOptions>
+            var routeOptions = new List<RouteBuilderOptions>
             {
+                new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
+                {
+                    (defaultCulture, "home"),
+                    (spanishCulture, "inicio"),
+                }),
+
                 new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
                 {
                     (defaultCulture, "doctors"),
@@ -126,16 +129,15 @@ namespace MedioClinic
                 }),
             };
 
-            foreach (var options in test)
+            foreach (var options in routeOptions)
             {
                 foreach (var culture in options.CulturePatterns)
                 {
-                    mapRouteCultureVariantsImplementation(builder, culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
+                    mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
                 }
             }
 
             void mapRouteCultureVariantsImplementation(
-                IEndpointRouteBuilder builder1,
                 string culture,
                 string routeName,
                 string routePattern,
@@ -154,5 +156,8 @@ namespace MedioClinic
                 }
             }
         }
+
+        private static string AddCulturePrefix(string culture, string pattern) =>
+            $"{{culture={culture}}}/{pattern}";
     }
 }

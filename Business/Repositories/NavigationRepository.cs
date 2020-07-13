@@ -28,14 +28,15 @@ namespace Business.Repositories
 
         protected readonly string[] _slugEnabledPageTypes = new string[]
         {
-            "MedioClinic.BasicPageWithUrlSlug", "MedioClinic.SiteSection", "MedioClinic.NamePerexText", "MedioClinic.User", "MedioClinic.Doctor"
+            "MedioClinic.HomePage", "MedioClinic.BasicPageWithUrlSlug", "MedioClinic.SiteSection", "MedioClinic.NamePerexText", "MedioClinic.User", "MedioClinic.Doctor"
         };
 
         protected NavigationItem RootDto => _basePageRepository.GetPages(query =>
             query
                 .Path(RootPath, PathTypeEnum.Single)
                 .TopN(1),
-            buildCacheAction: cache => GetCacheBuilder(cache, nameof(RootDto), RootPath, PathTypeEnum.Single))
+            buildCacheAction: cache => cache
+                .Key($"{nameof(NavigationRepository)}|{nameof(RootDto)}"))
                 .Select(basePageDto => new NavigationItem
                 {
                     NodeId = basePageDto.NodeId,
@@ -268,7 +269,7 @@ namespace Business.Repositories
         {
             var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
 
-            return _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture).RelativePath;
+            return _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture)?.RelativePath?.ToLowerInvariant()!;
         }
     }
 }

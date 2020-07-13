@@ -63,23 +63,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// Url.
-		/// </summary>
-		[DatabaseField]
-		public string Url
-		{
-			get
-			{
-				return ValidationHelper.GetString(GetValue("Url"), @"");
-			}
-			set
-			{
-				SetValue("Url", value);
-			}
-		}
-
-
-		/// <summary>
 		/// Icon.
 		/// </summary>
 		[DatabaseField]
@@ -92,6 +75,23 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 			set
 			{
 				SetValue("Icon", value);
+			}
+		}
+
+
+		/// <summary>
+		/// URL.
+		/// </summary>
+		[DatabaseField]
+		public string Url
+		{
+			get
+			{
+				return ValidationHelper.GetString(GetValue("Url"), @"");
+			}
+			set
+			{
+				SetValue("Url", value);
 			}
 		}
 
@@ -148,7 +148,19 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// Url.
+			/// Icon.
+			/// </summary>
+			public DocumentAttachment Icon
+			{
+				get
+				{
+					return mInstance.GetFieldDocumentAttachment("Icon");
+				}
+			}
+
+
+			/// <summary>
+			/// URL.
 			/// </summary>
 			public string Url
 			{
@@ -159,18 +171,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 				set
 				{
 					mInstance.Url = value;
-				}
-			}
-
-
-			/// <summary>
-			/// Icon.
-			/// </summary>
-			public DocumentAttachment Icon
-			{
-				get
-				{
-					return mInstance.GetFieldDocumentAttachment("Icon");
 				}
 			}
 		}

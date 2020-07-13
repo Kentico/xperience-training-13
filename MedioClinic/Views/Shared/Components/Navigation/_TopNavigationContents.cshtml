@@ -11,11 +11,11 @@
         var triggerViewName = $"{Navigation.PartialViewPath}/_DropdownTrigger";
     }
 
-    @if (navigationItems != null && navigationItems.Any())
+    @if (navigationItems?.Any() == true)
     {
         foreach (var item in navigationItems)
         {
-            if (Model?.DisplaySecondLevel == true && item.ChildItems != null && item.ChildItems.Any())
+            if (Model?.DisplaySecondLevel == true && item.ChildItems?.Any() == true)
             {
                 var childItemDtos = item.ChildItems.Select(item => (item.RelativeUrl, item.Name));
                 <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), item.Name, childItemDtos)" />

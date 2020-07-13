@@ -12,8 +12,8 @@ namespace Business.Repositories
     {
         public override Dtos.SocialLink MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Dtos.SocialLink dto)
         {
-            dto.Url = page.Url;
-            dto.IconServerPath = page.Fields.Icon.GetPath();
+            dto.Url = page?.Url;
+            dto.IconServerPath = page?.Fields?.Icon?.GetPath();
 
             return dto;
         }
