@@ -40,6 +40,7 @@ To make the project work, follow these steps:
 1. Build the solution.
 1. Under [MedioClinic](/MedioClinic), create an `appsettings.Development.json` file. If you run your SQL Server locally, the file can have the following structure:
 
+```json
     {
       "ConnectionStrings": {
         "CMSConnectionString": "Data Source=localhost;Initial Catalog=MedioClinic13-2020-06-16_12-24;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
@@ -53,6 +54,7 @@ To make the project work, follow these steps:
         }
       }
     }
+```
 
 ## Coding conventions
 
