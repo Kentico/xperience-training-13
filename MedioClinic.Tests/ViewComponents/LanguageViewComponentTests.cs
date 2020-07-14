@@ -10,6 +10,12 @@ using XperienceAdapter.Dtos;
 using XperienceAdapter.Repositories;
 using MedioClinic.ViewComponents;
 using Business.Repositories;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using Business.Dtos;
+using Kentico.Content.Web.Mvc;
+using CMS.DocumentEngine;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -17,14 +23,22 @@ namespace MedioClinic.Tests.ViewComponents
     {
         private const string CultureSwitchId = "switchId";
 
+        private const string HomeUrl = "/en-us/home/";
+
         [Fact]
         public void Invoke_ReturnsResult()
         {
             var cultureRepositoryMock = GetCultureRepository();
-            var navigationRepositoryMock = new Mock<INavigationRepository>();
+            var navigationRepositoryMock = GetNavigationRepository();
             var component = new Language(cultureRepositoryMock.Object, navigationRepositoryMock.Object);
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Path = "/";
+            component.ViewComponentContext.ViewContext.HttpContext = httpContext;
+            var urlHelperMock = new Mock<IUrlHelper>();
+            urlHelperMock.Setup(helper => helper.Content(It.Is<string>(input => input == HomeUrl))).Returns(HomeUrl);
+            urlHelperMock.Setup(helper => helper.Content(It.Is<string>(input => input == "/"))).Returns("/");
+            component.Url = urlHelperMock.Object;
 
-            // TODO: Mock HttpRequest.
             var result = component.Invoke(CultureSwitchId);
 
             Assert.NotNull(result);
@@ -52,8 +66,47 @@ namespace MedioClinic.Tests.ViewComponents
 
             var repository = new Mock<ISiteCultureRepository>();
             repository.Setup(repository => repository.GetAll()).Returns(cultures);
+            repository.Setup(repository => repository.DefaultSiteCulture).Returns(cultures.FirstOrDefault(culture => culture.IsDefault));
 
             return repository;
         }
+
+        private Mock<INavigationRepository> GetNavigationRepository()
+        {
+            var navigationVariant = GetNavigation();
+
+            var navigation = new Dictionary<string, NavigationItem>
+            {
+                { "en-US", navigationVariant },
+                { "cs-CZ", navigationVariant }
+            };
+
+            var repository = new Mock<INavigationRepository>();
+            repository.Setup(repository => repository.GetConventionalRoutingNavigation()).Returns(navigation);
+
+            return repository;
+        }
+
+        private static NavigationItem GetNavigation()
+        {
+            var child = new NavigationItem
+            {
+                NodeId = 1,
+                ParentId = 0,
+                UrlSlug = "home",
+                RelativeUrl = HomeUrl
+            };
+
+            var root = new NavigationItem
+            {
+                NodeId = 0,
+                RelativeUrl = "/"
+            };
+
+            root.ChildItems.Add(child);
+
+            return root;
+        }
+
     }
 }

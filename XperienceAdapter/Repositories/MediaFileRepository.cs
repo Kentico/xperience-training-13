@@ -45,7 +45,9 @@ namespace XperienceAdapter.Repositories
 
         public string? MediaLibraryName
         {
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
             get => string.IsNullOrEmpty(_mediaLibraryName) && _mediaLibraryId.HasValue
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 ? _mediaLibraryInfoProvider
                     .Get(_mediaLibraryId.Value)
                     .LibraryName

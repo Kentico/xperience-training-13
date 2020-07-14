@@ -30,6 +30,7 @@ namespace MedioClinic.ViewComponents
             var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
             var navigation = _navigationRepository.GetConventionalRoutingNavigation();
             var pageCultureVariants = new Dictionary<SiteCulture, string>();
+            
 
             if (cultures?.Any() == true)
             {
@@ -37,12 +38,25 @@ namespace MedioClinic.ViewComponents
 
                 foreach (var culture in cultures)
                 {
-                    var cultureVariantNavigation = navigation[culture.IsoCode!];
-                    var navigationItem = GetNavigationItemByUrl(searchPath, cultureVariantNavigation);
+                    NavigationItem cultureVariantNavigation = null!;
 
-                    if (navigationItem != null)
+                    try
                     {
-                        pageCultureVariants.Add(culture, navigationItem.RelativeUrl!);
+                        cultureVariantNavigation = navigation[culture.IsoCode!];
+                    }
+                    catch
+                    {
+
+                    }
+
+                    if (cultureVariantNavigation != null)
+                    {
+                        var navigationItem = GetNavigationItemByUrl(searchPath, cultureVariantNavigation);
+
+                        if (navigationItem != null)
+                        {
+                            pageCultureVariants.Add(culture, navigationItem.RelativeUrl!);
+                        }
                     }
                 }
             }
