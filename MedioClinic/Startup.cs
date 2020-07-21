@@ -4,26 +4,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Autofac;
 
+using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
+using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
 
 using Business.Configuration;
 using Business.Services;
+using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
+
 
 namespace MedioClinic
 {
     public class Startup
     {
+        private const string DefaultCultureFallback = "en-US";
+        private const string AuthCookieName = "MedioClinic.Authentication";
+
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
@@ -42,9 +51,11 @@ namespace MedioClinic
             services.AddControllersWithViews();
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
-            services.Configure<XperienceOptions>(Configuration.GetSection(nameof(XperienceOptions)));
+            var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
+            services.Configure<XperienceOptions>(xperienceOptions);
             var optionsServiceType = WebHostEnvironment.IsDevelopment() ? typeof(DevelopmentOptionsService<>) : typeof(ProductionOptionsService<>);
             services.AddSingleton(typeof(IOptionsService<>), optionsServiceType);
+            ConfigureIdentityServices(services, xperienceOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -99,7 +110,7 @@ namespace MedioClinic
 
         private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptionsService<XperienceOptions> optionsService)
         {
-            var defaultCulture = optionsService.Options.DefaultCulture ?? "en-US";
+            var defaultCulture = optionsService.Options.DefaultCulture ?? DefaultCultureFallback;
             var spanishCulture = "es-ES";
 
             var routeOptions = new List<RouteBuilderOptions>
@@ -157,7 +168,48 @@ namespace MedioClinic
             }
         }
 
+        // TODO: Can the segment name be inferred?
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
+
+        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
+        {
+            services.AddScoped<IPasswordHasher<ApplicationUser>, Kentico.Membership.PasswordHasher<ApplicationUser>>();
+            services.AddScoped<IMessageService, MessageService>();
+
+            services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
+                .AddApplicationDefaultTokenProviders()
+                .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
+                .AddUserManager<ApplicationUserManager<MedioClinicUser>>()
+                .AddSignInManager<SignInManager<MedioClinicUser>>();
+
+            services.AddAuthentication();
+            services.AddAuthorization();
+
+            services.ConfigureApplicationCookie(cookieOptions =>
+            {
+                cookieOptions.LoginPath = new PathString("/Account/Signin");
+
+                cookieOptions.Events.OnRedirectToLogin = redirectContext =>
+                {
+                    var culture = (string)redirectContext.Request.RouteValues["culture"];
+
+                    if (string.IsNullOrEmpty(culture))
+                    {
+                        culture = xperienceOptions.Get<XperienceOptions>()?.DefaultCulture ?? DefaultCultureFallback;
+                    }
+
+                    var redirectUrl = redirectContext.RedirectUri.Replace("/Account/Signin", $"/{culture}/Account/Signin");
+                    redirectContext.Response.Redirect(redirectUrl);
+                    return Task.CompletedTask;
+                };
+
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(14);
+                cookieOptions.SlidingExpiration = true;
+                cookieOptions.Cookie.Name = AuthCookieName;
+            });
+
+            CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+        }
     }
 }
