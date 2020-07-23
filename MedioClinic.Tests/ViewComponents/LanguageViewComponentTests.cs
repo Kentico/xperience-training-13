@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Xunit;
 using Moq;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using MedioClinic.ViewComponents;
 using Business.Repositories;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using Business.Dtos;
+using Business.Models;
 using Kentico.Content.Web.Mvc;
 using CMS.DocumentEngine;
 using Microsoft.AspNetCore.Mvc;

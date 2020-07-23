@@ -7,7 +7,7 @@ using Moq;
 
 using Business.Repositories;
 using MedioClinic.ViewComponents;
-using Business.Dtos;
+using Business.Models;
 
 namespace MedioClinic.Tests.ViewComponents
 {

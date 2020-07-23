@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XperienceAdapter.Dtos
+namespace XperienceAdapter.Models
 {
     /// <summary>
     /// Media library file.

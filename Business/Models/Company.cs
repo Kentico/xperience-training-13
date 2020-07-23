@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
-namespace Business.Dtos
+namespace Business.Models
 {
     public class Company : BasePage
     {

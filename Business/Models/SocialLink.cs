@@ -1,6 +1,6 @@
-﻿using XperienceAdapter.Dtos;
+﻿using XperienceAdapter.Models;
 
-namespace Business.Dtos
+namespace Business.Models
 {
     /// <summary>
     /// Social media link.

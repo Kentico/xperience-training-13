@@ -1,5 +1,5 @@
 ﻿using Abstractions;
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {

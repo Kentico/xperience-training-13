@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
-namespace Business.Dtos
+namespace Business.Models
 {
     /// <summary>
     /// Company service.

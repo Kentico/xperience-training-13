@@ -17,14 +17,14 @@ namespace MedioClinic.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private readonly IPageRepository<Business.Dtos.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> _homePageRepository;
+        private readonly IPageRepository<Business.Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> _homePageRepository;
 
-        private readonly IPageRepository<Business.Dtos.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> _companyServiceRepository;
+        private readonly IPageRepository<Business.Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> _companyServiceRepository;
 
         public HomeController(
             ILogger<HomeController> logger,
-            IPageRepository<Business.Dtos.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
-            IPageRepository<Business.Dtos.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
+            IPageRepository<Business.Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
+            IPageRepository<Business.Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));

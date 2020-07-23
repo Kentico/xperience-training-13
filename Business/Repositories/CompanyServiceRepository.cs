@@ -8,9 +8,9 @@ namespace Business.Repositories
     /// <summary>
     /// Stores company services.
     /// </summary>
-    public class CompanyServiceRepository : BasePageRepository<Dtos.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService>
+    public class CompanyServiceRepository : BasePageRepository<Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService>
     {
-        public override Dtos.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Dtos.CompanyService dto)
+        public override Models.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Models.CompanyService dto)
         {
             dto.ServiceDescription = page?.ServiceDescription;
             dto.IconServerPath = page?.Fields?.Icon?.GetPath();

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
-using Business.Dtos;
+using Business.Models;
 using Business.Repositories;
 
 namespace MedioClinic.ViewComponents

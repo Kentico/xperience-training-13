@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Business.Dtos
+namespace Business.Models
 {
     /// <summary>
     /// Navigation item.

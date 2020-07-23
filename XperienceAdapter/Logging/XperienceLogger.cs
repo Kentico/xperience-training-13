@@ -47,9 +47,10 @@ namespace XperienceAdapter.Logging
                 var eventType = MapLogLevel(logLevel);
                 var siteId = Service.ResolveOptional<ISiteService>().CurrentSite?.SiteID ?? default;
 
-                var eventData = new EventLogData(eventType, _name, message)
+                var eventData = new EventLogData(eventType, _name, eventId.Name)
                 {
                     SiteID = siteId,
+                    EventDescription = message,
                     Exception = exception
                 };
 

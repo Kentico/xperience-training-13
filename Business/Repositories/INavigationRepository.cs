@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Business.Dtos;
+using Business.Models;
 
 namespace Business.Repositories
 {

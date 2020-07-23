@@ -6,9 +6,9 @@ namespace Business.Repositories
     /// <summary>
     /// Stores company information.
     /// </summary>
-    public class CompanyRepository : BasePageRepository<Dtos.Company, CMS.DocumentEngine.Types.MedioClinic.Company>
+    public class CompanyRepository : BasePageRepository<Models.Company, CMS.DocumentEngine.Types.MedioClinic.Company>
     {
-        public override Dtos.Company MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Company page, Dtos.Company dto)
+        public override Models.Company MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Company page, Models.Company dto)
         {
             dto.City = page.City;
             dto.Country = page.Country;

@@ -10,7 +10,7 @@ using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {

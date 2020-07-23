@@ -8,7 +8,7 @@ using CMS.Helpers;
 using CMS.Localization;
 using CMS.SiteProvider;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {

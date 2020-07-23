@@ -2,7 +2,7 @@
 
 using XperienceAdapter;
 using XperienceAdapter.Repositories;
-using Business.Dtos;
+using Business.Models;
 
 namespace Business.Repositories
 {

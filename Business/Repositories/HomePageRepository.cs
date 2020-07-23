@@ -8,9 +8,9 @@ namespace Business.Repositories
     /// <summary>
     /// Stores the home page.
     /// </summary>
-    public class HomePageRepository : BasePageRepository<Dtos.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
+    public class HomePageRepository : BasePageRepository<Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
     {
-        public override Dtos.HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, Dtos.HomePage dto)
+        public override Models.HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, Models.HomePage dto)
         {
             dto.LinkButtonText = page.LinkButtonText;
 

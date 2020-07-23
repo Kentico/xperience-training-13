@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Abstractions;
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {

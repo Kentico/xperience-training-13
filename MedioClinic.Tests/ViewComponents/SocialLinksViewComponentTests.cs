@@ -6,7 +6,7 @@ using Xunit;
 using Moq;
 
 using XperienceAdapter.Repositories;
-using Business.Dtos;
+using Business.Models;
 using MedioClinic.ViewComponents;
 
 namespace MedioClinic.Tests.ViewComponents

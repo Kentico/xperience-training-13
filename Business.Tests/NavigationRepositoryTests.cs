@@ -9,9 +9,9 @@ using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Repositories;
-using Business.Dtos;
+using Business.Models;
 using Business.Repositories;
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 
 namespace Business.Tests
 {

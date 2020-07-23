@@ -1,4 +1,4 @@
-﻿namespace XperienceAdapter.Dtos
+﻿namespace XperienceAdapter.Models
 {
     /// <summary>
     /// Site culture.

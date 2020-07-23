@@ -6,9 +6,9 @@ using System.Threading;
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
-using XperienceAdapter.Dtos;
+using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
-using Business.Dtos;
+using Business.Models;
 
 namespace Business.Repositories
 {

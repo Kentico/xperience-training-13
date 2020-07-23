@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Business.Dtos
+namespace Business.Models
 {
     /// <summary>
     /// A home page.

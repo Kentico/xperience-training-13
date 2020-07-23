@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Business.Dtos;
+using Business.Models;
 
 namespace MedioClinic.Models.ViewComponents.Navigation
 {

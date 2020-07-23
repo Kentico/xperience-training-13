@@ -24,7 +24,7 @@ using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
-
+using Identity;
 
 namespace MedioClinic
 {
@@ -174,13 +174,13 @@ namespace MedioClinic
 
         private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
         {
-            services.AddScoped<IPasswordHasher<ApplicationUser>, Kentico.Membership.PasswordHasher<ApplicationUser>>();
+            services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
 
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
                 .AddApplicationDefaultTokenProviders()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
-                .AddUserManager<ApplicationUserManager<MedioClinicUser>>()
+                .AddUserManager<MedioClinicUserManager>()
                 .AddSignInManager<SignInManager<MedioClinicUser>>();
 
             services.AddAuthentication();

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XperienceAdapter.Dtos
+namespace XperienceAdapter.Models
 {
     /// <summary>
-    /// Base page DTO.
+    /// Base page model.
     /// </summary>
     public class BasePage
     {

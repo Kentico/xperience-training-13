@@ -8,9 +8,9 @@ namespace Business.Repositories
     /// <summary>
     /// Stores social media links.
     /// </summary>
-    public class SocialLinkRepository : BasePageRepository<Dtos.SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink>
+    public class SocialLinkRepository : BasePageRepository<Models.SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink>
     {
-        public override Dtos.SocialLink MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Dtos.SocialLink dto)
+        public override Models.SocialLink MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Models.SocialLink dto)
         {
             dto.Url = page?.Url;
             dto.IconServerPath = page?.Fields?.Icon?.GetPath();
