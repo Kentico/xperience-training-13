@@ -18,6 +18,7 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
 
+using Abstractions;
 using Business.Configuration;
 using Business.Services;
 using Identity.Models;

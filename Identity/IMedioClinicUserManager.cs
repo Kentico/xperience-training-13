@@ -157,6 +157,11 @@ namespace Identity
         IQueryable<TUser> Users { get; }
 
         /// <summary>
+        /// The persistence store the manager operates over.
+        /// </summary>
+        public IUserStore<TUser> UserStore { get; }
+
+        /// <summary>
         /// Returns the Name claim value if present otherwise returns null.
         /// </summary>
         /// <param name="principal">The <see cref="ClaimsPrincipal"/> instance.</param>

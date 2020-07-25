@@ -56,7 +56,7 @@ namespace Identity
 
             try
             {
-                identityResult = await UserManager.CreateAsync(user, uploadModel.PasswordConfirmationViewModel.Password);
+                identityResult = await _userManager.CreateAsync(user, uploadModel.PasswordConfirmationViewModel.Password);
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace Identity
 
                     try
                     {
-                        token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                        token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     }
                     catch (Exception ex)
                     {
@@ -135,8 +135,8 @@ namespace Identity
 
             try
             {
-                user = await UserManager.FindByIdAsync(userId.ToString());
-                identityResult = await UserManager.ConfirmEmailAsync(user, token);
+                user = await _userManager.FindByIdAsync(userId.ToString());
+                identityResult = await _userManager.ConfirmEmailAsync(user, token);
             }
             catch (Exception ex)
             {
@@ -176,7 +176,7 @@ namespace Identity
 
             try
             {
-                user = await UserManager.FindByNameAsync(uploadModel.EmailViewModel.Email);
+                user = await _userManager.FindByNameAsync(uploadModel.EmailViewModel.Email);
             }
             catch (Exception ex)
             {
@@ -188,7 +188,7 @@ namespace Identity
             }
 
             // Registration: Confirmed registration (begin)
-            if (user != null && !await UserManager.IsEmailConfirmedAsync(user))
+            if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
             {
                 accountResult.ResultState = SignInResultState.EmailNotConfirmed;
 
@@ -196,7 +196,7 @@ namespace Identity
             }
             // Registration: Confirmed registration (end)
 
-            SignInResult signInResult;
+            Microsoft.AspNetCore.Identity.SignInResult signInResult;
 
             try
             {
@@ -246,7 +246,7 @@ namespace Identity
 
             try
             {
-                user = await UserManager.FindByEmailAsync(uploadModel.Email);
+                user = await _userManager.FindByEmailAsync(uploadModel.Email);
             }
             catch (Exception ex)
             {
@@ -257,7 +257,7 @@ namespace Identity
             }
 
             // Registration: Confirmed registration (begin)
-            if (user == null || !await UserManager.IsEmailConfirmedAsync(user))
+            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
             {
                 accountResult.ResultState = ForgotPasswordResultState.EmailNotConfirmed;
 
@@ -269,7 +269,7 @@ namespace Identity
 
             try
             {
-                token = await UserManager.GeneratePasswordResetTokenAsync(user);
+                token = await _userManager.GeneratePasswordResetTokenAsync(user);
             }
             catch (Exception ex)
             {
@@ -309,8 +309,8 @@ namespace Identity
 
             try
             {
-                var user = await UserManager.FindByIdAsync(userId.ToString());
-                tokenVerified = await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultEmailProvider, "ResetPassword", token);
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+                tokenVerified = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultEmailProvider, "ResetPassword", token);
             }
             catch (Exception ex)
             {
@@ -340,8 +340,8 @@ namespace Identity
 
             try
             {
-                var user = await UserManager.FindByIdAsync(uploadModel.UserId.ToString());
-                identityResult = await UserManager.ResetPasswordAsync(
+                var user = await _userManager.FindByIdAsync(uploadModel.UserId.ToString());
+                identityResult = await _userManager.ResetPasswordAsync(
                     user,
                     uploadModel.Token,
                     uploadModel.PasswordConfirmationViewModel.Password);
@@ -371,9 +371,9 @@ namespace Identity
         protected async Task<IdentityResult> AddToPatientRoleAsync(int userId)
         {
             var patientRole = Roles.Patient.ToString();
-            var user = await UserManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            return await UserManager.AddToRolesAsync(user, new[] { patientRole });
+            return await _userManager.AddToRolesAsync(user, new[] { patientRole });
         }
 
         /// <summary>

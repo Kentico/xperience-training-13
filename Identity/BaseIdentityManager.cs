@@ -13,12 +13,12 @@ namespace Identity
     {
         protected readonly ILogger _logger;
 
-        public IMedioClinicUserManager<MedioClinicUser> UserManager { get; }
+        protected readonly IMedioClinicUserManager<MedioClinicUser> _userManager;
 
         public BaseIdentityManager(ILogger<BaseIdentityManager> logger, IMedioClinicUserManager<MedioClinicUser> userManager)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         /// <summary>

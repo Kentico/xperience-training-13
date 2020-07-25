@@ -36,5 +36,7 @@ namespace Identity
             ) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
         }
+
+        public IUserStore<MedioClinicUser> UserStore => Store;
     }
 }

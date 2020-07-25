@@ -1,4 +1,4 @@
-﻿namespace Business.Services
+﻿namespace Abstractions
 {
     /// <summary>
     /// Provides different ways to access app options, based on environment.
