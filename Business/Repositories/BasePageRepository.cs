@@ -11,7 +11,7 @@ namespace Business.Repositories
     /// </summary>
     public class BasePageRepository : BasePageRepository<BasePage, TreeNode>
     {
-        public BasePageRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
+        public BasePageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
     }

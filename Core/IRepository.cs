@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Abstractions
+namespace Core
 {
     /// <summary>
     /// Provides data from a data source in the form of a DTO object.

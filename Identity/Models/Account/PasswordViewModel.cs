@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-using Abstractions;
+using Core;
 
 namespace Identity.Models.Account
 {
-    public class PasswordViewModel : IViewModel
+    public class PasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]

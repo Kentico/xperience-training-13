@@ -1,4 +1,6 @@
-﻿namespace Abstractions
+﻿using Core;
+
+namespace XperienceAdapter
 {
     /// <summary>
     /// Captures information related the current site.

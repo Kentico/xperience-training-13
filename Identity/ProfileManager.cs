@@ -7,7 +7,7 @@ using EnumsNET;
 
 using CMS.Helpers;
 
-using Abstractions;
+using Core;
 using XperienceAdapter.Logging;
 using Identity.Extensions;
 using Identity.Models;

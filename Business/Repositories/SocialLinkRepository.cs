@@ -18,7 +18,7 @@ namespace Business.Repositories
             return dto;
         }
 
-        public SocialLinkRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
+        public SocialLinkRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
     }

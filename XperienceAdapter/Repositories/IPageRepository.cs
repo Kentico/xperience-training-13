@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
-using Abstractions;
+using Core;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Abstractions;
+using Core;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

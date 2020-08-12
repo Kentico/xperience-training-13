@@ -20,14 +20,14 @@ namespace XperienceAdapter.Repositories
         where TPageDto : BasePage, new()
         where TPage : TreeNode, new()
     {
-        protected readonly IRepositoryDependencies _repositoryDependencies;
+        protected readonly IRepositoryServices _repositoryDependencies;
 
         /// <summary>
         /// Default DTO factory method.
         /// </summary>
         protected virtual Func<TPageDto> DefaultDtoFactory => () => new TPageDto();
 
-        public BasePageRepository(IRepositoryDependencies repositoryDependencies)
+        public BasePageRepository(IRepositoryServices repositoryDependencies)
         {
             _repositoryDependencies = repositoryDependencies ?? throw new ArgumentNullException(nameof(repositoryDependencies));
         }

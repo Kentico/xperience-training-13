@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Abstractions;
+using Core;
 using Identity.Models;
 
 namespace Identity.Services

@@ -1,7 +1,5 @@
 ﻿using CMS.Base;
 
-using Abstractions;
-
 namespace MedioClinic.Models
 {
     /// <summary>
@@ -44,7 +42,7 @@ namespace MedioClinic.Models
         }
     }
 
-    public class PageViewModel<TViewModel> : PageViewModel where TViewModel : class, IViewModel
+    public class PageViewModel<TViewModel> : PageViewModel where TViewModel : class
     {
         public TViewModel? Data { get; set; }
 

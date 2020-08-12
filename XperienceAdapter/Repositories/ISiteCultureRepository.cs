@@ -1,4 +1,4 @@
-﻿using Abstractions;
+﻿using Core;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

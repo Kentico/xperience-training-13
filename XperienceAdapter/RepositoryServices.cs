@@ -3,11 +3,11 @@
 using CMS.Base;
 using Kentico.Content.Web.Mvc;
 
-using Abstractions;
+using Core;
 
 namespace XperienceAdapter
 {
-    public class RepositoryDependencies : IRepositoryDependencies
+    public class RepositoryServices : IRepositoryServices
     {
         public ISiteService SiteService { get; }
 
@@ -15,7 +15,7 @@ namespace XperienceAdapter
 
         public IPageRetriever PageRetriever { get; }
 
-        public RepositoryDependencies(ISiteService siteService, ISiteContextService siteContextService, IPageRetriever pageRetriever)
+        public RepositoryServices(ISiteService siteService, ISiteContextService siteContextService, IPageRetriever pageRetriever)
         {
             SiteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
             SiteContextService = siteContextService ?? throw new ArgumentNullException(nameof(siteContextService));

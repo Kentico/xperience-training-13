@@ -18,7 +18,7 @@ namespace Business.Repositories
             return dto;
         }
 
-        public CompanyServiceRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
+        public CompanyServiceRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
     }

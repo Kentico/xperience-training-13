@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-using Abstractions;
+using Core;
 
 namespace Identity.Models.Account
 {
-    public class EmailViewModel : IViewModel
+    public class EmailViewModel
     {
         [Required(ErrorMessage = "General.RequireEmail")]
         [DisplayName("General.EmailAddress")]

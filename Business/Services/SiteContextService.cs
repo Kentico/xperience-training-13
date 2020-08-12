@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Kentico.Content.Web.Mvc;
 using Kentico.Web.Mvc;
 
-using Abstractions;
+using Core;
 
 namespace XperienceAdapter
 {

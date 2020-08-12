@@ -20,7 +20,7 @@ namespace Business.Repositories
             return dto;
         }
 
-        public HomePageRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
+        public HomePageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
     }

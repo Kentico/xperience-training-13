@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 
-using Abstractions;
+using Core;
 using XperienceAdapter;
 using XperienceAdapter.Repositories;
 using Business.Repositories;
@@ -39,7 +39,7 @@ namespace MedioClinic.Configuration
                 .As<INavigationRepository>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<RepositoryDependencies>().As<IRepositoryDependencies>()
+            builder.RegisterType<RepositoryServices>().As<IRepositoryServices>()
                 .InstancePerLifetimeScope();
         }
     }

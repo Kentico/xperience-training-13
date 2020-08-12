@@ -1,4 +1,4 @@
-﻿namespace Abstractions
+﻿namespace Core
 {
     /// <summary>
     /// Provides functions to client code.

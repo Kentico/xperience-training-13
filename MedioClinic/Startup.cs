@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Autofac;
 
 using CMS.Helpers;
@@ -18,7 +19,7 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
 
-using Abstractions;
+using Core;
 using Business.Configuration;
 using Business.Services;
 using Identity.Models;
@@ -54,8 +55,6 @@ namespace MedioClinic
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
             services.Configure<XperienceOptions>(xperienceOptions);
-            var optionsServiceType = WebHostEnvironment.IsDevelopment() ? typeof(DevelopmentOptionsService<>) : typeof(ProductionOptionsService<>);
-            services.AddSingleton(typeof(IOptionsService<>), optionsServiceType);
             ConfigureIdentityServices(services, xperienceOptions);
         }
 
@@ -74,7 +73,7 @@ namespace MedioClinic
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
-            IOptionsService<XperienceOptions> optionsService)
+            IOptions<XperienceOptions> optionsAccessor)
         {
             if (WebHostEnvironment.IsDevelopment())
             {
@@ -101,7 +100,7 @@ namespace MedioClinic
 
             app.UseEndpoints(endpoints =>
             {
-                MapCultureSpecificRoutes(endpoints, optionsService);
+                MapCultureSpecificRoutes(endpoints, optionsAccessor);
                 endpoints.MapDefaultControllerRoute();
             });
         }
@@ -109,9 +108,9 @@ namespace MedioClinic
         private void RegisterInitializationHandler(ContainerBuilder builder) =>
             CMS.Base.ApplicationEvents.Initialized.Execute += (sender, eventArgs) => AutoFacConfig.ConfigureContainer(builder);
 
-        private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptionsService<XperienceOptions> optionsService)
+        private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
         {
-            var defaultCulture = optionsService.Options.DefaultCulture ?? DefaultCultureFallback;
+            var defaultCulture = optionsAccessor.Value.DefaultCulture ?? DefaultCultureFallback;
             var spanishCulture = "es-ES";
 
             var routeOptions = new List<RouteBuilderOptions>

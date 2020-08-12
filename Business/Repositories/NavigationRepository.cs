@@ -28,7 +28,12 @@ namespace Business.Repositories
 
         protected readonly string[] _slugEnabledPageTypes = new string[]
         {
-            "MedioClinic.HomePage", "MedioClinic.BasicPageWithUrlSlug", "MedioClinic.SiteSection", "MedioClinic.NamePerexText", "MedioClinic.User", "MedioClinic.Doctor"
+            CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME,
+            CMS.DocumentEngine.Types.MedioClinic.BasicPageWithUrlSlug.CLASS_NAME,
+            CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME,
+            CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME,
+            CMS.DocumentEngine.Types.MedioClinic.User.CLASS_NAME,
+            CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME
         };
 
         protected NavigationItem RootDto => _basePageRepository.GetPages(query =>

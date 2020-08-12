@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Abstractions;
+using Core;
 
 namespace Identity.Models.Account
 {
-    public class RegisterViewModel : IViewModel
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "General.FirstName")]

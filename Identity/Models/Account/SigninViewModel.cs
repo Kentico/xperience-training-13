@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 
-using Abstractions;
+using Core;
 
 namespace Identity.Models.Account
 {
-    public class SignInViewModel : IViewModel
+    public class SignInViewModel
     {
         public EmailViewModel EmailViewModel { get; set; }
 

@@ -8,7 +8,7 @@ namespace Business.Repositories
 {
     public class UrlSlugPageRepository : BasePageRepository<BasicPageWithUrlSlug, TreeNode>
     {
-        public UrlSlugPageRepository(IRepositoryDependencies repositoryDependencies) : base(repositoryDependencies)
+        public UrlSlugPageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
 

@@ -1,8 +1,8 @@
-﻿using Abstractions;
+﻿using Core;
 
 namespace Identity.Models.Account
 {
-    public class ResetPasswordViewModel : IViewModel
+    public class ResetPasswordViewModel
     {
         public int UserId { get; set; }
 
