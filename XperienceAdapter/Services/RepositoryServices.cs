@@ -3,9 +3,7 @@
 using CMS.Base;
 using Kentico.Content.Web.Mvc;
 
-using Core;
-
-namespace XperienceAdapter
+namespace XperienceAdapter.Services
 {
     public class RepositoryServices : IRepositoryServices
     {

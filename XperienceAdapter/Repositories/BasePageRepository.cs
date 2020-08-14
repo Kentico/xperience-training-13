@@ -8,6 +8,7 @@ using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Models;
+using XperienceAdapter.Services;
 
 namespace XperienceAdapter.Repositories
 {

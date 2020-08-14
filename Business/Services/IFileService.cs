@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Core
+using Core;
+
+namespace Business.Services
 {
     public interface IFileService : IService
     {

@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Kentico.Content.Web.Mvc;
 using Kentico.Web.Mvc;
 
-using Core;
-
-namespace XperienceAdapter
+namespace XperienceAdapter.Services
 {
     public class SiteContextService : ISiteContextService
     {

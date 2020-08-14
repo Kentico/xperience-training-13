@@ -1,6 +1,6 @@
 ﻿using CMS.DocumentEngine;
 
-using XperienceAdapter;
+using XperienceAdapter.Services;
 using XperienceAdapter.Repositories;
 using Business.Models;
 

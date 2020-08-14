@@ -1,6 +1,6 @@
 ﻿using Core;
 
-namespace XperienceAdapter
+namespace XperienceAdapter.Services
 {
     /// <summary>
     /// Captures information related the current site.

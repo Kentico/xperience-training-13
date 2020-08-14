@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 
 using Core;
-using XperienceAdapter;
+using XperienceAdapter.Services;
 using XperienceAdapter.Repositories;
 using Business.Repositories;
 
