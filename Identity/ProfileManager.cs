@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using EnumsNET;
 
+using CMS.Base.UploadExtensions;
 using CMS.Helpers;
 
 using XperienceAdapter.Logging;
@@ -14,6 +15,15 @@ using Identity.Models;
 using Identity.Models.Account;
 using Identity.Models.Profile;
 using Identity.Services;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
+using Business.Configuration;
+using System.Linq;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using CMS.Membership;
+using CMS.Base;
+using Business.Models;
 
 namespace Identity
 {
@@ -21,12 +31,19 @@ namespace Identity
     {
         //public IAvatarRepository AvatarRepository { get; }
 
-        protected readonly IFileService _fileService;
+        protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
         protected readonly IUserModelService _userModelService;
 
+        protected readonly IFileService _fileService;
+
+        protected readonly IAvatarService _avatarService;
+
+        protected readonly ISiteService _siteService;
+
         public ProfileManager(
             ILogger<ProfileManager> logger,
+            IOptionsMonitor<XperienceOptions> optionsMonitor,
             //IAvatarRepository avatarRepository,
             IFileService fileService,
             IUserModelService userModelService,
@@ -78,7 +95,7 @@ namespace Identity
             var userTitle = ResHelper.GetString("General.User");
             var userDoesntExistTitle = ResHelper.GetString("Adm.User.NotExist");
             profileResult.Data = (uploadModel, userTitle);
-            MedioClinicUser user = null;
+            MedioClinicUser user = default;
 
             try
             {
@@ -114,16 +131,30 @@ namespace Identity
 
             try
             {
-                // We need to use the user store directly due to the design of Microsoft.AspNet.Identity.Core.UserManager.UpdateAsync().
+                // We need to use the user store directly due to the design of Microsoft.AspNetCore.Identity.UserManager.UpdateAsync().
                 await _userManager.UserStore.UpdateAsync(user, CancellationToken.None);
 
-                //var avatarFile = uploadModel.CommonUserViewModel.AvatarFile;
+                var avatarFile = uploadModel.CommonUserViewModel.AvatarFile;
+                var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions.AllowedImageExtensions;
+                var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions.FileSizeLimit;
 
-                //if (avatarFile != null)
-                //{
-                //    var avatarBinary = _fileService.GetPostedFileBinary(avatarFile);
-                //    AvatarRepository.UploadUserAvatar(user, avatarBinary);
-                //}
+                if (avatarFile != null && allowedExtensions?.Any() == true)
+                {
+                    var property = typeof(CommonUserViewModel).GetProperty(nameof(CommonUserViewModel.AvatarFile));
+                    var displayName = property?.GetCustomAttribute<DisplayAttribute>()?.Name;
+                    var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit);
+
+                    if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
+                    {
+                        if (!_avatarService.UpdateAvatar(uploadedFileResult.UploadedFile, uploadModel.CommonUserViewModel.Id, _siteService.CurrentSite.SiteName))
+                        {
+                            var exception = new Exception("Updating of the avatar file failed.");
+                            HandlePostProfileException(ref profileResult, exception, PostProfileResultState.UserNotUpdated);
+
+                            return profileResult;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -156,11 +187,6 @@ namespace Identity
             if (user != null)
             {
                 var roles = user.Roles.ToMedioClinicRoles();
-                //string avatarPhysicalPath = EnsureAvatarPhysicalPath(user, requestContext, forceAvatarFileOverwrite);
-
-                //var avatarRelativePath = avatarPhysicalPath != null
-                //        ? _fileService.GetServerRelativePath(requestContext.HttpContext.Request, avatarPhysicalPath)
-                //        : string.Empty;
 
                 var commonUserModelCustomMappings = new Dictionary<(string propertyName, Type propertyType), object>
                 {

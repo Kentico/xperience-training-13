@@ -44,6 +44,11 @@
         /// Code name of the medical centers library.
         /// </summary>
         public string? MedicalCentersLibrary { get; set; }
+
+        /// <summary>
+        /// File size limit.
+        /// </summary>
+        public long FileSizeLimit { get; set; }
     }
 
     /// <summary>

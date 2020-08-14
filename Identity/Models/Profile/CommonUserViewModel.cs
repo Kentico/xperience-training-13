@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 //using Business.Attributes;
 using Identity.Models.Account;
+using Microsoft.AspNetCore.Http;
 
 namespace Identity.Models.Profile
 {
@@ -50,13 +51,8 @@ namespace Identity.Models.Profile
         [Display(Name = "Models.Profile.CommonUserViewModel.Nationality")]
         public string Nationality { get; set; }
 
-        //[HiddenInput]
-        //public string AvatarContentPath { get; set; }
-
-        //[Display(Name = "Models.Profile.CommonUserViewModel.AvatarFile")]
-        //[DataType(DataType.Upload)]
-        //[FileExtensions(ErrorMessage = "Models.AllowedExtensions")]
-        ////[HttpPostedFileExtensions(ErrorMessage = "Models.AllowedExtensions")]
-        //public HttpPostedFileBase AvatarFile { get; set; }
+        [Display(Name = "Models.Profile.CommonUserViewModel.AvatarFile")]
+        [FileExtensions(ErrorMessage = "Models.AllowedExtensions")]
+        public IFormFile AvatarFile { get; set; }
     }
 }

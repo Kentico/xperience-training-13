@@ -1,14 +1,14 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using Core;
+using XperienceAdapter.Models;
+using Business.Models;
 
 namespace Business.Services
 {
     public interface IFileService : IService
     {
-        Task<Stream> ProcessFormFile<T>(IFormFile formFile, ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit);
+        Task<(FormFileResultState ResultState, UploadedFile? UploadedFile)> ProcessFormFile(IFormFile formFile, string[] permittedExtensions, long sizeLimit);
     }
 }
