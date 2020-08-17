@@ -27,6 +27,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using Identity;
+using MedioClinic.ModelBinders;
 
 namespace MedioClinic
 {
@@ -50,7 +51,8 @@ namespace MedioClinic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()));
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));

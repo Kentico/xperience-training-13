@@ -46,13 +46,25 @@ namespace XperienceAdapter.Logging
             {
                 var eventType = MapLogLevel(logLevel);
                 var siteId = Service.ResolveOptional<ISiteService>().CurrentSite?.SiteID ?? default;
+                EventLogData eventData;
 
-                var eventData = new EventLogData(eventType, _name, eventId.Name)
+                if (!string.IsNullOrEmpty(eventId.Name))
                 {
-                    SiteID = siteId,
-                    EventDescription = message,
-                    Exception = exception
-                };
+                    eventData = new EventLogData(eventType, _name, eventId.Name)
+                    {
+                        SiteID = siteId,
+                        EventDescription = message,
+                        Exception = exception
+                    };
+                }
+                else
+                {
+                    eventData = new EventLogData(eventType, _name, message)
+                    {
+                        SiteID = siteId,
+                        Exception = exception
+                    };
+                }
 
                 // Xperience buffers all logged events in the memory, up to the point when
                 // the database is available. No need to buffer or ask about the database
