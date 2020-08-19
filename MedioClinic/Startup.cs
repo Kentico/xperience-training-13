@@ -27,7 +27,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using Identity;
-using MedioClinic.ModelBinders;
+using MedioClinic.Areas.Identity.ModelBinders;
 
 namespace MedioClinic
 {

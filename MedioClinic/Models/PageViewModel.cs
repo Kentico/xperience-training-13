@@ -15,7 +15,7 @@ namespace MedioClinic.Models
             string title,
             ISiteService siteService,
             string? message = default,
-            bool displayAsRaw = false,
+            bool displayAsRaw = default,
             MessageType messageType = MessageType.Info) =>
             new PageViewModel()
             {
@@ -42,16 +42,16 @@ namespace MedioClinic.Models
         }
     }
 
-    public class PageViewModel<TViewModel> : PageViewModel where TViewModel : class
+    public class PageViewModel<TViewModel> : PageViewModel where TViewModel : class, new()
     {
         public TViewModel? Data { get; set; }
 
         public static PageViewModel<TViewModel> GetPageViewModel(
-            TViewModel data,
+            TViewModel? data,
             string title,
             ISiteService siteService,
             string? message = default,
-            bool displayAsRaw = false,
+            bool displayAsRaw = default,
             MessageType messageType = MessageType.Info) =>
             new PageViewModel<TViewModel>()
             {

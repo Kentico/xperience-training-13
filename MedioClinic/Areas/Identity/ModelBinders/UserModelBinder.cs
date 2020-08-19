@@ -10,7 +10,7 @@ using Identity.Extensions;
 using Identity.Models;
 using Identity.Models.Profile;
 
-namespace MedioClinic.ModelBinders
+namespace MedioClinic.Areas.Identity.ModelBinders
 {
     internal class UserModelBinder : IModelBinder
     {

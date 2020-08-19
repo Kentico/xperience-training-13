@@ -28,6 +28,8 @@
         public MediaLibraryOptions? MediaLibraryOptions { get; set; }
 
         public ContentTreeLocationOptions? ContentTreeLocationOptions { get; set; }
+
+        public IdentityOptions? IdentityOptions { get; set; }
     }
 
     /// <summary>
@@ -60,5 +62,13 @@
         /// Start location of the bottom navigation.
         /// </summary>
         public string? BottomNavigationAliasPath { get; set; }
+    }
+
+    /// <summary>
+    /// Identity-related options.
+    /// </summary>
+    public class IdentityOptions
+    {
+        public bool EmailConfirmedRegistration { get; set; }
     }
 }

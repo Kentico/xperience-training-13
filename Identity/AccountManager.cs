@@ -31,13 +31,11 @@ namespace Identity
             IUrlHelper urlHelper,
             IMedioClinicUserManager<MedioClinicUser> userManager,
             SignInManager<MedioClinicUser> signInManager
-            //IAvatarRepository avatarRepository
             )
             : base(logger, userManager)
         {
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             SignInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-            //AvatarRepository = avatarRepository ?? throw new ArgumentNullException(nameof(avatarRepository));
         }
 
         public async Task<IdentityManagerResult<RegisterResultState>> RegisterAsync(RegisterViewModel uploadModel, bool emailConfirmed, HttpRequest request)

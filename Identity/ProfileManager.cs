@@ -29,13 +29,11 @@ namespace Identity
 {
     public class ProfileManager : BaseIdentityManager, IProfileManager
     {
-        //public IAvatarRepository AvatarRepository { get; }
-
         protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
-        protected readonly IUserModelService _userModelService;
-
         protected readonly IFileService _fileService;
+
+        protected readonly IUserModelService _userModelService;
 
         protected readonly IAvatarService _avatarService;
 
@@ -44,17 +42,19 @@ namespace Identity
         public ProfileManager(
             ILogger<ProfileManager> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
-            //IAvatarRepository avatarRepository,
             IFileService fileService,
             IUserModelService userModelService,
+            IAvatarService avatarService,
+            ISiteService siteService,
             IMedioClinicUserManager<MedioClinicUser> userManager
-            //IMedioClinicUserStore userStore,
             )
                 : base(logger, userManager)
         {
-            //AvatarRepository = avatarRepository ?? throw new ArgumentNullException(nameof(avatarRepository));
+            _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             _userModelService = userModelService ?? throw new ArgumentNullException(nameof(userModelService));
+            _avatarService = avatarService ?? throw new ArgumentNullException(nameof(avatarService));
+            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
         }
 
         public async Task<IdentityManagerResult<GetProfileResultState, (IUserViewModel UserViewModel, string PageTitle)>>
