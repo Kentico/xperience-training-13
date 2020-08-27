@@ -1,41 +1,49 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 
 using CMS.Helpers;
 using Kentico.Membership;
 
 using Business.Extensions;
+using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
-using System.Linq;
 
 namespace Identity
 {
     public class AccountManager : BaseIdentityManager, IAccountManager
     {
-        protected IUrlHelper _urlHelper;
+        protected readonly IUrlHelperFactory _urlHelperFactory;
 
-        protected IMessageService _messageService;
+        protected readonly IActionContextAccessor _actionContextAccessor;
 
-        public SignInManager<MedioClinicUser> SignInManager { get; }
+        protected readonly IMessageService _messageService;
+
+        protected readonly IMedioClinicSignInManager<MedioClinicUser> _signInManager;
 
         //public IAvatarRepository AvatarRepository { get; set; }
 
 
         public AccountManager(
             ILogger<AccountManager> logger,
-            IUrlHelper urlHelper,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccessor,
+            IMessageService messageService,
             IMedioClinicUserManager<MedioClinicUser> userManager,
-            SignInManager<MedioClinicUser> signInManager
+            IMedioClinicSignInManager<MedioClinicUser> signInManager
             )
             : base(logger, userManager)
         {
-            _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
-            SignInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
+            _actionContextAccessor = actionContextAccessor ?? throw new ArgumentNullException(nameof(actionContextAccessor));
+            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         }
 
         public async Task<IdentityManagerResult<RegisterResultState>> RegisterAsync(RegisterViewModel uploadModel, bool emailConfirmed, HttpRequest request)
@@ -50,11 +58,11 @@ namespace Identity
             };
 
             var accountResult = new IdentityManagerResult<RegisterResultState>();
-            IdentityResult identityResult = null;
+            IdentityResult? identityResult = default;
 
             try
             {
-                identityResult = await _userManager.CreateAsync(user, uploadModel.PasswordConfirmationViewModel.Password);
+                identityResult = await _userManager.CreateAsync(user, uploadModel.PasswordConfirmationViewModel.Password!);
             }
             catch (Exception ex)
             {
@@ -63,12 +71,12 @@ namespace Identity
                 return accountResult;
             }
 
-            if (identityResult != null && identityResult.Succeeded)
+            if (identityResult?.Succeeded == true)
             {
                 // Registration: Confirmed registration (begin)
                 if (emailConfirmed)
                 {
-                    string token = null;
+                    string? token = default;
 
                     try
                     {
@@ -85,7 +93,10 @@ namespace Identity
                     if (!string.IsNullOrEmpty(token))
                     {
                         // TODO: use nameof (via input params).
-                        var confirmationUrl = _urlHelper.AbsoluteUrl(request, "ConfirmUser", routeValues: new { userId = user.Id, token });
+                        var confirmationUrl = _urlHelperFactory
+                            .GetUrlHelper(_actionContextAccessor.ActionContext)
+                            .AbsoluteUrl(request, "ConfirmUser", routeValues: new { userId = user.Id, token });
+
                         var subject = ResHelper.GetString("AccountManager.Register.Email.Confirm.Subject");
                         var body = ResHelper.GetStringFormat("AccountManager.Register.Email.Confirm.Body", confirmationUrl);
 
@@ -105,7 +116,7 @@ namespace Identity
                     try
                     {
                         //await CreateNewAvatarAsync(user, requestContext.HttpContext.Server);
-                        await SignInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
                         accountResult.ResultState = RegisterResultState.SignedIn;
                         accountResult.Success = true;
                     }
@@ -120,7 +131,7 @@ namespace Identity
                 // Registration: Direct sign in (end)
             }
 
-            accountResult.Errors.AddNonNullRange(identityResult.Errors.Select(error => error.Description));
+            accountResult.Errors.AddNonNullRange(identityResult?.Errors.Select(error => error.Description));
 
             return accountResult;
         }
@@ -170,11 +181,11 @@ namespace Identity
         public async Task<IdentityManagerResult<SignInResultState>> SignInAsync(SignInViewModel uploadModel)
         {
             var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>();
-            MedioClinicUser user = null;
+            MedioClinicUser? user = default;
 
             try
             {
-                user = await _userManager.FindByNameAsync(uploadModel.EmailViewModel.Email);
+                user = await _userManager.FindByNameAsync(uploadModel.EmailViewModel.Email!);
             }
             catch (Exception ex)
             {
@@ -198,7 +209,7 @@ namespace Identity
 
             try
             {
-                signInResult = await SignInManager.PasswordSignInAsync(uploadModel.EmailViewModel.Email, uploadModel.PasswordViewModel.Password, uploadModel.StaySignedIn, false);
+                signInResult = await _signInManager.PasswordSignInAsync(uploadModel.EmailViewModel.Email!, uploadModel.PasswordViewModel.Password!, uploadModel.StaySignedIn, false);
             }
             catch (Exception ex)
             {
@@ -224,7 +235,7 @@ namespace Identity
 
             try
             {
-                await SignInManager.SignOutAsync();
+                await _signInManager.SignOutAsync();
                 accountResult.Success = true;
                 accountResult.ResultState = SignOutResultState.SignedOut;
             }
@@ -240,11 +251,11 @@ namespace Identity
         public async Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(EmailViewModel uploadModel, HttpRequest request)
         {
             var accountResult = new IdentityManagerResult<ForgotPasswordResultState>();
-            MedioClinicUser user = null;
+            MedioClinicUser? user = default;
 
             try
             {
-                user = await _userManager.FindByEmailAsync(uploadModel.Email);
+                user = await _userManager.FindByEmailAsync(uploadModel.Email!);
             }
             catch (Exception ex)
             {
@@ -263,7 +274,7 @@ namespace Identity
             }
             // Registration: Confirmed registration (end)
 
-            string token = null;
+            string? token = default;
 
             try
             {
@@ -278,8 +289,11 @@ namespace Identity
             }
 
             // TODO: Use nameof.
-            var resetUrl = _urlHelper.AbsoluteUrl(request, "ResetPassword", "Account", new { userId = user.Id, token });
-            var subject = ResHelper.GetString("PassReset.Title");
+            var resetUrl = _urlHelperFactory
+                .GetUrlHelper(_actionContextAccessor.ActionContext)
+                .AbsoluteUrl(request, "ResetPassword", "Account", new { userId = user.Id, token });
+
+            var subject = ResHelper.GetString("Identity.Account.ResetPassword.Title");
             var body = ResHelper.GetStringFormat("AccountManager.ForgotPassword.Email.Body", resetUrl);
 
             try
@@ -308,7 +322,7 @@ namespace Identity
             try
             {
                 var user = await _userManager.FindByIdAsync(userId.ToString());
-                tokenVerified = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultEmailProvider, "ResetPassword", token);
+                tokenVerified = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword", token);
             }
             catch (Exception ex)
             {
@@ -319,14 +333,17 @@ namespace Identity
                 return accountResult;
             }
 
-            accountResult.Success = true;
-            accountResult.ResultState = ResetPasswordResultState.TokenVerified;
-
-            accountResult.Data = new ResetPasswordViewModel
+            if (tokenVerified)
             {
-                UserId = userId,
-                Token = token
-            };
+                accountResult.Success = true;
+                accountResult.ResultState = ResetPasswordResultState.TokenVerified;
+
+                accountResult.Data = new ResetPasswordViewModel
+                {
+                    UserId = userId,
+                    Token = token
+                };
+            }
 
             return accountResult;
         }
@@ -341,8 +358,8 @@ namespace Identity
                 var user = await _userManager.FindByIdAsync(uploadModel.UserId.ToString());
                 identityResult = await _userManager.ResetPasswordAsync(
                     user,
-                    uploadModel.Token,
-                    uploadModel.PasswordConfirmationViewModel.Password);
+                    uploadModel.Token!,
+                    uploadModel.PasswordConfirmationViewModel.Password!);
             }
             catch (Exception ex)
             {

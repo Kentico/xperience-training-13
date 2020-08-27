@@ -2,6 +2,6 @@
 {
     public class DoctorViewModel : IUserViewModel
     {
-        public CommonUserViewModel CommonUserViewModel { get; set; }
+        public CommonUserViewModel CommonUserViewModel { get; set; } = new CommonUserViewModel();
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 using Core;
 
-namespace Identity.Models.Account
+namespace Business.Models
 {
     public class EmailViewModel
     {
@@ -12,6 +12,6 @@ namespace Identity.Models.Account
         [DataType(DataType.EmailAddress)]
         [EmailAddress(ErrorMessage = "Models.EmailFormat")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
     }
 }

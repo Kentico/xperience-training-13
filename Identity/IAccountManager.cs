@@ -1,15 +1,17 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
+using Core;
+using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
-using Microsoft.AspNetCore.Http;
 
 namespace Identity
 {
     /// <summary>
     /// Manager of user account operations.
     /// </summary>
-    public interface IAccountManager
+    public interface IAccountManager : IService
     {
         /// <summary>
         /// Registers a new user account.

@@ -10,7 +10,7 @@ namespace Business.Extensions
         /// <typeparam name="T">List entry type.</typeparam>
         /// <param name="list">List to add to.</param>
         /// <param name="rangeToAdd">Range to add.</param>
-        public static void AddNonNullRange<T>(this List<T> list, IEnumerable<T> rangeToAdd)
+        public static void AddNonNullRange<T>(this List<T> list, IEnumerable<T>? rangeToAdd)
         {
             if (rangeToAdd != null)
             {

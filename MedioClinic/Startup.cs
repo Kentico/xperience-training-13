@@ -51,8 +51,11 @@ namespace MedioClinic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCaching();
+
             services.AddControllersWithViews()
                 .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()));
+
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
@@ -97,11 +100,21 @@ namespace MedioClinic
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseResponseCaching();
             app.UseRequestCulture();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(
+                //    name: "areas",
+                //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapAreaControllerRoute(
+                    name: "identity",
+                    areaName: "Identity",
+                    pattern: "identity/{controller=Account}/{action=Register}/{id?}");
+
                 MapCultureSpecificRoutes(endpoints, optionsAccessor);
                 endpoints.MapDefaultControllerRoute();
             });
@@ -182,8 +195,14 @@ namespace MedioClinic
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
                 .AddApplicationDefaultTokenProviders()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
+                .AddRoleStore<ApplicationRoleStore<ApplicationRole>>()
                 .AddUserManager<MedioClinicUserManager>()
-                .AddSignInManager<SignInManager<MedioClinicUser>>();
+                .AddSignInManager<MedioClinicSignInManager>();
+
+            //services.AddHttpContextAccessor();
+            //services.AddScoped(typeof(ISecurityStampValidator), typeof(SecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
+            //services.AddScoped(typeof(ITwoFactorSecurityStampValidator), typeof(TwoFactorSecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
+            //services.AddScoped<IMedioClinicSignInManager<MedioClinicUser>, MedioClinicSignInManager>();
 
             services.AddAuthentication();
             services.AddAuthorization();

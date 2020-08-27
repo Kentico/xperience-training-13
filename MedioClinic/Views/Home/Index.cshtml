@@ -1,8 +1,11 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model PageViewModel<(Business.Models.HomePage HomePage, IEnumerable<Business.Models.CompanyService> CompanyServices)>
+
+@{
+    var backgroundLeft = Url.Kentico().ImageUrl(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true).ServerPath, SizeConstraint.Empty);
+    var backgroundRight = Url.Kentico().ImageUrl(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true).ServerPath, SizeConstraint.Empty);
 }
 
-<header class="row mc-page-fold-left" style="background-image:url(/images/background-left.png)">
+<header class="row mc-page-fold-left" style="background-image:url(@backgroundLeft)">
     <div></div>
     <div class="container mc-section-3">
         <div class="col xl4 offset-xl8 l7 offset-l5 m9 offset-m3 s12">
@@ -26,7 +29,7 @@
         </div>
     </div>
 </header>
-<main class="row mc-page-fold-right" style="background-image:url(~/images/background-right.png)">
+<main class="row mc-page-fold-right" style="background-image:url(@backgroundRight)">
     <div class="container mc-section-4">
         <h2 id="services" class="hide-on-med-and-down">Services</h2>
         <section class="row section">

@@ -8,19 +8,24 @@ using Identity.Models;
 using MedioClinic.Models;
 using Microsoft.Extensions.Options;
 using Business.Configuration;
+using Microsoft.Build.Framework;
+using Microsoft.Extensions.Logging;
 
 namespace MedioClinic.Controllers
 {
     public class BaseController : Controller
     {
+        protected readonly ILogger<BaseController> _logger;
+
         protected readonly ISiteService _siteService;
 
         protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
         protected string ErrorTitle => Localize("General.Error");
 
-        public BaseController(ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor)
+        public BaseController(ILogger<BaseController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         }
@@ -28,18 +33,21 @@ namespace MedioClinic.Controllers
         protected PageViewModel GetPageViewModel(
             string title,
             string? message = default,
+            bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info) =>
-            PageViewModel.GetPageViewModel(title, _siteService, message, displayAsRaw, messageType);
+            PageViewModel.GetPageViewModel(title, _siteService, message, displayMessage, displayAsRaw, messageType);
 
         protected PageViewModel<TViewModel> GetPageViewModel<TViewModel>(
-            TViewModel? data,
+            TViewModel data,
             string title,
             string? message = default,
+            bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info)
-            where TViewModel : class, new() =>
-            PageViewModel<TViewModel>.GetPageViewModel(data, title, _siteService, message, displayAsRaw, messageType);
+            //where TViewModel : class, new() =>
+            =>
+            PageViewModel<TViewModel>.GetPageViewModel(data, title, _siteService, message, displayMessage, displayAsRaw, messageType);
 
         protected string Localize(string resourceKey) =>
             ResHelper.GetString(resourceKey);
@@ -57,6 +65,7 @@ namespace MedioClinic.Controllers
                 uploadModel.Data,
                 Localize("BasicForm.InvalidInput"),
                 Localize("Controllers.Base.InvalidInput.Message"),
+                true,
                 false,
                 MessageType.Error);
 

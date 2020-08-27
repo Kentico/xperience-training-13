@@ -5,28 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
+using CMS.Base;
 using CMS.DocumentEngine;
 
-using MedioClinic.Models;
 using XperienceAdapter.Repositories;
+using Business.Configuration;
+using Business.Models;
+using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> _homePageRepository;
 
-        private readonly IPageRepository<Business.Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> _homePageRepository;
-
-        private readonly IPageRepository<Business.Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> _companyServiceRepository;
+        private readonly IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> _companyServiceRepository;
 
         public HomeController(
             ILogger<HomeController> logger,
-            IPageRepository<Business.Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
-            IPageRepository<Business.Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
+            ISiteService siteService,
+            IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
+            IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository) 
+            : base(logger, siteService, optionsMonitor)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));
             _companyServiceRepository = companyServiceRepository ?? throw new ArgumentNullException(nameof(companyServiceRepository));
         }
@@ -55,7 +59,8 @@ namespace MedioClinic.Controllers
                         .PagePath(homePath, PathTypeEnum.Children)
                         .PageOrder()));
 
-            var viewModel = (home, companyServices);
+            var data = (home, companyServices);
+            var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, home.Name!);
 
             return View(viewModel);
         }

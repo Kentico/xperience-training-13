@@ -11,7 +11,7 @@ namespace Identity.Services
         public object MapToCustomModel(
             MedioClinicUser user,
             Type targetModelType,
-            Dictionary<(string propertyName, Type propertyType), object> customMappings = null)
+            Dictionary<(string propertyName, Type propertyType), object>? customMappings = default)
         {
             if (user == null)
             {
@@ -45,13 +45,13 @@ namespace Identity.Services
                 }
             }
 
-            return viewModel;
+            return viewModel!;
         }
 
         public MedioClinicUser MapToMedioClinicUser(
             object customModel,
             MedioClinicUser userToMapTo,
-            Dictionary<(string propertyName, Type propertyType), object> customMappings = null)
+            Dictionary<(string propertyName, Type propertyType), object>? customMappings = default)
         {
             if (customModel == null)
             {

@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel;
 
-using Core;
+using Business.Models;
 
 namespace Identity.Models.Account
 {
     public class SignInViewModel
     {
-        public EmailViewModel EmailViewModel { get; set; }
+        public EmailViewModel EmailViewModel { get; set; } = new EmailViewModel();
 
-        public PasswordViewModel PasswordViewModel { get; set; }
+        public PasswordViewModel PasswordViewModel { get; set; } = new PasswordViewModel();
 
-        [DisplayName("Models.Account.StaySignedIn")]
+        [DisplayName("Identity.Account.StaySignedIn")]
         public bool StaySignedIn { get; set; }
     }
 }

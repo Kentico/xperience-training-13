@@ -61,7 +61,7 @@ namespace Identity
             GetProfileAsync(string userName)
         {
             var profileResult = new IdentityManagerResult<GetProfileResultState, (IUserViewModel, string)>();
-            MedioClinicUser user = null;
+            MedioClinicUser user = default!;
 
             try
             {
@@ -82,7 +82,7 @@ namespace Identity
             {
                 profileResult.Success = true;
                 profileResult.ResultState = GetProfileResultState.UserFound;
-                profileResult.Data = (model, title);
+                profileResult.Data = (model!, title!);
             }
 
             return profileResult;
@@ -95,7 +95,7 @@ namespace Identity
             var userTitle = ResHelper.GetString("General.User");
             var userDoesntExistTitle = ResHelper.GetString("Adm.User.NotExist");
             profileResult.Data = (uploadModel, userTitle);
-            MedioClinicUser user = default;
+            MedioClinicUser user = default!;
 
             try
             {
@@ -111,7 +111,7 @@ namespace Identity
 
             var commonUserModelCustomMappings = new Dictionary<(string propertyName, Type propertyType), object>
             {
-                { (nameof(MedioClinicUser.Email), typeof(string)), uploadModel.CommonUserViewModel.EmailViewModel.Email },
+                { (nameof(MedioClinicUser.Email), typeof(string)), uploadModel.CommonUserViewModel.EmailViewModel.Email! },
             };
 
             try
@@ -135,14 +135,14 @@ namespace Identity
                 await _userManager.UserStore.UpdateAsync(user, CancellationToken.None);
 
                 var avatarFile = uploadModel.CommonUserViewModel.AvatarFile;
-                var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions.AllowedImageExtensions;
-                var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions.FileSizeLimit;
+                var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
+                var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions?.FileSizeLimit;
 
                 if (avatarFile != null && allowedExtensions?.Any() == true)
                 {
                     var property = typeof(CommonUserViewModel).GetProperty(nameof(CommonUserViewModel.AvatarFile));
                     var displayName = property?.GetCustomAttribute<DisplayAttribute>()?.Name;
-                    var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit);
+                    var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit!.Value);
 
                     if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
                     {
@@ -169,7 +169,7 @@ namespace Identity
             {
                 profileResult.Success = true;
                 profileResult.ResultState = PostProfileResultState.UserUpdated;
-                profileResult.Data = (model, title);
+                profileResult.Data = (model!, title!);
             }
 
             return profileResult;
@@ -182,7 +182,7 @@ namespace Identity
         /// <param name="requestContext">Request context.</param>
         /// <param name="forceAvatarFileOverwrite">Flag that signals the need to update the app-local physical avatar file.</param>
         /// <returns>The view model and a page title.</returns>
-        protected (IUserViewModel UserViewModel, string PageTitle) GetViewModelByUserRoles(MedioClinicUser user)
+        protected (IUserViewModel? UserViewModel, string? PageTitle) GetViewModelByUserRoles(MedioClinicUser user)
         {
             if (user != null)
             {
@@ -194,7 +194,7 @@ namespace Identity
                     { (nameof(CommonUserViewModel.UserName), typeof(string)), user.UserName }
                 };
 
-                object mappedParentModel = null;
+                object mappedParentModel = default!;
 
                 try
                 {

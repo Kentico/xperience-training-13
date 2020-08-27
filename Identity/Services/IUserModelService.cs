@@ -18,7 +18,7 @@ namespace Identity.Services
         /// <param name="targetModelType">The type of the output object.</param>
         /// <param name="customMappings">Custom mappings of properties with different names and/or types.</param>
         /// <returns>The <paramref name="targetModelType"/> object with mapped properties.</returns>
-        object MapToCustomModel(MedioClinicUser user, Type targetModelType, Dictionary<(string propertyName, Type propertyType), object> customMappings = null);
+        object MapToCustomModel(MedioClinicUser user, Type targetModelType, Dictionary<(string propertyName, Type propertyType), object>? customMappings = default);
 
         /// <summary>
         /// Maps properties of the <paramref name="customModel"/> object to properties of the same name and type in the <see cref="MedioClinicUser"/> object.
@@ -27,6 +27,6 @@ namespace Identity.Services
         /// <param name="userToMapTo">The target Identity user object.</param>
         /// <param name="customMappings">Custom mappings of properties with different names and/or types.</param>
         /// <returns>The mapped <see cref="MedioClinicUser"/> object.</returns>
-        MedioClinicUser MapToMedioClinicUser(object customModel, MedioClinicUser userToMapTo, Dictionary<(string propertyName, Type propertyType), object> customMappings = null);
+        MedioClinicUser MapToMedioClinicUser(object customModel, MedioClinicUser userToMapTo, Dictionary<(string propertyName, Type propertyType), object>? customMappings = default);
     }
 }

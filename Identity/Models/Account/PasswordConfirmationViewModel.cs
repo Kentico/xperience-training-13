@@ -7,6 +7,6 @@ namespace Identity.Models.Account
         [DataType(DataType.Password)]
         [Display(Name = "General.ConfirmPassword")]
         [Compare("Password", ErrorMessage = "ChangePassword.ErrorNewPassword")]
-        public string ConfirmPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
     }
 }

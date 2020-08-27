@@ -52,7 +52,7 @@ namespace Business.Services
 
         public async Task<(FormFileResultState ResultState, UploadedFile? UploadedFile)> ProcessFormFile(IFormFile formFile,
             string[] permittedExtensions,
-            long sizeLimit)
+            long sizeLimit = 4194304)
         {
             // Don't trust the file name sent by the client. To display
             // the file name, HTML-encode the value.

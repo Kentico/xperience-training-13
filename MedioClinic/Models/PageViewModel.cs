@@ -7,14 +7,15 @@ namespace MedioClinic.Models
     /// </summary>
     public class PageViewModel
     {
-        public PageMetadata? Metadata { get; set; }
+        public PageMetadata Metadata { get; set; } = new PageMetadata();
 
-        public UserMessage? UserMessage { get; set; }
+        public UserMessage UserMessage { get; set; } = new UserMessage();
 
         public static PageViewModel GetPageViewModel(
             string title,
             ISiteService siteService,
             string? message = default,
+            bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info) =>
             new PageViewModel()
@@ -24,7 +25,8 @@ namespace MedioClinic.Models
                 {
                     Message = message,
                     MessageType = messageType,
-                    DisplayAsRaw = displayAsRaw
+                    DisplayAsRaw = displayAsRaw,
+                    Display = displayMessage
                 }
             };
 
@@ -42,15 +44,16 @@ namespace MedioClinic.Models
         }
     }
 
-    public class PageViewModel<TViewModel> : PageViewModel where TViewModel : class, new()
+    public class PageViewModel<TViewModel> : PageViewModel// where TViewModel : class, new()
     {
-        public TViewModel? Data { get; set; }
+        public TViewModel Data { get; set; } = default!;
 
         public static PageViewModel<TViewModel> GetPageViewModel(
-            TViewModel? data,
+            TViewModel data,
             string title,
             ISiteService siteService,
             string? message = default,
+            bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info) =>
             new PageViewModel<TViewModel>()
@@ -60,7 +63,8 @@ namespace MedioClinic.Models
                 {
                     Message = message,
                     MessageType = messageType,
-                    DisplayAsRaw = displayAsRaw
+                    DisplayAsRaw = displayAsRaw,
+                    Display = displayMessage
                 },
                 Data = data
             };

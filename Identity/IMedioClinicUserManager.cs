@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Identity
 {
-    public interface IMedioClinicUserManager<TUser> : IDisposable where TUser : class
+    public interface IMedioClinicUserManager<TUser> : IService, IDisposable where TUser : class
     {
         /// <summary>
         /// The <see cref="ILogger"/> used to log messages from the manager.

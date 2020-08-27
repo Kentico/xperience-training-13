@@ -1,0 +1,33 @@
+﻿@model MedioClinic.Models.UserMessage
+
+@{
+    string? styleSelector = default;
+
+    switch (Model.MessageType)
+    {
+        case MedioClinic.Models.MessageType.Info:
+        default:
+            styleSelector = "mc-user-message light-blue lighten-5";
+            break;
+        case MedioClinic.Models.MessageType.Warning:
+            styleSelector = "mc-user-message yellow lighten-4";
+            break;
+        case MedioClinic.Models.MessageType.Error:
+            styleSelector = "mc-user-message deep-orange lighten-2";
+            break;
+    }
+}
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <p class="@Html.Raw(styleSelector)">
+        @if (Model.DisplayAsRaw)
+        {
+            @Html.Raw(Model.Message);
+        }
+        else
+        {
+            @Html.DisplayFor(m => m.Message);
+        }
+    </p>
+}

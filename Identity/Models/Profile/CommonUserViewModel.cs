@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 //using Business.Attributes;
+using Business.Models;
 using Identity.Models.Account;
-using Microsoft.AspNetCore.Http;
 
 namespace Identity.Models.Profile
 {
@@ -14,17 +15,17 @@ namespace Identity.Models.Profile
         public int Id { get; set; }
 
         [HiddenInput]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required]
         [Display(Name = "Models.Profile.CommonUserViewModel.FirstName")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Required]
         [Display(Name = "Models.Profile.CommonUserViewModel.LastName")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.FullName")]
         public string FullName => $"{FirstName} {LastName}";
@@ -37,22 +38,22 @@ namespace Identity.Models.Profile
         public Gender Gender { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.City")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.Street")]
-        public string Street { get; set; }
+        public string? Street { get; set; }
 
-        public EmailViewModel EmailViewModel { get; set; }
+        public EmailViewModel EmailViewModel { get; set; } = new EmailViewModel();
 
         [DataType(DataType.PhoneNumber)]
         [Phone(ErrorMessage = "Models.PhoneFormat")]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.Nationality")]
-        public string Nationality { get; set; }
+        public string? Nationality { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.AvatarFile")]
         [FileExtensions(ErrorMessage = "Models.AllowedExtensions")]
-        public IFormFile AvatarFile { get; set; }
+        public IFormFile? AvatarFile { get; set; }
     }
 }
