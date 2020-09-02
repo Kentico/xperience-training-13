@@ -1,0 +1,555 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.pagetemplate>
+  <PageTemplateCategoryID>
+    <CodeName>Listing</CodeName>
+    <GUID>0cd9d6f5-4393-4f6d-9273-c7e667809496</GUID>
+    <ObjectType>cms.pagetemplatecategory</ObjectType>
+  </PageTemplateCategoryID>
+  <PageTemplateCodeName>ListingWithSiteSelector</PageTemplateCodeName>
+  <PageTemplateCSS />
+  <PageTemplateDescription>
+    <![CDATA[Contains a page title, new object button, site selector and a list of objects (UniGrid). The site selector saves the ID of the chosen site into the UI context. You can access the value in other web parts on the template through macros: {%UIContext.SiteID% }]]>
+  </PageTemplateDescription>
+  <PageTemplateDisplayName>Listing with site selector</PageTemplateDisplayName>
+  <PageTemplateGUID>ad73ab07-caed-4e21-b897-90544d6e06f1</PageTemplateGUID>
+  <PageTemplateIconClass>icon-l-list-article</PageTemplateIconClass>
+  <PageTemplateIsLayout>False</PageTemplateIsLayout>
+  <PageTemplateLayout>
+<![CDATA[
+<cms:CMSWebPartZone ZoneID="ZoneHeader" runat="server" ZoneType="Header" />
+<cms:CMSWebPartZone ZoneID="ZoneContent" runat="server" />
+]]>
+  </PageTemplateLayout>
+  <PageTemplateLayoutType>ascx</PageTemplateLayoutType>
+  <PageTemplateProperties>
+    <form version="2">
+      <category name="SiteSelector">
+        <properties>
+          <caption>Site selector</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="AllowAll" columntype="boolean" displayinsimplemode="true" guid="37604a98-22b1-4545-9743-6e823b45a305" visible="true">
+        <properties>
+          <fieldcaption>Allow all</fieldcaption>
+          <fielddescription>{$documentation.property.allowall$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="AllowGlobal" columntype="boolean" displayinsimplemode="true" guid="5f306257-205c-4b8e-9707-0c93c38da54f" visible="true">
+        <properties>
+          <fieldcaption>Allow global</fieldcaption>
+          <fielddescription>{$documentation.property.allowglobal$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="SelectorType" columnsize="50" columntype="text" displayinsimplemode="true" guid="0e8fef88-906c-45c1-8995-c9dda7b3b9e3" visible="true">
+        <properties>
+          <fieldcaption>Site selector type</fieldcaption>
+          <fielddescription>
+<![CDATA[
+Classic: The selector provides a list of sites.
+Site or global: The selector offers the current site, the global option, and both.
+]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+Classic
+siteorglobal;Site or global
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <category name="Grid">
+        <properties>
+          <caption>Listing</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="GridName" columnsize="200" columntype="text" displayinsimplemode="true" guid="85c02f0b-bf19-401b-8f94-70bd095da2ef" visible="true">
+        <properties>
+          <fieldcaption>Grid definition path</fieldcaption>
+          <fielddescription>{$documentation.property.gridname$}</fielddescription>
+        </properties>
+        <settings>
+          <AllowManage>True</AllowManage>
+          <controlname>filesystemselector</controlname>
+          <DefaultPath>App_Data/CMSModules</DefaultPath>
+          <NewTextFileExtension>xml</NewTextFileExtension>
+          <ShowFolders>False</ShowFolders>
+        </settings>
+      </field>
+      <field allowempty="true" column="WhereCondition" columnsize="400" columntype="text" displayinsimplemode="true" guid="d80a86c5-29fe-43b3-87f1-31fa7c227864" visible="true">
+        <properties>
+          <fieldcaption>Where condition</fieldcaption>
+          <fielddescription>{$documentation.webpartproperties.where$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <AutoSize>False</AutoSize>
+          <controlname>macroeditor</controlname>
+          <EditorMode>1</EditorMode>
+          <EnablePositionMember>False</EnablePositionMember>
+          <EnableSections>False</EnableSections>
+          <EnableViewState>False</EnableViewState>
+          <FilterMode>False</FilterMode>
+          <Height>100</Height>
+          <IsTextArea>True</IsTextArea>
+          <Language>6</Language>
+          <ShowBookmarks>False</ShowBookmarks>
+          <ShowLineNumbers>False</ShowLineNumbers>
+          <ShowMacroSelector>False</ShowMacroSelector>
+          <SingleLineMode>False</SingleLineMode>
+          <SingleMacroMode>False</SingleMacroMode>
+          <SupportPasteImages>False</SupportPasteImages>
+          <Width>100</Width>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+      <field allowempty="true" column="OrderBy" columnsize="200" columntype="text" displayinsimplemode="true" guid="a4514c5f-6970-4e3e-a007-73441b05ef15" visible="true">
+        <properties>
+          <fieldcaption>Order by</fieldcaption>
+          <fielddescription>{$documentation.webpartproperties.orderby$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="EditActionURL" columnsize="200" columntype="text" displayinsimplemode="true" guid="3c848e24-ba39-4787-b825-dbadf55c6084" visible="true">
+        <properties>
+          <fieldcaption>Edit action URL</fieldcaption>
+          <fielddescription>{$documentation.property.EditActionURL$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="AfterDeleteScript" columnsize="400" columntype="text" displayinsimplemode="true" guid="4372388b-3dbd-4788-909d-34c6085c7f60" visible="true">
+        <properties>
+          <fieldcaption>After delete script</fieldcaption>
+          <fielddescription>{$documentation.property.afterdeletescript$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <AutoSize>False</AutoSize>
+          <controlname>macroeditor</controlname>
+          <EditorMode>1</EditorMode>
+          <EnablePositionMember>False</EnablePositionMember>
+          <EnableSections>False</EnableSections>
+          <EnableViewState>False</EnableViewState>
+          <FilterMode>False</FilterMode>
+          <Height>100</Height>
+          <IsTextArea>True</IsTextArea>
+          <Language>3</Language>
+          <ShowBookmarks>False</ShowBookmarks>
+          <ShowLineNumbers>False</ShowLineNumbers>
+          <ShowMacroSelector>False</ShowMacroSelector>
+          <SingleLineMode>False</SingleLineMode>
+          <SingleMacroMode>False</SingleMacroMode>
+          <SupportPasteImages>False</SupportPasteImages>
+          <Width>100</Width>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+      <field allowempty="true" column="Text" columnsize="400" columntype="text" guid="de2e8333-79aa-4d8a-9e40-206ad50885fa" visible="true">
+        <properties>
+          <fieldcaption>Text</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$templatedocumentation.TextDisplayedAboveListing$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AutoSize>False</AutoSize>
+          <controlname>macroeditor</controlname>
+          <EnablePositionMember>False</EnablePositionMember>
+          <EnableSections>False</EnableSections>
+          <EnableViewState>False</EnableViewState>
+          <Height>100</Height>
+          <Language>0</Language>
+          <ShowBookmarks>False</ShowBookmarks>
+          <ShowLineNumbers>False</ShowLineNumbers>
+          <ShowMacroSelector>False</ShowMacroSelector>
+          <SingleLineMode>False</SingleLineMode>
+          <SingleMacroMode>False</SingleMacroMode>
+          <SupportPasteImages>False</SupportPasteImages>
+          <Width>100</Width>
+        </settings>
+      </field>
+      <field allowempty="true" column="ZeroRowsText" columnsize="200" columntype="text" displayinsimplemode="true" guid="9cc195af-2420-4f43-8766-d8243249d138" visible="true">
+        <properties>
+          <fieldcaption>No record found text</fieldcaption>
+          <fielddescription>{$documentation.property.zerorowstext$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="GridExtender" columnsize="100" columntype="text" displayinsimplemode="true" guid="8ed7d85b-959d-4b8c-bbcb-0c1b50d8654e" visible="true">
+        <properties>
+          <fieldcaption>Grid extender</fieldcaption>
+          <fielddescription>{$documentation.property.gridextender$}</fielddescription>
+        </properties>
+        <settings>
+          <ClassNameColumnName>ExtenderClassName</ClassNameColumnName>
+          <controlname>assemblyclassselector</controlname>
+          <ShowClasses>True</ShowClasses>
+          <ShowEnumerations>False</ShowEnumerations>
+          <ShowInterfaces>False</ShowInterfaces>
+        </settings>
+      </field>
+      <field allowempty="true" column="ExtenderClassName" columnsize="100" columntype="text" displayinsimplemode="true" guid="39e86ecb-9d82-4dd5-9385-a1f2f5455b9e">
+        <properties>
+          <fieldcaption>Extender class name</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="EditElement" columnsize="100" columntype="text" guid="ef614f48-5a02-4ec7-99bf-c103fbe65bfd">
+        <properties>
+          <fieldcaption>e</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <category name="HeaderActions">
+        <properties>
+          <caption>Header actions</caption>
+          <visible>False</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="NewElement" columnsize="50" columntype="text" displayinsimplemode="true" guid="c009c688-cf79-452b-92b5-fc8dbcc64c08">
+        <properties>
+          <fieldcaption>New element</fieldcaption>
+          <fielddescription>{$documentation.property.newelement$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <category name="SettingKeys">
+        <properties>
+          <caption>{$webpart.documentation.DisabledModuleInfo$}</caption>
+          <collapsedbydefault>true</collapsedbydefault>
+          <collapsible>true</collapsible>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="SettingKeys" columnsize="200" columntype="text" displayinsimplemode="true" guid="336abc8d-e1c3-460b-b156-de998b309769" visible="true">
+        <properties>
+          <fieldcaption>Checked setting keys</fieldcaption>
+          <fielddescription>{$webpart.settingkeys.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+    </form>
+  </PageTemplateProperties>
+  <PageTemplateType>ui</PageTemplateType>
+  <PageTemplateWebParts>
+    <page>
+      <webpartzone id="ZoneA" v="1" />
+      <webpartzone id="ZoneHeader" v="1">
+        <properties>
+          <property name="contentafter">
+            <![CDATA[</div>]]>
+          </property>
+          <property name="contentbefore">
+            <![CDATA[<div class="header-container">]]>
+          </property>
+          <property name="disableviewstate">False</property>
+          <property name="timezonetype">inherit</property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible">True</property>
+        </properties>
+        <webpart controlid="PageTitle" guid="71d6a316-eb9c-4b70-8239-59f01e53aa22" type="PageTitle" v="1">
+          <property name="cat_open_ajax"></property>
+          <property name="cat_open_output_filter"></property>
+          <property name="cat_open_performance"></property>
+          <property name="cat_open_time zones"></property>
+          <property name="cat_open_visibility"></property>
+          <property name="container"></property>
+          <property name="containercssclass"></property>
+          <property name="containercustomcontent"></property>
+          <property name="containerhideonsubpages">False</property>
+          <property name="containertitle"></property>
+          <property name="contentafter"></property>
+          <property name="contentbefore"></property>
+          <property name="controlid">PageTitle</property>
+          <property name="customtimezone"></property>
+          <property name="disablemacros">False</property>
+          <property name="disableviewstate">False</property>
+          <property name="displaytoroles"></property>
+          <property name="enableoutputfilter">False</property>
+          <property name="hideonsubpages">False</property>
+          <property name="instanceguid">71d6a316-eb9c-4b70-8239-59f01e53aa22</property>
+          <property name="outputconverttablestodivs">none</property>
+          <property name="outputfixattributes">True</property>
+          <property name="outputfixhtml5">True</property>
+          <property name="outputfixjavascript">True</property>
+          <property name="outputfixlowercase">True</property>
+          <property name="outputfixselfclose">True</property>
+          <property name="outputfixtags">True</property>
+          <property name="outputresolveurls">True</property>
+          <property name="partialcachedependencies">##DEFAULT##</property>
+          <property name="partialcacheminutes"></property>
+          <property name="showfordocumenttypes"></property>
+          <property name="timezonetype"></property>
+          <property name="titletext"></property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible">True</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">PageTitle</property>
+        </webpart>
+        <webpart controlid="SelectSite" guid="af68abd8-4b27-4514-92dd-5176d0580cf2" type="SelectSite" v="1">
+          <property name="allowall" ismacro="true">{% UIContext.AllowAll @%}</property>
+          <property name="allowglobal" ismacro="true">{% UIContext.AllowGlobal @%}</property>
+          <property name="cat_open_ajax"></property>
+          <property name="cat_open_codebehind"></property>
+          <property name="cat_open_output_filter"></property>
+          <property name="cat_open_performance"></property>
+          <property name="cat_open_time zones"></property>
+          <property name="cat_open_visibility"></property>
+          <property name="container"></property>
+          <property name="containercssclass"></property>
+          <property name="containercustomcontent"></property>
+          <property name="containerhideonsubpages">False</property>
+          <property name="containertitle"></property>
+          <property name="contentafter">
+            <![CDATA[</div>]]>
+          </property>
+          <property name="contentbefore">
+            <![CDATA[<div class="header-panel header-actions-site-selector-block">]]>
+          </property>
+          <property name="controlid">SelectSite</property>
+          <property name="customtimezone"></property>
+          <property name="disablemacros">False</property>
+          <property name="disableviewstate">False</property>
+          <property name="displaytoroles"></property>
+          <property name="enableoutputfilter">False</property>
+          <property name="extenderassemblyname">App_Code</property>
+          <property name="extenderclassname"></property>
+          <property name="hideonsubpages">False</property>
+          <property name="instanceguid">af68abd8-4b27-4514-92dd-5176d0580cf2</property>
+          <property name="outputconverttablestodivs">none</property>
+          <property name="outputfixattributes">True</property>
+          <property name="outputfixhtml5">True</property>
+          <property name="outputfixjavascript">True</property>
+          <property name="outputfixlowercase">True</property>
+          <property name="outputfixselfclose">True</property>
+          <property name="outputfixtags">True</property>
+          <property name="outputresolveurls">True</property>
+          <property name="partialcachedependencies">##DEFAULT##</property>
+          <property name="partialcacheminutes"></property>
+          <property name="selectortype" ismacro="true">{% UIContext.SelectorType @%}</property>
+          <property name="showfordocumenttypes"></property>
+          <property name="timezonetype">inherit</property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible" ismacro="true">{% UIContext.SiteSelectorVisibility @%}</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">SelectSite</property>
+        </webpart>
+        <webpart controlid="HeaderActions" guid="661f4781-6d3d-4c5b-8198-f3e6f8dcdf68" type="HeaderActions" v="1">
+          <property name="cat_open_codebehind"></property>
+          <property name="controlid">HeaderActions</property>
+          <property name="extenderassemblyname">App_Code</property>
+          <property name="extenderclassname"></property>
+          <property name="instanceguid">661f4781-6d3d-4c5b-8198-f3e6f8dcdf68</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">HeaderActions</property>
+        </webpart>
+        <webpart controlid="NewHeaderAction" guid="5fd9188d-b709-44ff-b446-b836c0039e43" type="NewHeaderAction" v="1">
+          <property name="cat_open_codebehind"></property>
+          <property name="controlid">NewHeaderAction</property>
+          <property name="extenderassemblyname">App_Code</property>
+          <property name="extenderclassname"></property>
+          <property name="instanceguid">5fd9188d-b709-44ff-b446-b836c0039e43</property>
+          <property name="newelement"></property>
+          <property name="targeturl"></property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">NewHeaderAction</property>
+        </webpart>
+      </webpartzone>
+      <webpartzone id="ZoneContent" v="1">
+        <properties>
+          <property name="containerhideonsubpages">False</property>
+          <property name="contentafter">
+            <![CDATA[</div>]]>
+          </property>
+          <property name="contentbefore">
+            <![CDATA[<div class=" {% UIContext.PageContentClass @%} PageContent">]]>
+          </property>
+          <property name="disableviewstate">False</property>
+          <property name="hideonsubpages">False</property>
+          <property name="timezonetype">inherit</property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible">True</property>
+        </properties>
+        <webpart controlid="MessagesPlaceholder" guid="2d407ac3-8d86-4792-b7ef-bf32866f0acc" type="MessagesPlaceholder" v="1">
+          <property name="cat_open_codebehind"></property>
+          <property name="cat_open_visibility"></property>
+          <property name="contentafter"></property>
+          <property name="contentbefore"></property>
+          <property name="controlid">MessagesPlaceholder</property>
+          <property name="extenderassemblyname">App_Code</property>
+          <property name="extenderclassname"></property>
+          <property name="instanceguid">2d407ac3-8d86-4792-b7ef-bf32866f0acc</property>
+          <property name="visible">True</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">MessagesPlaceholder</property>
+        </webpart>
+        <webpart controlid="DisabledModuleInfo" guid="49b400b0-a775-4782-a406-65aaee1702bb" type="DisabledModuleInfo" v="1">
+          <property name="cat_open_ajax"></property>
+          <property name="cat_open_output_filter"></property>
+          <property name="cat_open_performance"></property>
+          <property name="cat_open_time zones"></property>
+          <property name="cat_open_visibility"></property>
+          <property name="container"></property>
+          <property name="containercssclass"></property>
+          <property name="containercustomcontent"></property>
+          <property name="containertitle"></property>
+          <property name="contentafter"></property>
+          <property name="contentbefore"></property>
+          <property name="controlid">DisabledModuleInfo</property>
+          <property name="customtimezone"></property>
+          <property name="disablemacros">False</property>
+          <property name="disableviewstate">False</property>
+          <property name="displaytoroles"></property>
+          <property name="enableoutputfilter">False</property>
+          <property name="hideonsubpages">False</property>
+          <property name="instanceguid">49b400b0-a775-4782-a406-65aaee1702bb</property>
+          <property name="outputconverttablestodivs">none</property>
+          <property name="outputfixattributes">True</property>
+          <property name="outputfixhtml5">True</property>
+          <property name="outputfixjavascript">True</property>
+          <property name="outputfixlowercase">True</property>
+          <property name="outputfixselfclose">True</property>
+          <property name="outputfixtags">True</property>
+          <property name="outputresolveurls">True</property>
+          <property name="partialcachedependencies">##NONE##</property>
+          <property name="partialcacheminutes"></property>
+          <property name="showfordocumenttypes"></property>
+          <property name="timezonetype">inherit</property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible">True</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">DisabledModuleInfo</property>
+        </webpart>
+        <webpart controlid="Text" guid="cbf46153-1150-4661-9b43-5bcccedc06dc" type="Text" v="1">
+          <property name="contentafter"></property>
+          <property name="contentbefore"></property>
+          <property name="controlid">Text</property>
+          <property name="extenderassemblyname"></property>
+          <property name="extenderclassname"></property>
+          <property name="instanceguid">cbf46153-1150-4661-9b43-5bcccedc06dc</property>
+          <property name="text"></property>
+          <property name="visible">True</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">Text</property>
+        </webpart>
+        <webpart controlid="Listing" guid="68ef079a-c4a0-48b8-9cb9-065ef0c41674" type="Listing" v="1">
+          <property name="afterdeletescript"></property>
+          <property name="cat_open_ajax"></property>
+          <property name="cat_open_codebehind">True</property>
+          <property name="cat_open_output_filter"></property>
+          <property name="cat_open_performance"></property>
+          <property name="cat_open_time zones"></property>
+          <property name="cat_open_visibility">True</property>
+          <property name="checkinfoviewpermissions" ismacro="true">{% UIContext.CheckInfoViewPermissions @%}</property>
+          <property name="container"></property>
+          <property name="containercssclass"></property>
+          <property name="containercustomcontent"></property>
+          <property name="containerhideonsubpages">False</property>
+          <property name="containertitle"></property>
+          <property name="contentafter"></property>
+          <property name="contentbefore"></property>
+          <property name="controlid">Listing</property>
+          <property name="customtimezone"></property>
+          <property name="disablemacros">False</property>
+          <property name="disableviewstate">False</property>
+          <property name="displaytoroles"></property>
+          <property name="editactionurl"></property>
+          <property name="editelement"></property>
+          <property name="elementname"></property>
+          <property name="enableoutputfilter">False</property>
+          <property name="extenderassemblyname">{%UIContext.GridExtender @%}</property>
+          <property name="extenderclassname">{% UIContext.ExtenderClassName @%}</property>
+          <property name="gridname"></property>
+          <property name="hideonsubpages">False</property>
+          <property name="instanceguid">68ef079a-c4a0-48b8-9cb9-065ef0c41674</property>
+          <property name="objecttype"></property>
+          <property name="orderby"></property>
+          <property name="outputconverttablestodivs">none</property>
+          <property name="outputfixattributes">True</property>
+          <property name="outputfixhtml5">True</property>
+          <property name="outputfixjavascript">True</property>
+          <property name="outputfixlowercase">True</property>
+          <property name="outputfixselfclose">True</property>
+          <property name="outputfixtags">True</property>
+          <property name="outputresolveurls">True</property>
+          <property name="partialcachedependencies">##DEFAULT##</property>
+          <property name="partialcacheminutes"></property>
+          <property name="resourcename"></property>
+          <property name="showfordocumenttypes"></property>
+          <property name="timezonetype">inherit</property>
+          <property name="useupdatepanel">False</property>
+          <property name="visible">True</property>
+          <property name="webparttitle"></property>
+          <property name="webparttype">Listing</property>
+          <property name="wherecondition"></property>
+          <property name="zerorowstext"></property>
+        </webpart>
+      </webpartzone>
+    </page>
+  </PageTemplateWebParts>
+</cms.pagetemplate>

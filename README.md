@@ -30,12 +30,12 @@ To make the project work, follow these steps:
 1. To run the Xperience administration application, make sure your computer meets the [system requirements](https://docs.kentico.com/13/installation/system-requirements) outlined in the Xperience documentation.
 1. To run the ASP.NET Core 3.1 application, download the [.NET Core 3.1.3 SDK](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1.3/3.1.3.md).
 1. Clone the repo (`git clone https://github.com/Kentico/training-xperience-13`).
-1. Start your [SQL Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms) and restore the extracted MedioClinic13-2020-06-16_12-24.bak file.
 1. Register the [administration interface](/CMS) in IIS.
     * If you register the administration interface as an application that sits under `Default Web Site` and has a `Kentico13_Admin` alias, then you won't have to do any adjustments in Visual Studio.
 1. Open Visual Studio with elevated credentials, open the `WebApp.sln` solution and build it (`Ctrl+Shift+B`).
-1. Open the `web.config` file and adjust the connection string to your SQL Server instance (if your database instance runs on a different machine).
 1. Close the solution.
+1. Access the administrative interface. Follow the installation wizard to create a new database with the default Kentico objects.
+1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory
 1. Open the `MedioClinic.sln` solution.
 1. Build the solution.
 1. Under [MedioClinic](/MedioClinic), create an `appsettings.Development.json` file. If you run your SQL Server locally, the file can have the following structure:

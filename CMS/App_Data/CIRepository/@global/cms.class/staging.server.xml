@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Staging - server</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ServerID" columntype="integer" guid="adc25c7d-4b9d-4272-9bb5-83577cf832d3" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>ServerID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ServerDisplayName" columnsize="440" columntype="text" guid="ccbfd081-f598-4bcd-86c5-0b0659d1d823" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+        </settings>
+      </field>
+      <field column="ServerName" columnsize="100" columntype="text" guid="56e84c75-7ef5-46ac-b851-792532748a56" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field column="ServerSiteID" columntype="integer" guid="3a5aac85-f6a7-462c-995c-f87088fccdc7" system="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentSite.SiteID|(identity)GlobalAdministrator|(hash)4654facedf8fc90a5e9afbcd11e87cdf0486b48351fd7a2e03ca62e988594130%}]]>
+          </defaultvalue>
+          <fieldcaption>test</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ServerURL" columnsize="450" columntype="text" guid="5e032c90-c2ab-43d8-bb9c-9c43ebfcddc8" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Server_Edit.ServerURLLabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <AllowAutoRedirect>False</AllowAutoRedirect>
+          <controlname>urlchecker</controlname>
+          <IncludeUrlSuffixInValue>False</IncludeUrlSuffixInValue>
+          <ProtocolIsRequired>False</ProtocolIsRequired>
+          <ResourcePrefix>urlchecker</ResourcePrefix>
+          <UrlSuffix>/CMSPages/Staging/SyncServer.asmx</UrlSuffix>
+        </settings>
+      </field>
+      <field column="ServerEnabled" columntype="boolean" guid="4726b612-34b9-464b-8a35-17ef4acc9c26" system="true" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>{$general.enabled$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ServerAuthentication" columnsize="20" columntype="text" guid="df28276a-53b0-4899-b35e-3bce1bf0cfb8" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>USERNAME</defaultvalue>
+          <fieldcaption>Server authentication</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <Options>
+<![CDATA[
+USERNAME;User name / password
+X509;X509
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerUsername" columnsize="100" columntype="text" dependsonanotherfield="true" guid="7d0a229d-7ac4-4377-aaf4-953e995ed9a8" system="true" visible="true">
+        <properties>
+          <fieldcaption>User name</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerAuthentication == "USERNAME"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerPassword" columnsize="100" columntype="text" dependsonanotherfield="true" guid="b2bb8d87-584d-4e88-bff1-ebc6e96eff4a" system="true" visible="true">
+        <properties>
+          <fieldcaption>Password</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerAuthentication == "USERNAME"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>encryptedpassword</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerX509ClientKeyID" columnsize="200" columntype="text" dependsonanotherfield="true" guid="2c24dc63-7eed-4fc9-a343-24c89827ce81" system="true" visible="true">
+        <properties>
+          <fieldcaption>Client key ID</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerAuthentication == "X509"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerX509ServerKeyID" columnsize="200" columntype="text" dependsonanotherfield="true" guid="8b2d88a3-111f-4a03-8128-e31abaff562f" system="true" visible="true">
+        <properties>
+          <fieldcaption>Server key ID</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerAuthentication == "X509"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ServerGUID" columntype="guid" guid="85c57a10-f71b-4bcc-903a-8e55bd1038a2" system="true">
+        <properties>
+          <fieldcaption>ServerGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>LabelControl</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerLastModified" columntype="datetime" guid="40a0bfef-1603-4a94-90c0-d48e769f3fe7" system="true">
+        <properties>
+          <fieldcaption>ServerLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>ae6f2aaa-9dbc-47f4-b365-91167e71bbd0</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>staging.server</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Staging</CodeName>
+    <GUID>b1640241-8905-4845-ac9a-0301cb60cb63</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings />
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>Staging_Server</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

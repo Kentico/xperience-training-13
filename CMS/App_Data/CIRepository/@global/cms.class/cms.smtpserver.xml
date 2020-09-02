@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>SMTP server</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ServerID" columntype="integer" guid="c331e619-6707-4b28-83f5-0dc06ab3b1fc" isPK="true" system="true">
+        <properties>
+          <fieldcaption>ServerID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="ServerName" columnsize="200" columntype="text" guid="378adb50-4930-4f66-bab8-ed5b9663ea8a" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$smtpserver_edit.servernamelabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerPriority" columntype="integer" guid="85b25e3a-728f-4583-bc16-cdf1f30cf7f1" system="true" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$general.priority$}</fieldcaption>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.EmailEngine</AssemblyName>
+          <controlname>enumselector</controlname>
+          <DisplayType>0</DisplayType>
+          <Sort>False</Sort>
+          <TypeName>CMS.EmailEngine.SMTPServerPriorityEnum</TypeName>
+          <UseStringRepresentation>False</UseStringRepresentation>
+        </settings>
+      </field>
+      <field column="ServerEnabled" columntype="boolean" guid="0b471c96-3f09-480e-92fa-d110d7602889" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>{$general.enabled$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <category name="general.advanced">
+        <properties>
+          <caption>{$general.advanced$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ServerDeliveryMethod" columntype="integer" guid="5e3d28f6-23ed-484c-9519-d71c84c6a313" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$smtpserver.deliverymethod$}</fieldcaption>
+          <fielddescription>{$smtpserver.deliverymethoddesc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!SystemContext.IsRunningOnAzure|(identity)GlobalAdministrator|(hash)0fe4ac3599397fbeaae39c5075b1b4e607bc4ae3d5aae9d9e3087b4bf699a1a8%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.EmailEngine</AssemblyName>
+          <controlname>EnumSelector</controlname>
+          <DisplayType>0</DisplayType>
+          <Sort>False</Sort>
+          <TypeName>CMS.EmailEngine.SMTPServerDeliveryEnum</TypeName>
+          <UseStringRepresentation>False</UseStringRepresentation>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerUserName" columnsize="50" columntype="text" dependsonanotherfield="true" guid="e2eea375-809a-4875-b70f-4275d4d6ac63" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$smtpserver_edit.serverusernamelabel$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)8aa1b1e3a5a2da5f5da02de3d04daf5c2dfadd1a62a8624a6e0a58e14e3d52ea%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerPassword" columnsize="200" columntype="text" dependsonanotherfield="true" guid="3e6aa6f0-4b4c-4ddd-8ef3-5266c26c8b4b" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.password$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)8aa1b1e3a5a2da5f5da02de3d04daf5c2dfadd1a62a8624a6e0a58e14e3d52ea%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>encryptedpassword</controlname>
+        </settings>
+      </field>
+      <field column="ServerUseSSL" columntype="boolean" dependsonanotherfield="true" guid="73f0a42d-78ad-4d62-981a-403f29295f56" system="true" visible="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$system_email.ssl$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)8aa1b1e3a5a2da5f5da02de3d04daf5c2dfadd1a62a8624a6e0a58e14e3d52ea%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ServerPickupDirectory" columnsize="450" columntype="text" dependsonanotherfield="true" guid="d2ad7ad5-69c1-4be3-9a8f-e02493778a94" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$smtpserver.pickupdirectory$}</fieldcaption>
+          <fielddescription>{$smtpserver.pickupdirectorydesc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerDeliveryMethod.Value == 1|(identity)GlobalAdministrator|(hash)bd06e703f3270f9aaed898479c92fb40085d696784c0a21128e3e374df2089eb%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AllowManage>False</AllowManage>
+          <controlname>filesystemselector</controlname>
+          <ShowFolders>True</ShowFolders>
+        </settings>
+      </field>
+      <field column="ServerIsGlobal" columntype="boolean" guid="274aa6e5-bdb1-4fa8-ac44-0c817c89a832" system="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$general.isglobal$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ServerGUID" columntype="guid" guid="e8d4e762-d3a1-4937-9e92-878fc56d141d" system="true">
+        <properties>
+          <fieldcaption>ServerLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ServerLastModified" columntype="datetime" guid="6be76690-b010-4c8b-ad84-8a8d76e62602" system="true">
+        <properties>
+          <fieldcaption>ServerLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>True</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>21fdc065-df67-473b-b859-e5e0fc51b60b</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>CMS.SMTPServer</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.EmailEngine</CodeName>
+    <GUID>7675c4a8-a792-4d4c-b83e-38ed24b64eab</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings />
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_SMTPServer</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

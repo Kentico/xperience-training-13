@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Time zone</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="TimeZoneID" columntype="integer" guid="776b8955-f406-4b7d-ab2e-14b4b85ab905" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>TimeZoneID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneDisplayName" columnsize="200" columntype="text" guid="6198ab1c-c4f2-41dd-a0bb-c2b68042e748" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$timez.edit.timezonedisplayname$}</fieldcaption>
+          <validationerrormessage>{$TimeZ.Edit.rfvDisplayName$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="TimeZoneName" columnsize="200" columntype="text" guid="d6780795-e966-433a-9656-6bb4be5f85aa" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <validationerrormessage>{$TimeZ.Edit.rfvName$}</validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneGMT" columntype="double" guid="c18f9a15-b961-49b8-838b-e32994f208b0" system="true" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$timez.edit.timezonegmt$}</fieldcaption>
+          <validationerrormessage>{$TimeZ.Edit.rvGMTDouble$}</validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+-12
+-11
+-10
+-9
+-8
+-7
+-6
+-5
+-4
+-3
+-2
+-1
+0
+1;+1
+2;+2
+3;+3
+4;+4
+5;+5
+6;+6
+7;+7
+8;+8
+9;+9
+10;+10
+11;+11
+12;+12
+13;+13
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value >= -12", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>-12</t><v>-12</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("Value <= 13", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>13</t><v>13</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="TimeZoneDaylight" columntype="boolean" guid="72bda7ea-1792-47ce-9d08-437802fedead" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$timez.edit.timezonedaylight$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneRuleStartIn" columntype="datetime" guid="223b96a0-aab0-4e18-bbcc-e9f963f75692" system="true">
+        <properties>
+          <fieldcaption>Daylight saving time starts at:</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>viewdate</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneRuleEndIn" columntype="datetime" guid="5976acc3-b280-4ccb-ad3f-0f512970327e" system="true">
+        <properties>
+          <enabledmacro ismacro="true">{%false%}</enabledmacro>
+          <fieldcaption>Daylight saving time ends at:</fieldcaption>
+          <visiblemacro ismacro="true">{%TimeZoneDaylight%}</visiblemacro>
+        </properties>
+        <settings>
+          <controlname>viewdate</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneRuleStartRule" columnsize="200" columntype="text" dependsonanotherfield="true" guid="fda6252c-af95-453c-a7a2-0502c1a13642" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$timez.edit.timezonerulestartrule$}</fieldcaption>
+          <visiblemacro ismacro="true">{%TimeZoneDaylight%}</visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="TimeZoneRuleEndRule" columnsize="200" columntype="text" dependsonanotherfield="true" guid="7bd8557b-3689-459c-8a8f-73d150e704a2" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$timez.edit.timezoneruleendrule$}</fieldcaption>
+          <visiblemacro ismacro="true">{%TimeZoneDaylight%}</visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="TimeZoneGUID" columntype="guid" guid="a2abc64c-e024-40f5-ab20-8ef276f58eef" system="true">
+        <properties>
+          <fieldcaption>TimeZoneGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="TimeZoneLastModified" columntype="datetime" guid="3120e2b2-0503-48ac-b9bf-a4e17f7974bb" system="true">
+        <properties>
+          <fieldcaption>TimeZoneLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>01d6dfc3-0adc-444b-a86f-de19e72f76ff</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.timezone</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Globalization</CodeName>
+    <GUID>c171949b-8edd-4bcd-95c2-0d6a0dd5cbbb</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>0</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>0</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item azureretrievable="True" content="False" id="6698b050-78ca-446c-bf7d-bc408221e6b0" name="TimeZoneID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="83dbc72d-b41b-4fd8-9eb6-30b041e4d2c8" name="TimeZoneDaylight" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="8b871ba5-87a0-4723-9e9a-63afae47d925" name="TimeZoneRuleStartRule" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="a0db70a0-a1dd-425e-b604-b84ebe9d5a72" name="TimeZoneRuleEndRule" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="a7a17462-243d-4a9a-a496-8a9903d5ef01" name="TimeZoneRuleStartIn" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="b86120c5-57ab-43e3-b728-c162d26e6100" name="TimeZoneDisplayName" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="dea6156f-296d-4b59-88e1-e7bf53887bdf" name="TimeZoneName" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="e3e19887-74a2-49d1-81b1-1f5e501a7e36" name="TimeZoneGMT" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="e4ce22e7-1496-46a0-8155-998eacc18f04" name="TimeZoneRuleEndIn" searchable="True" tokenized="False" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>TimeZoneDisplayName</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_TimeZone</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

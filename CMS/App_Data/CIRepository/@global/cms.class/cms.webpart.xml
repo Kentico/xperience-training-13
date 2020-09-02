@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDefaultObjectType />
+  <ClassDisplayName>Web part</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="WebPartID" columntype="integer" guid="6539ce2d-0d72-49d5-8f55-7623bcf00d58" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>WebPartID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WebPartDisplayName" columnsize="100" columntype="text" guid="8f20efa0-4456-409e-a0cb-1aeac5829465" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="WebPartName" columnsize="100" columntype="text" guid="4db3d143-13ee-42ec-9e9c-5493a7b74437" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field column="WebPartCategoryID" columntype="integer" guid="f1b90dd7-8d48-4502-8c24-79e32050b0df" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$categoryselector.general.itemname$}</fieldcaption>
+        </properties>
+        <settings>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>webpartcategoryselector</controlname>
+          <ShowObjects>False</ShowObjects>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartType" columntype="integer" guid="9e8d452e-7496-4fa0-b609-9b8152a74803" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.type$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+0;Standard
+1;DataSource
+2;Filter
+3;Placeholder
+4;Invisible
+5;Basic
+6;Layout
+7;WidgetOnly
+9;UI
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartParentID" columntype="integer" guid="1c024cc5-4a87-4d0c-ba93-21c54970514a" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">{%false%}</enabledmacro>
+          <fieldcaption>{$developmentwebpartgeneral.inheritedwebpart$}</fieldcaption>
+          <visiblemacro ismacro="true">
+<![CDATA[
+{%parentID = EditedObject.WebPartParentID;
+return parentID != 0 && parentID != null;|(identity)GlobalAdministrator|(hash)77ef910ed05b16b26f8438d3c44066a2dbe8c9ccaa85c7a1cc3f701fdf754b43%}
+]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>webpartcategoryselector</controlname>
+          <ShowObjects>True</ShowObjects>
+        </settings>
+      </field>
+      <field column="WebPartFileName" columnsize="100" columntype="text" guid="06de87a7-02af-4722-a5ec-46b0c158c379" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+<![CDATA[
+{%parentID = EditedObject.WebPartParentID;
+return parentID == 0 || parentID == null;|(identity)GlobalAdministrator|(hash)bdceb76fccfae26cd8e31898a4e406f9151d35f35c2a566830289c08ef51c699%}
+]]>
+          </enabledmacro>
+          <fieldcaption>{$general.filename$}</fieldcaption>
+          <visiblemacro ismacro="true">
+<![CDATA[
+{%parentID = EditedObject.WebPartParentID;
+return parentID == 0 || parentID == null;|(identity)GlobalAdministrator|(hash)bdceb76fccfae26cd8e31898a4e406f9151d35f35c2a566830289c08ef51c699%}
+]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AllowedExtensions>ascx</AllowedExtensions>
+          <AllowManage>False</AllowManage>
+          <controlname>filesystemselector</controlname>
+          <DefaultPath>CMSWebParts/</DefaultPath>
+          <SelectedPathPrefix>~/CMSWebParts/</SelectedPathPrefix>
+          <ShowFolders>False</ShowFolders>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartDescription" columntype="longtext" guid="0354056c-45be-44ee-ae0e-d24e25495538" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.description$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>localizabletextarea</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartThumbnailGUID" columntype="guid" guid="b151eef9-4433-48fb-8684-b2fe17070dde" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.thumbnail$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>metafileorfonticonselector</controlname>
+          <IconCssFieldName>WebPartIconClass</IconCssFieldName>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartIconClass" columnsize="200" columntype="text" guid="a6cfcc25-2b48-42a9-98aa-57c8595042f1" system="true">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartSkipInsertProperties" columntype="boolean" guid="bf13a719-dcdc-463b-a68e-666fe46f777b" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$webpart.SkipInsertProperties$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartResourceID" columntype="integer" guid="87d2a7c2-2856-4cc4-9293-54429c0bbcc8" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.module$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SystemContext.DevelopmentMode|(identity)GlobalAdministrator|(hash)8e576fe5a4f626cc323e080952c49c3a9169ecaf5dc584185ab9251783d2cda0%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>moduleselector</controlname>
+          <DisplayAllModules>True</DisplayAllModules>
+          <DisplayNone>True</DisplayNone>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartCSS" columntype="longtext" guid="1fe188b2-3ece-4e9c-8c50-ea5de591b378" system="true">
+        <properties>
+          <fieldcaption>WebPartCSS</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textareacontrol</controlname>
+        </settings>
+      </field>
+      <field column="WebPartProperties" columntype="longtext" guid="b9791aae-ff3a-4b9b-be86-8c8a4e196034" system="true">
+        <properties>
+          <fieldcaption>WebPartProperties</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textareacontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartDocumentation" columntype="longtext" guid="e39a6a96-1d4a-435f-9cb5-b64dfb0355d5" system="true">
+        <properties>
+          <fieldcaption>WebPartDocumentation</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textareacontrol</controlname>
+        </settings>
+      </field>
+      <field column="WebPartGUID" columntype="guid" guid="b894e223-89e8-479c-84e3-07b860d8d4ed" system="true">
+        <properties>
+          <fieldcaption>WebPartGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WebPartLastModified" columnprecision="7" columntype="datetime" guid="408d0936-1690-4f1a-aacd-6edac353cc01" system="true">
+        <properties>
+          <fieldcaption>WebPartLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WebPartDefaultValues" columntype="longtext" guid="5bd3e284-ce9f-461b-b975-430e636286e5" system="true">
+        <properties>
+          <fieldcaption>WebPartDefaultValues</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textareacontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>347a3154-07b4-4fd6-8b70-ce0391f76007</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.webpart</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Design</CodeName>
+    <GUID>b755e8fc-a06f-421a-b749-f2d31d1f2570</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>WebPartDescription</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>WebPartLastModified</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>True</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item azurecontent="True" azuresearchable="True" content="True" id="12027235-5553-480e-aeea-3239a31b48df" name="WebPartDefaultValues" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="167a1054-f683-4a8b-9785-a4078f3a74c4" name="WebPartDisplayName" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="1c67c884-2257-49a9-a430-88c475aefc31" name="WebPartDescription" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="27809f19-a56c-45c8-9766-5f0d1980b7a7" name="WebPartID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="2d7da23f-bbdc-4235-abb2-83e0a3dab776" name="WebPartLastModified" searchable="True" tokenized="False" />
+      <item content="False" id="377202b2-51c8-4ab2-9985-1e9f159482c5" name="WebPartThumbnailGUID" searchable="False" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="37bc4b91-e051-453f-82da-084f905200bc" name="WebPartDocumentation" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="3c727e0c-313b-4114-a4ed-0ce77ca320f9" name="WebPartResourceID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="407e3909-7c85-49f3-b369-fd1fec6e938b" name="WebPartParentID" searchable="True" tokenized="False" />
+      <item content="False" id="491f2048-c95e-43fc-89bc-23688b9e4f21" name="WebPartCSS" searchable="False" tokenized="False" />
+      <item content="False" id="729559e7-82e5-4728-a364-f93228d55a23" name="WebPartIconClass" searchable="False" tokenized="False" />
+      <item content="False" id="7be68abe-40c3-44b9-85f4-389d85318073" name="WebPartGUID" searchable="False" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="8d4da117-b1b6-44a3-b36f-8cf13f7ac932" name="WebPartName" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="988577fb-bf92-407b-8c29-c194fa4f8686" name="WebPartFileName" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="b5322055-ac38-48ae-8681-dcbd15828686" name="WebPartCategoryID" searchable="True" tokenized="False" />
+      <item content="False" id="e1c23316-298c-4f62-af5b-d619e55845b8" name="WebPartSkipInsertProperties" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="ea8cb1ea-baf6-4660-b2e7-9b6ecf9c43bb" name="WebPartType" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="f91eebc3-e464-474c-9aa5-90a09085f671" name="WebPartProperties" searchable="False" tokenized="True" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>WebPartDisplayName</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_WebPart</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>True</ClassUsesVersioning>
+</cms.class>

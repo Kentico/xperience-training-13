@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ma.automationaction>
+  <ActionAllowedObjects>;om.contact;</ActionAllowedObjects>
+  <ActionAssemblyName>CMS.Automation</ActionAssemblyName>
+  <ActionClass>CMS.Automation.EmailAction</ActionClass>
+  <ActionDescription>
+    <![CDATA[Using this step, you can automatically send out email messages according to the step's properties, where you can specify the recipients and the template the emails will be based on.]]>
+  </ActionDescription>
+  <ActionDisplayName>Send transactional email</ActionDisplayName>
+  <ActionEnabled>True</ActionEnabled>
+  <ActionGUID>a578a254-b251-4f1e-abb7-533e5898f012</ActionGUID>
+  <ActionIconClass>icon-message</ActionIconClass>
+  <ActionName>Send_e-mail</ActionName>
+  <ActionParameters>
+    <form version="2">
+      <field column="From" columnsize="256" columntype="text" guid="03d20e31-9f89-4954-a9ad-435a532dffdd" visible="true">
+        <properties>
+          <fieldcaption>{$general.fromemail$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.from.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="To" columntype="longtext" guid="b0d64701-e65c-42f5-897f-147e95628d4d" visible="true">
+        <properties>
+          <fieldcaption>{$general.toemail$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.to.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textareacontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <IsTextArea>True</IsTextArea>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+      <field column="BasedOn" columntype="integer" guid="6cbde5ca-bf84-488b-9c7f-016caf5e2d44" hasdependingfields="true" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$ma.action.sendemails.basedon$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.basedon.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>RadioButtonsControl</controlname>
+          <Options>
+<![CDATA[
+0;Email template
+1;HTML formatted text
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <field column="EmailTemplate" columnsize="450" columntype="text" guid="d9a2f538-e097-43b6-ae78-3d6fd6892ec4" visible="true">
+        <properties>
+          <controlcssclass>
+            <![CDATA[automation-step-panel-selector control-group-inline-wrap]]>
+          </controlcssclass>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "0"|(identity)GlobalAdministrator|(hash)85b52af92b50adccce35e0e3dbfcb0b5dc57ba8e1f0137fa3d77e2017fdcd261%}]]>
+          </enabledmacro>
+          <fieldcaption>{$ma.action.sendemails.template$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.template.desc$}</fielddescription>
+          <validationerrormessage>{$emailtemplate_edit.fillcodenamefield$}</validationerrormessage>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "0"|(identity)GlobalAdministrator|(hash)85b52af92b50adccce35e0e3dbfcb0b5dc57ba8e1f0137fa3d77e2017fdcd261%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>email_template_selector</controlname>
+          <ShowEditButton>True</ShowEditButton>
+          <ShowNewButton>True</ShowNewButton>
+          <TemplateType>automation</TemplateType>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value.Length >= 1", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinLength\" ><p n=\"minlength\"><t>1</t><v>1</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")|(identity)GlobalAdministrator|(hash)a8b010a3c9b2e15ca8004bea27c6e712ca4adab776babcca732cddd83be53933%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("Value.Matches(\"^(?!\\\\s*$).+\")", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"RegExp\" ><p n=\"regexp\"><t>^(?!\\s*$).+</t><v>^(?!\\s*$).+</v><r>0</r><d></d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)eac6cebe0a8e119b97701af8da9a61b21203b7ed720759d2a9a4870d0f6deb25%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="Subject" columnsize="998" columntype="text" guid="45595d6d-814f-4590-a079-6dd895f9edc0" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "1"|(identity)GlobalAdministrator|(hash)28d941ea2b963dcc10c86eb6a03d12557061feea1e0e1c8f1429fb35390e7f7d%}]]>
+          </enabledmacro>
+          <fieldcaption>{$general.subject$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.subject.desc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "1"|(identity)GlobalAdministrator|(hash)28d941ea2b963dcc10c86eb6a03d12557061feea1e0e1c8f1429fb35390e7f7d%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="Body" columntype="longtext" guid="f4ef4406-3691-44c1-9d02-8ad215c4ec24" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "1"|(identity)GlobalAdministrator|(hash)28d941ea2b963dcc10c86eb6a03d12557061feea1e0e1c8f1429fb35390e7f7d%}]]>
+          </enabledmacro>
+          <fieldcaption>{$general.body$}</fieldcaption>
+          <fielddescription>{$ma.action.sendemails.body.desc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BasedOn.Value == "1"|(identity)GlobalAdministrator|(hash)28d941ea2b963dcc10c86eb6a03d12557061feea1e0e1c8f1429fb35390e7f7d%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <Autoresize_Hashtable>True</Autoresize_Hashtable>
+          <controlname>htmlareacontrol</controlname>
+          <CSSStylesheet>0</CSSStylesheet>
+          <Dialogs_Content_Hide>False</Dialogs_Content_Hide>
+          <HeightUnitType>PX</HeightUnitType>
+          <MediaDialogConfiguration>True</MediaDialogConfiguration>
+          <ShowAddStampButton>False</ShowAddStampButton>
+          <Width>100</Width>
+          <WidthUnitType>PERCENTAGE</WidthUnitType>
+        </settings>
+      </field>
+    </form>
+  </ActionParameters>
+  <ActionThumbnailClass>icon-message</ActionThumbnailClass>
+  <ActionWorkflowType>3</ActionWorkflowType>
+</ma.automationaction>

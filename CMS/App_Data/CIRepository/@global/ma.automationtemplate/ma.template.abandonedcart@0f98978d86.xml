@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ma.automationtemplate>
+  <TemplateConfiguration>
+    <TemplateConfiguration xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+      <RecurrenceType>NonConcurrentRecurring</RecurrenceType>
+      <Steps>
+        <Step>
+          <DisplayName>Finished</DisplayName>
+          <CodeName>finished</CodeName>
+          <Id>1</Id>
+          <Type>Finished</Type>
+          <Definition>
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2300</d5p1:X>
+              <d5p1:Y>400</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note</CodeName>
+          <Id>2</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2030</d5p1:X>
+              <d5p1:Y>40</d5p1:Y>
+            </Position>
+            <Note>
+<![CDATA[
+Prerequisite: To mark shopping carts as abandoned, your site must have a running scheduled task for this purpose.
+
+Administrators can set up the task in the 'Scheduled tasks' application. The task's 'Task provider' class must be set to:
+'CMS.Ecommerce.MarkCartAbandoned'
+]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note_1</CodeName>
+          <Id>3</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2030</d5p1:X>
+              <d5p1:Y>400</d5p1:Y>
+            </Position>
+            <Note>
+              <![CDATA[Note: Store administrators can configure the time interval after which the system marks shopping carts as abandoned in the 'Store configuration' application, under 'Store settings -&gt; General -&gt; Mark shopping cart as abandoned after (hours)'.]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note_2</CodeName>
+          <Id>4</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2810</d5p1:X>
+              <d5p1:Y>150</d5p1:Y>
+            </Position>
+            <Note>
+<![CDATA[
+Adjust the content of the shopping cart reminder email according to the requirements of your website. 
+
+Use the macros from the template example to add dynamic values, such as the shopping cart content and link.
+]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Send email</DisplayName>
+          <CodeName>SendEmail</CodeName>
+          <Id>5</Id>
+          <Type>Action</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>e813de91-1b54-4cca-bbd3-355b35e915a6</Guid>
+                <Label>Default</Label>
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2500</d5p1:X>
+              <d5p1:Y>220</d5p1:Y>
+            </Position>
+          </Definition>
+          <ActionGuid>a578a254-b251-4f1e-abb7-533e5898f012</ActionGuid>
+          <ActionParameters xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>Subject</d4p1:Key>
+              <d4p1:Value>Shopping Cart Reminder!</d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>From</d4p1:Key>
+              <d4p1:Value>admin@localhost.local</d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>Body</d4p1:Key>
+              <d4p1:Value>
+<![CDATA[
+{% site = System.GetObject("cms.site", ActivitySiteID); cartLink = site.SitePresentationURL + ShoppingCartURL(site.SiteName, ActivityValue); return; |(identity)GlobalAdministrator|(hash)6e786996f0d84f820824eefa35458bbd625cde050462d216b9515376e7d9639e%}
+<style type="text/css">body
+{
+  max-width:800px;
+  text-align:center;
+  font-size: 16px;
+  font-family: Arial;
+}
+
+h1 {
+  font-size: 44px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+p {
+  font-size: 16px;
+}
+
+.btn {
+  padding: 10px 32px;
+  cursor: pointer;
+  border: 2px solid #08768c;
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: #08768C;
+  color: #fff;
+}
+</style>
+<h1>Company Name</h1>
+
+<h2>Shopping Cart Reminder!</h2>
+
+<p>We&lsquo;ve noticed you&lsquo;ve left an item or two in your shopping cart. In case you are still interested in them, hurry up, your recent selections are in your cart for a limited time.</p>
+
+<div class="wrapper">{% foreach(item in ShoppingCartProducts(ActivityValue)) { %}
+<div id="item"><img src="{%GetAbsoluteUrlBySiteID(IfEmpty(item.SKU.SKUImagePath, item.SKU.Parent.SKUImagePath, item.SKU.SKUImagePath), site.SiteID)%}" width="300px" />
+<p>{% FormatPriceForCart(item.UnitPrice, item.ShoppingCartID)%}</p>
+
+<p>{% item.SKU.SKUName %}</p>
+</div>
+{% } |(encode)false |(identity)GlobalAdministrator|(hash)3f855f4d710eb0e5f8e6cc707ede1abd761e8bfeb325e80949c782fe25cc75ca%}</div>
+<a class="btn" href="{% cartLink %}">CONTINUE SHOPPING</a>
+
+<hr />
+<div style="text-align: center">Copyright &copy; {% DateTime.Today.Year |(identity)GlobalAdministrator|(hash)8b5e18b4939fcafdd10f5e66441d3ba4b91216dc22941135b568b1803c6381bd%} Company Name. All rights reserved.</div>
+
+]]>
+              </d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>To</d4p1:Key>
+              <d4p1:Value>
+                <![CDATA[{% Contact.ContactEmail |(identity)GlobalAdministrator|(hash)51d44f544ee467268c27c6df3984723ea0f91bb9b094a0c9936ec8217843c935%}]]>
+              </d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>BasedOn</d4p1:Key>
+              <d4p1:Value>1</d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+          </ActionParameters>
+        </Step>
+        <Step>
+          <DisplayName>Start</DisplayName>
+          <CodeName>start</CodeName>
+          <Id>6</Id>
+          <Type>Start</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>38a43694-d8c1-4202-b14c-fa3b59b1fb77</Guid>
+                <Label>Default</Label>
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2300</d5p1:X>
+              <d5p1:Y>40</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+      </Steps>
+      <Transitions>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>5</StartStepId>
+          <EndStepId>1</EndStepId>
+          <SourcePointGuid>e813de91-1b54-4cca-bbd3-355b35e915a6</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>6</StartStepId>
+          <EndStepId>5</EndStepId>
+          <SourcePointGuid>38a43694-d8c1-4202-b14c-fa3b59b1fb77</SourcePointGuid>
+        </Transition>
+      </Transitions>
+      <Triggers>
+        <Trigger>
+          <DisplayName>Shopping cart marked as abandoned</DisplayName>
+          <Type>Creation</Type>
+          <ObjectType>om.activity</ObjectType>
+          <TargetObjectType>om.activitytype</TargetObjectType>
+          <TargetObjectName>ShoppingCartAbandoned</TargetObjectName>
+        </Trigger>
+      </Triggers>
+    </TemplateConfiguration>
+  </TemplateConfiguration>
+  <TemplateDescription>{$ma.template.abandonedcart.description$}</TemplateDescription>
+  <TemplateDisplayName>{$ma.template.abandonedcart$}</TemplateDisplayName>
+  <TemplateGuid>3775c9ea-b1c4-4242-843f-a9de593dc938</TemplateGuid>
+  <TemplateIconClass>icon-shopping-cart</TemplateIconClass>
+</ma.automationtemplate>

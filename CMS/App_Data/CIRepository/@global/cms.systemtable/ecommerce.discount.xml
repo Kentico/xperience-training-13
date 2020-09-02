@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.systemtable>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDefaultObjectType />
+  <ClassDisplayName>Discount</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <category name="com.discount.general">
+        <properties>
+          <caption>{$com.discount.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="DiscountID" columntype="integer" guid="4e022b02-5173-4eb0-ab6e-32faa8a7f355" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>DiscountID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="DiscountDisplayName" columnsize="200" columntype="text" guid="16e55b27-9c07-4b77-b046-e25fa9608fd9" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.displayname$}</fieldcaption>
+          <fielddescription>{$com.discount.displaynamedesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="DiscountName" columnsize="200" columntype="text" guid="00f12cf2-2b16-434c-98ca-ef881b253e45" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.name$}</fieldcaption>
+          <fielddescription>{$com.discount.namedesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountDescription" columntype="longtext" guid="3385e1b8-158d-4be1-8b42-8542f539cb86" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.description$}</fieldcaption>
+          <fielddescription>{$com.discount.descriptiondesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextarea</controlname>
+        </settings>
+      </field>
+      <field column="DiscountEnabled" columntype="boolean" guid="dcccc91e-bef8-415d-a625-8e8992992f79" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>{$com.discount.enabled$}</fieldcaption>
+          <fielddescription>{$com.discount.enableddesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <category name="BasicProperties">
+        <properties>
+          <caption>{$com.discount.basicproperties$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="DiscountIsFlat" columntype="boolean" guid="8378c821-6d34-466c-a6f8-c7c962cbdb45" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$com.discount.discountisflat$}</fieldcaption>
+          <fielddescription>{$com.discount.discountisflatdescription$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <Options>
+<![CDATA[
+false; {$com.discount.by$} %
+true; {$com.discount.by$} {% (GetMainSiteCurrency((DiscountSiteID == 0)? CMSContext.CurrentSiteID : DiscountSiteID).CurrencyCode)|(encode)|(resolver)listitem |(identity)GlobalAdministrator|(hash)fcf3bb479625b306c3af4ff975ef9581a7e4ada90d7f6ff38ccf9a1033b9dece%}
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountSiteID" columntype="integer" guid="9280f349-116d-48e0-b82f-fcea23f78917" system="true" />
+      <field column="DiscountValue" columnprecision="9" columnsize="18" columntype="decimal" dependsonanotherfield="true" guid="dbe3fd7d-9375-49be-b247-40d56b0acf00" system="true" visible="true">
+        <properties>
+          <contentafter ismacro="true">
+<![CDATA[
+<span class="form-control-text">
+{% 
+	if (DiscountIsFlat.Value == "true")
+	{ 
+		siteID = DiscountSiteID == 0 ? CMSContext.CurrentSiteID : DiscountSiteID;
+		HTMLEncode(GetMainSiteCurrency(siteID).CurrencyCode);
+	}
+	else
+	{ 
+		"%" 
+	}
+|(identity)GlobalAdministrator|(hash)859453a2e436f359ab1ae9a3e611fd34c080943c3531cf12fdd99622b8faceac%}
+</span>
+]]>
+          </contentafter>
+          <controlcssclass>input-width-40</controlcssclass>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$com.discount.value$}</fieldcaption>
+          <fielddescription>{$com.discount.valuedesc$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0|3</FilterType>
+          <Trim>True</Trim>
+          <ValidChars>,.</ValidChars>
+        </settings>
+        <rules>
+          <rule errormsg="{$basicform.valuebetween0and100$}">
+            <![CDATA[{%Rule("(DiscountIsFlat.Value? true: (Value<=100 && Value >= 0))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>DiscountIsFlat.Value? true: (Value&lt;=100 &amp;&amp; Value &gt;= 0)</t><v>DiscountIsFlat.Value? true: (Value&lt;=100 &amp;&amp; Value &gt;= 0)</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)31ef181dac7f07ce5fe8f5747996ae50139a09b84d1e984d24122ff2d1af4b3e%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("Value >= 0", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>0</t><v>0</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="DiscountOrderAmount" columnprecision="9" columnsize="18" columntype="decimal" guid="f4913082-74bf-4706-ad60-11f741e8585f" system="true">
+        <properties>
+          <contentafter>
+            <![CDATA[{%GetMainSiteCurrency((DiscountSiteID == 0)? CMSContext.CurrentSiteID : DiscountSiteID).CurrencyCode |(identity)GlobalAdministrator|(hash)d511b7775f6555cb149a74d1fb108767d0a3fb7f49459444417462eabfd92fcf%}]]>
+          </contentafter>
+          <fieldcaption>{$com.discount.discountorderamount$}</fieldcaption>
+          <inputcontrolstyle>width:70px;</inputcontrolstyle>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value >= 0", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>0</t><v>0</v><r>false</r><d></d><vt>double</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="DiscountApplyTo" columnsize="100" columntype="text" guid="95655a03-a081-4fdb-af10-00e6bcd25293" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>Order</defaultvalue>
+          <fieldcaption>{$com.discount.applyto$}</fieldcaption>
+          <fielddescription>{$com.discount.applytodesc$}</fielddescription>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.Ecommerce</AssemblyName>
+          <controlname>EnumSelector</controlname>
+          <DisplayType>2</DisplayType>
+          <Sort>False</Sort>
+          <TypeName>CMS.Ecommerce.DiscountApplicationEnum</TypeName>
+          <UseStringRepresentation>False</UseStringRepresentation>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountProductCondition" columntype="longtext" dependsonanotherfield="true" guid="a485d43e-89fb-4b78-9b77-a35ff5a3b227" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.discountconditionproduct$}</fieldcaption>
+          <fielddescription>{$com.discount.conditiondesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>conditionbuilder</controlname>
+          <DisplayRuleType>1</DisplayRuleType>
+          <MaxWidth>600</MaxWidth>
+          <ResolverName>SKUResolver</ResolverName>
+          <RuleCategoryNames>com.catalogdiscount</RuleCategoryNames>
+          <ShowAutoCompletionAbove>False</ShowAutoCompletionAbove>
+          <ShowGlobalRules>False</ShowGlobalRules>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountCartCondition" columntype="longtext" guid="eeb69142-8a05-47d0-aee0-f19321a4f819" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.discountconditionorder$}</fieldcaption>
+          <fielddescription>{$com.discount.cartconditiondesc$}</fielddescription>
+        </properties>
+        <settings>
+          <AddDataMacroBrackets>True</AddDataMacroBrackets>
+          <controlname>conditionbuilder</controlname>
+          <DisplayRuleType>1</DisplayRuleType>
+          <MaxWidth>600</MaxWidth>
+          <ResolverName>CalculationResolver</ResolverName>
+          <RuleCategoryNames>com.orderdiscount</RuleCategoryNames>
+          <ShowAutoCompletionAbove>True</ShowAutoCompletionAbove>
+          <ShowGlobalRules>False</ShowGlobalRules>
+          <SingleLineMode>True</SingleLineMode>
+        </settings>
+      </field>
+      <category name="com.discount.coupons">
+        <properties>
+          <caption>{$com.discount.coupons$}</caption>
+          <visible>False</visible>
+        </properties>
+      </category>
+      <field column="DiscountUsesCoupons" columntype="boolean" guid="145b313c-7eb9-4fc2-abd1-1262a18eaf69" system="true">
+        <properties>
+          <captioncssclass>norequiredmarks</captioncssclass>
+          <contentafter>
+<![CDATA[
+<div ID="CouponsInfoLabel" class="explanation-text" style="display:none;" >
+{% GetResourceString("com.discount.couponsredirect")|(identity)GlobalAdministrator|(hash)cedaaed0e52f413c19adca2cf5b65b9f38b53784473e850ae84cf53409a87541%}
+</div>
+</div>
+]]>
+          </contentafter>
+          <contentbefore>
+            <![CDATA[<div ID="CouponCheckBox">]]>
+          </contentbefore>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$com.discount.usescoupons$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <category name="TimeRestriction">
+        <properties>
+          <caption>{$com.discount.timerestriction$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="DiscountValidFrom" columnprecision="7" columntype="datetime" guid="f3ce6ac9-9eba-4bf0-8f5a-25fa29cbf2f9" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.validfrom$}</fieldcaption>
+          <fielddescription>{$com.discount.validfromdesc$}</fielddescription>
+          <validationerrormessage>{$general.dateoverlaps$}</validationerrormessage>
+        </properties>
+        <settings>
+          <CheckRange>True</CheckRange>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>True</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountValidTo" columnprecision="7" columntype="datetime" guid="5a5dbee3-f1a2-4e53-b86d-b766735c9698" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.discount.validto$}</fieldcaption>
+          <fielddescription>{$com.discount.validtodesc$}</fielddescription>
+          <validationerrormessage>{$general.dateoverlaps$}</validationerrormessage>
+        </properties>
+        <settings>
+          <CheckRange>True</CheckRange>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>True</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value > Fields[\"f3ce6ac9-9eba-4bf0-8f5a-25fa29cbf2f9\"].Value", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"CompareToField\" ><p n=\"field\"><t>Valid from</t><v>f3ce6ac9-9eba-4bf0-8f5a-25fa29cbf2f9</v><r>false</r><d></d><vt>text</vt></p><p n=\"operator\"><t>is greater than</t><v>&gt;</v><r>false</r><d></d><vt>text</vt></p></r></rules>")|(identity)GlobalAdministrator|(hash)c9d47921a214b7987371dd03e9bce2a8831b89ade2f256b388fc64c48d8787c4%}]]>
+          </rule>
+        </rules>
+      </field>
+      <category name="CustomerRestriction">
+        <properties>
+          <caption>{$com.discount.CustomerRestriction$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="DiscountCustomerRestriction" columnsize="200" columntype="text" guid="c70bd58f-a720-418f-bb26-c1a12a96a9ad" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>enum1</defaultvalue>
+          <fieldcaption>{$com.discount.CustomerRestrictiontext$}</fieldcaption>
+          <fielddescription>{$com.discount.restrictiondesc$}</fielddescription>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.Ecommerce</AssemblyName>
+          <controlname>EnumSelector</controlname>
+          <DisplayType>2</DisplayType>
+          <Sort>False</Sort>
+          <TypeName>CMS.Ecommerce.DiscountCustomerEnum</TypeName>
+          <UseStringRepresentation>True</UseStringRepresentation>
+        </settings>
+      </field>
+      <field allowempty="true" column="DiscountRoles" columnsize="400" columntype="text" dependsonanotherfield="true" guid="4e86869a-5ae4-4516-9475-ff74cb1c8b58" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%DiscountCustomerRestriction.Value == "SelectedRoles"|(identity)GlobalAdministrator|(hash)90756e6892a29e2ab328d27270c8cb0e7f32dfec8fce43590366a143dc352db7%}]]>
+          </enabledmacro>
+          <fielddescription>{$com.discount.rolesdesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>rolecheckboxselector</controlname>
+        </settings>
+      </field>
+      <category name="RulesForDiscountCalculation">
+        <properties>
+          <caption>{$com.discount.RulesForDiscountCalculation$}</caption>
+          <collapsedbydefault>true</collapsedbydefault>
+          <collapsible>true</collapsible>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="DiscountOrder" columntype="double" guid="6b14d539-6469-4046-87e0-4182267ab6cc" system="true" visible="true">
+        <properties>
+          <contentafter>
+            <![CDATA[<div class="FieldDescription">(1 is the highest priority)</div>]]>
+          </contentafter>
+          <defaultvalue>1</defaultvalue>
+          <fieldcaption>{$com.discount.Priority$}</fieldcaption>
+          <fielddescription>{$com.discount.PriorityDesc$}</fielddescription>
+          <validationerrormessage>{$com.discountedit.weightinvalid$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value >= 1", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>1</t><v>1</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="DiscountApplyFurtherDiscounts" columntype="boolean" guid="e1f01fe0-0e06-40bb-b618-7698e8e865c1" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>{$com.discount.applyfurtherdiscounts$}</fieldcaption>
+          <fielddescription>{$com.discount.applyfurtherdiscountsdesc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="DiscountGUID" columntype="guid" guid="1472ccd6-cfd9-4fe8-8804-ba37b0f8dc6b" system="true">
+        <properties>
+          <fieldcaption>DiscountGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="DiscountLastModified" columntype="datetime" guid="30e7c36b-b318-49a7-a715-e9df75857f60" system="true">
+        <properties>
+          <fieldcaption>DiscountLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>True</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>ascx</ClassFormLayoutType>
+  <ClassGUID>3cc5179a-b1f8-4a9a-98cb-06b92bc9604b</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>ecommerce.discount</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Ecommerce</CodeName>
+    <GUID>684e021b-8b56-4cbf-8fd5-b7a791fd2dbc</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search />
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>True</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>COM_Discount</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.systemtable>

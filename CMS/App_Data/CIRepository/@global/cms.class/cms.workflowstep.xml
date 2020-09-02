@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Workflow step</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="StepID" columntype="integer" guid="dfd2799a-66de-4a1f-ba2a-f53ba992521f" isPK="true" system="true">
+        <properties>
+          <fieldcaption>StepID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepType" columntype="integer" guid="00492fa3-f303-4d73-b232-06002242544e" system="true" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% Convert.ToInt(WorkflowStepTypeEnum.Standard, 0)|(identity)GlobalAdministrator|(hash)fdbb7cc347f95510b1ff30b30ed323ceeff19f3f69cffb62cbab375f9ba77220%}]]>
+          </defaultvalue>
+          <fieldcaption>{$graph.stepType$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!ParentObject.IsBasic|(identity)GlobalAdministrator|(hash)0bd73c0ce665d06a775e792682badfe331e1bad4a2a27b72eb76977e55ed6ee9%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+          <OutputFormat>
+            <![CDATA[{% Enums.ToStringRepresentation(Value, "CMS.DataEngine", "CMS.DataEngine.WorkflowStepTypeEnum") |(identity)GlobalAdministrator|(hash)59bbe29bba58b1ad265856c18cf69949ddf14502eb5a8f7c5418cdf751ace688%}]]>
+          </OutputFormat>
+        </settings>
+      </field>
+      <field column="StepDisplayName" columnsize="450" columntype="text" guid="9a698a96-f6c6-4814-bf15-d1f010a30df4" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+          <validationerrormessage>{$Development-Workflow_New.RequiresDisplayName$}</validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepName" columnsize="440" columntype="text" guid="aec2d92f-840a-42c1-a7fa-c5e9ff31df60" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <validationerrormessage>{$Development-Workflow_New.RequiresCodeName$}</validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepOrder" columntype="integer" guid="6e5445e6-c8f9-40ad-bd9d-5200229ed50a" system="true">
+        <properties>
+          <fieldcaption>StepOrder</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="StepWorkflowID" columntype="integer" guid="049b5d7d-4e7b-457e-8cf7-330a5aeffb9f" system="true">
+        <properties>
+          <fieldcaption>StepWorkflowID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="StepGUID" columntype="guid" guid="4ec30499-ea5f-4999-9789-100a7ca8e59f" system="true">
+        <properties>
+          <fieldcaption>StepGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="StepLastModified" columntype="datetime" guid="507a485e-ab44-41f6-8c22-9c29771f2832" system="true">
+        <properties>
+          <fieldcaption>StepLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepAllowReject" columntype="boolean" guid="7ed14742-d6ad-4b42-872e-5c62268eac2d" system="true" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption ismacro="true">
+            <![CDATA[{%!ParentObject.IsAutomation ? GetResourceString("WorkflowStep.AllowReject") : GetResourceString("WorkflowStep.AllowMoveToPrevious") |(identity)GlobalAdministrator|(hash)ea1f8d1ea12776a4c9915f0d47fe63d097f2b3100a5a86ba8f8b5a8646f61a15%}]]>
+          </fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!EditedObject.StepIsArchived && !EditedObject.StepIsEdit && !EditedObject.StepIsStart && !EditedObject.StepIsAction|(identity)GlobalAdministrator|(hash)9a7458b87005867567cef357239d3e69f4f1bb8148f979633e983f0a97e38d55%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepAllowPublish" columntype="boolean" guid="c25d48eb-2d42-4ccd-a3a8-16599234c964" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$WorkflowStep.AllowPublish$}</fieldcaption>
+          <validationerrormessage>{$Development-Workflow_New.RequiresCodeName$}</validationerrormessage>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!ParentObject.IsAutomation && ((EditedObject.StepType == WorkflowStepTypeEnum.Standard) || EditedObject.StepIsEdit || EditedObject.StepIsStart || (EditedObject.StepType == WorkflowStepTypeEnum.Wait))|(identity)GlobalAdministrator|(hash)765d922c2727ec92312f4484293f4e7d3359de530441bc01134ea986bb79c860%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepDefinition" columntype="longtext" guid="37e735b7-45a1-4ce8-a941-c5b60a2134a1" system="true">
+        <properties>
+          <fieldcaption>StepDefinition</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textareacontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepActionParameters" columntype="longtext" guid="2b4a4191-32ce-4894-9119-e41e389882e0" system="true">
+        <properties>
+          <fieldcaption>StepActionParameters</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>largetextarea</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepRolesSecurity" columntype="integer" guid="a1afef11-fe1e-4956-ad86-cc70e94ba99f" system="true">
+        <properties>
+          <fieldcaption>StepRolesSecurity</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepUsersSecurity" columntype="integer" guid="889d4850-245f-4927-bd9a-3592612afbb8" system="true">
+        <properties>
+          <fieldcaption>StepUsersSecurity</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepApprovedTemplateName" columnsize="200" columntype="text" guid="019fd464-e1f3-4eae-9031-b0b484aa4db3" system="true">
+        <properties>
+          <fieldcaption>StepApprovedTemplateName</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepRejectedTemplateName" columnsize="200" columntype="text" guid="13785671-e66e-40c9-9de1-ba84e3b37f7f" system="true">
+        <properties>
+          <fieldcaption>StepRejectedTemplateName</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepReadyforApprovalTemplateName" columnsize="200" columntype="text" guid="e0ac8026-9995-4427-a613-cfbad4c9c7b8" system="true">
+        <properties>
+          <fieldcaption>StepReadyforApprovalTemplateName</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepSendApproveEmails" columntype="boolean" guid="7d8bddd3-8f5d-4bfe-994c-16d40f69be03" system="true" />
+      <field allowempty="true" column="StepSendRejectEmails" columntype="boolean" guid="f479ab44-f3eb-4d34-9776-503aba1390a3" system="true" />
+      <field allowempty="true" column="StepSendReadyForApprovalEmails" columntype="boolean" guid="b7620869-ebe1-49a2-b56d-627047441bcf" system="true" />
+      <field allowempty="true" column="StepSendEmails" columntype="boolean" guid="4108270f-1cbf-4911-9513-e07079791310" system="true" />
+      <field allowempty="true" column="StepActionID" columntype="integer" guid="f4972d47-1bcf-49a1-ae31-6d6f39349c1e" system="true">
+        <properties>
+          <fieldcaption>StepActionID</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="StepWorkflowType" columntype="integer" guid="70ccbc86-b560-47ab-be83-dbb7d2a23a06" system="true">
+        <properties>
+          <fieldcaption>StepWorkflowType</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>6fc9d49b-83c2-4a7e-9a33-037883a76a26</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.workflowstep</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.WorkflowEngine</CodeName>
+    <GUID>2b67f370-3df4-4a4d-8734-1974639c5b69</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings />
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_WorkflowStep</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>
