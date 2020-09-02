@@ -34,7 +34,7 @@ To make the project work, follow these steps:
     * If you register the administration interface as an application that sits under `Default Web Site` and has a `Kentico13_Admin` alias, then you won't have to do any adjustments in Visual Studio.
 1. Open Visual Studio with elevated credentials, open the `WebApp.sln` solution and build it (`Ctrl+Shift+B`).
 1. Close the solution.
-1. Access the administrative interface. Follow the installation wizard to create a new database named "training-xperience-13" with the default Kentico objects.
+1. Access the administrative interface. Follow the installation wizard to create a new database named "xperience-training-13" with the default Kentico objects.
 1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory
 1. Open the `MedioClinic.sln` solution.
 1. Build the solution.
@@ -43,7 +43,7 @@ To make the project work, follow these steps:
 ```json
     {
       "ConnectionStrings": {
-        "CMSConnectionString": "Data Source=localhost;Initial Catalog=training-xperience-13;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
+        "CMSConnectionString": "Data Source=localhost;Initial Catalog=xperience-training-13;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
       },
       "CMSHashStringSalt": "ea505e97-2d5f-4d74-b4eb-1cbea203f877",
       "Logging": {
