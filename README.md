@@ -35,7 +35,9 @@ To make the project work, follow these steps:
 1. Open Visual Studio with elevated credentials, open the `WebApp.sln` solution and build it (`Ctrl+Shift+B`).
 1. Close the solution.
 1. Access the administrative interface. Follow the installation wizard to create a new database named "xperience-training-13" with the default Kentico objects.
-1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory
+1. Register an EMS license when prompted.
+1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory.
+1. Open the __Sites__ application in Xperience and start the MedioClinic website.
 1. Open the `MedioClinic.sln` solution.
 1. Build the solution.
 1. Under [MedioClinic](/MedioClinic), create an `appsettings.Development.json` file. If you run your SQL Server locally, the file can have the following structure:
