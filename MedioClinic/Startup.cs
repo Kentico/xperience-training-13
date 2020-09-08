@@ -18,10 +18,7 @@ using Kentico.Content.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
-
-using Core;
 using Business.Configuration;
-using Business.Services;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
@@ -58,9 +55,14 @@ namespace MedioClinic
 
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
+
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
             services.Configure<XperienceOptions>(xperienceOptions);
-            ConfigureIdentityServices(services, xperienceOptions);
+
+            var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
+            services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
+
+            ConfigureIdentityServices(services, xperienceOptions, googleAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -102,6 +104,7 @@ namespace MedioClinic
             app.UseRouting();
             app.UseResponseCaching();
             app.UseRequestCulture();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -187,13 +190,12 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
 
-        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
+        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions, IConfigurationSection googleAuthenticationOptions)
         {
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
 
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
-                .AddApplicationDefaultTokenProviders()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
                 .AddRoleStore<ApplicationRoleStore<ApplicationRole>>()
                 .AddUserManager<MedioClinicUserManager>()
@@ -204,9 +206,20 @@ namespace MedioClinic
             //services.AddScoped(typeof(ITwoFactorSecurityStampValidator), typeof(TwoFactorSecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
             //services.AddScoped<IMedioClinicSignInManager<MedioClinicUser>, MedioClinicSignInManager>();
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+            var authBuilder = services.AddAuthentication();
 
+            var useGoogleAuth = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>().UseGoogleAuth;
+            if (useGoogleAuth)
+            {
+                authBuilder.AddGoogle(googleOptions =>
+                 {
+                     googleOptions.ClientId = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientId;
+                     googleOptions.ClientSecret = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientSecret;
+                 });
+            }
+
+            services.AddAuthorization();
+            
             services.ConfigureApplicationCookie(cookieOptions =>
             {
                 cookieOptions.LoginPath = new PathString("/Account/Signin");

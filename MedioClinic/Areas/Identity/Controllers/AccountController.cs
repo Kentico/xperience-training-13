@@ -15,6 +15,9 @@ using Identity;
 using Identity.Models.Account;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Identity.Models;
 
 namespace MedioClinic.Areas.Identity.Controllers
 {
@@ -24,7 +27,7 @@ namespace MedioClinic.Areas.Identity.Controllers
     {
         private readonly IAccountManager _accountManager;
 
-        private IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
+        private Business.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
         public AccountController(ILogger<AccountController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor, IAccountManager accountManager) 
             : base(logger, siteService, optionsMonitor)
@@ -274,5 +277,57 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// </summary>
         /// <returns>Home page URL.</returns>
         protected string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
+
+        /// <summary>
+        /// Redirects authentication requests to an external service.
+        /// Posted parameters include the name of the requested authentication middleware instance and a return URL.
+        /// </summary>
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult RequestExternalSignIn(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalSignInCallback", new { ReturnUrl = returnUrl });
+
+            // Configures the redirect URL and user identifier for the specified external authentication provider
+            AuthenticationProperties authenticationProperties = _accountManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return Challenge(authenticationProperties, provider);
+        }
+
+        /// <summary>
+        /// Handles responses from external authentication services.
+        /// </summary>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalSignInCallback(string returnUrl, string remoteError = null)
+        {
+            // If an error occurred on the side of the ecternal provider, displays a view with the forwarded error message
+            if (remoteError != null)
+            {
+                throw new Exception($"External authentication failed: {remoteError}");
+            }
+
+            // Extracts login info out of the external identity provided by the service
+            ExternalLoginInfo loginInfo = await _accountManager.GetExternalLoginInfoAsync();
+
+            // If the external authentication fails, displays a view with appropriate information
+            if (loginInfo == null)
+            {
+                throw new Exception("External authentication failed: loginInfo");
+            }
+
+            // Attempts to sign in the user using the external login info
+            IdentityManagerResult<SignInResultState, SignInViewModel> result = await _accountManager.SignInExternalAsync(loginInfo);
+
+            if(result.Success)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                throw new Exception(result.Errors.Join("<br/>"));
+            }
+        }
     }
 }

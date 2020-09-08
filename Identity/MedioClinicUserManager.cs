@@ -7,11 +7,17 @@ using Microsoft.Extensions.Options;
 using Kentico.Membership;
 
 using Identity.Models;
+using CMS.Helpers;
+using System.Security.Claims;
+using CMS.Base;
+using System.Threading.Tasks;
 
 namespace Identity
 {
     public class MedioClinicUserManager : ApplicationUserManager<MedioClinicUser>, IMedioClinicUserManager<MedioClinicUser>
     {
+        private ISiteService _siteService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MedioClinicUserManager"/> class.
         /// </summary>
@@ -32,11 +38,38 @@ namespace Identity
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
             IServiceProvider services,
-            ILogger<MedioClinicUserManager> logger
+            ILogger<MedioClinicUserManager> logger,
+            ISiteService siteService
             ) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
+            _siteService = siteService;
         }
 
         public IUserStore<MedioClinicUser> UserStore => Store;
+
+        public async Task<IdentityResult> CreateExternalUser(ExternalLoginInfo loginInfo)
+        {
+            // Prepares a new user entity based on the external login data
+            MedioClinicUser user = new MedioClinicUser
+            {
+                UserName = ValidationHelper.GetSafeUserName(loginInfo.Principal.FindFirstValue(ClaimTypes.Name) ??
+                                                            loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+                                                            _siteService.CurrentSite.SiteName),
+                Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+                Enabled = true, // The user is enabled by default
+                IsExternal = true // IsExternal must always be true for users created via external authentication
+                                  // Set any other required user properties using the data available in loginInfo
+            };
+
+            // Attempts to create the user in the Xperience database
+            IdentityResult result = await CreateAsync(user);
+            if (result.Succeeded)
+            {
+                // If the user was created successfully, creates a mapping between the user and the given authentication provider
+                result = await AddLoginAsync(user, loginInfo);
+            }
+
+            return result;
+        }
     }
 }
