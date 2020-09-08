@@ -58,6 +58,20 @@ To make the project work, follow these steps:
     }
 ```
 
+## Enabling external authentication
+
+### Google
+
+Add the following to your `appsettings.json`:
+
+```
+"GoogleAuthenticationOptions": {
+    "UseGoogleAuth": "true",
+    "ClientId": <your-client-id>",
+    "ClientSecret": "<your-client-secret>"
+  },
+```
+
 ## Coding conventions
 
 The code in this repo follows the standard [C# coding conventions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions) documented in the [C# programming guide](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/), and the [coding guidelines](https://github.com/dotnet/aspnetcore/wiki/Engineering-guidelines#coding-guidelines) held by the ASP.NET Core product team at Microsoft.
