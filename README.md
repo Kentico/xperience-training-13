@@ -62,7 +62,9 @@ To make the project work, follow these steps:
 
 ### Google
 
-Add the following to your `appsettings.json`:
+Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849).
+
+Add the generated Client ID and Secret to your `appsettings.json`:
 
 ```
 "GoogleAuthenticationOptions": {
