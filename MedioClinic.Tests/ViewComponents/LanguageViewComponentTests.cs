@@ -75,10 +75,22 @@ namespace MedioClinic.Tests.ViewComponents
         {
             var navigationVariant = GetNavigation();
 
-            var navigation = new Dictionary<string, NavigationItem>
+            var navigation = new Dictionary<SiteCulture, NavigationItem>
             {
-                { "en-US", navigationVariant },
-                { "cs-CZ", navigationVariant }
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "en-US"
+                    },
+                    navigationVariant
+                },
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "cs-CZ",
+                    },
+                    navigationVariant
+                }
             };
 
             var repository = new Mock<INavigationRepository>();

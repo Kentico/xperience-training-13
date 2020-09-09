@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using XperienceAdapter.Models;
 using Business.Models;
 
 namespace MedioClinic.Models.ViewComponents.Navigation
@@ -12,7 +13,7 @@ namespace MedioClinic.Models.ViewComponents.Navigation
 
         public string? ListClass { get; set; }
 
-        public Dictionary<string, NavigationItem>? Navigation { get; set; }
+        public Dictionary<SiteCulture, NavigationItem>? Navigation { get; set; }
 
         public bool DisplaySecondLevel { get; set; }
     }

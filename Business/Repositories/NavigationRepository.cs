@@ -39,6 +39,7 @@ namespace Business.Repositories
         protected NavigationItem RootDto => _basePageRepository.GetPages(query =>
             query
                 .Path(RootPath, PathTypeEnum.Single)
+                .CombineWithDefaultCulture()
                 .TopN(1),
             buildCacheAction: cache => cache
                 .Key($"{nameof(NavigationRepository)}|{nameof(RootDto)}"))
@@ -61,10 +62,10 @@ namespace Business.Repositories
             _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
-        public Dictionary<string, NavigationItem> GetContentTreeNavigation()
+        public Dictionary<SiteCulture, NavigationItem> GetContentTreeNavigation()
         {
             var cacheKeySuffix = $"{nameof(GetContentTreeNavigation)}";
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
 
             if (cultures != null && cultures.Any())
             {
@@ -79,19 +80,19 @@ namespace Business.Repositories
 
                     var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
 
-                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                    cultureSpecificNavigations.Add(culture, decorated);
                 }
             }
 
             return cultureSpecificNavigations;
         }
 
-        public Dictionary<string, NavigationItem> GetSecondaryNavigation(string nodeAliasPath)
+        public Dictionary<SiteCulture, NavigationItem> GetSecondaryNavigation(string nodeAliasPath)
         {
             var cacheKeySuffix = $"{nameof(GetSecondaryNavigation)}|{nodeAliasPath}";
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
 
-            if (cultures != null && cultures.Any())
+            if (cultures.Any())
             {
                 foreach (var culture in cultures)
                 {
@@ -104,19 +105,19 @@ namespace Business.Repositories
 
                     var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
 
-                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                    cultureSpecificNavigations.Add(culture, decorated);
                 }
             }
 
             return cultureSpecificNavigations;
         }
 
-        public Dictionary<string, NavigationItem> GetConventionalRoutingNavigation()
+        public Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation()
         {
             string cacheKeySuffix = $"{nameof(GetConventionalRoutingNavigation)}";
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations);
+            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
 
-            if (cultures != null && cultures.Any())
+            if (cultures.Any())
             {
                 foreach (var culture in cultures)
                 {
@@ -126,7 +127,7 @@ namespace Business.Repositories
                             .FilterDuplicates()
                             .OrderByAscending(NodeOrdering),
                         buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|{culture.IsoCode}", RootPath, PathTypeEnum.Section),
-                        culture: culture.IsoCode)
+                        culture: culture)
                             .Select(dto => new NavigationItem
                             {
                                 NodeId = dto.NodeId,
@@ -134,16 +135,44 @@ namespace Business.Repositories
                                 ParentId = dto.ParentId,
                                 Name = dto.Name,
                                 NodeAliasPath = dto.NodeAliasPath,
+                                Culture = dto.Culture,
                                 UrlSlug = dto.UrlSlug
                             });
 
                     var decorated = DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
 
-                    cultureSpecificNavigations.Add(culture.IsoCode!, decorated);
+                    cultureSpecificNavigations.Add(culture, decorated);
                 }
             }
 
             return cultureSpecificNavigations;
+        }
+
+        public string? GetConventionalRoutingUrl(int nodeId, SiteCulture pageCulture)
+        {
+            var navigation = GetConventionalRoutingNavigation()[pageCulture];
+
+            return GetUrlByNodeId(nodeId, navigation);
+        }
+
+        private string? GetUrlByNodeId(int nodeId, NavigationItem item)
+        {
+            if (item.NodeId == nodeId)
+            {
+                return item.RelativeUrl;
+            }
+
+            foreach (var childItem in item.ChildItems)
+            {
+                var childResult = GetUrlByNodeId(nodeId, childItem);
+
+                if (childResult != null)
+                {
+                    return childResult;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -151,10 +180,10 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="cultures">All site cultures.</param>
         /// <param name="cultureSpecificNavigations">Empty dictionary with navigation sets for each culture.</param>
-        protected void GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<string, NavigationItem> cultureSpecificNavigations)
+        protected void GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations)
         {
             cultures = _cultureRepository.GetAll();
-            cultureSpecificNavigations = new Dictionary<string, NavigationItem>();
+            cultureSpecificNavigations = new Dictionary<SiteCulture, NavigationItem>();
         }
 
         /// <summary>
@@ -199,7 +228,7 @@ namespace Business.Repositories
         /// <param name="root">Root navigation item.</param>
         /// <param name="defaultCultureItems">A flat sequence of all other items.</param>
         /// <returns></returns>
-        public NavigationItem DecorateItems(NavigationItem root, IEnumerable<NavigationItem> navigationItems, Func<NavigationItem, string> urlDecorator)
+        public NavigationItem DecorateItems(NavigationItem root, IEnumerable<NavigationItem> navigationItems, Func<NavigationItem, SiteCulture, string?> urlDecorator)
         {
             var connectableItems = GetConnectableItems(navigationItems.Concat(new[] { root })).ToList();
 
@@ -222,7 +251,7 @@ namespace Business.Repositories
         /// <param name="parent">Current parent item.</param>
         /// <param name="allItems">A flat sequence of all items.</param>
         /// <returns>Hierarchical navigation item.</returns>
-        public NavigationItem BuildHierarchyLevel(NavigationItem parent, IEnumerable<NavigationItem> allItems, Func<NavigationItem, string> urlDecorator)
+        public NavigationItem BuildHierarchyLevel(NavigationItem parent, IEnumerable<NavigationItem> allItems, Func<NavigationItem, SiteCulture, string?> urlDecorator)
         {
             var children = allItems
                 .Where(item => item.ParentId.HasValue && item.ParentId == parent.NodeId);
@@ -236,7 +265,7 @@ namespace Business.Repositories
                     item.Parent = parent;
                     item.AllParents.AddRange(parent.AllParents);
                     item.AllParents.Add(parent);
-                    item.RelativeUrl = urlDecorator(item);
+                    item.RelativeUrl = urlDecorator(item, item.Culture!);
                     BuildHierarchyLevel(item, allItems, urlDecorator);
                 }
             }
@@ -249,32 +278,43 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="item">Item to get the URL for.</param>
         /// <returns>URL.</returns>
-        protected string GetContentTreeBasedUrl(NavigationItem item) => GetPageUrl(item);
+        protected string? GetContentTreeBasedUrl(NavigationItem item, SiteCulture _) => GetPageUrl(item);
 
         /// <summary>
         /// Gets URL for conventional routing.
         /// </summary>
         /// <param name="item">Item to get the URL for.</param>
         /// <returns>URL.</returns>
-        protected string GetConventionalRoutingUrl(NavigationItem item)
+        protected string GetConventionalRoutingUrl(NavigationItem item, SiteCulture? siteCulture = default)
         {
             var patternBasedUrl = GetPageUrl(item);
 
             if (string.IsNullOrEmpty(patternBasedUrl))
             {
                 var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
+                var culture = siteCulture ?? _cultureRepository.DefaultSiteCulture;
 
-                return $"~/{Thread.CurrentThread.CurrentCulture.Name.ToLowerInvariant()}{trailingPath}/";
+                return $"~/{siteCulture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
             }
 
             return patternBasedUrl;
         }
 
-        protected string GetPageUrl(NavigationItem item)
+        protected string? GetPageUrl(NavigationItem item)
         {
             var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
 
-            return _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture)?.RelativePath?.ToLowerInvariant()!;
+            try
+            {
+                var url = _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture)?.RelativePath?.ToLowerInvariant()!;
+
+                return url;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
     }
 }

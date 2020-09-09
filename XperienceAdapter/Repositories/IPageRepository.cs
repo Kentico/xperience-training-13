@@ -32,7 +32,7 @@ namespace XperienceAdapter.Repositories
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
             bool includeAttachments = default,
-            string? culture = default);
+            SiteCulture? culture = default);
 
         /// <summary>
         /// Gets pages of multiple types and optionally caches them.
@@ -50,7 +50,7 @@ namespace XperienceAdapter.Repositories
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            string? culture = default);
+            SiteCulture? culture = default);
 
         /// <summary>
         /// Gets a specific page.

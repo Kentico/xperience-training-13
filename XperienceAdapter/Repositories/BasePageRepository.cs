@@ -45,11 +45,11 @@ namespace XperienceAdapter.Repositories
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
             bool includeAttachments = default,
-            string? culture = default)
+            SiteCulture? culture = default)
         {
             var result = _repositoryDependencies.PageRetriever.Retrieve(query =>
             {
-                query = FilterForSingleType(query, culture);
+                query = FilterForSingleType(query, culture?.IsoCode);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
@@ -64,11 +64,11 @@ namespace XperienceAdapter.Repositories
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            string? culture = default)
+            SiteCulture? culture = default)
         {
             var result = _repositoryDependencies.PageRetriever.RetrieveMultiple(query =>
             {
-                query = FilterForMultipleTypes(query, culture);
+                query = FilterForMultipleTypes(query, culture?.IsoCode);
                 query
                     .Types(types.ToArray())
                     .WithCoupledColumns();
@@ -247,7 +247,7 @@ namespace XperienceAdapter.Repositories
             dto.Name = page.DocumentName;
             dto.NodeAliasPath = page.NodeAliasPath;
             dto.ParentId = page.NodeParentID;
-            dto.Culture = page.DocumentCulture;
+            dto.Culture = _repositoryDependencies.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
 
             if (includeAttachments)
             {

@@ -41,7 +41,7 @@ namespace Business.Tests
             var items = new[] { GetRootItem() }.Concat(GetCyclicItems());
 
             // Act.
-            var result = repository.BuildHierarchyLevel(GetRootItem(), items, dto => string.Empty);
+            var result = repository.BuildHierarchyLevel(GetRootItem(), items, (dto, culture) => string.Empty);
 
             // Assert.
             Assert.NotNull(result);
@@ -57,7 +57,7 @@ namespace Business.Tests
             var items = new[] { GetRootItem() }.Concat(GetItems());
 
             // Act.
-            var result = repository.BuildHierarchyLevel(GetRootItem(), items, dto => string.Empty);
+            var result = repository.BuildHierarchyLevel(GetRootItem(), items, (dto, culture) => string.Empty);
 
             // Assert.
             Assert.NotNull(result);

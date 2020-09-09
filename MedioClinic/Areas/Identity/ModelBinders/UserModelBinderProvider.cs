@@ -1,16 +1,14 @@
-﻿using Identity;
-using Identity.Models.Profile;
+﻿using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Identity.Models.Profile;
 
 namespace MedioClinic.Areas.Identity.ModelBinders
 {
     public class UserModelBinderProvider : IModelBinderProvider
     {
+        // TODO: Nullable return value?
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
             if (context is null)

@@ -1,9 +1,16 @@
-﻿@using MedioClinic.ViewComponents
+﻿@using System.Threading;
+@using XperienceAdapter.Extensions;
+@using MedioClinic.ViewComponents
 @model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
 
 @{
-    var cultureName = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
-    var navigationItems = Model?.Navigation?[cultureName]?.ChildItems;
+    var culture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
+    List<Business.Models.NavigationItem>? navigationItems = default;
+
+    if (culture != null)
+    {
+        navigationItems = Model?.Navigation?[culture]?.ChildItems;
+    }
 }
 
 <ul id="@Model?.MainId" class="@Model?.ListClass">
@@ -31,4 +38,20 @@
     {
         <vc:language culture-switch-id="@Model?.CultureSwitchId" />
     }
+
+    @{
+        var identityNavigation = new List<(string, string)>();
+    }
+
+    @if (Context.User.Identity.IsAuthenticated)
+    {
+        identityNavigation.Add((Url.Action("Index", "Profile", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), "Profile"));
+        identityNavigation.Add((Url.Action("Signout", "Account", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), "Sign out"));
+    }
+    else
+    {
+        identityNavigation.Add((Url.Action("Signin", "Account", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture }).ToLowerInvariant(), "Sign in"));
+    }
+
+    <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), "Identity", (IEnumerable<(string, string)>)identityNavigation)" />
 </ul>

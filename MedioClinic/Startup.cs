@@ -19,9 +19,7 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
 
-using Core;
 using Business.Configuration;
-using Business.Services;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
@@ -106,14 +104,10 @@ namespace MedioClinic
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "areas",
-                //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
                 endpoints.MapAreaControllerRoute(
                     name: "identity",
                     areaName: "Identity",
-                    pattern: "identity/{controller=Account}/{action=Register}/{id?}");
+                    pattern: "{culture}/identity/{controller=Account}/{action=Register}/{id?}");
 
                 MapCultureSpecificRoutes(endpoints, optionsAccessor);
                 endpoints.MapDefaultControllerRoute();
@@ -144,7 +138,7 @@ namespace MedioClinic
 
                 new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
                 {
-                    (defaultCulture, "doctors/{nodeGuid}/{urlSlug?}"),
+                    (defaultCulture, "doctors/{urlSlug?}"),
                     (spanishCulture, "medicos/{nodeGuid}/{urlSlug?}"),
                 }),
 
@@ -183,9 +177,8 @@ namespace MedioClinic
             }
         }
 
-        // TODO: Can the segment name be inferred?
         private static string AddCulturePrefix(string culture, string pattern) =>
-            $"{{culture={culture}}}/{pattern}";
+            $"{{culture={culture.ToLowerInvariant()}}}/{pattern}";
 
         private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
         {

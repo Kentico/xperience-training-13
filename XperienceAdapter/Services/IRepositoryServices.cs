@@ -1,5 +1,6 @@
 ﻿using CMS.Base;
 using Kentico.Content.Web.Mvc;
+using XperienceAdapter.Repositories;
 
 namespace XperienceAdapter.Services
 {
@@ -13,5 +14,7 @@ namespace XperienceAdapter.Services
         ISiteContextService SiteContextService { get; }
 
         IPageRetriever PageRetriever { get; }
+
+        ISiteCultureRepository SiteCultureRepository { get; }
     }
 }

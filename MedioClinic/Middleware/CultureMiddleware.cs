@@ -1,12 +1,9 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.Operations;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace MedioClinic.Middleware
 {
@@ -29,13 +26,11 @@ namespace MedioClinic.Middleware
             }
 
             // TODO: Nested function.
-            var endpoint = httpContext.GetEndpoint() as Microsoft.AspNetCore.Routing.RouteEndpoint;
-
-            var cultureParameterValue = endpoint?
-                .RoutePattern?
-                .Parameters?
-                .FirstOrDefault(parameter => parameter.Name.Equals(CultureParameterName, StringComparison.OrdinalIgnoreCase))?
-                .Default as string;
+            var cultureParameterValue = httpContext
+                .Request
+                .RouteValues?
+                .FirstOrDefault(value => value.Key.Equals(CultureParameterName, StringComparison.OrdinalIgnoreCase))
+                .Value as string;
 
             if (!string.IsNullOrEmpty(cultureParameterValue))
             {

@@ -85,5 +85,8 @@ namespace Business.Extensions
 
             return stringBuilder.ToString();
         }
+
+        public static string UrlInCurrentCulture(this IUrlHelper helper, string routeName) =>
+            helper.RouteUrl($"{routeName}_{Thread.CurrentThread.CurrentUICulture.Name}");
     }
 }
