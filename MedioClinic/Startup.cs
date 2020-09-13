@@ -59,10 +59,15 @@ namespace MedioClinic
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
             services.Configure<XperienceOptions>(xperienceOptions);
 
+            // Load external authentication configurations
+
             var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
             services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
 
-            ConfigureIdentityServices(services, xperienceOptions, googleAuthenticationOptions);
+            var msAuthenticationOptions = Configuration.GetSection(nameof(MicrosoftAuthenticationOptions));
+            services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
+
+            ConfigureIdentityServices(services, xperienceOptions, googleAuthenticationOptions, msAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -190,7 +195,11 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
 
-        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions, IConfigurationSection googleAuthenticationOptions)
+        private static void ConfigureIdentityServices(
+            IServiceCollection services,
+            IConfigurationSection xperienceOptions,
+            IConfigurationSection googleAuthenticationOptions,
+            IConfigurationSection msAuthenticationOptions)
         {
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
@@ -218,6 +227,16 @@ namespace MedioClinic
                  });
             }
 
+            var useMSAuth = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>().UseMicrosoftAuth;
+            if(useMSAuth)
+            {
+                authBuilder.AddMicrosoftAccount(microsoftAccountOptions =>
+                {
+                    microsoftAccountOptions.ClientSecret = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientSecret;
+                    microsoftAccountOptions.ClientId = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientId;
+                });
+            }
+            
             services.AddAuthorization();
             
             services.ConfigureApplicationCookie(cookieOptions =>

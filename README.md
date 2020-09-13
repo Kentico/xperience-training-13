@@ -66,12 +66,26 @@ Create a new [Google Console](https://console.developers.google.com/) project fo
 
 Add the generated Client ID and Secret to your `appsettings.json`:
 
-```
+```json
 "GoogleAuthenticationOptions": {
-    "UseGoogleAuth": "true",
-    "ClientId": <your-client-id>",
-    "ClientSecret": "<your-client-secret>"
-  },
+  "UseGoogleAuth": true,
+  "ClientId": "<your-client-id>",
+  "ClientSecret": "<your-client-secret>"
+},
+```
+
+### Microsoft
+
+In the Azure Portal, create a new __App registration__ following [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-3.1#create-the-app-in-microsoft-developer-portal). Ensure that the __Redirect URI__ is set to `https://localhost:44324/signin-microsoft`.
+
+Add the __Application (client) ID__ from the Overview tab and the __Client secret__ you generated to the `appsettings.json`:
+
+```json
+"MicrosoftAuthenticationOptions": {
+  "UseMicrosoftAuth": true,
+  "ClientId": "<your-client-id>",
+  "ClientSecret": "<your-client-secret>"
+},
 ```
 
 ## Coding conventions
