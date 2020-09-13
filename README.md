@@ -78,7 +78,7 @@ Add the generated __Client ID__ and __Client Secret__ to your `appsettings.json`
 
 In the Azure Portal, create a new __App registration__ following [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-3.1#create-the-app-in-microsoft-developer-portal). Ensure that the __Redirect URI__ is set to `https://localhost:44324/signin-microsoft`.
 
-Add the __Application (client) ID__ from the Overview tab and the __Client secret__ you generated to the `appsettings.json`:
+Add the __Application (client) ID__ from the _Overview tab_ and the __Client secret__ you generated to the `appsettings.json`:
 
 ```json
 "MicrosoftAuthenticationOptions": {
@@ -97,6 +97,18 @@ Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/sec
   "UseFacebookAuth": true,
   "AppId": "<your-app-id>",
   "AppSecret": "<your-app-secret>"
+},
+```
+
+### Twitter
+
+Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/twitter-logins?view=aspnetcore-3.1#create-the-app-in-twitter) with the __Callback URL__ of `https://localhost:44324/signin-twitter`. On the _Keys and Tokens_ tab, copy the __API key__ and __API secret key__ into your `appsettings.json`:
+
+```json
+"TwitterAuthenticationOptions": {
+  "UseTwitterAuth": true,
+  "ConsumerKey": "<your-api-key",
+  "ConsumerSecret": "<your-api-secret-key>"
 },
 ```
 

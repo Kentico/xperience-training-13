@@ -64,15 +64,16 @@ namespace MedioClinic
             // Load external authentication configurations
 
             var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
-            services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
-
+            var twitterAuthenticationOptions = Configuration.GetSection(nameof(TwitterAuthenticationOptions));
             var msAuthenticationOptions = Configuration.GetSection(nameof(MicrosoftAuthenticationOptions));
-            services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
-
             var facebookAuthenticationOptions = Configuration.GetSection(nameof(FacebookAuthenticationOptions));
-            services.Configure<FacebookAuthenticationOptions>(facebookAuthenticationOptions);
 
-            ConfigureExternalAuthentication(services, googleAuthenticationOptions, msAuthenticationOptions, facebookAuthenticationOptions);
+            services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
+            services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
+            services.Configure<FacebookAuthenticationOptions>(facebookAuthenticationOptions);
+            services.Configure<TwitterAuthenticationOptions>(twitterAuthenticationOptions);
+
+            ConfigureExternalAuthentication(services, googleAuthenticationOptions, msAuthenticationOptions, facebookAuthenticationOptions, twitterAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -204,7 +205,8 @@ namespace MedioClinic
             IServiceCollection services,
             IConfigurationSection googleAuthenticationOptions,
             IConfigurationSection msAuthenticationOptions,
-            IConfigurationSection facebookAuthenticationOptions)
+            IConfigurationSection facebookAuthenticationOptions,
+            IConfigurationSection twitterAuthenticationOptions)
         {
             var authBuilder = services.AddAuthentication();
 
@@ -235,6 +237,17 @@ namespace MedioClinic
                 {
                     facebookOptions.AppId = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppId;
                     facebookOptions.AppSecret = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppSecret;
+                });
+            }
+
+            var useTwitterAuth = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>().UseTwitterAuth;
+            if (useTwitterAuth)
+            {
+                authBuilder.AddTwitter(twitterOptions =>
+                {
+                    twitterOptions.ConsumerKey = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerKey;
+                    twitterOptions.ConsumerSecret = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerSecret;
+                    twitterOptions.RetrieveUserDetails = true;
                 });
             }
         }
