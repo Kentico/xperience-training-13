@@ -59,6 +59,8 @@ namespace MedioClinic
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
             services.Configure<XperienceOptions>(xperienceOptions);
 
+            ConfigureIdentityServices(services, xperienceOptions);
+
             // Load external authentication configurations
 
             var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
@@ -67,7 +69,10 @@ namespace MedioClinic
             var msAuthenticationOptions = Configuration.GetSection(nameof(MicrosoftAuthenticationOptions));
             services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
 
-            ConfigureIdentityServices(services, xperienceOptions, googleAuthenticationOptions, msAuthenticationOptions);
+            var facebookAuthenticationOptions = Configuration.GetSection(nameof(FacebookAuthenticationOptions));
+            services.Configure<FacebookAuthenticationOptions>(facebookAuthenticationOptions);
+
+            ConfigureExternalAuthentication(services, googleAuthenticationOptions, msAuthenticationOptions, facebookAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -195,11 +200,46 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
 
-        private static void ConfigureIdentityServices(
+        private static void ConfigureExternalAuthentication(
             IServiceCollection services,
-            IConfigurationSection xperienceOptions,
             IConfigurationSection googleAuthenticationOptions,
-            IConfigurationSection msAuthenticationOptions)
+            IConfigurationSection msAuthenticationOptions,
+            IConfigurationSection facebookAuthenticationOptions)
+        {
+            var authBuilder = services.AddAuthentication();
+
+            var useGoogleAuth = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>().UseGoogleAuth;
+            if (useGoogleAuth)
+            {
+                authBuilder.AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientId;
+                    googleOptions.ClientSecret = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientSecret;
+                });
+            }
+
+            var useMSAuth = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>().UseMicrosoftAuth;
+            if (useMSAuth)
+            {
+                authBuilder.AddMicrosoftAccount(microsoftAccountOptions =>
+                {
+                    microsoftAccountOptions.ClientSecret = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientSecret;
+                    microsoftAccountOptions.ClientId = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientId;
+                });
+            }
+
+            var useFacebookAuth = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>().UseFacebookAuth;
+            if(useFacebookAuth)
+            {
+                authBuilder.AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppId;
+                    facebookOptions.AppSecret = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppSecret;
+                });
+            }
+        }
+
+        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
         {
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
@@ -215,28 +255,6 @@ namespace MedioClinic
             //services.AddScoped(typeof(ITwoFactorSecurityStampValidator), typeof(TwoFactorSecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
             //services.AddScoped<IMedioClinicSignInManager<MedioClinicUser>, MedioClinicSignInManager>();
 
-            var authBuilder = services.AddAuthentication();
-
-            var useGoogleAuth = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>().UseGoogleAuth;
-            if (useGoogleAuth)
-            {
-                authBuilder.AddGoogle(googleOptions =>
-                 {
-                     googleOptions.ClientId = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientId;
-                     googleOptions.ClientSecret = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientSecret;
-                 });
-            }
-
-            var useMSAuth = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>().UseMicrosoftAuth;
-            if(useMSAuth)
-            {
-                authBuilder.AddMicrosoftAccount(microsoftAccountOptions =>
-                {
-                    microsoftAccountOptions.ClientSecret = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientSecret;
-                    microsoftAccountOptions.ClientId = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientId;
-                });
-            }
-            
             services.AddAuthorization();
             
             services.ConfigureApplicationCookie(cookieOptions =>

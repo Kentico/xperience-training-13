@@ -62,9 +62,9 @@ To make the project work, follow these steps:
 
 ### Google
 
-Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849).
+Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849). Set the __Authorized redirect URIs__ to `https://localhost:44324/signin-google`.
 
-Add the generated Client ID and Secret to your `appsettings.json`:
+Add the generated __Client ID__ and __Client Secret__ to your `appsettings.json`:
 
 ```json
 "GoogleAuthenticationOptions": {
@@ -85,6 +85,18 @@ Add the __Application (client) ID__ from the Overview tab and the __Client secre
   "UseMicrosoftAuth": true,
   "ClientId": "<your-client-id>",
   "ClientSecret": "<your-client-secret>"
+},
+```
+
+### Facebook
+
+Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-3.1#create-the-app-in-facebook) with the __OAuth Redirect URL__ of `https://localhost:44324/signin-facebook`. Add the following to your `appsettings.json` with the __App ID__ and __App Secret__ from the _Settings > Basic_ tab:
+
+```json
+"FacebookAuthenticationOptions": {
+  "UseFacebookAuth": true,
+  "AppId": "<your-app-id>",
+  "AppSecret": "<your-app-secret>"
 },
 ```
 
