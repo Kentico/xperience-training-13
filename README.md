@@ -107,7 +107,7 @@ Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/secu
 ```json
 "TwitterAuthenticationOptions": {
   "UseTwitterAuth": true,
-  "ConsumerKey": "<your-api-key",
+  "ConsumerKey": "<your-api-key>",
   "ConsumerSecret": "<your-api-secret-key>"
 },
 ```
