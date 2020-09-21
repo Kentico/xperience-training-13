@@ -32,7 +32,7 @@ namespace XperienceAdapter.Repositories
         /// <returns></returns>
         public static SiteCulture MapDtoProperties(CultureInfo culture, string siteName) => new SiteCulture
         {
-            FriendlyName = culture.CultureName,
+            Name = culture.CultureName,
             IsDefault = CultureHelper.GetDefaultCultureCode(siteName) == culture.CultureCode,
             IsoCode = culture.CultureCode,
             ShortName = culture.CultureShortName

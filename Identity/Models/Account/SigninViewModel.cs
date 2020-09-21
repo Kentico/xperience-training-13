@@ -10,6 +10,7 @@ namespace Identity.Models.Account
 
         public PasswordViewModel PasswordViewModel { get; set; } = new PasswordViewModel();
 
+        // TODO: Make localization work.
         [DisplayName("Identity.Account.StaySignedIn")]
         public bool StaySignedIn { get; set; }
     }

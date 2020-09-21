@@ -11,11 +11,14 @@
     {
         navigationItems = Model?.Navigation?[culture]?.ChildItems;
     }
+
+    (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
+        (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), ResHelper.GetString(resourceKey));
 }
 
 <ul id="@Model?.MainId" class="@Model?.ListClass">
     @{
-        var triggerViewName = $"{Navigation.PartialViewPath}/_DropdownTrigger";
+        var triggerViewName = "_DropdownTrigger";
     }
 
     @if (navigationItems?.Any() == true)
@@ -34,24 +37,27 @@
         }
     }
 
+    @{
+        var identityNavigation = new List<(string, string)>();
+
+        if (Context.User.Identity.IsAuthenticated)
+        {
+            identityNavigation.Add(GetIdentityItem("Index", "Profile", "Identity.Profile.Title"));
+            identityNavigation.Add(GetIdentityItem("Signout", "Account", "Identity.Account.SignOut.Title"));
+        }
+        else
+        {
+            identityNavigation.Add(GetIdentityItem("Signin", "Account", "Identity.Account.SignIn.Title"));
+            identityNavigation.Add(GetIdentityItem("Register", "Account", "Identity.Account.Register.Title"));
+        }
+    }
+
+    @{ var identityIcon = @"<i class=""material-icons"">account_circle</i>"; } 
+
+    <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), identityIcon, (IEnumerable<(string, string)>)identityNavigation)" />
+
     @if (Model?.CultureSwitchId != null)
     {
         <vc:language culture-switch-id="@Model?.CultureSwitchId" />
     }
-
-    @{
-        var identityNavigation = new List<(string, string)>();
-    }
-
-    @if (Context.User.Identity.IsAuthenticated)
-    {
-        identityNavigation.Add((Url.Action("Index", "Profile", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), "Profile"));
-        identityNavigation.Add((Url.Action("Signout", "Account", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), "Sign out"));
-    }
-    else
-    {
-        identityNavigation.Add((Url.Action("Signin", "Account", new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture }).ToLowerInvariant(), "Sign in"));
-    }
-
-    <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), "Identity", (IEnumerable<(string, string)>)identityNavigation)" />
 </ul>

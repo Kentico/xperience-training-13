@@ -11,4 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
     M.Dropdown.init(dropdownElements, {
         hover: false
     });
+
+    var selectElements = document.querySelectorAll("select");
+    M.FormSelect.init(selectElements);
+    var datepickerElements = document.querySelectorAll("datepicker");
+    M.Datepicker.init(datepickerElements);
 });

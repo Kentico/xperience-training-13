@@ -30,7 +30,7 @@ namespace MedioClinic.ViewComponents
         {
             var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
             var navigation = _navigationRepository.GetConventionalRoutingNavigation();
-            var searchPath = Request.Path.Equals("/") ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : Request.Path.Value;
+            var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : Request.Path.Value;
             var variants = GetDatabaseUrlVariants(navigation, searchPath) ?? GetNonDatabaseUrlVariants(searchPath);
             var model = (cultureSwitchId, variants.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
 

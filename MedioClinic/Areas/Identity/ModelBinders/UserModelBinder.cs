@@ -14,14 +14,14 @@ namespace MedioClinic.Areas.Identity.ModelBinders
 {
     internal class UserModelBinder : IModelBinder
     {
-        private readonly IModelMetadataProvider _modelMetadataProvider;
-
         private readonly MedioClinicUserManager _medioClinicUserManager;
 
-        public UserModelBinder(IModelMetadataProvider modelMetadataProvider, MedioClinicUserManager medioClinicUserManager)
+        private readonly Dictionary<Type, (ModelMetadata, IModelBinder)> _binders;
+
+        public UserModelBinder(MedioClinicUserManager medioClinicUserManager, Dictionary<Type, (ModelMetadata, IModelBinder)> binders)
         {
-            _modelMetadataProvider = modelMetadataProvider ?? throw new ArgumentNullException(nameof(modelMetadataProvider));
             _medioClinicUserManager = medioClinicUserManager ?? throw new ArgumentNullException(nameof(medioClinicUserManager));
+            _binders = binders ?? throw new ArgumentNullException(nameof(binders));
         }
 
         public async Task BindModelAsync(ModelBindingContext bindingContext)
@@ -34,16 +34,17 @@ namespace MedioClinic.Areas.Identity.ModelBinders
 
                 if (medioClinicUser != null)
                 {
-                    Type modelType;
+                    IModelBinder modelBinder;
+                    ModelMetadata modelMetadata;
                     var roles = _medioClinicUserManager.GetRolesAsync(medioClinicUser).Result.ToMedioClinicRoles();
 
                     if (FlagEnums.HasAnyFlags(Roles.Doctor, roles))
                     {
-                        modelType = typeof(DoctorViewModel);
+                        (modelMetadata, modelBinder) = _binders[typeof(DoctorViewModel)];
                     }
                     else if (FlagEnums.HasAnyFlags(Roles.Patient, roles))
                     {
-                        modelType = typeof(PatientViewModel);
+                        (modelMetadata, modelBinder) = _binders[typeof(PatientViewModel)];
                     }
                     else
                     {
@@ -52,8 +53,6 @@ namespace MedioClinic.Areas.Identity.ModelBinders
                         return;
                     }
 
-                    var modelMetadata = _modelMetadataProvider.GetMetadataForType(modelType);
-
                     var newBindingContext = DefaultModelBindingContext.CreateBindingContext(
                         bindingContext.ActionContext,
                         bindingContext.ValueProvider,
@@ -61,8 +60,8 @@ namespace MedioClinic.Areas.Identity.ModelBinders
                         bindingInfo: null,
                         bindingContext.ModelName);
 
-                    await BindModelAsync(newBindingContext);
-                    bindingContext.Result = newBindingContext.Result;
+                    await modelBinder.BindModelAsync(newBindingContext);
+                    bindingContext.Result = ModelBindingResult.Success(newBindingContext.Model);
 
                     if (newBindingContext.Result.IsModelSet)
                     {

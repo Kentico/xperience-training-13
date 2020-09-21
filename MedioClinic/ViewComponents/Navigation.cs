@@ -12,8 +12,6 @@ namespace MedioClinic.ViewComponents
 {
     public class Navigation : ViewComponent
     {
-        public static string PartialViewPath => $"Components/{nameof(Navigation)}";
-
         protected readonly INavigationRepository _navigationRepository;
 
         public Navigation(INavigationRepository navigationRepository)

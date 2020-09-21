@@ -33,7 +33,8 @@ namespace Identity.Services
 
                 var sourceProperty = userProperties.FirstOrDefault(
                     prop => prop.Name.Equals(targetProperty.Name, StringComparison.OrdinalIgnoreCase)
-                    && prop.PropertyType == targetProperty.PropertyType);
+                    && prop.PropertyType == targetProperty.PropertyType
+                    && targetProperty.CanWrite);
 
                 if (customMappings != null && customMappings.Keys.Contains(propertyToMatch))
                 {
@@ -74,13 +75,16 @@ namespace Identity.Services
                     prop.Name.Equals(userProperty.Name, StringComparison.OrdinalIgnoreCase)
                     && prop.PropertyType == userProperty.PropertyType);
 
-                if (customMappings != null && customMappings.Keys.Contains(propertyToMatch))
+                if (userProperty.CanWrite)
                 {
-                    userProperty.SetValue(userToMapTo, customMappings[propertyToMatch]);
-                }
-                else if (sourceProperty != null)
-                {
-                    userProperty.SetValue(userToMapTo, sourceProperty.GetValue(customModel));
+                    if (customMappings != null && customMappings.Keys.Contains(propertyToMatch))
+                    {
+                        userProperty.SetValue(userToMapTo, customMappings[propertyToMatch]);
+                    }
+                    else if (sourceProperty != null)
+                    {
+                        userProperty.SetValue(userToMapTo, sourceProperty.GetValue(customModel));
+                    } 
                 }
             }
 

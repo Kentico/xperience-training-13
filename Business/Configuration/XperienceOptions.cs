@@ -70,5 +70,7 @@
     public class IdentityOptions
     {
         public bool EmailConfirmedRegistration { get; set; }
+
+        public string? PathToDefaultAvatar { get; set; }
     }
 }

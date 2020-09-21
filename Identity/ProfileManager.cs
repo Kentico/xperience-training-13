@@ -231,8 +231,8 @@ namespace Identity
         /// <returns>A friendly name of the role.</returns>
         protected string GetRoleTitle(Roles roles) =>
             FlagEnums.HasAnyFlags(roles, Roles.Doctor)
-                ? ResHelper.GetString("ProfileManager.GetRoleTitle.Doctor")
-                : ResHelper.GetString("ProfileManager.GetRoleTitle.Patient");
+                ? ResHelper.GetString("Identity.Profile.Doctor")
+                : ResHelper.GetString("Identity.Profile.Patient");
 
         /// <summary>
         /// Handles exceptions raised in <see cref="ProfileManager.PostProfileAsync(IUserViewModel, RequestContext)"/>

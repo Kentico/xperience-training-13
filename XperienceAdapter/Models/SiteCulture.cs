@@ -27,7 +27,7 @@ namespace XperienceAdapter.Models
             return !a.Equals(b);
         }
 
-        public string? FriendlyName { get; set; }
+        public string? Name { get; set; }
 
         public string? ShortName { get; set; }
 
@@ -40,7 +40,7 @@ namespace XperienceAdapter.Models
 
         public override bool Equals(object? obj) => obj is SiteCulture culture && culture.IsoCode?.Equals(IsoCode, StringComparison.InvariantCulture) == true;
 
-        public override int GetHashCode() => HashCode.Combine(FriendlyName, ShortName, IsoCode, IsDefault);
+        public override int GetHashCode() => HashCode.Combine(Name, ShortName, IsoCode, IsDefault);
 
         public bool Equals(SiteCulture? other) => other?.IsoCode?.Equals(IsoCode, StringComparison.InvariantCulture) == true;
     }

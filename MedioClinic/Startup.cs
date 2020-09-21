@@ -100,6 +100,7 @@ namespace MedioClinic
             app.UseRouting();
             app.UseResponseCaching();
             app.UseRequestCulture();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

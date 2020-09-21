@@ -1,0 +1,23 @@
+﻿@using Identity.Models.Profile
+@model PageViewModel<IUserViewModel>
+@inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+
+@{
+    var backgroundFile = await MediaFileRepository.GetMediaFileDtoAsync(Guid.Parse("a7234235-b37a-4aeb-8d83-e381fd16ecfa"));
+    var background = Url.Kentico().ImageUrl(backgroundFile?.PermanentUrl, SizeConstraint.Empty);
+
+    var templateName = Model.Data.GetType()?.Name;
+}
+
+@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <main class="row mc-page-fixed" style="background-image:url(@background)">
+        <div class="container mc-section-4">
+            <h2>@Html.DisplayFor(m => m.Metadata.Title)</h2>
+            @Html.ValidationSummary()
+            @Html.EditorFor(m => m.Data, templateName)
+            <button class="btn waves-effect waves-light" type="submit">@ResHelper.GetString("General.Save")</button>
+        </div>
+    </main>
+}

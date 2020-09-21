@@ -53,7 +53,6 @@ namespace Identity.Models.Profile
         public string? Nationality { get; set; }
 
         [Display(Name = "Models.Profile.CommonUserViewModel.AvatarFile")]
-        [FileExtensions(ErrorMessage = "Models.AllowedExtensions")]
         public IFormFile? AvatarFile { get; set; }
     }
 }

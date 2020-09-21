@@ -51,14 +51,14 @@ namespace MedioClinic.Tests.ViewComponents
             {
                 new SiteCulture
                 {
-                    FriendlyName = "English",
+                    Name = "English",
                     IsDefault = true,
                     IsoCode = "en-US",
                     ShortName = "EN"
                 },
                 new SiteCulture
                 {
-                    FriendlyName = "Czech",
+                    Name = "Czech",
                     IsoCode = "cz-CS",
                     ShortName = "CZ"
                 }
