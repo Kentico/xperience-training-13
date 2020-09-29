@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Bad word</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="WordID" columntype="integer" guid="e55fab30-93b1-4726-ac24-70db1744bd52" isPK="true" system="true">
+        <properties>
+          <fieldcaption>WordID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WordGUID" columntype="guid" guid="bfab8943-80c4-4a8f-9edd-4058567f964f" system="true">
+        <properties>
+          <fieldcaption>WordGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WordLastModified" columntype="datetime" guid="66a1e9e5-27e1-4807-9138-edf7f19543f8" system="true">
+        <properties>
+          <fieldcaption>WordLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WordExpression" columnsize="200" columntype="text" guid="06c844fc-a206-4ce9-8475-46235c72007b" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$BadWords_Edit.WordExpressionLabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>True</Trim>
+        </settings>
+      </field>
+      <field column="WordIsRegularExpression" columntype="boolean" guid="9c891be9-e869-4041-8e50-fb10c51d25ce" system="true" visible="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$badwords_edit.wordisregularexpressionlabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WordMatchWholeWord" columntype="boolean" guid="085a4c0c-7a6f-42f1-949e-7735f013eb95" spellcheck="false" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$badwords_edit.matchwholewordlabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="WordActionUseDefaultSettings" columntype="boolean" dummy="mainform" guid="e915127f-2a87-401c-b93e-eab862b1b1d9" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>Use default action</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WordAction" columntype="integer" dependsonanotherfield="true" guid="362cfe9c-423a-40f0-8918-2529c1bc7d02" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%WordActionUseDefaultSettings.Value == false|(identity)GlobalAdministrator|(hash)acc5fdf64108c91bd2f82f55e7e3c5a399a21c3d6f401bc98930a59b0e64087a%}]]>
+          </enabledmacro>
+          <fieldcaption>{$BadWords_Edit.WordActionLabel$}</fieldcaption>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.Protection</AssemblyName>
+          <controlname>enumselector</controlname>
+          <DisplayType>0</DisplayType>
+          <ExcludedValues>0</ExcludedValues>
+          <Sort>False</Sort>
+          <TypeName>CMS.Protection.BadWordActionEnum</TypeName>
+          <UseStringRepresentation>False</UseStringRepresentation>
+        </settings>
+      </field>
+      <field column="WordReplacementUseDefaultSettings" columntype="boolean" dependsonanotherfield="true" dummy="mainform" guid="d44be9c1-438a-4f9d-a1bc-389622eee6cf" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>Use default word replacement</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%WordAction.Value == 2|(identity)GlobalAdministrator|(hash)8d22062c9e8aa5e51ab309ce5d3e977c6eb732605a5e13a5c564794879340b33%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="WordReplacement" columnsize="200" columntype="text" dependsonanotherfield="true" guid="43afe0be-68dd-4e9d-8b52-196416a9743f" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%WordReplacementUseDefaultSettings.Value == false|(identity)GlobalAdministrator|(hash)96dfcdea5c8f422e1cbe135c6b15d44165ebdc93ea4ab47885a6ca1925357bed%}]]>
+          </enabledmacro>
+          <fieldcaption>{$BadWords_Edit.WordReplacementLabel$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%WordAction.Value == 2|(identity)GlobalAdministrator|(hash)8d22062c9e8aa5e51ab309ce5d3e977c6eb732605a5e13a5c564794879340b33%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="WordIsGlobal" columntype="boolean" guid="4043c1a4-0979-4cb4-9956-3210e752b9f3" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>WordIsGlobal</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>9ff65ce7-ed48-48ea-97d6-cf88e644a10e</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>badwords.word</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Badwords</CodeName>
+    <GUID>09642799-d831-4b69-a95d-28a9bdf496d9</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>0</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>WordLastModified</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item azureretrievable="True" content="False" id="0495906d-23b4-4c91-b14c-fde05fbfcafb" name="WordIsGlobal" searchable="True" tokenized="False" />
+      <item content="False" id="0ed6f07d-c57d-4969-a963-0c8fd011e4f1" name="WordGUID" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="57beaafb-b275-4f1b-884f-a91df7efd4c7" name="WordIsRegularExpression" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="5f3a3e59-4d41-43eb-ab8e-9f0b23e5bba3" name="WordAction" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="699331a8-6ece-42a2-8e0f-5a9ceff6f0e8" name="WordID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="72928fad-8dd8-4ae8-b629-ac662c2a93ef" name="WordLastModified" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="7ca71a34-76a3-4615-a9c1-64df53c84056" name="WordMatchWholeWord" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="c2c5c0ac-a8b8-444f-8932-a1d34950f0a1" name="WordReplacement" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="cfb63391-a9cb-4355-9b41-4e85d37bea38" name="WordExpression" searchable="False" tokenized="True" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>WordExpression</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>BadWords_Word</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

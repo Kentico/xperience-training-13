@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Core;
+using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -982,5 +984,7 @@ namespace Identity
         /// <param name="user">The user.</param>
         /// <returns>The security token bytes.</returns>
         Task<byte[]> CreateSecurityTokenAsync(TUser user);
+
+        Task<IdentityResult> CreateExternalUser(ExternalLoginInfo loginInfo);
     }
 }

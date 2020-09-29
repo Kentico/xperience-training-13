@@ -5,6 +5,9 @@ using Core;
 using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
+using Microsoft.AspNetCore.Authentication;
+using CMS.Membership;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity
 {
@@ -66,5 +69,11 @@ namespace Identity
         /// <param name="uploadModel">New passwords taken from the user.</param>
         /// <returns>An operation result.</returns>
         Task<IdentityManagerResult<ResetPasswordResultState>> ResetPasswordAsync(ResetPasswordViewModel uploadModel);
+
+        AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl);
+
+        Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync();
+
+        Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
     }
 }

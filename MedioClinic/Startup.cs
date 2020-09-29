@@ -18,10 +18,7 @@ using Kentico.Content.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
-
-using Core;
 using Business.Configuration;
-using Business.Services;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
@@ -58,9 +55,25 @@ namespace MedioClinic
 
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
+
             var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
             services.Configure<XperienceOptions>(xperienceOptions);
+
             ConfigureIdentityServices(services, xperienceOptions);
+
+            // Load external authentication configurations
+
+            var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
+            var twitterAuthenticationOptions = Configuration.GetSection(nameof(TwitterAuthenticationOptions));
+            var msAuthenticationOptions = Configuration.GetSection(nameof(MicrosoftAuthenticationOptions));
+            var facebookAuthenticationOptions = Configuration.GetSection(nameof(FacebookAuthenticationOptions));
+
+            services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
+            services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
+            services.Configure<FacebookAuthenticationOptions>(facebookAuthenticationOptions);
+            services.Configure<TwitterAuthenticationOptions>(twitterAuthenticationOptions);
+
+            ConfigureExternalAuthentication(services, googleAuthenticationOptions, msAuthenticationOptions, facebookAuthenticationOptions, twitterAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -102,6 +115,7 @@ namespace MedioClinic
             app.UseRouting();
             app.UseResponseCaching();
             app.UseRequestCulture();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -187,13 +201,63 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
 
+        private static void ConfigureExternalAuthentication(
+            IServiceCollection services,
+            IConfigurationSection googleAuthenticationOptions,
+            IConfigurationSection msAuthenticationOptions,
+            IConfigurationSection facebookAuthenticationOptions,
+            IConfigurationSection twitterAuthenticationOptions)
+        {
+            var authBuilder = services.AddAuthentication();
+
+            var useGoogleAuth = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>().UseGoogleAuth;
+            if (useGoogleAuth)
+            {
+                authBuilder.AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientId;
+                    googleOptions.ClientSecret = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientSecret;
+                });
+            }
+
+            var useMSAuth = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>().UseMicrosoftAuth;
+            if (useMSAuth)
+            {
+                authBuilder.AddMicrosoftAccount(microsoftAccountOptions =>
+                {
+                    microsoftAccountOptions.ClientSecret = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientSecret;
+                    microsoftAccountOptions.ClientId = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientId;
+                });
+            }
+
+            var useFacebookAuth = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>().UseFacebookAuth;
+            if(useFacebookAuth)
+            {
+                authBuilder.AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppId;
+                    facebookOptions.AppSecret = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppSecret;
+                });
+            }
+
+            var useTwitterAuth = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>().UseTwitterAuth;
+            if (useTwitterAuth)
+            {
+                authBuilder.AddTwitter(twitterOptions =>
+                {
+                    twitterOptions.ConsumerKey = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerKey;
+                    twitterOptions.ConsumerSecret = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerSecret;
+                    twitterOptions.RetrieveUserDetails = true;
+                });
+            }
+        }
+
         private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
         {
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
 
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
-                .AddApplicationDefaultTokenProviders()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
                 .AddRoleStore<ApplicationRoleStore<ApplicationRole>>()
                 .AddUserManager<MedioClinicUserManager>()
@@ -204,9 +268,8 @@ namespace MedioClinic
             //services.AddScoped(typeof(ITwoFactorSecurityStampValidator), typeof(TwoFactorSecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
             //services.AddScoped<IMedioClinicSignInManager<MedioClinicUser>, MedioClinicSignInManager>();
 
-            services.AddAuthentication();
             services.AddAuthorization();
-
+            
             services.ConfigureApplicationCookie(cookieOptions =>
             {
                 cookieOptions.LoginPath = new PathString("/Account/Signin");

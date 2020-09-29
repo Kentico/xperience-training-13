@@ -1,7 +1,9 @@
 ﻿@using CMS.Helpers
 @using Identity.Models.Account
+@using Microsoft.AspNetCore.Authentication
 @model MedioClinic.Models.PageViewModel<SignInViewModel>
 @inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+@inject Identity.IMedioClinicSignInManager<Identity.Models.MedioClinicUser> SignInManager
 
 @{
     var backgroundFile = await MediaFileRepository.GetMediaFileDtoAsync(Guid.Parse("a7234235-b37a-4aeb-8d83-e381fd16ecfa"));
@@ -27,4 +29,21 @@
             </section>
         </div>
     </main>
+}
+@{
+    @* Gets a collection of the authentication services registered in your application's startup class *@
+    var signInProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+    if (signInProviders.Count > 0)
+    {
+        <form asp-route-returnurl="/identity/account/signin" asp-controller="Account" asp-action="RequestExternalSignIn" method="post" class="form-horizontal">
+            <div>
+                <p>
+                    @foreach (AuthenticationScheme provider in signInProviders)
+                    {
+                        <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                    }
+                </p>
+            </div>
+        </form>
+    }
 }

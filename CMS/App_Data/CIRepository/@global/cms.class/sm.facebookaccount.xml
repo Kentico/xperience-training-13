@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Facebook account</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="FacebookAccountID" columntype="integer" guid="0443ebcd-0f48-47f7-8ba9-1b3814b4204f" isPK="true" system="true">
+        <properties>
+          <fieldcaption>FacebookAccountID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="FacebookAccountDisplayName" columnsize="200" columntype="text" guid="602aebef-e7a4-4063-a590-1c47bfd4d223" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.accounts.displayname$}</fieldcaption>
+          <fielddescription>{$sm.facebook.accounts.displayname.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="FacebookAccountName" columnsize="200" columntype="text" guid="62ffb11a-82ad-40d3-a7e6-27a933c68c8d" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.accounts.codename$}</fieldcaption>
+          <fielddescription>{$sm.application.codename.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="FacebookAccountIsDefault" columntype="boolean" guid="7d772fb4-1bd9-41f9-84c6-d5347b6af407" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.isdefault$}</fieldcaption>
+          <fielddescription>{$sm.facebook.isdeault.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="FacebookAccountFacebookApplicationID" columntype="integer" guid="d6128b96-0621-45fc-ada4-09448b60ea43" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.accounts.application$}</fieldcaption>
+          <fielddescription>{$sm.facebook.accounts.application.description$}</fielddescription>
+          <validationerrormessage>{$sm.facebook.accounts.msg.selectapplication$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>uni_selector</controlname>
+          <DialogWindowHeight>590</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>668</DialogWindowWidth>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectSiteName>#currentsite</ObjectSiteName>
+          <ObjectType>sm.facebookapplication</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>FacebookApplicationID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>1</SelectionMode>
+          <UseAutocomplete>False</UseAutocomplete>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value >= 1", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>1</t><v>1</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="FacebookAccountPageID" columnsize="500" columntype="text" dependsonanotherfield="true" guid="e8da8e9f-4603-41d6-acb9-174cff1c9cb8" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.accounts.pageid$}</fieldcaption>
+          <fielddescription>{$sm.facebook.accounts.pageid.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>True</Trim>
+        </settings>
+        <rules>
+          <rule errormsg="{$sm.facebook.accounts.msg.pageidnotnumericstring$}">
+            <![CDATA[{%Rule("(Value.Matches(\"^\\\\d+$\"))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"RegExp\" ><p n=\"regexp\"><t>^\\d+$</t><v>^\\d+$</v><r>0</r><d></d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)7f5aae270a85c5a782ce03237457b144ee12d812eb45767cbcbdf03e93a02f22%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="FacebookAccountPageAccessToken" columntype="longtext" guid="95d9521d-0e69-416a-b845-537b7f041b2e" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sm.facebook.accounts.accesstoken$}</fieldcaption>
+          <fielddescription>{$sm.facebook.accounts.accesstoken.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>smfacebookpageaccesstoken</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="FacebookAccountPageAccessTokenExpiration" columntype="datetime" guid="a8df349b-fcfb-4ee0-af9f-2d28bae17305" system="true" />
+      <field column="FacebookAccountGUID" columntype="guid" guid="ee933a71-e5a8-4d4c-954f-275ecc0c0b6a" system="true" />
+      <field column="FacebookAccountLastModified" columntype="datetime" guid="1db367b4-ccad-44a7-81fe-a80807472dda" system="true" />
+      <field column="FacebookAccountSiteID" columntype="integer" guid="4a47f251-4633-435d-9869-484542c15dc6" system="true" />
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayoutType>ascx</ClassFormLayoutType>
+  <ClassGUID>4dcefe2c-970a-4d9d-8c52-d86f7929b176</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>SM.FacebookAccount</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.SocialMarketing</CodeName>
+    <GUID>66fed7e0-3dfc-4367-9350-0ce620cc1d7e</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search />
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>SM_FacebookAccount</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

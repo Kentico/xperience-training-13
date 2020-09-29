@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ma.automationtemplate>
+  <TemplateConfiguration>
+    <TemplateConfiguration xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+      <RecurrenceType>Recurring</RecurrenceType>
+      <Steps>
+        <Step>
+          <DisplayName>Add to birthday success group</DisplayName>
+          <CodeName>AddToBirthdaySuccessGroup</CodeName>
+          <Id>1</Id>
+          <Type>Action</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>d921105e-23ca-44ad-95fd-bf98e65594f7</Guid>
+                <Label>Default</Label>
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2560</d5p1:X>
+              <d5p1:Y>980</d5p1:Y>
+            </Position>
+          </Definition>
+          <ActionGuid>003c8e4c-14ad-4451-b8e0-5a8e97f5539e</ActionGuid>
+          <ActionParameters xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>ContactAction</d4p1:Key>
+              <d4p1:Value>0</d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+          </ActionParameters>
+        </Step>
+        <Step>
+          <DisplayName>Condition</DisplayName>
+          <CodeName>Condition</CodeName>
+          <Id>2</Id>
+          <Type>MultichoiceFirstWin</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint xmlns="" i:type="ConditionSourcePoint">
+                <Guid>8d739c3c-0021-487e-a287-aa094455c26f</Guid>
+                <Label>
+                  <![CDATA[Contact has made a purchase within 10 days after receiving the birthday coupon]]>
+                </Label>
+                <Text />
+                <Tooltip />
+                <Condition>
+                  <![CDATA[{%Rule("(Contact.DidActivities(\"purchase\", ToInt(10), false))", "<rules><r pos=\"0\" par=\"\" op=\"or\" n=\"CMSContactHasDoneFollowingActivitiesInTheLastXDays\" ><p n=\"activities\"><t>Purchase</t><v>purchase</v><r>1</r><d>select activities</d><vt>text</vt><tv>0</tv></p><p n=\"days\"><t>10</t><v>10</v><r>0</r><d>enter days</d><vt>integer</vt><tv>1</tv></p><p n=\"_any\"><t>any</t><v>false</v><r>0</r><d>select operation</d><vt>text</vt><tv>0</tv></p><p n=\"_perfectum\"><t>has</t><v></v><r>0</r><d>select operation</d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)38e70e1066f3445e5b236cee167594ca05b47d06107b09860590b64ba859dbde%}]]>
+                </Condition>
+                <Type>1</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+              <SourcePoint xmlns="" i:type="ElseSourcePoint">
+                <Guid>bd321635-1246-4c8f-9d55-032f8d82cdba</Guid>
+                <Label>Else</Label>
+                <Type>2</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2410</d5p1:X>
+              <d5p1:Y>740</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Condition</DisplayName>
+          <CodeName>ContactHasEmail</CodeName>
+          <Id>3</Id>
+          <Type>MultichoiceFirstWin</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint xmlns="" i:type="ConditionSourcePoint">
+                <Guid>db1c4e7d-76a5-4c16-aef2-5083f6d46baa</Guid>
+                <Label>Contact has email</Label>
+                <Text />
+                <Tooltip />
+                <Condition>
+                  <![CDATA[{%Rule("(Contact.ContactEmail.Contains(\"@\"))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"CMSContactFieldContainsValue\" ><p n=\"field\"><t>Email address</t><v>ContactEmail</v><r>1</r><d>select field</d><vt>text</vt><tv>0</tv></p><p n=\"op\"><t>contains</t><v>Contains</v><r>0</r><d>select operator</d><vt>text</vt><tv>0</tv></p><p n=\"value\"><t>@</t><v>@</v><r>0</r><d>enter value</d><vt>text</vt><tv>1</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)140373f4de3911eb3c197b6ba92fe0fea7751d13c448eae8b88baf77de329c3b%}]]>
+                </Condition>
+                <Type>1</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+              <SourcePoint xmlns="" i:type="ElseSourcePoint">
+                <Guid>9b8c9967-d540-48d4-893d-50515177934a</Guid>
+                <Label>Else</Label>
+                <Type>2</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2170</d5p1:X>
+              <d5p1:Y>220</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Finished</DisplayName>
+          <CodeName>finished</CodeName>
+          <Id>4</Id>
+          <Type>Finished</Type>
+          <Definition>
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2190</d5p1:X>
+              <d5p1:Y>1140</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note</CodeName>
+          <Id>5</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2720</d5p1:X>
+              <d5p1:Y>310</d5p1:Y>
+            </Position>
+            <Note>
+<![CDATA[
+The birthday message email is empty by default.
+
+Prepare an email suitable for your website. Including a gift, such as a discount coupon, is optional.
+]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note_1</CodeName>
+          <Id>6</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2880</d5p1:X>
+              <d5p1:Y>940</d5p1:Y>
+            </Position>
+            <Note>
+<![CDATA[
+Select a contact group to segment contacts who react positively to your birthday message.
+
+Alternatively, you can replace this step with any desired marketing actions.
+]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Note</DisplayName>
+          <CodeName>Note_2</CodeName>
+          <Id>7</Id>
+          <Type>Note</Type>
+          <Definition xmlns="" i:type="NoteStep">
+            <SourcePoints />
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2700</d5p1:X>
+              <d5p1:Y>740</d5p1:Y>
+            </Position>
+            <Note>
+              <![CDATA[Adjust the "success condition" according to the content of your birthday message.]]>
+            </Note>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Send birthday email with coupon</DisplayName>
+          <CodeName>SendBirthdayEmailWithCoupon</CodeName>
+          <Id>8</Id>
+          <Type>Action</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>2144d7e5-8dde-4c9d-9168-ba8f1cca0154</Guid>
+                <Label>Default</Label>
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2390</d5p1:X>
+              <d5p1:Y>390</d5p1:Y>
+            </Position>
+          </Definition>
+          <ActionGuid>b33d5c68-235d-406e-89d7-4f1714078940</ActionGuid>
+        </Step>
+        <Step>
+          <DisplayName>Start</DisplayName>
+          <CodeName>start</CodeName>
+          <Id>9</Id>
+          <Type>Start</Type>
+          <Definition>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>8d248732-56b7-4a75-9f16-a9eed27d9252</Guid>
+                <Label>Default</Label>
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2320</d5p1:X>
+              <d5p1:Y>40</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+        <Step>
+          <DisplayName>Wait</DisplayName>
+          <CodeName>Wait</CodeName>
+          <Id>10</Id>
+          <Type>Wait</Type>
+          <Definition>
+            <TimeoutEnabled>true</TimeoutEnabled>
+            <TimeoutInterval>
+              <![CDATA[day;1/1/0001 12:00:00 AM;10;Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]]>
+            </TimeoutInterval>
+            <SourcePoints>
+              <SourcePoint>
+                <Guid>6654ce37-7512-4e28-896a-305d4c3f9b0a</Guid>
+                <Label>Default</Label>
+                <Text />
+                <Tooltip />
+                <Condition />
+                <Type>0</Type>
+                <StepRolesSecurity>0</StepRolesSecurity>
+                <StepUsersSecurity>0</StepUsersSecurity>
+              </SourcePoint>
+            </SourcePoints>
+            <Position xmlns:d5p1="CMS.Helpers.UniGraphConfig">
+              <d5p1:X>2560</d5p1:X>
+              <d5p1:Y>560</d5p1:Y>
+            </Position>
+          </Definition>
+        </Step>
+      </Steps>
+      <Transitions>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>10</StartStepId>
+          <EndStepId>2</EndStepId>
+          <SourcePointGuid>6654ce37-7512-4e28-896a-305d4c3f9b0a</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>2</StartStepId>
+          <EndStepId>1</EndStepId>
+          <SourcePointGuid>8d739c3c-0021-487e-a287-aa094455c26f</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>2</StartStepId>
+          <EndStepId>4</EndStepId>
+          <SourcePointGuid>bd321635-1246-4c8f-9d55-032f8d82cdba</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>1</StartStepId>
+          <EndStepId>4</EndStepId>
+          <SourcePointGuid>d921105e-23ca-44ad-95fd-bf98e65594f7</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>9</StartStepId>
+          <EndStepId>3</EndStepId>
+          <SourcePointGuid>8d248732-56b7-4a75-9f16-a9eed27d9252</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>8</StartStepId>
+          <EndStepId>10</EndStepId>
+          <SourcePointGuid>2144d7e5-8dde-4c9d-9168-ba8f1cca0154</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>3</StartStepId>
+          <EndStepId>8</EndStepId>
+          <SourcePointGuid>db1c4e7d-76a5-4c16-aef2-5083f6d46baa</SourcePointGuid>
+        </Transition>
+        <Transition>
+          <Type>Automatic</Type>
+          <StartStepId>3</StartStepId>
+          <EndStepId>4</EndStepId>
+          <SourcePointGuid>9b8c9967-d540-48d4-893d-50515177934a</SourcePointGuid>
+        </Transition>
+      </Transitions>
+      <Triggers>
+        <Trigger>
+          <DisplayName>Contact has birthday</DisplayName>
+          <Type>TimeBased</Type>
+          <ObjectType>cms.objectscheduledtask</ObjectType>
+          <MacroCondition>
+            <![CDATA[{%Rule("(selectedDay = DateTime.Now.AddDays(ToInt(0));\r\nContact.ContactBirthday != null && (Contact.ContactBirthday.Month == selectedDay.Month && Contact.ContactBirthday.Day == selectedDay.Day);)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"CMSContactHasBirthday\" ><p n=\"days\"><t>today</t><v>0</v><r>1</r><d>select day</d><vt>integer</vt><tv>0</tv></p><p n=\"_is\"><t>is</t><v></v><r>0</r><d>select operation</d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)dc65e485a0677748a3a723dd04c7c426f692e5afd86d5bb73094c63bc817a060%}]]>
+          </MacroCondition>
+          <Parameters xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d4p1:KeyValueOfstringstring>
+              <d4p1:Key>TriggerInterval</d4p1:Key>
+              <d4p1:Value>
+                <![CDATA[day;1/1/2020 12:00:00 AM;1;Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]]>
+              </d4p1:Value>
+            </d4p1:KeyValueOfstringstring>
+          </Parameters>
+        </Trigger>
+      </Triggers>
+    </TemplateConfiguration>
+  </TemplateConfiguration>
+  <TemplateDescription>{$ma.template.birthdaymessage.description$}</TemplateDescription>
+  <TemplateDisplayName>{$ma.template.birthdaymessage$}</TemplateDisplayName>
+  <TemplateGuid>adfd3c6b-c6af-45c1-9c71-f8eef1551c86</TemplateGuid>
+  <TemplateIconClass>icon-gift</TemplateIconClass>
+</ma.automationtemplate>

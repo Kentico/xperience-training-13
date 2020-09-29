@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Sharepoint library</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="SharePointLibraryID" columntype="integer" guid="f6704e6a-4708-4cf0-bb3f-c3ef925aed24" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>SharePointLibraryID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="SharePointLibraryGUID" columntype="guid" guid="e0ecf9ce-ba73-44fd-ae9e-4b7ee0c941e0" isunique="true" system="true" />
+      <field column="SharePointLibrarySiteID" columntype="integer" guid="26d08a81-6a68-4fb6-b121-694dfbdf4d33" refobjtype="cms.site" reftype="Required" system="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </defaultvalue>
+        </properties>
+      </field>
+      <field column="SharePointLibraryLastModified" columnprecision="7" columntype="datetime" guid="00fbf9d3-ae36-445c-a484-3d3609e9f80e" system="true" />
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="SharePointLibraryDisplayName" columnsize="100" columntype="text" guid="436f919c-0ff3-473d-8a44-efe5535959bc" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+          <fielddescription>{$sharepoint.library.displayname.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="SharePointLibraryName" columnsize="100" columntype="text" guid="aa88a7a2-da06-4c92-acfd-9b425e97b6f5" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <fielddescription>{$sharepoint.connection.codename.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>CodeName</controlname>
+        </settings>
+      </field>
+      <category name="unigrid.eventlog.columns.source">
+        <properties>
+          <caption>{$ObjectType.staging_synchronization$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="SharePointLibrarySharePointConnectionID" columntype="integer" guid="cfaaedca-dbe6-42d6-afe6-fa83f147ed91" hasdependingfields="true" refobjtype="sharepoint.sharepointconnection" reftype="Required" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">{%SharePointLibraryID == 0%}</enabledmacro>
+          <fieldcaption>
+            <![CDATA[{$SharePoint.SharePointLibrary.SharePointConnection$}]]>
+          </fieldcaption>
+          <fielddescription ismacro="true">
+            <![CDATA[{% SharePointLibraryID == 0 ? String.Empty : "{$SharePoint.Library.PropertyCannotBeModified$}" |(identity)GlobalAdministrator|(hash)647290a7373007bd4231f9d9cfe7c0220b7225e6c5020d51de1e76b34f66e627%}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>True</AllowEditTextBox>
+          <AllowEmpty ismacro="true">{% SharePointLibraryID != 0 %}</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectSiteName>#currentsite</ObjectSiteName>
+          <ObjectType>sharepoint.sharepointconnection</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>SharePointConnectionID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>1</SelectionMode>
+          <UseAutocomplete>False</UseAutocomplete>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+        <rules>
+          <rule errormsg="{$SharePoint.Library.NoConnectionError$}">
+            <![CDATA[{%Rule("(SharePointLibraryID != 0) || (SharePointLibraryID ==0 && SharePointLibrarySharePointConnectionID != 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>(SharePointLibraryID != 0) || (SharePointLibraryID ==0 &amp;&amp; SharePointLibrarySharePointConnectionID != 0)</t><v>(SharePointLibraryID != 0) || (SharePointLibraryID ==0 &amp;&amp; SharePointLibrarySharePointConnectionID != 0)</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="SharePointLibraryListType" columntype="integer" guid="bba5e672-1f49-48a6-90ea-c0b987b57992" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">{%SharePointLibraryID == 0%}</enabledmacro>
+          <fieldcaption>{$sharepoint.wp.datasource.field.listtype$}</fieldcaption>
+          <fielddescription ismacro="true">
+            <![CDATA[{%SharePointLibraryID == 0 ? "{$sharepoint.wp.datasource.field.listtype.description$}" : "{$SharePoint.Library.PropertyCannotBeModified$}"|(identity)GlobalAdministrator|(hash)142daf396838e78e5d808d347de51b7b7b7faa074cee638387d36bfc00f713c2%}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>SharePointListTypeSelector</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+0;All
+109;Picture library
+101;Document library
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="SharePointLibraryListTitle" columnsize="100" columntype="text" dependsonanotherfield="true" guid="952b226b-ab9f-4cc3-bc2c-b895ae4f5674" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">{%SharePointLibraryID == 0%}</enabledmacro>
+          <fieldcaption>
+            <![CDATA[{$SharePoint.SharePointLibrary.SharePointListTitle$}]]>
+          </fieldcaption>
+          <fielddescription ismacro="true">
+            <![CDATA[{% SharePointLibraryID == 0 ? String.Empty : "{$SharePoint.Library.PropertyCannotBeModified$}" |(identity)GlobalAdministrator|(hash)647290a7373007bd4231f9d9cfe7c0220b7225e6c5020d51de1e76b34f66e627%}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>SharePointListSelector</controlname>
+          <IncludedListTypes>101,109</IncludedListTypes>
+          <SharePointConnectionIDFieldName>SharePointLibrarySharePointConnectionID</SharePointConnectionIDFieldName>
+          <SharePointListTypeFieldName>SharePointLibraryListType</SharePointListTypeFieldName>
+        </settings>
+      </field>
+      <field column="SharePointLibrarySynchronizationPeriod" columntype="integer" guid="a97c4b9c-dc4f-4006-902a-888286d61131" system="true" visible="true">
+        <properties>
+          <defaultvalue>720</defaultvalue>
+          <explanationtext>
+            <![CDATA[{$Sharepoint.SharepointLibrary.SyncPeriod.Explanation$}]]>
+          </explanationtext>
+          <fieldcaption>{$Sharepoint.SharepointLibrary.SyncPeriod$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>TimeIntervalSelector</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassGUID>3c7fafa2-88b6-4d9a-8964-a090ecc74d95</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassName>SharePoint.SharePointLibrary</ClassName>
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.SharePoint</CodeName>
+    <GUID>978f8972-606c-4f8f-9b01-7b650a5ca31d</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchSettings>
+    <search />
+  </ClassSearchSettings>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>SharePoint_SharePointLibrary</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

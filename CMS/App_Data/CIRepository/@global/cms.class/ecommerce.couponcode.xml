@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDefaultObjectType />
+  <ClassDisplayName>Coupon code</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="CouponCodeID" columntype="integer" guid="c16e4801-ce86-4033-9462-ec4cf6fe3610" isPK="true" system="true">
+        <properties>
+          <fieldcaption>CouponCodeID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="CouponCodeCode" columnsize="200" columntype="text" guid="c5d0fd92-b1fc-4c54-89f1-24fddc161710" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.couponcode.couponcode$}</fieldcaption>
+          <fielddescription>{$com.couponcode.couponcodedesc$}</fielddescription>
+          <inputcontrolstyle>width:100px;</inputcontrolstyle>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0|1|2|3</FilterType>
+          <Trim>True</Trim>
+          <ValidChars>_-.</ValidChars>
+        </settings>
+      </field>
+      <field allowempty="true" column="CouponCodeUseLimit" columntype="integer" guid="c8733a1b-6cbd-4999-a985-d2d83923dd92" system="true" visible="true">
+        <properties>
+          <contentafter>
+            <![CDATA[<span class="form-control-text">{% GetResourceString("com.couponcode.times") |(identity)GlobalAdministrator|(hash)9733c3f3a8076e35b91f5a43db236f5d7a6ca32d86f02a8bf5e6303b8b3efa6a%}</span> ]]>
+          </contentafter>
+          <fieldcaption>{$com.couponcode.uselimit$}</fieldcaption>
+          <fielddescription>{$com.couponcode.uselimitdesc$}</fielddescription>
+          <inputcontrolstyle>width:100px;</inputcontrolstyle>
+          <validationerrormessage>{$com.discount.couponcodelimiterror$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0</FilterType>
+          <Trim>False</Trim>
+          <WatermarkText>{$com.couponcode.unlimited$}</WatermarkText>
+        </settings>
+        <rules>
+          <rule errormsg="Maximal value is 999999">
+            <![CDATA[{%Rule("Value <= 999999", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>999999</t><v>999999</v><r>false</r><d></d><vt>double</vt></p></r></rules>")%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("((Convert.ToInt(CouponCodeUseCount.Value) == 0)? Value >= 1: Value >= Convert.ToInt(CouponCodeUseCount.Value))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>(Convert.ToInt(CouponCodeUseCount.Value) == 0)? Value &gt;= 1: Value &gt;= Convert.ToInt(CouponCodeUseCount.Value)</t><v>(Convert.ToInt(CouponCodeUseCount.Value) == 0)? Value &gt;= 1: Value &gt;= Convert.ToInt(CouponCodeUseCount.Value)</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)98cf469782e48d79858386bce3b1f46de29f3b7685f264080e8446a1b2f5c141%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="CouponCodeUseCount" columntype="integer" guid="7edca5ee-5bb3-4f3b-a5d4-425dd3cf2bc1" system="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$com.couponcode.usecount$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="CouponCodeDiscountID" columntype="integer" guid="c555f1a6-187c-46cd-941b-4ea44e07dfed" system="true">
+        <properties>
+          <fieldcaption>Coupon code discount ID</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="CouponCodeLastModified" columntype="datetime" guid="e2502feb-e2e6-4f70-be77-7ad3aae799fd" system="true" />
+      <field column="CouponCodeGUID" columntype="guid" guid="28bb945e-4805-414e-b555-4ef2bb18cb29" system="true" />
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>ascx</ClassFormLayoutType>
+  <ClassGUID>5728f337-da95-4e98-8a90-693212730929</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>ecommerce.couponcode</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Ecommerce</CodeName>
+    <GUID>684e021b-8b56-4cbf-8fd5-b7a791fd2dbc</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings />
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>COM_CouponCode</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

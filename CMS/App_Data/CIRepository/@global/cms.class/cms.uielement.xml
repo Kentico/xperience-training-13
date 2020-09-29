@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>UI element</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ElementID" columntype="integer" guid="645c0c6d-7049-4e6b-b82c-4e955281a6ab" isPK="true" system="true">
+        <properties>
+          <fieldcaption>ElementID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field column="ElementDisplayName" columnsize="200" columntype="text" guid="b4631bcc-8acc-48ed-b44a-6db67e7a9a70" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[The name of the element displayed in the user interface tree.]]>
+          </fielddescription>
+          <inputcontrolstyle>ColumnMinWidth</inputcontrolstyle>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="ElementName" columnsize="200" columntype="text" guid="e3267f50-9cd8-462c-b6a4-8e682c0a7a2b" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Serves as an identifier of the UI element. Must be unique within the module.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementParentID" columntype="integer" guid="c1534088-c759-4c87-9c2c-e39f75cdfa87" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.parent$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Allows you to change the position of the element in the user interface tree. The system places the current element under the selected parent element.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AllowEmpty>True</AllowEmpty>
+          <CategoryColumn>ElementParentID</CategoryColumn>
+          <controlname>uielementcategoryselector</controlname>
+          <DisabledItemStyle>color: #AAAAAA;</DisabledItemStyle>
+          <ObjectType>cms.uielement</ObjectType>
+          <ShowEmptyCategories>True</ShowEmptyCategories>
+          <ShowObjects>False</ShowObjects>
+          <ShowRoot>True</ShowRoot>
+        </settings>
+      </field>
+      <field column="ElementResourceID" columntype="integer" guid="cddb57a0-5500-4011-a414-2e6e6e214f90" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$objecttype.cms_resource$}</fieldcaption>
+          <fielddescription>Select the module to which the UI element belongs.</fielddescription>
+        </properties>
+        <settings>
+          <controlname>moduleselector</controlname>
+          <DisplayAllModules>True</DisplayAllModules>
+          <DisplayNone>False</DisplayNone>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementFromVersion" columnsize="20" columntype="text" guid="090113df-a8b8-40de-8812-6dc1b89e63c0" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.fromversion$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SystemContext.DevelopmentMode|(identity)GlobalAdministrator|(hash)8e576fe5a4f626cc323e080952c49c3a9169ecaf5dc584185ab9251783d2cda0%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>selectcmsversion</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementIsCustom" columntype="boolean" guid="ab307308-5525-4044-96ea-a2596417b87e" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Element is custom</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementIsMenu" columntype="boolean" guid="62191743-a2f7-41c8-91cb-a0e9770778d8" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Element is menu</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <category name="ElementHeader">
+        <properties>
+          <caption> Element appearance</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ElementCaption" columnsize="200" columntype="text" guid="44ebc475-fa8e-4b62-bdb3-facec141da14" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.caption$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the caption of the UI element in the final user interface. If empty, the system uses the element's Display name. ]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementIconType" columnsize="5" columntype="text" dummy="mainform" guid="c9f440c8-6b62-4d3a-b35d-77dba54cc081" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% (ElementIconClass != "") ? 1 : 0 %}]]>
+          </defaultvalue>
+          <fieldcaption>Element icon type</fieldcaption>
+          <fielddescription>
+<![CDATA[
+Indicates whether element's icon is represented by image or by CSS font class.
+
+]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>RadioButtonsControl</controlname>
+          <Options>
+<![CDATA[
+0;Path
+1;Class
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementIconPath" columnsize="200" columntype="text" dependsonanotherfield="true" guid="4aa48ec6-c813-439d-9a5b-4c94a92ee26d" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.iconpath$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the path to the image used to represent the element in the user interface. You can enter either a full relative path (~/App_Themes/Default/Images/CMSModules/list.png) or a short path inside the 'Images' folder in 'App_Themes/Default/Images' (CMSModules/list.png).]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ElementIconType.Value == 0|(identity)GlobalAdministrator|(hash)0e7729838077c5e28553f4a509f0714920f39700a3fbdc0d29bfac53b1463a01%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AllowManage>False</AllowManage>
+          <AllowNonApplicationPath>True</AllowNonApplicationPath>
+          <AllowZipFolders>True</AllowZipFolders>
+          <controlname>filesystemselector</controlname>
+          <DefaultPath>CMSModules</DefaultPath>
+          <SelectedPathPrefix>{% Util.BaseImagePath() @%}</SelectedPathPrefix>
+          <ShowFolders>False</ShowFolders>
+          <StartingPath>{% Util.BaseImagePath() @%}</StartingPath>
+          <UseRelativeDimensions>True</UseRelativeDimensions>
+        </settings>
+        <rules>
+          <rule errormsg="Invalid image path.">
+            <![CDATA[{%Rule("Value.Matches(\"^[^<>\\\\\\\"|]*$\")", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"RegExp\" ><p n=\"regexp\"><t>^[^&lt;&gt;\\&quot;|]*$</t><v>^[^&lt;&gt;\\&quot;|]*$</v><r>0</r><d></d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)2823feffe60d8d7999af52617aa387d92c8c173cf1abe8b8e69971a8d38a90b8%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="ElementIconClass" columnsize="100" columntype="text" dependsonanotherfield="true" guid="2713d4c5-12e4-4f12-9e0c-2e8f82a51cbc" system="true" visible="true">
+        <properties>
+          <fieldcaption>Element icon CSS class</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the icon's class used to represent the element in the user interface. ]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ElementIconType.Value == 1|(identity)GlobalAdministrator|(hash)d8435b45d678a0c450bf2afeb8a50694eb42adc59747c0d22099b80222deb602%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementSize" columntype="integer" guid="b0fbdae8-2dcf-480b-9214-8ba738aa8fed" system="true" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$webpart.name.iconsize$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the size of the UI element icon in ribbon-like menus.]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ElementIconType.Value == 0|(identity)GlobalAdministrator|(hash)0e7729838077c5e28553f4a509f0714920f39700a3fbdc0d29bfac53b1463a01%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <Options>
+<![CDATA[
+0;Large
+1;Regular
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementDescription" columntype="longtext" guid="c5b75437-8e04-489b-a36b-fc65c12666cc" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.description$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[A text description of the UI element. The system displays the description in certain navigation elements. For example, the description appears as a tooltip in the Application list for UI elements that represent applications.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextarea</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <category name="MenuItemSetting">
+        <properties>
+          <caption>Element content</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ElementType" columnsize="50" columntype="text" guid="f7dca34c-3b3f-4262-a312-7bfc86e4d700" hasdependingfields="true" spellcheck="false" system="true" visible="true">
+        <properties>
+          <defaultvalue>PageTemplate</defaultvalue>
+          <fieldcaption>{$resource.ui.type$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the type of the UI element's content. Page template - a UI template based on the portal engine. URL - a web form (aspx file). User control - a dynamically loaded user control (ascx file). JavaScript - the element executes a JavaScript action when clicked.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+UserControl;User control
+Url;URL
+Javascript;JavaScript
+PageTemplate;Page template
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementPageTemplateID" columntype="integer" guid="9c713ba4-6be4-4fd3-bcba-b79c7c5b8c16" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.pagetemplate$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Selects the UI template that provides the content for elements of the Page template type. You can configure the template on the 'Properties' tab.]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ElementType.Value == "PageTemplate"|(identity)GlobalAdministrator|(hash)07486328ae84b9b5aa53e78140ad69f14ac4fc71fa0126df3277e3e745a2fee6%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>selectpagetemplate</controlname>
+          <ReturnColumnName>PageTemplateID</ReturnColumnName>
+          <RootCategoryName>UITemplates</RootCategoryName>
+          <ShowOnlySiteTemplates>False</ShowOnlySiteTemplates>
+          <ShowTemplateButtons>True</ShowTemplateButtons>
+          <ShowTemplates>True</ShowTemplates>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementTargetURL" columnsize="650" columntype="text" guid="7dd2f1ba-80b1-4295-b937-029afdc2d584" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$resource.ui.targeturl$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Specifies the path to the file that provides the content for UI elements of the 'URL' or 'User control' type (~/CMSModules/Content/CMSDesk/Default.aspx). For JavaScript type elements, enter the JavaScript action.]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ElementType.Value != "PageTemplate"|(identity)GlobalAdministrator|(hash)9ae39561947a7325321fb0d1239b3169b4cd8fea29c0c04678349fd67ae3f9d7%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ElementChildCount" columntype="integer" guid="ee66fff4-f1c0-4f20-81e0-cbb00de1c95a" system="true">
+        <properties>
+          <fieldcaption>ElementChildCount</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementOrder" columntype="integer" guid="53486043-468b-4937-a6e0-f9fe28adb638" system="true">
+        <properties>
+          <fieldcaption>ElementOrder</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ElementLevel" columntype="integer" guid="d3a88b9f-adbb-4f04-a212-2d391b5ea5d6" system="true">
+        <properties>
+          <fieldcaption>ElementLevel</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ElementIDPath" columnsize="450" columntype="text" guid="0cbf65ee-21c4-447e-92c9-139b9ccf882d" system="true">
+        <properties>
+          <fieldcaption>ElementIDPath</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ElementLastModified" columntype="datetime" guid="0a3574c2-c3f2-4434-bf1a-7bd043b58a76" system="true">
+        <properties>
+          <fieldcaption>ElementLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ElementGUID" columntype="guid" guid="ec245fac-abd8-488a-8b9a-780afeca2e15" system="true">
+        <properties>
+          <fieldcaption>ElementGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <category name="Properties">
+        <properties>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ElementProperties" columntype="longtext" guid="2225a529-d8ca-4674-8081-dcc6a62ae605" system="true">
+        <settings>
+          <controlname>uielementpropertieseditor</controlname>
+        </settings>
+      </field>
+      <category name="ElementPermissions">
+        <properties>
+          <caption>{$uielement.elementrestrictions$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ElementAccessCondition" columntype="longtext" guid="7e19eabe-280f-407b-8c5a-9c690b32c333" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$uielement.contentpermissions$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets a macro condition that must be fulfilled to view the UI element's content. If the condition is false, the element displays an access denied error instead of the content. All descendant elements in the user interface tree automatically inherit the condition.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AddDataMacroBrackets>True</AddDataMacroBrackets>
+          <controlname>conditionbuilder</controlname>
+          <DisplayRuleType>0</DisplayRuleType>
+          <MaxWidth>600</MaxWidth>
+          <ShowAutoCompletionAbove>False</ShowAutoCompletionAbove>
+          <ShowGlobalRules>True</ShowGlobalRules>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementCheckModuleReadPermission" columntype="boolean" guid="652ef9b0-3cf7-48a5-86fc-e6d47b4cd6dc" system="true" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>
+            <![CDATA[Check module "read" permission]]>
+          </fieldcaption>
+          <fielddescription>
+            <![CDATA[If enabled, users must have the "Read" or "GlobalRead" permission for the UI element's module to access the element's content. Has no effect for elements whose module does not have read permissions.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementVisibilityCondition" columntype="longtext" guid="df2e3f9d-c8eb-4ced-a0fb-83b7fe6a08d7" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$fieldeditor.visibilitymacro$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets a macro condition that must be fulfilled for the UI element to be visible in the system's user interface.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AddDataMacroBrackets>True</AddDataMacroBrackets>
+          <controlname>conditionbuilder</controlname>
+          <DisplayRuleType>0</DisplayRuleType>
+          <MaxWidth>600</MaxWidth>
+          <ShowAutoCompletionAbove>False</ShowAutoCompletionAbove>
+          <ShowGlobalRules>True</ShowGlobalRules>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementFeature" columnsize="200" columntype="text" guid="990839b5-6185-4afe-a54d-6bdbbb0ae68c" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$editionerror.feature$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[The UI element is only visible in the user interface if the licensing requirements of the selected feature are fulfilled.]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SystemContext.DevelopmentMode;|(identity)GlobalAdministrator|(hash)3b661bb60f384dd715caabdf1e4f17fbd41b4c803d6a27a1685a1185bd397ee1%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.DataEngine</AssemblyName>
+          <controlname>enumselector</controlname>
+          <DisplayType>0</DisplayType>
+          <Items>;(inherit)</Items>
+          <Sort>True</Sort>
+          <TypeName>CMS.DataEngine.FeatureEnum</TypeName>
+          <UseStringRepresentation>True</UseStringRepresentation>
+        </settings>
+      </field>
+      <field allowempty="true" column="ElementIsGlobalApplication" columntype="boolean" guid="8cca6a60-420b-49d1-aea0-90abd672594a" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$uielement.isglobalapplication.fieldcaption$}</fieldcaption>
+          <fielddescription>{$uielement.isglobalapplication.fielddescription$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="ElementRequiresGlobalAdminPriviligeLevel" columntype="boolean" guid="5e248bac-e8f4-496a-a395-db23043a1d38" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>
+            <![CDATA[{$uielement.RequiresGlobalAdminPriviligeLevel.fieldcaption$}]]>
+          </fieldcaption>
+          <fielddescription>
+            <![CDATA[{$uielement.RequiresGlobalAdminPriviligeLevel.fielddescription$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>756292a7-ea43-4b8c-a343-6e88dbc3d38e</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>CMS.UIElement</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS</CodeName>
+    <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>ElementDescription</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>0</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>True</ClassSearchEnabled>
+  <ClassSearchImageColumn>ElementIconPath</ClassSearchImageColumn>
+  <ClassSearchSettings>
+    <search>
+      <item id="00840f56-caf4-4628-83f1-b8e6e218d0eb" name="ElementIsMenu" />
+      <item id="29733e80-cb01-4827-9e43-2e0408274634" name="ElementPageTemplateID" />
+      <item id="2e44d60c-4f33-422a-a6ec-319f4c885ddf" name="ElementVisibilityCondition" />
+      <item content="False" id="34443908-1b5c-4c86-b920-b747d0b31bdb" name="ElementLevel" searchable="False" tokenized="False" />
+      <item content="False" id="35602d8b-f257-4f3d-ba52-7904968b713a" name="ElementSize" searchable="False" tokenized="False" />
+      <item content="False" id="39f56d16-9f1a-4119-b754-40a9a0b12482" name="ElementParentID" searchable="False" tokenized="False" />
+      <item id="3ee16be3-ab89-4c18-a09a-adb97af62881" name="ElementIconClass" />
+      <item content="False" id="40bc2d97-d058-485d-8f1f-6e4f9a5fa486" name="ElementDescription" searchable="False" tokenized="False" />
+      <item content="False" id="4f91d283-db3b-4039-a097-9538406790f1" name="ElementCaption" searchable="False" tokenized="False" />
+      <item content="False" id="5982839d-a2c9-42b4-9394-1676bf7e0aed" name="ElementName" searchable="False" tokenized="False" />
+      <item content="False" id="6c6663a4-8faa-40d8-a24c-4efbe06ba04c" name="ElementIsCustom" searchable="False" tokenized="False" />
+      <item id="716643d1-c45e-49cc-ab42-fd5f8e2c81f5" name="ElementCheckModuleReadPermission" />
+      <item id="72c725fb-cdbb-45cd-8622-e1f11b69aff8" name="ElementType" />
+      <item id="7503efb1-8785-436a-9d7b-13b4064e1ca4" name="ElementIsGlobalApplication" />
+      <item content="False" id="75b411d1-2c40-4187-8754-8a320de3ec13" name="ElementIconPath" searchable="False" tokenized="False" />
+      <item content="False" id="86a73011-26af-4d40-9c77-2e5ff64949dd" name="ElementIDPath" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="8b4f9405-8434-46eb-ac36-0f5e815c395f" name="ElementID" searchable="True" tokenized="False" />
+      <item azuresearchable="True" content="False" id="8d9f1fc6-8756-41e4-8b98-9c2b0fc658d0" name="ElementFromVersion" searchable="False" tokenized="True" />
+      <item id="9ae75bb4-367e-4b1d-b8b7-01413ddbf66e" name="ElementProperties" />
+      <item content="False" id="9f5b27e7-6347-4d52-9d8c-27617ca2d1aa" name="ElementLastModified" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="c80f6a01-d7f3-415c-b358-3b37c96575f1" name="ElementTargetURL" searchable="True" tokenized="False" />
+      <item content="False" id="c9952b7e-d139-4cdd-852f-2cab99b2cbbb" name="ElementChildCount" searchable="False" tokenized="False" />
+      <item content="False" id="d47dcfd2-d234-4354-baff-cb16a33d36bf" name="ElementGUID" searchable="False" tokenized="False" />
+      <item content="False" id="dcf3e63a-217c-4d5b-8878-2640af8dfc1c" name="ElementResourceID" searchable="False" tokenized="False" />
+      <item id="e75f6b26-7612-4558-820f-f09f47563efd" name="ElementFeature" />
+      <item content="False" id="e81e93cd-2916-42c1-b1d5-5b3ecf554e2f" name="ElementOrder" searchable="False" tokenized="False" />
+      <item azurecontent="True" content="True" id="f3219e90-63e1-4cce-ad1f-66484f159f25" name="ElementDisplayName" searchable="False" tokenized="False" />
+      <item id="f61fde4a-c64d-4264-86bb-9e9f39055e1e" name="ElementAccessCondition" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>ElementDisplayName</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_UIElement</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

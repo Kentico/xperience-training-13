@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Workflow scope</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ScopeID" columntype="integer" guid="80348be1-c666-4a97-9d48-1d46bb49d061" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>ScopeID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ScopeWorkflowID" columntype="integer" guid="d53bd2fe-2023-4098-9527-fd6d13fc8cff" system="true">
+        <properties>
+          <fieldcaption>ScopeWorkflowID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ScopeSiteID" columntype="integer" guid="314be952-3e36-4868-b10b-b1026cb021cc" system="true">
+        <properties>
+          <fieldcaption>ScopeSiteID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ScopeGUID" columntype="guid" guid="2b198dac-7fd9-46b5-bfff-e8c087bbbec2" system="true">
+        <properties>
+          <fieldcaption>ScopeGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ScopeLastModified" columntype="datetime" guid="42da4cc7-0319-486d-84ab-0cc0aecab0ad" system="true">
+        <properties>
+          <fieldcaption>ScopeLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field column="ScopeStartingPath" columnsize="450" columntype="text" guid="e1bfc63e-7081-4b80-acc6-993bcc17becb" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$Development-Workflow_Scope_Edit.Coverage$}</fieldcaption>
+          <fieldcssclass>BottomPadding TopAlign form-group</fieldcssclass>
+          <validationerrormessage>
+            <![CDATA[{$Development-Workflow_Scope_Edit.RequiresStartingAliasPath$}]]>
+          </validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>workflowscopedefinition</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ScopeExcludeChildren" columntype="boolean" guid="c734ddc0-cdcd-45a2-b72e-fa37f123a004" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>This scope covers</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <Options>
+<![CDATA[
+0;{$workflowscope.docandchildren$}
+1;{$workflowscope.doc$}
+2;{$workflowscope.children$}
+]]>
+          </Options>
+          <RepeatDirection>vertical</RepeatDirection>
+        </settings>
+      </field>
+      <field column="ScopeExcluded" columntype="boolean" guid="0f75405b-7625-4186-bd37-5064636d7780" system="true" visible="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$Development-Workflow_Scope_Edit.ScopeType$}</fieldcaption>
+          <fieldcssclass>TopAlign form-group</fieldcssclass>
+        </properties>
+        <settings>
+          <controlname>RadioButtonsControl</controlname>
+          <Options>
+<![CDATA[
+0;{$general.allowedscope$}
+1;{$general.excludedscope$}
+]]>
+          </Options>
+          <RepeatDirection>vertical</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <category name="general.advanced">
+        <properties>
+          <caption>{$general.advanced$}</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ScopeClassID" columntype="integer" guid="86559d2f-0ac6-4714-adb6-e1b2ce4cae90" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Development-Workflow_Scope_Edit.DocumentType$}</fieldcaption>
+        </properties>
+        <settings>
+          <AllowAll>True</AllowAll>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>selectclassnames</controlname>
+          <HideInheritedClasses>False</HideInheritedClasses>
+          <ReturnColumnName>ClassID</ReturnColumnName>
+          <SelectionMode>1</SelectionMode>
+          <ShowOnlyCoupled>False</ShowOnlyCoupled>
+        </settings>
+      </field>
+      <field allowempty="true" column="ScopeCultureID" columntype="integer" guid="3fd1415f-d6c5-4305-8c67-5c2cc778768a" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.culture$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%LicenseHelper.CheckFeature(FeatureEnum.Multilingual)|(identity)GlobalAdministrator|(hash)84fe1f7db5830b8d6ee8b9fe789222b7285594e587c7af609f257a7c5b53fe51%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AllowAll>True</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>sitecultureselector</controlname>
+          <DisplayNameFormat>{%CultureName%}</DisplayNameFormat>
+          <ReturnColumnName>CultureID</ReturnColumnName>
+        </settings>
+      </field>
+      <field allowempty="true" column="ScopeMacroCondition" columntype="longtext" guid="62c7aa61-76b5-402c-bb4e-f47775a58b86" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$cms.workflowscope.condition$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>conditionbuilder</controlname>
+          <DisplayRuleType>0</DisplayRuleType>
+          <MaxWidth>600</MaxWidth>
+          <ResolverName>WorkflowBaseDocumentResolver</ResolverName>
+          <RuleCategoryNames>cms.workflow</RuleCategoryNames>
+          <ShowAutoCompletionAbove>False</ShowAutoCompletionAbove>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>8cba8304-c75f-45ce-8f39-7f363cf5892a</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.workflowscope</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.WorkflowEngine</CodeName>
+    <GUID>2b67f370-3df4-4a4d-8734-1974639c5b69</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>0</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>ScopeLastModified</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item azureretrievable="True" content="False" id="10e3f770-b6ae-415e-b997-e386858265ff" name="ScopeID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="301e0569-9057-4c76-ab1d-40f8386cfbc4" name="ScopeSiteID" searchable="True" tokenized="False" />
+      <item content="False" id="6d647006-b642-4947-aea9-b30e93b048e2" name="ScopeGUID" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="8768d1a8-dfed-4571-98e3-b1dc28151ff2" name="ScopeCultureID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="b0f0ddc1-202c-4bd7-879a-996c6ce84962" name="ScopeLastModified" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="c3bc06a7-86e3-4a71-ad72-e52df1a1643f" name="ScopeWorkflowID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="f7b938fd-f791-460d-98a1-17291995129b" name="ScopeClassID" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="fc697fc4-9f43-4fff-9c7d-6670e403c1c1" name="ScopeStartingPath" searchable="False" tokenized="True" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>ScopeStartingPath</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_WorkflowScope</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

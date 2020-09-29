@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSOMConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Scoring - Rule</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="RuleID" columntype="integer" guid="b37e31c1-be2d-462c-9d73-04cda0d60b7e" isPK="true" system="true">
+        <properties>
+          <fieldcaption>RuleID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="RuleScoreID" columntype="integer" guid="0e593954-64d1-4dd8-a992-132f8baaa08a" system="true">
+        <properties>
+          <fieldcaption>RuleScoreID</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="RuleDisplayName" columnsize="200" columntype="text" guid="eeec77c5-4f3d-433c-b842-28ca4f6a0a19" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$om.rule.displayname$}</fieldcaption>
+          <fielddescription>{$om.rule.displayname.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="RuleName" columnsize="200" columntype="text" guid="3c12c604-59ab-4966-bb15-985db40d5f0d" system="true" visible="true">
+        <properties>
+          <defaultvalue>__AUTO__</defaultvalue>
+          <fieldcaption>{$om.rule.codename$}</fieldcaption>
+          <fielddescription>{$om.rule.codename.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field column="RuleValue" columntype="integer" dependsonanotherfield="true" guid="573d49df-2418-4137-b7ac-0dfa0899c042" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$om.score.value$}</fieldcaption>
+          <fielddescription>{$om.score.scorevalue.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule errormsg="{$om.score.maximumrulevalue$}">
+            <![CDATA[{%Rule("Value <= 100000", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>100000</t><v>100000</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+          <rule errormsg="{$om.score.minimumrulevalue$}">
+            <![CDATA[{%Rule("Value >= -100000", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>-100000</t><v>-100000</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="RuleIsRecurring" columntype="boolean" guid="fd1e37c0-d6fa-4c8f-a5bd-509b93013539" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$om.score.recurringrule$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="RuleMaxPoints" columntype="integer" dependsonanotherfield="true" guid="195a701b-656f-4117-b7ec-7f57e9212b6a" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">{%RuleIsRecurring%}</enabledmacro>
+          <fieldcaption>{$om.score.maxpoints$}</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="RuleValidUntil" columntype="datetime" guid="8773004e-c8ed-47a1-b4fd-e5f80f92ed2b" system="true">
+        <properties>
+          <fieldcaption>RuleValidUntil</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>True</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field allowempty="true" column="RuleValidity" columnsize="50" columntype="text" guid="15c836e4-82cc-426c-b228-1f8898833b97" spellcheck="false" system="true">
+        <properties>
+          <fieldcaption>RuleValidity</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="RuleValidFor" columntype="integer" guid="913ee1f2-73c6-46c3-a9a4-3b75fd2ffd27" system="true">
+        <properties>
+          <fieldcaption>RuleValidFor</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="RuleType" columntype="integer" guid="9f552f8e-df8e-4ec2-a5ea-38f93a52862d" hasdependingfields="true" spellcheck="false" system="true" visible="true">
+        <properties>
+          <defaultvalue>1</defaultvalue>
+          <fieldcaption>{$om.score.ruletype$}</fieldcaption>
+          <fielddescription>{$om.score.ruletype.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <Options>
+<![CDATA[
+1;{$om.score.attribute$}
+0;{$om.score.activity$}
+2;{$om.score.macro$}
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+        </settings>
+      </field>
+      <field allowempty="true" column="RuleParameter" columnsize="250" columntype="text" guid="14fe236f-0b60-4b37-884a-d1d8d87fbc14" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>RuleParameter</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="RuleCondition" columntype="longtext" guid="044cb901-83ab-45b5-82be-7ee390ffdf19" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>RuleCondition</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textareacontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <IsTextArea>True</IsTextArea>
+        </settings>
+      </field>
+      <field column="RuleLastModified" columntype="datetime" guid="a35b9681-c68e-497f-8812-df9e8502c476" system="true">
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+        </settings>
+      </field>
+      <field column="RuleGUID" columntype="guid" guid="c3c7b27d-8421-47e4-b2dd-754bce97ec00" system="true">
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+        </settings>
+      </field>
+      <field column="RuleBelongsToPersona" columntype="boolean" guid="7deb603c-a873-4754-8b04-e5d2f51197c8" system="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field allowempty="true" column="RuleActivityItemID" columntype="integer" guid="9a199dad-912a-41a7-b5f1-a27a23d20eae" system="true" />
+      <field allowempty="true" column="RuleActivityItemObjectType" columnsize="200" columntype="text" guid="ce7e096d-29e3-4791-a36b-a128f4483ee3" system="true" />
+      <field allowempty="true" column="RuleActivityItemDetailID" columntype="integer" guid="fcaba008-2101-4fc1-9fe9-c3b55725f18c" system="true" />
+      <field allowempty="true" column="RuleActivityItemDetailObjectType" columnsize="200" columntype="text" guid="59606e06-e691-49d8-a684-0fee09170834" system="true" />
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>be7d8b1c-e4e5-4ee4-9bf9-dbd02cf13ff9</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>OM.Rule</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Scoring</CodeName>
+    <GUID>65210a3e-5aef-4a10-aa23-17906fcd7039</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search />
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>OM_Rule</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

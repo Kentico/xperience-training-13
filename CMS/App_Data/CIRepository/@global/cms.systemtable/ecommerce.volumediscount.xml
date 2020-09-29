@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.systemtable>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDefaultObjectType />
+  <ClassDisplayName>Volume discount</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="VolumeDiscountID" columntype="integer" guid="0c00f4b8-c620-47c9-b210-560ccad5de07" isPK="true" system="true">
+        <properties>
+          <fieldcaption>VolumeDiscountID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="VolumeDiscountSKUID" columntype="integer" guid="40cf73c1-36e7-4ba1-a430-99edc9882288" system="true">
+        <properties>
+          <fieldcaption>VolumeDiscountSKUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>textboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="VolumeDiscountMinCount" columntype="integer" guid="fec331ea-76d5-4b7b-9d07-712a73f010df" system="true" visible="true">
+        <properties>
+          <fieldcaption>
+            <![CDATA[{$unigrid.product_edit_volumediscount.columns.volumediscountmincount$}]]>
+          </fieldcaption>
+          <fielddescription>
+            <![CDATA[Minimum amount of ordered items the volume discount applies to.]]>
+          </fielddescription>
+          <validationerrormessage>{$com.discount.minimumquantityempty$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0</FilterType>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("(Value >= 2)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>2</t><v>2</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("Value <= 2000000000", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>2000000000</t><v>2000000000</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="VolumeDiscountIsFlatValue" columntype="boolean" guid="87ded51f-d9b2-4650-88a4-53c3e09c4735" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$com.discount.discountisflat$}</fieldcaption>
+          <fielddescription>{$com.discount.discountisflatdescription$}</fielddescription>
+          <validationerrormessage ismacro="true">
+            <![CDATA[{% VolumeDiscountIsFlatValue.Value? GetResourceString("com.discount.valuerealposnumber"):GetResourceString("basicform.valuebetween0and100")|(identity)GlobalAdministrator|(hash)d71dfd211393084d881a51ab533dfe8e04a57e47b8918f5f28a3e8658d09e149%}]]>
+          </validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+false; {$com.discount.percentage$}
+true; {$com.discount.fixedamount$}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="VolumeDiscountValue" columnprecision="9" columnsize="18" columntype="decimal" dependsonanotherfield="true" guid="85872dc6-b413-4a5c-b534-193c93175e94" system="true" visible="true">
+        <properties>
+          <contentafter>
+            <![CDATA[<span class="form-control-text">{% VolumeDiscountIsFlatValue.Value ? HTMLEncode(GetMainSiteCurrency(ParentObject.SKUSiteID).CurrencyCode) : "%"|(identity)GlobalAdministrator|(hash)86cdc995c84d6921da7eae5daf94eddc27204348307dc27307cc00628460b0cb%}</span>]]>
+          </contentafter>
+          <controlcssclass>input-width-40</controlcssclass>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>{$com.discount.valueperitem$}</fieldcaption>
+          <validationerrormessage>{$com.discount.valueempty$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0|3</FilterType>
+          <Trim>True</Trim>
+          <ValidChars>.,</ValidChars>
+        </settings>
+        <rules>
+          <rule errormsg="{$com.discount.amountpercentage$}">
+            <![CDATA[{%Rule("(VolumeDiscountIsFlatValue.Value? true : Value<=100)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>VolumeDiscountIsFlatValue.Value? true : Value&lt;=100</t><v>VolumeDiscountIsFlatValue.Value? true : Value&lt;=100</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)73372afa7a254ed61f0d00dc906c26fa57dcde7eafb9de47ac5fe60f37f40172%}]]>
+          </rule>
+          <rule errormsg="{$com.discount.minamount$}">
+            <![CDATA[{%Rule("(Value > 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>Value &gt; 0</t><v>Value &gt; 0</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="VolumeDiscountGUID" columntype="file" guid="51cb9858-7105-4c5e-8f23-58b9299b37de" system="true">
+        <properties>
+          <fieldcaption>VolumeDiscountIsFlatValue</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="VolumeDiscountLastModified" columntype="datetime" guid="1709e8fd-993e-44a3-9e74-eab513d45a78" system="true">
+        <properties>
+          <fieldcaption>VolumeDiscountLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>c363a8ef-9b91-4e8b-860f-1e058dfc66ec</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>ecommerce.volumediscount</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Ecommerce</CodeName>
+    <GUID>684e021b-8b56-4cbf-8fd5-b7a791fd2dbc</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search />
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>True</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>COM_VolumeDiscount</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.systemtable>

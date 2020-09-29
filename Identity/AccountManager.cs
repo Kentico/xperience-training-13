@@ -14,6 +14,7 @@ using Business.Extensions;
 using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Identity
 {
@@ -174,6 +175,59 @@ namespace Identity
             }
 
             accountResult.Errors.AddNonNullRange(identityResult.Errors.Select(error => error.Description));
+
+            return accountResult;
+        }
+
+        public async Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(ExternalLoginInfo loginInfo)
+        {
+            var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>();
+            SignInResult signInResult;
+
+            try
+            {
+                signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
+            }
+            catch (Exception ex)
+            {
+                var ar = accountResult as IdentityManagerResult<SignInResultState>;
+                accountResult.ResultState = SignInResultState.NotSignedIn;
+                HandleException(nameof(SignInAsync), ex, ref ar);
+
+                return accountResult;
+            }
+
+            // Success occurs if the user already exists in the connected database and has signed in using the given external service
+            if (signInResult.Succeeded)
+            {
+                accountResult.Success = true;
+                accountResult.ResultState = SignInResultState.SignedIn;
+            }
+            else
+            {
+                // Attempts to create a new user in Xperience if the authentication failed
+                IdentityResult userCreation = await _userManager.CreateExternalUser(loginInfo);
+
+                // Attempts to sign in again with the new user created based on the external authentication data
+                signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
+
+                // Verifies that the user was created successfully and was able to sign in
+                if (userCreation.Succeeded && signInResult == SignInResult.Success)
+                {
+                    accountResult.Success = true;
+                    accountResult.ResultState = SignInResultState.SignedIn;
+                }
+                else
+                {
+                    // User creation not successful
+                    accountResult.Success = false;
+                    accountResult.ResultState = SignInResultState.NotSignedIn;
+                    foreach (IdentityError error in userCreation.Errors)
+                    {
+                        accountResult.Errors.Add(error.Description);
+                    }
+                }
+            }
 
             return accountResult;
         }
@@ -389,6 +443,16 @@ namespace Identity
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             return await _userManager.AddToRolesAsync(user, new[] { patientRole });
+        }
+
+        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl)
+        {
+            return _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
+        }
+
+        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync()
+        {
+            return await _signInManager.GetExternalLoginInfoAsync();
         }
 
         /// <summary>

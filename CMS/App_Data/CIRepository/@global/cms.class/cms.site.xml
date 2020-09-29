@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Site</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <category name="General">
+        <properties>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="SiteID" columntype="integer" guid="8f1d2a8a-6f44-41ef-899b-d0dd37b82cab" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>SiteID</fieldcaption>
+        </properties>
+      </field>
+      <field column="SiteDisplayName" columnsize="200" columntype="text" guid="24ef1161-4c27-4bea-8b37-36acc59cff34" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.DisplayName$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="SiteName" columnsize="100" columntype="text" guid="4f69f0f6-e786-435f-83f1-9f771fa2f726" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.CodeName$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+          <RequireIdentifier>False</RequireIdentifier>
+        </settings>
+      </field>
+      <field column="SitePresentationURL" columnsize="400" columntype="text" guid="ad9a9c6d-6579-45a8-99f0-5be2bf4fd901" spellcheck="false" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$site_edit.PresentationURL$}</fieldcaption>
+          <fielddescription>{$site_edit.PresentationURL.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule errormsg="{$site_edit.PresentationURL.mustStartWith$}">
+            <![CDATA[{%Rule("(Value.Matches(\"^https?://\"))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"RegExp\" ><p n=\"regexp\"><t>^https?://</t><v>^https?://</v><r>0</r><d></d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)b478d99d272b8abfe9b1196762d21522d88e63c548b1a1b1ef81c6a0aa6f0610%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="SiteDomainName" columnsize="400" columntype="text" guid="4a553b11-0d6a-44c5-8e2c-7bef0ce6587d" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.DomainName$}</fieldcaption>
+          <fielddescription>{$site_edit.domainname.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>True</Trim>
+        </settings>
+      </field>
+      <field column="SiteStatus" columnsize="20" columntype="text" guid="4683b075-8db9-4411-bf14-563e795cdd95" system="true">
+        <properties>
+          <fieldcaption>SiteStatus</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="SiteDescription" columntype="longtext" guid="6c445911-e93e-4449-bb1f-9cc4048e788f" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.Description$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>LocalizableTextArea</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <category name="Cultures">
+        <properties>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="SiteDefaultContentCulture" columnsize="50" columntype="text" dummy="mainform" guid="b653e25f-8a95-467c-a778-69448bfc9bca" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.ContentCulture$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>sitecontentculture</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="SiteDefaultVisitorCulture" columnsize="50" columntype="text" guid="ddfbfe8d-3b87-4785-b147-24a28f107937" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Site_Edit.VisitorCulture$}</fieldcaption>
+        </properties>
+        <settings>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEmpty>False</AllowEmpty>
+          <AllRecordValue>-1</AllRecordValue>
+          <controlname>sitecultureselector</controlname>
+          <DisplayNameFormat>{%CultureName%}</DisplayNameFormat>
+          <ReturnColumnName>CultureCode</ReturnColumnName>
+          <SelectionMode>1</SelectionMode>
+          <SpecialFields>;{$Site_Edit.Automatic$}</SpecialFields>
+        </settings>
+      </field>
+      <field allowempty="true" column="SiteGUID" columntype="file" guid="de9b4fc5-3c93-4751-9b10-061edd14a3d8" system="true">
+        <properties>
+          <fieldcaption>SiteGUID</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="SiteLastModified" columntype="datetime" guid="90802d29-9156-46b9-891a-4612618d8ea5" system="true">
+        <properties>
+          <fieldcaption>SiteLastModified</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="SiteIsOffline" columntype="boolean" guid="48a74857-910c-4422-b1e1-beeaf05bae51" spellcheck="false" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Site is offline</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="SiteOfflineRedirectURL" columnsize="400" columntype="text" guid="92291451-c76c-46ad-8e3a-7c6d4611d01a" spellcheck="false" system="true">
+        <properties>
+          <fieldcaption>Offline redirect URL</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="SiteOfflineMessage" columntype="longtext" guid="e9dc8486-78b6-46a3-8ea8-635ea7a865d6" spellcheck="false" system="true" translatefield="true">
+        <properties>
+          <fieldcaption>Offline message</fieldcaption>
+        </properties>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>8f2f80f1-13cb-4050-bc10-14a45b09f4e0</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.site</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS</CodeName>
+    <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn />
+  <ClassSearchCreationDateColumn />
+  <ClassSearchEnabled>True</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item id="02660e38-0bcb-4997-8bb2-07a7eb4bca3f" name="SiteDescription" />
+      <item id="096cc329-9d69-420f-be5c-502dd90497ee" name="SiteLastModified" />
+      <item id="526b74b4-85bf-40c1-8dfe-0559fc179ef2" name="SiteStatus" />
+      <item id="5c95f7b5-fba5-47c3-8df7-feefafc28d57" name="SiteOfflineRedirectURL" />
+      <item id="6b192c2d-fdec-4717-8dc8-ed82e0477adf" name="SiteDefaultVisitorCulture" />
+      <item id="73c33607-22ff-4004-bd60-e97ec165e783" name="SiteGUID" />
+      <item id="74e434f1-9722-4feb-945b-1d5607751f56" name="SiteIsOffline" />
+      <item id="7a4ee8af-a0ba-4778-8ad2-1796829c3c1d" name="SiteOfflineMessage" />
+      <item id="83f9a4a0-e60c-4cb6-bc70-0d760a13830d" name="SiteID" />
+      <item id="9af207f3-bb45-4054-9da2-2d0288ff53ee" name="SiteDisplayName" />
+      <item id="a5784bdc-3a2f-4163-9731-34ab1658f5a1" name="SiteName" />
+      <item id="a71f26a1-7135-47f6-852b-13586774c215" name="SitePresentationURL" />
+      <item id="b9abba49-3a00-46ed-9c59-b0ba33949ddc" name="SiteDomainName" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn />
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_Site</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

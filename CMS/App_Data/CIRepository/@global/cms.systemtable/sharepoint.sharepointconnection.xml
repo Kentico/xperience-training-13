@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.systemtable>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>SharePoint connection</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <category name="general.general">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="SharePointConnectionDisplayName" columnsize="100" columntype="text" guid="6181c9bb-eea5-4b6d-adc6-a40dcc1af2d9" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+          <fielddescription>{$sharepoint.connection.displayname.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="SharePointConnectionName" columnsize="100" columntype="text" guid="aa1e8de2-8fb9-42db-a0ce-0e1f2ef3ce2a" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <fielddescription>{$sharepoint.connection.codename.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field column="SharePointConnectionSiteUrl" columnsize="512" columntype="text" guid="cfd86cbd-6da5-4bc1-878c-84526df9eb1e" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sharepoint.connection.siteurl$}</fieldcaption>
+          <fielddescription>{$sharepoint.connection.siteurl.description$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>True</Trim>
+        </settings>
+      </field>
+      <field column="SharePointConnectionSharePointVersion" columnsize="30" columntype="text" guid="77ab24aa-e826-4be5-86cd-bcce2b3c473e" system="true" visible="true">
+        <properties>
+          <defaultvalue>sp2010</defaultvalue>
+          <fieldcaption>{$sharepoint.connection.sharepointversion$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$sharepoint.connection.sharepointversion.description$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>SharePointVersionSelector</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+        </settings>
+      </field>
+      <category name="sharepoint.connection.category.authentication">
+        <properties>
+          <caption>{$sharepoint.connection.category.authentication$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="SharePointConnectionAuthMode" columnsize="30" columntype="text" guid="b480abc6-67b9-462a-bdd4-0605d2728d48" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>default</defaultvalue>
+          <fieldcaption>{$sharepoint.connection.authmode$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+anonymous;{$ sharepoint.connection.authmode.anonymous $}
+default;{$ sharepoint.connection.authmode.default $}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="SharePointConnectionUserName" columnsize="100" columntype="text" dependsonanotherfield="true" guid="634086dc-ca1c-4c03-83e9-638776ebde03" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sharepoint.connection.username$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SharePointConnectionAuthMode != "anonymous"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="SharePointConnectionDomain" columnsize="100" columntype="text" dependsonanotherfield="true" guid="12d84579-11ca-4233-9142-dad5f38fe479" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sharepoint.connection.domain$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SharePointConnectionAuthMode != "anonymous"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="SharePointConnectionPassword" columnsize="100" columntype="text" dependsonanotherfield="true" guid="49355949-5fec-48d1-a078-310b45bf5ada" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$sharepoint.connection.password$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SharePointConnectionAuthMode != "anonymous"%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>EncryptedPassword</controlname>
+        </settings>
+      </field>
+      <category name="ConnectionTest">
+        <properties>
+          <caption>{$sharepoint.connection.category.test$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ConnectionTestControl" columntype="longtext" dummy="mainform" guid="0755fb6d-7429-439f-8abe-98274cdccba0" system="true" visible="true">
+        <settings>
+          <controlname>sharepointserverconnectiontest</controlname>
+        </settings>
+      </field>
+      <field column="SharePointConnectionID" columntype="integer" guid="b734766b-4eaa-47ea-bf4a-d8c2ab3b525a" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>SharePointConnectionID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="SharePointConnectionSiteID" columntype="integer" guid="ae8090d6-4d47-4a3f-9867-4a493535a6ef" refobjtype="cms.site" reftype="Required" system="true" />
+      <field column="SharePointConnectionGUID" columntype="guid" guid="92725154-ce49-46e1-a91f-d39f39c8e945" system="true" />
+      <field column="SharePointConnectionLastModified" columnprecision="7" columntype="datetime" guid="73cd783e-29fd-4c49-9c77-a3b2e4334e19" system="true" />
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayoutType>Html</ClassFormLayoutType>
+  <ClassGUID>1ba9dff5-c998-4d77-aae7-d902065b5bc7</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassName>SharePoint.SharePointConnection</ClassName>
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.SharePoint</CodeName>
+    <GUID>978f8972-606c-4f8f-9b01-7b650a5ca31d</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassShowAsSystemTable>True</ClassShowAsSystemTable>
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>SharePoint_SharePointConnection</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.systemtable>

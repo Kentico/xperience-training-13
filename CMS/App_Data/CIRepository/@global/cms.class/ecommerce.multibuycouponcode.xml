@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Multibuy coupon code</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="MultiBuyCouponCodeID" columntype="integer" guid="aab1ed1c-1051-423b-b8a8-8b6649edd7cc" isPK="true" isunique="true" system="true">
+        <properties>
+          <fieldcaption>MultiBuyCouponCodeID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="MultiBuyCouponCodeCode" columnsize="200" columntype="text" guid="5a5b7909-6825-464b-8c76-2e5165308edb" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.couponcode.couponcode$}</fieldcaption>
+          <fielddescription>{$com.couponcode.couponcodedesc$}</fielddescription>
+          <inputcontrolstyle>width:100px;</inputcontrolstyle>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0|1|2|3</FilterType>
+          <Trim>True</Trim>
+          <ValidChars>_-.</ValidChars>
+        </settings>
+      </field>
+      <field allowempty="true" column="MultiBuyCouponCodeUseLimit" columntype="integer" guid="4b4d24cb-783c-4553-8e81-03b1c92269f9" system="true" visible="true">
+        <properties>
+          <contentafter ismacro="true">
+            <![CDATA[<span class="form-control-text">{% GetResourceString("com.couponcode.times") |(identity)GlobalAdministrator|(hash)9733c3f3a8076e35b91f5a43db236f5d7a6ca32d86f02a8bf5e6303b8b3efa6a%}</span> ]]>
+          </contentafter>
+          <fieldcaption>{$com.couponcode.uselimit$}</fieldcaption>
+          <fielddescription>{$com.couponcode.uselimitdesc$}</fielddescription>
+          <inputcontrolstyle>width:100px;</inputcontrolstyle>
+          <validationerrormessage>{$com.discount.couponcodelimiterror$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0</FilterType>
+          <Trim>False</Trim>
+          <WatermarkText>{$com.couponcode.unlimited$}</WatermarkText>
+        </settings>
+        <rules>
+          <rule errormsg="Maximal value is 999999">
+            <![CDATA[{%Rule("Value <= 999999", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>999999</t><v>999999</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("((Convert.ToInt(MultiBuyCouponCodeUseCount.Value) == 0)? Value >= 1: Value >= Convert.ToInt(MultiBuyCouponCodeUseCount.Value))", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>(Convert.ToInt(MultiBuyCouponCodeUseCount.Value) == 0)? Value &gt;= 1: Value &gt;= Convert.ToInt(MultiBuyCouponCodeUseCount.Value)</t><v>(Convert.ToInt(MultiBuyCouponCodeUseCount.Value) == 0)? Value &gt;= 1: Value &gt;= Convert.ToInt(MultiBuyCouponCodeUseCount.Value)</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)a0a0c904c51dd3709f8e094b3c038d798896c1c58be7bf2ae291580264881ecd%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="MultiBuyCouponCodeUseCount" columntype="integer" guid="43aae5f4-3de1-4d1d-aa8a-b173f08cd2d2" system="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+        </properties>
+      </field>
+      <field column="MultiBuyCouponCodeMultiBuyDiscountID" columntype="integer" guid="380e0817-3e7c-4a60-b153-0da051f56f0a" system="true" />
+      <field column="MultiBuyCouponCodeLastModified" columnprecision="7" columntype="datetime" guid="16f217c6-b3e4-474a-9345-ea9750c970c7" system="true" />
+      <field column="MultiBuyCouponCodeGUID" columntype="guid" guid="37a9b110-4435-4961-90f8-37473676cb4f" system="true" />
+    </form>
+  </ClassFormDefinition>
+  <ClassGUID>6f173070-72aa-462f-b761-b513569e7afc</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassName>Ecommerce.MultiBuyCouponCode</ClassName>
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Ecommerce</CodeName>
+    <GUID>684e021b-8b56-4cbf-8fd5-b7a791fd2dbc</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>COM_MultiBuyCouponCode</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.systemtable>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDefaultObjectType />
+  <ClassDisplayName>Shipping option</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ShippingOptionID" columntype="integer" guid="dc7a8f97-f1cb-4517-8031-489213a2445d" isPK="true" system="true">
+        <properties>
+          <fieldcaption>ShippingOptionID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <category name="com.ui.configurationshippingoptionsgeneral">
+        <properties>
+          <caption>{$com.ui.configurationshippingoptionsgeneral$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ShippingOptionCarrierID" columntype="integer" guid="44289ffa-5e1a-4b40-8def-bcbf4c392fd5" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%EditedObject.ID == 0|(identity)GlobalAdministrator|(hash)a0a4544586e05cca53494134985aab8286074eadf8c4462715dcbc932f129ff3%}]]>
+          </enabledmacro>
+          <fieldcaption>{$com.shippingoption.carrier$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>LabelControl</controlname>
+          <OutputFormat ismacro="true">
+            <![CDATA[{% EditedObject.ShippingOptionCarrier.CarrierDisplayName |(identity)GlobalAdministrator|(hash)ba99193ba4f30ba2f59bee26e85d1c8c8bc3d5d7f671a4b87c23e8802ae36a47%}]]>
+          </OutputFormat>
+        </settings>
+      </field>
+      <field allowempty="true" column="ShippingOptionCarrierServiceName" columnsize="200" columntype="text" guid="b38ed66d-cba3-4b19-93f4-169fd5d82ec5" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$com.carrier.service$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>LabelControl</controlname>
+          <OutputFormat ismacro="true">
+            <![CDATA[{% EditedObject.ShippingOptionServiceDisplayName |(identity)GlobalAdministrator|(hash)09b5722e704387b497539a88b6f632b3e9858cb61a4d9b7701c35ece1c1a9e89%}]]>
+          </OutputFormat>
+        </settings>
+      </field>
+      <field column="ShippingOptionDisplayName" columnsize="200" columntype="text" guid="765b2b6e-52b1-41c9-ab12-ec94b3ef6ad7" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[The shipping option name displayed to the users on the live site and in the administration interface.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="ShippingOptionName" columnsize="200" columntype="text" guid="9804163e-683a-4f71-91ed-d2b81643f483" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+          <RequireIdentifier>False</RequireIdentifier>
+        </settings>
+      </field>
+      <field allowempty="true" column="ShippingOptionTaxClassID" columntype="integer" guid="7d267933-0d0e-443b-80f8-54cf64ecd8a4" system="true" visible="true">
+        <properties>
+          <fieldcaption>Tax class</fieldcaption>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>True</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <LocalizeItems>True</LocalizeItems>
+          <ObjectType>ecommerce.taxclass</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>taxselect</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>1</SelectionMode>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[{%GetShippingOptionTaxClassSelectorWhereCondition(EditedObject)%}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="ShippingOptionEnabled" columntype="boolean" guid="0fe5eaa7-6d54-4c76-90c5-376b35a11f9d" system="true" visible="true">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+          <fieldcaption>{$general.enabled$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Indicates if the shipping option can be used in your on-line store.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <category name="com.shippingoption.additional">
+        <properties>
+          <caption>{$com.shippingoption.additional$}</caption>
+          <collapsedbydefault>true</collapsedbydefault>
+          <collapsible>true</collapsible>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="ShippingOptionDescription" columntype="longtext" guid="0b53df7f-bcc9-49a4-8fcc-946b90068ca6" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$general.description$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Description that can be displayed on the live site.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>localizabletextarea</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ShippingOptionThumbnailGUID" columntype="guid" guid="d2799e66-8102-4569-ba53-a826837785e5" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$media.general.teaser$}</fieldcaption>
+          <fielddescription>{$com.shippingoptionimage.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>metafileuploadercontrol</controlname>
+          <ObjectCategory>Thumbnail</ObjectCategory>
+        </settings>
+      </field>
+      <field allowempty="true" column="ShippingOptionSiteID" columntype="integer" guid="fd1414cc-26d1-4d35-8dfe-6d6c0edf3a92" system="true">
+        <properties>
+          <fieldcaption>ShippingOptionSiteID</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ShippingOptionGUID" columntype="file" guid="18dd26bf-7cc3-4d53-9cd4-b3cb5df860da" system="true">
+        <properties>
+          <fieldcaption>ShippingOptionSiteID</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ShippingOptionLastModified" columntype="datetime" guid="949f7f46-fd67-4cc3-8942-77064b1924cf" system="true">
+        <properties>
+          <fieldcaption>ShippingOptionLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>b556c066-57d3-4400-b601-78bb4f527447</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>Ecommerce.ShippingOption</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS.Ecommerce</CodeName>
+    <GUID>684e021b-8b56-4cbf-8fd5-b7a791fd2dbc</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>0</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>ShippingOptionLastModified</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item content="False" id="299f630d-910c-4070-aa4c-2206fdab632a" name="ShippingOptionGUID" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="3097d44e-cc79-427e-bbe6-229e0d592933" name="ShippingOptionSiteID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="37bba34d-ce23-44b0-8dd3-49a2a73fbf52" name="ShippingOptionID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="3cf17e19-481d-47a2-bc1a-f8c834f6bd46" name="ShippingOptionLastModified" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="601e8ce1-c959-45f7-816a-e0996264ddd6" name="ShippingOptionEnabled" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="a6d290f6-04fb-4fb0-a1fa-b90218c01a7a" name="ShippingOptionDisplayName" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="bb8ce5a0-8ee2-4b00-98c1-ac488b108a73" name="ShippingOptionName" searchable="False" tokenized="True" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>ShippingOptionDisplayName</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>True</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>COM_ShippingOption</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.systemtable>

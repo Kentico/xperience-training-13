@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.class>
+  <ClassConnectionString>CMSConnectionString</ClassConnectionString>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
+  <ClassCreateSKU>False</ClassCreateSKU>
+  <ClassCustomizedColumns />
+  <ClassDisplayName>Resource</ClassDisplayName>
+  <ClassFormDefinition>
+    <form version="2">
+      <field column="ResourceID" columntype="integer" guid="870bc6d4-f89a-4116-80b3-45a32604b394" isPK="true" system="true">
+        <properties>
+          <fieldcaption>ResourceID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ResourceDisplayName" columnsize="100" columntype="text" guid="e4714769-8c09-4488-82ee-69f0c7aeccac" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$Administration-Module_New.ModuleDisplayName$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>localizabletextbox</controlname>
+        </settings>
+      </field>
+      <field column="ResourceName" columnsize="100" columntype="text" guid="69930d99-46c8-4be2-b19c-5a9edb05fb79" system="true" visible="true">
+        <properties>
+          <fieldcaption>{$Administration-Module_New.ModuleCodeName$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourceDescription" columntype="longtext" guid="27828b12-d1fb-4cb1-866d-a15f683bb674" system="true" translatefield="true" visible="true">
+        <properties>
+          <fieldcaption>{$Administration-Module_New.ModuleDescription$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$Administration-Module_New.ModuleDescription.Description$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>LocalizableTextArea</controlname>
+          <TextMode>MultiLine</TextMode>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourceHasFiles" columntype="boolean" guid="68c72084-2a1d-406a-94a7-a4c3109817de" spellcheck="false" system="true" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$Administration-Module_New.ModuleHasFiles$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SystemContext.DevelopmentMode|(identity)GlobalAdministrator|(hash)8e576fe5a4f626cc323e080952c49c3a9169ecaf5dc584185ab9251783d2cda0%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourceVersion" columnsize="200" columntype="text" guid="fe952147-e48d-487c-bee5-2eb152d7fdf5" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%UIContext.EditedObject.ResourceIsInDevelopment|(identity)GlobalAdministrator|(hash)780765c16c71e139c785c48c23df5aeb19385107772c30fdee3702371fb8d59f%}]]>
+          </enabledmacro>
+          <explanationtext>
+            <![CDATA[{$Administration-Module_New.ModuleVersion.Explanation$}]]>
+          </explanationtext>
+          <fieldcaption>{$Administration-Module_New.ModuleVersion$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$Administration-Module_New.ModuleVersion.Description$}]]>
+          </fielddescription>
+          <validationerrormessage>
+            <![CDATA[{$Administration-Module_New.ModuleVersion.FormatValidationError$}]]>
+          </validationerrormessage>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!UIContext.EditedObject.ResourceName.Equals("cms.customsystemmodule", true)|(identity)GlobalAdministrator|(hash)ce425d1c0541d47e2ab5e94ece612aaed634ef84942b76b3a4b52a6600a5c2ad%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+          <WatermarkText>1.0.0</WatermarkText>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value.Matches(\"^\\\\d+(\\\\.\\\\d+){2}$\")", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"RegExp\" ><p n=\"regexp\"><t>^\\d+(\\.\\d+){2}$</t><v>^\\d+(\\.\\d+){2}$</v><r>0</r><d></d><vt>text</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)5095da52e7b88a8c26fece8eaa6e937c03c26a1c86218144564e82973c992ae3%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="ResourceAuthor" columnsize="200" columntype="text" guid="24b711ac-4c5d-4f7a-9d47-c6dba033d7f2" system="true" visible="true">
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%UIContext.EditedObject.ResourceIsInDevelopment|(identity)GlobalAdministrator|(hash)780765c16c71e139c785c48c23df5aeb19385107772c30fdee3702371fb8d59f%}]]>
+          </enabledmacro>
+          <fieldcaption>{$Administration-Module_New.ModuleAuthor$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$Administration-Module_New.ModuleAuthor.Description$}]]>
+          </fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!UIContext.EditedObject.ResourceName.Equals("cms.customsystemmodule", true)|(identity)GlobalAdministrator|(hash)ce425d1c0541d47e2ab5e94ece612aaed634ef84942b76b3a4b52a6600a5c2ad%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourceInstallationState" columnsize="50" columntype="text" guid="340482a0-5a8f-461b-8433-6214fe9dfd9c" system="true" />
+      <field allowempty="true" column="ResourceInstalledVersion" columnsize="50" columntype="text" guid="d1a7d5c0-6345-4e92-90f3-48feeb059cde" system="true" />
+      <field allowempty="true" column="ResourceIsInDevelopment" columntype="boolean" guid="787c2b57-e5e4-48c4-a865-321f8d90b4e9" system="true" />
+      <field allowempty="true" column="ShowInDevelopment" columntype="boolean" guid="b8fdc63e-35c2-400f-af7f-9b04b39c4b2f" system="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>ShowInDevelopment</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourceURL" columnsize="1000" columntype="text" guid="5585f8e7-88f5-4b0e-88ec-3c695822530c" system="true">
+        <properties>
+          <fieldcaption>ResourceURL</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="ResourceGUID" columntype="guid" guid="2389fed5-9c07-45e7-88db-4e56ec0c2889" system="true">
+        <properties>
+          <fieldcaption>ResourceGUID</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="ResourceLastModified" columntype="datetime" guid="a43d2cef-9fdc-43a8-8cd8-37b161ef4582" system="true">
+        <properties>
+          <fieldcaption>ResourceLastModified</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ClassFormDefinition>
+  <ClassFormLayout />
+  <ClassFormLayoutType>html</ClassFormLayoutType>
+  <ClassGUID>93746c62-21e4-4fda-bcbd-61c5fcee9945</ClassGUID>
+  <ClassHasMetadata>False</ClassHasMetadata>
+  <ClassHasURL>False</ClassHasURL>
+  <ClassIsCoupledClass>True</ClassIsCoupledClass>
+  <ClassIsCustomTable>False</ClassIsCustomTable>
+  <ClassIsDocumentType>False</ClassIsDocumentType>
+  <ClassIsForm>False</ClassIsForm>
+  <ClassIsMenuItemType>False</ClassIsMenuItemType>
+  <ClassIsNavigationItem>False</ClassIsNavigationItem>
+  <ClassIsProduct>False</ClassIsProduct>
+  <ClassIsProductSection>False</ClassIsProductSection>
+  <ClassName>cms.resource</ClassName>
+  <ClassNodeAliasSource />
+  <ClassNodeNameSource />
+  <ClassResourceID>
+    <CodeName>CMS</CodeName>
+    <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ClassResourceID>
+  <ClassSearchContentColumn>ResourceDescription</ClassSearchContentColumn>
+  <ClassSearchCreationDateColumn>ResourceLastModified</ClassSearchCreationDateColumn>
+  <ClassSearchEnabled>False</ClassSearchEnabled>
+  <ClassSearchImageColumn />
+  <ClassSearchSettings>
+    <search>
+      <item azurecontent="True" azuresearchable="True" content="True" id="25ffd74c-ae3d-4ea5-b91a-0665b186dcd8" name="ResourceName" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="2f274a66-9fbc-49c2-a137-b481edc7a656" name="ResourceURL" searchable="False" tokenized="True" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="4dcae158-1288-490f-95d4-db532558bb34" name="ResourceDisplayName" searchable="False" tokenized="True" />
+      <item azureretrievable="True" content="False" id="6428f209-375b-429c-b205-37362ae56d96" name="ShowInDevelopment" searchable="True" tokenized="False" />
+      <item content="False" id="828dfcfd-03d3-42c7-b761-71dbdbf197c3" name="ResourceGUID" searchable="False" tokenized="False" />
+      <item azureretrievable="True" content="False" id="8c81ce3e-d2ad-4047-a9de-5fa9ecb68f9c" name="ResourceID" searchable="True" tokenized="False" />
+      <item azureretrievable="True" content="False" id="ac1a1a28-22b7-4a99-9c94-3cc7fd7ff012" name="ResourceLastModified" searchable="True" tokenized="False" />
+      <item azurecontent="True" azuresearchable="True" content="True" id="c139de5a-615f-4806-b2f7-162daf3d1e18" name="ResourceDescription" searchable="False" tokenized="True" />
+    </search>
+  </ClassSearchSettings>
+  <ClassSearchTitleColumn>ResourceDisplayName</ClassSearchTitleColumn>
+  <ClassShowAsSystemTable>False</ClassShowAsSystemTable>
+  <ClassShowColumns />
+  <ClassShowTemplateSelection>False</ClassShowTemplateSelection>
+  <ClassTableName>CMS_Resource</ClassTableName>
+  <ClassUsePublishFromTo>False</ClassUsePublishFromTo>
+  <ClassUsesPageBuilder>False</ClassUsesPageBuilder>
+  <ClassUsesVersioning>False</ClassUsesVersioning>
+</cms.class>

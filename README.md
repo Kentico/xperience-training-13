@@ -30,12 +30,14 @@ To make the project work, follow these steps:
 1. To run the Xperience administration application, make sure your computer meets the [system requirements](https://docs.kentico.com/13/installation/system-requirements) outlined in the Xperience documentation.
 1. To run the ASP.NET Core 3.1 application, download the [.NET Core 3.1.3 SDK](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1.3/3.1.3.md).
 1. Clone the repo (`git clone https://github.com/Kentico/training-xperience-13`).
-1. Start your [SQL Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms) and restore the extracted MedioClinic13-2020-06-16_12-24.bak file.
 1. Register the [administration interface](/CMS) in IIS.
     * If you register the administration interface as an application that sits under `Default Web Site` and has a `Kentico13_Admin` alias, then you won't have to do any adjustments in Visual Studio.
 1. Open Visual Studio with elevated credentials, open the `WebApp.sln` solution and build it (`Ctrl+Shift+B`).
-1. Open the `web.config` file and adjust the connection string to your SQL Server instance (if your database instance runs on a different machine).
 1. Close the solution.
+1. Access the administrative interface. Follow the installation wizard to create a new database named "xperience-training-13" with the default Kentico objects.
+1. Register an EMS license when prompted.
+1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory.
+1. Open the __Sites__ application in Xperience and start the MedioClinic website.
 1. Open the `MedioClinic.sln` solution.
 1. Build the solution.
 1. Under [MedioClinic](/MedioClinic), create an `appsettings.Development.json` file. If you run your SQL Server locally, the file can have the following structure:
@@ -43,7 +45,7 @@ To make the project work, follow these steps:
 ```json
     {
       "ConnectionStrings": {
-        "CMSConnectionString": "Data Source=localhost;Initial Catalog=MedioClinic13-2020-06-16_12-24;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
+        "CMSConnectionString": "Data Source=localhost;Initial Catalog=xperience-training-13;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
       },
       "CMSHashStringSalt": "ea505e97-2d5f-4d74-b4eb-1cbea203f877",
       "Logging": {
@@ -54,6 +56,60 @@ To make the project work, follow these steps:
         }
       }
     }
+```
+
+## Enabling external authentication
+
+### Google
+
+Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849). Set the __Authorized redirect URIs__ to `https://localhost:44324/signin-google`.
+
+Add the generated __Client ID__ and __Client Secret__ to your `appsettings.json`:
+
+```json
+"GoogleAuthenticationOptions": {
+  "UseGoogleAuth": true,
+  "ClientId": "<your-client-id>",
+  "ClientSecret": "<your-client-secret>"
+},
+```
+
+### Microsoft
+
+In the Azure Portal, create a new __App registration__ following [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-3.1#create-the-app-in-microsoft-developer-portal). Ensure that the __Redirect URI__ is set to `https://localhost:44324/signin-microsoft`.
+
+Add the __Application (client) ID__ from the _Overview tab_ and the __Client secret__ you generated to the `appsettings.json`:
+
+```json
+"MicrosoftAuthenticationOptions": {
+  "UseMicrosoftAuth": true,
+  "ClientId": "<your-client-id>",
+  "ClientSecret": "<your-client-secret>"
+},
+```
+
+### Facebook
+
+Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-3.1#create-the-app-in-facebook) with the __OAuth Redirect URL__ of `https://localhost:44324/signin-facebook`. Add the following to your `appsettings.json` with the __App ID__ and __App Secret__ from the _Settings > Basic_ tab:
+
+```json
+"FacebookAuthenticationOptions": {
+  "UseFacebookAuth": true,
+  "AppId": "<your-app-id>",
+  "AppSecret": "<your-app-secret>"
+},
+```
+
+### Twitter
+
+Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/twitter-logins?view=aspnetcore-3.1#create-the-app-in-twitter) with the __Callback URL__ of `https://localhost:44324/signin-twitter`. On the _Keys and Tokens_ tab, copy the __API key__ and __API secret key__ into your `appsettings.json`:
+
+```json
+"TwitterAuthenticationOptions": {
+  "UseTwitterAuth": true,
+  "ConsumerKey": "<your-api-key>",
+  "ConsumerSecret": "<your-api-secret-key>"
+},
 ```
 
 ## Coding conventions
