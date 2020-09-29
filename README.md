@@ -60,11 +60,13 @@ To make the project work, follow these steps:
 
 ## Enabling external authentication
 
+Prior to enabling external authentication for your development instance, make sure you've set the `ASPNETCORE_ENVIRONMENT` [environment variable](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-3.1) to `Development`.
+
 ### Google
 
 Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849). Set the __Authorized redirect URIs__ to `https://localhost:44324/signin-google`.
 
-Add the generated __Client ID__ and __Client Secret__ to your `appsettings.json`:
+Add the generated __Client ID__ to your `appsettings.json`:
 
 ```json
 "GoogleAuthenticationOptions": {
@@ -74,11 +76,13 @@ Add the generated __Client ID__ and __Client Secret__ to your `appsettings.json`
 },
 ```
 
+Store the __Client Secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
+
 ### Microsoft
 
 In the Azure Portal, create a new __App registration__ following [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-3.1#create-the-app-in-microsoft-developer-portal). Ensure that the __Redirect URI__ is set to `https://localhost:44324/signin-microsoft`.
 
-Add the __Application (client) ID__ from the _Overview tab_ and the __Client secret__ you generated to the `appsettings.json`:
+Add the __Application (client) ID__ from the _Overview tab_ you generated to the `appsettings.json`:
 
 ```json
 "MicrosoftAuthenticationOptions": {
@@ -88,9 +92,11 @@ Add the __Application (client) ID__ from the _Overview tab_ and the __Client sec
 },
 ```
 
+Store the __Client secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
+
 ### Facebook
 
-Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-3.1#create-the-app-in-facebook) with the __OAuth Redirect URL__ of `https://localhost:44324/signin-facebook`. Add the following to your `appsettings.json` with the __App ID__ and __App Secret__ from the _Settings > Basic_ tab:
+Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-3.1#create-the-app-in-facebook) with the __OAuth Redirect URL__ of `https://localhost:44324/signin-facebook`. Add the following to your `appsettings.json` with the __App ID__ from the _Settings > Basic_ tab:
 
 ```json
 "FacebookAuthenticationOptions": {
@@ -100,9 +106,11 @@ Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/sec
 },
 ```
 
+Store the __App secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
+
 ### Twitter
 
-Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/twitter-logins?view=aspnetcore-3.1#create-the-app-in-twitter) with the __Callback URL__ of `https://localhost:44324/signin-twitter`. On the _Keys and Tokens_ tab, copy the __API key__ and __API secret key__ into your `appsettings.json`:
+Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/twitter-logins?view=aspnetcore-3.1#create-the-app-in-twitter) with the __Callback URL__ of `https://localhost:44324/signin-twitter`. On the _Keys and Tokens_ tab, copy the __API key__ into your `appsettings.json`:
 
 ```json
 "TwitterAuthenticationOptions": {
@@ -111,6 +119,8 @@ Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/secu
   "ConsumerSecret": "<your-api-secret-key>"
 },
 ```
+
+Store the __API secret key__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
 
 ## Coding conventions
 

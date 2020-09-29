@@ -1,6 +1,7 @@
 ﻿@using CMS.Helpers
 @using Identity.Models.Account
 @using Microsoft.AspNetCore.Authentication
+@using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.PageViewModel<SignInViewModel>
 @inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
 @inject Identity.IMedioClinicSignInManager<Identity.Models.MedioClinicUser> SignInManager
@@ -31,19 +32,22 @@
     </main>
 }
 @{
-    @* Gets a collection of the authentication services registered in your application's startup class *@
-    var signInProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-    if (signInProviders.Count > 0)
+    var externalIdentityProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+    if (externalIdentityProviders?.Count > 0)
     {
-        <form asp-route-returnurl="/identity/account/signin" asp-controller="Account" asp-action="RequestExternalSignIn" method="post" class="form-horizontal">
+        //TODO: Use UrlExtensions.
+        @using (Html.BeginForm(nameof(AccountController.RequestExternalSignIn), nameof(AccountController), new { returnUrl = "/en-us/home/" }))
+        {
             <div>
                 <p>
-                    @foreach (AuthenticationScheme provider in signInProviders)
+                    @foreach (AuthenticationScheme provider in externalIdentityProviders)
                     {
-                        <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                        //TODO: Localize.
+                        <button type="submit" class="btn waves-effect waves-light" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
                     }
                 </p>
             </div>
-        </form>
+        }
     }
 }

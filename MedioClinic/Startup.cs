@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,11 +20,11 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 using Kentico.Web.Mvc.Internal;
 using Business.Configuration;
+using Identity;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
-using Identity;
 using MedioClinic.Areas.Identity.ModelBinders;
 
 namespace MedioClinic
@@ -56,24 +57,11 @@ namespace MedioClinic
             services.AddKentico();
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
 
-            var xperienceOptions = Configuration.GetSection(nameof(XperienceOptions));
-            services.Configure<XperienceOptions>(xperienceOptions);
+            var optionsSection = Configuration.GetSection(nameof(XperienceOptions));
+            services.Configure<XperienceOptions>(optionsSection);
+            var xperienceOptions = optionsSection.Get<XperienceOptions>();
 
             ConfigureIdentityServices(services, xperienceOptions);
-
-            // Load external authentication configurations
-
-            var googleAuthenticationOptions = Configuration.GetSection(nameof(GoogleAuthenticationOptions));
-            var twitterAuthenticationOptions = Configuration.GetSection(nameof(TwitterAuthenticationOptions));
-            var msAuthenticationOptions = Configuration.GetSection(nameof(MicrosoftAuthenticationOptions));
-            var facebookAuthenticationOptions = Configuration.GetSection(nameof(FacebookAuthenticationOptions));
-
-            services.Configure<GoogleAuthenticationOptions>(googleAuthenticationOptions);
-            services.Configure<MicrosoftAuthenticationOptions>(msAuthenticationOptions);
-            services.Configure<FacebookAuthenticationOptions>(facebookAuthenticationOptions);
-            services.Configure<TwitterAuthenticationOptions>(twitterAuthenticationOptions);
-
-            ConfigureExternalAuthentication(services, googleAuthenticationOptions, msAuthenticationOptions, facebookAuthenticationOptions, twitterAuthenticationOptions);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -201,61 +189,10 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture}}}/{pattern}";
 
-        private static void ConfigureExternalAuthentication(
-            IServiceCollection services,
-            IConfigurationSection googleAuthenticationOptions,
-            IConfigurationSection msAuthenticationOptions,
-            IConfigurationSection facebookAuthenticationOptions,
-            IConfigurationSection twitterAuthenticationOptions)
+        private static void ConfigureIdentityServices(IServiceCollection services, XperienceOptions? xperienceOptions)
         {
-            var authBuilder = services.AddAuthentication();
-
-            var useGoogleAuth = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>().UseGoogleAuth;
-            if (useGoogleAuth)
-            {
-                authBuilder.AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientId;
-                    googleOptions.ClientSecret = googleAuthenticationOptions.Get<GoogleAuthenticationOptions>()?.ClientSecret;
-                });
-            }
-
-            var useMSAuth = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>().UseMicrosoftAuth;
-            if (useMSAuth)
-            {
-                authBuilder.AddMicrosoftAccount(microsoftAccountOptions =>
-                {
-                    microsoftAccountOptions.ClientSecret = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientSecret;
-                    microsoftAccountOptions.ClientId = msAuthenticationOptions.Get<MicrosoftAuthenticationOptions>()?.ClientId;
-                });
-            }
-
-            var useFacebookAuth = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>().UseFacebookAuth;
-            if(useFacebookAuth)
-            {
-                authBuilder.AddFacebook(facebookOptions =>
-                {
-                    facebookOptions.AppId = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppId;
-                    facebookOptions.AppSecret = facebookAuthenticationOptions.Get<FacebookAuthenticationOptions>()?.AppSecret;
-                });
-            }
-
-            var useTwitterAuth = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>().UseTwitterAuth;
-            if (useTwitterAuth)
-            {
-                authBuilder.AddTwitter(twitterOptions =>
-                {
-                    twitterOptions.ConsumerKey = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerKey;
-                    twitterOptions.ConsumerSecret = twitterAuthenticationOptions.Get<TwitterAuthenticationOptions>()?.ConsumerSecret;
-                    twitterOptions.RetrieveUserDetails = true;
-                });
-            }
-        }
-
-        private static void ConfigureIdentityServices(IServiceCollection services, IConfigurationSection xperienceOptions)
-        {
-            services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
 
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
@@ -263,10 +200,8 @@ namespace MedioClinic
                 .AddUserManager<MedioClinicUserManager>()
                 .AddSignInManager<MedioClinicSignInManager>();
 
-            //services.AddHttpContextAccessor();
-            //services.AddScoped(typeof(ISecurityStampValidator), typeof(SecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
-            //services.AddScoped(typeof(ITwoFactorSecurityStampValidator), typeof(TwoFactorSecurityStampValidator<>).MakeGenericType(typeof(MedioClinicUser)));
-            //services.AddScoped<IMedioClinicSignInManager<MedioClinicUser>, MedioClinicSignInManager>();
+            var authenticationBuilder = services.AddAuthentication();
+            ConfigureExternalAuthentication(services, authenticationBuilder, xperienceOptions);
 
             services.AddAuthorization();
             
@@ -280,7 +215,7 @@ namespace MedioClinic
 
                     if (string.IsNullOrEmpty(culture))
                     {
-                        culture = xperienceOptions.Get<XperienceOptions>()?.DefaultCulture ?? DefaultCultureFallback;
+                        culture = xperienceOptions?.DefaultCulture ?? DefaultCultureFallback;
                     }
 
                     var redirectUrl = redirectContext.RedirectUri.Replace("/Account/Signin", $"/{culture}/Account/Signin");
@@ -294,6 +229,56 @@ namespace MedioClinic
             });
 
             CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+        }
+
+        private static void ConfigureExternalAuthentication(IServiceCollection services, AuthenticationBuilder builder, XperienceOptions? xperienceOptions)
+        {
+            var identityOptions = xperienceOptions?.IdentityOptions;
+
+            if (identityOptions?.FacebookOptions?.UseFacebookAuth == true)
+            {
+                var facebookOptions = identityOptions.FacebookOptions;
+
+                builder.AddFacebook(options =>
+                {
+                    options.ClientId = facebookOptions.AppId;
+                    options.ClientSecret = facebookOptions.AppSecret;
+                });
+            };
+
+            if (identityOptions?.GoogleOptions?.UseGoogleAuth == true)
+            {
+                var googleOptions = identityOptions.GoogleOptions;
+
+                builder.AddGoogle(options =>
+                {
+                    options.ClientId = googleOptions.ClientId;
+                    options.ClientSecret = googleOptions.ClientSecret;
+                });
+            };
+
+            if (identityOptions?.MicrosoftOptions?.UseMicrosoftAuth == true)
+            {
+                var microsoftOptions = identityOptions.MicrosoftOptions;
+
+                builder.AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = microsoftOptions.ClientId;
+                    options.ClientSecret = microsoftOptions.ClientSecret;
+                });
+            };
+
+            if (identityOptions?.TwitterOptions?.UseTwitterAuth == true)
+            {
+                var twitterOptions = identityOptions.TwitterOptions;
+
+                builder.AddTwitter(options =>
+                {
+                    options.ConsumerKey = twitterOptions.ConsumerKey;
+                    options.ConsumerSecret = twitterOptions.ConsumerSecret;
+                    options.RetrieveUserDetails = true;
+                });
+            }
         }
     }
 }

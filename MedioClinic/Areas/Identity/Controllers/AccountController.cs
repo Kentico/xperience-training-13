@@ -122,10 +122,8 @@ namespace MedioClinic.Areas.Identity.Controllers
         }
 
         // GET: /Account/Signin
-        public ActionResult SignIn()
-        {
-            return View(GetPageViewModel(new SignInViewModel(), Localize("LogonForm.LogonButton")));
-        }
+        public ActionResult SignIn() =>
+            View(GetPageViewModel(new SignInViewModel(), Localize("LogonForm.LogonButton")));
 
         // POST: /Account/Signin
         [HttpPost]
@@ -280,16 +278,16 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         /// <summary>
         /// Redirects authentication requests to an external service.
-        /// Posted parameters include the name of the requested authentication middleware instance and a return URL.
         /// </summary>
+        /// <param name="provider">Name of the authentication middleware.</param>
+        /// <param name="returnUrl">Return URL.</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public IActionResult RequestExternalSignIn(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action("ExternalSignInCallback", new { ReturnUrl = returnUrl });
-
-            // Configures the redirect URL and user identifier for the specified external authentication provider
+            var redirectUrl = Url.Action(nameof(ExternalSignInCallback), new { ReturnUrl = returnUrl });
             AuthenticationProperties authenticationProperties = _accountManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
             return Challenge(authenticationProperties, provider);
@@ -298,35 +296,41 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// <summary>
         /// Handles responses from external authentication services.
         /// </summary>
+        /// <param name="returnUrl">Return URL.</param>
+        /// <param name="remoteError">Error returned by the external identity provider.</param>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalSignInCallback(string returnUrl, string remoteError = null)
+        public async Task<IActionResult> ExternalSignInCallback(string returnUrl, string? remoteError = default)
         {
-            // If an error occurred on the side of the ecternal provider, displays a view with the forwarded error message
             if (remoteError != null)
             {
-                throw new Exception($"External authentication failed: {remoteError}");
+                var error = $"External authentication failed: {remoteError}";
+                _logger.LogError(error);
+                ModelState.AddModelError(string.Empty, error);
+
+                return View(nameof(SignIn));
             }
 
-            // Extracts login info out of the external identity provided by the service
             ExternalLoginInfo loginInfo = await _accountManager.GetExternalLoginInfoAsync();
 
-            // If the external authentication fails, displays a view with appropriate information
             if (loginInfo == null)
             {
-                throw new Exception("External authentication failed: loginInfo");
+                var error = $"External authentication failed. ExteralLoginInfo must not be null.";
+                _logger.LogError(error);
+                ModelState.AddModelError(string.Empty, error);
+
+                return View(nameof(SignIn));
             }
 
-            // Attempts to sign in the user using the external login info
             IdentityManagerResult<SignInResultState, SignInViewModel> result = await _accountManager.SignInExternalAsync(loginInfo);
 
-            if(result.Success)
+            if (result.Success)
             {
                 return RedirectToLocal(returnUrl);
             }
             else
             {
-                throw new Exception(result.Errors.Join("<br/>"));
+                return InvalidAttempt(new PageViewModel<SignInViewModel>());
             }
         }
     }

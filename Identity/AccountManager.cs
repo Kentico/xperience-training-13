@@ -197,7 +197,7 @@ namespace Identity
                 return accountResult;
             }
 
-            // Success occurs if the user already exists in the connected database and has signed in using the given external service
+            // Success occurs if the user already exists in the connected database and has signed in using the given external service.
             if (signInResult.Succeeded)
             {
                 accountResult.Success = true;
@@ -205,13 +205,11 @@ namespace Identity
             }
             else
             {
-                // Attempts to create a new user in Xperience if the authentication failed
                 IdentityResult userCreation = await _userManager.CreateExternalUser(loginInfo);
 
-                // Attempts to sign in again with the new user created based on the external authentication data
+                // Attempts to sign in again with the new user created based on the external authentication data.
                 signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
 
-                // Verifies that the user was created successfully and was able to sign in
                 if (userCreation.Succeeded && signInResult == SignInResult.Success)
                 {
                     accountResult.Success = true;
@@ -219,9 +217,9 @@ namespace Identity
                 }
                 else
                 {
-                    // User creation not successful
                     accountResult.Success = false;
                     accountResult.ResultState = SignInResultState.NotSignedIn;
+
                     foreach (IdentityError error in userCreation.Errors)
                     {
                         accountResult.Errors.Add(error.Description);
@@ -445,15 +443,10 @@ namespace Identity
             return await _userManager.AddToRolesAsync(user, new[] { patientRole });
         }
 
-        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl)
-        {
-            return _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
-        }
+        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl) =>
+            _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
 
-        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync()
-        {
-            return await _signInManager.GetExternalLoginInfoAsync();
-        }
+        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
 
         /// <summary>
         /// Creates a new user avatar.
