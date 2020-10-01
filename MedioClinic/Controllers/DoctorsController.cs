@@ -13,7 +13,7 @@ namespace MedioClinic.Controllers
             return View();
         }
 
-        public IActionResult Detail(string nodeGuid, string? urlSlug)
+        public IActionResult Detail(string? urlSlug)
         {
             return View();
         }

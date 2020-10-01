@@ -31,7 +31,7 @@ namespace XperienceAdapter.Models
         /// <summary>
         /// In the form of RFC 5646 (e.g. "en-US").
         /// </summary>
-        public string? Culture { get; set; }
+        public SiteCulture? Culture { get; set; }
 
         public IList<PageAttachment> Attachments { get; } = new List<PageAttachment>();
     }

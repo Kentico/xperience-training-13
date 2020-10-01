@@ -1,0 +1,27 @@
+﻿@model string
+@inject Core.IRepository<XperienceAdapter.Models.Country> CountryRepository
+
+@{ 
+    var countries = CountryRepository
+        .GetAll()
+        .Select(country => new SelectListItem
+        {
+            Value = country.CodeName,
+            Text = country.Name,
+            Selected = country.CodeName?.Equals(Model, StringComparison.OrdinalIgnoreCase) == true
+        })
+        .ToList();
+
+    if (!countries.Any(country => country.Selected))
+    {
+        countries
+            .Insert(0, new SelectListItem
+            {
+                Value = "unknown",
+                Text = ResHelper.GetString("General.Unknown"),
+                Selected = true
+            });
+    }
+}
+
+@Html.DropDownListFor(m => m, countries)

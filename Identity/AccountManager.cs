@@ -98,8 +98,8 @@ namespace Identity
                             .GetUrlHelper(_actionContextAccessor.ActionContext)
                             .AbsoluteUrl(request, "ConfirmUser", routeValues: new { userId = user.Id, token });
 
-                        var subject = ResHelper.GetString("AccountManager.Register.Email.Confirm.Subject");
-                        var body = ResHelper.GetStringFormat("AccountManager.Register.Email.Confirm.Body", confirmationUrl);
+                        var subject = ResHelper.GetString("Identity.Account.Register.Email.Confirm.Subject");
+                        var body = ResHelper.GetStringFormat("Identity.Account.Register.Email.Confirm.Body", confirmationUrl);
 
                         await _messageService.SendEmailAsync(user.Email, subject, body);
 
@@ -346,7 +346,7 @@ namespace Identity
                 .AbsoluteUrl(request, "ResetPassword", "Account", new { userId = user.Id, token });
 
             var subject = ResHelper.GetString("Identity.Account.ResetPassword.Title");
-            var body = ResHelper.GetStringFormat("AccountManager.ForgotPassword.Email.Body", resetUrl);
+            var body = ResHelper.GetStringFormat("Identity.Account.ForgotPassword.Email.Body", resetUrl);
 
             try
             {
@@ -447,18 +447,5 @@ namespace Identity
             _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
 
         public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
-
-        /// <summary>
-        /// Creates a new user avatar.
-        /// </summary>
-        /// <param name="user">A user.</param>
-        /// <param name="server">A server object.</param>
-        /// <returns></returns>
-        //protected async Task CreateNewAvatarAsync(MedioClinicUser user, HttpServerUtilityBase server)
-        //{
-        //    var path = server.MapPath($"{AppConfig.ContentDirectory}/{AppConfig.AvatarDirectory}/{AppConfig.DefaultAvatarFileName}");
-        //    user.AvatarId = AvatarRepository.CreateUserAvatar(path, $"Custom {user.UserName}");
-        //    await UserManager.UpdateAsync(user);
-        //}
     }
 }

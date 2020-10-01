@@ -51,14 +51,14 @@ namespace MedioClinic.Tests.ViewComponents
             {
                 new SiteCulture
                 {
-                    FriendlyName = "English",
+                    Name = "English",
                     IsDefault = true,
                     IsoCode = "en-US",
                     ShortName = "EN"
                 },
                 new SiteCulture
                 {
-                    FriendlyName = "Czech",
+                    Name = "Czech",
                     IsoCode = "cz-CS",
                     ShortName = "CZ"
                 }
@@ -75,10 +75,22 @@ namespace MedioClinic.Tests.ViewComponents
         {
             var navigationVariant = GetNavigation();
 
-            var navigation = new Dictionary<string, NavigationItem>
+            var navigation = new Dictionary<SiteCulture, NavigationItem>
             {
-                { "en-US", navigationVariant },
-                { "cs-CZ", navigationVariant }
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "en-US"
+                    },
+                    navigationVariant
+                },
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "cs-CZ",
+                    },
+                    navigationVariant
+                }
             };
 
             var repository = new Mock<INavigationRepository>();

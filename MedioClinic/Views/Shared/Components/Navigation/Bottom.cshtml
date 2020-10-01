@@ -1,9 +1,10 @@
-﻿@model Dictionary<string, Business.Models.NavigationItem>
+﻿@using XperienceAdapter.Extensions
+@model Dictionary<XperienceAdapter.Models.SiteCulture, Business.Models.NavigationItem>
 @inject CMS.Core.ILocalizationService LocalizationService
 
 @{
-    var currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
-    var childItems = Model?[currentCulture].ChildItems;
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
+    var childItems = Model?[culture]?.ChildItems;
 }
 
 <h5 class="white-text">@LocalizationService.GetString("ViewComponent.Navigation.Bottom.Navigation")</h5>

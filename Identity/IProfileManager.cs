@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 
+using Core;
 using Identity.Models;
 using Identity.Models.Profile;
 
@@ -8,7 +9,7 @@ namespace Identity
     /// <summary>
     /// Manager of user profile operations.
     /// </summary>
-    public interface IProfileManager
+    public interface IProfileManager : IService
     {
         /// <summary>
         /// Gets a user profile data, together with a result state.

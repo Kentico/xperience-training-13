@@ -71,6 +71,8 @@
     {
         public bool EmailConfirmedRegistration { get; set; }
 
+        public string? PathToDefaultAvatar { get; set; }
+
         public FacebookAuthenticationOptions? FacebookOptions { get; set; }
 
         public GoogleAuthenticationOptions? GoogleOptions { get; set; }

@@ -1,15 +1,14 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 using CMS.Base;
 using CMS.Helpers;
 
+using Business.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
-using Microsoft.Extensions.Options;
-using Business.Configuration;
-using Microsoft.Build.Framework;
-using Microsoft.Extensions.Logging;
 
 namespace MedioClinic.Controllers
 {
@@ -55,7 +54,7 @@ namespace MedioClinic.Controllers
         protected string ConcatenateContactAdmin(string messageKey) =>
             Localize(messageKey)
                 + " "
-                + Localize("ContactAdministrator");
+                + Localize("General.ContactAdministrator");
 
         protected ActionResult InvalidInput<TUploadViewModel>(
             PageViewModel<TUploadViewModel> uploadModel)
@@ -63,8 +62,8 @@ namespace MedioClinic.Controllers
         {
             var viewModel = GetPageViewModel(
                 uploadModel.Data,
-                Localize("BasicForm.InvalidInput"),
-                Localize("Controllers.Base.InvalidInput.Message"),
+                Localize("General.InvalidInput.Title"),
+                Localize("General.InvalidInput.Message"),
                 true,
                 false,
                 MessageType.Error);

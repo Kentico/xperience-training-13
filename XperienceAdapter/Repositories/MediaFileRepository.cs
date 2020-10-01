@@ -181,7 +181,7 @@ namespace XperienceAdapter.Repositories
             new MediaLibraryFile()
             {
                 Guid = mediaFileInfo.FileGUID,
-                Title = mediaFileInfo.FileTitle,
+                Name = mediaFileInfo.FileTitle,
                 Extension = mediaFileInfo.FileExtension,
                 DirectUrl = MediaLibraryHelper.GetDirectUrl(mediaFileInfo),
                 PermanentUrl = MediaLibraryHelper.GetPermanentUrl(mediaFileInfo),

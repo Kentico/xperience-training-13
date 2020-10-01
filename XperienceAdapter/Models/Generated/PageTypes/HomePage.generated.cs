@@ -114,18 +114,35 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// Link button text.
+		/// Doctors link button text.
 		/// </summary>
 		[DatabaseField]
-		public string LinkButtonText
+		public string DoctorsLinkButtonText
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("LinkButtonText"), @"");
+				return ValidationHelper.GetString(GetValue("DoctorsLinkButtonText"), @"");
 			}
 			set
 			{
-				SetValue("LinkButtonText", value);
+				SetValue("DoctorsLinkButtonText", value);
+			}
+		}
+
+
+		/// <summary>
+		/// Services link button text.
+		/// </summary>
+		[DatabaseField]
+		public string ServicesLinkButtonText
+		{
+			get
+			{
+				return ValidationHelper.GetString(GetValue("ServicesLinkButtonText"), @"");
+			}
+			set
+			{
+				SetValue("ServicesLinkButtonText", value);
 			}
 		}
 
@@ -242,17 +259,33 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// Link button text.
+			/// Doctors link button text.
 			/// </summary>
-			public string LinkButtonText
+			public string DoctorsLinkButtonText
 			{
 				get
 				{
-					return mInstance.LinkButtonText;
+					return mInstance.DoctorsLinkButtonText;
 				}
 				set
 				{
-					mInstance.LinkButtonText = value;
+					mInstance.DoctorsLinkButtonText = value;
+				}
+			}
+
+
+			/// <summary>
+			/// Services link button text.
+			/// </summary>
+			public string ServicesLinkButtonText
+			{
+				get
+				{
+					return mInstance.ServicesLinkButtonText;
+				}
+				set
+				{
+					mInstance.ServicesLinkButtonText = value;
 				}
 			}
 		}

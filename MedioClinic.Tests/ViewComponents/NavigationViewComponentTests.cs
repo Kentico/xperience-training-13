@@ -8,6 +8,7 @@ using Moq;
 using Business.Repositories;
 using MedioClinic.ViewComponents;
 using Business.Models;
+using XperienceAdapter.Models;
 
 namespace MedioClinic.Tests.ViewComponents
 {
@@ -80,10 +81,23 @@ namespace MedioClinic.Tests.ViewComponents
             navigationItem.ChildItems.AddRange(childrenOfRoot);
             childrenOfRoot[0].ChildItems.AddRange(childrenOf11);
             childrenOfRoot[1].ChildItems.AddRange(childrenOf12);
-            var set = new Dictionary<string, NavigationItem>
+
+            var set = new Dictionary<SiteCulture, NavigationItem>
             {
-                { "en-US", navigationItem },
-                { "cs-CZ", navigationItem }
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "en-US"
+                    },
+                    navigationItem
+                },
+                {
+                    new SiteCulture
+                    {
+                        IsoCode = "cs-CZ",
+                    },
+                    navigationItem
+                }
             };
 
             var navigationRepository = new Mock<INavigationRepository>();

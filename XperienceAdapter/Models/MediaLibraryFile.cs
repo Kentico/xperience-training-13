@@ -9,7 +9,7 @@ namespace XperienceAdapter.Models
     {
         public Guid Guid { get; set; }
 
-        public string? Title { get; set; }
+        public string? Name { get; set; }
         
         public string? DirectUrl { get; set; }
         

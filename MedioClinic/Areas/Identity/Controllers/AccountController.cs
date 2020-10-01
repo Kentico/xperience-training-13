@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,12 +14,10 @@ using CMS.Helpers;
 using Business.Configuration;
 using Business.Models;
 using Identity;
+using Identity.Models;
 using Identity.Models.Account;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Identity.Models;
 
 namespace MedioClinic.Areas.Identity.Controllers
 {
@@ -92,7 +92,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         public async Task<ActionResult> ConfirmUser(int? userId, string token)
         {
             var title = ErrorTitle;
-            var message = ConcatenateContactAdmin("Error.Message");
+            var message = ConcatenateContactAdmin("General.Error.Message");
             var displayAsRaw = false;
             var messageType = MessageType.Error;
 
@@ -220,7 +220,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(PageViewModel<ResetPasswordViewModel> uploadModel)
         {
-            var message = ConcatenateContactAdmin("Error.Message");
+            var message = ConcatenateContactAdmin("General.Error.Message");
             var messageType = MessageType.Error;
 
             if (ModelState.IsValid)
@@ -248,7 +248,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// </summary>
         /// <param name="returnUrl">Local URL to redirect to.</param>
         /// <returns>Redirect to a URL.</returns>
-        protected ActionResult RedirectToLocal(string returnUrl)
+        private ActionResult RedirectToLocal(string returnUrl)
         {
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
@@ -263,11 +263,11 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// </summary>
         /// <param name="uploadModel">Sign-in model taken from the user.</param>
         /// <returns>The user message.</returns>
-        protected ActionResult InvalidAttempt(PageViewModel<SignInViewModel> uploadModel)
+        private ActionResult InvalidAttempt(PageViewModel<SignInViewModel> uploadModel)
         {
             ModelState.AddModelError(string.Empty, Localize("Identity.Account.InvalidAttempt"));
 
-            return View(GetPageViewModel(uploadModel.Data, Localize("LogonForm.LogonButton")));
+            return View(GetPageViewModel(uploadModel.Data, Localize("Identity.Account.SignIn.Title")));
         }
 
         /// <summary>
