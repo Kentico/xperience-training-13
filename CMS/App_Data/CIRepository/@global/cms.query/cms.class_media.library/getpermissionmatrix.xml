@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>media.library</CodeName>
+    <GUID>dead7673-d566-4f83-87e3-e9a235b70e4f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>01eadf08-d4d8-464d-8e75-e76c092add1a</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>getPermissionMatrix</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## Matrix.##COLUMNS##, CASE WHEN Media_LibraryRolePermission.RoleID IS NULL THEN 0 ELSE 1 END AS Allowed FROM 
+(SELECT CMS_Permission.PermissionID, CMS_Permission.PermissionDisplayName, CMS_Permission.PermissionName, CMS_Permission.PermissionDescription, CMS_Role.RoleID, 
+CMS_Role.Rolename, CMS_Role.RoleDisplayName, CMS_Role.SiteID FROM CMS_Permission, CMS_Role WHERE ResourceID = @ID AND 
+RoleID IN (SELECT RoleID FROM CMS_Role WHERE ##WHERE## AND (SiteID IS NULL OR SiteID = @SiteID))) 
+Matrix 
+LEFT JOIN Media_LibraryRolePermission ON (Matrix.PermissionID = Media_LibraryRolePermission.PermissionID AND Media_LibraryRolePermission.RoleID = Matrix.RoleID AND Media_LibraryRolePermission.LibraryID= @LibraryID) ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

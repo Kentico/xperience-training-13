@@ -51,7 +51,7 @@ namespace CMS.TranslationServices
         /// <returns>Total number of waiting submissions</returns>
         private int GetNumberOfWaitingSubmissions(int siteId)
         {
-            var submissions = TranslationSubmissionInfoProvider.GetTranslationSubmissions()
+            var submissions = TranslationSubmissionInfo.Provider.Get()
                 .Column("SubmissionID")
                 .OnSite(siteId)
                 .WhereEquals("SubmissionStatus", TranslationStatusEnum.TranslationReady);

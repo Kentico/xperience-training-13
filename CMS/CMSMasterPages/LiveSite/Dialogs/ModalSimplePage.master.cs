@@ -10,7 +10,7 @@ using CMS.PortalEngine;
 using CMS.UIControls;
 using CMS.Base.Web.UI;
 
-public partial class CMSMasterPages_LiveSite_Dialogs_ModalSimplePage : CMSLiveMasterPage
+public partial class CMSMasterPages_LiveSite_Dialogs_ModalSimplePage : AbstractMasterPage
 {
     /// <summary>
     /// PageTitle control.
@@ -109,9 +109,6 @@ public partial class CMSMasterPages_LiveSite_Dialogs_ModalSimplePage : CMSLiveMa
         base.OnInit(e);
 
         PageStatusContainer = plcStatus;
-
-        // Set dialog CSS class
-        SetDialogClass();
     }
 
 

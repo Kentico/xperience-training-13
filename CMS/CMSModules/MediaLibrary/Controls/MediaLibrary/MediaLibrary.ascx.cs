@@ -819,9 +819,9 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         }
         else
         {
-            path = LibraryPath + "/" + Path.EnsureSlashes(LastFolderPath) + "/";
+            path = LibraryPath + "/" + Path.EnsureForwardSlashes(LastFolderPath) + "/";
         }
-        path = Path.EnsureBackslashes(path).Replace("|", "\\");
+        path = Path.EnsureSlashes(path).Replace("|", "\\");
 
         return path;
     }
@@ -891,7 +891,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                     // Get only imported files if required
                     if (DisplayOnlyImportedFiles)
                     {
-                        string normFolderPath = Path.EnsureSlashes(FolderPath).Trim('/');
+                        string normFolderPath = Path.EnsureForwardSlashes(FolderPath).Trim('/');
                         normFolderPath = SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(normFolderPath));
 
                         // Create WHERE condition
@@ -1070,7 +1070,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         {
             // Get path to the currently selected folder
             string dirPath = DirectoryHelper.CombinePath(LibraryRootFolder, LibraryInfo.LibraryFolder) + ((LastFolderPath != string.Empty) ? "\\" + LastFolderPath : string.Empty);
-            dirPath = Path.EnsureBackslashes(dirPath);
+            dirPath = Path.EnsureSlashes(dirPath);
             if (Directory.Exists(dirPath))
             {
                 // Get directories in the current path
@@ -1162,7 +1162,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 FileInfo fi = FileInfo.New(MediaFileInfoProvider.GetMediaFilePath(LibrarySiteInfo.SiteName, LibraryInfo.LibraryFolder, filePath));
                 if (fi != null)
                 {
-                    string path = Path.EnsureSlashes(filePath);
+                    string path = Path.EnsureForwardSlashes(filePath);
                     string where = String.Format("(FileLibraryID = {0}) AND (FilePath = N'{1}')", LibraryID, path.TrimStart('/').Replace("'", "''"));
 
                     // Try to get file from DB
@@ -1714,7 +1714,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         string newPath = folderEdit.ProcessFolderAction();
         if (newPath != null)
         {
-            newPath = Path.EnsureSlashes(newPath);
+            newPath = Path.EnsureForwardSlashes(newPath);
 
             SelectTreePath(newPath);
 
@@ -2108,7 +2108,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     {
         if (FileList == null)
         {
-            string where = String.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{0}_%/%' AND FileLibraryID = {1}", Path.EnsureSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'), LibraryID);
+            string where = String.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{0}_%/%' AND FileLibraryID = {1}", Path.EnsureForwardSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'), LibraryID);
 
             if (!string.IsNullOrEmpty(LastSearchedValue))
             {
@@ -2151,7 +2151,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             }
             else
             {
-                string filePath = Path.EnsureSlashes(LastFolderPath).Trim('/') + "/" + fileName;
+                string filePath = Path.EnsureForwardSlashes(LastFolderPath).Trim('/') + "/" + fileName;
                 filePath = filePath.ToLowerCSafe();
                 if (FileList.Contains(filePath))
                 {
@@ -2597,11 +2597,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             DataRowView drv = (e.Row.DataItem as DataRowView);
             if ((drv != null) && drv.DataView.Table.Columns.Contains("Extension") && (drv["Extension"].ToString().ToLowerCSafe() == "<dir>"))
             {
-                // Hide selection check box for folder items
-                CMSCheckBox selectBox = e.Row.Cells[1].FindControl("itemBox") as CMSCheckBox;
+                // Disable selection check box for folder items
+                CMSCheckBox selectBox = e.Row.Cells[0].Controls[0] as CMSCheckBox;
+
                 if (selectBox != null)
                 {
-                    selectBox.Visible = false;
+                    selectBox.Enabled = false;
                 }
             }
         }
@@ -2677,7 +2678,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// <param name="filePath">File path</param>
     private MediaFileInfo SaveNewFile(FileInfo fi, string title, string description, string name, string filePath)
     {
-        string path = Path.EnsureSlashes(filePath);
+        string path = Path.EnsureForwardSlashes(filePath);
         string fileName = name;
 
         string fullPath = fi.FullName;
@@ -2687,13 +2688,13 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         if (fileName + extension != fi.Name)
         {
             fullPath = MediaLibraryHelper.EnsureUniqueFileName(DirectoryHelper.CombinePath(Path.GetDirectoryName(fullPath), fileName) + extension);
-            path = Path.EnsureSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileName(fullPath)).TrimStart('/');
+            path = Path.EnsureForwardSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileName(fullPath)).TrimStart('/');
             // Rename file to new safe file name
             File.Move(fi.FullName, fullPath);
         }
 
         // Create media file info
-        var fileInfo = new MediaFileInfo(fullPath, LibraryInfo.LibraryID, Path.EnsureSlashes(Path.GetDirectoryName(path)));
+        var fileInfo = new MediaFileInfo(fullPath, LibraryInfo.LibraryID, Path.EnsureForwardSlashes(Path.GetDirectoryName(path)));
 
         fileInfo.FileTitle = title;
         fileInfo.FileDescription = description;
@@ -2766,7 +2767,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     {
         if (LibraryInfo != null && path != null)
         {
-            return Path.EnsureSlashes(String.Format("{0}/{1}", LibraryInfo.LibraryFolder, path), true);
+            return Path.EnsureForwardSlashes(String.Format("{0}/{1}", LibraryInfo.LibraryFolder, path), true);
         }
 
         return string.Empty;
@@ -2781,7 +2782,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     {
         if (!string.IsNullOrEmpty(path))
         {
-            path = Path.EnsureSlashes(path);
+            path = Path.EnsureForwardSlashes(path);
 
             int lastSlash = path.LastIndexOfCSafe('/');
             if (lastSlash > -1)
@@ -2816,7 +2817,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     {
         string filePath = String.IsNullOrEmpty(LastFolderPath) ? fileName : DirectoryHelper.CombinePath(LastFolderPath, fileName);
 
-        return Path.EnsureBackslashes(filePath).Replace('|', '\\');
+        return Path.EnsureSlashes(filePath).Replace('|', '\\');
     }
 
 
@@ -3268,7 +3269,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     private IList<string> GetExistingSelectedFileNames(string folderPath)
     {
         List<string> fileNames = new List<string>(mediaView.SelectedItems.Count);
-        folderPath = Path.EnsureEndBackslash(folderPath);
+        folderPath = Path.EnsureEndSlash(folderPath);
         foreach (string fileName in mediaView.SelectedItems)
         {
             string filePath = folderPath + fileName;
@@ -3373,7 +3374,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         /// <returns>A reference to this instance.</returns>
         public DialogUrlBuilder WithFolderPath(string folderPath)
         {
-            AddProperty("path", Path.EnsureSlashes(folderPath));
+            AddProperty("path", Path.EnsureForwardSlashes(folderPath));
             return this;
         }
 

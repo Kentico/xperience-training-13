@@ -511,6 +511,13 @@
             <param name="formName">Form name</param>
             <param name="siteName">Site name</param>
         </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.Set(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
+        </member>
         <member name="M:CMS.OnlineForms.BizFormInfoProvider.SetBizFormInfo(CMS.OnlineForms.BizFormInfo)">
             <summary>
             Sets (updates or inserts) specified bizForm.
@@ -521,6 +528,13 @@
             <summary>
             Clear hashtables.
             </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormInfoProvider.Delete(CMS.OnlineForms.BizFormInfo)">
+            <summary>
+            Deletes the <paramref name="info"/> object from the underlying data store.
+            </summary>
+            <param name="info">Info object to be deleted.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.OnlineForms.BizFormInfoProvider.DeleteBizFormInfo(CMS.OnlineForms.BizFormInfo)">
             <summary>
@@ -1142,6 +1156,11 @@
         <member name="M:CMS.OnlineForms.BizFormItemHandler.GetRecursionKey(CMS.OnlineForms.BizFormItemEventArgs)">
             <summary>
             Gets the recursion key of the class to identify recursion
+            </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.IBizFormInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.OnlineForms.BizFormInfo"/> management.
             </summary>
         </member>
         <member name="T:CMS.OnlineForms.BizFormItem">
@@ -2167,6 +2186,23 @@
             Returns a query for all the BizFormRoleInfo objects.
             </summary>
         </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding structure.
+            </summary>
+            <param name="formId">Form ID.</param>
+            <param name="roleId">Role ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding structure.
+            </summary>
+            <param name="formId">Form ID.</param>
+            <param name="roleId">Role ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.GetBizFormRoleInfo(System.Int32,System.Int32)">
             <summary>
             Returns the BizFormRoleInfo structure for the specified bizFormRole.
@@ -2180,6 +2216,13 @@
             </summary>
             <param name="infoObj">BizFormRoleInfo to be set.</param>
         </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
+        </member>
         <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.SetBizFormRoleInfo(System.Int32,System.Int32)">
             <summary>
             Inserts specified BizFormRoleInfo.
@@ -2192,6 +2235,13 @@
             Deletes specified BizFormRoleInfo.
             </summary>
             <param name="infoObj">BizFormRoleInfo to be deleted.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
         </member>
         <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.DeleteBizFormRoleInfo(System.Int32,System.Int32)">
             <summary>
@@ -2211,7 +2261,7 @@
             Returns the BizFormRoleInfo structure for the specified form and role.
             </summary>
             <param name="roleId">RoleId</param>
-            <param name="formId">FormId</param>       
+            <param name="formId">FormId</param>
         </member>
         <member name="M:CMS.OnlineForms.BizFormRoleInfoProvider.SetBizFormRoleInfoInternal(System.Int32,System.Int32)">
             <summary>
@@ -2225,6 +2275,42 @@
             Removes all allowed roles from the form.
             </summary>        
             <param name="formId">Form ID</param>
+        </member>
+        <member name="T:CMS.OnlineForms.IBizFormRoleInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormRoleInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormRoleInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding structure.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormRoleInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.IBizFormRoleInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.OnlineForms.BizFormRoleInfo"/> binding.
+            </summary>
+            <param name="roleId">Role ID.</param>
+            <param name="formId">Form ID.</param>
         </member>
         <member name="T:CMS.OnlineForms.FormFieldInfoExtensions">
             <summary>

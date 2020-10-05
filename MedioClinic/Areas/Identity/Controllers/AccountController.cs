@@ -123,7 +123,7 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         // GET: /Account/Signin
         public ActionResult SignIn() =>
-            View(GetPageViewModel(new SignInViewModel(), Localize("LogonForm.LogonButton")));
+            View(GetPageViewModel(new SignInViewModel(), Localize("Identity.Account.SignIn.Title")));
 
         // POST: /Account/Signin
         [HttpPost]

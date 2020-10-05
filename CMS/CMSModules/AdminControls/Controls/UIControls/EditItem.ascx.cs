@@ -97,7 +97,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditItem : CMS
     {
         get
         {
-            return GetStringContextValue("DefaultFormLayout").ToEnum<FormLayoutEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<FormLayoutEnum>(GetStringContextValue("DefaultFormLayout"));
         }
         set
         {
@@ -125,7 +125,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditItem : CMS
     {
         get
         {
-            return GetStringContextValue("DefaultFieldLayout", "twocolumns").ToEnum<FieldLayoutEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<FieldLayoutEnum>(GetStringContextValue("DefaultFieldLayout", "twocolumns"));
         }
         set
         {

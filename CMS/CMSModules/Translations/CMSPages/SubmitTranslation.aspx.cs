@@ -8,7 +8,7 @@ using CMS.UIControls;
 
 
 [Title("translationservice.uploadtranslation")]
-public partial class CMSModules_Translations_CMSPages_SubmitTranslation : CMSLiveModalPage
+public partial class CMSModules_Translations_CMSPages_SubmitTranslation : CMSPage
 {
     #region "Page events"
 
@@ -30,7 +30,7 @@ public partial class CMSModules_Translations_CMSPages_SubmitTranslation : CMSLiv
 
         int submissionID = QueryHelper.GetInteger("submissionid", 0);
 
-        TranslationSubmissionInfo submissionInfo = TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(submissionID);
+        TranslationSubmissionInfo submissionInfo = TranslationSubmissionInfo.Provider.Get(submissionID);
         if (submissionInfo != null)
         {
             EditedObject = submissionInfo;

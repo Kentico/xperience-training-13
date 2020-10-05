@@ -411,8 +411,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Properties_HTMLMediaPro
         ScriptHelper.RegisterDialogScript(Page);
 
         // Get the correct url of the dialog
-        bool isLiveSite = RequestContext.CurrentURL.Contains("LiveSelectors");
-        string url = ResolveUrl("~/CMSFormControls/" + (isLiveSite ? "Live" : "") + "Selectors/InsertImageOrMedia/default.aspx") + URLHelper.GetQuery(RequestContext.CurrentURL);
+        string url = ResolveUrl("~/CMSFormControls/Selectors/InsertImageOrMedia/default.aspx") + URLHelper.GetQuery(RequestContext.CurrentURL);
         url = URLHelper.RemoveParameterFromUrl(URLHelper.RemoveParameterFromUrl(URLHelper.AddParameterToUrl(url, DialogParameters.EDITOR_CLIENTID, txtLinkUrl.ClientID), "hash"), "output");
         url = URLHelper.AddParameterToUrl(url, "output", "url");
         url = URLHelper.UpdateParameterInUrl(url, "link", "1");

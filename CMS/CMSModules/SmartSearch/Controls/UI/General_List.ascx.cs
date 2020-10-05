@@ -114,11 +114,9 @@ public partial class CMSModules_SmartSearch_Controls_UI_General_List : CMSAdminC
             var excludedGeneralObjects = new List<string>
             {
                     PredefinedObjectType.CUSTOMTABLECLASS,
-                    PredefinedObjectType.FORUM,
                     PredefinedObjectType.BIZFORM_ITEM_PREFIX,
                     PredefinedObjectType.DOCUMENT,
                     PredefinedObjectType.NODE,
-                    PredefinedObjectType.GROUPFORUM,
                     SearchHelper.ONLINEFORMINDEX,
                 }
                 .Select(x => x.ToLowerInvariant())

@@ -139,7 +139,7 @@
             </summary>
             <returns>Original user if impersonation was used, otherwise returns null</returns>
         </member>
-        <member name="M:CMS.Membership.AuthenticationHelper.SetImpersonatedUser(CMS.Base.IUserInfo)">
+        <member name="M:CMS.Membership.AuthenticationHelper.SetImpersonatedUser(CMS.Membership.UserInfo)">
             <summary>
             Sets given user as impersonated one, current user is set as original one.
             </summary>
@@ -207,13 +207,14 @@
             </summary>
             <param name="siteName">Site name</param>
         </member>
-        <member name="M:CMS.Membership.AuthenticationHelper.GetUserAuthenticationUrl(CMS.Membership.UserInfo,System.String)">
+        <member name="M:CMS.Membership.AuthenticationHelper.GetUserAuthenticationUrl(CMS.Membership.UserInfo,System.String,System.String)">
             <summary>
-            Prepares the user authentication GUID, adds it as a query string parameter to supplied Url.
+            Gets authentication URL for automatic sign-in.
             </summary>
-            <param name="user">UserInfo of particular user</param>
-            <param name="targetUrl">Target URL</param>
-            <returns>Target URL with authentication GUID parameter</returns>
+            <param name="user">UserInfo of particular user.</param>
+            <param name="targetUrl">Target URL.</param>
+            <param name="targetSiteDomain">Target site domain.</param>
+            <returns>Authentication URL with the token and expiration stamp.</returns>
         </member>
         <member name="M:CMS.Membership.AuthenticationHelper.SignOutUser">
             <summary>
@@ -287,6 +288,13 @@
             Doesn't call SetUserInfo!!
             </summary>
             <param name="userInfo">User info</param>
+        </member>
+        <member name="M:CMS.Membership.AuthenticationHelper.RegenerateAuthenticationGuid(CMS.Membership.UserInfo,System.Boolean)">
+            <summary>
+            Invalidates JSON Web Token by regenerating <see cref="P:CMS.Base.IUserInfo.UserAuthenticationGUID" /> value.
+            </summary>
+            <param name="userInfo">User info object.</param>
+            <param name="saveObject">Specifies whether object is saved into database.</param>
         </member>
         <member name="M:CMS.Membership.AuthenticationHelper.GetUserADGuid(System.String,System.Security.Principal.SecurityIdentifier)">
             <summary>
@@ -456,7 +464,7 @@
         </member>
         <member name="M:CMS.Membership.AuthenticationHelper.HandleAutomaticSignIn">
             <summary>
-            Check URL query string for authentication parameter and authenticate user.
+            Check URL query string for authentication token and authenticate user.
             </summary>
         </member>
         <member name="T:CMS.Membership.AuthenticationService">
@@ -570,6 +578,185 @@
             <summary>
             Validation failed.
             </summary>
+        </member>
+        <member name="T:CMS.Membership.Internal.AutomaticSignInConfiguration">
+            <summary>
+            Represents security token configuration for automatic sign-in.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.AutomaticSignInConfiguration.Issuer">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.AutomaticSignInConfiguration.Audience">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.AutomaticSignInConfiguration.TokenEncryption">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.AutomaticSignInConfiguration.Validity">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.Membership.Internal.AutomaticSignInConfiguration.#ctor">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Membership.Internal.AutomaticSignInConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.Internal.AutomaticSignInConfiguration.#ctor(System.String)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Membership.Internal.AutomaticSignInConfiguration"/>.
+            </summary>
+            <param name="targetDomain">The site domain which the token will be issued for.</param>
+        </member>
+        <member name="T:CMS.Membership.Internal.ITokenConfiguration">
+            <summary>
+            Represents security token configuration.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.ITokenConfiguration.Issuer">
+            <summary>
+            Issuer of the JWT token.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.ITokenConfiguration.Audience">
+            <summary>
+            Audience of the JWT token.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.ITokenConfiguration.TokenEncryption">
+            <summary>
+            Indicates if token will be encrypted.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.ITokenConfiguration.Validity">
+            <summary>
+            Token validity.
+            </summary>
+        </member>
+        <member name="T:CMS.Membership.Internal.VirtualContextAuthenticationConfiguration">
+            <summary>
+            Represents security token configuration for authentication in virtual context.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextAuthenticationConfiguration.Issuer">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextAuthenticationConfiguration.Audience">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextAuthenticationConfiguration.TokenEncryption">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextAuthenticationConfiguration.Validity">
+            <inheritdoc/>
+        </member>
+        <member name="T:CMS.Membership.Internal.VirtualContextSignInConfiguration">
+            <summary>
+            Represents security token configuration for sign in for virtual context.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextSignInConfiguration.Issuer">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextSignInConfiguration.Audience">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextSignInConfiguration.TokenEncryption">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.Internal.VirtualContextSignInConfiguration.Validity">
+            <inheritdoc/>
+        </member>
+        <member name="T:CMS.Membership.Internal.ISecurityTokenManager`1">
+            <summary>
+            Provides methods for managing JWT security tokens.
+            </summary>
+            <typeparam name="T">Security token configuration</typeparam>
+        </member>
+        <member name="M:CMS.Membership.Internal.ISecurityTokenManager`1.GetToken(CMS.Base.IUserInfo)">
+            <summary>
+            Gets JWT token for current user.
+            </summary>
+            <param name="user">User info which should be serialized into the token.</param>
+            <returns>Serialized the JWT token.</returns>
+            <exception cref="T:System.ArgumentException">
+            Throws when <paramref name="user"/> has missing <see cref="P:CMS.Base.IUserInfo.UserAuthenticationGUID"/>
+            or <see cref="P:CMS.Base.IUserInfo.UserName"/>.
+            </exception>
+        </member>
+        <member name="M:CMS.Membership.Internal.ISecurityTokenManager`1.GetUserFromToken(System.String)">
+            <summary>
+            Validates JWT token, checks <see cref="P:CMS.Base.IUserInfo.UserAuthenticationGUID"/> integrity and returns claims-based identity.
+            </summary>
+            <param name="token">Serialized the JWT token.</param>
+            <returns>Claims-based identity</returns>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="token"/> is null or whitespace.</exception>
+        </member>
+        <member name="T:CMS.Membership.Internal.SecurityTokenManager`1">
+            <summary>
+            Provides methods for managing JWT security tokens.
+            </summary>
+            <typeparam name="T">Security token configuration</typeparam>
+        </member>
+        <member name="M:CMS.Membership.Internal.SecurityTokenManager`1.#ctor(`0)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Membership.Internal.SecurityTokenManager`1"/>.
+            </summary>
+            <param name="tokenConfiguration">Security token configuration.</param>
+            <exception cref="T:System.ArgumentException">Throws when <typeparamref name="T"/> is not valid.</exception>
+        </member>
+        <member name="M:CMS.Membership.Internal.SecurityTokenManager`1.GetToken(CMS.Base.IUserInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.Membership.Internal.SecurityTokenManager`1.GetUserFromToken(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:CMS.Membership.JwtTokenService">
+            <summary>
+            Service responsible for issuing, validation and parsing 'JSON Web Token' (JWT).
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.JwtTokenService.SigningCredentials">
+            <summary>
+            Defines the security key, algorithm and digest for digital token signature.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.JwtTokenService.EncryptingCredentials">
+            <summary>
+            Defines the security key, key wrap algorithm and data encryption algorithm for token encryption.
+            </summary>
+        </member>
+        <member name="P:CMS.Membership.JwtTokenService.Issuer">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.JwtTokenService.Audience">
+            <inheritdoc/>
+        </member>
+        <member name="P:CMS.Membership.JwtTokenService.TokenEncryption">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.Membership.JwtTokenService.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.Membership.JwtTokenService"/>.
+            </summary>
+            <param name="issuer">Issuer of the JWT token.</param>
+            <param name="audience">Audience of the JWT token.</param>
+            <param name="tokenEncryption">Indicates if token will be encrypted.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="issuer"/> is null or whitespace.</exception>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="audience"/> is null or whitespace.</exception>
+        </member>
+        <member name="M:CMS.Membership.JwtTokenService.IssueToken(System.String,System.DateTime,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Nullable{System.DateTime})">
+            <inheritdoc/>
+        </member>
+        <member name="M:CMS.Membership.JwtTokenService.TryParseToken(System.String,System.Security.Claims.ClaimsPrincipal@,System.Boolean@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:CMS.Membership.JwtTokenServiceFactory">
+            <summary>
+            Represents a factory for <see cref="T:CMS.Base.Internal.IJwtTokenService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Membership.JwtTokenServiceFactory.GetJwtTokenService(System.String,System.String,System.Boolean)">
+            <inheritdoc/>
         </member>
         <member name="M:CMS.Membership.Base32.Encode(System.Byte[])">
             <summary>
@@ -1423,183 +1610,6 @@
             </summary>
             <param name="userId">User id</param>
         </member>
-        <member name="T:CMS.Membership.ActivityPointsEnum">
-            <summary>
-            Activity points enumeration.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.ActivityPointsEnum.ForumPost">
-            <summary>
-            Forum post.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.ActivityPointsEnum.MessageBoardPost">
-            <summary>
-            Messsage board post.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.ActivityPointsEnum.BlogCommentPost">
-            <summary>
-            Blog comment post.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.ActivityPointsEnum.BlogPosts">
-            <summary>
-            Blog posts.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.ActivityPointsEnum.All">
-            <summary>
-            All.
-            </summary>
-        </member>
-        <member name="T:CMS.Membership.BadgeInfo">
-            <summary>
-            BadgeInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.BadgeInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.BadgeInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeID">
-            <summary>
-            Badge id.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeImageURL">
-            <summary>
-            Badge image URL.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeName">
-            <summary>
-            Badge name.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeDisplayName">
-            <summary>
-            Badge display name.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeIsAutomatic">
-            <summary>
-            Badge is automatic.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeTopLimit">
-            <summary>
-            Badge top limit.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeGUID">
-            <summary>
-            Badge guid.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.BadgeInfo.BadgeLastModified">
-            <summary>
-            Badge last modified.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty BadgeInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new BadgeInfo object from the given DataRow.
-            </summary>
-        </member>
-        <member name="T:CMS.Membership.BadgeInfoProvider">
-            <summary>
-            Class providing BadgeInfo management.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.GetBadgeInfo(System.Int32)">
-            <summary>
-            Returns the BadgeInfo structure for the specified badge.
-            </summary>
-            <param name="badgeId">Badge id</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.GetBadgeInfo(System.String)">
-            <summary>
-            Returns the BadgeInfo structure for the specified badge.
-            </summary>
-            <param name="badgeName">Badge name</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.Set(CMS.Membership.BadgeInfo)">
-            <summary>
-            Inserts or updates the <paramref name="info"/> object in the underlying data store.
-            </summary>
-            <param name="info">Info object to be inserted or updated.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.SetBadgeInfo(CMS.Membership.BadgeInfo)">
-            <summary>
-            Sets (updates or inserts) specified badge.
-            </summary>
-            <param name="badge">Badge to set</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.DeleteBadgeInfo(CMS.Membership.BadgeInfo)">
-            <summary>
-            Deletes specified badge.
-            </summary>
-            <param name="infoObj">Badge object</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.DeleteBadgeInfo(System.Int32)">
-            <summary>
-            Deletes specified badge.
-            </summary>
-            <param name="badgeId">Badge id</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.UpdateActivityPointsToUser(CMS.Membership.ActivityPointsEnum,System.Int32,System.String,System.Boolean)">
-            <summary>
-            Adds (subtracts) activity points to specified user.
-            </summary>
-            <param name="pointsType">Activity points type</param>
-            <param name="userID">User ID</param>
-            <param name="siteName">Site name</param>
-            <param name="add">If true add points else subtract points</param>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.GetBadges">
-            <summary>
-            Returns the query for all badges.
-            </summary>
-        </member>
-        <member name="M:CMS.Membership.BadgeInfoProvider.SetBadgeInfoInternal(CMS.Membership.BadgeInfo)">
-            <summary>
-            Sets (updates or inserts) specified badge.
-            </summary>
-            <param name="badge">Badge to set</param>
-        </member>
-        <member name="T:CMS.Membership.IBadgeInfoProvider">
-            <summary>
-            Declares members for <see cref="T:CMS.Membership.BadgeInfo"/> management.
-            </summary>
-        </member>
         <member name="T:CMS.Membership.AuthenticationEventArgs">
             <summary>
             Authentication event arguments
@@ -1924,13 +1934,6 @@
             <param name="context">Evaluation context with child resolver</param>
             <param name="parameters">Method parameters</param>
         </member>
-        <member name="M:CMS.Membership.MembershipMethods.IsInGroup(CMS.MacroEngine.EvaluationContext,System.Object[])">
-            <summary>
-            Tests whether user is in group
-            </summary>
-            <param name="context">Evaluation context with child resolver</param>
-            <param name="parameters">Method parameters</param>
-        </member>
         <member name="M:CMS.Membership.MembershipMethods.HasAnyMembership(CMS.MacroEngine.EvaluationContext,System.Object[])">
             <summary>
             Tests whether user has any membership
@@ -2168,13 +2171,12 @@
             </summary>
             <param name="userID">User ID</param>
         </member>
-        <member name="M:CMS.Membership.MembershipInfoProvider.GetInfoByCodeName(System.String,System.Int32,System.Int32,System.Boolean)">
+        <member name="M:CMS.Membership.MembershipInfoProvider.GetInfoByCodeName(System.String,System.Int32,System.Boolean)">
             <summary>
             Gets an instance of info object based on the given code name.
             </summary>
             <param name="codeName">Code name</param>
             <param name="siteId">Site ID</param>
-            <param name="groupId">Group ID</param>
             <param name="useHashtable">If true, the object is taken through the hashtable</param>
         </member>
         <member name="M:CMS.Membership.MembershipInfoProvider.GetInfoByCodeNameAsync(System.String,System.Int32,System.Boolean,System.Threading.CancellationToken)">
@@ -2689,11 +2691,6 @@
             If true, SignOut method was called in this method and user is figuratively signed out.
             </summary>
         </member>
-        <member name="P:CMS.Membership.MembershipContext.UserIsBanned">
-            <summary>
-            Indicates whether the user is banned using BannedIP modules.
-            </summary>
-        </member>
         <member name="M:CMS.Membership.MembershipContext.CurrentUserIsImpersonated">
             <summary>
             Indicates whether currently authenticated user is impersonated.
@@ -2757,13 +2754,6 @@
             <summary>
             Initializes the membership handlers
             </summary>
-        </member>
-        <member name="M:CMS.Membership.MembershipHandlers.CheckBannedIP(System.Object,CMS.Membership.AuthenticationEventArgs)">
-            <summary>
-            Handles BannedIPs checking.
-            </summary>
-            <param name="sender">Sender</param>
-            <param name="e">Authentication event arguments</param>
         </member>
         <member name="M:CMS.Membership.MembershipHandlers.HandleAdminEmergencyReset(System.Object,System.EventArgs)">
             <summary>
@@ -2834,6 +2824,15 @@
             <summary>
             Initializes the module.
             </summary>
+        </member>
+        <member name="M:CMS.Membership.MembershipModule.InitJWTTokenAuthentication">
+            <summary>
+            Initializes JWT token authentication.
+            </summary>
+            <remarks>
+            Generates a new JWT token encryption key and saves to the <see cref="F:CMS.Helpers.ValidationHelper.CMS_SETTINGS_JWT_TOKEN_ENCRYPTION_KEY"/>
+            setting if empty (after fresh installation or upgrade from older version).
+            </remarks>
         </member>
         <member name="M:CMS.Membership.MembershipModule.InitImportExport">
             <summary>
@@ -3154,19 +3153,9 @@
             Role object type
             </summary>
         </member>
-        <member name="F:CMS.Membership.RoleInfo.OBJECT_TYPE_GROUP">
-            <summary>
-            Group role object type
-            </summary>
-        </member>
         <member name="F:CMS.Membership.RoleInfo.TYPEINFO">
             <summary>
             Type information for standard role.
-            </summary>
-        </member>
-        <member name="F:CMS.Membership.RoleInfo.TYPEINFOGROUP">
-            <summary>
-            Type information for group role.
             </summary>
         </member>
         <member name="P:CMS.Membership.RoleInfo.SiteID">
@@ -3204,24 +3193,9 @@
             Object last modified.
             </summary>
         </member>
-        <member name="P:CMS.Membership.RoleInfo.RoleGroupID">
-            <summary>
-            Role group ID.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.RoleInfo.RoleIsGroupAdministrator">
-            <summary>
-            Indicates whether role is group admin.
-            </summary>
-        </member>
         <member name="P:CMS.Membership.RoleInfo.RoleIsDomain">
             <summary>
             Indicates whether role is domain role.
-            </summary>
-        </member>
-        <member name="P:CMS.Membership.RoleInfo.TypeInfo">
-            <summary>
-            Type information.
             </summary>
         </member>
         <member name="M:CMS.Membership.RoleInfo.DeleteObject">
@@ -3275,14 +3249,6 @@
             <param name="roleName">Role code name</param>
             <param name="siteID">Role site ID - if zero all roles are picked</param>
         </member>
-        <member name="M:CMS.Membership.RoleInfoProvider.GetExistingRoleInfo(System.String,System.Int32,System.Int32)">
-            <summary>
-            Returns info object of role.
-            </summary>
-            <param name="roleName">Role code name</param>
-            <param name="siteID">Role site ID - if zero all roles are picked</param>
-            <param name="groupId">Community group ID</param>
-        </member>
         <member name="M:CMS.Membership.RoleInfoProvider.GetRoleInfo(System.String,System.String,System.Boolean)">
             <summary>
             Returns the role info object with specified role name.
@@ -3333,12 +3299,11 @@
             </summary>
             <param name="siteId">SiteID of site which roles we want to return</param>
         </member>
-        <member name="M:CMS.Membership.RoleInfoProvider.GetAllRoles(System.Int32,System.Boolean,System.Boolean)">
+        <member name="M:CMS.Membership.RoleInfoProvider.GetAllRoles(System.Int32,System.Boolean)">
             <summary>
             Returns DataSet with roles of given site (if siteId > 0) with option to display GroupRoles.
             </summary>
             <param name="siteId">SiteID of site which roles we want to return</param>
-            <param name="includingGroups">If set to true then GroupRoles are also returned in DataSet</param>
             <param name="includingGeneric">If set to true then Generic roles are also returned in DataSet</param>
         </member>
         <member name="M:CMS.Membership.RoleInfoProvider.RoleExists(System.String,System.String)">
@@ -3395,14 +3360,6 @@
             </summary>
             <param name="roleName">Role code name</param>
             <param name="siteID">Site ID - if zero all roles are picked</param>
-        </member>
-        <member name="M:CMS.Membership.RoleInfoProvider.GetExistingRoleInfoInternal(System.String,System.Int32,System.Int32)">
-            <summary>
-            Returns role object depending on site and group.
-            </summary>
-            <param name="roleName">Role code name</param>
-            <param name="siteID">Site ID - if zero all roles are picked</param>
-            <param name="groupId">Community group ID</param>
         </member>
         <member name="M:CMS.Membership.RoleInfoProvider.GetRoleInfoInternal(System.String,System.String,System.Boolean)">
             <summary>
@@ -4840,7 +4797,7 @@
         </member>
         <member name="P:CMS.Membership.UserInfo.UserAuthenticationGUID">
             <summary>
-            Temporary GUID for user identification for automatic sign-in in the CMS Desk.
+            Represents a secret for invalidating JSON Web Tokens.
             </summary>
         </member>
         <member name="P:CMS.Membership.UserInfo.SiteIndependentPrivilegeLevel">
@@ -5330,11 +5287,6 @@
             Gets the type of current object.
             </summary>
         </member>
-        <member name="P:CMS.Membership.UserInfo.Groups">
-            <summary>
-            Returns the collection with user's groups.
-            </summary>
-        </member>
         <member name="M:CMS.Membership.UserInfo.IsAuthorizedPerResource(System.String,System.String,System.String,System.Boolean)">
             <summary>
             Returns true if given user is granted with specified permission.
@@ -5522,25 +5474,6 @@
             (Order of privilege levels from the highest is: GlobalAdmin -> Admin -> Editor -> None)
             </summary>
             <param name="privilegeLevel">Required privilege level</param>
-        </member>
-        <member name="M:CMS.Membership.UserInfo.IsGroupMember(System.Int32)">
-            <summary>
-            Returns true if the user is member of the specified group.
-            </summary>
-            <param name="groupId">ID of the group check</param>
-        </member>
-        <member name="M:CMS.Membership.UserInfo.IsGroupMember(System.String,System.String)">
-            <summary>
-            Returns true if the user is member of the specified group.
-            </summary>
-            <param name="groupName">Group name to test</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.Membership.UserInfo.IsGroupAdministrator(System.Int32)">
-            <summary>
-            Returns true if the user is administrator of the specified group.
-            </summary>
-            <param name="groupId">ID of the group check</param>
         </member>
         <member name="T:CMS.Membership.UserInfoProvider">
             <summary>

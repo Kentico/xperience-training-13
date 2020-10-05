@@ -614,18 +614,6 @@ public partial class CMSModules_Ecommerce_Controls_ProductOptions_ShoppingCartIt
             return;
         }
 
-        if (!ShowProductOptions)
-        {
-            // Does product have some enabled product option categories?
-            bool hasOptions = !DataHelper.DataSourceIsEmpty(OptionCategoryInfoProvider.GetProductOptionCategories(SKUID, true));
-
-            if (hasOptions)
-            {
-                // Redirect to product details
-                URLHelper.Redirect("~/CMSPages/Ecommerce/GetProduct.aspx?productid=" + SKUID);
-            }
-        }
-
         if (SKU.HasVariants)
         {
             // Check if configured variant is available

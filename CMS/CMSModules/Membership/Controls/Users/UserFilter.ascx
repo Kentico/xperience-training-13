@@ -95,32 +95,6 @@
                 <uc1:SelectRole UserFriendlyMode="true" IsLiveSite="false" ID="selectNotInRole" runat="server" />
             </div>
         </div>
-        <asp:PlaceHolder ID="plcGroups" runat="server" Visible="false">
-            <div class="form-group">
-                <div class="filter-form-label-cell">
-                    <cms:LocalizedLabel ID="lblInGroups" runat="server" CssClass="control-label" AssociatedControlID="drpTypeSelectInGroups"
-                        ResourceString="userlist.InGroups" DisplayColon="True" EnableViewState="False" />
-                </div>
-                <div class="filter-form-condition-cell">
-                    <cms:CMSDropDownList CssClass="ExtraSmallDropDown" runat="server" ID="drpTypeSelectInGroups" />
-                </div>
-                <div class="filter-form-value-cell control-group-inline">
-                    <asp:PlaceHolder runat="server" ID="plcSelectInGroups" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="filter-form-label-cell">
-                    <cms:LocalizedLabel ID="lblNotInGroups" runat="server" CssClass="control-label" AssociatedControlID="drpTypeSelectNotInGroups"
-                         ResourceString="userlist.NotInGroups" DisplayColon="True" EnableViewState="False" />
-                </div>
-                <div class="filter-form-condition-cell">
-                    <cms:CMSDropDownList CssClass="ExtraSmallDropDown" runat="server" ID="drpTypeSelectNotInGroups" />
-                </div>
-                <div class="filter-form-value-cell control-group-inline">
-                    <asp:PlaceHolder runat="server" ID="plcSelectNotInGroups" />
-                </div>
-            </div>
-        </asp:PlaceHolder>
         <asp:PlaceHolder ID="plcPrivilegeLevel" runat="server" Visible="False">
             <div class="form-group">
                 <div class="filter-form-label-cell">

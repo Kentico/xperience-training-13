@@ -1,0 +1,12 @@
+﻿@inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    MediaFileRepository.MediaLibraryName = "Identity";
+    var backgroundFile = await MediaFileRepository.GetMediaFileDtoAsync("identity-background-right.png");
+    var background = Url.Content(backgroundFile?.MediaFileUrl?.RelativePath);
+}
+
+<main class="row mc-page-fold-right" style="background-image:url(@background)">
+    @RenderBody()
+</main>

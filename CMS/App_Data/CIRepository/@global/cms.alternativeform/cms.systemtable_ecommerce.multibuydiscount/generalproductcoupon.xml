@@ -1,0 +1,552 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>Ecommerce.MultiBuyDiscount</CodeName>
+    <GUID>fe68001b-3b12-4c19-a097-f4bbdf8ebb56</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <category dummy="true" name="general.general" order="0">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="MultiBuyDiscountID" guid="cd898992-1bb0-4d27-a8d3-c3c9af36464f" order="1" />
+      <field column="MultiBuyDiscountDisplayName" guid="d51b0f69-d0b3-477d-bb90-256752b3db86" visible="true" order="2">
+        <settings>
+          <controlname>localizabletextbox</controlname>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.name$}</fieldcaption>
+          <fielddescription>Discount name visible by customers.</fielddescription>
+          <validationerrormessage>{$com.discount.displaynameempty$}</validationerrormessage>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountName" guid="4547761f-9407-4a7b-beb7-7f62e27b8f2c" visible="true" order="3">
+        <settings>
+          <controlname>codename</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+          <fielddescription>{$com.discount.namedesc$}</fielddescription>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountEnabled" guid="48e56501-4756-40da-bb12-bd33e80e733b" visible="true" order="4">
+        <properties>
+          <fieldcaption>{$general.enabled$}</fieldcaption>
+          <fielddescription>{$com.multibuy.enabledmultibuydesc$}</fielddescription>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountGUID" guid="139e2143-5db9-4675-873d-c4f0fe31d150" order="5" />
+      <field column="MultiBuyDiscountDescription" guid="abfc8235-b96d-44e8-9ee0-df17d79658bb" order="6" />
+      <category dummy="true" name="com.multibuy.application" order="7">
+        <properties>
+          <caption>{$com.multibuy.discountscope$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="BuyDepartmentOrProduct" columnsize="200" columntype="text" dummy="altform" guid="3fafeda7-b362-4dfc-9802-7c4a2ddd1833" hasdependingfields="true" system="true" visible="true" order="8">
+        <properties>
+          <fieldcaption>{$com.productcoupon.applyto$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+products; {$com.multibuy.products$}
+sections; {$com.multibuy.productsinsections$}
+departments; {$com.multibuy.productsindepartments$}
+brands; {$com.multibuy.productsinbrands$}
+collections; {$com.multibuy.productsincollections$}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="BuyProductSet" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="dede477a-9909-43f0-9e51-58460ce1df09" system="true" visible="true" order="9">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.buyproductset$}</fieldcaption>
+          <fielddescription>{$com.multibuy.buyproductsetdesc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value == "products"|(identity)GlobalAdministrator|(hash)9797660d172fbf1a2b79074d4278df3dd594a128dc6d26670909ff1f06eb7b4b%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DisplayNameFormat>{%SKUName%}</DisplayNameFormat>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <FilterControl>
+            <![CDATA[~/CMSModules/Ecommerce/Controls/Filters/SimpleProductFilter.ascx]]>
+          </FilterControl>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.skulist</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuyproductselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>False</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[{% GetMultiBuyProductSelectorWhereCondition(EditedObject) %}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="BuyDepartmentSet" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="711dc038-60c1-44bb-810b-1770ca62dc29" system="true" visible="true" order="10">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.departments$}</fieldcaption>
+          <fielddescription>{$com.multibuy.buydepartmentsetdesc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value == "departments"|(identity)GlobalAdministrator|(hash)9d8963f44cc736c843edb9e2678a74cad069c91a29d91843f778dc260dba322d%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DisplayNameFormat>{%DepartmentDisplayName%}</DisplayNameFormat>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.department</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuydepartmentselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[{% GetMultiBuyDepartmentSelectorWhereCondition(); %}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="BuyBrandSet" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="ff65c3b4-5fc1-41ee-88ee-a275a3e7adc7" system="true" visible="true" order="11">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.brands$}</fieldcaption>
+          <fielddescription>{$com.multibuy.brands.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value == "brands"|(identity)GlobalAdministrator|(hash)00d16ae9097dd92a12f51e3e648dd18edb62cb856fc0ba70091ee7b04721ad9c%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.brand</ObjectType>
+          <OrderBy>BrandDisplayName</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuybrandselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[BrandSiteID = {% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="BuyCollectionSet" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="6e9acfc3-c1f6-4a0f-8239-631baaa02fda" system="true" visible="true" order="12">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.collections$}</fieldcaption>
+          <fielddescription>{$com.multibuy.collections.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value == "collections"|(identity)GlobalAdministrator|(hash)447a526295966c5dc66b36937e5d72ea8afad5e7511dee358bc4958e4a3c00e6%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.collection</ObjectType>
+          <OrderBy>CollectionDisplayName</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuycollectionselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[CollectionSiteID = {% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="BuySectionSet" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="abc6d20c-d01e-4528-9dda-d4641ef7043b" system="true" visible="true" order="13">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.sections$}</fieldcaption>
+          <fielddescription>{$com.multibuy.buysectionsetdesc$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value == "sections"|(identity)GlobalAdministrator|(hash)98c9564fb2fda0969e1b30b8752b7d55de500a31ab1fa9ee550fba6201a01f0e%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>ProductSectionsSelector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <OrderBy>NodeAliasPath</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuysectionselector</ResourcePrefix>
+          <ReturnColumnName>NodeID</ReturnColumnName>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field allowempty="true" column="Exclude" columnsize="200" columntype="text" dependsonanotherfield="true" dummy="altform" guid="6377212b-402a-4fca-98b6-d359b81520a0" hasdependingfields="true" system="true" visible="true" order="14">
+        <properties>
+          <fieldcaption>{$com.multibuy.exclude$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%BuyDepartmentOrProduct.Value != "products"|(identity)GlobalAdministrator|(hash)2222fe766bef6710ccffb318224db4a3de129167971da227574d1f44454ca488%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+none;{$general.selectnone$}
+sections;{$com.multibuy.productsinsections$};{%BuyDepartmentOrProduct.Value != "products" |(identity)GlobalAdministrator|(hash)cd454540aa5a8e503603b666f93651e7b7925e1108dcde91f5454a0fb4544af8%}
+brands;{$com.multibuy.productsinbrands$};{%BuyDepartmentOrProduct.Value == "departments" || BuyDepartmentOrProduct.Value == "collections" || BuyDepartmentOrProduct.Value == "sections" |(identity)GlobalAdministrator|(hash)058cefd91855a85bf5e682dc67617125556d3cee05d490cf5955641fdeb2049e%}
+collections;{$com.multibuy.productsincollections$};{%BuyDepartmentOrProduct.Value == "departments" || BuyDepartmentOrProduct.Value == "brands" || BuyDepartmentOrProduct.Value == "sections" |(identity)GlobalAdministrator|(hash)dc2852b32150e6f2d6b3f010e6dbd17a1f9c656ac590aedb77a2d4bb719a92c7%}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="ExcludedBrands" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="7f7b64de-fa1f-4978-8ae5-ddb382d7e9d9" system="true" visible="true" order="15">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.excludedbrands$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%Exclude.Value == "brands" && (BuyDepartmentOrProduct.Value == "departments" || BuyDepartmentOrProduct.Value == "collections" || BuyDepartmentOrProduct.Value == "sections")|(identity)GlobalAdministrator|(hash)33730459c6d11ace8dce6846db6cd1c15004d5dccd3407b04ecb006c09a816ae%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.brand</ObjectType>
+          <OrderBy>BrandDisplayName</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuybrandselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[BrandSiteID = {% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field allowempty="true" column="ExcludedCollections" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="f4d1c74b-846f-4445-ac47-f9755eacdae2" system="true" visible="true" order="16">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.excludedcollections$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%Exclude.Value == "collections" && (BuyDepartmentOrProduct.Value == "departments" || BuyDepartmentOrProduct.Value == "brands" || BuyDepartmentOrProduct.Value == "sections")|(identity)GlobalAdministrator|(hash)471a159028fa9a1abf2d7c6077c33f744716cdc5da4121050dbcb96dc6591fba%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.collection</ObjectType>
+          <OrderBy>CollectionDisplayName</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuycollectionselector</ResourcePrefix>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>2</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition ismacro="true">
+            <![CDATA[CollectionSiteID = {% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field allowempty="true" column="ExcludedSections" columntype="longtext" dependsonanotherfield="true" dummy="altform" guid="1a096414-3b6d-4b16-9f5e-8eaa2c354585" system="true" visible="true" order="17">
+        <properties>
+          <controlcssclass>multibuydiscount-selector</controlcssclass>
+          <fieldcaption>{$com.multibuy.excludedsections$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%Exclude.Value == "sections" && BuyDepartmentOrProduct.Value != "products"|(identity)GlobalAdministrator|(hash)b03ca8f5d944f6fea1e7725df5540855eb2a8bcc29260de5734cf162a96f48f6%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>ProductSectionsSelector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <OrderBy>NodeAliasPath</OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>com.multibuysectionselector</ResourcePrefix>
+          <ReturnColumnName>NodeID</ReturnColumnName>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field column="MultiBuyDiscountMinimumBuyCount" guid="64ee760d-dc65-4ef9-a4cc-bf68fe25805d" order="18" />
+      <category dummy="true" name="com.productcoupon.discount" order="19">
+        <properties>
+          <caption>{$com.discount.discountvalue$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="MultiBuyDiscountApplyToSKUID" guid="5f5fbf61-aba2-4bd8-92eb-b14bf50d73f5" order="20" />
+      <field column="MultiBuyDiscountIsFlat" guid="16a2db17-32cc-4d48-aba3-ef0630f46f2e" hasdependingfields="true" visible="true" order="21">
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+false; {$com.discount.percentage$}
+true; {$com.discount.fixedamount$}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$com.discount.discountisflat$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountValue" dependsonanotherfield="true" guid="716c3ca4-44e7-4c92-a1c2-6550a5bbea07" hasdependingfields="true" visible="true" allowempty="" order="22">
+        <settings>
+          <Trim>True</Trim>
+          <ValidChars>,.</ValidChars>
+        </settings>
+        <properties>
+          <contentafter ismacro="true">
+<![CDATA[
+<span class="form-control-text">
+{%
+	if (MultiBuyDiscountIsFlat.Value == "true")
+	{
+		siteID = MultiBuyDiscountSiteID == 0 ? CMSContext.CurrentSiteID : MultiBuyDiscountSiteID;
+		HTMLEncode(GetMainSiteCurrency(siteID).CurrencyCode);
+	}
+	else
+	{
+		"%"
+	}
+|(identity)GlobalAdministrator|(hash)7bef4a3df24b8603de7aac4d7b19c7c62db3505926530c5750268ed7b00e263b%}	
+</span>
+]]>
+          </contentafter>
+          <controlcssclass>input-width-40</controlcssclass>
+          <fieldcaption>{$com.multibuy.amount$}</fieldcaption>
+          <validationerrormessage>{$com.discount.valueempty$}</validationerrormessage>
+        </properties>
+        <rules>
+          <rule errormsg="{$com.discount.amountpercentage$}">
+            <![CDATA[{%Rule("(MultiBuyDiscountIsFlat.Value? true: Value<=100)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>MultiBuyDiscountIsFlat.Value? true: Value&lt;=100</t><v>MultiBuyDiscountIsFlat.Value? true: Value&lt;=100</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)696e893a1e20f97399db344a65d2dd7fbe3f36f6e1c166639dedd08b8ed5f11d%}]]>
+          </rule>
+          <rule errormsg="{$com.discount.minamount$}">
+            <![CDATA[{%Rule("(Value > 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>Value &gt; 0</t><v>Value &gt; 0</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="MultiBuyDiscountAutoAddEnabled" dependsonanotherfield="true" guid="274d3901-f174-4b88-b4d2-74391b1188a4" visible="true" order="23">
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$com.multibuy.addtocartautomatically$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%(!MultiBuyDiscountIsFlat.Value && (GetSpecificOrCheapestUnit.Value == "specificUnit") && MultiBuyDiscountValue.Value == "100")|(identity)GlobalAdministrator|(hash)1a97373a5817de00f165fc5562f18211a17826483bc6f59af5f492dc017fde20%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountUsesCoupons" guid="4ccceb0b-5a47-42c7-a129-ee6cac9ee79a" order="24">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+        </properties>
+      </field>
+      <category dummy="true" name="com.multibuy.duration" order="25">
+        <properties>
+          <caption>{$com.multibuy.duration$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="MultiBuyDiscountPriority" guid="8b1cf45d-1c87-4aad-af7c-2dd542ee833c" order="26" />
+      <field column="MultiBuyDiscountSiteID" guid="44995ab6-bc09-448e-980c-c6a288c59b64" order="27">
+        <properties>
+          <defaultvalue ismacro="true">{% CurrentSite %}</defaultvalue>
+        </properties>
+      </field>
+      <category dummy="true" name="com.discount.CustomerRestriction" order="28">
+        <properties>
+          <caption>{$com.multibuy.CustomerRestriction$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="MultiBuyDiscountCustomerRestriction" guid="cab69774-2ccd-4bc1-b7e2-76a4ba2be457" visible="true" order="29">
+        <settings>
+          <UseStringRepresentation>True</UseStringRepresentation>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.multibuydiscount.CustomerRestrictiontext$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountRoles" guid="72f32911-f3a6-4f65-b867-54c9e3379835" visible="true" order="30">
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%MultiBuyDiscountCustomerRestriction.Value == "SelectedRoles"|(identity)GlobalAdministrator|(hash)68bb066459e4f19ffa1f0343f031f98cbf6c0d6e7fa22c5206bce4e276abb878%}]]>
+          </visiblemacro>
+          <enabledmacro />
+        </properties>
+      </field>
+      <category dummy="true" name="com.discount.RulesForDiscountCalculation" order="31">
+        <properties>
+          <caption>{$com.discount.RulesForDiscountCalculation$}</caption>
+          <collapsedbydefault>true</collapsedbydefault>
+          <collapsible>true</collapsible>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="MultiBuyDiscountApplyFurtherDiscounts" guid="fdd36afb-ddb1-49a8-ab07-6bbc9d0c6ce6" visible="true" order="32">
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="MultiBuyDiscountLimitPerOrder" guid="43d4a7e1-7bbe-4388-b25b-efd627c87a28" order="33" />
+      <field column="MultiBuyDiscountLastModified" guid="0c904cd8-35c5-434a-ac8e-9c2c463141f1" order="34" />
+      <field column="MultiBuyDiscountIsProductCoupon" guid="ad744ce0-42d8-4bf2-9ce2-4470e2dd70c5" order="35">
+        <properties>
+          <defaultvalue>True</defaultvalue>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountValidTo" guid="dab23db5-2c82-46c5-84d1-4b6026a38541" visible="true" order="36">
+        <settings>
+          <controlname>CalendarControl</controlname>
+        </settings>
+        <properties>
+          <validationerrormessage>{$general.dateoverlaps$}</validationerrormessage>
+        </properties>
+      </field>
+      <field column="MultiBuyDiscountValidFrom" guid="cb8b6189-4689-44e8-aca3-743b48555a28" visible="true" order="37">
+        <settings>
+          <controlname>CalendarControl</controlname>
+        </settings>
+        <properties>
+          <validationerrormessage>{$general.dateoverlaps$}</validationerrormessage>
+        </properties>
+      </field>
+    </form>
+  </FormDefinition>
+  <FormDisplayName>General Product Coupon</FormDisplayName>
+  <FormGUID>9e12350f-eef4-4588-9941-485fea4f392d</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>GeneralProductCoupon</FormName>
+</cms.alternativeform>

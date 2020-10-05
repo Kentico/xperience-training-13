@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>35edb982-5c2d-4e20-a539-7a3d24825538</TableGUID>
+  <TableName>TableYearPageViewsCulture</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'week');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'week');
+DECLARE @myselection TABLE (
+   NodeAliasPath varchar(400),
+   StatisticsObjectCulture varchar(400),
+   Count float   
+);
+
+DECLARE @countedAll TABLE (
+   Counted float   
+);
+
+INSERT INTO @myselection
+  SELECT TOP 100
+  StatisticsObjectName,
+  StatisticsObjectCulture,
+  SUM(HitsCount) AS Count
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_WeekHits ON Analytics_WeekHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)
+  GROUP BY StatisticsObjectCulture, StatisticsObjectName
+  ORDER BY SUM(HitsCount) DESC
+  
+INSERT INTO @countedAll
+  SELECT
+  SUM(HitsCount) AS Counted
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_WeekHits ON Analytics_WeekHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)
+
+ SELECT NodeAliasPath AS '{$reports_landingpage_Week.path_header$}',
+ StatisticsObjectCulture AS   '{$general.culture$}',
+ Count AS '{$reports_landingpage_Week.hits_header$}',
+ CAST (CAST((100*Count)/(SELECT Counted FROM  @countedAll) as decimal(10,2)) AS NVARCHAR(10))+'%' AS '{$reports_landingpage_Week.hits_percent_header$}'
+ FROM @myselection
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>landingpage.multilingual.weekreport</CodeName>
+    <GUID>89b09457-978f-49ff-ada3-62c393a949ed</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

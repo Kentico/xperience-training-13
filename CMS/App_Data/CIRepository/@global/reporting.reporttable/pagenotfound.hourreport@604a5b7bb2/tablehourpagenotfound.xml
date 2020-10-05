@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>b426ae01-fe3b-4e96-baed-94ac4cd431a3</TableGUID>
+  <TableName>TableHourPageNotFound</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+SELECT TOP 100 
+ StatisticsObjectName AS '{$reports_pagenotfound_hour.path_header$}', 
+ SUM(HitsCount) AS '{$reports_pagenotfound_hour.hits_header$}' 
+ FROM Analytics_Statistics
+ INNER JOIN Analytics_HourHits ON Analytics_HourHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+ WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+ AND (StatisticsCode=@CodeName) 
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+ GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>pagenotfound.hourreport</CodeName>
+    <GUID>b9695c6b-f008-4588-9290-9be6f6698f02</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>true</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

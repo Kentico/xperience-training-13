@@ -12,7 +12,7 @@
         RememberStateByParam="">
         <GridActions Parameters="IssueID">
             <ug:Action Name="edit" Caption="$General.Edit$" FontIconClass="icon-edit" FontIconStyle="Allow" />
-            <ug:Action Name="delete" Caption="$General.Delete$" FontIconClass="icon-bin" FontIconStyle="Critical" Confirmation="$General.ConfirmDelete$" />
+            <ug:Action Name="delete" Caption="$General.Delete$" FontIconClass="icon-bin" FontIconStyle="Critical" />
         </GridActions>
         <GridColumns>
             <ug:Column Source="##ALL##" ExternalSourceName="IssueDisplayName" Caption="$unigrid.newsletter_issue.columns.issuedisplayname$" Wrap="false">

@@ -473,11 +473,7 @@ public partial class CMSModules_Permissions_Controls_PermissionsMatrix : CMSAdmi
         string where = null;
         if (RoleID > 0)
         {
-            where = string.Format("RoleGroupID IS NULL AND RoleID = {0}", RoleID);
-        }
-        else
-        {
-            where = "RoleGroupID IS NULL";
+            where = string.Format("RoleID = {0}", RoleID);
         }
 
         if (UserRolesOnly && (SelectedUserID > 0))

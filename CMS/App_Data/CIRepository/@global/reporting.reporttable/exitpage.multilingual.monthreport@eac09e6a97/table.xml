@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>715d5ab1-ddff-46e9-b47e-667c30d26568</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'month');
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+DECLARE @myselection TABLE (
+   NodeAliasPath varchar(450),
+   StatisticsObjectCulture varchar(400),
+   Count float   
+);
+
+DECLARE @countedAll TABLE (
+   Counted float   
+);
+
+INSERT INTO @myselection 
+  SELECT TOP 100 
+  StatisticsObjectName,
+  StatisticsObjectCulture, 
+  SUM(HitsCount) AS Count 
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_MonthHits ON Analytics_MonthHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+  AND (StatisticsCode=@CodeName) 
+  AND (HitsStartTime >= @FromDate) 
+  AND (HitsEndTime <= @ToDate) 
+  GROUP BY StatisticsObjectCulture, StatisticsObjectName 
+  ORDER BY SUM(HitsCount) DESC
+  
+INSERT INTO @countedAll 
+  SELECT
+  SUM(HitsCount) AS Count 
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_MonthHits ON Analytics_MonthHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+  AND (StatisticsCode=@CodeName) 
+  AND (HitsStartTime >= @FromDate) 
+  AND (HitsEndTime <= @ToDate)   
+
+ SELECT NodeAliasPath AS '{$reports_exitpage_month.path_header$}', 
+ StatisticsObjectCulture AS   '{$general.culture$}', 
+ Count AS '{$reports_exitpage_month.hits_header$}', 
+ CAST (CAST((100*Count)/(SELECT Counted FROM  @countedAll) as decimal(10,2)) AS NVARCHAR(10))+'%' AS '{$reports_exitpage_month.hits_percent_header$}' 
+ FROM @myselection
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>exitpage.multilingual.monthreport</CodeName>
+    <GUID>b4362a5c-eb70-4085-996d-70e7e473625e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

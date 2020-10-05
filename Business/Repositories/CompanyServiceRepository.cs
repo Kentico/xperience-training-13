@@ -13,7 +13,11 @@ namespace Business.Repositories
         public override Models.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Models.CompanyService dto)
         {
             dto.ServiceDescription = page?.ServiceDescription;
-            dto.IconServerPath = page?.Fields?.Icon?.GetPath();
+
+            if (page?.Fields?.Icon != null)
+            {
+                dto.IconUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(page?.Fields?.Icon); 
+            }
 
             return dto;
         }

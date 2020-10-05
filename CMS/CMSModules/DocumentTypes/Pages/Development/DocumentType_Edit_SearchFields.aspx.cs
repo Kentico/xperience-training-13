@@ -13,10 +13,10 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
     protected void Page_Load(object sender, EventArgs e)
     {
         DataClassInfo dci = DataClassInfoProvider.GetDataClassInfo(classId);
-        if ((dci == null) || (!dci.ClassIsCoupledClass))
+        if ((dci == null) || (!dci.ClassHasURL))
         {
             // Show error message
-            ShowError(GetString("srch.doctype.ErrorIsNotCoupled"));
+            ShowError(GetString("srch.doctype.ErrorCannotHaveSearchFieldsOptions"));
 
             SearchFields.StopProcessing = true;
             SearchFields.Visible = false;

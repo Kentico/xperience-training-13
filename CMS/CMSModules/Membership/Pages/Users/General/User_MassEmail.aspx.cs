@@ -21,7 +21,6 @@ public partial class CMSModules_Membership_Pages_Users_General_User_MassEmail : 
     #region "Variables"
 
     private int siteId;
-    private FormEngineUserControl groupsControl;
 
     #endregion
 
@@ -159,45 +158,10 @@ function IsSubjectEmpty()
         roles.Value = null;
         roles.Reload(true);
 
-        // Delete groups
-        if (groupsControl != null)
-        {
-            groupsControl.Value = String.Empty;
-            groupsControl.SetValue("reloaddata", true);
-        }
-
         // Hide HTML or text area according to e-mail format in settings
         EnsureEmailFormatRegions();
 
         pnlUpdate.Update();
-    }
-
-
-    /// <summary>
-    /// Loads group selector control to the page.
-    /// </summary>
-    /// <returns>Returns true if site contains group and group selector was loaded</returns>
-    private bool AddGroupSelector()
-    {
-        SiteInfo si = SiteInfo.Provider.Get(siteId);
-        if ((si != null) && (ModuleCommands.CommunitySiteHasGroup(si.SiteID)))
-        {
-            groupsControl = Page.LoadUserControl("~/CMSModules/Groups/FormControls/MultipleGroupSelector.ascx") as FormEngineUserControl;
-            if (groupsControl != null)
-            {
-                groupsControl.FormControlParameter = siteId;
-                groupsControl.IsLiveSite = false;
-                groupsControl.ID = "selectgroups";
-                groupsControl.ShortID = "sg";
-                groupsControl.SetValue("ReturnColumnName", "GroupID");
-
-                plcGroupSelector.Controls.Add(groupsControl);
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
 
@@ -210,12 +174,6 @@ function IsSubjectEmpty()
         txtPlainText.Text = String.Empty;
         htmlText.ResolvedValue = String.Empty;
         emailSender.Text = MembershipContext.AuthenticatedUser.Email;
-
-        if (groupsControl != null)
-        {
-            groupsControl.Value = String.Empty;
-            groupsControl.SetValue("reloaddata", true);
-        }
 
         users.Value = String.Empty;
         users.ReloadData();
@@ -246,15 +204,11 @@ function IsSubjectEmpty()
         }
 
         // Get recipients
-        string groupIds = null;
-        if (groupsControl != null)
-        {
-            groupIds = Convert.ToString(groupsControl.Value);
-        }
+
         string userIDs = Convert.ToString(users.Value);
         string roleIDs = Convert.ToString(roles.Value);
 
-        if (string.IsNullOrEmpty(groupIds) && string.IsNullOrEmpty(userIDs) && string.IsNullOrEmpty(roleIDs))
+        if (string.IsNullOrEmpty(userIDs) && string.IsNullOrEmpty(roleIDs))
         {
             ShowError(GetString("massemail.norecipients"));
             return;
@@ -296,7 +250,7 @@ function IsSubjectEmpty()
         }
 
         // Send messages using email engine
-        EmailSender.SendMassEmails(message, userIDs, roleIDs, groupIds, siteId, containsEveryone);
+        EmailSender.SendMassEmails(message, userIDs, roleIDs, siteId, containsEveryone);
         
         // Clear the form if email was sent successfully
         Clear();
@@ -382,7 +336,7 @@ function IsSubjectEmpty()
     protected void EnsureSelectorPanels()
     {
         // Check group availability and try to load group selector
-        pnlGroups.Visible = (siteId > 0) && AddGroupSelector();
+        pnlGroups.Visible = false;
     }
 
     #endregion

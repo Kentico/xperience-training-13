@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Expired pages table</TableDisplayName>
+  <TableGUID>305d166c-9965-4076-8ba1-0eb3535815b8</TableGUID>
+  <TableName>ExpiredDocsTable</TableName>
+  <TableQuery>
+    <![CDATA[Select DocumentName AS 'Name', NodeAliasPath AS 'Alias path', DocumentPublishTo AS 'Expiration date', FirstName + ' '  + LastName + ' (' + UserName +')' AS 'Last modified by', StepDisplayName AS 'Current workflow step' FROM View_CMS_Tree_Joined LEFT JOIN CMS_User ON View_CMS_Tree_Joined.DocumentModifiedByUserID=CMS_User.UserID LEFT JOIN CMS_WorkflowStep ON View_CMS_Tree_Joined.DocumentWorkflowStepID = CMS_WorkflowStep.StepID Where (DocumentPublishTo IS NOT NULL) AND (DocumentPublishTo < @CMSContextCurrentTime) AND (NodeSiteID=@CMSContextCurrentSiteID) ORDER BY DocumentPublishTo DESC]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>ExpiredDocuments</CodeName>
+    <GUID>a42dbf6c-59b0-4a08-91c3-9838d2747fae</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No expired pages found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

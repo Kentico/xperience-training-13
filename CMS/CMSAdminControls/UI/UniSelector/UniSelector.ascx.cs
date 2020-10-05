@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -1286,7 +1287,7 @@ return false;";
 
             mJavaScript.Append($@"
 function US_SelectionDialog_{UniSelectorClientID} (values) {{
-    {Page.ClientScript.GetCallbackEventReference(this, "values", $"US_SelectionDialogReady_{UniSelectorClientID}", $"'{ScriptHelper.ResolveUrl(url)}'")};
+    {Page.ClientScript.GetCallbackEventReference(this, "values", $"US_SelectionDialogReady_{UniSelectorClientID}", $"'{HttpUtility.JavaScriptStringEncode(ScriptHelper.ResolveUrl(url))}'")};
 }}");
 
             mJavaScript.AppendLine($@"

@@ -7,7 +7,6 @@ using CMS.Membership;
 using CMS.Reporting;
 using CMS.SiteProvider;
 using CMS.UIControls;
-using CMS.WebAnalytics;
 
 using Action = CMS.UIControls.UniGridConfig.Action;
 
@@ -56,12 +55,11 @@ public partial class CMSModules_Reporting_Controls_UserSubscriptions : CMSAdminC
     {
         get
         {
-            return ValidationHelper.GetBoolean(GetValue("islivesite"), base.IsLiveSite);
+            return false;
         }
         set
         {
             base.IsLiveSite = value;
-            SetValue("islivesite", value);
         }
     }
 
@@ -141,7 +139,7 @@ public partial class CMSModules_Reporting_Controls_UserSubscriptions : CMSAdminC
         {
 	        ScriptHelper.RegisterDialogScript(Page);
             String subscriptionUrl = IsLiveSite ? "~/CMSModules/Reporting/LiveDialogs/EditSubscription.aspx?subscriptionId={0}&mode=liveedit" : "~/CMSModules/Reporting/Dialogs/EditSubscription.aspx?subscriptionId={0}&mode=edit";
-            act.OnClick = String.Format("modalDialog('{0}','Subscription',{1},{2});return false;", ResolveUrl(subscriptionUrl), AnalyticsHelper.SUBSCRIPTION_WINDOW_WIDTH + 70, AnalyticsHelper.SUBSCRIPTION_WINDOW_HEIGHT + 100);
+            act.OnClick = String.Format("modalDialog('{0}','Subscription',{1},{2});return false;", ResolveUrl(subscriptionUrl), ReportHelper.SUBSCRIPTION_WINDOW_WIDTH + 70, ReportHelper.SUBSCRIPTION_WINDOW_HEIGHT + 100);
         }
 
         ScriptHelper.RegisterClientScriptBlock(Page, typeof(String), "RefreshScript", ScriptHelper.GetScript("function refreshCurrentPage() {" + ControlsHelper.GetPostBackEventReference(btnPostback, String.Empty) + "}"));

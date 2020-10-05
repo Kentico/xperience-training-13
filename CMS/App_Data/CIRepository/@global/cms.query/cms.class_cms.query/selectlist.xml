@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.query</CodeName>
+    <GUID>821c115d-0b5b-4d8a-b5f9-7d2e0f97e0bd</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>3cf5904d-8c0e-44fb-99a0-fb62d83b1e29</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectlist</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## ##COLUMNS##
+FROM
+(
+	SELECT
+		q.[QueryID],
+		q.[QueryName],
+		c.[ClassName] + '.' + q.[QueryName] AS [QueryFullName],
+		q.[QueryTypeID],
+		q.[QueryText],
+		q.[QueryRequiresTransaction],
+		q.[ClassID],
+		q.[QueryIsLocked],
+		q.[QueryLastModified],
+		q.[QueryGUID],
+		q.[QueryIsCustom],
+		q.[QueryConnectionString]
+	FROM [CMS_Query] q
+	INNER JOIN [CMS_Class] c ON q.[ClassID] = c.[ClassID]
+		WHERE q.[ClassID] IS NOT NULL
+	
+	UNION ALL
+	
+	SELECT
+		0 AS [QueryID],
+		'selectall' AS [QueryName],
+		c.[ClassName] + '.selectall' AS [QueryFullName],
+		0 AS [QueryTypeID],
+		'SELECT NULL' AS [QueryText],
+		0 AS [QueryRequiresTransaction],
+		c.[ClassID] AS [ClassID],
+		0 AS [QueryIsLocked],
+		GETDATE() AS [QueryLastModified],
+		'00000000-0000-0000-0000-000000000000' AS [QueryGUID],
+		0 AS [QueryIsCustom],
+		c.[ClassConnectionString] AS [QueryConnectionString]
+	FROM [CMS_Class] c         
+			WHERE c.[ClassIsCoupledClass] = 1 AND c.[ClassID] NOT IN (SELECT [ClassID] FROM [CMS_Query] WHERE [QueryName] = 'selectall' AND [ClassID] IS NOT NULL)
+) t    WHERE ##WHERE## ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

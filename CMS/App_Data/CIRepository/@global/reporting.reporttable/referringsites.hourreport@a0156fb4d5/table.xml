@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>34e6f8c6-e73c-4b8d-9452-0597934c81e3</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+SELECT TOP 100
+StatisticsObjectName  AS '{$reports_referringsites.name_header$}',
+ SUM(HitsCount) AS '{$reports_referringsites.hits_header$}',
+ CAST(CAST(100*CAST(SUM(HitsCount) AS float)/NULLIF((
+  SELECT SUM(HitsCount)
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)), 0) AS decimal(5,2)) AS VARCHAR)+'%' AS '{$reports_referringsites.percent_header$}'
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+  GROUP BY StatisticsObjectName
+  ORDER BY SUM(HitsCount) DESC
+
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>referringsites.hourreport</CodeName>
+    <GUID>f2ef24cb-8229-4bfe-a56a-09a1bf0f6acc</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>true</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

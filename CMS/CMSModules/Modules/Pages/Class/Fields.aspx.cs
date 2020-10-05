@@ -64,7 +64,8 @@ public partial class CMSModules_Modules_Pages_Class_Fields : GlobalAdminPage
                         Tooltip = GetString("EditTemplateFields.GenerateFormDefinition"),
                         OnClientClick = "if (!confirm('" + GetString("EditTemplateFields.GenerateFormDefConfirmation") + "')) {{ return false; }}",
                         Visible = !dci.ClassIsDocumentType,
-                        CommandName = "gendefinition"
+                        CommandName = "gendefinition",
+                        ButtonStyle = ButtonStyle.Default
                     });
 
                     fieldEditor.HeaderActions.ActionPerformed += (s, ea) => { if (ea.CommandName == "gendefinition") GenerateDefinition(); };

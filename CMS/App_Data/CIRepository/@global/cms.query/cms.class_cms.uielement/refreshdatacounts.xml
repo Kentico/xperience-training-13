@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.UIElement</CodeName>
+    <GUID>756292a7-ea43-4b8c-a343-6e88dbc3d38e</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>de7a9085-5bf1-4e2d-90c3-c8c5cc4e3fa5</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>refreshdatacounts</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+-- Correct all IDPaths and child counts
+DECLARE @elementCursor CURSOR;
+SET @elementCursor = CURSOR FOR SELECT [ElementID] FROM [CMS_UIElement] ORDER BY [ElementLevel], [ElementID]
+DECLARE @elementID int;
+OPEN @elementCursor
+FETCH NEXT FROM @elementCursor INTO @elementID;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+UPDATE CMS_UIElement SET ElementChildCount = (SELECT COUNT(*) FROM CMS_UIElement b WHERE b.ElementParentID = a.ElementID), ElementIDPath = ISNULL((SELECT TOP 1 ElementIDPath FROM CMS_UIElement b WHERE b.ElementID = a.ElementParentID), '') + '/' + REPLICATE('0', 8 - DATALENGTH(ElementID)) + CAST(ElementID AS NVARCHAR(200)) FROM CMS_UIElement a WHERE ElementID = @elementID
+
+FETCH NEXT FROM @elementCursor INTO @elementID;
+END
+
+CLOSE @elementCursor;
+DEALLOCATE @elementCursor;
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

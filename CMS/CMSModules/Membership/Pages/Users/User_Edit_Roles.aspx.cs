@@ -110,10 +110,10 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Roles : CMSUser
 
         usRoles.OnSelectionChanged += usRoles_OnSelectionChanged;
         string siteIDWhere = (mSiteId <= 0) ? " SiteID IS NULL " : " SiteID =" + mSiteId;
-        usRoles.WhereCondition = siteIDWhere + " AND RoleGroupID IS NULL";
+        usRoles.WhereCondition = siteIDWhere;
 
         usRoles.SelectItemPageUrl = "~/CMSModules/Membership/Pages/Users/User_Edit_Add_Item_Dialog.aspx";
-        usRoles.ListingWhereCondition = siteIDWhere + " AND RoleGroupID IS NULL AND UserID=" + mUserId;
+        usRoles.ListingWhereCondition = siteIDWhere + " AND UserID=" + mUserId;
         usRoles.ReturnColumnName = "RoleID";
         usRoles.DynamicColumnName = false;
         usRoles.GridName = "User_Role_List.xml";

@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Content_Controls_TreeActionsPanel {
-    
+public partial class CMSModules_Content_Controls_TreeActionsPanel
+{
+
     /// <summary>
     /// plcContentButtons control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcContentButtons;
-    
+
     /// <summary>
     /// pnlButtons control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSPanel pnlButtons;
-    
+
     /// <summary>
     /// btnEdit control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton btnEdit;
-    
+
     /// <summary>
     /// btnPreview control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton btnPreview;
-    
+
     /// <summary>
     /// btnListing control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton btnListing;
-    
+
     /// <summary>
     /// btnNew control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnNew;
-    
+
     /// <summary>
     /// btnDelete control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnDelete;
-    
+
     /// <summary>
     /// btnCopy control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnCopy;
-    
+
     /// <summary>
     /// btnMove control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnMove;
-    
+
     /// <summary>
     /// btnUp control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnUp;
-    
+
     /// <summary>
     /// btnDown control.
     /// </summary>
@@ -109,7 +110,16 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSAccessibleButton btnDown;
-    
+
+    /// <summary>
+    /// btnRefresh control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSAccessibleButton btnRefresh;
+
     /// <summary>
     /// btnSearch control.
     /// </summary>

@@ -332,22 +332,8 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     /// <param name="parameterValue">Additional parameter value</param>
     private string GetFilePath(string fileName, string parameterName = null, string parameterValue = null)
     {
-        string path;
-        if (IsLiveSite)
-        {
-            if (AuthenticationHelper.IsAuthenticated())
-            {
-                path = "~/CMS/Dialogs/CMSFormControls/LiveSelectors/InsertImageOrMedia/";
-            }
-            else
-            {
-                path = "~/CMSFormControls/LiveSelectors/InsertImageOrMedia/";
-            }
-        }
-        else
-        {
-            path = "~/CMSFormControls/Selectors/InsertImageOrMedia/";
-        }
+        string path = "~/CMSFormControls/Selectors/InsertImageOrMedia/";
+
         if ((!String.IsNullOrEmpty(parameterName)) && (!String.IsNullOrEmpty(parameterValue)))
         {
             string query = URLHelper.RemoveUrlParameter(RequestContext.CurrentQueryString, "hash");
@@ -367,25 +353,9 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogHeader : 
     /// </summary>
     private string GetMediaLibrariesPath()
     {
-        string path;
-
         const string MEDIA_FORMCONTROLS_FOLDER = "~/CMSModules/MediaLibrary/FormControls/";
 
-        if (IsLiveSite)
-        {
-            if (AuthenticationHelper.IsAuthenticated())
-            {
-                path = "~/CMS/Dialogs/CMSModules/MediaLibrary/FormControls/LiveSelectors/InsertImageOrMedia/Tabs_Media.aspx";
-            }
-            else
-            {
-                path = MEDIA_FORMCONTROLS_FOLDER + "LiveSelectors/InsertImageOrMedia/Tabs_Media.aspx";
-            }
-        }
-        else
-        {
-            path = MEDIA_FORMCONTROLS_FOLDER + "Selectors/InsertImageOrMedia/Tabs_Media.aspx";
-        }
+        var path = MEDIA_FORMCONTROLS_FOLDER + "Selectors/InsertImageOrMedia/Tabs_Media.aspx";
 
         return UrlResolver.ResolveUrl(path) + RequestContext.CurrentQueryString;
     }

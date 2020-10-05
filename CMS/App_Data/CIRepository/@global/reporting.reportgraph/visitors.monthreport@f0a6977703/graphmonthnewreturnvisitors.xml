@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphDisplayName>new and returning visitors</GraphDisplayName>
+  <GraphGUID>8c28e0ee-6518-45f4-80e1-9db5769af627</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>GraphMonthNewReturnVisitors</GraphName>
+  <GraphQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'month');
+SELECT '{'+'$analytics_codename.' + StatisticsCode + '$}' as Name,
+SUM(HitsCount) as Count FROM Analytics_Statistics, Analytics_MonthHits WHERE (StatisticsSiteID =
+@CMSContextCurrentSiteID) AND ((StatisticsCode = @FirstCategory) OR (StatisticsCode = @SecondCategory))
+ AND (StatisticsID = HitsStatisticsID) AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+ GROUP BY StatisticsCode
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>visitors.monthreport</CodeName>
+    <GUID>340c5b68-09b6-47ea-9de4-d1fb8b6a7214</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>true</exportenabled>
+      <itemvalueformat>#PERCENT{P1} (#VALY)</itemvalueformat>
+      <legendinside>True</legendinside>
+      <legendposition>Right</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <pieothervalue>5</pieothervalue>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX  -   #PERCENT{P1}</seriesitemtooltip>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle>{$reports_visits.label_newandreturningvisitors$}</GraphTitle>
+  <GraphType>pie</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

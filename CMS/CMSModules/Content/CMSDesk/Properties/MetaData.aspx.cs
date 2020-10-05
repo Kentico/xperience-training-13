@@ -20,9 +20,8 @@ public partial class CMSModules_Content_CMSDesk_Properties_MetaData : CMSPropert
         ScriptHelper.RegisterLoader(Page);
 
         MetaDataControlExtender extender = new MetaDataControlExtender();
-        extender.UIModuleName = "cms.content";
-        extender.UIPageElementName = "metadata.page";
-        extender.UITagsElementName = "metadata.tags";
+        extender.UIModuleName = "CMS.Content";
+        extender.UIMetadataElementName = "Properties.MetaData";
         extender.Init(editForm);
     }
 

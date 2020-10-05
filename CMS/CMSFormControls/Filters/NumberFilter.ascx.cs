@@ -166,7 +166,7 @@ public partial class CMSFormControls_Filters_NumberFilter : FormEngineUserContro
                 typedValue = ValidationHelper.GetDoubleSystem(value, Double.NaN);
             }
 
-            return new WhereCondition(FieldInfo.Name, op.ToEnum<QueryOperator>(), typedValue).ToString(true);
+            return new WhereCondition(FieldInfo.Name, EnumStringRepresentationExtensions.ToEnum<QueryOperator>(op), typedValue).ToString(true);
         }
 
         try

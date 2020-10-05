@@ -488,10 +488,10 @@ public partial class CMSModules_Reporting_Controls_DisplayReport : AbstractRepor
                 void DelayReportReload(object sender, EventArgs eventArgs)
                 {
                     formParameters.PreRender -= DelayReportReload;
+                    ctrl.Page = Page;
 
                     if (formParameters.ValidateData())
                     {
-                        ctrl.Page = Page;
                         ctrl.ReloadData(forceLoad);
                     }
                 }

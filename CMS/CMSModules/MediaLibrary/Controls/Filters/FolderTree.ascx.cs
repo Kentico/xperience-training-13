@@ -207,10 +207,10 @@ public partial class CMSModules_MediaLibrary_Controls_Filters_FolderTree : Folde
             else
             {
                 // Escape ' and [ (spacial character for LIKE condition)
-                string wPath = Path.EnsureSlashes(path).Replace("'", "''").Replace("[", "[[]");
+                string wPath = Path.EnsureForwardSlashes(path).Replace("'", "''").Replace("[", "[[]");
                 // Get files from path
                 WhereCondition = String.Format("(FilePath LIKE N'{0}/%')", wPath);
-                CurrentFolder = Path.EnsureSlashes(path);
+                CurrentFolder = Path.EnsureForwardSlashes(path);
 
                 if (!ShowSubfoldersContent)
                 {
@@ -224,10 +224,10 @@ public partial class CMSModules_MediaLibrary_Controls_Filters_FolderTree : Folde
             if (String.IsNullOrEmpty(path))
             {
                 // Escape ' and [ (spacial character for LIKE condition)
-                string wPath = Path.EnsureSlashes(MediaLibraryPath).Replace("'", "''").Replace("[", "[[]");
+                string wPath = Path.EnsureForwardSlashes(MediaLibraryPath).Replace("'", "''").Replace("[", "[[]");
                 // Select files from path folder
                 WhereCondition = String.Format("(Filepath LIKE N'{0}/%')", wPath);
-                CurrentFolder = Path.EnsureSlashes(MediaLibraryPath);
+                CurrentFolder = Path.EnsureForwardSlashes(MediaLibraryPath);
 
                 if (!ShowSubfoldersContent)
                 {
@@ -238,10 +238,10 @@ public partial class CMSModules_MediaLibrary_Controls_Filters_FolderTree : Folde
             else
             {
                 // Escape ' and [ (spacial character for LIKE condition)
-                string wPath = Path.EnsureSlashes(String.Format("{0}/{1}", MediaLibraryPath, path)).Replace("'", "''").Replace("[", "[[]");
+                string wPath = Path.EnsureForwardSlashes(String.Format("{0}/{1}", MediaLibraryPath, path)).Replace("'", "''").Replace("[", "[[]");
                 // Get files from path
                 WhereCondition = String.Format("(FilePath LIKE N'{0}/%')", wPath);
-                CurrentFolder = String.Format("{0}/{1}", Path.EnsureSlashes(MediaLibraryPath), Path.EnsureSlashes(path));
+                CurrentFolder = String.Format("{0}/{1}", Path.EnsureForwardSlashes(MediaLibraryPath), Path.EnsureForwardSlashes(path));
                 if (!ShowSubfoldersContent)
                 {
                     // But no from subfolders

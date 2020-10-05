@@ -137,11 +137,10 @@ public partial class CMSModules_Newsletters_Controls_MySubscriptions : CMSAdminC
     {
         get
         {
-            return ValidationHelper.GetBoolean(GetValue("IsLiveSite"), false);
+            return false;
         }
         set
         {
-            SetValue("IsLiveSite", value);
             plcMess.IsLiveSite = value;
         }
     }

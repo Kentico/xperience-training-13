@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>e977744d-dfdf-4359-9e4f-d5ccd75131e4</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @globalCurrency bit;
+SET @globalCurrency = {%Settings.CMSStoreUseGlobalCurrencies?1:0|(identity)GlobalAdministrator|(hash)0ab7d8ea8682c49dbd98696beebc1fd5abee5b6cb085bdf3f17253c96532cf2b%};
+
+
+/* Selects the number of orders in the given currency. */
+SELECT 
+   CurrencyCode AS '{$unigrid.currency.columns.currencycode$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'
+FROM 
+   COM_Order
+   LEFT JOIN COM_Currency
+      ON CurrencyID = OrderCurrencyID
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid, 0) = 1)
+WHERE 
+   (CurrencyEnabled = 1 OR CurrencyID IN (SELECT OrderCurrencyID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID)) 
+   AND ((@globalCurrency = 1 AND CurrencySiteID IS NULL)OR(@globalCurrency = 0 AND CurrencySiteID = @CMSContextCurrentSiteID))
+GROUP BY 
+   CurrencyCode, 
+   CurrencyDisplayName
+ORDER BY COUNT(OrderID) DESC
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>NumberOfOrdersByCurrency</CodeName>
+    <GUID>b7cc93bb-98ce-4eeb-a2a3-44554177078d</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Horizontal</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$unigrid.currency.columns.currencycode$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$ecommerce.report_numberoforders$}</GraphYAxisTitle>
+</reporting.reportgraph>

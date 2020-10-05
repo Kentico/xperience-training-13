@@ -9,7 +9,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Content_Attachments_DirectFileUploader_PublicFileUploader : LivePage
+public partial class CMSModules_Content_Attachments_DirectFileUploader_PublicFileUploader : CMSPage
 {
     #region "Private variables"
 
@@ -106,7 +106,7 @@ public partial class CMSModules_Content_Attachments_DirectFileUploader_PublicFil
                     fileUploaderElem.OnlyImages = ValidationHelper.GetBoolean(GetProp("onlyimages"), false);
                     fileUploaderElem.ParentElemID = QueryHelper.GetString("parentelemid", String.Empty);
                     fileUploaderElem.CheckPermissions = ValidationHelper.GetBoolean(GetProp("checkperm"), true);
-                    fileUploaderElem.IsLiveSite = ValidationHelper.GetBoolean(GetProp("islive"), true);
+                    fileUploaderElem.IsLiveSite = false;
                     fileUploaderElem.RaiseOnClick = ValidationHelper.GetBoolean(GetProp("click"), false);
                     fileUploaderElem.NodeSiteName = ValidationHelper.GetString(GetProp("sitename"), null);
                     fileUploaderElem.SourceType = SourceType;

@@ -134,7 +134,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibraryT
                     isRTL = CultureHelper.IsPreferredCultureRTL();
                 }
 
-                mImageFolderPath = GetImageUrl(isRTL ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree", IsLiveSite, false);
+                mImageFolderPath = GetImageUrl(isRTL ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree", false);
             }
             return mImageFolderPath;
         }
@@ -392,7 +392,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibraryT
             {
                 if (!Directory.Exists(rootDir))
                 {
-                    DirectoryHelper.EnsureDiskPath(Path.EnsureEndBackslash(rootDir), Server.MapPath("~"));
+                    DirectoryHelper.EnsureDiskPath(Path.EnsureEndSlash(rootDir), Server.MapPath("~"));
                 }
                 directories = Directory.GetDirectories(rootDir);
             }
@@ -861,7 +861,7 @@ function FolderSelected() {
     {
         if (!string.IsNullOrEmpty(path))
         {
-            path = Path.EnsureSlashes(path);
+            path = Path.EnsureForwardSlashes(path);
             path = EnsureFolderId(path.ToLowerCSafe());
         }
         return path;

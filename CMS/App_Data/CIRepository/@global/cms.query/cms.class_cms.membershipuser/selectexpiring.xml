@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.MembershipUser</CodeName>
+    <GUID>b5209315-936d-4853-b679-42abb2afdafd</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>aa8ced47-9d9b-42fe-81ce-d4fc6c80382f</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectexpiring</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT CMS_MembershipUser.*, CMS_Membership.MembershipDisplayName, CMS_Membership.MembershipSiteID, CMS_User.Email
+FROM CMS_MembershipUser
+JOIN CMS_Membership ON CMS_Membership.MembershipID = CMS_MembershipUser.MembershipID
+JOIN CMS_User ON CMS_User.UserID = CMS_MembershipUser.UserID
+WHERE ((DATEDIFF(day, @CurrentDateTime, CMS_MembershipUser.ValidTo) BETWEEN 0 AND @Days)
+AND (ISNULL(CMS_Membership.MembershipSiteID, 0) = @SiteID)
+AND ((@OnlyWithSendNotification = 0) OR (CMS_MembershipUser.SendNotification = 1))
+AND (##WHERE##))
+ORDER BY (##ORDERBY##)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

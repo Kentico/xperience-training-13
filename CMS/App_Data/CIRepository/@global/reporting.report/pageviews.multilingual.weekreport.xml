@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>PageViews</CodeName>
+    <GUID>6a09d0cf-887b-45b1-a959-3387c29cf3c7</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString />
+  <ReportDisplayName>Page views (multilingual) - Weekly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>146ac24a-74d3-408b-913a-7473463293ff</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+<br />
+%%control:ReportGraph?pageviews.multilingual.weekreport.graph%%<br />
+<br />
+%%control:ReportTable?pageviews.multilingual.weekreport.table%%<br />
+<br />
+%%control:ReportGraph?pageviews.multilingual.weekreport.graph_pie%%<br />
+<br />
+{$reports_general.created$} {%cmscontextcurrenttime%} {$reports_general.by$} {%cmscontextcurrentusername%}
+]]>
+  </ReportLayout>
+  <ReportName>pageviews.multilingual.weekreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="8ac3d946-b158-4183-b919-e4b235195537" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddWeeks(-15).Date|(identity)GlobalAdministrator|(hash)df127d150cc75576920d1979fdffd7b176f8157a6b5593277d263be003059385%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="7cf52959-adce-4a5a-9c76-990d08a09a67" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="CodeName" columnsize="20" columntype="text" guid="00000000-0000-0000-0000-000000000000" spellcheck="false">
+        <properties>
+          <defaultvalue>pageviews</defaultvalue>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

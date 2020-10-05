@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>b8f9923d-a570-4b8f-bc70-9db9c29d4787</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the number of orders from @FromDate to @ToDate */ 
+SELECT
+   CAST(ISNULL(COUNT(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,0)) 
+FROM 
+   COM_Order  
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (dateadd(hour,datediff(hour,0,@FromDate),0) <= OrderDate OR @FromDate IS NULL)
+   AND (dateadd(hour,datediff(hour,0,dateadd(hour,1,@ToDate)),0) > OrderDate OR @ToDate IS NULL)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Orders.HourReport</CodeName>
+    <GUID>918a2cda-cd42-4130-b038-79315a9607c6</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

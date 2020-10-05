@@ -52,7 +52,7 @@ public partial class CMSModules_EventLog_EventLog_Details : CMSEventLogPage
         {
             if (mEventInfo == null)
             {
-                mEventInfo = EventLogProvider.GetEventLogInfo(QueryHelper.GetInteger("eventid", 0));
+                mEventInfo = EventLogInfo.Provider.Get(QueryHelper.GetInteger("eventid", 0));
             }
             return mEventInfo;
         }

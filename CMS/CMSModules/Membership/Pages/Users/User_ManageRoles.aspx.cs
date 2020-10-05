@@ -212,7 +212,7 @@ public partial class CMSModules_Membership_Pages_Users_User_ManageRoles : CMSMod
     private ObjectQuery<RoleInfo> GetRoleDataset(bool users)
     {
         string siteWhere = (siteId.ToString() == siteSelector.GlobalRecordValue) ? "SiteID IS NULL" : "SiteID = " + siteId;
-        string where = "(RoleID " + (users ? "" : "NOT ") + "IN (SELECT RoleID FROM CMS_UserRole WHERE UserID = " + userId + ")) AND " + siteWhere + " AND RoleGroupID IS NULL";
+        string where = "(RoleID " + (users ? "" : "NOT ") + "IN (SELECT RoleID FROM CMS_UserRole WHERE UserID = " + userId + ")) AND " + siteWhere;
 
         // Exclude generic roles
         string genericWhere = null;

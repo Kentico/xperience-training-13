@@ -169,14 +169,6 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
                             throw new Exception("[Content/Edit.aspx]: Class ID '" + ClassID + "' not found.");
                         }
 
-                        if (ci.ClassName.ToLowerCSafe() == "cms.blog")
-                        {
-                            if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Blogs, ObjectActionEnum.Insert))
-                            {
-                                RedirectToAccessDenied(String.Format(GetString("cmsdesk.bloglicenselimits"), ""));
-                            }
-                        }
-
                         if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Documents, ObjectActionEnum.Insert))
                         {
                             RedirectToAccessDenied(String.Format(GetString("cmsdesk.documentslicenselimits"), ""));
@@ -248,20 +240,12 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
 
                             if (authorized)
                             {
-                                string className = DocumentManager.NewNodeClassName;
-                                if (className.ToLowerCSafe() == "cms.blog")
-                                {
-                                    if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Blogs, ObjectActionEnum.Insert))
-                                    {
-                                        RedirectToAccessDenied(String.Format(GetString("cmsdesk.bloglicenselimits"), ""));
-                                    }
-                                }
-
                                 if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Documents, ObjectActionEnum.Insert))
                                 {
                                     RedirectToAccessDenied(String.Format(GetString("cmsdesk.documentslicenselimits"), ""));
                                 }
 
+                                string className = DocumentManager.NewNodeClassName;
                                 ci = DataClassInfoProvider.GetDataClassInfo(className);
                                 formElem.FormName = className + ".default";
                             }

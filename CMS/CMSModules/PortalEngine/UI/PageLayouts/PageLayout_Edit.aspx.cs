@@ -1,7 +1,6 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.Helpers;
 using CMS.PortalEngine;
 using CMS.UIControls;
@@ -23,8 +22,6 @@ public partial class CMSModules_PortalEngine_UI_PageLayouts_PageLayout_Edit : CM
 
     private bool? mDialogMode;
     private PageTemplateInfo mPageTemplate;
-    private DeviceProfileInfo mDeviceProfile;
-    private bool deviceChecked;
 
     #endregion
 
@@ -68,23 +65,6 @@ public partial class CMSModules_PortalEngine_UI_PageLayouts_PageLayout_Edit : CM
                 mDialogMode = (QueryHelper.GetBoolean("dialog", false) || QueryHelper.GetBoolean("isindialog", false)) && !QueryHelper.Contains("rootelementid");
             }
             return mDialogMode.Value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets the current device prile
-    /// </summary>
-    private DeviceProfileInfo DeviceProfile
-    {
-        get
-        {
-            if (!deviceChecked)
-            {
-                mDeviceProfile = DeviceContext.CurrentDeviceProfile;
-                deviceChecked = true;
-            }
-            return mDeviceProfile;
         }
     }
 
@@ -170,10 +150,6 @@ public partial class CMSModules_PortalEngine_UI_PageLayouts_PageLayout_Edit : CM
         }
         else
         {
-            if (DeviceProfile != null)
-            {
-                ucHierarchy.PreviewObjectName = DeviceProfile.ProfileName;
-            }
             ucHierarchy.CookiesPreviewStateName = CMSPreviewControl.DEVICELAYUOT;
         }
 
@@ -191,17 +167,8 @@ public partial class CMSModules_PortalEngine_UI_PageLayouts_PageLayout_Edit : CM
     /// </summary>
     private string GetTitleText()
     {
-        string title = GetString(PageTemplateId > 0 ? "pagetemplate.layoutproperties" : "administration-pagelayout_new.editlayout");
-
-        if (DeviceProfile != null)
-        {
-            // Display info about the current device profile
-            title += " - " + HTMLHelper.HTMLEncode(DeviceProfile.ProfileDisplayName);
-        }
-
-        return title;
+        return GetString(PageTemplateId > 0 ? "pagetemplate.layoutproperties" : "administration-pagelayout_new.editlayout");
     }
-
 
 
     /// <summary>

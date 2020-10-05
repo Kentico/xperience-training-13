@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>182b094b-cd05-4c1a-bda2-800a646041c6</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+IF @FromDate <= @ToDate
+BEGIN
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+
+SELECT 
+   DATEPART(YEAR,[Date]) AS '{$ecommerce.report_year$}',
+   CAST(SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}' 
+FROM 
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS Dates
+   LEFT JOIN COM_Order
+      ON Dates.Date = DATENAME(year, OrderDate)
+      AND  OrderSiteID = @CMSContextCurrentSiteID 
+GROUP BY [Date]
+ORDER BY [Date] DESC
+END
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Sales.YearReport</CodeName>
+    <GUID>b8401ba0-83ba-45e1-9612-b3e90be7d224</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

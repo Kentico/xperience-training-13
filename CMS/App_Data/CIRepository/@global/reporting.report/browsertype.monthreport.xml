@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>BrowserTypes</CodeName>
+    <GUID>c2180ed8-6047-4414-ace0-4a6d635af4eb</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportDisplayName>Browser types - Monthly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>f33b656e-4781-48c2-8efe-ec6ba4a0431a</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+%%control:ReportGraph?browsertype.monthreport.graph%%<br />
+<br />
+%%control:ReportTable?TableMonthBrowserType%%<br />
+<br />
+{$reports_general.created$} {%cmscontextcurrenttime%} {$reports_general.by$} {%cmscontextcurrentusername%}
+]]>
+  </ReportLayout>
+  <ReportName>browsertype.monthreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="c92378e6-bfe0-4641-a80d-39bd80ecd398" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddYears(-1).Date|(identity)GlobalAdministrator|(hash)03e2e9d76b2b7c2f0871530f9d00e1d98b9c444834fc880d0d63d0b72a8bfb8c%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="edf2ebb7-7336-4614-bb09-de6e7fce7fcb" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="CodeName" columnsize="20" columntype="text" guid="00000000-0000-0000-0000-000000000000" spellcheck="false">
+        <properties>
+          <defaultvalue>browsertype</defaultvalue>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

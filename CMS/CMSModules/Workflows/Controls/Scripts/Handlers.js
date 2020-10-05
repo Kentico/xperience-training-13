@@ -872,12 +872,12 @@ var GraphControlHandler = $class({
             var isNote = node.definition.Type === 5;
 
             if (text.length > 0 || isNote) {
-                text = graphControlHandler.escapeHtml(text);
-
                 // Save the changes in database
                 if (isContentChanged) {
                     graphControlHandler.saveLabelChange(targetJQ, text);
                 }
+
+                text = graphControlHandler.escapeHtml(text);
 
                 // Display the text in <span>
                 text = isNote ? graphControlHandler.ensureLineBreaks(text) : text;
@@ -921,7 +921,8 @@ var GraphControlHandler = $class({
         if (labelJQ.parents(".Case").length === 1) {
             graphControlHandler.saveCaseLabelChange(labelJQ, value);
         } else if (labelJQ.parents(".Note").length === 1) {
-            graphControlHandler.saveNoteChange(labelJQ, value);
+            var escapedValue = graphControlHandler.escapeHtml(value);
+            graphControlHandler.saveNoteChange(labelJQ, escapedValue);
         } else if (labelJQ.parents(".Node").length === 1) {
             graphControlHandler.saveNodeLabelChange(labelJQ, value);
         }

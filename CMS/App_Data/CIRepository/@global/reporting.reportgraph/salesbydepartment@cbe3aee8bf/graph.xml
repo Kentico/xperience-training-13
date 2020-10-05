@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>ff694189-aaaa-4557-b73f-2bfd38afad42</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @AllowGlobalDepartments bit;
+SET @AllowGlobalDepartments = {%Settings.CMSStoreAllowGlobalDepartments?1:0|(identity)GlobalAdministrator|(hash)7b532cee7ed620d0be072b3a16087db1ebae4f857bec07d736d6fc45194c0fb7%};
+SELECT
+   DepartmentDisplayName AS '{$ecommerce.report_departmentname$}',
+   CAST(ROUND(SUM(OrderItemTotalPriceInMainCurrency),1) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}' 
+FROM
+   COM_OrderItem  
+  LEFT JOIN 
+  (SELECT 
+    product.SKUID AS productSKUID,
+    product.SKUName AS productName,
+    product.SKUDepartmentID AS productDepartment,
+    product.SKUOptionCategoryID AS productCategory,
+    parentProduct.SKUDepartmentID AS parentProductDepartment,
+    parentProduct.SKUName AS parentName
+    FROM 
+    COM_SKU product
+      LEFT JOIN
+      COM_SKU parentProduct
+        ON product.SKUParentSKUID = parentProduct.SKUID) products
+   ON OrderItemSKUID = productSKUID
+     LEFT JOIN COM_Order  
+      ON OrderItemOrderID = OrderID
+     LEFT JOIN COM_Department            
+      ON (products.productDepartment = DepartmentID OR products.parentProductDepartment = DepartmentID)
+WHERE 
+   DepartmentID IS NOT NULL
+   AND productCategory IS NULL
+   AND @CMSContextCurrentSiteID = OrderSiteID
+   AND (OrderDate < DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+   AND (DepartmentSiteID = @CMSContextCurrentSiteID OR (@AllowGlobalDepartments=1 AND DepartmentSiteID IS NULL))
+   AND (ISNULL(OrderIsPaid,0) = 1 OR ISNULL(@OrderIsPaid,0) = 0)
+GROUP BY DepartmentDisplayName  
+ORDER BY SUM(OrderItemTotalPriceInMainCurrency) DESC, DepartmentDisplayName
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>SalesByDepartment</CodeName>
+    <GUID>27fa80f6-1332-4d7a-ac65-06e1b996ccb7</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0.0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$ecommerce.report_departmentname$}</GraphXAxisTitle>
+  <GraphYAxisTitle />
+</reporting.reportgraph>

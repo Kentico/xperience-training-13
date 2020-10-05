@@ -780,31 +780,6 @@ public partial class CMSModules_Content_Controls_ViewVersion : VersionHistoryCon
 
                     break;
 
-                case "documentwebparts":
-                    StringBuilder sbOriginal = new StringBuilder();
-                    StringBuilder sbCompared = new StringBuilder();
-
-                    // Set original web parts
-                    string originalWebParts = Convert.ToString(node.GetValue(columnName));
-                    GenerateWebPartsMarkup(ref sbOriginal, originalWebParts, true);
-
-                    // Add text comparison control
-                    if (compareMode)
-                    {
-                        string compareWebParts = Convert.ToString(compareNode.GetValue(columnName));
-                        GenerateWebPartsMarkup(ref sbCompared, compareWebParts, false);
-                    }
-
-                    // Set empty flag
-                    empty = sbOriginal.Length == 0 && sbCompared.Length == 0;
-
-                    if (!empty)
-                    {
-                        leftValueCell.Text = GetValueForLeftCell(compareMode, sbOriginal, sbCompared);
-                        rightValueCell.Text = GetValueForRightCell(compareMode, sbOriginal, sbCompared);
-                    }
-                    break;
-
                 case "documentpagebuilderwidgets":
                 case "documentpagetemplateconfiguration":
                 case "documentabtestconfiguration":
@@ -1319,7 +1294,7 @@ public partial class CMSModules_Content_Controls_ViewVersion : VersionHistoryCon
 
         // Get link for attachment
         string attName = ValidationHelper.GetString(dc.GetValue("AttachmentName"), null);
-        string attachmentUrl = ApplicationUrlHelper.ResolveUIUrl(AttachmentURLProvider.GetAttachmentUrl(attachmentGuid, URLHelper.GetSafeFileName(attName, SiteContext.CurrentSiteName), null, versionId));
+        string attachmentUrl = ApplicationUrlHelper.ResolveUIUrl(AttachmentURLProvider.GetAttachmentUrl(attachmentGuid, attName, versionId));
 
         // Ensure correct URL
         attachmentUrl = URLHelper.AddParameterToUrl(attachmentUrl, "sitename", SiteContext.CurrentSiteName);

@@ -297,11 +297,11 @@ public partial class CMSModules_WebAnalytics_Controls_AnalyticsReportViewer : CM
             parameters[0] = ucGraphTypePeriod.From;
             parameters[1] = ucGraphTypePeriod.To;
             parameters[2] = DataName;
-            parameters[3] = HitLogProvider.VISITORS_FIRST;
-            parameters[4] = HitLogProvider.VISITORS_RETURNING;
-            parameters[5] = HitLogProvider.REFERRINGSITE + "_direct";
-            parameters[6] = HitLogProvider.REFERRINGSITE + "_search";
-            parameters[7] = HitLogProvider.REFERRINGSITE + "_referring";
+            parameters[3] = StatisticsNames.VISITORS_FIRST;
+            parameters[4] = StatisticsNames.VISITORS_RETURNING;
+            parameters[5] = StatisticsNames.REFERRINGSITE + "_direct";
+            parameters[6] = StatisticsNames.REFERRINGSITE + "_search";
+            parameters[7] = StatisticsNames.REFERRINGSITE + "_referring";
 
             dtp.Rows.Add(parameters);
             dtp.AcceptChanges();
@@ -378,7 +378,7 @@ public partial class CMSModules_WebAnalytics_Controls_AnalyticsReportViewer : CM
     {
         if (mUcDisplayReport != null)
         {
-            return AnalyticsHelper.GetQueryStringParameters(mUcDisplayReport.ReportParameters);
+            return ReportUIHelper.GetQueryStringParameters(mUcDisplayReport.ReportParameters);
         }
 
         return String.Empty;

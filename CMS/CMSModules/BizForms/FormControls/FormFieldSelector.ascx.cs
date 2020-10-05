@@ -164,7 +164,7 @@ public partial class CMSModules_BizForms_FormControls_FormFieldSelector : FormEn
             return;
         }
 
-        var form = BizFormInfoProvider.GetBizFormInfo(className, SiteContext.CurrentSiteID);
+        var form = BizFormInfo.Provider.Get(className, SiteContext.CurrentSiteID);
         if (form == null)
         {
             return;

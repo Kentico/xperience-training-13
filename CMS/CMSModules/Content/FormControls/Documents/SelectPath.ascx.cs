@@ -540,7 +540,7 @@ function ChangeState_{ClientID}(state) {{
     /// </summary>
     private string GetSelectionDialogUrl()
     {
-        string url = CMSDialogHelper.GetDialogUrl(Config, IsLiveSite, false, null, false);
+        string url = CMSDialogHelper.GetDialogUrl(Config, false, null, false);
 
         url = URLHelper.RemoveParameterFromUrl(url, "hash");
 

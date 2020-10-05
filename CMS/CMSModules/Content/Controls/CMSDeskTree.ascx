@@ -8,7 +8,6 @@
     oncontextmenu="return false;">
     <asp:Panel onclick="HideAllContextMenus();" ID="pnlTreeArea" runat="server" CssClass="ContentTreeArea tree-vertical-scroll">
         <div class="TreeAreaTree">
-            <cms:RefreshIcon runat="server" ID="iconRefresh" />
             <cms:ContentTree ID="treeElem" runat="server" AllowDragAndDrop="true" ShortID="t"
                 IsLiveSite="false" AllowMarks="true" />
         </div>

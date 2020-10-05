@@ -66,6 +66,7 @@ config. BgImg			= '';
 // Path to background image, none if empty string ''
 config. BorderColor		= '#cccccc';
 config. BorderStyle		= 'none';
+config. BorderRadius    = '8px';
 // Any permitted CSS value, but I recommend 'solid', 'dotted' or 'dashed'
 config. BorderWidth		= 1;
 config. CenterMouse		= false;
@@ -778,7 +779,10 @@ function tt_FormatTip()
 		css.borderStyle = tt_aV[BORDERSTYLE];
 		css.borderWidth = wBrd + "px";
 	}
-	if(tt_aV[BGCOLOR].length)
+	if (tt_aV[BORDERRADIUS]) {
+		css.borderRadius = tt_aV[BORDERRADIUS];
+	}
+	if (tt_aV[BGCOLOR].length)
 		css.background = tt_aV[BGCOLOR];
 	if(tt_aV[BGIMG].length)
 		css.backgroundImage = "url(" + tt_aV[BGIMG] + ")";

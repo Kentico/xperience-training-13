@@ -6,7 +6,7 @@ using CMS.IO;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_CMSPages_SelectFolder_Content : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_CMSPages_SelectFolder_Content : CMSPage
 {
     protected override void OnInit(EventArgs e)
     {
@@ -28,7 +28,7 @@ public partial class CMSModules_MediaLibrary_CMSPages_SelectFolder_Content : CMS
                     // Get query values
                     selectFolder.MediaLibraryID = ValidationHelper.GetInteger(properties["libraryid"], 0);
                     selectFolder.Action = QueryHelper.GetString("action", "");
-                    selectFolder.FolderPath = Path.EnsureBackslashes(ValidationHelper.GetString(properties["path"], ""));
+                    selectFolder.FolderPath = Path.EnsureSlashes(ValidationHelper.GetString(properties["path"], ""));
                     selectFolder.Files = ValidationHelper.GetString(properties["files"], "").Trim('|');
                     selectFolder.AllFiles = ValidationHelper.GetBoolean(properties["allFiles"], false);
                 }

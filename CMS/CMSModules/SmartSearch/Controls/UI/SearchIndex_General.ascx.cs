@@ -143,9 +143,6 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_General : CM
                 .Select(c => c.ToLowerInvariant())
                 .Intersect(new[] { INDEX_ANALYZER_TYPE, INDEX_STOP_WORDS_FILE, INDEX_CUSTOM_ANALYZER_ASSEMBLY, INDEX_CUSTOM_ANALYZER_CLASS })
                 .Any();
-
-            // Set other values
-            SearchIndex.IndexIsCommunityGroup = false;
         };
 
         form.OnAfterSave += (sender, args) =>

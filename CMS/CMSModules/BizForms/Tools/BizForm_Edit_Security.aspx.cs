@@ -113,7 +113,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_Security : CMSBizFor
         foreach (ListItem item in lstRoles.GetSelectedItems())
         {
             // Remove role-form association from database
-            BizFormRoleInfoProvider.DeleteBizFormRoleInfo(Convert.ToInt32(item.Value), FormInfo.FormID);
+            BizFormRoleInfo.Provider.Remove(Convert.ToInt32(item.Value), FormInfo.FormID);
         }
 
         LoadRoles();
@@ -147,7 +147,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_Security : CMSBizFor
                 FormInfo.FormAccess = FormAccessEnum.OnlyAuthorizedRoles;
             }
 
-            BizFormInfoProvider.SetBizFormInfo(FormInfo);
+            BizFormInfo.Provider.Set(FormInfo);
 
             ShowChangesSaved();
         }

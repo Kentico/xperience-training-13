@@ -40,13 +40,11 @@ namespace MedioClinic.Tests.ViewComponents
                 {
                     new SocialLink
                     {
-                        IconServerPath = "/images/social/fb.png",
                         Name = "Facebook",
                         Url = "http://example.com"
                     },
                     new SocialLink
                     {
-                        IconServerPath = "/images/social/tw.png",
                         Name = "Twitter",
                         Url = "http://example.com"
                     }

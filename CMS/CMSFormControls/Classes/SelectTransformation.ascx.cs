@@ -1,11 +1,11 @@
 ﻿using System;
 
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.MacroEngine;
 using CMS.Membership;
-using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
@@ -272,11 +272,6 @@ public partial class CMSFormControls_Classes_SelectTransformation : FormEngineUs
         }
 
         string where = null;
-
-        if (!ShowHierarchicalTransformation)
-        {
-            where = "(TransformationIsHierarchical IS NULL) OR (TransformationIsHierarchical = 0)";
-        }
 
         if (!string.IsNullOrEmpty(WhereCondition))
         {

@@ -104,7 +104,7 @@ select[size] {
     display: inline-block; // important
     margin-top: @base-unit * 0.375;
     margin-right: @base-unit * 0.5;
-
+    
     // :before pseudo-selector cannot be used, because it cannot be animated in some browsers
     // icon spinner has to be added manually into the element
     i {
@@ -333,6 +333,10 @@ select[size] {
     .uploader {
         margin-top: @base-unit *0.25;
     }
+
+    .radio {
+        display: block;
+    }
 }
 
 // Cell for field label in narrow form
@@ -407,7 +411,13 @@ select[size] {
 
 .editing-form-control-nested-control {
     display: inline;
+
+    .radio {
+        display: block;
+        margin-top: 4px;
+    }
 }
+
 
 .editing-form-control-nested-control:not(:first-child) {
     :first-child {
@@ -471,7 +481,7 @@ label {
     display: inline-block;
 
     &.control-label, &.control-label-top {
-        color: @color-blue-70;
+        color: @label-color;
         .text-semibold();
         width: 100%;
     }
@@ -482,7 +492,7 @@ span {
     &.control-label {
         display: inline-block;
         .text-semibold();
-        color: @color-blue-70;
+        color: @label-color;
         width: 100%;
     }
 }
@@ -564,7 +574,7 @@ span {
     display: block;
     width: 100%;
     height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
-    padding: @padding-base-vertical @padding-base-horizontal * 0.5;
+    padding: @padding-base-vertical @input-padding;
     font-size: @font-size-base;
     line-height: @line-height-100;
     color: @input-color;
@@ -572,10 +582,11 @@ span {
     background-color: @input-bg;
     border: @input-border-width solid @input-border;
     border-radius: @input-border-radius;
+    text-overflow: ellipsis;
     box-sizing: border-box;
     transition: ~"border-color ease-in-out .15s, box-shadow ease-in-out .15s";
     // Customize the `:focus` state to imitate native WebKit styles.
-    .form-control-focus();
+    .form-control-focus(@input-border-focus);
     // Disabled and read-only inputs
     // Note: HTML5 says that controls under a fieldset > legend:first-child won't
     // be disabled if the fieldset is disabled. Due to implementation difficulty,
@@ -590,18 +601,69 @@ span {
 
     &[disabled] {
         cursor: not-allowed;
+        opacity: 1;
     }
 }
 
 // Reset height for textareas
 textarea.form-control {
     height: auto;
+    border-radius: @border-radius;
 }
 
 // Fix dropdown flag position in select
 select.form-control {
     padding-right: @base-unit * 0.25;
 }
+
+select.form-control.AttributesList,
+select.form-control.PermissionsListBox,
+select.form-control[multiple="multiple"],
+select.form-control[size="4"],
+select.form-control[size="13"],
+.form-control.vertical-scrollable-list {
+    border-radius: @border-radius;
+    overflow: auto;
+    background: @input-bg;
+    padding: 0;
+
+    option {
+        padding: @padding-base-vertical @input-padding;
+    }
+}
+
+.form-control.CM {
+    border-radius: @border-radius;
+    border-color: @input-border;
+
+    .CM-toolbar {
+        border-radius: 0 0 @border-radius @border-radius;
+    }
+
+    &.CM-singleline {
+        border-radius: @input-border-radius;
+    }
+}
+
+input + button.btn.icon-only.dropdown-toggle {
+    border-width: @input-border-width @input-border-width @input-border-width 0;
+    border-style: solid;
+    border-color: @input-border;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+select.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxMCAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwKSI+CjxwYXRoIGQ9Ik00LjI0MzA5IDcuMTkyMzlMMC43MDc1NTUgMy42NTY4NUMwLjMxNzAzIDMuMjY2MzMgMC4zMTcwMyAyLjYzMzE2IDAuNzA3NTU1IDIuMjQyNjRDMS4wOTgwOCAxLjg1MjEyIDEuNzMxMjQgMS44NTIxMiAyLjEyMTc3IDIuMjQyNjRMNC45NTAyIDUuMDcxMDdMNy43Nzg2MiAyLjI0MjY0QzguMTY5MTUgMS44NTIxMiA4LjgwMjMxIDEuODUyMTIgOS4xOTI4NCAyLjI0MjY0QzkuNTgzMzYgMi42MzMxNiA5LjU4MzM2IDMuMjY2MzMgOS4xOTI4NCAzLjY1Njg1TDUuNjU3MyA3LjE5MjM5QzUuMjY2NzggNy41ODI5MSA0LjYzMzYxIDcuNTgyOTEgNC4yNDMwOSA3LjE5MjM5WiIgZmlsbD0iIzIzMjUyOSIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwIj4KPHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=);
+    background-position: right 0.5 * @base-unit top 0.7*@base-unit;
+    background-size: 0.5 * @base-unit;
+    background-repeat: no-repeat;
+    padding-right: 1.5 * @base-unit;
+}
+
 
 &.IE select.form-control {
     padding-top: @base-unit * 0.1875;
@@ -630,7 +692,7 @@ select.form-control {
 }
 
 .input-width-20 {
-    width: @base-unit * 5; // ~80px = 4n chars in drp, 7n chars in txb
+    width: @base-unit * 6; // ~96px = 4n chars in drp, 7n chars in txb
 }
 
 .input-width-40 {
@@ -652,7 +714,7 @@ select.form-control {
 
 // For date/time textbox
 .input-width-58 {
-    width: @base-unit * 11;
+    width: @base-unit * 13;
 }
 
 
@@ -680,8 +742,7 @@ select.form-control {
 // Checkboxes and radios
 // Uses font-icon for the checkboxes and radio buttons
 //
-// Common radio and checkbox styles
-.radio,
+// Checkbox specific styles
 .checkbox {
     display: block;
 
@@ -693,12 +754,13 @@ select.form-control {
         font-size: @font-size-base;
         line-height: @line-height-100;
         font-weight: normal;
+        outline: none;
         // Common styles for border and inner icon
         &:before,
         &:after {
             content: "";
-            width: @base-unit - 1px; // remove white bg around
-            height: @base-unit - 1px; // remove white bg around
+            width: @base-unit;
+            height: @base-unit;
             line-height: @base-unit;
             display: inline-block;
             box-sizing: border-box;
@@ -728,87 +790,29 @@ select.form-control {
                 }
             }
         }
-        // Hide default inputs
-        position: fixed;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
+        // Hide default inputs (do not use display:none, input can't be focused then)
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
         // Icons
         + label:before,
         + label:after {
             font-family: @icon-font-name;
             font-size: @icon-size-80;
             text-align: center;
+            height: @base-unit;
+            width: @base-unit;
         }
 
         + label:before {
-            color: @color-gray-130;
+            color: @input-border;
+            border-radius: @border-radius-half;
+            overflow: hidden;
+            content: @icon-cb-uncheck;
         }
 
         + label:after {
-            color: @color-green-100;
-        }
-        // Focus
-        &:focus + label:before,
-        &:active + label:before {
-            color: @color-blue-100;
-        }
-    }
-}
-// Checkbox correction for Safari
-&.Safari {
-    .checkbox {
-        label {
-            &:after {
-                height: @base-unit;
-            }
-        }
-    }
-}
-// Checkbox correction for Chrome
-&.Chrome {
-    .checkbox {
-        label {
-            &:before,
-            &:after {
-                height: @base-unit;
-            }
-        }
-    }
-}
-
-// Radio specific styles
-.radio {
-    input {
-        // Border - shown for both selected and unselected
-        + label:before {
-            content: @icon-rb-uncheck;
-        }
-
-        &:disabled + label:before {
-            content: @icon-circle;
-        }
-        // Inner icon
-        &:checked + label:after {
-            content: @icon-rb-check-sign;
-        }
-    }
-    // Radio button border radius fix - because of background issue on table hover
-    label:before {
-        border-radius: 50%;
-    }
-}
-
-// Checkbox specific styles
-.checkbox {
-    input {
-        // Border - shown for both checked and unchecked
-        + label:before {
-            content: @icon-cb-uncheck;
+            color: @color-primary;
         }
 
         &:disabled + label:before {
@@ -817,6 +821,24 @@ select.form-control {
         // Inner icon
         &:checked + label:after {
             content: @icon-cb-check-sign;
+        }
+
+        + label:before,
+        + label:after {
+            height: @base-unit;
+            width: @base-unit;
+        }
+
+        + label:before {
+            border-radius: 4px;
+            border: 2px solid @color-gray-130;
+            color: transparent;
+        }
+        // Focus
+        &:focus + label:before,
+        &:active + label:before {
+            color: transparent;
+            border-color: @input-border-focus;
         }
     }
 
@@ -827,16 +849,76 @@ select.form-control {
     }
 }
 
+input[type='radio'] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 0;
+    width: 0;
+    outline: none;
 
+    & + label {
+        position: relative;
+        padding-left: @base-unit * 1.5;
+    }
+
+    & + label:before {
+        content: "";
+        display: inline-block;
+        height: @base-unit;
+        width: @base-unit;
+        box-sizing: border-box;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+        border: @input-border-width solid @input-border;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 0;
+        top: 2px;
+    }
+
+    &:checked + label:after {
+        content: "";
+        display: block;
+        width: 8px;
+        height: 8px;
+        background-color: @color-primary;
+        border-radius: 50%;
+        position: absolute;
+        top: 6px;
+        left: 4px;
+    }
+
+    &:focus + label:before {
+        border-color: @input-border-focus;
+    }
+
+    &[disabled] {
+        & + label {
+            cursor: not-allowed;
+
+            &:before, &:focus:before, &:active:before {
+                background: @input-bg-disabled;
+            }
+
+            &:after {
+                background: @input-color-disabled;
+            }
+        }
+    }
+}
 
 // Vertical radio and checkbox lists
 .radio-list-vertical,
 .checkbox-list-vertical {
     margin-top: (@base-unit * 0.25 + @input-border-width);
     margin-right: @base-unit * 0.5;
+    display: flex;
+    flex-direction: column;
 
-    &.column-reverse label:first-of-type,
-    &.column-reverse span:first-of-type,
     label:not(:first-of-type),
     // When disabled, radio list item gets wrapped with a span
     span:not(:first-of-type) label,
@@ -844,15 +926,29 @@ select.form-control {
     .checkbox + .checkbox {
         margin-top: @base-unit * 0.25;
     }
+
+    &.column-reverse {
+        flex-direction: column-reverse;
+
+        label:first-of-type {
+            margin-top: @base-unit * 0.25;
+        }
+
+        label:last-of-type {
+            margin-top: 0;
+        }
+    }
     // Use this class when the list is the first thing on the page
     &.first-on-page {
         margin-top: 0px;
     }
 }
-
 // Horizontal radio and checkbox lists
 .radio-list-horizontal,
 .checkbox-list-horizontal {
+    display: flex;
+    flex-direction: row;
+
     .radio,
     .checkbox {
         display: inline-block;
@@ -862,8 +958,6 @@ select.form-control {
         margin-right: @base-unit;
     }
 }
-
-
 // Additional elements styling
 //
 // Full width for textarea column
@@ -880,7 +974,6 @@ select.form-control {
         max-width: 100%;
     }
 }
-
 // Label for full-width textarea
 .label-full-width {
     width: 100%;
@@ -889,7 +982,6 @@ select.form-control {
         text-align: left;
     }
 }
-
 // Text under the input
 .explanation-text {
     font-size: @font-size-base;
@@ -906,54 +998,41 @@ select.form-control {
     .explanation-text;
     max-width: @explanation-text-max-width*1.75;
 }
-
 // Required mark (*)
 .required-mark {
     font-size: @font-size-base;
     font-weight: bold;
     color: Red;
 }
-
 // Remove red outline added by automatic input validation before submit
 input:invalid {
     box-shadow: none;
 }
-
-
 // Styles for collapsible panels (i.e. webpart properties)
-
 .form-horizontal .editing-form-category-fields {
     margin-top: @base-unit;
     margin-bottom: @base-unit * 1.5;
 }
-
 // Not used Bootstrap stuff
 // ------------------------
-
 // Static form control text
 //
 // Apply class to a `p` element to make any string of text align with labels in
 // a horizontal form layout.
-
 .form-control-static {
     margin-bottom: 0; // Remove default margin from `p`
     margin-top: (@padding-base-vertical + 1);
 }
-
-
 // Help text
 //
 // Apply to any element you wish to create light text for placement immediately
 // below a form control. Use for general help, formatting, or instructional text.
-
 .help-block {
     display: block; // account for any element using help-block
     margin-top: 5px;
     margin-bottom: 10px;
     color: lighten(@text-color, 25%); // lighten the text some for contrast
 }
-
-
 // Inline forms
 //
 // Make forms appear inline(-block) by adding the `.form-inline` class. Inline
@@ -964,7 +1043,6 @@ input:invalid {
 // default HTML form controls and our custom form controls (e.g., input groups).
 //
 // Heads up! This is mixin-ed into `.navbar-form` in navbars.less.
-
 .form-inline {
     // Kick in the inline
     @media screen and (min-width: @screen-tablet) {
@@ -998,7 +1076,6 @@ input:invalid {
         }
     }
 }
-
 // Form control used to select icon for RSS feeds
 .iconSelector {
     // Set margin for different types of selectors
@@ -1026,7 +1103,6 @@ input:invalid {
         }
     }
 }
-
 // Form control used to check for URL availability
 .url-checker {
     // Basic status panel
@@ -1066,7 +1142,6 @@ input:invalid {
         }
     }
 }
-
 // Styles for new-Page dialog
 .new-page-dialog {
     h3 {
@@ -1125,7 +1200,6 @@ input:invalid {
         padding: @base-unit;
     }
 }
-
 // Styles for collision dialog
 .form-merge-collisions {
     .label-state-selector {
@@ -1162,7 +1236,6 @@ input:invalid {
         }
     }
 }
-
 // Styles for country selector
 .country-selector {
     div {
@@ -1171,7 +1244,6 @@ input:invalid {
         }
     }
 }
-
 // ScreenLock styling
 .screen-lock-dialog {
     .form-info {
@@ -1213,7 +1285,6 @@ input:invalid {
         .make-column(@screen-desktop, 8);
     }
 }
-
 // Document type uploader form control used for specifying icon or files
 .doc-type-icon-uploader {
     .ButtonUploaderContainer {
@@ -1232,9 +1303,7 @@ input:invalid {
         height: @base-unit;
     }
 }
-
 // Mark localized inputs with icon flag
-
 .input-localized {
     position: relative;
 
@@ -1256,9 +1325,7 @@ input:invalid {
         right: @base-unit * 1.5;
     }
 }
-
 // Info icon
-
 .info-icon {
     .btn-icon;
     cursor: default;
@@ -1273,12 +1340,10 @@ input:invalid {
         margin-top: 0;
     }
 }
-
 // Media selector form control
 .media-selector-image {
     padding-top: @padding-base-vertical;
 }
-
 // Form control used for changing the zone type
 .zone-type-change-warning {
     &.alert {
@@ -1286,12 +1351,10 @@ input:invalid {
         position: fixed;
     }
 }
-
 // Toggle button form control used as image alternative to checkbox
 .toggle-button .checkbox input + label {
     display: none;
 }
-
 // Textbox with placeholder
 &.Safari {
     .cms-input-group.cms-textwithplaceholder-container::before {
@@ -1306,8 +1369,8 @@ input:invalid {
     display: inline-block;
     padding: 5px 8px 4px;
     background-color: @color-gray-150;
-    border: 2px solid @color-gray-130;
-    border-radius: 3px 0 0 3px;
+    border: @input-border-width solid @color-gray-130;
+    border-radius: @input-border-radius 0 0 @input-border-radius;
 }
 
 .cms-input-group.cms-textwithplaceholder-container {

@@ -309,7 +309,6 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Security : CM
         usRoles.OnSelectionChanged += usRoles_OnSelectionChanged;
         usRoles.ObjectType = RoleInfo.OBJECT_TYPE;
         usRoles.UniGrid.OnLoadColumns += PrepareColumns;
-        usRoles.WhereCondition = "RoleGroupID IS NULL";
     }
 
 

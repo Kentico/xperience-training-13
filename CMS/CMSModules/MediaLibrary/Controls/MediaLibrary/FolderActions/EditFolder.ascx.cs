@@ -364,19 +364,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                     // Not a global admin
                     if (!currUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin))
                     {
-                        // Group library
-                        bool isGroupLibrary = (libInfo.LibraryGroupID > 0);
-                        if (!(isGroupLibrary && currUser.IsGroupAdministrator(libInfo.LibraryGroupID)))
+                        // Check 'CREATE' & 'MANAGE' permissions
+                        if (!(currUser.IsAuthorizedPerResource("CMS.MediaLibrary", PERMISSION_MANAGE) || MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(libInfo, "foldercreate")))
                         {
-                            // Checked resource name
-                            string resource = (isGroupLibrary) ? "CMS.Groups" : "CMS.MediaLibrary";
-
-                            // Check 'CREATE' & 'MANAGE' permissions
-                            if (!(currUser.IsAuthorizedPerResource(resource, PERMISSION_MANAGE) || MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(libInfo, "foldercreate")))
-                            {
-                                ShowError(MediaLibraryHelper.GetAccessDeniedMessage("foldercreate"));
-                                return null;
-                            }
+                            ShowError(MediaLibraryHelper.GetAccessDeniedMessage("foldercreate"));
+                            return null;
                         }
                     }
                 }
@@ -410,7 +402,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                     try
                     {
                         // Update info only if folder was renamed
-                        if (Path.EnsureSlashes(FolderPath) != Path.EnsureSlashes(mNewFolderPath))
+                        if (Path.EnsureForwardSlashes(FolderPath) != Path.EnsureForwardSlashes(mNewFolderPath))
                         {
                             if (Action.ToLowerCSafe().Trim() == "new")
                             {
@@ -535,7 +527,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
     /// </summary>
     private void UpdateFolderName()
     {
-        string safeFolderPath = Path.EnsureBackslashes(FolderPath);
+        string safeFolderPath = Path.EnsureSlashes(FolderPath);
         int folderNameStartIndex = safeFolderPath.LastIndexOfCSafe('\\') + 1;
         txtFolderName.Text = FolderPath.Substring(folderNameStartIndex);
     }
@@ -600,7 +592,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                         // Get new folder path
                         GetNewFolderPath(mustExist);
 
-                        if (Path.EnsureSlashes(FolderPath) != Path.EnsureSlashes(mNewFolderPath))
+                        if (Path.EnsureForwardSlashes(FolderPath) != Path.EnsureForwardSlashes(mNewFolderPath))
                         {
                             // Check if new folder doesn't exist yet
                             if (Directory.Exists(MediaLibraryInfoProvider.GetMediaLibraryFolderPath(siteName, DirectoryHelper.CombinePath(LibraryFolder, mNewFolderPath))))
@@ -625,7 +617,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         string trimFolderName = txtFolderName.Text.Trim();
         if (mustExist)
         {
-            string folderPath = Path.EnsureBackslashes(FolderPath);
+            string folderPath = Path.EnsureSlashes(FolderPath);
 
             mNewFolderPath = GetParentPath(folderPath) + trimFolderName;
             if (folderPath.LastIndexOfCSafe("\\") > 0)
@@ -663,7 +655,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
 
         // Ensure paths are in correct format
         mNewFolderPath = mNewFolderPath.TrimStart('\\');
-        mNewTreePath = Path.EnsureBackslashes(mNewTreePath.Replace("\\\\", "\\"));
+        mNewTreePath = Path.EnsureSlashes(mNewTreePath.Replace("\\\\", "\\"));
     }
 
 

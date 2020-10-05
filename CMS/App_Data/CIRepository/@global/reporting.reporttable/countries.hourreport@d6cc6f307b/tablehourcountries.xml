@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>181ec0f9-a70c-4048-a0df-f39d122fdd62</TableGUID>
+  <TableName>TableHourCountries</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+SELECT TOP 100 
+ StatisticsObjectName AS '{$reports_countries.name_header$}', 
+ SUM(HitsCount) AS '{$reports_countries.hits_header$}' 
+ FROM Analytics_Statistics
+ INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+ WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+ AND (StatisticsCode=@CodeName) 
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+ GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>countries.hourreport</CodeName>
+    <GUID>cb772c52-3c0d-40a0-a227-c7796c315567</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

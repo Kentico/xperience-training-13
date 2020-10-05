@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>2cd55af9-a297-4324-bf1f-861e8c11d6b6</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @GlobalObjects bit;
+SET @GlobalObjects = {%Settings.CMSStoreUseGlobalOrderStatus?1:0|(identity)GlobalAdministrator|(hash)efb41e29101daa006213bf4f2aaf0390d4d7d92b9b7dc2fd1bb4adf7f604ec65%};
+                      
+DECLARE @totalsum float;
+SET @totalsum = (SELECT ROUND(SUM(OrderGrandTotalInMainCurrency),1) 
+                 FROM COM_Order, COM_OrderStatus 
+                 WHERE 
+                    OrderSiteID = @CMSContextCurrentSiteID 
+                    AND OrderStatusID = StatusID
+                    AND ((StatusSiteID IS NULL AND @GlobalObjects = 1) OR (StatusSiteID = @CMSContextCurrentSiteID AND @GlobalObjects = 0))
+                    AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+                    AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL))
+
+SELECT 
+   StatusDisplayName AS '{$com.report.orderstatus$}',
+   CAST(ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}',
+   CAST(CAST(ISNULL(CASE WHEN @totalsum != 0 
+                         THEN ROUND(SUM(OrderGrandTotalInMainCurrency),1)/@totalsum*100  
+                         ELSE 0 END,0) AS DECIMAL(38,1)) AS VARCHAR(20)) + ' %' AS '{$reports_pageviews.percent_header$}'
+FROM 
+   COM_OrderStatus 
+   LEFT JOIN COM_Order 
+      ON OrderStatusID = StatusID 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+WHERE 
+   (StatusEnabled = 1 OR StatusID IN (SELECT OrderStatusID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND ((StatusSiteID IS NULL AND @GlobalObjects = 1) OR (StatusSiteID = @CMSContextCurrentSiteID AND @GlobalObjects = 0))
+GROUP BY 
+   StatusDisplayName, 
+   StatusOrder
+ORDER BY StatusOrder
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesByOrderStatus</CodeName>
+    <GUID>fe8c4b10-93d9-4b0a-93a9-6884f6344bdd</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

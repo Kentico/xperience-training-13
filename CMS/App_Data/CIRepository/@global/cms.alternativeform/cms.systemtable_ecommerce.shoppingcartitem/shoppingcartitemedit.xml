@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.shoppingcartitem</CodeName>
+    <GUID>936fda11-e521-4885-be89-a085f440ba4e</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="CartItemID" guid="ddd0b393-ea5e-46aa-89eb-16771b8249ed" isunique="true" visible="" />
+      <field column="ShoppingCartID" guid="109dea76-7132-4052-8d95-8247d6dc94bc" visible="" />
+      <field column="SKUID" guid="8ccf5472-5f5c-4bab-bf88-9256e8dcd515" visible="" />
+      <field allowempty="true" column="CartItemUnitPrice" columnprecision="9" columnsize="18" columntype="decimal" dummy="altform" guid="9052b53e-2c12-45b2-abdc-ce1f39d59092" system="true" visible="true" order="3">
+        <properties>
+          <contentafter>
+            <![CDATA[<span class="form-control-text">{%HTMLEncode(ParentObject.ShoppingCartCurrency.CurrencyCode)|(identity)GlobalAdministrator|(hash)76c375808c1a0002a2c4725570bed56eb150730c17bf8046a747d1838bdf127b%}</span>]]>
+          </contentafter>
+          <controlcellcssclass>form-inline</controlcellcssclass>
+          <fieldcaption>{$order_edit_additems.unitprice$}</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule errormsg="{$com.newproduct.skupricenotdouble$}">
+            <![CDATA[{%Rule("(Value >= 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>0</t><v>0</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="SKUUnits" guid="233f8ac2-2329-4188-8812-23aa0c4977f6" order="4">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$orderitemedit.skuunits$}</fieldcaption>
+          <validationerrormessage>{$OrderItemEdit.SKUUnitsNotPositiveInteger$}</validationerrormessage>
+        </properties>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value <= 999999", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>999999</t><v>999999</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+          <rule>
+            <![CDATA[{%Rule("Value >= 1", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>1</t><v>1</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="CartItemCustomData" guid="c6af4828-879f-4203-8298-373e12011dca" visible="" order="5" />
+      <field column="CartItemGuid" guid="ff1bdf4f-ec66-4d98-9e55-26a5608bcff0" visible="" order="6" />
+      <field column="CartItemParentGuid" guid="ed4485db-5dcc-4deb-a1c6-f3749f10a89a" visible="" order="7" />
+      <field column="CartItemBundleGUID" guid="1e524cb7-2e01-47e0-9777-72b346b9096a" order="8" />
+      <field column="CartItemText" guid="04f4bf42-57f4-43ae-ac44-27456e08a838" />
+      <field allowempty="true" column="CartItemTextArea" columntype="longtext" dummy="altform" guid="5ce3f158-55a0-4969-a3ca-89843d8fd50d" system="true" visible="true" order="10">
+        <properties>
+          <fieldcaption>{$com.optioncategorytype.textattribute$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%EditedObject.SKU.IsProductOption && EditedObject.SKU.SKUOptionCategory.CategorySelectionType == "TEXTAREA"|(identity)GlobalAdministrator|(hash)f1fd785333c061e9e94c76b5d9c5e3b5101a73497fc768df6f20392bc672935e%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextAreaControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+      <field allowempty="true" column="CartItemValidToLabel" columnsize="200" columntype="text" dummy="altform" guid="eea500b5-bcb9-41a2-8e22-9a68717f3998" system="true" visible="true" order="11">
+        <properties>
+          <fieldcaption>{$orderitemedit.validto$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%EditedObject.SKU.SKUProductType == "EPRODUCT"|(identity)GlobalAdministrator|(hash)509138dd23e08009a51acd21c19da6a3a3bb8d94568a05ecbb3a1ee1a60b724f%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>labelcontrol</controlname>
+        </settings>
+      </field>
+      <field column="CartItemValidTo" guid="660e66e6-bdef-4a26-b3bf-8273397d21a5" order="12" />
+      <field allowempty="true" column="CartItemTextBox" columnsize="200" columntype="text" dummy="altform" guid="e30f48ac-2531-4ee2-8d39-704fe3f5ec34" system="true" visible="true" order="13">
+        <properties>
+          <fieldcaption>{$com.optioncategorytype.textattribute$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%EditedObject.SKU.IsProductOption && EditedObject.SKU.SKUOptionCategory.CategorySelectionType == "TEXTBOX"|(identity)GlobalAdministrator|(hash)804e6d863445239113ee32c12f76312b08d8dd2cc8a441efee7d442da55050db%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="CartItemAutoAddedUnits" guid="2c8825e1-c6d0-4425-b400-7bd46fc41824" order="14" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Shopping Cart Item Edit</FormDisplayName>
+  <FormGUID>ddce0d22-7533-42fa-a735-30615816bcf5</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>ShoppingCartItemEdit</FormName>
+</cms.alternativeform>

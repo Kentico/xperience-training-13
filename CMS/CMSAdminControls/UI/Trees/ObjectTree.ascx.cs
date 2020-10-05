@@ -168,7 +168,7 @@ public partial class CMSAdminControls_UI_Trees_ObjectTree : CMSUserControl
             imagePath = "RTL/" + imagePath;
         }
 
-        treeElem.LineImagesFolder = GetImageUrl(imagePath, IsLiveSite, false);
+        treeElem.LineImagesFolder = GetImageUrl(imagePath, false);
 
         if (!RequestHelper.IsPostBack())
         {

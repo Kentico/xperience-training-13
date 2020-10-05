@@ -63,6 +63,7 @@ public partial class CMSModules_SmartSearch_FormControls_IndexTypeSelector : For
         {
             { GetString("smartsearch.indextype." + TreeNode.OBJECT_TYPE), TreeNode.OBJECT_TYPE },
             { GetString("smartsearch.indextype." + SearchHelper.GENERALINDEX), SearchHelper.GENERALINDEX },
+            { GetString("smartsearch.indextype." + SearchHelper.DOCUMENTS_CRAWLER_INDEX), SearchHelper.DOCUMENTS_CRAWLER_INDEX }
         };
 
         if (searchIndex?.IndexProvider.Equals(SearchIndexInfo.LUCENE_SEARCH_PROVIDER, StringComparison.OrdinalIgnoreCase) ?? false)
@@ -70,8 +71,7 @@ public partial class CMSModules_SmartSearch_FormControls_IndexTypeSelector : For
             items.Add(GetString("smartsearch.indextype." + UserInfo.OBJECT_TYPE), UserInfo.OBJECT_TYPE);
             items.Add(GetString("smartsearch.indextype." + CustomTableInfo.OBJECT_TYPE_CUSTOMTABLE), CustomTableInfo.OBJECT_TYPE_CUSTOMTABLE);
             items.Add(GetString("smartsearch.indextype." + SearchHelper.CUSTOM_SEARCH_INDEX), SearchHelper.CUSTOM_SEARCH_INDEX);
-            items.Add(GetString("smartsearch.indextype." + SearchHelper.DOCUMENTS_CRAWLER_INDEX), SearchHelper.DOCUMENTS_CRAWLER_INDEX);
-
+           
             // Allow on-line forms only if the module is available
             if ((ModuleManager.IsModuleLoaded(ModuleName.BIZFORM)))
             {

@@ -3,8 +3,8 @@
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DocumentEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
-using CMS.Membership;
 using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
@@ -12,9 +12,6 @@ using CMS.UIControls;
 
 public partial class CMSModules_Content_CMSDesk_View_View : CMSContentPage
 {
-    private const string COOKIE_POLICY_DETECTION_PATH = "/KenticoCookiePolicyCheck";
-    private const string COOKIE_POLICY_DETECTION_COOKIE_NAME = "KenticoCookiePolicyTest";
-
     #region "Variables & Properties"
 
     private string viewPage;
@@ -75,20 +72,6 @@ public partial class CMSModules_Content_CMSDesk_View_View : CMSContentPage
         editMenu.IsLiveSite = false;
 
         viewPage = DocumentUIHelper.GetViewPageUrl();
-        ucView.ViewPage = string.Empty;
-        ucView.RotateDevice = ValidationHelper.GetBoolean(CookieHelper.GetValue(CookieName.CurrentDeviceProfileRotate), false);
-
-        const string deviceRotateScript = @"
-$cmsj(document).ready(function () {
-    if (window.CMSDeviceProfile) {
-        CMSDeviceProfile.OnRotationFunction = (function() {
-            CMSView.InitializeFrame(CMSView.PreviewWidth, CMSView.PreviewHeight, !CMSView.Rotated);
-            CMSView.DeviceWindowResize();
-        });
-    }
-});";
-
-        ScriptHelper.RegisterStartupScript(this, typeof(string), "deviceRotateScript", deviceRotateScript, true);
 
         // Bind external buttons (i.e. Persona selector)
         var extensionTarget = editMenu as IExtensibleEditMenu;
@@ -97,7 +80,7 @@ $cmsj(document).ready(function () {
         // Preview link is not valid after going through workflow because DocumentWorkflowCycleGUID has changed
         if (Node != null)
         {
-            DocumentManager.OnAfterAction += (obj, args) => viewPage = Node.GetPreviewLink(MembershipContext.AuthenticatedUser.UserName, embededInAdministration: true);
+            DocumentManager.OnAfterAction += (obj, args) => viewPage = Node.GetPreviewLink(embededInAdministration: true);
         }
     }
 
@@ -119,58 +102,6 @@ $cmsj(document).ready(function () {
         });
 
         RegisterCookiePolicyDetection();
-    }
-
-
-    /// <summary>
-    /// Registers client scripts that display a message in case when the browser prevents iframe pages from setting cookies. The message informs user 
-    /// that the previewed page may not work properly as e.g. form submission requires CSRF token saved in cookie.
-    /// </summary>
-    private void RegisterCookiePolicyDetection()
-    {
-        var page = Node;
-        if (page == null && SiteInfoProvider.CombineWithDefaultCulture(CurrentSiteName))
-        {
-            // Preview shows page in default culture if combine is turned on
-            page = DocumentHelper.GetDocument(NodeID, CultureHelper.GetDefaultCultureCode(CurrentSiteName), null);
-        }
-
-        if (!(page?.HasUrl() ?? false))
-        {
-            return;
-        }
-
-        string cookieValue = Guid.NewGuid().ToString();
-        string sitePresentationUrl = GetPresentationUrl(page);
-        string sourceOrigin = GetOriginFromUrl(RequestContext.URL.ToString());
-        string targetOrigin = GetOriginFromUrl(sitePresentationUrl);
-        string iframeUrl = sitePresentationUrl + COOKIE_POLICY_DETECTION_PATH;
-        iframeUrl += QueryHelper.BuildQueryWithHash("origin", sourceOrigin, "cookieName", COOKIE_POLICY_DETECTION_COOKIE_NAME, "cookieValue", cookieValue);
-
-        ScriptHelper.RegisterRequireJs(this);
-
-        var moduleParameters = new
-        {
-            iframeUrl,
-            targetOrigin,
-            cookieName = COOKIE_POLICY_DETECTION_COOKIE_NAME,
-            cookieValue,
-            message = GetString("content.ui.preview.thirdpartycookiesblocked")
-        };
-
-        ScriptHelper.RegisterModule(this, "CMS/CookiePolicyDetection", moduleParameters);
-    }
-
-
-    private string GetPresentationUrl(TreeNode page)
-    {
-        return DocumentURLProvider.GetPresentationUrl(page.NodeSiteID, page.DocumentCulture);
-    }
-
-
-    private string GetOriginFromUrl(string url)
-    {
-        return Uri.TryCreate(url, UriKind.Absolute, out var uri) ? uri.GetLeftPart(UriPartial.Authority) : String.Empty;
     }
 
     #endregion

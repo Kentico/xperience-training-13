@@ -5,7 +5,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_CMSPages_SelectFolder_Footer : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_CMSPages_SelectFolder_Footer : CMSPage
 {
     protected override void OnInit(EventArgs e)
     {

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.user</CodeName>
+    <GUID>2e02c378-0f3d-45de-9b2d-b8cf2bd87b55</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>941c7e8f-fc31-4577-bb35-4bc1b3efaa18</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectrolesbymembership</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## ##COLUMNS## 
+FROM CMS_Role JOIN CMS_MembershipRole ON CMS_MembershipRole.RoleID = CMS_Role.RoleID 
+                       JOIN CMS_MembershipUser ON CMS_MembershipUser.MembershipID = CMS_MembershipRole.MembershipID                    
+                       WHERE ##WHERE## AND @UserID = CMS_MembershipUser.UserID ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

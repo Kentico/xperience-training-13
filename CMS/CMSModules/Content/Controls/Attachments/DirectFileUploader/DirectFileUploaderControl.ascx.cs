@@ -349,28 +349,8 @@ public partial class CMSModules_Content_Controls_Attachments_DirectFileUploader_
             {
                 if ((message == string.Empty) && (newAttachment != null))
                 {
-                    string url = null;
-                    string safeName = URLHelper.GetSafeFileName(newAttachment.AttachmentName, SiteContext.CurrentSiteName);
-                    if (node != null)
-                    {
-                        SiteInfo si = SiteInfo.Provider.Get(node.NodeSiteID);
-                        if (si != null)
-                        {
-                            bool usePermanent = AttachmentURLProvider.UsePermanentUrls(si.SiteName);
-                            if (usePermanent)
-                            {
-                                url = ResolveUrl(AttachmentURLProvider.GetAttachmentUrl(newAttachment.AttachmentGUID, safeName));
-                            }
-                            else
-                            {
-                                url = ResolveUrl(AttachmentURLProvider.GetAttachmentUrl(safeName, node.NodeAliasPath));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        url = ResolveUrl(AttachmentURLProvider.GetAttachmentUrl(newAttachment.AttachmentGUID, safeName));
-                    }
+                    var url = ResolveUrl(AttachmentURLProvider.GetAttachmentUrl(newAttachment.AttachmentGUID, newAttachment.AttachmentName));
+
                     // Calling javascript function with parameters attachments url, name, width, height
                     if (!string.IsNullOrEmpty(AfterSaveJavascript))
                     {

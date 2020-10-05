@@ -15,6 +15,8 @@ namespace XperienceAdapter.Services
 
         IPageRetriever PageRetriever { get; }
 
+        IPageAttachmentUrlRetriever PageAttachmentUrlRetriever { get; }
+
         ISiteCultureRepository SiteCultureRepository { get; }
     }
 }

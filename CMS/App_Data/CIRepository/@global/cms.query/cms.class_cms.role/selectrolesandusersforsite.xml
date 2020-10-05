@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.Role</CodeName>
+    <GUID>1dba5a45-954e-442c-8a00-41927c501f2b</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>4ec5d38d-3a3e-43c4-a9f1-618fca3b44bf</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>SelectRolesAndUsersForSite</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[SELECT * FROM (SELECT 'U' + CAST(CMS_User.UserID AS nvarchar(50)) AS OperatorID, FullName + ' (' + CMS_User.UserName + ')' AS OperatorName, CMS_User.UserIsHidden AS Hidden, NULL AS RoleName FROM CMS_User, CMS_UserSite WHERE (CMS_User.UserName LIKE @Search OR CMS_User.FullName LIKE @Search) AND (CMS_User.UserID = CMS_UserSite.UserID AND CMS_UserSite.SiteID=@SiteID) UNION SELECT 'R' + CAST(RoleID AS nvarchar(50)) AS OperatorID, RoleDisplayName AS OperatorName, 0 AS Hidden, RoleName AS RoleName FROM CMS_Role WHERE RoleDisplayName LIKE @Search AND SiteID = @SiteID) AS Operators WHERE ##WHERE## ORDER BY OperatorName]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

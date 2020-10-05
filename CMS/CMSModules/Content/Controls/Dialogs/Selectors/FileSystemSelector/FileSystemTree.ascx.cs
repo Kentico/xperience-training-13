@@ -72,7 +72,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
         }
         set
         {
-            mDefaultPath = Path.EnsureBackslashes(value);
+            mDefaultPath = Path.EnsureSlashes(value);
             ViewState["TreeDefaultPath"] = mDefaultPath;
         }
     }
@@ -356,7 +356,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
 
         var imagesPath = CultureHelper.IsUICultureRTL() ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree";
 
-        treeFileSystem.LineImagesFolder = GetImageUrl(imagesPath, IsLiveSite, true);
+        treeFileSystem.LineImagesFolder = GetImageUrl(imagesPath, true);
 
         treeFileSystem.ImageSet = TreeViewImageSet.Custom;
         treeFileSystem.ExpandImageToolTip = GetString("ContentTree.Expand");

@@ -4,10 +4,9 @@ using System.Web.UI.WebControls;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
+using CMS.DocumentEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
-using CMS.Membership;
-using CMS.PortalEngine;
 
 
 /// <summary>
@@ -117,7 +116,7 @@ public partial class CMSFormControls_Layouts_PageLayoutCode : FormEngineUserCont
         values[0, 0] = CodeColumn;
         values[0, 1] = tbLayoutCode.Text;
         values[1, 0] = TypeColumn;
-        values[1, 1] = drpType.SelectedValue == null ? TransformationTypeEnum.Ascx.ToStringRepresentation() : drpType.SelectedValue.ToLowerCSafe();
+        values[1, 1] = drpType.SelectedValue == null ? "ascx" : drpType.SelectedValue.ToLowerCSafe();
 
         return values;
     }
@@ -133,7 +132,7 @@ public partial class CMSFormControls_Layouts_PageLayoutCode : FormEngineUserCont
         var items = drpType.Items;
         if (items.Count == 0)
         {
-            items.Add(new ListItem(TransformationTypeEnum.Ascx.ToLocalizedString("TransformationType"), TransformationTypeEnum.Ascx.ToStringRepresentation()));
+            items.Add(new ListItem(GetString("TransformationType.ascx"), "ascx"));
             items.Add(new ListItem(TransformationTypeEnum.Html.ToLocalizedString("TransformationType"), TransformationTypeEnum.Html.ToStringRepresentation()));
         }
     }
@@ -152,7 +151,6 @@ public partial class CMSFormControls_Layouts_PageLayoutCode : FormEngineUserCont
         if (drpType.SelectedIndex == 0)
         {
             items.Add(new ListItem(GetString("PageLayout.ConditionalElement"), "cl"));
-            items.Add(new ListItem(GetString("PageLayout.DeviceElement"), "dl"));
             items.Add(new ListItem(GetString("PageLayout.ZoneElement"), "wpz"));
             drpElements.SelectedIndex = 2;
         }
@@ -186,10 +184,6 @@ function InsertLayoutElement()
             idDefault = 'ConditionLayout';
             break;    
 
-        case 'dl':
-            elem = '<cms:CMSDeviceLayout runat=""server"" ID=""#"" VisibleForDeviceProfiles="""" ></cms:CMSDeviceLayout>';
-            idDefault = 'DeviceLayout';
-            break;    
     }
     
     cedit.replaceSelection(elem.replace('#',idDefault)); 

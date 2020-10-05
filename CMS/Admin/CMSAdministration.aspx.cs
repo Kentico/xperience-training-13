@@ -147,10 +147,10 @@ public partial class Admin_CMSAdministration : CMSDeskPage
             int level = ValidationHelper.GetInteger(drv["ElementLevel"], -1);
             bool isCategory = (level == 2);
 
-            // Set placeholder based by category or application 
+            // Set placeholder based by category or application
             String placeholderId = isCategory ? "plcCategoryTemplate" : "plcItemTemplate";
 
-            // If current item is category then make visible appropriate placeholder to render category template. Otherwise make visible placeholder that renders item template           
+            // If current item is category then make visible appropriate placeholder to render category template. Otherwise make visible placeholder that renders item template
             Control c = item.FindControl(placeholderId);
             if (c != null)
             {
@@ -181,16 +181,14 @@ public partial class Admin_CMSAdministration : CMSDeskPage
         DataSet ds = ApplicationUIHelper.LoadApplications();
         DataSet filteredDataSet = ApplicationUIHelper.FilterApplications(ds, CurrentUser, true);
 
-        if ((filteredDataSet != null) && !DataHelper.DataSourceIsEmpty(filteredDataSet))
+        if (filteredDataSet != null && !DataHelper.DataSourceIsEmpty(filteredDataSet))
         {
             // Create grouped data source
-            GroupedDataSource gds = new GroupedDataSource(filteredDataSet, "ElementParentID", "ElementLevel");
-            appListUniview.DataSource = gds;
+            appListUniview.DataSource = new GroupedDataSource(filteredDataSet, "ElementParentID", "ElementLevel");
             appListUniview.ReloadData(true);
         }
 
-        SiteInfo si = SiteContext.CurrentSite;
-        if ((si != null) && (!si.SiteIsOffline))
+        if (SiteContext.CurrentSite != null)
         {
             SetupLiveSiteLink();
         }

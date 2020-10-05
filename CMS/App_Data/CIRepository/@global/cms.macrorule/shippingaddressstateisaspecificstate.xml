@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.macrorule>
+  <MacroRuleAvailability>0</MacroRuleAvailability>
+  <MacroRuleCondition>
+    <![CDATA[{_is}(ShippingAddress.AddressState.StateName == "{state}") ]]>
+  </MacroRuleCondition>
+  <MacroRuleDescription />
+  <MacroRuleDisplayName>Shipping address state is</MacroRuleDisplayName>
+  <MacroRuleEnabled>True</MacroRuleEnabled>
+  <MacroRuleGUID>323e2616-dc4b-4db9-b30a-5aa5b7afbd4e</MacroRuleGUID>
+  <MacroRuleIsCustom>False</MacroRuleIsCustom>
+  <MacroRuleName>ShippingAddressStateIsASpecificState</MacroRuleName>
+  <MacroRuleParameters>
+    <form version="2">
+      <field allowempty="true" column="_is" columnsize="100" columntype="text" guid="0f4f3155-d342-4e34-9d11-549e7cff9776" visible="true">
+        <properties>
+          <defaultvalue>;is</defaultvalue>
+          <fieldcaption>select operation</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>macronegationoperator</controlname>
+          <Options>
+<![CDATA[
+;is
+!;is not
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+        </settings>
+      </field>
+      <field allowempty="true" column="state" columnsize="200" columntype="text" guid="b2eaebd9-419d-43a3-a805-b3189ae133e2" visible="true">
+        <properties>
+          <fieldcaption>select state</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Query>
+<![CDATA[
+SELECT StateName, StateDisplayName
+FROM CMS_State
+]]>
+          </Query>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+    </form>
+  </MacroRuleParameters>
+  <MacroRuleRequiredData />
+  <MacroRuleRequiresContext>False</MacroRuleRequiresContext>
+  <MacroRuleResourceName>com.orderdiscount</MacroRuleResourceName>
+  <MacroRuleText>Shipping address state {_is} {state}</MacroRuleText>
+</cms.macrorule>

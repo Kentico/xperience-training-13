@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Top % Contacts</TableDisplayName>
+  <TableGUID>ceb31edd-8103-4a30-9dd4-3accde62c4e0</TableGUID>
+  <TableName>TopPctContacts</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT TOP (@SelectTopNPct) PERCENT 
+	SUM(OM_ScoreContactRule.Value) as [{$om.score$}],
+	ContactFirstName as [{$om.contact.firstname$}], 
+	ContactLastName as [{$om.contact.lastname$}], 
+        ContactEmail as [{$general.email$}],
+        ContactStatusName as [{$om.contactstatus$}]
+
+FROM OM_Contact
+LEFT JOIN OM_ContactStatus ON OM_Contact.ContactStatusID = OM_ContactStatus.ContactStatusID
+INNER JOIN OM_ScoreContactRule ON OM_Contact.ContactID = OM_ScoreContactRule.ContactID
+INNER JOIN OM_Score ON OM_ScoreContactRule.ScoreID = OM_Score.ScoreID
+INNER JOIN OM_Rule ON OM_ScoreContactRule.RuleID = OM_Rule.RuleID
+
+WHERE
+  OM_Score.ScoreEnabled = 1
+  AND
+  OM_Score.ScorePersonaID IS NULL
+  AND
+  (@ScoreID = -1 OR OM_Score.ScoreID = @ScoreID)
+
+GROUP BY OM_Contact.ContactID, ContactFirstName, ContactLastName, ContactEmail, ContactStatusName
+ORDER BY [{$om.score$}] DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>TopPctContactsByScore</CodeName>
+    <GUID>5b1ccae7-70e4-483c-8099-107bec889eea</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

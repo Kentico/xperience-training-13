@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphDisplayName>visitors</GraphDisplayName>
+  <GraphGUID>22a3e2fe-0360-415b-ada9-1e1d726205c0</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>GraphMonthVisitors</GraphName>
+  <GraphQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+ 
+ SELECT [Date] AS StartTime ,T1.Hits FROM
+  {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'month') AS Dates   
+  LEFT JOIN
+  (SELECT HitsStartTime AS StartTime,SUM(HitsCount) AS hits
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_MonthHits ON Analytics_MonthHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE 
+  (StatisticsSiteID = @CMSContextCurrentSiteID)  AND
+  ((StatisticsCode = @FirstCategory) OR (StatisticsCode = @SecondCategory))  
+  GROUP BY HitsStartTime) AS T1
+  ON T1.StartTime = [Date]
+  ORDER BY [Date]
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>visitors.monthreport</CodeName>
+    <GUID>340c5b68-09b6-47ea-9de4-d1fb8b6a7214</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>true</exportenabled>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{y}  -  #SER: #VALY</seriesitemtooltip>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisangle>0</xaxisangle>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisformat>y</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_months$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$reports_visits.label_numofvisits$}</GraphYAxisTitle>
+</reporting.reportgraph>

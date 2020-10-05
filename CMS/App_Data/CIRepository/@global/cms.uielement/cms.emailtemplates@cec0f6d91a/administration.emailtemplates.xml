@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>{$administration.ui.emailtemplates$}</ElementCaption>
+  <ElementCheckModuleReadPermission>True</ElementCheckModuleReadPermission>
+  <ElementDescription>{$administration.ui.emailtemplatesdescription$}</ElementDescription>
+  <ElementDisplayName>{$administration.ui.emailtemplates.global$}</ElementDisplayName>
+  <ElementFromVersion>7.0</ElementFromVersion>
+  <ElementGUID>c1dff926-1ff4-4900-8f87-1590eb7a850c</ElementGUID>
+  <ElementIconClass>icon-app-email-templates</ElementIconClass>
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>Administration.EmailTemplates</ElementName>
+  <ElementOrder>4</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>ListingWithSiteSelector</CodeName>
+    <GUID>ad73ab07-caed-4e21-b897-90544d6e06f1</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>development</CodeName>
+    <GUID>f6ccbd3d-3fd8-4d8e-b7a1-f6f6385e8b95</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS</CodeName>
+      <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <data>
+      <displaybreadcrumbs>False</displaybreadcrumbs>
+      <descriptionlink>email_templates_managing</descriptionlink>
+      <allowglobal>True</allowglobal>
+      <objecttype>cms.emailtemplate</objecttype>
+      <extenderclassname>EmailTemplateListExtender</extenderclassname>
+      <includejquery>False</includejquery>
+      <allowall>False</allowall>
+      <wherecondition>
+<![CDATA[
+{% System.FormatId(UIContext.SiteID, " EmailTemplateSiteID ={0}", " EmailTemplateSiteID IS NULL") |(identity)GlobalAdministrator|(hash)8a98ac9fced6fe6e13f1d832b9d620710a6e9b3fb43308d18535348e84ecc502%}
+	
+]]>
+      </wherecondition>
+      <siteid>
+        <![CDATA[{% CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) ? (QueryString.SiteID != null? ToInt(QueryString.SiteID) : SiteContext.CurrentSiteID) : SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)a4ff623eebf62ec42f78aae1b9b5efac9f07974d9fbc274ece845dea7e53b2e5%}]]>
+      </siteid>
+      <siteselectorvisibility>
+        <![CDATA[{% CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) |(identity)GlobalAdministrator|(hash)e1168d43cf702d6b60c2fb03dc5ba68a701ddfeeff0a812c502cc089d31c7b35%}]]>
+      </siteselectorvisibility>
+      <selectortype>Classic</selectortype>
+      <gridextender>App_Code</gridextender>
+    </data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS.EmailTemplates</CodeName>
+    <GUID>0918154f-3c60-4ac5-8413-c2b4bd619cd0</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+</cms.uielement>

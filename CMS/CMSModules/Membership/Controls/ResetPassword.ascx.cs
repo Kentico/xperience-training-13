@@ -211,6 +211,10 @@ public partial class CMSModules_Membership_Controls_ResetPassword : CMSUserContr
 
                     // Delete it from user info
                     ui.UserPasswordRequestHash = null;
+
+                    // Invalidate JSON Web Token for user
+                    AuthenticationHelper.RegenerateAuthenticationGuid(ui, saveObject: false);
+
                     UserInfo.Provider.Set(ui);
 
                     break;

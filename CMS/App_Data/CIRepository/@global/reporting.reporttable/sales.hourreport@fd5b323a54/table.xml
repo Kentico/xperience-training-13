@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>a765e078-d500-4692-afe2-6a760a35e55d</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+IF @FromDate <= @ToDate
+BEGIN
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+
+SELECT 
+   [Date] AS '{$ecommerce.report_hour$}',  
+   CAST(SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}'  
+FROM
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'hour') AS Dates
+   LEFT JOIN COM_Order  
+      ON ([Date] <= OrderDate  AND  DATEADD(HOUR,1,[Date]) > OrderDate) 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+GROUP BY [Date]
+ORDER BY [Date] DESC
+END
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Sales.HourReport</CodeName>
+    <GUID>baf1be2c-d83c-4f21-99f4-3a4cdfb8cba8</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

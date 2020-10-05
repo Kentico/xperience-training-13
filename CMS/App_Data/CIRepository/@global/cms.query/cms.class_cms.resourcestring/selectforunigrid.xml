@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.ResourceString</CodeName>
+    <GUID>77097669-a269-4702-af21-8896af411555</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>b56e95ab-5979-4d42-8794-8f887b838929</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>SelectForUniGrid</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[SELECT ##TOPN## ##COLUMNS## FROM (SELECT resourceStrings1.StringKey, resourceStrings1.StringIsCustom, CAST(defaultLanguage.TranslationText AS nvarchar(4000)) AS DefaultText, CAST(cultureLanguage.TranslationText AS nvarchar(4000)) AS CultureText  FROM CMS_ResourceTranslation AS defaultLanguage INNER JOIN CMS_ResourceString AS resourceStrings1 ON resourceStrings1.StringID = defaultLanguage.TranslationStringID LEFT OUTER JOIN CMS_ResourceTranslation AS cultureLanguage ON defaultLanguage.TranslationStringID = cultureLanguage.TranslationStringID AND (cultureLanguage.TranslationCultureID IS NULL OR cultureLanguage.TranslationCultureID = @Culture) WHERE (defaultLanguage.TranslationCultureID = @DefaultCultureID)  UNION SELECT resourceStrings2.StringKey,  resourceStrings2.StringIsCustom, CAST(defaultLanguage.TranslationText AS nvarchar(4000)) AS DefaultText, CAST(cultureLanguage.TranslationText AS nvarchar(4000)) AS CultureText  FROM CMS_ResourceTranslation AS cultureLanguage INNER JOIN CMS_ResourceString AS resourceStrings2 ON resourceStrings2.StringID = cultureLanguage.TranslationStringID LEFT OUTER JOIN CMS_ResourceTranslation AS defaultLanguage ON defaultLanguage.TranslationStringID = cultureLanguage.TranslationStringID AND defaultLanguage.TranslationCultureID IS NULL WHERE (cultureLanguage.TranslationCultureID = @Culture) AND (NOT EXISTS (SELECT TranslationID, TranslationStringID, TranslationCultureID, CAST(TranslationText AS nvarchar(4000)) AS Expr1 FROM CMS_ResourceTranslation WHERE (TranslationCultureID = @DefaultCultureID) AND (TranslationStringID = cultureLanguage.TranslationStringID))) UNION SELECT StringKey, StringIsCustom, NULL AS DefaultText, NULL AS CultureText FROM CMS_ResourceString WHERE (StringID NOT IN (SELECT TranslationStringID FROM CMS_ResourceTranslation AS CMS_ResourceTranslation_1 WHERE (TranslationCultureID = @Culture) OR (TranslationCultureID = @DefaultCultureID)))) AS StringInfoRows WHERE ##WHERE## ORDER BY ##ORDERBY##]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

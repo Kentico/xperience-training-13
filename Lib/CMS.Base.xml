@@ -546,6 +546,62 @@
             Fires events for handling the end of the request.
             </summary>
         </member>
+        <member name="T:CMS.Base.Internal.IJwtTokenService">
+            <summary>
+            Provides methods for issuing, validation and parsing 'JSON Web Token' (JWT).
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IJwtTokenService.Audience">
+            <summary>
+            Audience of the JWT token.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IJwtTokenService.Issuer">
+            <summary>
+            Issuer of the JWT token.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IJwtTokenService.TokenEncryption">
+            <summary>
+            Indicates if token will be encrypted.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IJwtTokenService.IssueToken(System.String,System.DateTime,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Nullable{System.DateTime})">
+            <summary>
+            Creates and serializes the JWT token.
+            </summary>
+            <param name="userName">User name (the principal that is the subject of the JWT).</param>
+            <param name="validTo">Expiration date of the JWT token.</param>
+            <param name="customClaims">Custom JWT token claims</param>
+            <param name="validFrom">The valid-from date specifies the time the JWT token becomes effective.</param>
+            <returns>Serialized the JWT token.</returns>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="userName"/> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Throw when <paramref name="validTo"/> is in the past.</exception>
+        </member>
+        <member name="M:CMS.Base.Internal.IJwtTokenService.TryParseToken(System.String,System.Security.Claims.ClaimsPrincipal@,System.Boolean@)">
+            <summary>
+            Parses and validates a JWT token provided by <paramref name="tokenString"/> parameter.
+            </summary>
+            <param name="tokenString">Token string encoded as JWE or JWS.</param>
+            <param name="claimsPrincipal">Claims-based identity parsed from token.</param>
+            <param name="tokenExpired">Returns <c>True</c> when <paramref name="tokenString"/> has expiration time in the past.</param>
+            <returns>Returns <c>True</c> whether the operation succeeded.</returns>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="tokenString"/> is null or whitespace.</exception>
+        </member>
+        <member name="T:CMS.Base.Internal.IJwtTokenServiceFactory">
+            <summary>
+            Represents a factory for <see cref="T:CMS.Base.Internal.IJwtTokenService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Internal.IJwtTokenServiceFactory.GetJwtTokenService(System.String,System.String,System.Boolean)">
+            <summary>
+            Returns new instance of JWT token service.
+            </summary>
+            <param name="issuer">Issuer of the JWT token.</param>
+            <param name="audience">Audience of the JWT token.</param>
+            <param name="tokenEncryption">Indicates if token will be encrypted.</param>
+            <returns>JWT token service.</returns>
+        </member>
         <member name="T:CMS.Base.Internal.DefaultHttpContextRetriever">
             <summary>
             Implementation if <see cref="T:CMS.Base.Internal.IHttpContextRetriever"/> that always returns
@@ -799,11 +855,6 @@
             Represents <see cref="T:CMS.Base.Internal.IRequest"/> and <see cref="T:CMS.Base.Internal.IResponse"/> headers
             </summary>
         </member>
-        <member name="P:CMS.Base.Internal.IHeaderDictionary.ContentLength">
-            <summary>
-            Gets and sets the "Content-Length" header value.
-            </summary>
-        </member>
         <member name="T:CMS.Base.Internal.IHttpApplication">
             <summary>
             Defines methods for request pipeline processing.
@@ -895,6 +946,16 @@
         <member name="P:CMS.Base.Internal.IHttpCookie.Path">
             <summary>
             Gets or sets the virtual path to transmit with the current cookie.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IHttpCookie.SameSite">
+            <summary>
+            Gets or sets the value of the cookie's same site attribute.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IHttpCookie.Secure">
+            <summary>
+            Gets or sets the value of the cookie's secure attribute.
             </summary>
         </member>
         <member name="T:CMS.Base.Internal.IHttpCookieCollection">
@@ -1081,6 +1142,11 @@
         <member name="P:CMS.Base.Internal.IResponse.StatusCode">
             <summary>
             Gets or sets the HTTP status code of the output that is returned to the client.
+            </summary>
+        </member>
+        <member name="P:CMS.Base.Internal.IResponse.ContentType">
+            <summary>
+            Gets content type of the current response or null if not set.
             </summary>
         </member>
         <member name="P:CMS.Base.Internal.IResponse.Cookies">
@@ -1992,6 +2058,13 @@
             <summary>
             CMS version
             </summary>
+        </member>
+        <member name="P:CMS.Base.CMSVersion.DevelopmentModel">
+            <summary>
+            Get the value that indicates current development model.
+            </summary>
+            <remarks>This property should not be used directly by custom code.</remarks>
+            <exclude />
         </member>
         <member name="P:CMS.Base.CMSVersion.HotfixVersion">
             <summary>
@@ -3292,6 +3365,7 @@
             </summary>
             <param name="dataRecord">Data record to initialize the container with.</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="dataRecord"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="dataRecord"/> contains duplicate column names.</exception>
         </member>
         <member name="M:CMS.Base.DataRecordContainer.ContainsColumn(System.String)">
             <summary>
@@ -4271,11 +4345,6 @@
             User of the context.
             </summary>
         </member>
-        <member name="P:CMS.Base.CMSActionContext.IsLiveSite">
-            <summary>
-            Indicates whether the currently running code executes on the live site.
-            </summary>
-        </member>
         <member name="P:CMS.Base.CMSActionContext.LogSynchronization">
             <summary>
             Indicates if the staging tasks should be logged.
@@ -4391,11 +4460,6 @@
             Indicates whether a user activity points should be updated.
             </summary>
         </member>
-        <member name="P:CMS.Base.CMSActionContext.UpdateRating">
-            <summary>
-            Indicates whether a user activity points should be updated.
-            </summary>
-        </member>
         <member name="P:CMS.Base.CMSActionContext.AllowLicenseRedirect">
             <summary>
             Indicates whether a redirect is allowed in case the license check fails. If not, an exception is thrown instead.
@@ -4439,11 +4503,6 @@
         <member name="P:CMS.Base.CMSActionContext.CurrentUser">
             <summary>
             Current user of the context.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.CMSActionContext.CurrentIsLiveSite">
-            <summary>
-            Indicates whether the currently running code executes on the live site.
             </summary>
         </member>
         <member name="P:CMS.Base.CMSActionContext.CurrentLogSynchronization">
@@ -4561,11 +4620,6 @@
             Indicates whether a user activity points should be updated.
             </summary>
         </member>
-        <member name="P:CMS.Base.CMSActionContext.CurrentUpdateRating">
-            <summary>
-            Indicates whether a rating should be updated.
-            </summary>
-        </member>
         <member name="P:CMS.Base.CMSActionContext.CurrentAllowLicenseRedirect">
             <summary>
             Indicates whether a redirect is allowed in case the license check fails. If not, an exception is thrown instead.
@@ -4661,11 +4715,6 @@
         <member name="M:CMS.Base.CMSActionContext.GetCurrentSite">
             <summary>
             Gets the current site from context
-            </summary>
-        </member>
-        <member name="M:CMS.Base.CMSActionContext.GetCurrentIsLiveSite">
-            <summary>
-            Gets the current live site flag from the context
             </summary>
         </member>
         <member name="M:CMS.Base.CMSActionContext.CloneForNewThread">
@@ -4799,11 +4848,6 @@
             </summary>
         </member>
         <member name="P:CMS.Base.ExtendedActionContext`1.UpdateUserCounts">
-            <summary>
-            Indicates whether a user activity points should be updated.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.ExtendedActionContext`1.UpdateRating">
             <summary>
             Indicates whether a user activity points should be updated.
             </summary>
@@ -4982,11 +5026,6 @@
             Debug everything?
             </summary>
         </member>
-        <member name="F:CMS.Base.DebugHelper.mDebugEverythingLive">
-            <summary>
-            Debug everything live?
-            </summary>
-        </member>
         <member name="F:CMS.Base.DebugHelper.mDebugAllForEverything">
             <summary>
             Debug everything on all pages?
@@ -5017,11 +5056,6 @@
             If false, pages with Import/Export are excluded from debugs.
             </summary>
         </member>
-        <member name="F:CMS.Base.DebugHelper.mShowDebugOnLiveSite">
-            <summary>
-            If true all debugs are disabled.
-            </summary>
-        </member>
         <member name="F:CMS.Base.DebugHelper.mExcludedMethods">
             <summary>
             The table of the method excluded from stack trace.
@@ -5040,11 +5074,6 @@
         <member name="F:CMS.Base.DebugHelper.mAnyDebugEnabled">
             <summary>
             If true, at least one debug is enabled.
-            </summary>
-        </member>
-        <member name="F:CMS.Base.DebugHelper.mAnyLiveDebugEnabled">
-            <summary>
-            If true, some debug is enabled on live site.
             </summary>
         </member>
         <member name="F:CMS.Base.DebugHelper.mRegisteredDebugs">
@@ -5092,16 +5121,6 @@
             Returns true if any debug has the logging to file enabled.
             </summary>
         </member>
-        <member name="P:CMS.Base.DebugHelper.AnyLiveDebugEnabled">
-            <summary>
-            Returns true if any LiveDebug is enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.Base.DebugHelper.ShowDebugOnLiveSite">
-            <summary>
-            If true, the debug control are allowed in the live site view
-            </summary>
-        </member>
         <member name="P:CMS.Base.DebugHelper.DebugDisabled">
             <summary>
             Indicates whether all debugs are disabled.
@@ -5135,11 +5154,6 @@
         <member name="P:CMS.Base.DebugHelper.DebugEverything">
             <summary>
             Debug Everything?
-            </summary>
-        </member>
-        <member name="P:CMS.Base.DebugHelper.DebugEverythingLive">
-            <summary>
-            Debug Everything live?
             </summary>
         </member>
         <member name="P:CMS.Base.DebugHelper.DebugAllForEverything">
@@ -5646,11 +5660,6 @@
             If true, the debug is enabled
             </summary>
         </member>
-        <member name="P:CMS.Base.DebugSettings.Live">
-            <summary>
-            If true, the live pages are debugged
-            </summary>
-        </member>
         <member name="P:CMS.Base.DebugSettings.All">
             <summary>
             Debug on all pages, including the UI and preview pages.
@@ -5914,6 +5923,26 @@
             accessing the input stream via opening of a new stream
             and the input stream must be accessed via <see cref="P:CMS.Base.IUploadedFile.InputStream"/> property.
             </exception>
+        </member>
+        <member name="T:CMS.Base.SameSiteMode">
+            <summary>
+            Enum containing constants that indicate the value for the SameSite attribute of a cookie.
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SameSiteMode.None">
+            <summary>
+            The cookie will be sent with all requests.
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SameSiteMode.Lax">
+            <summary>
+            The cookie will be sent with "same-site" requests, and with "cross-site" top level navigation.
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SameSiteMode.Strict">
+            <summary>
+            The cookie will only be sent along with "same-site" requests.
+            </summary>
         </member>
         <member name="T:CMS.Base.ContextItemsDictionary`2">
             <summary>
@@ -8879,7 +8908,7 @@
         </member>
         <member name="P:CMS.Base.IUserInfo.UserAuthenticationGUID">
             <summary>
-            Temporary GUID for user identification for automatic sign-in in the CMS Desk.
+            Represents a secret for invalidating JSON Web Tokens.
             </summary>
         </member>
         <member name="P:CMS.Base.IUserInfo.UserIsExternal">
@@ -10773,6 +10802,32 @@
             Adds this instance to the table with routes to Kentico HTTP handlers.
             </summary>
         </member>
+        <member name="T:CMS.Base.SiteDevelopmentModelEnum">
+            <summary>
+            Development models
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:CMS.Base.SiteDevelopmentModelEnum.Unknown">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SiteDevelopmentModelEnum.Admin">
+            <summary>
+            Administration instance
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SiteDevelopmentModelEnum.MVC">
+            <summary>
+            MVC model
+            </summary>
+        </member>
+        <member name="F:CMS.Base.SiteDevelopmentModelEnum.Core">
+            <summary>
+            .NET Core model
+            </summary>
+        </member>
         <member name="T:CMS.Base.CMSString">
             <summary>
             Helper (replace) methods for string class
@@ -11100,7 +11155,7 @@
         </member>
         <member name="P:CMS.Base.SystemContext.IsPrecompiledWebsite">
             <summary>
-            Returns true if the website is precompiled (checks existence of codebehind file of PortalTemplate).
+            Returns true if the website is precompiled (checks existence of codebehind file of Logon page).
             </summary>
         </member>
         <member name="P:CMS.Base.SystemContext.ServerName">

@@ -65,7 +65,7 @@ public partial class CMSModules_Ecommerce_FormControls_OptionCategoryProductOpti
     {
         get
         {
-            return ValidationHelper.GetString(ViewState["PreviouslySelectedSelectionType"], "").ToEnum<OptionCategorySelectionTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<OptionCategorySelectionTypeEnum>(ValidationHelper.GetString(ViewState["PreviouslySelectedSelectionType"], ""));
         }
         set
         {
@@ -375,7 +375,7 @@ public partial class CMSModules_Ecommerce_FormControls_OptionCategoryProductOpti
             // Selection type
             if (Form.FieldControls.Contains(OptionCategorySelectionTypeColumn))
             {
-                SelectionType = ValidationHelper.GetString(Form.FieldControls[OptionCategorySelectionTypeColumn].Value, "").ToEnum<OptionCategorySelectionTypeEnum>();
+                SelectionType = EnumStringRepresentationExtensions.ToEnum<OptionCategorySelectionTypeEnum>(ValidationHelper.GetString(Form.FieldControls[OptionCategorySelectionTypeColumn].Value, ""));
             }
         }
     }

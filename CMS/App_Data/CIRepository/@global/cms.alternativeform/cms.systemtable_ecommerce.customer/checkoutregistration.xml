@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.customer</CodeName>
+    <GUID>cd867311-743a-4599-ba72-5fe29b1c4a9c</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="CustomerID" guid="96c3731e-c8dc-4bb7-b692-120b5e92e67d" />
+      <field allowempty="true" column="AccountType" columnsize="20" columntype="text" dummy="altform" guid="0686b07f-02c3-41b9-8465-da8d195254b4" hasdependingfields="true" system="true" visible="true" order="1">
+        <properties>
+          <contentbefore>
+<![CDATA[
+<script type=""text/javascript"">
+
+var element;
+
+function pageLoad(sender, args) {
+  Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequest);
+  element = $cmsj('#TaxAdjustingField input[type=text]');
+  element._hasFocusLost = false;
+}
+
+function endRequest(sender, args) {
+  if(!element._hasFocusLost)
+  {
+    element._hasFocusLost = true;
+    $cmsj(element).focusout(function() {   
+      __doPostBack(element.attr('name'), '');       
+    })
+  }
+}
+
+</script>
+]]>
+          </contentbefore>
+          <defaultvalue>Personal</defaultvalue>
+          <fieldcaption>{$com.customer.accounttype$}</fieldcaption>
+          <fielddescription>{$com.customer.accounttype.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>RadioButtonsControl</controlname>
+          <Options>
+<![CDATA[
+Personal
+Company
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Table</RepeatLayout>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="CustomerCompany" dependsonanotherfield="true" guid="0b263893-c00f-44f7-a36d-ca0449ac9f0a" visible="true" order="2">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.companyname$}</fieldcaption>
+          <fielddescription>{$com.customer.companyname.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%AccountType.Value == "Company"|(identity)GlobalAdministrator|(hash)f9ecc70cd2fb93908b30f277b74ff27a8f00fee86b5e1bd1cb11669be029dc9e%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="CustomerOrganizationID" guid="e7df891f-ea59-4add-876b-69d4a619ac12" visible="true" order="3">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.customer.organizationid$}</fieldcaption>
+          <fielddescription>{$com.customer.organizationid.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%AccountType.Value == "Company"|(identity)GlobalAdministrator|(hash)f9ecc70cd2fb93908b30f277b74ff27a8f00fee86b5e1bd1cb11669be029dc9e%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="CustomerTaxRegistrationID" guid="873dce9d-ee95-4793-a1ed-963a3feeee42" visible="true" order="4">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <contentafter>
+<![CDATA[
+</div>
+
+
+]]>
+          </contentafter>
+          <contentbefore>
+<![CDATA[
+<div id="TaxAdjustingField">
+
+
+]]>
+          </contentbefore>
+          <fieldcaption>{$com.customer.taxregistrationid$}</fieldcaption>
+          <fielddescription>{$com.customer.taxregistrationid.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%AccountType.Value == "Company"|(identity)GlobalAdministrator|(hash)f9ecc70cd2fb93908b30f277b74ff27a8f00fee86b5e1bd1cb11669be029dc9e%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="CustomerFirstName" guid="b2b44dc5-ae13-4180-9fad-7a47431b9b36" visible="true" order="5">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.customer.firstname$}</fieldcaption>
+          <fielddescription>{$com.customer.firstname.description$}</fielddescription>
+        </properties>
+      </field>
+      <field column="CustomerLastName" guid="f1470954-5eed-49a9-91ae-de257fc8cc6b" visible="true" translatefield="" order="6">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.customer.lastname$}</fieldcaption>
+          <fielddescription>{$com.customer.lastname.description$}</fielddescription>
+        </properties>
+      </field>
+      <field column="CustomerPhone" guid="ec61f54e-1202-4e42-8646-30f067f38eb2" visible="true" order="7">
+        <settings>
+          <controlname>internationalphone</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.customer.phonenumber$}</fieldcaption>
+          <fielddescription>{$com.customer.phonenumber.description$}</fielddescription>
+        </properties>
+      </field>
+      <field column="CustomerEmail" guid="ed57af72-8df1-456f-b369-041c7faf0085" visible="true" allowempty="" order="8">
+        <settings>
+          <controlname>emailinput</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.customer.email$}</fieldcaption>
+          <fielddescription>{$com.customer.email.description$}</fielddescription>
+        </properties>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("(Value.Length <= 100)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxLength\" ><p n=\"maxlength\"><t>100</t><v>100</v><r>0</r><d></d><vt>integer</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)c4d1c632b611b96663eefa0c7013b484c235ba79d2fd571b55b5f8185fbab83e%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="CustomerFax" guid="044422b8-46d8-4222-b0f7-9466783c2274" order="9">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field column="CustomerUserID" guid="54062fca-65ff-4995-9b7a-404ca2e04f58" order="10" />
+      <field column="CustomerGUID" guid="56206b17-fdf9-4953-9136-6e91e18d6d4d" order="11" />
+      <field column="CustomerSiteID" guid="b986d250-cc3e-404f-86f2-987f25770524" order="12" />
+      <field column="CustomerCreated" guid="54fa9014-05b8-4a7f-9936-94a13458b6c0" order="13" />
+      <field column="CustomerLastModified" guid="87a1a570-2285-457b-9508-d541995a7769" order="14" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Checkout registration</FormDisplayName>
+  <FormGUID>7b00401c-3dc4-4101-92ed-4b1945fdd58c</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>CheckoutRegistration</FormName>
+</cms.alternativeform>

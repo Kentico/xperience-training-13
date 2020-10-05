@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.class</CodeName>
+    <GUID>d7e91104-201b-4b11-9550-e93ad9a4d81f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>10ac65b0-bbd4-446a-bade-e03fbfde2f5e</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>UpdatePath</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+DECLARE @NewPrefix VARCHAR(450);
+DECLARE @OldLevel INT;
+DECLARE @NewLevel INT;
+SET @NewPrefix = (SELECT TOP 1 ##PATHCOLUMN## FROM ##TABLENAME## WHERE ##IDCOLUMN## = ##NEWPARENTID##); IF (@NewPrefix = '/')SET @NewPrefix = '';
+SET @OldLevel = (SELECT TOP 1 ##LEVELCOLUMN## FROM ##TABLENAME## WHERE ##IDCOLUMN## = ##OLDPARENTID##);
+SET @NewLevel = (SELECT TOP 1 ##LEVELCOLUMN## FROM ##TABLENAME## WHERE ##IDCOLUMN## = ##NEWPARENTID##);
+
+-- Update level
+IF @UpdateLevel = 1 UPDATE ##TABLENAME## SET ##LEVELCOLUMN## = ##LEVELCOLUMN## - @OldLevel + ISNULL(@NewLevel, -1) + 1 WHERE ##PATHCOLUMN## LIKE '##OLDPREFIX##%'
+
+-- Update path
+UPDATE ##TABLENAME## SET ##PATHCOLUMN## = ISNULL(@NewPrefix, '') + '/' + '##CURRENTITEM##' + SUBSTRING(##PATHCOLUMN##, LEN('##OLDPREFIX##'), LEN(##PATHCOLUMN##)) WHERE ##PATHCOLUMN## LIKE '##OLDPREFIX##%'
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

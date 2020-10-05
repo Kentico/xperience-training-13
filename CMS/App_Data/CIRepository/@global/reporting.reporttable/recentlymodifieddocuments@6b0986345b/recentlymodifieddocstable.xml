@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Recently modified pages table</TableDisplayName>
+  <TableGUID>84b838bf-a8e2-4852-a784-c7c99d0f2941</TableGUID>
+  <TableName>RecentlyModifiedDocsTable</TableName>
+  <TableQuery>
+    <![CDATA[Select DocumentName AS 'Name', NodeAliasPath AS 'Alias path', DocumentModifiedWhen AS 'Last modification date', FirstName + ' '  + LastName + ' (' + UserName +')' AS 'Last modified by', StepDisplayName AS 'Current workflow step'  FROM View_CMS_Tree_Joined LEFT JOIN CMS_User ON View_CMS_Tree_Joined.DocumentModifiedByUserID=CMS_User.UserID LEFT JOIN CMS_WorkflowStep ON View_CMS_Tree_Joined.DocumentWorkflowStepID = CMS_WorkflowStep.StepID Where (DocumentModifiedWhen >= @ModifiedSince) AND (NodeSiteID=@CMSContextCurrentSiteID) ORDER BY DocumentModifiedWhen DESC]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>RecentlyModifiedDocuments</CodeName>
+    <GUID>ef15dcce-67b1-4ac3-a079-4b4a0fe7445a</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No recently modified pages found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

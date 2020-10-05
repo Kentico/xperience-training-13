@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Data;
-using System.Collections;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 
 using CMS.UIControls;
 
-public partial class CMSMasterPages_LiveSite_EmptyPage : CMSLiveMasterPage
+public partial class CMSMasterPages_LiveSite_EmptyPage : AbstractMasterPage
 {
     #region "Properties"
 
@@ -31,7 +27,7 @@ public partial class CMSMasterPages_LiveSite_EmptyPage : CMSLiveMasterPage
     /// <summary>
     /// Body element control
     /// </summary>
-    public override System.Web.UI.HtmlControls.HtmlGenericControl Body
+    public override HtmlGenericControl Body
     {
         get
         {

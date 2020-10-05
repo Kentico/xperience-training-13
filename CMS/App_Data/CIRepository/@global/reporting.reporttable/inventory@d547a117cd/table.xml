@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>09730073-aed3-4e26-991e-11e91b2c8df8</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Selects the products meeting the conditions from the filter */
+DECLARE @GlobalProducts bit;
+SET @GlobalProducts = {%Settings.CMSStoreAllowGlobalProducts?1:0|(identity)GlobalAdministrator|(hash)df4a55eb95b038f77e15e7e01910c539b3d5e54da5818e5613b2922375fdbb44%};
+DECLARE @GlobalOptions bit;
+SET @GlobalOptions = {%Settings.CMSStoreAllowGlobalProductOptions?1:0|(identity)GlobalAdministrator|(hash)41b789b90f663d43a23ec85a8d09f48c0e3633697f6d357d90320f2853cc53d5%};
+SELECT 
+   ISNULL(parent.SKUName + ': ', '') + product.SKUName + ISNULL(' (' + COM_OptionCategory.CategoryDisplayName + ')', '') AS '{$product_list.productname$}',
+   product.SKUNumber AS '{$ecommerce.report_productnumber$}',
+   ISNULL(department.DepartmentDisplayName, parentDepartment.DepartmentDisplayName) AS '{$objecttype.com_department$}', 
+   ISNULL(manufacturer.ManufacturerDisplayName,parentManufacturer.ManufacturerDisplayName) AS '{$objecttype.com_manufacturer$}',
+   ISNULL(supplier.SupplierDisplayName,parentSupplier.SupplierDisplayName) AS '{$objecttype.com_supplier$}',
+   CAST(product.SKUPrice AS DECIMAL(38,2)) AS '{$com.inventory.price$}',
+   ISNULL(CAST(product.SKUReOrderAt AS nvarchar(16)), '-') AS '{$com.report_reorderat$}',
+   ISNULL(CAST(product.SKUAvailableItems AS nvarchar(16)), '-') AS '{$ecommerce.report_availableitems$}'
+FROM 
+   COM_SKU product
+   LEFT JOIN COM_Department department
+      ON department.DepartmentID = product.SKUDepartmentID
+   LEFT JOIN COM_Supplier supplier
+      ON supplier.SupplierID = SKUSupplierID 
+   LEFT JOIN COM_Manufacturer manufacturer
+      ON manufacturer.ManufacturerID = product.SKUManufacturerID 
+   LEFT JOIN COM_PublicStatus publicStatus
+      ON publicStatus.PublicStatusID = product.SKUPublicStatusID 
+   LEFT JOIN COM_InternalStatus internalStatus
+      ON internalStatus.InternalStatusID = product.SKUInternalStatusID
+   LEFT JOIN COM_OptionCategory 
+      ON CategoryID = SKUOptionCategoryID
+   LEFT JOIN COM_SKU parent
+      ON product.SKUParentSKUID = parent.SKUID
+   LEFT JOIN COM_Department parentDepartment
+      ON parentDepartment.DepartmentID = parent.SKUDepartmentID
+   LEFT JOIN COM_Supplier parentSupplier
+      ON parentSupplier.SupplierID = parent.SKUSupplierID 
+   LEFT JOIN COM_Manufacturer parentManufacturer
+      ON parentManufacturer.ManufacturerID = parent.SKUManufacturerID 
+   LEFT JOIN COM_PublicStatus parentPublicStatus
+      ON parentPublicStatus.PublicStatusID = parent.SKUPublicStatusID
+   LEFT JOIN COM_InternalStatus parentInternalStatus
+      ON parentInternalStatus.InternalStatusID = parent.SKUInternalStatusID
+WHERE
+   (@ProductName IS NULL OR @ProductName = '' OR product.SKUName LIKE '%'+@ProductName+'%')
+   AND (@ProductNumber IS NULL OR @ProductNumber = '' OR product.SKUNumber LIKE '%'+@ProductNumber+'%')
+   AND (@DepartmentID < 0 OR product.SKUDepartmentID = @DepartmentID OR (@DepartmentID IS NULL AND product.SKUDepartmentID IS NULL AND parent.SKUDepartmentID IS NULL) OR parent.SKUDepartmentID = @DepartmentID) 
+   AND (@SupplierID < 0 OR product.SKUSupplierID = @SupplierID OR (@SupplierID IS NULL AND product.SKUSupplierID IS NULL AND parent.SKUSupplierID IS NULL) OR parent.SKUSupplierID = @SupplierID) 
+   AND (ISNULL(@NeedsReordered,0) = 0 OR (ISNULL(product.SKUAvailableItems,0) <= product.SKUReOrderAt))
+   AND (@Limit IS NULL OR (ISNULL(product.SKUAvailableItems,0) < @Limit))
+   AND (product.SKUOptionCategoryID IS NULL OR ((@GlobalOptions = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID))
+   AND (product.SKUOptionCategoryID IS NOT NULL OR ((@GlobalProducts = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID))
+   AND (product.SKUOptionCategoryID IS NULL OR (CategoryType = 'PRODUCTS'))   
+   AND (@ManufacturerID < 0 OR product.SKUManufacturerID = @ManufacturerID OR (@ManufacturerID IS NULL AND product.SKUManufacturerID IS NULL AND parent.SKUManufacturerID IS NULL ) OR parent.SKUManufacturerID = @ManufacturerID)
+   AND (@InternalStatusID < 0 OR product.SKUInternalStatusID = @InternalStatusID OR (@InternalStatusID IS NULL AND product.SKUInternalStatusID IS NULL AND parent.SKUInternalStatusID IS NULL) OR parent.SKUInternalStatusID = @InternalStatusID)
+   AND (@PublicStatusID < 0 OR product.SKUPublicStatusID = @PublicStatusID OR (@PublicStatusID IS NULL AND product.SKUPublicStatusID IS NULL AND parent.SKUPublicStatusID IS NULL) OR parent.SKUPublicStatusID = @PublicStatusID) 
+   AND product.SKUEnabled = 1
+   AND (parent.SKUEnabled IS NULL OR parent.SKUEnabled = 1)
+   AND (product.SKUTrackInventory = 'ByProduct' OR parent.SKUTrackInventory = 'ByVariants')
+ORDER BY 
+   ISNULL(parent.SKUName, '') + product.SKUName ASC,
+   product.SKUNumber ASC,
+   product.SKUPrice ASC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Inventory</CodeName>
+    <GUID>712c1408-44a2-4bf7-8b11-bafb1ada123e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

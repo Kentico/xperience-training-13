@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>c5804ad1-7cd4-44c9-b309-3e20ddf71479</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+ EXEC Proc_Analytics_RemoveTempTable
+ SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+ 
+ CREATE TABLE #AnalyticsTempTable (
+	StartTime DATETIME,  
+	Hits DECIMAL(15,2),
+	Name NVARCHAR(300) COLLATE database_default
+);
+
+-- SELECT INTO statement cannot be used, because it is not supported by Azure SQL
+INSERT INTO #AnalyticsTempTable
+SELECT [Date] AS StartTime, T1.Hits, StatisticsObjectCulture AS Name
+ FROM
+  {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS Dates   
+  LEFT JOIN
+  (SELECT HitsStartTime AS StartTime,SUM(HitsCount) AS hits,StatisticsObjectCulture
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_YearHits ON Analytics_YearHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND
+  (StatisticsCode = @CodeName)
+  GROUP BY HitsStartTime,StatisticsObjectCulture) AS T1
+  ON T1.StartTime = [Date]
+  
+  EXEC Proc_Analytics_Pivot 'year'
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>pageviews.multilingual.yearreport</CodeName>
+    <GUID>eee0aca4-8cb4-4f45-a6ba-d22c11eabd5d</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>true</exportenabled>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisformat>{yyyy}</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_years$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$reports_pageviews.label_numofpageviews$}</GraphYAxisTitle>
+</reporting.reportgraph>

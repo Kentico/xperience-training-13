@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_Reporting_Tools_Report_View"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Inherits="CMSModules_Reporting_Tools_Report_View"
     Theme="Default" EnableEventValidation="false" MaintainScrollPositionOnPostback="true"
      Codebehind="Report_View.aspx.cs" %>
 
@@ -16,7 +16,7 @@
         <asp:PlaceHolder runat="server" ID="scriptManager" />
         <cms:CMSPanel ID="pnlHeaderActions" runat="server" ShortID="pH" FixedPosition="true" CssClass="header-container">
             <div class="control-group-inline header-actions-container">
-                <cms:ReportHeader runat="server" ID="reportHeader" />
+                <cms:ReportHeader runat="server" ID="reportHeader" PrintPageURL="~/CMSModules/Reporting/Tools/Report_Print.aspx" OnActionPerformed="HeaderActions_ActionPerformed" />
             </div>
         </cms:CMSPanel>
         <asp:Panel ID="pnlContent" runat="server" CssClass="PageContent">

@@ -82,11 +82,11 @@ public partial class CMSModules_PortalEngine_FormControls_PageTemplates_LevelTre
         // Check culture
         if (CultureHelper.IsUICultureRTL())
         {
-            treeElem.LineImagesFolder = GetImageUrl("RTL/Design/Controls/Tree", IsLiveSite, true);
+            treeElem.LineImagesFolder = GetImageUrl("RTL/Design/Controls/Tree", true);
         }
         else
         {
-            treeElem.LineImagesFolder = GetImageUrl("Design/Controls/Tree", IsLiveSite, true);
+            treeElem.LineImagesFolder = GetImageUrl("Design/Controls/Tree", true);
         }
 
         // Set tree elements

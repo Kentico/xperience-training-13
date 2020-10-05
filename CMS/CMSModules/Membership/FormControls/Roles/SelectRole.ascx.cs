@@ -13,7 +13,6 @@ public partial class CMSModules_Membership_FormControls_Roles_SelectRole : FormE
     #region "Variables"
 
     private int mSiteId = 0;
-    private int mGroupId = 0;
     private bool mUseCodeNameForSelection = true;
     private bool mGlobalRoles = true;
     private bool mSiteRoles = true;
@@ -51,23 +50,6 @@ public partial class CMSModules_Membership_FormControls_Roles_SelectRole : FormE
         set
         {
             CurrentSelector.AllowEmpty = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets the ID of the group
-    /// (search will be only among group roles if this property is nonzero) 
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return mGroupId;
-        }
-        set
-        {
-            mGroupId = value;
         }
     }
 
@@ -212,7 +194,7 @@ public partial class CMSModules_Membership_FormControls_Roles_SelectRole : FormE
 
 
     /// <summary>
-    /// Gets or sets if control works in simple mode (ignores SiteID, GroupID parameters).
+    /// Gets or sets if control works in simple mode (ignores SiteID parameter).
     /// </summary>
     public bool SimpleMode
     {
@@ -314,7 +296,7 @@ public partial class CMSModules_Membership_FormControls_Roles_SelectRole : FormE
     protected void Page_Load(object sender, EventArgs e)
     {
         // If current control context is widget or livesite hide site selector
-        if (ControlsHelper.CheckControlContext(this, ControlContext.WIDGET_PROPERTIES) || ControlsHelper.CheckControlContext(this, ControlContext.LIVE_SITE))
+        if (ControlsHelper.CheckControlContext(this, ControlContext.WIDGET_PROPERTIES))
         {
             ShowSiteFilter = false;
         }
@@ -348,17 +330,17 @@ public partial class CMSModules_Membership_FormControls_Roles_SelectRole : FormE
 
 
         // Build where condition
-        string whereCondition = (GroupID > 0) ? "(RoleGroupID = " + GroupID.ToString() + ") " : "(RoleGroupID IS NULL)";
+        string whereCondition = String.Empty;
 
         if (UseFriendlyMode)
         {
             if (DisplayEveryone)
             {
-                whereCondition += " AND RoleName != '" + RoleName.AUTHENTICATED + "' AND RoleName != '" + RoleName.NOTAUTHENTICATED + "' ";
+                whereCondition += "RoleName != '" + RoleName.AUTHENTICATED + "' AND RoleName != '" + RoleName.NOTAUTHENTICATED + "' ";
             }
             else
             {
-                whereCondition += " AND RoleName != '" + RoleName.EVERYONE + "' AND RoleName != '" + RoleName.AUTHENTICATED + "' AND RoleName != '" + RoleName.NOTAUTHENTICATED + "' ";
+                whereCondition += "RoleName != '" + RoleName.EVERYONE + "' AND RoleName != '" + RoleName.AUTHENTICATED + "' AND RoleName != '" + RoleName.NOTAUTHENTICATED + "' ";
             }
         }
 

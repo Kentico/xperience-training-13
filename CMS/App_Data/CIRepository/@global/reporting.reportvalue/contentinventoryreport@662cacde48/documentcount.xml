@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueConnectionString />
+  <ValueDisplayName>PageCount</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>526030e0-b87b-4f0c-bc2a-54d12e485a38</ValueGUID>
+  <ValueName>DocumentCount</ValueName>
+  <ValueQuery>
+<![CDATA[
+SELECT Count(NodeId)
+FROM View_CMS_Tree_Joined
+WHERE (@OnlyPublished = 0 OR ([DocumentCanBePublished] = @OnlyPublished AND ([DocumentPublishFrom] IS NULL OR [DocumentPublishFrom] <= @CMSContextCurrentTime) AND ([DocumentPublishTo] IS NULL OR [DocumentPublishTo] >= @CMSContextCurrentTime)))  
+AND (NodeSiteID = @CMSContextCurrentSiteID)
+AND (@ModifiedFrom IS NULL OR DocumentModifiedWhen >= @ModifiedFrom)
+AND (@ModifiedTo IS NULL OR DocumentModifiedWhen < @ModifiedTo) 
+AND (NodeAliasPath LIKE @path)
+AND (@Language IS NULL OR @Language = '-1' OR DocumentCulture = @Language)
+AND (@name IS NULL OR DocumentName LIKE '%'+@name+'%')
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>ContentInventoryReport</CodeName>
+    <GUID>df9c9212-7712-4f56-b795-df8b2d0a0c65</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings>
+    <CustomData>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </ValueSettings>
+</reporting.reportvalue>

@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>70ee89a9-8f76-4fea-86c0-8b8d7d68cc26</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @from1 datetime;
+DECLARE @to1 datetime;
+DECLARE @from2 datetime;
+DECLARE @to2 datetime;
+
+DECLARE @sales1 float;
+DECLARE @sales2 float;
+DECLARE @orders1 float;
+DECLARE @orders2 float;
+
+DECLARE @salesChange decimal(38,1);
+DECLARE @ordersChange decimal(38,1);
+
+IF (@Period = 'custom')
+	BEGIN
+		SET @from1 = @Period1From;
+		SET @to1 = DATEADD(day,1,@Period1To);
+        SET @from2 = @Period2From;
+		SET @to2 = DATEADD(day,1,@Period2To);
+        END
+ELSE IF (@Period = 'day')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('yesterday');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('yesterday');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('today');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('today');
+        END
+ELSE IF (@Period = 'week')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastWeek');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastWeek');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisWeek');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisWeek');
+        END
+ELSE IF (@Period = 'month')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastMonth');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastMonth');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisMonth');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisMonth');
+        END
+ELSE IF (@Period = 'quarter')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastQuarter');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastQuarter');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisQuarter');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisQuarter');
+        END
+ELSE IF (@Period = 'half')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastHalf');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastHalf');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisHalf');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisHalf');
+        END
+ELSE IF (@Period = 'year')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastYear');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastYear');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisYear');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisYear');
+        END
+
+SET @sales1 = (SELECT ISNULL(SUM(OrderGrandTotalInMainCurrency),0) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from1 OR @from1 IS NULL) AND (OrderDate < @to1 OR @to1 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+SET @sales2 = (SELECT ISNULL(SUM(OrderGrandTotalInMainCurrency),0) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from2 OR @from2 IS NULL) AND (OrderDate < @to2 OR @to2 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+SET @salesChange = CASE 
+	WHEN @sales1 = 0 
+        THEN NULL
+		ELSE
+		ROUND((@sales2 / @sales1 * 100) - 100,1)
+	END
+
+SET @orders1 = (SELECT COUNT(OrderID) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from1 OR @from1 IS NULL) AND (OrderDate < @to1 OR @to1 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+SET @orders2 = (SELECT COUNT(OrderID) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from2 OR @from2 IS NULL) AND (OrderDate < @to2 OR @to2 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+SET @ordersChange = CASE 
+	WHEN @orders1 = 0 
+ 	THEN NULL
+		ELSE
+			ROUND((@orders2 / @orders1 * 100) - 100,1)
+	END
+
+SELECT '{$com.sales.volumeofsales$}' AS '{$rep.webparrts.parametername$}', CAST(ROUND(@sales1,1) AS decimal(38,1)) AS '{$com.report.period1$}', CAST(ROUND(@sales2,1) AS decimal(38,1)) AS '{$com.report.period2$}', ISNULL(CAST(@salesChange AS nvarchar(20)), 0) + ' %' AS '{$general.change$}'
+UNION
+SELECT '{$ecommerce.report_numberoforders$}', @orders1 , @orders2 , ISNULL(CAST(@ordersChange AS nvarchar(20)), 0) + ' %'
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesComparison</CodeName>
+    <GUID>47243a76-621b-4a8c-a6c8-077fb3ca8855</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

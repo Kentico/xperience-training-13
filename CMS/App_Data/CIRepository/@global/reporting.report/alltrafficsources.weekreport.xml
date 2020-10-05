@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>AllTrafficSources</CodeName>
+    <GUID>0160ccb8-4872-45e4-8cdd-75afbdc4c67f</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportDisplayName>All traffic sources - Weekly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>89bfd3f1-376a-4196-b6cf-fa69b4a3f7e6</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+%%control:ReportGraph?alltrafficsources.weekreport.graph_pie%%<br />
+<br />
+%%control:ReportGraph?alltrafficsources.weekreport.graph%%<br />
+<br />
+<br />
+{$reports_general.created$} {%cmscontextcurrenttime%} {$reports_general.by$} {%cmscontextcurrentusername%}
+]]>
+  </ReportLayout>
+  <ReportName>alltrafficsources.weekreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="3a2bc443-7e96-4929-8f85-d09e0d4e47d3" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddWeeks(-15).Date|(identity)GlobalAdministrator|(hash)df127d150cc75576920d1979fdffd7b176f8157a6b5593277d263be003059385%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="ed1cb074-89d2-4576-a6c8-f451121f5269" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="Direct" columnsize="50" columntype="text" guid="a66fd0e2-e001-4269-9fa6-a538ae6160f1">
+        <properties>
+          <defaultvalue>referringsite_direct</defaultvalue>
+        </properties>
+      </field>
+      <field column="Search" columnsize="50" columntype="text" guid="199d43de-5149-4dce-8ea1-03c3811b8eba">
+        <properties>
+          <defaultvalue>referringsite_search</defaultvalue>
+        </properties>
+        <settings>
+          <controlname>checkboxlistcontrol</controlname>
+          <Query>
+            <![CDATA[SELECT DISTINCT StatisticsCode, StatisticsCode FROM Analytics_Statistics]]>
+          </Query>
+        </settings>
+      </field>
+      <field column="Referring" columnsize="50" columntype="text" guid="e4233772-0ad5-477c-b967-6663f642c036" spellcheck="false">
+        <properties>
+          <defaultvalue>referringsite_referring</defaultvalue>
+          <fieldcaption>From</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

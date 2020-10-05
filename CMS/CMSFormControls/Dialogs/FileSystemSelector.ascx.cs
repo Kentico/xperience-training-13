@@ -709,8 +709,8 @@ function FSS_Clear_{0}(selectorId) {{
             startPath = Server.MapPath(startPath);
         }
 
-        startPath = Path.EnsureEndBackslash(startPath);
-        string folderName = Path.EnsureEndBackslash(folder);
+        startPath = Path.EnsureEndSlash(startPath);
+        string folderName = Path.EnsureEndSlash(folder);
         try
         {
             folderName = Server.MapPath(folderName);

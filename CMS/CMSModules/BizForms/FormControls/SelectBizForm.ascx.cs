@@ -214,7 +214,6 @@ public partial class CMSModules_BizForms_FormControls_SelectBizForm : FormEngine
 
         // If current control context is widget or livesite or SingleDropDownList mode hide site selector
         if (ControlsHelper.CheckControlContext(this, ControlContext.WIDGET_PROPERTIES)
-            || ControlsHelper.CheckControlContext(this, ControlContext.LIVE_SITE)
             || SelectionMode == SelectionModeEnum.SingleDropDownList)
         {
             ShowSiteFilter = false;

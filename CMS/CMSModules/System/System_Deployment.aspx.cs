@@ -6,6 +6,7 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.EventLog;
 using CMS.FormEngine;
 using CMS.Helpers;
@@ -79,18 +80,16 @@ public partial class CMSModules_System_System_Deployment : GlobalAdminPage
     protected override void OnPreRender(EventArgs e)
     {
         base.OnPreRender(e);
-
-        chkSaveCSS.Checked = CssStylesheetInfoProvider.StoreCSSStyleSheetsInExternalStorage;
+                
         chkSaveLayouts.Checked = LayoutInfoProvider.StoreLayoutsInExternalStorage;
         chkSavePageTemplate.Checked = PageTemplateInfoProvider.StorePageTemplatesInExternalStorage;
         chkSaveWebpartLayout.Checked = WebPartLayoutInfoProvider.StoreWebPartLayoutsInExternalStorage;
         chkSaveTransformation.Checked = TransformationInfoProvider.StoreTransformationsInExternalStorage;
-        chkSaveWebpartContainer.Checked = WebPartContainerInfoProvider.StoreWebPartContainersInExternalStorage;
         chkSaveAltFormLayouts.Checked = AlternativeFormInfoProvider.StoreAlternativeFormsInExternalStorage;
         chkSaveFormLayouts.Checked = DataClassInfoProvider.StoreFormLayoutsInExternalStorage;
 
-        if (chkSaveCSS.Checked || chkSaveLayouts.Checked || chkSavePageTemplate.Checked || chkSaveWebpartLayout.Checked
-            || chkSaveTransformation.Checked || chkSaveWebpartContainer.Checked || chkSaveAltFormLayouts.Checked || chkSaveFormLayouts.Checked)
+        if (chkSaveLayouts.Checked || chkSavePageTemplate.Checked || chkSaveWebpartLayout.Checked
+            || chkSaveTransformation.Checked || chkSaveAltFormLayouts.Checked || chkSaveFormLayouts.Checked)
         {
             lblSynchronization.Visible = true;
             btnSynchronize.Visible = true;
@@ -105,7 +104,7 @@ public partial class CMSModules_System_System_Deployment : GlobalAdminPage
             ShowWarning(GetString("Deployment.AzureDisabled"));
             btnSaveAll.Enabled = false;
             btnSourceControl.Enabled = false;
-            chkSaveCSS.Enabled = chkSaveLayouts.Enabled = chkSavePageTemplate.Enabled = chkSaveTransformation.Enabled = chkSaveWebpartLayout.Enabled
+            chkSaveLayouts.Enabled = chkSavePageTemplate.Enabled = chkSaveTransformation.Enabled = chkSaveWebpartLayout.Enabled
                 = chkSaveAltFormLayouts.Enabled = chkSaveFormLayouts.Enabled = false;
         }
 
@@ -126,8 +125,8 @@ public partial class CMSModules_System_System_Deployment : GlobalAdminPage
         {
             ShowInformation(GetString("Deployment.DevelopmentMode"));
             btnSaveAll.Enabled = btnSourceControl.Enabled = btnSynchronize.Enabled = false;
-            chkSaveCSS.Enabled = chkSaveLayouts.Enabled = chkSavePageTemplate.Enabled = chkSaveWebpartLayout.Enabled = false;
-            chkSaveTransformation.Enabled = chkSaveWebpartContainer.Enabled = chkSaveAltFormLayouts.Enabled = chkSaveFormLayouts.Enabled = false;
+            chkSaveLayouts.Enabled = chkSavePageTemplate.Enabled = chkSaveWebpartLayout.Enabled = false;    
+            chkSaveTransformation.Enabled = chkSaveAltFormLayouts.Enabled = chkSaveFormLayouts.Enabled = false;
         }
     }
 
@@ -186,10 +185,8 @@ public partial class CMSModules_System_System_Deployment : GlobalAdminPage
             SaveAlternativeFormLayout = chkSaveAltFormLayouts.Checked,
             SaveFormLayout = chkSaveFormLayouts.Checked,
             SavePageTemplate = chkSavePageTemplate.Checked,
-            SaveCss = chkSaveCSS.Checked,
             SaveLayout = chkSaveLayouts.Checked,
             SaveTransformation = chkSaveTransformation.Checked,
-            SaveWebPartContainer = chkSaveWebpartContainer.Checked,
             SaveWebPartLayout = chkSaveWebpartLayout.Checked
         };
     }

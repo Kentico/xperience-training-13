@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Checked out docs table</TableDisplayName>
+  <TableGUID>b25b33ab-cdda-4018-b0bf-7cfcaaad651e</TableGUID>
+  <TableName>CheckedOutDocsTable</TableName>
+  <TableQuery>
+    <![CDATA[Select DocumentName AS 'Page name', NodeAliasPath AS 'Alias path', FirstName + ' ' + LastName + ' (' +UserName+')' AS 'Checked out by', DocumentCheckedOutWhen AS 'Checked out on', FirstName + ' '  + LastName + ' (' + UserName +')' AS 'Last modified by', StepDisplayName AS 'Current workflow step' FROM View_CMS_Tree_Joined LEFT JOIN CMS_User ON CMS_User.UserID = View_CMS_Tree_Joined.DocumentCheckedOutByUserID  LEFT JOIN CMS_WorkflowStep ON View_CMS_Tree_Joined.DocumentWorkflowStepID = CMS_WorkflowStep.StepID  Where (DocumentCheckedOutByUserID IS NOT NULL) AND (NodeSiteID=@CMSContextCurrentSiteID) ORDER BY DocumentCheckedOutWhen DESC]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>CheckedOutDocuments</CodeName>
+    <GUID>04695031-4f21-461d-bd8b-b43681e42594</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No checked out documents found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

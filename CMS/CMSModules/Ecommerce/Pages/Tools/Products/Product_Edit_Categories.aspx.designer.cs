@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Categories {
-    
+public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Categories
+{
+
     /// <summary>
     /// headTitle control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Cate
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headTitle;
-    
+
     /// <summary>
     /// categoriesElem control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Cate
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Categories_Controls_MultipleCategoriesSelector categoriesElem;
-    
+
     /// <summary>
     /// ltlScript control.
     /// </summary>

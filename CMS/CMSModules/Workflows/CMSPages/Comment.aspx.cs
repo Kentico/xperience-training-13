@@ -6,7 +6,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Workflows_CMSPages_Comment : CMSLiveModalPage
+public partial class CMSModules_Workflows_CMSPages_Comment : CMSPage
 {
     #region "Properties"
 

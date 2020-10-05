@@ -225,7 +225,7 @@ public partial class CMSModules_Objects_Controls_Locking_ObjectEditMenu : Object
                         UserInfo ui = UserInfo.Provider.Get(settings.ObjectCheckedOutByUserID);
                         if (ui != null)
                         {
-                            userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));
+                            userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(false));
                         }
 
                         AddInfoText(string.Format(GetString("ObjectEditMenu.CheckedOutByAnotherUser", ResourceCulture), objectType, objectName, userName));

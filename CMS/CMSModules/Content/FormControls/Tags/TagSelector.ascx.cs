@@ -252,7 +252,7 @@ function TS_SetTagsToTextBox(textBoxId, tagString) {{
 
         WindowHelper.Add(DialogIdentifier, p);
 
-        var url = IsLiveSite ? "~/CMSFormControls/LiveSelectors/TagSelector.aspx" : "~/CMSFormControls/Selectors/TagSelector.aspx";
+        var url = "~/CMSFormControls/Selectors/TagSelector.aspx";
         url = URLHelper.AddParameterToUrl(url, "params", DialogIdentifier);
 
         callbackResult = ResolveUrl(url);

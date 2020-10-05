@@ -400,7 +400,7 @@ public partial class CMSModules_Content_Controls_EditMenu : EditMenu, IExtensibl
             // Register spell checker script
             ScriptHelper.RegisterSpellChecker(Page);
 
-            sb.Append("var spellURL = '", (IsLiveSite ? ApplicationUrlHelper.ResolveDialogUrl("~/CMSFormControls/LiveSelectors/SpellCheck.aspx") : ApplicationUrlHelper.ResolveDialogUrl("~/CMSModules/Content/CMSDesk/Edit/SpellCheck.aspx")), "'; \n");
+            sb.Append("var spellURL = '", ApplicationUrlHelper.ResolveDialogUrl("~/CMSModules/Content/CMSDesk/Edit/SpellCheck.aspx"), "'; \n");
             sb.Append("function SpellCheck_", ClientID, "(spellURL) { checkSpelling(spellURL); } var offsetValue = 7;");
         }
 

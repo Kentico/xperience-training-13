@@ -20,7 +20,7 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="plcContent" runat="server">
     <asp:Panel ID="pnlUrl" runat="server" DefaultButton="btnEnterPress">
         <cms:LocalizedHeading runat="server" ID="headUrl" Level="4" ResourceString="content.ui.urltitle" EnableViewState="false" />
-        <div class="form-horizontal url-form">
+        <asp:Panel ID="pnlPageUrlPath" runat="server" CssClass="form-horizontal url-form url-slug-form">
             <div class="form-group">
                 <div class="editing-form-label-cell cms-pageurlpath-slug-label">
                     <cms:LocalizedLabel CssClass="control-label" ID="lblSlug" runat="server" EnableViewState="false"
@@ -32,7 +32,37 @@
                     <asp:Button CssClass="HiddenButton" ID="btnEnterPress" runat="server" OnClick="btnSave_Click" EnableViewState="false"/>
                 </div>
             </div>
-        </div>
+        </asp:Panel>  
+
+        <asp:Panel runat="server" ID="pnlUrlLinks" CssClass="form-horizontal url-form url-links-form">
+            <asp:PlaceHolder runat="server" ID="plcLive" Visible="false">
+                <div class="form-group url-form">
+                    <div class="editing-form-label-cell">
+                        <cms:LocalizedLabel CssClass="control-label" ID="lblLiveURLTitle" runat="server" ResourceString="content.ui.properties.liveurl" EnableViewState="false" />
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <a id="lnkLiveURL" runat="server" target="_blank" class="form-control-text" enableviewstate="false"></a>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+            <asp:PlaceHolder ID="plcPreview" runat="server" Visible="false">
+                <div class="form-group url-form">
+                    <div class="editing-form-label-cell">
+                        <cms:LocalizedLabel CssClass="control-label" ID="lblPreviewURLTitle" runat="server" ResourceString="content.ui.properties.previewurl" EnableViewState="false" />
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <cms:CMSUpdatePanel ID="pnlUpdatePreviewUrl" runat="server" UpdateMode="conditional">
+                            <ContentTemplate>
+                                <a id="lnkPreviewURL" runat="server" target="_blank" class="form-control-text"><%= ResHelper.GetString("content.ui.properties.showpreview") %></a>
+                                <cms:CMSAccessibleButton runat="server" ID="btnResetPreviewGuid" EnableViewState="false" IconOnly="True" IconCssClass="icon-rotate-right" />
+                            </ContentTemplate>
+                        </cms:CMSUpdatePanel>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+            <cms:LocalizedLiteral runat="server" ID="litMissingPattern" ResourceString="content.ui.properties.missingurlpattern" Visible="false"></cms:LocalizedLiteral>
+        </asp:Panel>
+        
     </asp:Panel>
     <asp:Panel ID="pnlAlternativeUrls" runat="server">
         <cms:LocalizedHeading runat="server" ID="headTitle" Level="4" ResourceString="content.ui.propertiesalternativeurls" EnableViewState="false" />

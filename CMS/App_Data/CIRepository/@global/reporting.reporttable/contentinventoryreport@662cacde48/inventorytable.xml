@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>InventoryTable</TableDisplayName>
+  <TableGUID>73ad09f4-db03-47ae-a09d-9b5ad4c76e11</TableGUID>
+  <TableName>InventoryTable</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT NodeAliasPath AS 'Alias Path', 
+	DocumentCulture AS 'Language', 
+	DocumentName AS 'Name', 
+	DocumentModifiedWhen AS 'Last modified', 
+	UserName AS 'Last modified by',
+	StepDisplayName AS 'Workflow step',
+	DocumentPublishFrom AS 'Publish from',
+	DocumentPublishTo AS 'Publish to'
+FROM View_CMS_Tree_Joined
+LEFT JOIN CMS_User ON DocumentModifiedByUserID = UserID
+LEFT JOIN CMS_WorkFlowStep ON DocumentWorkflowStepID = StepID
+WHERE (@OnlyPublished = 0 OR ([DocumentCanBePublished] = @OnlyPublished AND ([DocumentPublishFrom] IS NULL OR [DocumentPublishFrom] <= @CMSContextCurrentTime) AND ([DocumentPublishTo] IS NULL OR [DocumentPublishTo] >= @CMSContextCurrentTime))) 
+AND (NodeSiteID = @CMSContextCurrentSiteID)
+AND (@ModifiedFrom IS NULL OR DocumentModifiedWhen >= @ModifiedFrom)
+AND (@ModifiedTo IS NULL OR DocumentModifiedWhen < @ModifiedTo) 
+AND (NodeAliasPath LIKE @path)
+AND (@Language IS NULL OR @Language = '-1' OR DocumentCulture = @Language)
+AND (@name IS NULL OR DocumentName LIKE '%'+@name+'%')
+ORDER BY NodeAliasPath
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>ContentInventoryReport</CodeName>
+    <GUID>df9c9212-7712-4f56-b795-df8b2d0a0c65</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No inventory data found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

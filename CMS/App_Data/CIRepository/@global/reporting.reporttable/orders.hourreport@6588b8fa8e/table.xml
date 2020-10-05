@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>a7dbcbda-1d17-46aa-9021-a88707265e35</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+IF @FromDate <= @ToDate 
+BEGIN
+/* Trims the value of @FromDate to be able to display hours in the table. */
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+
+/* Selects the number of orders created in the given hours. */
+SELECT 
+   [Date] AS '{$ecommerce.report_hour$}', 
+   COUNT(OrderDate) AS '{$ecommerce.report_numberoforders$}'  
+FROM 
+   -- returns a column of dates, each hour in a new row 
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'hour') AS Dates
+   LEFT JOIN COM_Order  
+      ON ([Date] <= OrderDate  AND  DATEADD(HOUR,1,[Date]) > OrderDate) 
+      AND OrderSiteID = @CMSContextCurrentSiteID
+GROUP BY [Date]
+ORDER BY [Date] DESC
+END
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Orders.HourReport</CodeName>
+    <GUID>918a2cda-cd42-4130-b038-79315a9607c6</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

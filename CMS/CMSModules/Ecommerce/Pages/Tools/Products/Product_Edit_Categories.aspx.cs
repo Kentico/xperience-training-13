@@ -1,18 +1,14 @@
 ﻿using System;
 
-using CMS.DocumentEngine;
-
-using System.Linq;
-
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.Ecommerce.Web.UI;
 using CMS.Helpers;
 using CMS.Membership;
 using CMS.PortalEngine.Web.UI;
 using CMS.UIControls;
-
 
 [UIElement(ModuleName.ECOMMERCE, "Products.Categories")]
 public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Categories : CMSProductsPage

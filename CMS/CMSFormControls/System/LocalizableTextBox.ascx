@@ -3,7 +3,7 @@
 
 <cms:ActionContainer runat="server" ID="cntrlContainer">
     <InputTemplate>
-        <cms:CMSTextBox ID="textbox" runat="server" ProcessMacroSecurity="False" />
+        <cms:CMSTextBox ID="textbox" runat="server" />
     </InputTemplate>
     <ActionsTemplate>
         <cms:CMSAccessibleButton runat="server" ID="btnLocalize" EnableViewState="false" IconCssClass="icon-plus" CssClass="btn-first btn-last" />

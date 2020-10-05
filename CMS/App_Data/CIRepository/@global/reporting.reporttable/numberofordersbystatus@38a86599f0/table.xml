@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>f5cd02d6-ff31-4ff8-a26b-0cf454082ef9</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @GlobalStatus bit;
+SET @GlobalStatus = {%Settings.CMSStoreUseGlobalOrderStatus?1:0|(identity)GlobalAdministrator|(hash)efb41e29101daa006213bf4f2aaf0390d4d7d92b9b7dc2fd1bb4adf7f604ec65%}; 
+
+SELECT 
+   StatusDisplayName AS '{$com.report.orderstatus$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'   
+FROM 
+   COM_OrderStatus 
+   LEFT JOIN COM_Order 
+      ON OrderStatusID = StatusID 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+WHERE 
+   (StatusEnabled = 1 OR StatusID IN (SELECT OrderStatusID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND ((StatusSiteID = @CMSContextCurrentSiteID AND @GlobalStatus = 0)  
+        OR (StatusSiteID IS NULL AND @GlobalStatus = 1))
+GROUP BY 
+   StatusDisplayName, 
+   StatusOrder 
+ORDER BY StatusOrder
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByStatus</CodeName>
+    <GUID>0733b7d7-077d-49a0-95c7-d58078315327</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

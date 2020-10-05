@@ -7,7 +7,6 @@
     <input type="hidden" id="selectedCulture" name="selectedCulture" value="<%=LocalizationContext.PreferredCultureCode%>" />
     <input type="hidden" id="selectedSplitModeCulture" name="selectedSplitModeCulture"
         value="<%=PortalUIHelper.SplitModeCultureCode %>" />
-    <input type="hidden" id="selectedDevice" name="selectedDevice" value="<%= HTMLHelper.HTMLEncode(ResultDevice) %>" />
     <input type="hidden" id="selectedMode" name="selectedMode" value="editform" />
     <cms:UILayout runat="server" ID="layoutElem">
         <Panes>

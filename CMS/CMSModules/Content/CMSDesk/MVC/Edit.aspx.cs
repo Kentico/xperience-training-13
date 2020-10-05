@@ -169,6 +169,8 @@ public partial class CMSModules_Content_CMSDesk_MVC_Edit : CMSContentPage
                     msgService.showSuccess('{ ResHelper.GetString("pagetemplatesmvc.saveastemplate.succes") }');
                 }});              
             }})"));
+
+        RegisterCookiePolicyDetection();
     }
 
 
@@ -197,7 +199,7 @@ public partial class CMSModules_Content_CMSDesk_MVC_Edit : CMSContentPage
         try
         {
             var queryStringParameters = GetQueryStringParameters();
-            url = PageBuilderHelper.GetPreviewLink(Node, MembershipContext.AuthenticatedUser.UserName, queryStringParameters);
+            url = PageBuilderHelper.GetPreviewLink(Node, queryStringParameters);
         }
         catch (InvalidOperationException ex)
         {

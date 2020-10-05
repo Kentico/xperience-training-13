@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Pages waiting for approval</TableDisplayName>
+  <TableGUID>15feabe3-d47c-4a6b-8345-1b87c7b3e576</TableGUID>
+  <TableName>DocsWaitingForApproval</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT DocumentName AS 'Name', NodeAliasPath AS 'Alias path', FirstName + ' '  + LastName + ' (' + UserName +')' AS 'Last modified by', StepDisplayName AS 'Current workflow step' 
+FROM View_CMS_Tree_Joined LEFT JOIN CMS_User ON View_CMS_Tree_Joined.DocumentModifiedByUserID=CMS_User.UserID LEFT JOIN CMS_WorkflowStep ON View_CMS_Tree_Joined.DocumentWorkflowStepID = CMS_WorkflowStep.StepID WHERE View_CMS_Tree_Joined.DocumentWorkflowStepID IN (SELECT StepID FROM CMS_WorkflowStep WHERE (StepType NOT IN (6, 11, 100, 101))) AND (NodeSiteID = @CMSContextCurrentSiteID) ORDER BY NodeAliasPath
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>DocumentsWaitingForApproval</CodeName>
+    <GUID>cd7643b0-2c67-4724-b8da-bb5679b19c06</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No waiting pages found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

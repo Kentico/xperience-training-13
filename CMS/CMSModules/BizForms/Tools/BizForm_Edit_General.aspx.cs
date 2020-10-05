@@ -51,6 +51,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General : CMSBizForm
 
         DataClassInfo mDci = DataClassInfoProvider.GetDataClassInfo(bfi.FormClassID);
         txtTableName.Text = mDci.ClassTableName;
+        txtClassName.Text = mDci.ClassName;
 
         txtButtonText.Text = bfi.FormSubmitButtonText;
         txtButtonText.TextBox.WatermarkText = GetString("general.submit");
@@ -148,7 +149,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General : CMSBizForm
             txtRedirect.Text = string.Empty;
         }
 
-        BizFormInfoProvider.SetBizFormInfo(bfi);
+        BizFormInfo.Provider.Set(bfi);
 
         ShowChangesSaved();
 

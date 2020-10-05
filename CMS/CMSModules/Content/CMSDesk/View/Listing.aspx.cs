@@ -4,7 +4,6 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using CMS.Membership;
@@ -137,11 +136,7 @@ public partial class CMSModules_Content_CMSDesk_View_Listing : CMSContentPage
                     }
                 }
 
-                // Define target window for modal dialogs (used for mobile Android browser which cannot open more than one modal dialog window at a time).
-                // If set: The target window will be used for opening the new dialog in the following way: targetWindow.location.href = '...new dialog url...';
-                // If not set: New modal dialog window will be opened 
-                string actionTargetWindow = "var targetWindow = " + (DeviceContext.CurrentDevice.IsMobile() ? "this" : "null");
-                ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "listingScript", actionTargetWindow, true);
+                ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "listingScript", "var targetWindow = null", true);
             }
         }
     }

@@ -641,7 +641,6 @@ function SelectService(serviceName, displaySeparateSubmission, supportsInstructi
             settings.TargetLanguages.Add(currentCulture);
         }
 
-        settings.TranslateWebpartProperties = SettingsKeyInfoProvider.GetBoolValue(SiteContext.CurrentSiteName + ".CMSTranslateWebpartProperties");
         settings.SourceLanguage = FromLanguage;
         settings.Instructions = Instructions;
         settings.Priority = Priority;

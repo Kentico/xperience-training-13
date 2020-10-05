@@ -296,7 +296,7 @@
         </member>
         <member name="T:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker">
             <summary>
-            Check administration domain uniqueness of site domain alias.
+            Check administration domain uniqueness of site domain alias within all sites.
             </summary>
         </member>
         <member name="M:CMS.SiteProvider.Internal.AdministrationDomainCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
@@ -337,12 +337,14 @@
             Retrieves the site alias based on given presentation URL.
             </summary>
             <param name="url">URL to detect matching site domain alias.</param>
+            <remarks>Looks for presentation URL in both live site and administration site aliases.</remarks>
         </member>
         <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasRetriever.RetrieveByCulture(System.String)">
             <summary>
             Retrieves the site alias based on given culture code.
             </summary>
             <param name="cultureCode">Culture code to detect matching site domain alias.</param>
+            <remarks>Looks for presentation URL based on culture code only in live site aliases.</remarks>
         </member>
         <member name="T:CMS.SiteProvider.Internal.NormalizedPresentationUrl">
             <summary>
@@ -376,7 +378,7 @@
         </member>
         <member name="T:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker">
             <summary>
-            Checks presentation URL uniqueness.
+            Checks presentation URL uniqueness within all sites.
             </summary>
         </member>
         <member name="M:CMS.SiteProvider.Internal.PresentationUrlCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
@@ -426,58 +428,42 @@
             </remarks>
             <param name="presentationUrl">URL</param>        
         </member>
-        <member name="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever">
+        <member name="T:CMS.SiteProvider.Internal.PresentationUrlSourceEnum">
             <summary>
-            Encapsulates presentation URLs loading from given site. 
+            Determines the source of presentation URLs.
             </summary>
         </member>
-        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+        <member name="F:CMS.SiteProvider.Internal.PresentationUrlSourceEnum.All">
             <summary>
-            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.PresentationUrlsRetriever"/> class.
+            Presentation URLs from both live site and administration site aliases.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.Internal.PresentationUrlSourceEnum.LiveSite">
+            <summary>
+            Presentation URLs from live site aliases.
+            </summary>
+        </member>
+        <member name="F:CMS.SiteProvider.Internal.PresentationUrlSourceEnum.Administration">
+            <summary>
+            Presentation URLs from administration site aliases.
+            </summary>
+        </member>
+        <member name="T:CMS.SiteProvider.Internal.SitePresentationUrlsRetriever">
+            <summary>
+            Encapsulates retrieval of presentation URLs for given site. 
+            </summary>
+        </member>
+        <member name="M:CMS.SiteProvider.Internal.SitePresentationUrlsRetriever.#ctor(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.SitePresentationUrlsRetriever"/> class.
             </summary>
             <param name="site">Site.</param>
         </member>
-        <member name="M:CMS.SiteProvider.Internal.PresentationUrlsRetriever.Retrieve">
+        <member name="M:CMS.SiteProvider.Internal.SitePresentationUrlsRetriever.Retrieve(CMS.SiteProvider.Internal.PresentationUrlSourceEnum)">
             <summary>
-            Returns presentation URLs assigned to the given site.
+            Returns presentation URLs assigned to the given site using specified source.
             </summary>
-        </member>
-        <member name="T:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker">
-            <summary>
-            Checks uniqueness of administration domains and presentation URLs within a site.
-            </summary>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.#ctor(CMS.SiteProvider.SiteInfo)">
-            <summary>
-            Initializes an instance of the <see cref="T:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker"/> class.
-            </summary>
-            <param name="site">Site.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsAliasPresentationUrlInCollision(System.String,System.Int32)">
-            <summary>
-            Checks collisions for given domain alias presentation URL.
-            </summary>
-            <param name="presentationUrl">Presentation URL.</param>
-            <param name="domainAliasId">Domain alias ID.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsAliasAdministrationDomainInCollision(System.String,System.Int32)">
-            <summary>
-            Checks collisions for given domain alias administration domain.
-            </summary>
-            <param name="domain">Administration domain.</param>
-            <param name="domainAliasId">Domain alias ID.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsSitePresentationUrlInCollision(System.String)">
-            <summary>
-            Checks collisions for given site presentation URL.
-            </summary>
-            <param name="presentationUrl">Presentation URL.</param>
-        </member>
-        <member name="M:CMS.SiteProvider.Internal.SiteDomainAliasesCollisionsChecker.IsSiteAdministrationDomainInCollision(System.String)">
-            <summary>
-            Checks collisions for given site administration domain.
-            </summary>
-            <param name="domain">Administration domain.</param>
+            <param name="source">Determines what set of presentation URLs should be retrieved.</param>
         </member>
         <member name="T:CMS.SiteProvider.ISiteDomainAliasInfoProvider">
             <summary>
@@ -1218,21 +1204,6 @@
         <member name="P:CMS.SiteProvider.SiteInfo.SiteTimeZone">
             <summary>
             Returns time zone info for current site.
-            </summary>
-        </member>
-        <member name="P:CMS.SiteProvider.SiteInfo.SiteIsOffline">
-            <summary>
-            Indicates whether site is in offline mode.
-            </summary>
-        </member>
-        <member name="P:CMS.SiteProvider.SiteInfo.SiteOfflineRedirectURL">
-            <summary>
-            URL redirection in offline mode.
-            </summary>
-        </member>
-        <member name="P:CMS.SiteProvider.SiteInfo.SiteOfflineMessage">
-            <summary>
-            Offline message.
             </summary>
         </member>
         <member name="M:CMS.SiteProvider.SiteInfo.DeleteObject">

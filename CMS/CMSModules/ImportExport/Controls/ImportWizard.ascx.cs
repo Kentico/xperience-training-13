@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Principal;
@@ -610,11 +611,21 @@ function NextStepAction() {
         } // Decide if importing site
         else if (settings.SiteIsIncluded)
         {
-            // Single site import and no site exists
-            if (ValidationHelper.GetBoolean(settings.GetInfo(ImportExportHelper.INFO_SINGLE_OBJECT), false) && (SiteInfoProvider.GetSitesCount() == 0))
+            // No site exists and...
+            if (SiteInfoProvider.GetSitesCount() == 0)
             {
-                SetErrorLabel(GetString("SiteImport.SingleSiteObjectNoSite"));
-                return;
+                // ...single site import
+                if (ValidationHelper.GetBoolean(settings.GetInfo(ImportExportHelper.INFO_SINGLE_OBJECT), false))
+                {
+                    SetErrorLabel(GetString("SiteImport.SingleSiteObjectNoSite"));
+                    return;
+                }
+                // ...older unsupported (PE) site
+                if (!SiteIsSupported(settings))
+                {
+                    SetErrorLabel(GetString("SiteImport.SiteNotSupported"));
+                    return;
+                }
             }
 
             // Init control
@@ -852,6 +863,21 @@ function NextStepAction() {
     private void SetWarningLabel(string text)
     {
         SetAlertLabel(lblWarning, text);
+    }
+
+
+    /// <summary>
+    /// Returns <c>true</c> if imported package contains site which is compatible with current version.
+    /// </summary>
+    private bool SiteIsSupported(SiteImportSettings settings)
+    {
+        DataTable table = ImportProvider.GetObjectsData(settings, SiteInfo.OBJECT_TYPE, true);
+        if ((table != null) && settings.IsLowerVersion("13.0"))
+        {
+            return DataHelper.GetBoolValue(table.Rows[0], "SiteIsContentOnly", false);
+        }
+
+        return true;
     }
 
     #endregion

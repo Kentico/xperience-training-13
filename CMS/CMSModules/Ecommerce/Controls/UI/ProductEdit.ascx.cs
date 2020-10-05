@@ -260,7 +260,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductEdit : CMSAdminCont
                 value = skuGeneralForm.GetFieldValue("SKUProductType");
             }
 
-            return ValidationHelper.GetString(value, "").ToEnum<SKUProductTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<SKUProductTypeEnum>(ValidationHelper.GetString(value, ""));
         }
     }
 
@@ -2014,7 +2014,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductEdit : CMSAdminCont
 
         if (!string.IsNullOrEmpty(value as string))
         {
-            return value.ToString().ToEnum<TrackInventoryTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<TrackInventoryTypeEnum>(value.ToString());
         }
 
         return null;

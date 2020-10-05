@@ -76,7 +76,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_E
             return;
         }
 
-        var service = TranslationServiceInfoProvider.GetTranslationServiceInfo(submission.SubmissionServiceID);
+        var service = TranslationServiceInfo.Provider.Get(submission.SubmissionServiceID);
         if (service == null)
         {
             return;

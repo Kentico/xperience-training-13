@@ -6,7 +6,7 @@
     <cms:LocalizedButton ID="btnInsert" runat="server" ResourceString="dialogs.actions.insert"
         ButtonStyle="Primary" EnableViewState="false" />
     <cms:LocalizedButton ID="btnCancel"
-        runat="server" ResourceString="dialogs.actions.cancel" ButtonStyle="Primary"
+        runat="server" ResourceString="dialogs.actions.cancel" ButtonStyle="Default"
         EnableViewState="false" />
 </div>
 <asp:Literal ID="ltlScript" runat="server" EnableViewState="false" />

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.webpart>
+  <WebPartCategoryID>
+    <CodeName>GeneralHTML</CodeName>
+    <GUID>16c890ee-6223-4455-8e5e-0f1fd0472fd6</GUID>
+    <ObjectType>cms.webpartcategory</ObjectType>
+  </WebPartCategoryID>
+  <WebPartDescription>
+    <![CDATA[This web part inserts javascript onto the page. The script can either be defined in-line or retrieved from an external file.]]>
+  </WebPartDescription>
+  <WebPartDisplayName>Javascript</WebPartDisplayName>
+  <WebPartDocumentation />
+  <WebPartFileName>general/javascript.ascx</WebPartFileName>
+  <WebPartGUID>8665bd43-6cfa-458c-a4a0-059c58c0ee8d</WebPartGUID>
+  <WebPartIconClass>icon-w-javascript</WebPartIconClass>
+  <WebPartName>javascript</WebPartName>
+  <WebPartProperties>
+    <form version="2">
+      <category name="Linked script">
+        <properties>
+          <caption>Linked JavaScript</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="LinkedFile" columnsize="500" columntype="text" guid="d18b4b3f-37da-40ac-8cd8-b41e89f391c3" resolvedefaultvalue="False" visible="true">
+        <properties>
+          <fieldcaption>Linked file</fieldcaption>
+          <fielddescription>
+            <![CDATA[Can be used to specify the path to an external script file. A request for the script will be added to the page. For example: ~/CMSScripts/Custom/jquery.js.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AllowManage>True</AllowManage>
+          <AllowNonApplicationPath>True</AllowNonApplicationPath>
+          <AllowZipFolders>True</AllowZipFolders>
+          <controlname>filesystemselector</controlname>
+          <NewTextFileExtension>js</NewTextFileExtension>
+          <SelectedPathPrefix>~/CMSScripts/</SelectedPathPrefix>
+          <ShowFolders>False</ShowFolders>
+          <StartingPath>~/CMSScripts/Custom</StartingPath>
+          <UseRelativeDimensions>True</UseRelativeDimensions>
+        </settings>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value.Length <= 500", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxLength\" ><p n=\"maxlength\"><t>500</t><v>500</v><r>false</r><d></d><vt>integer</vt></p></r></rules>")|(identity)GlobalAdministrator|(hash)e587954b0d9197e948c969b7508510a479b5a758a21974f588520a21be1801fc%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field allowempty="true" column="LinkedFilePageLocation" columnsize="50" columntype="text" guid="3c16bced-a3c5-4f63-b9f6-ce8f84fed5f8" visible="true">
+        <properties>
+          <fieldcaption>Linked file page location</fieldcaption>
+          <fielddescription>
+            <![CDATA[Selects the location on the page where the external script will be placed.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <Options>
+            <![CDATA[<item value="Header" text="Header" /><item value="Beginning" text="Beginning of the page" /><item value="Startup" text="Startup script" />]]>
+          </Options>
+        </settings>
+      </field>
+      <category name="JavaScript">
+        <properties>
+          <caption>In-line JavaScript</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="InlineScript" columntype="longtext" guid="5cbb7f63-2dcc-4f31-89a9-1484623c5d4c" visible="true">
+        <properties>
+          <fieldcaption>In-line script</fieldcaption>
+          <fielddescription>
+            <![CDATA[Specifies the code of the in-line script that will be rendered on the page.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>largetextarea</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="InlineScriptPageLocation" columnsize="50" columntype="text" guid="371a0cbe-8d9c-4de3-b3f7-3f003995689e" visible="true">
+        <properties>
+          <fieldcaption>In-line script page location</fieldcaption>
+          <fielddescription>
+            <![CDATA[Selects the location on the page, where the in-line javascript code will be inserted.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <Options>
+            <![CDATA[<item value="Header" text="Header" /><item value="Beginning" text="Beginning of the page" /><item value="Inline" text="Inline" /><item value="Startup" text="Startup script" /><item value="Submit" text="On submit statement" />]]>
+          </Options>
+        </settings>
+      </field>
+      <field column="GenerateScriptTags" columntype="boolean" guid="fa3c5076-47dc-4272-ad8d-0e9a52e159b1" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>Generate script tags</fieldcaption>
+          <fielddescription>
+            <![CDATA[Indicates whether script tags should automatically be generated around the in-line script.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </WebPartProperties>
+  <WebPartSkipInsertProperties>False</WebPartSkipInsertProperties>
+  <WebPartType>4</WebPartType>
+</cms.webpart>

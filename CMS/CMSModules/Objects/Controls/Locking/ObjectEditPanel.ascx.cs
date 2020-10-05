@@ -106,22 +106,6 @@ public partial class CMSModules_Objects_Controls_Locking_ObjectEditPanel : CMSUs
         }
     }
 
-
-    /// <summary>
-    /// Gets or sets the value that indicates if the control is used in the preview mode.
-    /// </summary>
-    public bool PreviewMode
-    {
-        get
-        {
-            return editMenuElem.PreviewMode;
-        }
-        set
-        {
-            editMenuElem.PreviewMode = value;
-        }
-    }
-
     #endregion
 
 

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>9edbfefc-ac03-4bd8-a433-c5447e9feb07</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @GlobalManufacturers bit;
+SET @GlobalManufacturers = {%Settings.CMSStoreAllowGlobalManufacturers?1:0|(identity)GlobalAdministrator|(hash)79651229ac58df7d8ca48e71d72fedf78bd6ce37f2648e8013f95ab3e569043a%};
+SELECT
+   Manufacturers.ManufacturerDisplayName AS '{$manufacturerselector.itemname$}', 
+   CAST(ISNULL(ROUND(SUM(OrderItemTotalPriceInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}'
+FROM 
+   COM_Manufacturer AS Manufacturers
+   LEFT JOIN
+   (COM_SKU AS product
+   LEFT JOIN
+   COM_SKU parentProduct
+    ON product.SKUParentSKUID = parentProduct.SKUID) 
+      ON (Manufacturers.ManufacturerID = product.SKUManufacturerID OR Manufacturers.ManufacturerID = parentProduct.SKUManufacturerID)
+   LEFT JOIN COM_OrderItem 
+      ON OrderItemSKUID = product.SKUID
+   LEFT JOIN COM_Order 
+      ON OrderID = OrderItemOrderID
+WHERE
+   (Manufacturers.ManufacturerEnabled = 1 OR 
+      (Manufacturers.ManufacturerID IN (SELECT SKUManufacturerID FROM COM_SKU WHERE SKUID IN 
+          (SELECT OrderItemSKUID FROM COM_OrderItem WHERE OrderItemOrderID IN 
+              (SELECT OrderID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID)))))
+   AND product.SKUOptionCategoryID IS NULL
+   AND (Manufacturers.ManufacturerSiteID = @CMSContextCurrentSiteID OR (Manufacturers.ManufacturerSiteID IS NULL AND @GlobalManufacturers = 1) )
+   AND OrderSiteID = @CMSContextCurrentSiteID 
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+   AND (OrderDate <= dateadd(day,1,@ToDate) OR @ToDate IS NULL) 
+   AND (ISNULL(@OrderIsPaid,0) = 0 OR ISNULL(OrderIsPaid, 0) = 1)
+GROUP BY Manufacturers.ManufacturerDisplayName
+ORDER BY SUM(OrderItemTotalPriceInMainCurrency) DESC, Manufacturers.ManufacturerDisplayName
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>SalesByManufacturer</CodeName>
+    <GUID>26644b71-0daa-4614-a4fb-d1e5d305d613</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Horizontal</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0.0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

@@ -720,7 +720,7 @@ public partial class CMSWebParts_Ecommerce_Products_Products : CMSAbstractWebPar
         // Representing filter
         if (!string.IsNullOrEmpty(Representing) && (Representing != FILTER_ALL))
         {
-            SKUProductTypeEnum productTypeEnum = Representing.ToEnum<SKUProductTypeEnum>();
+            SKUProductTypeEnum productTypeEnum = EnumStringRepresentationExtensions.ToEnum<SKUProductTypeEnum>(Representing);
             string productTypeString = productTypeEnum.ToStringRepresentation();
 
             where.WhereEquals("SKUProductType", productTypeString);

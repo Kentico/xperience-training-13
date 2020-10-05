@@ -159,6 +159,12 @@
             Name of license owner.
             </summary>
         </member>
+        <member name="F:CMS.LicenseProvider.LicenseKeyInfo.mLicenseGuid">
+            <summary>
+            License identifier, used for subscription licenses.
+            Used only for subscription type licenses since v13.
+            </summary>
+        </member>
         <member name="P:CMS.LicenseProvider.LicenseKeyInfo.IsTrial">
             <summary>
             Returns true if key is trial.
@@ -182,6 +188,11 @@
         <member name="P:CMS.LicenseProvider.LicenseKeyInfo.Edition">
             <summary>
             License edition.
+            </summary>
+        </member>
+        <member name="P:CMS.LicenseProvider.LicenseKeyInfo.LicenseGuid">
+            <summary>
+            Subscription license identifier.        
             </summary>
         </member>
         <member name="P:CMS.LicenseProvider.LicenseKeyInfo.EditionChar">
@@ -687,6 +698,98 @@
             Based on CMSVersion.NUMBER
             </summary>        
         </member>
+        <member name="T:CMS.LicenseProvider.ISubscriptionLicenseService">
+            <summary>
+            Service providing functionality to handle subscription licenses.
+            </summary>
+        </member>
+        <member name="M:CMS.LicenseProvider.ISubscriptionLicenseService.UpdateSubscriptionLicenses">
+            <summary>
+            Updates the subscription licenses registered in the application if there are new license keys available.
+            </summary>
+            <returns>A message if the update process encountered and error with some of the licenses.</returns>
+        </member>
+        <member name="T:CMS.LicenseProvider.SubscriptionLicenseService">
+            <summary>
+            Service providing functionality to handle subscription licenses.
+            </summary>
+        </member>
+        <member name="M:CMS.LicenseProvider.SubscriptionLicenseService.#ctor(CMS.LicenseProvider.ISubscriptionRenewalService,CMS.Core.IEventLogService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.LicenseProvider.SubscriptionLicenseService"/> class.
+            </summary>
+            <param name="eventLogService">The service for logging into the system event log.</param>
+            <param name="subscriptionRenewalService">The service that handles the requests to subscription renewal web service API.</param>
+        </member>
+        <member name="M:CMS.LicenseProvider.SubscriptionLicenseService.UpdateSubscriptionLicenses">
+            <summary>
+            Updates the subscription licenses registered in the application if there are new license keys available.
+            </summary>
+            <returns>A message if the update process encountered and error with some of the licenses.</returns>
+        </member>
+        <member name="T:CMS.LicenseProvider.ISubscriptionRenewalService">
+            <summary>
+            Service connecting to subscription licenses API.
+            </summary>
+        </member>
+        <member name="M:CMS.LicenseProvider.ISubscriptionRenewalService.RenewLicenses(System.Collections.Generic.IEnumerable{CMS.LicenseProvider.LicenseKeyInfo})">
+            <summary>
+            Renews the subscription licenses by calling external web service and sends subscriptions licenses to renew.
+            </summary>
+            <param name="licenses">The list of subscription licenses.</param>
+            <returns>
+            A collection corresponding to provided licenses where for each license a license key
+            is returned or an error message. The returned license key may be updated or unchanged.
+            </returns>
+        </member>
+        <member name="T:CMS.LicenseProvider.SubscriptionLicenseRenewalResult">
+            <summary>
+            Object representing the response of the subscription license renewal web service.
+            </summary>
+        </member>
+        <member name="P:CMS.LicenseProvider.SubscriptionLicenseRenewalResult.Domain">
+            <summary>
+            Domain for which the renewed license is registered.
+            </summary>
+        </member>
+        <member name="P:CMS.LicenseProvider.SubscriptionLicenseRenewalResult.ErrorMessage">
+            <summary>
+            Contains information why the renewal for this license failed, otherwise <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:CMS.LicenseProvider.SubscriptionLicenseRenewalResult.Key">
+            <summary>
+            When the license is found in the web service, the license key is returned into this property.
+            If an error occurred during renewal for this license then <c>null</c> is returned and <see cref="P:CMS.LicenseProvider.SubscriptionLicenseRenewalResult.ErrorMessage"/> 
+            will contain the information.
+            </summary>
+        </member>
+        <member name="T:CMS.LicenseProvider.SubscriptionRenewalService">
+            <summary>
+            Service connecting to subscription licenses API.
+            </summary>
+        </member>
+        <member name="M:CMS.LicenseProvider.SubscriptionRenewalService.#ctor(CMS.Core.IAppSettingsService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.LicenseProvider.SubscriptionRenewalService"/> class.
+            </summary>
+            <param name="appSettingsService">The application settings service.</param>
+        </member>
+        <member name="M:CMS.LicenseProvider.SubscriptionRenewalService.RenewLicenses(System.Collections.Generic.IEnumerable{CMS.LicenseProvider.LicenseKeyInfo})">
+            <summary>
+            Renews the subscription licenses by calling external web service and sends subscriptions licenses to renew.
+            </summary>
+            <param name="licenses">The list of subscription licenses.</param>
+            <returns>
+            A collection corresponding to provided licenses where for each license a license key
+            is returned or an error message. The returned license key may be updated or unchanged.
+            </returns>
+        </member>
+        <member name="M:CMS.LicenseProvider.SubscriptionRenewalService.GetRenewalServiceUrl">
+            <summary>
+            For testing purposes an app-setting with different URL may be used.
+            </summary>
+        </member>
         <member name="T:CMS.LicenseProvider.ClearLicenseLimitationCacheWebFarmTask">
             <summary>
             Web farm task used to clear basic license limitation tables.
@@ -968,11 +1071,6 @@
             Site IDs by domain
             </summary>
         </member>
-        <member name="P:CMS.LicenseProvider.LicenseHelperInternal.EA5">
-            <summary>
-            License version blog table
-            </summary>
-        </member>
         <member name="P:CMS.LicenseProvider.LicenseHelperInternal.A7FB6">
             <summary>
             License version document table
@@ -1047,13 +1145,6 @@
             Returns DataClassInfo object according to 
             </summary>
             <param name="className">Class name.</param>
-        </member>
-        <member name="M:CMS.LicenseProvider.LicenseHelperInternal.GetNumberOfBlogDocuments(System.Int32,System.String)">
-            <summary>
-            Calls query which returns number of blog documents for given domain.
-            </summary>
-            <param name="classID">Class ID of blog docuemnt type.</param>
-            <param name="domain">Domain.</param>
         </member>
         <member name="M:CMS.LicenseProvider.LicenseHelperInternal.GetNumberOfDocuments(System.String)">
             <summary>

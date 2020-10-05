@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>SearchCrawlers</CodeName>
+    <GUID>e45ca3b3-171e-4d3c-bc0c-67545a696f2d</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString />
+  <ReportDisplayName>Search crawlers - Monthly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>c0157c8b-b385-4d30-b10f-fcf3f8430922</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+<p>%%control:ReportGraph?searchcrawler.monthreport.graph%%</p>
+<p>%%control:ReportTable?searchcrawler.monthreport.table%%</p>
+
+<p>{$reports_general.created$} {%cmscontextcurrenttime%} {$reports_general.by$} {%cmscontextcurrentusername%}</p>
+
+]]>
+  </ReportLayout>
+  <ReportName>searchcrawler.monthreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="67a40990-d133-4367-aa95-37448b790c95" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddYears(-1).Date|(identity)GlobalAdministrator|(hash)03e2e9d76b2b7c2f0871530f9d00e1d98b9c444834fc880d0d63d0b72a8bfb8c%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+        </settings>
+      </field>
+      <field column="ToDate" columnprecision="7" columntype="datetime" guid="b46600cc-e03f-401a-b4e2-1370d8ea4832" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{% CurrentDateTime %}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <CheckRange>True</CheckRange>
+          <controlname>CalendarControl</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="CodeName" columnsize="50" columntype="text" guid="7a39052f-7cd7-4923-9e9d-53557e22be1b" />
+    </form>
+  </ReportParameters>
+</reporting.report>

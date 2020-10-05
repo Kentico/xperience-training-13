@@ -76,12 +76,6 @@ public partial class CMSModules_PortalEngine_UI_PageTemplates_PageTemplate_Desig
     {
         base.OnPreRender(e);
 
-        if (QueryHelper.Contains("deviceprofileid"))
-        {
-            ScriptHelper.RegisterGetTopScript(this);
-            ShowWarning(GetString("devicelayout.designmode.warning"), null, null);
-        }
-
         // Init the header tags
         ltlTags.Text = HeaderTags;
     }

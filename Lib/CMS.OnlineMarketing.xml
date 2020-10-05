@@ -87,29 +87,40 @@
             Class providing method for logging A/B test conversions.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.#ctor(CMS.OnlineMarketing.Internal.IABUserStateManagerFactory,CMS.WebAnalytics.IAnalyticsConsentProvider,CMS.SiteProvider.ISiteInfoProvider)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.#ctor(CMS.OnlineMarketing.Internal.IABUserStateManagerFactory,CMS.Base.Internal.IHttpContextRetriever,CMS.WebAnalytics.IAnalyticsLogger,CMS.SiteProvider.ISiteInfoProvider)">
             <summary>
-            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABTestConversionLogger"/> with given <paramref name="abUserStateManagerFactory"/>, <paramref name="analyticsConsentProvider"/>
-            and <paramref name="siteInfoProvider"/>.
+            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABTestConversionLogger"/> with given <paramref name="abUserStateManagerFactory"/>, <paramref name="httpContextRetriever"/>, 
+            <paramref name="siteInfoProvider"/> and <paramref name="analyticsLogger"/>.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.LogConversion``1(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.LogConversion(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Decimal)">
             <summary>
             Log A/B test conversion with given parameters. Actual logging of conversions is different for content only sites and other sites based on given <paramref name="siteName"/>.
             </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier in <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager`1"/>.</typeparam>
             <param name="requestDomain">Domain of current HTTP request.</param>
             <param name="siteName">Site name where conversion occurred.</param>
             <param name="culture">Culture of page where conversion occurred.</param>
             <param name="conversionName">Name of conversion registered in system.</param>
             <param name="itemIdentifier">Identifier of object connected to conversion.</param>
-            <param name="objectId">ID of object connected with conversion.</param>
             <param name="count">Number of conversions that occurred.</param>
             <param name="value">Conversion value.</param>
             <seealso cref="P:CMS.OnlineMarketing.ABTestConversionDefinition.ConversionName"/>
             <seealso cref="M:CMS.OnlineMarketing.ABTestConversionDefinitionRegister.Register(CMS.OnlineMarketing.ABTestConversionDefinition)"/>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.GetConversionValue(CMS.OnlineMarketing.ABTestInfo,System.String,System.Double)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.LogConversion(System.String,System.String,System.String,System.Decimal,System.Int32,System.String)">
+            <summary>
+            Logs A/B test conversion.
+            </summary>
+            <param name="conversionName">Name of conversion registered in system.</param>
+            <param name="siteName">Site name where conversion occurred.</param>
+            <param name="itemIdentifier">Identifier of object connected to conversion.</param>
+            <param name="value">Default value used for logging. This value has lower priority than the conversion default value defined in the A/B testing application.</param>
+            <param name="count">Number of conversions that occurred - 1 by default.</param>
+            <param name="culture">Culture name connected to conversion - current thread culture is used if not specified.</param>
+            <seealso cref="P:CMS.OnlineMarketing.ABTestConversionDefinition.ConversionName"/>
+            <seealso cref="M:CMS.OnlineMarketing.ABTestConversionDefinitionRegister.Register(CMS.OnlineMarketing.ABTestConversionDefinition)"/>
+        </member>
+        <member name="M:CMS.OnlineMarketing.Internal.ABTestConversionLogger.GetConversionValue(CMS.OnlineMarketing.ABTestInfo,System.String,System.Decimal)">
             <summary>
             Returns value that should be used as value of given <paramref name="conversionName"/>.
             </summary>
@@ -117,27 +128,6 @@
             <param name="conversionName">Name of conversion for which value is returned.</param>
             <param name="value">Conversion value used for portal engine A/B tests, or fallback conversion value for content only A/B tests.</param>
             <returns>Conversion value.</returns>
-        </member>
-        <member name="T:CMS.OnlineMarketing.Internal.IABTestConversionLogger">
-            <summary>
-            Defines set of methods for logging A/B test conversions.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABTestConversionLogger.LogConversion``1(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
-            <summary>
-            Log A/B test conversion with given parameters. Actual logging of conversions is different for content only sites and other sites based on given <paramref name="siteName"/>.
-            </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier in <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager`1"/>.</typeparam>
-            <param name="requestDomain">Domain of current HTTP request.</param>
-            <param name="siteName">Site name where conversion occurred.</param>
-            <param name="culture">Culture of page where conversion occurred.</param>
-            <param name="conversionName">Name of conversion registered in system.</param>
-            <param name="itemIdentifier">Identifier of object connected to conversion.</param>
-            <param name="objectId">ID of object connected with conversion.</param>
-            <param name="count">Number of conversions that occurred.</param>
-            <param name="value">Conversion value.</param>
-            <seealso cref="P:CMS.OnlineMarketing.ABTestConversionDefinition.ConversionName"/>
-            <seealso cref="M:CMS.OnlineMarketing.ABTestConversionDefinitionRegister.Register(CMS.OnlineMarketing.ABTestConversionDefinition)"/>
         </member>
         <member name="T:CMS.OnlineMarketing.Internal.ABTestConfiguration">
             <summary>
@@ -343,138 +333,137 @@
             <param name="minValue">The inclusive lower bound of the random number returned. </param><param name="maxValue">The exclusive upper bound of the random number returned. <paramref name="maxValue"/> must be greater than or equal to <paramref name="minValue"/>. </param>
             <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>. </exception>
         </member>
-        <member name="T:CMS.OnlineMarketing.Internal.ABCookieValue`1">
+        <member name="T:CMS.OnlineMarketing.Internal.ABCookieValue">
             <summary>
             Class representing deserialized permanent A/B cookie value.
             </summary>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue`1.VariantIdentifier">
+        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue.VariantIdentifier">
             <summary>
             A/B variant identifier.
             </summary>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue`1.ExcludedFromTest">
+        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue.ExcludedFromTest">
             <summary>
             Indicates whether is visitor included in A/B test or not.
             If not, Control is always shown and no A/B conversions and A/B visits are logged.
             </summary>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue`1.Conversions">
+        <member name="P:CMS.OnlineMarketing.Internal.ABCookieValue.Conversions">
             <summary>
             Conversions performed during this test.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABCookieValue`1.#ctor">
+        <member name="M:CMS.OnlineMarketing.Internal.ABCookieValue.#ctor">
             <summary>
             Constructor. Sets properties to empty values.
             </summary>
         </member>
-        <member name="T:CMS.OnlineMarketing.Internal.ABUserStateManager`1">
+        <member name="T:CMS.OnlineMarketing.Internal.ABUserStateManager">
             <summary>
             Manages current user's A/B test state - can assign an A/B variant to him, save which conversions he has done, or read saved state. Internally uses a cookie for permanent state
-            (see <see cref="T:CMS.OnlineMarketing.Internal.ABCookieValue`1"/>) and session for session state(see <see cref="T:CMS.Helpers.SessionHelper"/>).
+            (see <see cref="T:CMS.OnlineMarketing.Internal.ABCookieValue"/>) and session for session state(see <see cref="T:CMS.Helpers.SessionHelper"/>).
             </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier.</typeparam>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager`1.CookieValue">
+        <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager.CookieValue">
             <summary>
             Gets or sets cached cookie value.
             </summary>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager`1.IsExcluded">
+        <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager.IsExcluded">
             <summary>
             Indicates whether is visitor included in A/B test or not.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.#ctor(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.#ctor(System.String)">
             <summary>
-            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager`1"/>.
+            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager"/>.
             </summary>
             <param name="testName">Name of the test for which the user's state is managed</param>
             <exception cref="T:System.ArgumentException">testName is null or empty</exception>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.#ctor(System.String,CMS.OnlineMarketing.Internal.IABResponseCookieProvider)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.#ctor(System.String,CMS.OnlineMarketing.Internal.IABResponseCookieProvider)">
             <summary>
-            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager`1"/>.
+            Initializes a new instance of <see cref="T:CMS.OnlineMarketing.Internal.ABUserStateManager"/>.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.SetVisit">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.SetVisit">
             <summary>
             Sets a A/B test visit for current user so that from now on, conversions can be logged also as A/B test session conversions.
             </summary>
             <returns>True if visit was assigned successfully (wasn't already assigned). False if a visit is already set.</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.SetVisitToSession">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.SetVisitToSession">
             <summary>
             Sets current A/B test visit directly to the session store.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.IsABVisit">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.IsABVisit">
             <summary>
             Returns true if user has visited A/B test page and has visit session.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.GetVariantIdentifier">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.GetVariantIdentifier">
             <summary>
             Gets name of the A/B variant assigned to the current user. Returns null, if the user hasn't got any variant assigned yet.
             </summary>
             <returns>Code name of the variant that is assigned to the current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.AssignVariant(`0)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.AssignVariant(System.Guid)">
             <summary>
             Assigns an A/B variant to current user so that it can be used on next visit. From now on, permanent conversions can be also saved to
             user's state.
             </summary>
             <param name="variantIdentifier">Identifier of the variant to assign to current user.</param>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.Exclude">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.Exclude">
             <summary>
             Excludes visitor from A/B test.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.GetPermanentConversions">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.GetPermanentConversions">
             <summary>
             Gets permanent conversions that are done by current user.
             </summary>
             <returns>Permanent conversions that are done by current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.GetSessionConversions">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.GetSessionConversions">
             <summary>
             Gets session conversions that are done by current user.
             </summary>
             <returns>Session conversions that are done by current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.AddConversion(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.AddConversion(System.String)">
             <summary>
             Adds a conversion to session and permanent conversions if possible.
             </summary>
             <param name="conversion">Conversion to add to current user</param>
             <exception cref="T:System.ArgumentException">conversion is null or empty</exception>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.IsABTestCookieDefined">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.IsABTestCookieDefined">
             <summary>
             Returns true when A/B test cookie is defined.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.TryAddPermanentConversion(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.TryAddPermanentConversion(System.String)">
             <summary>
             Adds specified conversion to permanent cookie.
             </summary>
             <param name="conversion">Conversion name</param>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.TryAddSessionConversion(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.TryAddSessionConversion(System.String)">
             <summary>
             Adds specified conversion to session cookie.
             </summary>
             <param name="conversion">Conversion name</param>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.GetCookieValue(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.GetCookieValue(System.String)">
             <summary>
             Returns deserialized value of specified cookie.
             </summary>
             <param name="cookieName">Cookie name</param>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager`1.SetCookie(System.String,CMS.OnlineMarketing.Internal.ABCookieValue{`0},System.DateTime)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.SetCookie(System.String,CMS.OnlineMarketing.Internal.ABCookieValue,System.DateTime)">
             <summary>
             Serializes object to a cookie as a JSON object.
             </summary>
@@ -484,14 +473,13 @@
         </member>
         <member name="T:CMS.OnlineMarketing.Internal.ABUserStateManagerFactory">
             <summary>
-            Factory for <see cref="T:CMS.OnlineMarketing.Internal.IABUserStateManager`1"/>.
+            Factory for <see cref="T:CMS.OnlineMarketing.Internal.IABUserStateManager"/>.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManagerFactory.Create``1(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManagerFactory.Create(System.String)">
             <summary>
             Creates a new user state manager for A/B test identified by <paramref name="abTestName"/>.
             </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier.</typeparam>
             <param name="abTestName">Name of A/B test to create a manager for.</param>
             <returns>Returns a new instance of A/B test manager for a test.</returns>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="abTestName"/> is null or an empty string.</exception>
@@ -552,86 +540,84 @@
              Gets names of both request and response cookies without duplicates.
             </summary>
         </member>
-        <member name="T:CMS.OnlineMarketing.Internal.IABUserStateManager`1">
+        <member name="T:CMS.OnlineMarketing.Internal.IABUserStateManager">
             <summary>
             Manages current user's A/B test state - can assign an A/B variant to him, save which conversions he has done, or read saved state. Internally uses a cookie for permanent state
-            (see <see cref="T:CMS.OnlineMarketing.Internal.ABCookieValue`1"/>) and session for session state(see <see cref="T:CMS.Helpers.SessionHelper"/>).
+            (see <see cref="T:CMS.OnlineMarketing.Internal.ABCookieValue"/>) and session for session state(see <see cref="T:CMS.Helpers.SessionHelper"/>).
             </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier.</typeparam>
         </member>
-        <member name="P:CMS.OnlineMarketing.Internal.IABUserStateManager`1.IsExcluded">
+        <member name="P:CMS.OnlineMarketing.Internal.IABUserStateManager.IsExcluded">
             <summary>
             Indicates whether is visitor included in A/B test or not.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.SetVisit">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.SetVisit">
             <summary>
             Sets a A/B test visit for current user so that from now on, conversions can be logged also as A/B test session conversions.
             </summary>
             <returns>True if visit was assigned successfully (wasn't already assigned). False if a visit is already set.</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.SetVisitToSession">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.SetVisitToSession">
             <summary>
             Sets current A/B test visit to the session store.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.IsABVisit">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.IsABVisit">
             <summary>
             Returns true if user has visited A/B test page and has visit session.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.GetVariantIdentifier">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.GetVariantIdentifier">
             <summary>
-            Gets name of the A/B variant assigned to the current user. Returns null, if the user hasn't got any variant assigned yet.
+            Gets identifier of the A/B variant assigned to the current user. Returns null, if the user hasn't got any variant assigned yet.
             </summary>
-            <returns>Code name of the variant that is assigned to the current user</returns>
+            <returns>Identifier of the variant that is assigned to the current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.AssignVariant(`0)">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.AssignVariant(System.Guid)">
             <summary>
             Assigns an A/B variant to current user so that it can be used on next visit. From now on, permanent conversions can be also saved to
             user's state.
             </summary>
             <param name="variantIdentifier">Identifier of the variant to assign to current user.</param>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.Exclude">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.Exclude">
             <summary>
             Excludes visitor from A/B test.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.GetPermanentConversions">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.GetPermanentConversions">
             <summary>
             Gets permanent conversions that are done by current user.
             </summary>
             <returns>Permanent conversions that are done by current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.GetSessionConversions">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.GetSessionConversions">
             <summary>
             Gets session conversions that are done by current user.
             </summary>
             <returns>Session conversions that are done by current user</returns>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.AddConversion(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.AddConversion(System.String)">
             <summary>
             Adds a conversion to session and permanent conversions if possible.
             </summary>
             <param name="conversion">Conversion to add to current user</param>
             <exception cref="T:System.ArgumentException">conversion is null or empty</exception>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager`1.IsABTestCookieDefined">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManager.IsABTestCookieDefined">
             <summary>
             Returns true when A/B test cookie is defined.
             </summary>
         </member>
         <member name="T:CMS.OnlineMarketing.Internal.IABUserStateManagerFactory">
             <summary>
-            Factory for <see cref="T:CMS.OnlineMarketing.Internal.IABUserStateManager`1"/>.
+            Factory for <see cref="T:CMS.OnlineMarketing.Internal.IABUserStateManager"/>.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManagerFactory.Create``1(System.String)">
+        <member name="M:CMS.OnlineMarketing.Internal.IABUserStateManagerFactory.Create(System.String)">
             <summary>
             Creates a new user state manager for A/B test identified by <paramref name="abTestName"/>.
             </summary>
-            <typeparam name="TIdentifier">Type of the A/B variant identifier.</typeparam>
             <param name="abTestName">Name of A/B test to create a manager for.</param>
             <returns>Returns a new instance of A/B test manager for a test.</returns>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="abTestName"/> is null or an empty string.</exception>
@@ -1141,6 +1127,24 @@
             <param name="formControlType">Type of the form control used to pick the object related to conversion type.</param>
             <param name="formControlCaption">Caption shown as label above the form control used to pick the object related to conversion type.</param>
             <param name="formControlParameters">Parameters which allow customization of form control defined by <paramref name="formControlType"/>.</param>
+        </member>
+        <member name="T:CMS.OnlineMarketing.IABTestConversionLogger">
+            <summary>
+            Defines set of methods for logging A/B test conversions.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineMarketing.IABTestConversionLogger.LogConversion(System.String,System.String,System.String,System.Decimal,System.Int32,System.String)">
+            <summary>
+            Logs A/B test conversion.
+            </summary>
+            <param name="conversionName">Name of conversion registered in system.</param>
+            <param name="siteName">Site name where conversion occurred.</param>
+            <param name="itemIdentifier">Identifier of object connected to conversion.</param>
+            <param name="value">Default value used for logging. This value has lower priority than the conversion default value defined in the A/B testing application.</param>
+            <param name="count">Number of conversions that occurred - 1 by default.</param>
+            <param name="culture">Culture name connected to conversion - current thread culture is used if not specified.</param>
+            <seealso cref="P:CMS.OnlineMarketing.ABTestConversionDefinition.ConversionName"/>
+            <seealso cref="M:CMS.OnlineMarketing.ABTestConversionDefinitionRegister.Register(CMS.OnlineMarketing.ABTestConversionDefinition)"/>
         </member>
         <member name="T:CMS.OnlineMarketing.TreeNodeExtensions">
             <summary>
@@ -2188,390 +2192,6 @@
             </summary>
             <returns>Returns <c>true</c> if logging should be filtered out, because current user has disabled logging. Otherwise returns <c>false</c>.</returns>
         </member>
-        <member name="T:CMS.OnlineMarketing.MVTActivityModifier">
-            <summary>
-            Class for updating MVT related properties in activities.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTActivityModifier.Modify(CMS.Activities.IActivityInfo)">
-            <summary>
-            Updates <see cref="P:CMS.Activities.IActivityInfo.ActivityMVTCombinationName"/> with current MVT combination name.
-            </summary>
-            <remarks>Only activities of type <see cref="F:CMS.Activities.PredefinedActivityType.PAGE_VISIT"/> or <see cref="F:CMS.Activities.PredefinedActivityType.LANDING_PAGE"/> are updated.</remarks>
-            <param name="activity">Activity which property to update.</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ContentPersonalizationUsageDataSource">
-            <summary>
-            Module usage tracking data source for content personalization module.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ContentPersonalizationUsageDataSource.mSettingsToLog">
-            <summary>
-            Settings keys which are logged.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationUsageDataSource.Name">
-            <summary>
-            Get the data source name.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationUsageDataSource.GetData">
-            <summary>
-            Get all module statistical data.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationUsageDataSource.GetSettingsUsage(System.Boolean)">
-            <summary>
-            Returns how many times is specific setting used with value which is not same as default value. 
-            Only settings on running sites (if <paramref name="global"/> is true), not hidden and not custom are retrieved.
-            Only global settings when <paramref name="global"/> is false.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ContentPersonalizationVariantInfo">
-            <summary>
-            ContentPersonalizationVariant data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.OBJECT_TYPE_DOCUMENTVARIANT">
-            <summary>
-            Object type for document variant
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.TYPEINFO_DOCUMENT">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantInstanceGUID">
-            <summary>
-            Personalization variant instance GUID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantPosition">
-            <summary>
-            Personalization variant position.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantDisplayCondition">
-            <summary>
-            Personalization variant display condition.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantWebParts">
-            <summary>
-            Personalization variant web parts.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantLastModified">
-            <summary>
-            Personalization variant last modified.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantName">
-            <summary>
-            Personalization variant code name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantID">
-            <summary>
-            Personalization variant id.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantDescription">
-            <summary>
-            Personalization variant description.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantDisplayName">
-            <summary>
-            Personalization variant display name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantEnabled">
-            <summary>
-            Personalization variant enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantDocumentID">
-            <summary>
-            Personalization variant document id.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantPageTemplateID">
-            <summary>
-            Personalization variant page template id.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantZoneID">
-            <summary>
-            Personalization variant zone id.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.VariantGUID">
-            <summary>
-            Personalization variant GUID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.TypeInfo">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.GetAutomaticCodeName">
-            <summary>
-            Gets the automatic code name for the object.
-            </summary>
-            <remarks>
-            There are many cases where the codename has to or has not to be unique. To avoid necessary complexity and prevent further defects, GUID is used for the code name instead.
-            </remarks>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.SetObjectOrderPostprocessing">
-            <summary>
-            Method which is called after the order of the object was changed. Generates staging tasks and webfarm tasks by default.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty ContentPersonalizationVariant object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new ContentPersonalizationVariant object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data.</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider">
-            <summary>
-            Class providing ContentPersonalizationVariant management.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariants">
-            <summary>
-            Returns a query for all the ContentPersonalizationVariantInfo objects.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariants(System.Int32)">
-            <summary>
-            Gets all the Content personalization variants for the specified template.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariant(System.Int32)">
-            <summary>
-            Returns content personalization variant with specified ID.
-            </summary>
-            <param name="variantId">Content personalization variant ID.</param>        
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariant(System.String)">
-            <summary>
-            Returns content personalization variant with specified name.
-            </summary>
-            <param name="variantName">Content personalization variant name.</param>                
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SetContentPersonalizationVariant(CMS.OnlineMarketing.ContentPersonalizationVariantInfo)">
-            <summary>
-            Sets (updates or inserts) specified content personalization variant.
-            </summary>
-            <param name="variantObj">Content personalization variant to be set.</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.DeleteContentPersonalizationVariant(CMS.OnlineMarketing.ContentPersonalizationVariantInfo)">
-            <summary>
-            Deletes specified content personalization variant.
-            </summary>
-            <param name="variantObj">Content personalization variant to be deleted.</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.DeleteContentPersonalizationVariant(System.Int32)">
-            <summary>
-            Deletes content personalization variant with specified ID.
-            </summary>
-            <param name="variantId">Content personalization variant ID.</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.ContentPersonalizationEnabled(System.String)">
-            <summary>
-            Indicates whether the content personalization is enabled.
-            </summary>
-            <param name="siteName">Name of the site</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariants(System.Int32,System.String,System.Guid,System.Int32)">
-            <summary>
-            Gets the Content personalization variants for a web part/zone/widget.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SaveVariant(System.Int32,System.String,System.String,System.String,System.Boolean,System.String,System.String,System.Guid,System.Int32,System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="variantName">Name of the variant</param>
-            <param name="variantDisplayName">Display name of the variant</param>
-            <param name="variantDescription">The variant description</param>
-            <param name="variantEnabled">Indicates whether the variant is enabled</param>
-            <param name="variantDisplayCondition">The variant display condition</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SaveVariantWebparts(System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant properties.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.UpdateWebPartVariants(System.Int32,System.String,System.Guid,System.String)">
-            <summary>
-            Updates the web part variants with a new zone id.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id.</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="newZoneId">The new zone id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.DeleteWidgetVariants(System.String,System.Int32,System.Int32)">
-            <summary>
-            Deletes all variants of all widgets in the document.
-            </summary>
-            <param name="zoneId">The zone id</param>
-            <param name="templateId">The template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.MoveVariantUp(System.Int32)">
-            <summary>
-            Moves the variant up in the position sequence (up = smaller VariantPosition = sooner in the navigation)
-            </summary>
-            <param name="variantId">The variant id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.MoveVariantDown(System.Int32)">
-            <summary>
-            Moves the variant down in the position sequence (down = larger VariantPosition = later in the navigation)
-            </summary>
-            <param name="variantId">The variant id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.CloneTemplateVariants(System.Int32,System.Int32)">
-            <summary>
-            Clones all the Content personalization variants of the specific page template.
-            </summary>
-            <param name="originalTemplateId">The original template id</param>
-            <param name="newTemplateId">The new template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SetInfo(CMS.OnlineMarketing.ContentPersonalizationVariantInfo)">
-            <summary>
-            Inserts or Updates the object to the database.
-            </summary>
-            <param name="info">Object to insert / update</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.DeleteInfo(CMS.OnlineMarketing.ContentPersonalizationVariantInfo)">
-            <summary>
-            Deletes the object to the database.
-            </summary>
-            <param name="info">Object to delete</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariantsInternal(System.Int32)">
-            <summary>
-            Gets all the Content personalization variants for the specified template.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.GetContentPersonalizationVariantsInternal(System.Int32,System.String,System.Guid,System.Int32)">
-            <summary>
-            Gets the Content personalization variants for a web part/zone/widget.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SaveVariantInternal(System.Int32,System.String,System.String,System.String,System.Boolean,System.String,System.String,System.Guid,System.Int32,System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant and generates new combinations if the variant is new.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="variantName">Name of the variant</param>
-            <param name="variantDisplayName">Display name of the variant</param>
-            <param name="variantDescription">The variant description</param>
-            <param name="variantEnabled">Indicates whether the variant is enabled</param>
-            <param name="variantDisplayCondition">The variant display condition</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.SaveVariantWebpartsInternal(System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant properties.
-            </summary>
-            <param name="variantId">The variant id.</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.UpdateWebPartVariantsInternal(System.Int32,System.String,System.Guid,System.String)">
-            <summary>
-            Updates the web part variants with a new zone id.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id.</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="newZoneId">The new zone id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.DeleteWidgetVariantsInternal(System.String,System.Int32,System.Int32)">
-            <summary>
-            Deletes all variants of all widgets in the document.
-            </summary>
-            <param name="zoneId">The zone id</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.MoveVariantUpInternal(System.Int32)">
-            <summary>
-            Moves task up in the order sequence (up = smaller VariantPosition = sooner in the navigation)
-            </summary>
-            <param name="variantId">The variant id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.MoveVariantDownInternal(System.Int32)">
-            <summary>
-            Moves task down in the order sequence (down = larger VariantPosition = later in the navigation)
-            </summary>
-            <param name="variantId">The variant id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationVariantInfoProvider.CloneTemplateVariantsInternal(System.Int32,System.Int32)">
-            <summary>
-            Clones all the Content personalization variants of the specific page template.
-            </summary>
-            <param name="originalTemplateId">The original template id</param>
-            <param name="newTemplateId">The new template id</param>
-        </member>
         <member name="T:CMS.OnlineMarketing.ActivityInfoMethods">
             <summary>
             Online marketing methods - wrapping methods for macro resolver.
@@ -2620,11 +2240,6 @@
             Initializes the events handlers.
             </summary>
         </member>
-        <member name="M:CMS.OnlineMarketing.ABHandlers.LogABConversion(System.Object,CMS.Base.CMSEventArgs{CMS.WebAnalytics.LogRecord})">
-            <summary>
-            Logs AB conversions.
-            </summary>
-        </member>
         <member name="T:CMS.OnlineMarketing.ABTestModule">
             <summary>
             Represents the A/B tests module.
@@ -2645,46 +2260,6 @@
             Initializes a new instance of the ABTestModuleMetadata class.
             </summary>
         </member>
-        <member name="T:CMS.OnlineMarketing.ContentPersonalizationModule">
-            <summary>
-            Represents the Content personalization module.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationModule.#ctor">
-            <summary>
-            Initializes a new instance of the ContentPersonalizationModule class.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.ContentPersonalizationModuleMetadata">
-            <summary>
-            Represents the Content personalization module metadata.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.ContentPersonalizationModuleMetadata.#ctor">
-            <summary>
-            Initializes a new instance of the ContentPersonalizationModuleMetadata class.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestModule">
-            <summary>
-            Represents the MVT tests module.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestModule.#ctor">
-            <summary>
-            Initializes a new instance of the MVTestModule class.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestModuleMetadata">
-            <summary>
-            Represents the MVT tests module metadata.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestModuleMetadata.#ctor">
-            <summary>
-            Initializes a new instance of the MVTestModuleMetadata class.
-            </summary>
-        </member>
         <member name="T:CMS.OnlineMarketing.OnlineMarketingImportSpecialActions">
             <summary>
             Handles special actions during the import process.
@@ -2694,21 +2269,6 @@
             <summary>
             Initializes export handlers
             </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.OnlineMarketingImportSpecialActions.RegisterTranslationRecords(System.Data.DataSet,System.String,CMS.DataEngine.TranslationHelper,System.String[])">
-            <summary>
-            Ensure translation records registration.
-            </summary>
-            <param name="data">Source dataset</param>
-            <param name="objectType">Type of the object</param>
-            <param name="th">Translation helper</param>
-            <param name="excludedNames">Excluded object names</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.OnlineMarketingImportSpecialActions.IsDocumentObjectType(System.String)">
-            <summary>
-            Returns true if object type is from documents data.
-            </summary>
-            <param name="objectType">Type of the object</param>
         </member>
         <member name="T:CMS.OnlineMarketing.OnlineMarketingHandlers">
             <summary>
@@ -2811,1488 +2371,6 @@
             <summary>
             Default constructor
             </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTCombinationInfo">
-            <summary>
-            MVTCombinationInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfo.OBJECT_TYPE_DOCUMENTCOMBINATION">
-            <summary>
-            Object type for document combination
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfo.TYPEINFO">
-            <summary>
-            Type information (Web part, zone combinations).
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfo.TYPEINFO_DOCUMENT">
-            <summary>
-            Type information (Combinations containing widgets).
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationConversions">
-            <summary>
-            Number of conversions of the current combination
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationGUID">
-            <summary>
-            Unique combination identifier.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationID">
-            <summary>
-            MVT combination ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationDocumentID">
-            <summary>
-            MVT combination document ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationLastModified">
-            <summary>
-            Last modification of the MVT combination.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationName">
-            <summary>
-            MVT combination code name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationCustomName">
-            <summary>
-            MVT combination custom name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationPageTemplateID">
-            <summary>
-            MVT combination page template ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationEnabled">
-            <summary>
-            MVT combination enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationEnabledOriginal">
-            <summary>
-            MVT combination enabled - original value.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.MVTCombinationIsDefault">
-            <summary>
-            Indicates whether the MVT combination is a default combination (without any mvt variants).
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfo.TypeInfo">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty MVTCombinationInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new MVTCombinationInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTCombinationInfoProvider">
-            <summary>
-            Class providing MVTCombinationInfo management.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfoProvider.COMBINATION_NAME_PREFIX">
-            <summary>
-            Default prefix for new combinations.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfoProvider.COMBINATION_CUSTOMNAME_MAX_LENGHT">
-            <summary>
-            The maximum allowed length of the automatically generated combination custom names.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationInfoProvider.mTemplateCombinations">
-            <summary>
-            Dictionary containing combination infos with keys: templateID_combinationName 
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfoProvider.TemplateCombinations">
-            <summary>
-            Dictionary containing combination infos with keys: templateID_combinationName 
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationInfoProvider.RandomGenerator">
-            <summary>
-            Gets random generator for choosing a combination.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.#ctor">
-            <summary>
-            Constructor.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinations">
-            <summary>
-            Returns a query for all the MVTCombinationInfo objects.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinationInfo(System.Int32)">
-            <summary>
-            Returns MVT combination with the specified ID.
-            </summary>
-            <param name="combinationId">Combination ID</param>        
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinationInfo(System.Int32,System.String)">
-            <summary>
-            Returns MVT combination with the specified combination name and template id.
-            </summary>
-            <param name="combinationName">Code name of the combination.</param>
-            <param name="pageTemplateId">The page template id.</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinationInfo(System.String,System.String,System.String,System.String)">
-            <summary>
-            Returns MVT combination with the specified parameters.
-            </summary>
-            <param name="aliasPath">Alias path</param>
-            <param name="culture">Culture code</param>
-            <param name="combinationName">Combination name</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.SetMVTCombinationInfo(CMS.OnlineMarketing.MVTCombinationInfo)">
-            <summary>
-            Sets (updates or inserts) specified MVT combination.
-            </summary>
-            <param name="combinationObj">MVT combination to be set</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.DeleteMVTCombinationInfo(CMS.OnlineMarketing.MVTCombinationInfo)">
-            <summary>
-            Deletes specified MVT combination.
-            </summary>
-            <param name="combinationObj">MVT combination to be deleted</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.DeleteMVTCombinationInfo(System.Int32)">
-            <summary>
-            Deletes MVT combination with the specified ID.
-            </summary>
-            <param name="combinationId">MVT combination ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.DeleteMVTCombinationInfo(System.String)">
-            <summary>
-            Deletes MVT combinations using the specified condition.
-            </summary>
-            <param name="whereCondition">Where condition</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.IsMVTCombinationValid(System.String,System.String,System.String,System.String)">
-            <summary>
-            Checks whether the specified MVT combination is assigned to a specified multivariate test and the multivariate test is running.
-            </summary>
-            <param name="combinationName">Combination name</param>
-            <param name="testName">Test name</param>
-            <param name="siteName">Site name</param>
-            <param name="culture">Culture code</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsForTemplate(System.Int32,System.Boolean)">
-            <summary>
-            Returns dataset of MVT combinations for the specified page template.
-            </summary>
-            <param name="pageTemplateId">PageTemplate id parameter</param>
-            <param name="enabledOnly">Indicates whether only enabled combinations should be loaded</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsWithoutWebpart(System.Int32,System.Guid,System.Int32)">
-            <summary>
-            Gets the combinations which do not contain the specified webpart (instanceGuid).
-            </summary>
-            <param name="pageTemplateId">The template id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsWithoutZone(System.Int32,System.String,System.Int32)">
-            <summary>
-            Gets the combinations which do not contain the specified zone.
-            </summary>
-            <param name="pageTemplateId">The template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetNewCombinationNumber(System.Int32,System.Int32)">
-            <summary>
-            Gets the new combination number.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.EnableCombinations(System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            Disables/enables all combinations where the MVT variant is used.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="variantId">The MVT variant id</param>
-            <param name="enable">True = Enable the combinations; False = Disable the combinations</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTestCombination(CMS.OnlineMarketing.MVTestInfo,System.String)">
-            <summary>
-            Returns the combination for the specified multivariate test object.
-            If any combination for this multivariate test is stored in a browser cookie then this combination will be used,
-            otherwise will be chosen a random combination for this test.
-            </summary>
-            <param name="testObj">The multivariate test object</param>
-            <param name="culture">Required culture</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetNewCombinationCustomName(System.String,System.String,System.Int32)">
-            <summary>
-            Combines the old custom name with the new variant.
-            </summary>
-            <param name="oldCombinationCustomName">The old combination custom name</param>
-            <param name="newVariantName">The new variant name</param>
-            <param name="newCombinationNumber">The new combination number</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationName(System.Int32)">
-            <summary>
-            Gets the formated name of the combination (i.e.: number=2 returns "Combination_002").
-            </summary>
-            <param name="combinationNumber">The number used in the formated combination name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.SetInfo(CMS.OnlineMarketing.MVTCombinationInfo)">
-            <summary>
-            Inserts or Updates the object to the database.
-            </summary>
-            <param name="info">Object to insert / update</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.DeleteInfo(CMS.OnlineMarketing.MVTCombinationInfo)">
-            <summary>
-            Deletes the object to the database.
-            </summary>
-            <param name="info">Object to delete</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.DeleteMVTCombinationInfoInternal(System.String)">
-            <summary>
-            Deletes MVT combinations using the specified condition.
-            </summary>
-            <param name="whereCondition">Where condition</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.ClearHashtables(System.Boolean)">
-            <summary>
-            Clear hashtables.
-            </summary>
-            <param name="logTasks">If true, web farm tasks are logged</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.IsMVTCombinationValidInternal(System.String,System.String,System.String,System.String)">
-            <summary>
-            Checks whether MVT combination is assigned to a specified multivariate test and the multivariate test is running.
-            </summary>
-            <param name="combinationName">Combination name</param>
-            <param name="testName">Test name</param>
-            <param name="siteName">Site name</param>
-            <param name="culture">Culture code</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsForTemplateInternal(System.Int32,System.Boolean)">
-            <summary>
-            Returns dataset of MVT combinations for the specified page template.
-            </summary>
-            <param name="pageTemplateId">Page template id</param>
-            <param name="enabledOnly">Indicates whether only enabled should be loaded</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinationInfoInternal(System.String,System.String,System.String,System.String)">
-            <summary>
-            Returns MVT combination with the specified parameters.
-            </summary>
-            <param name="aliasPath">Alias path</param>
-            <param name="culture">Culture code</param>
-            <param name="combinationName">Combination name</param>
-            <param name="siteName">Site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsWithoutWebpartInternal(System.Int32,System.Guid,System.Int32)">
-            <summary>
-            Gets the combinations which do not contain the specified webpart (instanceGuid).
-            </summary>
-            <param name="pageTemplateId">The template id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationsWithoutZoneInternal(System.Int32,System.String,System.Int32)">
-            <summary>
-            Gets the combinations which do not contain the specified zone.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetNewCombinationNumberInternal(System.Int32,System.Int32)">
-            <summary>
-            Gets a new combination number.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.EnableCombinationsInternal(System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            Disables all combinations where the variant is used.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="variantId">The variant id</param>
-            <param name="enable">True = Enable; false = Disable</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTestCombinationInternal(CMS.OnlineMarketing.MVTestInfo,System.String)">
-            <summary>
-            Returns the combination for the specified multivariate test object.
-            If any combination for this multivariate test is stored in a browser cookie then this combination will be used,
-            otherwise will be chosen a random combination for this test.
-            </summary>
-            <param name="testObj">The multivariate test object</param>
-            <param name="culture">Required culture</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.LoadTemplateCombinations">
-            <summary>
-            Load all combinations from DB to the dictionary.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetTemplateCombinationCode(CMS.OnlineMarketing.MVTCombinationInfo)">
-            <summary>
-            Gets the template combination code.
-            </summary>
-            <param name="combinationObj">The combination obj</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetTemplateCombinationCode(System.Int32,System.String)">
-            <summary>
-            Gets the template combination site code.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="combinationName">Name of the MVT combination</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetMVTCombinationInfoInternal(System.Int32,System.String)">
-            <summary>
-            Returns MVT combination with the specified combination name and template id.
-            </summary>
-            <param name="combinationName">Code name of the combination.</param>
-            <param name="pageTemplateId">The page template id.</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetNewCombinationCustomNameInternal(System.String,System.String,System.Int32)">
-            <summary>
-            Combines the old custom name with the new variant.
-            </summary>
-            <param name="oldCombinationCustomName">The old combination custom name</param>
-            <param name="newVariantName">The new variant name</param>
-            <param name="newCombinationNumber">The new combination number</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationInfoProvider.GetCombinationNameInternal(System.Int32)">
-            <summary>
-            Gets the formated name of the combination (i.e.: number=2 returns "Combination_002").
-            </summary>
-            <param name="combinationNumber">The number used in the formated combination name</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTCombinationVariationInfo">
-            <summary>
-            MVTCombinationVariationInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationVariationInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTCombinationVariationInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationVariationInfo.MVTCombinationID">
-            <summary>
-            MVT combination ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTCombinationVariationInfo.MVTVariantID">
-            <summary>
-            MVT variant ID.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty MVTCombinationVariationInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new MVTCombinationVariationInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider">
-            <summary>
-            Class providing MVTCombinationVariationInfo management.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.GetMVTCombinationVariationInfo(System.Int32,System.Int32)">
-            <summary>
-            Returns relationship between specified MVT combination and MVT variant.
-            </summary>
-            <param name="combinationId">MVT combination ID</param>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.GetCombinationVariations">
-            <summary>
-            Returns query of all relationships between MVT combinations and MVT variants.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.SetMVTCombinationVariationInfo(CMS.OnlineMarketing.MVTCombinationVariationInfo)">
-            <summary>
-            Sets relationship between specified MVT combination and MVT variant.
-            </summary>
-            <param name="combinationObj">MVT combination - MVT variant relationship to be set</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.AddRelationship(System.Int32,System.Int32)">
-            <summary>
-            Sets relationship between specified MVT combination and MVT variant.
-            </summary>	
-            <param name="combinationId">MVT combination ID</param>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.DeleteMVTCombinationVariationInfo(CMS.OnlineMarketing.MVTCombinationVariationInfo)">
-            <summary>
-            Deletes relationship between specified MVT combination and MVT variant.
-            </summary>
-            <param name="infoObj">MVT combination - MVT variant relationship to be deleted</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.DeleteMVTCombinationVariationInfo(System.String)">
-            <summary>
-            Deletes relationship between specified MVT combination and MVT variant using specified condition.
-            </summary>
-            <param name="whereCondition">Where condition</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.RemoveRelationship(System.Int32,System.Int32)">
-            <summary>
-            Deletes relationship between specified MVT combination and MVT variant.
-            </summary>
-            <param name="combinationId">MVT combination ID</param>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.CombineCombinationVariants(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Combines a new variant with existing combinations.
-            </summary>
-            <param name="originalCombinationId">The original combination id</param>
-            <param name="newCombinationId">The new combination id</param>
-            <param name="newVariantId">The new variant id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.GetMVTCombinationVariationInfoInternal(System.Int32,System.Int32)">
-            <summary>
-            Returns relationship between specified MVT combination and MVT variant.
-            </summary>
-            <param name="combinationId">MVT combination ID</param>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.DeleteMVTCombinationVariationInfoInternal(System.String)">
-            <summary>
-            Deletes relationship between specified MVT combination and MVT variant using specified condition.
-            </summary>
-            <param name="whereCondition">Where condition</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTCombinationVariationInfoProvider.CombineCombinationVariantsInternal(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Combines a new variant with existing combinations.
-            </summary>
-            <param name="originalCombinationId">The original combination id</param>
-            <param name="newCombinationId">The new combination id</param>
-            <param name="newVariantId">The new variant id</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTContext">
-            <summary>
-            MVT Test context
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTContext.CurrentMVTestName">
-            <summary>
-            Gets or sets the current multivariate test name
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTContext.CurrentMVTCombinationName">
-            <summary>
-            Current MVT combination name
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestInfo">
-            <summary>
-            MVTestInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestInfo.mOriginalCulture">
-            <summary>
-            Original culture of the multivariate test.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestTargetConversionType">
-            <summary>
-            Multivariate test target conversion type.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestID">
-            <summary>
-            Multivariate test ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestConversions">
-            <summary>
-            Multivariate test conversions.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestCulture">
-            <summary>
-            Multivariate test culture.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestLastModified">
-            <summary>
-            Last modification of the multivariate test.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestOpenFrom">
-            <summary>
-            Start date of the test.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestGUID">
-            <summary>
-            Unique multivariate test identifier.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestName">
-            <summary>
-            Multivariate test name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestDisplayName">
-            <summary>
-            Multivariate test display name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestMaxConversions">
-            <summary>
-            Multivariate test maximum conversions.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestDescription">
-            <summary>
-            Multivariate test description.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestPage">
-            <summary>
-            Multivariate test page.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestSiteID">
-            <summary>
-            Multivariate test site ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestOpenTo">
-            <summary>
-            End date of the test.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.MVTestEnabled">
-            <summary>
-            Indicates whether the multivariate test is enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestInfo.OriginalCulture">
-            <summary>
-            Gets or sets the original culture of the test.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty MVTestInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new MVTestInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.LoadDefaultData">
-            <summary>
-            Loads the default data to the object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
-            <summary>
-            Checks the permissions of the MVT Test object.
-            </summary>
-            <param name="permission">Permission type</param>
-            <param name="siteName">Name of the site</param>
-            <param name="userInfo">UserInfo object</param>
-            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfo.RemoveObjectDependencies(System.Boolean,System.Boolean)">
-            <summary>
-            Removes dependencies from the specified MVTest.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestInfoProvider">
-            <summary>
-            Class providing MVTestInfo management.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.#ctor">
-            <summary>
-            Constructor.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTests">
-            <summary>
-            Returns a query for all the MVTestInfo objects.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestInfo(System.Int32)">
-            <summary>
-            Returns multivariate test with specified ID.
-            </summary>
-            <param name="testId">Multivariate test ID</param>        
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestInfo(System.String,System.String)">
-            <summary>
-            Returns multivariate test with the specified name.
-            </summary>
-            <param name="testName">The multivariate test name</param>                
-            <param name="sitename">The site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.SetMVTestInfo(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Sets (updates or inserts) specified multivariate test.
-            </summary>
-            <param name="testObj">The multivariate test to be set</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.DeleteMVTestInfo(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Deletes specified multivariate test.
-            </summary>
-            <param name="testObj">The multivariate test to be deleted</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.DeleteMVTestInfo(System.Int32)">
-            <summary>
-            Deletes multivariate test with specified ID.
-            </summary>
-            <param name="testId">The multivariate test ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.ClearHashtables(System.Boolean)">
-            <summary>
-            Clear hashtables.
-            </summary>
-            <param name="logTasks">If true, web farm tasks are logged</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.IncreaseConversions(System.String,System.String,System.String,System.String,System.Int32)">
-            <summary>
-            Increases number of conversions in multivariate test and combination.
-            </summary>
-            <param name="testName">MVTest name</param>
-            <param name="combinationName">Combination name</param>
-            <param name="siteName">Site name</param>
-            <param name="hits">Hits count</param>
-            <param name="culture">Culture code</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.RenameMVTestStatistics(System.String,System.String,System.Int32)">
-            <summary>
-            Renames multivariate test statistics data when changed code name
-            </summary>
-            <param name="oldName">Old code name</param>
-            <param name="newName">New code name</param>
-            <param name="siteId">The site id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.MoveMVTests(System.String,System.String,System.Int32)">
-            <summary>
-            Moves all MVTests from the document under the oldAlias path to the document under the newAlias path.
-            </summary>
-            <param name="newAlias">Document's new alias path</param>
-            <param name="oldAlias">Document's old alias path</param>
-            <param name="siteID">Document's siteID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.MVTestingEnabled(System.String)">
-            <summary>
-            Indicates whether multivariate testing is enabled.
-            </summary>
-            <param name="siteName">Name of the site</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.ContainsMVTest(System.String,System.Int32,System.String,System.Boolean)">
-            <summary>
-            Indicates whether a document has defined any multivariate tests.
-            </summary>
-            <param name="path">The path</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-            <param name="isLiveSite">Is live site</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestStatus(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Returns status of multivariate test.
-            </summary>
-            <param name="testObj">The multivariate test info object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.MVTestIsRunning(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Returns true if specified multivariate test is running.
-            </summary>
-            <param name="testObj">Multivariate test info object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.MVTestIsRunning(CMS.OnlineMarketing.MVTestInfo,CMS.OnlineMarketing.MVTestStatusEnum@)">
-            <summary>
-            Returns true if specified multivariate test is running.
-            </summary>
-            <param name="testObj">Multivariate test info object</param>
-            <param name="status">Returns current test status</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetRunningTest(System.String,System.Int32,System.String)">
-            <summary>
-            Gets the running multivariate test for a page.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.ContainsRunningMVTest(System.String,System.Int32,System.String)">
-            <summary>
-            Determines whether there is a running multivariate test for the specified document.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetRunningTest(System.String,System.Int32,System.String,System.Boolean@)">
-            <summary>
-            Gets the running multivariate test for the specified page.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-            <param name="mvtTestExists">Returns a value indicating whether a mvt test with the given parameters exists</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetConflicting(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Returns all conflicting tests (tests running in the same time interval on same page with same culture and are enabled).
-            </summary>
-            <param name="info">Info to check conflicts for</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTests(System.String,System.Int32)">
-            <summary>
-            Gets the running multivariate test for the specified page.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestInfoInternal(System.String,System.String)">
-            <summary>
-            Returns multivariate with specified name.
-            </summary>
-            <param name="testName">The multivariate test name</param>   
-            <param name="siteName">The site name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetConflictingInternal(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Returns all conflicting tests (tests running in the same time interval on same page with same culture and are enabled).
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.DeleteInfo(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Deletes the object to the database.
-            </summary>
-            <param name="info">Object to delete</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.IncreaseConversionsInternal(System.String,System.String,System.String,System.String,System.Int32)">
-            <summary>
-            Increases number of conversions in multivariate test and combination.
-            </summary>
-            <param name="testName">The multivariate test name</param>
-            <param name="combinationName">The combination name</param>
-            <param name="siteName">The site name</param>
-            <param name="culture">The culture code</param>
-            <param name="hits">The hits count</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.RenameMVTestStatisticsInternal(System.String,System.String,System.Int32)">
-            <summary>
-            Renames multivariate test statistics data when changed code name
-            </summary>
-            <param name="oldName">Old code name</param>
-            <param name="newName">New code name</param>
-            <param name="siteID">Test site ID </param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.ContainsMVTestInternal(System.String,System.Int32,System.String,System.Boolean)">
-            <summary>
-            Indicates whether a document has defined any multivariate tests.
-            </summary>
-            <param name="path">The path</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-            <param name="isLiveSite">Is live site</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestStatusInternal(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Returns status of multivariate test.
-            </summary>
-            <param name="testObj">The multivariate test info object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetRunningTestInternal(System.String,System.Int32,System.String,System.Boolean@)">
-            <summary>
-            Gets the running multivariate test for a page.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-            <param name="cultureCode">The culture code</param>
-            <param name="mvtTestExists">Returns a value indicating whether a multivariate test with the given parameters exists</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestsInternal(System.String,System.Int32)">
-            <summary>
-            Gets the running multivariate test for a page.
-            </summary>
-            <param name="testPage">The test page</param>
-            <param name="siteId">The site id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetRunningConditionInternal(CMS.OnlineMarketing.MVTestInfo,CMS.DataEngine.QueryDataParameters@)">
-            <summary>
-            Returns the where condition selecting tests which are running at the same time as the specified test.
-            </summary>
-            <param name="testObj">The multivariate test info object</param>
-            <param name="parameters">The parameters</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetRunningConditionInternal(System.Int32,System.String,System.Int32,System.String,System.DateTime,System.DateTime,CMS.DataEngine.QueryDataParameters@)">
-            <summary>
-            Returns the where condition selecting multivariate tests which are running for the same conditions as defined in the method params (testPage, testSiteId, testCulture...).
-            </summary>
-            <param name="testId">The test id to be excluded from the where condition</param>
-            <param name="testPage">The test page</param>
-            <param name="testSiteId">The test site id</param>
-            <param name="testCulture">The test culture</param>
-            <param name="openFrom">The open from</param>
-            <param name="openTo">The open to</param>
-            <param name="parameters">The parameters</param>
-            <returns>String containing actual Where condition</returns>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetPageSiteCode(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Gets the page site code.
-            </summary>
-            <param name="testObj">The multivariate test info object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetPageSiteCode(System.String,System.Int32)">
-            <summary>
-            Gets the page site code.
-            </summary>
-            <param name="path">The path</param>
-            <param name="siteId">The site id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.MoveMVTestsInternal(System.String,System.String,System.Int32)">
-            <summary>
-            Moves all MVTests from the document under the oldAlias path to the document under the newAlias path.
-            </summary>
-            <param name="newAlias">Document's new alias path</param>
-            <param name="oldAlias">Document's old alias path</param>
-            <param name="siteID">Document's site ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetTestTemplatesInternal(CMS.OnlineMarketing.MVTestInfo)">
-            <summary>
-            Gets the test templates according to test culture.
-            </summary>
-            <param name="testObj">Test object</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTTargetConversionTypeString(CMS.OnlineMarketing.MVTTargetConversionTypeEnum)">
-            <summary>
-            Returns MVTTargetConversionType string.
-            </summary>
-            <param name="conversionType">Target conversion type</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTTargetConversionTypeEnum(System.String)">
-            <summary>
-            Returns MVTTargetConversionType enum.
-            </summary>
-            <param name="conversionType">String representation of target conversion type</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestStatusString(CMS.OnlineMarketing.MVTestStatusEnum)">
-            <summary>
-            Returns MVTestStatus string.
-            </summary>
-            <param name="statusType">Test status type</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestInfoProvider.GetMVTestStatusEnum(System.String)">
-            <summary>
-            Returns MVTestStatus enum.
-            </summary>
-            <param name="statusType">String representation of test status type</param>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestListInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestListInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestListInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty MVTestListInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestListInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new MVTestListInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestListInfo.GetColumnNames">
-            <summary>
-            Gets the default list of column names for this class
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestListInfo.GetDataQueryInternal">
-            <summary>
-            Gets the data query for this object type
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestStatusEnum">
-            <summary>
-            MVT test status enumeration.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestStatusEnum.Disabled">
-            <summary>
-            Disabled - task is disabled.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestStatusEnum.Running">
-            <summary>
-            Running status - task is running.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestStatusEnum.NotRunning">
-            <summary>
-            Not running - task is enabled, but not running yet
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestStatusEnum.Finished">
-            <summary>
-            Finished status - task has finished.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTestUsageDataSource">
-            <summary>
-            Module usage tracking data source for MVTest module.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTestUsageDataSource.mSettingsToLog">
-            <summary>
-            Settings keys which are logged.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTestUsageDataSource.Name">
-            <summary>
-            Get the data source name.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestUsageDataSource.GetData">
-            <summary>
-            Get all module statistical data.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTestUsageDataSource.GetSettingsUsage(System.Boolean)">
-            <summary>
-            Returns how many times is specific setting used with value which is not same as default value. 
-            Only settings on running sites (if <paramref name="global"/> is true), not hidden and not custom are retrieved.
-            Only global settings when <paramref name="global"/> is false.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTHandlers">
-            <summary>
-            MV testing event handlers.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTHandlers.MVTCOOKIE_PREFIX">
-            <summary>
-            Cookie prefix.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTHandlers.MVTCONVERSION">
-            <summary>
-            Conversion name.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.Init">
-            <summary>
-            Initializes the events handlers.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.MoveMVTests(System.Object,CMS.DocumentEngine.DocumentEventArgs)">
-            <summary>
-            Moves MVT tests together with a document
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.LogMVTConversion(System.Object,CMS.Base.CMSEventArgs{CMS.WebAnalytics.LogRecord})">
-            <summary>
-            Logs AB and MVT conversions.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTHandlers.LogMVTestConversion(System.String,System.String,System.String,System.Int32,System.Int32,System.Double)">
-            <summary>
-            Checks cookies and logs MVT conversions.
-            </summary>
-            <param name="siteName">Site name</param>
-            <param name="culture">Culture</param>
-            <param name="conversionName">Conversion name</param>
-            <param name="objectId">Object ID</param>
-            <param name="count">Conversions count</param>
-            <param name="value">Conversions value</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTTargetConversionTypeEnum">
-            <summary>
-            Target conversion type enumeration.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTTargetConversionTypeEnum.Total">
-            <summary>
-            Actual conversions are compared with sum of all conversions for multivariate test
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTTargetConversionTypeEnum.AnyCombination">
-            <summary>
-            Actual conversions are compared with each combination conversion value.
-            </summary>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTVariantInfo">
-            <summary>
-            MVTVariantInfo data container class.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTVariantInfo.OBJECT_TYPE">
-            <summary>
-            Object type
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTVariantInfo.OBJECT_TYPE_DOCUMENTVARIANT">
-            <summary>
-            Object type for document MVT variant
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTVariantInfo.TYPEINFO">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTVariantInfo.TYPEINFO_DOCUMENTVARIANT">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="F:CMS.OnlineMarketing.MVTVariantInfo.mMVTVariantEnabledOriginal">
-            <summary>
-            Original value indicating whether the variant is enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantID">
-            <summary>
-            MVT variant ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantZoneID">
-            <summary>
-            MVT variant zone ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantDocumentID">
-            <summary>
-            MVT variant document ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantInstanceGUID">
-            <summary>
-            Web part instance GUID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantDisplayName">
-            <summary>
-            MVT variant display name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantDescription">
-            <summary>
-            MVT variant description.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantPageTemplateID">
-            <summary>
-            MVT variant page template ID.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantEnabled">
-            <summary>
-            Last modification of the MVT combination.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantEnabledOriginal">
-            <summary>
-            Gets or sets the original value indicating whether the variant is enabled.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantGUID">
-            <summary>
-            Unique project identifier.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantName">
-            <summary>
-            MVT variant name.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantWebParts">
-            <summary>
-            MVT variant web parts.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.MVTVariantLastModified">
-            <summary>
-            Last modification of the MVT variant.
-            </summary>
-        </member>
-        <member name="P:CMS.OnlineMarketing.MVTVariantInfo.TypeInfo">
-            <summary>
-            Type information.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.DeleteObject">
-            <summary>
-            Deletes the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.SetObject">
-            <summary>
-            Updates the object using appropriate provider.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.CheckUniqueValues(System.String[])">
-            <summary>
-            Checks if a record with the same column values already exists in the database. Returns true if the set of values is unique.
-            </summary>
-            <param name="columns">Columns to check</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.#ctor">
-            <summary>
-            Constructor - Creates an empty MVTVariantInfo object.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.#ctor(System.Data.DataRow)">
-            <summary>
-            Constructor - Creates a new MVTVariantInfo object from the given DataRow.
-            </summary>
-            <param name="dr">DataRow with the object data</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfo.CheckPermissionsInternal(CMS.DataEngine.PermissionsEnum,System.String,CMS.Base.IUserInfo,System.Boolean)">
-            <summary>
-            Checks the permissions of the MVT Variant object.
-            </summary>
-            <param name="permission">Permission type</param>
-            <param name="siteName">Name of the site</param>
-            <param name="userInfo">UserInfo object</param>
-            <param name="exceptionOnFailure">If true, PermissionCheckException is thrown whenever a permission check fails</param>
-        </member>
-        <member name="T:CMS.OnlineMarketing.MVTVariantInfoProvider">
-            <summary>
-            Class providing MVTVariantInfo management.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.#ctor">
-            <summary>
-            Constructor.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariants">
-            <summary>
-            Returns a query for all the MVTVariantInfo objects.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantInfo(System.Int32)">
-            <summary>
-            Returns MVT variant with specified ID.
-            </summary>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantInfo(System.Guid)">
-            <summary>
-            Gets the MVT variant info.
-            </summary>
-            <param name="variantGuid">The MVT variant GUID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantInfo(System.String)">
-            <summary>
-            Returns MVT variant with specified name.
-            </summary>
-            <param name="variantName">MVT variant name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SetMVTVariantInfo(CMS.OnlineMarketing.MVTVariantInfo)">
-            <summary>
-            Sets (updates or inserts) specified MVT variant.
-            </summary>
-            <param name="variantObj">MVT variant to be set</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteMVTVariantInfo(CMS.OnlineMarketing.MVTVariantInfo)">
-            <summary>
-            Deletes specified MVT variant.
-            </summary>
-            <param name="variantObj">MVT variant to be deleted</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteMVTVariantInfo(System.Int32)">
-            <summary>
-            Deletes MVT variant with specified ID.
-            </summary>
-            <param name="variantId">MVT variant ID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteMVTVariantInfo(System.Guid)">
-            <summary>
-            Deletes MVT variant with specified ID.
-            </summary>
-            <param name="variantGuid">The MVT variant GUID</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariants(System.Int32,System.Int32)">
-            <summary>
-            Gets pairs "MVTVariantInstanceGUID, MVTVariantGUID" which represent web part instances and their variant GUID for the specified combination.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="combinationId">The combination id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SaveVariant(System.Int32,System.String,System.String,System.String,System.Boolean,System.String,System.Guid,System.Int32,System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant and generates new combinations if the variant is new.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="variantName">Name of the variant</param>
-            <param name="variantDisplayName">Display name of the variant</param>
-            <param name="variantDescription">The variant description</param>
-            <param name="variantEnabled">Indicates whether the variant is enabled</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SaveVariantWebparts(System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant properties.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteWidgetVariants(System.String,System.Int32,System.Int32)">
-            <summary>
-            Deletes all variants of all widgets in the document.
-            </summary>
-            <param name="zoneId">The zone id</param>
-            <param name="templateId">The template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.UpdateWebPartVariants(System.Int32,System.String,System.Guid,System.String)">
-            <summary>
-            Updates the web part variants with a new zone id.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id.</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="newZoneId">The new zone id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.EnableWebPartVariants(System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            Enables/Disables the web part variants.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="combinationId">The combination id</param>
-            <param name="enable">Indicates whether enable or disable the combination variants</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariants(System.Int32)">
-            <summary>
-            Gets all the MVT variants for the specified template.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariants(System.Int32,System.String,System.Guid,System.Int32)">
-            <summary>
-            Gets the MVT variants.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantId(System.Int32,System.String)">
-            <summary>
-            Returns the MVT variant id for the specified template and code name.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="variantName">The variant code name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.CloneTemplateVariants(System.Int32,System.Int32)">
-            <summary>
-            Clones all the MVT variants and their combinations of the specific page template.
-            </summary>
-            <param name="originalTemplateId">The original template id</param>
-            <param name="newTemplateId">The new template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SetInfo(CMS.OnlineMarketing.MVTVariantInfo)">
-            <summary>
-            Inserts or Updates the object to the database.
-            </summary>
-            <param name="info">Object to insert / update</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteInfo(CMS.OnlineMarketing.MVTVariantInfo)">
-            <summary>
-            Deletes the object to the database.
-            </summary>
-            <param name="info">Object to delete</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantsInternal(System.Int32,System.Int32)">
-            <summary>
-            Gets pairs "MVTVariantInstanceGUID, MVTVariantGUID" which represent web part instances and their variant GUID for the specified combination.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="combinationId">The combination id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantsInternal(System.Int32)">
-            <summary>
-            Gets all the MVT variants for the specified template.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantsInternal(System.Int32,System.String,System.Guid,System.Int32)">
-            <summary>
-            Gets the MVT variants.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.DeleteWidgetVariantsInternal(System.String,System.Int32,System.Int32)">
-            <summary>
-            Deletes all variants of all widgets in the document.
-            </summary>
-            <param name="zoneId">The zone id</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.UpdateWebPartVariantsInternal(System.Int32,System.String,System.Guid,System.String)">
-            <summary>
-            Updates the web part variants with a new zone id.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="zoneId">The zone id.</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="newZoneId">The new zone id</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.EnableWebPartVariantsInternal(System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            Enables/Disables the web part variants.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="combinationId">The combination id</param>
-            <param name="enabled">Indicates whether enable or disable the combination variants</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SaveVariantInternal(System.Int32,System.String,System.String,System.String,System.Boolean,System.String,System.Guid,System.Int32,System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant and generates new combinations if the variant is new.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="variantName">Name of the variant</param>
-            <param name="variantDisplayName">Display name of the variant</param>
-            <param name="variantDescription">The variant description</param>
-            <param name="variantEnabled">Indicates whether the variant is enabled</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SaveVariantInternal(System.Int32,System.String,System.String,System.String,System.Boolean,System.String,System.Guid,System.Int32,System.Int32,System.String)">
-            <summary>
-            Saves the variant and generates new combinations if the variant is new.
-            </summary>
-            <param name="variantId">The variant id</param>
-            <param name="variantName">Name of the variant</param>
-            <param name="variantDisplayName">Display name of the variant</param>
-            <param name="variantDescription">The variant description</param>
-            <param name="variantEnabled">Indicates whether the variant is enabled</param>
-            <param name="zoneId">The zone id</param>
-            <param name="instanceGuid">The instance GUID</param>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="documentId">The document id</param>
-            <param name="webPartsXml">Web parts XML string</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.SaveVariantWebpartsInternal(System.Int32,System.Xml.XmlNode)">
-            <summary>
-            Saves the variant properties.
-            </summary>
-            <param name="variantId">The variant id.</param>
-            <param name="xmlWebParts">Web parts XML</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.GetMVTVariantIdInternal(System.Int32,System.String)">
-            <summary>
-            Returns the MVT variant id for the specified template and code name.
-            </summary>
-            <param name="pageTemplateId">The page template id</param>
-            <param name="variantName">The variant code name</param>
-        </member>
-        <member name="M:CMS.OnlineMarketing.MVTVariantInfoProvider.CloneTemplateVariantsInternal(System.Int32,System.Int32)">
-            <summary>
-            Clones all the MVT variants and their combinations of the specific page template.
-            </summary>
-            <param name="originalTemplateId">The original template id</param>
-            <param name="newTemplateId">The new template id</param>
         </member>
         <member name="T:CMS.OnlineMarketing.VariantTypeEnum">
             <summary>

@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>0ab24fe2-55f9-46f5-be19-44a9c4950830</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+	-- This SQL script is used for getting conversion rates.
+	-- Required variables are:
+	-- @FromDate, @ToDate - used for specifying date range
+	-- @GraphType - can be Cumulative or DayWise
+	-- @TestName - ABTestName
+	-- @ABTestID - ABTestID
+	-- @ABTestCulture - ABTestCulture
+	-- @ConversionName - selected conversion or empty for all conversions
+	-- @VariationName - selected variation (GUID) or empty for all variations
+	-- @ConversionType - selected conversion type (abconversion, absessionconversionfirst, absessionconversion%)
+
+	EXEC Proc_Analytics_RemoveTempTable
+	CREATE TABLE #AnalyticsTempTable (
+		StartTime DATETIME,
+		Hits DECIMAL(20,5),
+		Visits DECIMAL(20,5),
+		Name NVARCHAR(300) COLLATE DATABASE_DEFAULT,
+		RunningHits DECIMAL(20,5),
+		RunningVisits DECIMAL(20,5),
+		CumulativeRate DECIMAL(20,5),
+		DayWiseRate DECIMAL(20,5)
+	);
+
+	DECLARE @VisitType NVARCHAR(MAX)
+    SET @VisitType = 'abvisit%'
+
+    IF @ConversionType = 'absessionconversionfirst'
+	BEGIN
+		SET @VisitType = 'abvisitfirst'
+    END
+
+	SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+ 
+	-- Get hits and visits
+	INSERT INTO #AnalyticsTempTable (StartTime, Hits, Visits, Name)
+	SELECT [Date], SUM(Hits) as Hits, SUM(Visits) as Visits, ABVariantDisplayName FROM
+	(
+		SELECT [DATE], Hits, 0 as Visits, ABVariantDisplayName
+		FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'month') AS Dates
+		LEFT JOIN
+			(
+			SELECT HitsStartTime, SUM(HitsCount) as Hits, ABVariantDisplayName
+			FROM OM_ABVariantData		
+			INNER JOIN Analytics_Statistics ON Analytics_Statistics.StatisticsCode LIKE @ConversionType + ';' + @TestName + ';' + CAST(ABVariantGUID AS char(36))
+			INNER JOIN Analytics_MonthHits ON Analytics_Statistics.StatisticsID = Analytics_MonthHits.HitsStatisticsID
+			WHERE StatisticsSiteID = @CMSContextCurrentSiteID
+			AND (ABVariantTestID = @ABTestID)			
+			AND (@ConversionName IS NULL OR @ConversionName IN ('',StatisticsObjectName) OR ';' + @ConversionName + ';' LIKE '%;' + StatisticsObjectName + ';%')
+			AND (@VariationName IS NULL OR @VariationName IN ('', CAST(ABVariantGUID AS char(36))))
+			AND (StatisticsObjectCulture IS NULL OR StatisticsObjectCulture = '' OR StatisticsObjectCulture = @ABTestCulture OR @ABTestCulture IS NULL OR @ABTestCulture = '')
+			GROUP BY HitsStartTime, ABVariantDisplayName
+			) AS T1
+		ON Dates.Date= T1.HitsStartTime
+	
+		UNION
+	
+		SELECT [DATE], 0 as Hits, Visits, ABVariantDisplayName
+		FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'month') AS Dates
+		LEFT JOIN
+			(SELECT HitsStartTime, SUM(HitsCount) as Visits, ABVariantDisplayName
+			FROM OM_ABVariantData		
+			INNER JOIN Analytics_Statistics ON Analytics_Statistics.StatisticsCode LIKE @VisitType + ';' + @TestName + ';' + CAST(ABVariantGUID AS char(36))
+			INNER JOIN Analytics_MonthHits ON Analytics_Statistics.StatisticsID = Analytics_MonthHits.HitsStatisticsID
+			WHERE StatisticsSiteID = @CMSContextCurrentSiteID
+			AND (ABVariantTestID = @ABTestID)			
+			AND (@VariationName IS NULL OR @VariationName IN ('', CAST(ABVariantGUID AS char(36))))
+			AND (StatisticsObjectCulture IS NULL OR StatisticsObjectCulture = '' OR StatisticsObjectCulture = @ABTestCulture OR @ABTestCulture IS NULL OR @ABTestCulture = '')
+			GROUP BY HitsStartTime, ABVariantDisplayName
+		) AS T2
+		ON Dates.Date=T2.HitsStartTime
+	) as T3
+	GROUP BY T3.[DATE], T3.ABVariantDisplayName
+	
+	-- Fill in missing values
+	-- Select dates and names, which are missing in original data to fill gaps that are needed to ensure, that cumulative rates are calculated the right way	
+	INSERT INTO #AnalyticsTempTable
+		SELECT T1.StartTime, 0, 0, T2.Name, NULL, NULL, NULL, NULL
+		FROM #AnalyticsTempTable as T1 
+		JOIN #AnalyticsTempTable T2 ON T2.Name IS NOT NULL 
+		WHERE NOT EXISTS 
+			(
+			SELECT T3.StartTime, T3.Name 
+			FROM #AnalyticsTempTable as T3 
+			WHERE T3.Name = T2.Name AND T3.StartTime = T1.StartTime
+			) 
+		GROUP BY T1.StartTime, T2.Name
+
+	-- Delete NULL values
+	DELETE FROM #AnalyticsTempTable WHERE Name IS NULL
+
+	-- Declare variables for calculation of rates
+	DECLARE @RunningVisits DECIMAL(20,5)
+	SET @RunningVisits = 0
+
+	DECLARE @RunningHits DECIMAL(20,5)
+	SET @RunningHits = 0
+
+	DECLARE @LastName NVARCHAR(MAX)
+		
+	-- Sum running totals and rates using 'quirky update'
+	-- Uses view to define order
+	;WITH TempView AS 
+	(
+		SELECT TOP (2147483647) *
+		FROM    #AnalyticsTempTable
+		ORDER BY
+				Name, StartTime
+	)            
+	UPDATE  TempView
+	SET    	@RunningVisits = RunningVisits =  ISNULL(Visits,0) + CASE WHEN Name=@LastName THEN ISNULL(@RunningVisits,0) ELSE 0 END,
+			@RunningHits = RunningHits = ISNULL(Hits,0) + CASE WHEN Name=@LastName THEN ISNULL(@RunningHits,0) ELSE 0 END,
+			CumulativeRate = @RunningHits / NULLIF(@RunningVisits, 0) * 100,
+			DayWiseRate = Hits / NULLIF(Visits,0) * 100,
+			@LastName = Name
+
+	-- Prepare for PIVOT - delete remaining columns
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN Visits
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningHits
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningVisits
+
+	DECLARE @engineEdition int;
+	SET @engineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
+
+	-- Drop columns based on graph type
+	IF @GraphType = 'DayWise'
+	BEGIN
+		IF @engineEdition = 5 
+		BEGIN 
+			---------------
+			-- Azure SQL --
+			---------------
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeRate		
+			-- Rename using the update, because Azure do not support rename of columns after CTE
+			UPDATE #AnalyticsTempTable SET Hits = DayWiseRate WHERE Name = Name AND StartTime = StartTime
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseRate
+		END
+		ELSE BEGIN
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeRate
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN Hits			
+			-- Calling in inner exec, because Azure does not allow to access tempdb using the 'temdb..'	
+			EXEC('exec tempdb..sp_rename ''#AnalyticsTempTable.DayWiseRate'', ''Hits'', ''COLUMN''')
+		END
+	END
+	ELSE --Cumulative
+	BEGIN
+		IF @engineEdition = 5 
+		BEGIN 
+			---------------
+			-- Azure SQL --
+			---------------
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseRate		
+			-- Rename using the update, because Azure do not support rename of columns after CTE
+			UPDATE #AnalyticsTempTable SET Hits = CumulativeRate WHERE Name = Name AND StartTime = StartTime
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeRate
+		END
+		ELSE BEGIN
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseRate
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN Hits		
+			-- Calling in inner exec, because Azure does not allow to access tempdb using the 'temdb..'	
+			EXEC('exec tempdb..sp_rename ''#AnalyticsTempTable.CumulativeRate'', ''Hits'', ''COLUMN''')		
+		END
+	END
+	
+	EXEC Proc_Analytics_Pivot 'month'
+	EXEC Proc_Analytics_RemoveTempTable
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>mvcabtestconversionrate.monthreport</CodeName>
+    <GUID>1cc5415a-31bd-4824-b540-9d34846ce35a</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found.</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{y}  -  #SER: #VALY%</seriesitemtooltip>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisangle>0</xaxisangle>
+      <xaxisformat>y</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxisformat>{0.0\%}</yaxisformat>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

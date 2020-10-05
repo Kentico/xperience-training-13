@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>3447b44a-2f78-4613-8226-c988382fc554</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+SELECT 
+   ShippingOptionDisplayName  AS '{$ecommerceconfiguration.shippingoptions$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'   
+FROM
+   COM_Order, 
+   COM_ShippingOption
+WHERE 
+   (ShippingOptionSiteID = @CMSContextCurrentSiteID)
+   AND (OrderShippingOptionID = ShippingOptionID)
+   AND (@FromDate IS NULL OR (OrderDate >= @FromDate))
+   AND (@ToDate IS NULL OR (OrderDate <= DATEADD(day,1,@ToDate)))
+   AND OrderSiteID = @CMSContextCurrentSiteID 
+   AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+GROUP BY ShippingOptionDisplayName
+ORDER BY COUNT(OrderID) DESC
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>NumberOfOrdersByShippingOption</CodeName>
+    <GUID>4f9edd6b-678f-4f74-9bd6-664c77607552</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0}</itemvalueformat>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>0</seriesbordersize>
+      <seriesborderstyle>NotSet</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$ecommerce.report_month$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$ecommerce.report_number$}</GraphYAxisTitle>
+</reporting.reportgraph>

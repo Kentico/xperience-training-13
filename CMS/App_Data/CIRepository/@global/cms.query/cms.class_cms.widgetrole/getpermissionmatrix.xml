@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.WidgetRole</CodeName>
+    <GUID>6bd0e677-683e-4875-8dcb-686295c0320b</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>1a8f6835-55a4-4f6d-959c-49dba76cc2d1</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>getPermissionMatrix</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## Matrix.##COLUMNS##, CASE WHEN CMS_WidgetRole.RoleID IS NULL THEN 0 ELSE 1 END AS Allowed FROM 
+(SELECT CMS_Permission.PermissionID, CMS_Permission.PermissionDisplayName, CMS_Permission.PermissionName, CMS_Permission.PermissionDescription, 
+CMS_Role.RoleID, CMS_Role.Rolename, CMS_Role.RoleDisplayName FROM CMS_Permission, CMS_Role WHERE ResourceID = @ID AND RoleID IN (SELECT RoleID FROM
+CMS_Role WHERE ##WHERE## AND ((@SiteID = 0 AND SiteID IS NULL) OR SiteID = @SiteID))) Matrix LEFT JOIN CMS_WidgetRole ON (Matrix.PermissionID = CMS_WidgetRole.PermissionID
+AND CMS_WidgetRole.RoleID = Matrix.RoleID AND CMS_WidgetRole.WidgetID = @WidgetID) ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

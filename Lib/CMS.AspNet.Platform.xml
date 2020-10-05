@@ -43,6 +43,41 @@
             </summary>
             <param name="cmsDependency">Cache dependency abstraction object.</param>
         </member>
+        <member name="T:CMS.AspNet.Platform.HttpRuntimeCacheAccessor">
+            <summary>
+            Cache accessor is registered only when application is running as web site.
+            <see cref="T:CMS.AspNet.Platform.PlatformModule"/>
+            </summary>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRuntimeCacheAccessor.Insert(System.String,System.Object,CMS.Helpers.CMSCacheDependency,System.DateTime,System.TimeSpan,CMS.Helpers.CMSCacheItemPriority,CMS.Helpers.CMSCacheItemRemovedCallback)">
+            <summary>
+            Inserts an object into the cache.
+            </summary>
+            <param name="key">The cache key used to reference the object.</param>
+            <param name="value">The object to be inserted in the cache.</param>
+            <param name="dependencies">The file or cache key dependencies for the item. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+            <param name="absoluteExpiration">The time at which the inserted object expires and is removed from the cache. </param>
+            <param name="slidingExpiration">The interval between the time the inserted object was last accessed and the time at which that object expires.</param>
+            <param name="priority">The cost of the object relative to other items stored in the cache.</param>
+            <param name="onRemoveCallback">A delegate that, if provided, will be called when an object is removed from the cache.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRuntimeCacheAccessor.Get(System.String)">
+            <summary>
+            Retrieves the specified item from the cache.
+            </summary>
+            <param name="key">The identifier for the cache item to retrieve.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRuntimeCacheAccessor.Remove(System.String)">
+            <summary>
+            Removes the specified item from the cache.
+            </summary>
+            <param name="key">The identifier for the cache item to remove.</param>
+        </member>
+        <member name="M:CMS.AspNet.Platform.HttpRuntimeCacheAccessor.GetEnumerator">
+            <summary>
+            <summary>Retrieves a dictionary enumerator used to iterate through the key settings and their values contained in the cache.</summary>
+            </summary>
+        </member>
         <member name="T:CMS.AspNet.Platform.CachePolicyImpl">
             <summary>
             Wrapper over <see cref="T:System.Web.HttpCachePolicyBase"/> object implementing <see cref="T:CMS.Base.Internal.ICache"/> interface.
@@ -84,11 +119,6 @@
         <member name="P:CMS.AspNet.Platform.HeaderDictionary.Item(System.String)">
             <summary>
             Gets and sets a header.
-            </summary>
-        </member>
-        <member name="P:CMS.AspNet.Platform.HeaderDictionary.ContentLength">
-            <summary>
-            Gets and sets the "Content-Length" header value.
             </summary>
         </member>
         <member name="P:CMS.AspNet.Platform.HeaderDictionary.Keys">

@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.order</CodeName>
+    <GUID>58eb48fc-83f4-41f7-add2-bc3ce5de8909</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="OrderID" guid="f28fb94f-e177-48e6-aaf6-acfcd856ac3e" />
+      <field column="OrderShippingOptionID" guid="0eccbbc8-1bb0-4ef9-9c34-6d30c87ea79c" visible="true">
+        <settings>
+          <AddAllItemsRecord>False</AddAllItemsRecord>
+          <AddNoneRecord>True</AddNoneRecord>
+          <controlname>shippingselector</controlname>
+          <DisplayOnlyEnabled>True</DisplayOnlyEnabled>
+          <EnsureSelectedItem>True</EnsureSelectedItem>
+          <UseShippingNameForSelection>False</UseShippingNameForSelection>
+        </settings>
+        <properties>
+          <enabledmacro ismacro="true">{%!OrderIsPaid%}</enabledmacro>
+          <fieldcaption>{$Order_Edit_Shipping.lblOption$}</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="OrderShippingAddressID" columntype="integer" dummy="altform" guid="98bd92a0-e6be-4a3f-91ed-fb60cf1018e2" system="true" visible="true" order="2">
+        <properties>
+          <controlcssclass>form-control-text</controlcssclass>
+          <fieldcaption>{$com.ShippingAddress$}</fieldcaption>
+          <visiblemacro ismacro="true">{%OrderShippingAddressID != null%}</visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowHeight>590</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>668</DialogWindowWidth>
+          <EditDialogWindowHeight>630</EditDialogWindowHeight>
+          <EditDialogWindowWidth>680</EditDialogWindowWidth>
+          <EditItemElementName>EditAddressPropertiesShipping</EditItemElementName>
+          <EditWindowName>EditWindow</EditWindowName>
+          <ElementResourceName>cms.ecommerce</ElementResourceName>
+          <EncodeOutput>False</EncodeOutput>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.orderaddress</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>AddressID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>6</SelectionMode>
+          <Transformation>
+            <![CDATA[{%EditedObject.OrderShippingAddress.ApplyTransformation("Ecommerce.Transformations.Order_OrderAddressDetail")|(identity)GlobalAdministrator|(hash)5b6114ebea88abcf66f80687c034b2ab498d31c7810e9b421d4e9d03f1209055%}]]>
+          </Transformation>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition>
+<![CDATA[
+AddressOrderID = {%EditedObject.OrderID|(identity)GlobalAdministrator|(hash)508642e77165e37c87633e8cde30f7593577988f442278b82dcf742a0e3f3388%} 
+AND 
+AddressType = 2
+]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="OrderTrackingNumber" guid="a8e47954-ef84-46cc-a2e7-c8ae6515b4c5" visible="true" order="3">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$order_edit.lbltrackingnumber$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[A number or any combination of characters according to which the order will be tracked by the delivery service.]]>
+          </fielddescription>
+        </properties>
+      </field>
+      <field column="OrderTotalShipping" guid="075b59b9-762d-46f7-8e08-e0008ad055ea" order="4" />
+      <field column="OrderGrandTotal" guid="3cdb8bf9-6568-465a-8b43-a073d4bc125d" order="5" />
+      <field column="OrderGrandTotalInMainCurrency" guid="835d4981-f09e-4f83-922a-c9a8ef81878f" order="6" />
+      <field column="OrderTotalPrice" guid="fef6bb8a-2c7d-4ea3-8335-920498657802" order="7" />
+      <field column="OrderTotalPriceInMainCurrency" guid="a62bd496-944e-4f31-9f2d-530b849cd644" order="8" />
+      <field column="OrderTotalTax" guid="786aede8-95e6-4d3a-a285-1627661b9ca7" order="9" />
+      <field column="OrderDiscounts" guid="d1b49e10-4999-4dcc-9f06-5743bee08980" order="10" />
+      <field column="OrderOtherPayments" guid="5ea8a4cb-4421-4458-835e-8e362c6f20c8" order="11" />
+      <field column="OrderTaxSummary" guid="b8fdab08-5003-4ee7-8520-4525e51715ed" order="12" />
+      <field column="OrderDate" guid="fc38316b-50bd-49f2-b469-2a8649440ed8" order="13" />
+      <field column="OrderStatusID" guid="11250533-9320-4950-b72c-f44d48c6903c" order="14" />
+      <field column="OrderCurrencyID" guid="efeadf73-e9a5-4283-b015-0702a04163e9" order="15" />
+      <field column="OrderCustomerID" guid="ae5f163d-d345-459c-97e2-3adb7150195f" order="16" />
+      <field column="OrderCreatedByUserID" guid="1fda4f50-5db3-4803-aeb5-7c1ddfbf85ab" order="17" />
+      <field column="OrderNote" guid="ad9e3376-04c8-42b3-b405-d0f36bebb606" order="18" />
+      <field column="OrderSiteID" guid="72c87c0f-a61b-4ff4-8c2b-4f6b510e03a1" order="19" />
+      <field column="OrderPaymentOptionID" guid="d7942b91-97c7-46d0-a4b5-770a006065e1" order="20" />
+      <field column="OrderInvoice" guid="da660e03-1666-44e4-b05c-15b52a9e2f44" order="21" />
+      <field column="OrderInvoiceNumber" guid="2e515b8c-5186-488f-8836-84ae1a3a73bb" order="22" />
+      <field column="OrderCustomData" guid="0162e231-adda-4951-b014-fde264ec2103" order="23" />
+      <field column="OrderPaymentResult" guid="59784e17-5d9d-48e0-93a1-ae6d97564121" order="24" />
+      <field column="OrderGUID" guid="cfcbbfde-eda8-4fd8-b94c-7d92bac0b907" order="25" />
+      <field column="OrderLastModified" guid="0554677d-56cc-4b16-8992-7e02ae6c46f7" order="26" />
+      <field column="OrderIsPaid" guid="4f3c7a42-baa6-44bc-8c52-2f18dc8e20b9" order="27" />
+      <field column="OrderCulture" guid="d4c36d0d-073d-4b64-a99c-5213b120cffc" order="28" />
+      <field column="OrderCouponCodes" guid="0c00c13e-47a4-4e9f-92e5-fe64a24505ce" order="29" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Update shipping</FormDisplayName>
+  <FormGUID>c3094efc-46f7-4420-bae3-bde7fa3e218f</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>UpdateShipping</FormName>
+</cms.alternativeform>

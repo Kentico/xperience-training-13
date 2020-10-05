@@ -16,7 +16,7 @@ using CMS.MediaLibrary;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
-public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_CopyMoveFolder : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_CopyMoveFolder : CMSPage
 {
     #region "Variables"
 
@@ -218,18 +218,6 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         }
     }
 
-
-    /// <summary>
-    /// Gets true if page is used on the live site. False if is in administration.
-    /// </summary>
-    private bool IsLiveSite
-    {
-        get
-        {
-            return QueryHelper.GetBoolean("islivesite", false);
-        }
-    }
-
     #endregion
 
 
@@ -288,14 +276,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
 
     protected void Page_Init(object sender, EventArgs e)
     {
-        if (IsLiveSite)
-        {
-            SetLiveRTL();
-        }
-        else
-        {
-            SetRTL();
-        }
+        SetRTL();
     }
 
 
@@ -320,11 +301,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         // Get the source node
         MediaLibraryID = ValidationHelper.GetInteger(Parameters["libraryid"], 0);
         CopyMoveAction = ValidationHelper.GetString(Parameters["action"], string.Empty);
-        FolderPath = Path.EnsureBackslashes(ValidationHelper.GetString(Parameters["path"], ""));
+        FolderPath = Path.EnsureSlashes(ValidationHelper.GetString(Parameters["path"], ""));
         Files = ValidationHelper.GetString(Parameters["files"], "").Trim('|');
         RootFolder = MediaLibraryHelper.GetMediaRootFolderPath(SiteContext.CurrentSiteName);
         AllFiles = ValidationHelper.GetBoolean(Parameters["allFiles"], false);
-        NewPath = Path.EnsureBackslashes(ValidationHelper.GetString(Parameters["newpath"], ""));
+        NewPath = Path.EnsureSlashes(ValidationHelper.GetString(Parameters["newpath"], ""));
 
         // Target folder
         string tarFolder = NewPath;
@@ -413,7 +394,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
             string origPath = Path.GetFullPath(DirectoryHelper.CombinePath(libPath, FolderPath));
 
             // Original path in DB
-            string origDBPath = Path.EnsureSlashes(FolderPath);
+            string origDBPath = Path.EnsureForwardSlashes(FolderPath);
 
             // New path in DB
             string newDBPath;
@@ -442,7 +423,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
             // Process current folder copy/move action
             if (String.IsNullOrEmpty(Files) && !AllFiles)
             {
-                newPath = Path.EnsureEndBackslash(newPath) + origFolderName;
+                newPath = Path.EnsureEndSlash(newPath) + origFolderName;
                 newPath = newPath.Trim('\\');
 
                 // Check if moving into same folder
@@ -457,7 +438,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                 string newRootPath = Path.GetDirectoryName(newPath).Trim();
                 string newSubRootFolder = Path.GetFileName(newPath).ToLowerCSafe().Trim();
                 string originalSubRootFolder = Path.GetFileName(FolderPath).ToLowerCSafe().Trim();
-                if (String.IsNullOrEmpty(Files) && (CopyMoveAction.ToLowerCSafe() == "move") && newPath.StartsWithCSafe(Path.EnsureEndBackslash(FolderPath))
+                if (String.IsNullOrEmpty(Files) && (CopyMoveAction.ToLowerCSafe() == "move") && newPath.StartsWithCSafe(Path.EnsureEndSlash(FolderPath))
                     && (originalSubRootFolder == newSubRootFolder) && (newRootPath == FolderPath))
                 {
                     CurrentError = GetString("media.move.movetoitself");
@@ -473,7 +454,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
                     newPath = path.Remove(0, (libPath.Length + 1));
 
                     // Get new DB path
-                    newDBPath = Path.EnsureSlashes(newPath.Replace(Path.EnsureEndBackslash(libPath), ""));
+                    newDBPath = Path.EnsureForwardSlashes(newPath.Replace(Path.EnsureEndSlash(libPath), ""));
                 }
                 catch (Exception ex)
                 {
@@ -485,12 +466,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
             }
             else
             {
-                origDBPath = Path.EnsureSlashes(FolderPath);
-                newDBPath = Path.EnsureSlashes(newPath.Replace(libPath, "")).Trim('/');
+                origDBPath = Path.EnsureForwardSlashes(FolderPath);
+                newDBPath = Path.EnsureForwardSlashes(newPath.Replace(libPath, "")).Trim('/');
             }
 
             // Error if moving folder into its subfolder
-            if ((String.IsNullOrEmpty(Files) && !AllFiles) && (CopyMoveAction.ToLowerCSafe() == "move") && newPath.StartsWithCSafe(Path.EnsureEndBackslash(FolderPath)))
+            if ((String.IsNullOrEmpty(Files) && !AllFiles) && (CopyMoveAction.ToLowerCSafe() == "move") && newPath.StartsWithCSafe(Path.EnsureEndSlash(FolderPath)))
             {
                 CurrentError = GetString("media.move.parenttochild");
                 AddLog(CurrentError);
@@ -718,8 +699,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
     /// </summary>
     private IEnumerable<string> GetFileNames()
     {
-        var path = LibraryPath + "/" + Path.EnsureSlashes(FolderPath) + "/";
-        path = Path.EnsureBackslashes(path).Replace("|", "\\");
+        var path = LibraryPath + "/" + Path.EnsureForwardSlashes(FolderPath) + "/";
+        path = Path.EnsureSlashes(path).Replace("|", "\\");
 
         IEnumerable<FileInfo> files = GetFileInfos(path, "*.*");
         var filenames = new List<string>();

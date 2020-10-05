@@ -176,7 +176,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Section :
         viewpage = URLHelper.AddParameterToUrl(viewpage, "hash", QueryHelper.GetHash(viewpage));
 
         // Split mode enabled
-        if (splitViewSupported && PortalUIHelper.DisplaySplitMode && (TreeNode != null) && (action == "edit" || action == "preview" || (TreeNode.IsPublished && action == "livesite")))
+        if (splitViewSupported && PortalUIHelper.DisplaySplitMode && (TreeNode != null) && (action == "edit" || action == "preview"))
         {
             viewpage = DocumentUIHelper.GetSplitViewUrl(viewpage);
         }

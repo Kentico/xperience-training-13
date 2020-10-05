@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>cfc4bf3d-b583-492e-a956-ea1ef8d990c6</GraphGUID>
+  <GraphHeight>700</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>Facebook_page_fans_city_month</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE
+@cols AS NVARCHAR(MAX),
+@sql  AS NVARCHAR(MAX),
+@CodeName AS NVARCHAR(MAX) = 'Facebook.page_fans_city';
+
+SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+
+IF (@ExternalID IS NOT NULL) AND (@ExternalID != N'') 
+BEGIN
+	SET @cols = STUFF(
+	(SELECT N',' + QUOTENAME([col]) AS [text()]
+	FROM (SELECT DISTINCT [InsightValueName] AS [col] FROM [SM_Insight] INNER JOIN [SM_InsightHit_Month] ON [InsightID] = [InsightHitInsightID]
+		WHERE [InsightExternalID] = @ExternalID AND [InsightPeriodType] = @PeriodType
+				AND [InsightCodeName] = @CodeName AND [InsightHitPeriodFrom] BETWEEN @FromDate AND @ToDate) AS [T1]
+	ORDER BY [col]
+	FOR XML PATH('')),
+	1, 1, N'');
+
+	SET @sql = N'SELECT * FROM
+	(
+		SELECT [Date], [InsightValueName], [InsightHitValue] FROM [SM_Insight]
+		INNER JOIN [SM_InsightHit_Month] ON [InsightID] = [InsightHitInsightID]
+			AND [InsightCodeName] = @CodeName
+			AND [InsightPeriodType] = @PeriodType
+			AND InsightExternalID = @ExternalID
+		RIGHT JOIN {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,''month'') ON [Date] = [InsightHitPeriodFrom]
+	) AS [T2]
+	PIVOT
+	(
+		SUM(InsightHitValue) FOR [InsightValueName] IN(' + @cols + N')
+	) AS [T3]
+	;';
+
+
+	EXEC sp_executesql @sql,
+		N'@FromDate DATE, @ToDate DATE, @CodeName AS NVARCHAR(MAX), @ExternalID AS NVARCHAR(MAX), @PeriodType AS NVARCHAR(20)', 
+		@FromDate, @ToDate, @CodeName, @ExternalID, @PeriodType;
+
+
+END
+ELSE
+BEGIN
+  SELECT 0 AS [StartTime] WHERE 0 = 1
+END
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Facebook.page_fans_city.lifetime.monthreport</CodeName>
+    <GUID>065359c7-a6fc-4486-867d-d64b0be7799b</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>{$sm.ins.nodata$}</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisformat>y</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle>{$sm.ins.facebook.page_fans_city$}</GraphTitle>
+  <GraphType>line</GraphType>
+  <GraphWidth>1100</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_months$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$sm.ins.facebook.page_fans_city.value$}</GraphYAxisTitle>
+</reporting.reportgraph>

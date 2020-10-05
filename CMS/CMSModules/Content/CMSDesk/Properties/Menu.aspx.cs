@@ -50,11 +50,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
 
     private void DocumentManager_OnSaveData(object sender, DocumentManagerEventArgs e)
     {
-        if (!pnlUISearch.IsHidden)
-        {
-            Node.DocumentSearchExcluded = chkExcludeFromSearch.Checked;
-        }
-
         if (!pnlUIBasicProperties.IsHidden)
         {
             Node.DocumentShowInMenu = chkShowInMenu.Checked;
@@ -73,12 +68,11 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
         }
 
         // Redirect to information page when no UI elements displayed
-        if ((pnlUIBasicProperties.IsHidden || !Node.IsNavigationItem()) && pnlUISearch.IsHidden)
+        if (pnlUIBasicProperties.IsHidden || !Node.IsNavigationItem())
         {
             RedirectToUINotAvailable();
         }
-
-        chkExcludeFromSearch.Checked = Node.DocumentSearchExcluded;
+        
         chkShowInMenu.Checked = Node.DocumentShowInMenu;
 
         pnlForm.Enabled = DocumentManager.AllowSave;

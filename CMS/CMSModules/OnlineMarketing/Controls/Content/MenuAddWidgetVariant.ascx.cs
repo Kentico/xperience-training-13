@@ -21,10 +21,6 @@ public partial class CMSModules_OnlineMarketing_Controls_Content_MenuAddWidgetVa
         iAddMVTVariant.Text = ResHelper.GetString("mvtvariant.new", culture);
         iAddMVTVariant.Attributes.Add("onclick", "ContextAddWebPartMVTVariant(GetContextMenuParameter('addWidgetVariantMenu'));");
 
-        // Add Content personalization variant
-        iAddCPVariant.Text = ResHelper.GetString("contentpersonalizationvariant.new", culture);
-        iAddCPVariant.Attributes.Add("onclick", "ContextAddWebPartCPVariant(GetContextMenuParameter('addWidgetVariantMenu'));");
-
         pnlWebPartMenu.Attributes.Add("onmouseover", "ActivateParentBorder();");
     }
 

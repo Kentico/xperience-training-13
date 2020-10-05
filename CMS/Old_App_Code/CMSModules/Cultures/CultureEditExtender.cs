@@ -71,7 +71,7 @@ public class CultureEditExtender : ControlExtender<UIForm>
         bool isUiCulture = ValidationHelper.GetBoolean(Control.GetFieldValue("CultureIsUICulture"), false);
         if (!Control.StopProcessing && !LocalizationHelper.ResourceFileExistsForCulture(cultureCode) && isUiCulture)
         {
-            string url = "http://devnet.kentico.com/download/localization-packs";
+            string url = "https://devnet.kentico.com/download/localization-packs";
             string downloadPage = String.Format(@"<a href=""{0}"" target=""_blank"" >{1}</a> ", url, HTMLHelper.HTMLEncode(url));
             Control.ShowWarning(String.Format(Control.GetString("culture.downloadlocalization"), downloadPage));
         }

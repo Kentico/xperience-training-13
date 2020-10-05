@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.attachment</CodeName>
+    <GUID>af2b10c3-0037-42e9-8b5a-e4e1a90b81e6</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>58d67eaf-e12c-41a7-b52a-377a4a2eb2d9</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>Search</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT View_CMS_Tree_Joined.*, View_CMS_Tree_Joined.DocumentName AS SearchResultName
+FROM CMS_Attachment INNER JOIN View_CMS_Tree_Joined 
+ON View_CMS_Tree_Joined.DocumentID = CMS_Attachment.AttachmentDocumentID 
+WHERE (##WHERE##) AND (([AttachmentName] Like N'%'+ @Expression + N'%') OR ([AttachmentTitle] Like N'%'+ @Expression + N'%') OR ([AttachmentDescription] Like N'%'+ @Expression + N'%')) ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

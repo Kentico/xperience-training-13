@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>1f172da0-837a-4c90-8c99-e107f0a12dca</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+/* Variable determines whether global payment methods should be displayed */
+DECLARE @GlobalOptions bit;
+SET @GlobalOptions = {%Settings.CMSStoreAllowGlobalPaymentMethods?1:0|(identity)GlobalAdministrator|(hash)71bad8ecddebbf8dcb30b5315575beb080d53c49d2886904b8a3b46557c13620%};  
+SELECT
+   PaymentOptionDisplayName  AS '{$paymentoption_edit.itemlistlink$}',
+   ISNULL(COUNT(OrderID),0) AS '{$ecommerce.report_numberoforders$}'
+FROM
+   COM_PaymentOption, 
+   COM_Order   
+WHERE 
+   (PaymentOptionSiteID = @CMSContextCurrentSiteID OR (@GlobalOptions = 1 AND PaymentOptionSiteID IS NULL))
+   AND (OrderPaymentOptionID = PaymentOptionID)
+   AND (@FromDate IS NULL OR (OrderDate >= @FromDate))    
+   AND (@ToDate IS NULL OR (OrderDate <= DATEADD(day,1,@ToDate)))
+   AND OrderSiteID = @CMSContextCurrentSiteID
+   AND (ISNULL(OrderIsPaid,0) = 1 OR ISNULL(@OnlyPaid,0) = 0)
+GROUP BY PaymentOptionDisplayName
+ORDER BY COUNT(OrderID) DESC
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>NumberOfOrdersByPaymentMethod</CodeName>
+    <GUID>981f339b-4e27-4fcd-ad3e-06952ddb3566</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$ecommerceconfiguration.paymentoptions$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$ecommerce.report_number$}</GraphYAxisTitle>
+</reporting.reportgraph>

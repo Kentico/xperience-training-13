@@ -11,7 +11,6 @@
             <ug:Action Name="edit" Caption="$general.edit$" FontIconClass="icon-edit" FontIconStyle="Allow" />
             <ug:Action Name="delete" ExternalSourceName="delete" Caption="$general.delete$" FontIconClass="icon-bin" FontIconStyle="Critical"
                 Confirmation="$ma.process.delete.confirm$" />
-            <ug:Action Name="savetemplate" Caption="$ma.template.create$" FontIconClass="icon-layout" ExternalSourceName="savetemplate" OnClick="saveAsTemplate({0}); return false;" />
         </GridActions>
         <GridColumns>
             <ug:Column Source="WorkflowDisplayName" Caption="$ma.processname$" Wrap="false" Localize="true">

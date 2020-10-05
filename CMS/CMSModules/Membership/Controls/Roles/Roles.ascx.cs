@@ -8,76 +8,7 @@ using CMS.UIControls;
 
 public partial class CMSModules_Membership_Controls_Roles_Roles : CMSAdminEditControl
 {
-    #region "Variables"
-
-    private bool mHideWhenGroupIsNotSupplied = false;
-
-    #endregion
-
-
     #region "Properties"
-
-    /// <summary>
-    /// Determines whether to hide the content of the control when GroupID is not supplied.
-    /// </summary>
-    public bool HideWhenGroupIsNotSupplied
-    {
-        get
-        {
-            return mHideWhenGroupIsNotSupplied;
-        }
-        set
-        {
-            mHideWhenGroupIsNotSupplied = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets and sets current group ID.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            int groupId = ValidationHelper.GetInteger(ViewState["groupid"], 0);
-
-            if (groupId <= 0)
-            {
-                groupId = ValidationHelper.GetInteger(GetValue("GroupID"), 0);
-            }
-
-            return groupId;
-        }
-        set
-        {
-            ViewState["groupid"] = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets and sets current group GUID.
-    /// </summary>
-    public Guid GroupGUID
-    {
-        get
-        {
-            Guid groupGuid = ValidationHelper.GetGuid(ViewState["groupguid"], Guid.Empty);
-
-            if (groupGuid == Guid.Empty)
-            {
-                groupGuid = ValidationHelper.GetGuid(GetValue("GroupGUID"), Guid.Empty);
-            }
-
-            return groupGuid;
-        }
-        set
-        {
-            ViewState["groupguid"] = value;
-        }
-    }
-
 
     /// <summary>
     /// Gets and sets current site ID.
@@ -160,25 +91,14 @@ public partial class CMSModules_Membership_Controls_Roles_Roles : CMSAdminEditCo
         }
         else
         {
-            if ((GroupID == 0) && HideWhenGroupIsNotSupplied)
-            {
-                Visible = false;
-                return;
-            }
-
             // Is live site
             Role.IsLiveSite = IsLiveSite;
 
             RoleList.SiteID = SiteID;
-            RoleList.GroupID = GroupID;
 
-            RoleEdit.GroupID = GroupID;
-            RoleEdit.GroupGUID = GroupGUID;
             RoleEdit.SiteID = SiteID;
             RoleEdit.DisplayMode = DisplayMode;
 
-            Role.GroupID = GroupID;
-            Role.GroupGUID = GroupGUID;
             Role.SiteID = SiteID;
             Role.DisplayMode = DisplayMode;
 

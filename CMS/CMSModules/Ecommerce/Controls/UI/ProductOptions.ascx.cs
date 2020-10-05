@@ -224,7 +224,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductOptions : CMSAdminC
                 return HTMLHelper.HTMLEncode(category.CategoryFullName);
 
             case "categorytype":
-                return ValidationHelper.GetString(parameter, "").ToEnum<OptionCategoryTypeEnum>().ToLocalizedString("com.optioncategorytype");
+                return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(parameter, "")).ToLocalizedString("com.optioncategorytype");
 
             case "optionscounts":
                 category = OptionCategoryInfo.Provider.Get(ValidationHelper.GetInteger(parameter, 0));

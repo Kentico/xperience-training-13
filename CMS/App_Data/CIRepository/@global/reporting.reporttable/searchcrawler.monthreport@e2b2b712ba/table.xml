@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>5346d068-4138-4f7e-9bd8-8b885899cc1a</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'month');
+SELECT TOP 100
+StatisticsObjectName  AS '{$reports_searchcrawler.name_header$}',
+ SUM(HitsCount) AS '{$reports_searchcrawler.hits_header$}',
+  (SELECT MAX(HitsStartTime) FROM Analytics_HourHits INNER JOIN Analytics_Statistics ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)) AS '{$reports_searchcrawler.lastvisit_header$}'
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_MonthHits ON Analytics_Statistics.StatisticsID = Analytics_MonthHits.HitsStatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+  GROUP BY StatisticsObjectName
+  ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>searchcrawler.monthreport</CodeName>
+    <GUID>c0157c8b-b385-4d30-b10f-fcf3f8430922</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

@@ -132,7 +132,7 @@ public partial class CMSFormControls_Metafiles_MetafileOrFontIconSelector : Form
     {
         get
         {
-            return drpThumbnailType.SelectedValue.ToEnum<ThumbnailTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<ThumbnailTypeEnum>(drpThumbnailType.SelectedValue);
         }
     }
 

@@ -45,6 +45,9 @@ cmsdefine(['jQuery', 'CMS/UrlChecker'], function ($, UrlChecker) {
         }
 
         data.checkedUrls.forEach(function (checkedUrl) {
+            if (checkedUrl.url === '') {
+                brokenUrlNames.push(checkedUrl.name);
+            }
             var urlCheckerOptions = {
                 expectedStatusCode: 200,
                 url: checkedUrl.url,

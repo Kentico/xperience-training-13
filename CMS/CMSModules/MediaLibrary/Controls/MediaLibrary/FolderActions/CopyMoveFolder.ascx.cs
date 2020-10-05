@@ -179,7 +179,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         WindowHelper.Add(Identifier, props);
 
         frameUrl = URLHelper.AddParameterToUrl(frameUrl, "params", Identifier);
-        frameUrl = URLHelper.AddParameterToUrl(frameUrl, "islivesite", IsLiveSite.ToString());
+        frameUrl = URLHelper.AddParameterToUrl(frameUrl, "islivesite", false.ToString());
         frameUrl = URLHelper.AddParameterToUrl(frameUrl, "hash", QueryHelper.GetHash(frameUrl));
         return frameUrl;
     }

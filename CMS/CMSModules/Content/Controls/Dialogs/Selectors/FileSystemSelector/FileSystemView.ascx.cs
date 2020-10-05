@@ -286,7 +286,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
 
             if (path.StartsWithCSafe(appPath, true))
             {
-                path = "~" + Path.EnsureSlashes(path.Substring(appPath.Length));
+                path = "~" + Path.EnsureForwardSlashes(path.Substring(appPath.Length));
             }
 
             // Display information about current path

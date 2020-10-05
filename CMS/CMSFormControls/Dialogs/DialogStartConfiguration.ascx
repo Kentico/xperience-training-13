@@ -84,26 +84,6 @@
                             <cms:UniSelector runat="server" ID="drpSiteLibraries" SelectionMode="SingleDropDownList" ReturnColumnName="LibraryName" ObjectType="media.library" />
                         </div>
                     </div>
-                    <asp:PlaceHolder ID="plcGroups" runat="server">
-                        <div class="form-group">
-                            <div class="editing-form-label-cell">
-                                <cms:LocalizedLabel CssClass="control-label" ID="lblMediaSiteGroups" runat="server" EnableViewState="false"
-                                    DisplayColon="true" ResourceString="dialogs.config.sitegroups" AssociatedControlID="drpGroups" />
-                            </div>
-                            <div class="editing-form-value-cell">
-                                <cms:UniSelector runat="server" ID="drpGroups" SelectionMode="SingleDropDownList" ReturnColumnName="GroupName" ObjectType="community.group" HasDependingFields="True" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="editing-form-label-cell">
-                                <cms:LocalizedLabel CssClass="control-label" ID="lblMediaGroupLibraries" runat="server" EnableViewState="false"
-                                    DisplayColon="true" ResourceString="dialogs.config.grouplibraries" AssociatedControlID="drpGroupLibraries" />
-                            </div>
-                            <div class="editing-form-value-cell">
-                                <cms:UniSelector runat="server" ID="drpGroupLibraries" SelectionMode="SingleDropDownList" ReturnColumnName="LibraryName" ObjectType="media.grouplibrary" AllowEmpty="false" />
-                            </div>
-                        </div>
-                    </asp:PlaceHolder>
                     <div class="form-group">
                         <div class="editing-form-label-cell">
                             <cms:LocalizedLabel CssClass="control-label" ID="lblMediaStartPath" runat="server" EnableViewState="false"

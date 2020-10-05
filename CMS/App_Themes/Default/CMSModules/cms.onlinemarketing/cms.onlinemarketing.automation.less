@@ -11,7 +11,7 @@
 @shadow-color: @color-gray-100;
 
 .ma-template-selector-wrapper {
-    margin: @base-unit @base-unit 0px @base-unit;
+    margin: @base-unit @base-unit 0 @base-unit;
 }
 
 .ma-template-selector-item .ma-template-selector-item-envelope {
@@ -21,7 +21,7 @@
     text-align: center;
     height: @base-unit * 15.25;
     width: @base-unit * 17.5;
-    margin: 0px @base-unit * 2 @base-unit * 2 0px;
+    margin: 0 @base-unit * 2 @base-unit * 2 0;
     position: relative;
 }
 
@@ -36,26 +36,73 @@
 
 .ma-template-selector-item-envelope {
     cursor: pointer;
+
+    .ma-template-selector-item-content {
+        height: 100%;
+    }
+}
+
+.vertical-overflow() {
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
 }
 
 .ma-template-selector-item-name {
-    display: block;
-    padding: @base-unit * 2 @base-unit * 0.875 0px;
-    word-wrap: break-word;
+    .vertical-overflow();
+    padding: 0 @base-unit / 2;
+    height: @base-unit * 3;
+    margin-bottom: @base-unit / 2;
 }
 
 .ma-template-selector-item-description {
-    display: block;
-    padding: 0px @base-unit;
+    .vertical-overflow();
+    -webkit-line-clamp: 4;
+    padding: 0 @base-unit;
 }
 
 .ma-template-selector-item-icon {
-    position: absolute;
-    bottom: @base-unit * 2;
-    left: @base-unit * 6.75;
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    padding: @base-unit * 2 0 @base-unit;
     i {
         color: @color-gray-70;
-        font-size: 64px !important;
+        font-size: @base-unit * 3 !important;
+    }
+}
+
+.ma-template-selector-item-actions {
+    position: absolute;
+    right: 0;
+
+    .btn.dropdown-toggle {
+        background-color: transparent;
+        box-shadow: none;
+        border-radius: unset;
+
+        &:hover i {
+            color: @color-blue-70;
+        }
+    }
+
+    &.open > .btn.dropdown-toggle {
+        background-color: @color-gray-140;
+    }
+
+    .dropdown-menu {
+        min-width: 0;
+        text-align: right;
+
+        li a {
+            line-height: @base-unit;
+            padding: @base-unit / 2 @base-unit @base-unit / 2 @base-unit * 2;
+        }
     }
 }
 
@@ -104,7 +151,6 @@
 div.automation-header {
     width: calc(~"100% -"@base-unit * 2);
     height: @base-unit * 3;
-    line-height: @base-unit * 3;
     text-align: right;
     padding: 0 @base-unit;
 
@@ -126,10 +172,16 @@ div.automation-header {
         }
     }
 
+    .dropdown-menu-right {
+        text-align: left;
+        margin-top: -@base-unit / 2;
+    }
+
     div.automation-header-icon {
         font-size: @base-unit / 2;
         display: inline;
         padding-right: 4px;
+        line-height: @base-unit * 3;
 
         .enabled {
             color: @color-green-100;
@@ -311,7 +363,7 @@ div.automation-header {
         position: relative;
         overflow: hidden;
         height: 100%;
-        width: 0px;
+        width: 0;
 
         &.automation-step-properties-wrapper-visible {
             width: @automation-step-properties-wrapper-width;
@@ -323,7 +375,7 @@ div.automation-header {
             width: @automation-step-properties-width;
             right: -@automation-step-properties-width;
             transition: right 0.2s ease;
-            box-shadow: 4px 0px 8px 4px @shadow-color;
+            box-shadow: 4px 0 8px 4px @shadow-color;
 
             &.automation-step-properties-slidable-visible {
                 right: 0;
@@ -417,6 +469,31 @@ div.automation-header {
             text-overflow: ellipsis;
             overflow: hidden;
             max-width: @selector-first-button-max-width;
+        }
+    }
+
+    .editing-form-control-nested-control,
+    .editing-form-value-cell {
+        .control-group-inline {
+            display: flex;
+            max-width: @input-max-width;
+            flex-wrap: wrap;
+            justify-items: space-between;
+
+            input,
+            select,
+            .editing-form-control-nested-control {
+                flex: 1 0 100%;
+                margin-bottom: @base-unit * 0.5;
+            }
+
+            button {
+                flex: 1 0 35%;
+
+                &:last-of-type {
+                    margin-right: 0;
+                }
+            }
         }
     }
 }

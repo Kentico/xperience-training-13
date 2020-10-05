@@ -311,11 +311,6 @@ public partial class CMSModules_AdminControls_Controls_Preview_PreviewHierarchy 
 
         if (previewValue != 0)
         {
-            if (previewControl != null)
-            {
-                previewControl.IsInPreview = true;
-            }
-
             ScriptHelper.HideVerticalTabs(Page);
 
             if (!RequestHelper.IsPostBack())

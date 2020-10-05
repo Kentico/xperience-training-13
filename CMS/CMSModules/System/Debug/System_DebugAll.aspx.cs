@@ -17,7 +17,7 @@ public partial class CMSModules_System_Debug_System_DebugAll : CMSDebugPage
 
     protected void ReloadData()
     {
-        if (!RequestDebug.Settings.Enabled)
+        if (!HandlersDebug.Settings.Enabled)
         {
             ShowWarning(GetString("DebugRequests.NotConfigured"));
         }
@@ -25,7 +25,7 @@ public partial class CMSModules_System_Debug_System_DebugAll : CMSDebugPage
         {
             plcLogs.Controls.Clear();
 
-            var requestLogs = RequestDebug.Settings.LastLogs;
+            var requestLogs = HandlersDebug.Settings.LastLogs;
 
             RequestLog lastLog = null;
 

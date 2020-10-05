@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>b4032f7f-b1c0-498b-a04c-84f5586694b2</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'week');
+SET @ToDate = {%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'week');
+
+SELECT X.Name AS '{$om.variant.tabletitle$}',ISNULL (Y.Hits,0) AS '{$om.selectedperiod$}',
+ISNULL(X.Hits,0) AS '{$om.total$}'  FROM
+(
+SELECT ABVariantDisplayName AS Name, ISNULL(SUM (HitsCount),0) AS Hits,ABVariantGUID FROM Analytics_Statistics
+  LEFT JOIN OM_ABVariantData ON ABVariantGUID = CAST(SUBSTRING(StatisticsCode, LEN(StatisticsCode)-35, LEN(StatisticsCode)) AS uniqueidentifier)
+  LEFT JOIN OM_ABTest ON ABVariantTestID = ABTestID AND ABTestSiteID = @CMSContextCurrentSiteID
+  LEFT JOIN Analytics_WeekHits ON StatisticsID = HitsSTatisticsID    
+
+ WHERE   StatisticsSiteID = @CMSContextCurrentSiteID AND StatisticsCode LIKE 'abconversion;%' AND
+ @TestName = SUBSTRING(StatisticsCode, 14, CHARINDEX(';',StatisticsCode,14)-14) AND
+ ISNULL(@ConversionName,'') IN ('',StatisticsObjectName)
+ 
+ GROUP BY ABVariantDisplayName,ABVariantGUID
+)
+ AS X
+LEFT JOIN (SELECT
+  CAST(SUBSTRING(StatisticsCode, LEN(StatisticsCode)-35, LEN(StatisticsCode)) AS uniqueidentifier) AS ABVariantGUID, SUM(HitsCount) AS Hits FROM Analytics_Statistics
+  LEFT JOIN Analytics_WeekHits ON HitsStatisticsID = StatisticsID
+  
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND StatisticsCode LIKE 'abconversion;%'
+    AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+    AND ISNULL(@ConversionName,'') IN ('',StatisticsObjectName)
+     
+  GROUP BY SUBSTRING(StatisticsCode, LEN(StatisticsCode)-35, LEN(StatisticsCode))
+)
+AS Y ON X.ABVariantGUID = Y.ABVariantGUID
+
+ 
+ORDER BY X.Hits Desc
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>mvcabtestconversioncount.weekreport</CodeName>
+    <GUID>265faf9e-0cdf-4f6d-80bc-b0e373da643f</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

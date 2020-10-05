@@ -76,7 +76,7 @@ public partial class CMSModules_Scheduler_Pages_Tab_SystemTasks : CMSScheduledTa
 
         if (SiteInfo != null)
         {
-            bool usesTimer = SchedulingHelper.UseAutomaticScheduler || !SchedulingHelper.RunSchedulerWithinRequest;
+            bool usesTimer = SchedulingHelper.UseAutomaticScheduler;
             if (usesTimer)
             {
                 // Restart timer action
@@ -114,7 +114,7 @@ public partial class CMSModules_Scheduler_Pages_Tab_SystemTasks : CMSScheduledTa
     {
         if (SiteInfo != null)
         {
-            if (SchedulingHelper.UseAutomaticScheduler || !SchedulingHelper.RunSchedulerWithinRequest)
+            if (SchedulingHelper.UseAutomaticScheduler)
             {
                 lblLastRun.Visible = true;
 

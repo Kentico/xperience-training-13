@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>0ef7b4e1-d6dc-4561-89a0-f3a36a533b43</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Variable determines whether global products should be displayed. */
+DECLARE @GlobalProducts bit;
+SET @GlobalProducts = {%Settings.CMSStoreAllowGlobalProducts?1:0|(identity)GlobalAdministrator|(hash)df4a55eb95b038f77e15e7e01910c539b3d5e54da5818e5613b2922375fdbb44%};
+DECLARE @GlobalOptions bit;
+SET @GlobalOptions = {%Settings.CMSStoreAllowGlobalProductOptions?1:0|(identity)GlobalAdministrator|(hash)41b789b90f663d43a23ec85a8d09f48c0e3633697f6d357d90320f2853cc53d5%};
+                            
+/* Selects the product meeting the conditions from the filter and 
+   the number of orders in which it occures */
+SELECT TOP (@Limit) 
+   ISNULL(parent.SKUName + ': ', '') + product.SKUName + ISNULL(' (' + COM_OptionCategory.CategoryDisplayName + ')', '') AS '{$product_list.productname$}',
+   product.SKUNumber AS '{$product_list.productnumber$}',
+   ISNULL(Departments.DepartmentDisplayName, parentDepartment.DepartmentDisplayName) AS '{$objecttype.com_department$}',
+   ISNULL(Manufacturers.ManufacturerDisplayName,parentManufacturer.ManufacturerDisplayName) AS '{$objecttype.com_manufacturer$}',
+   ISNULL(Suppliers.SupplierDisplayName,parentSupplier.SupplierDisplayName) AS '{$objecttype.com_supplier$}',
+   CAST(product.SKUPrice AS DECIMAL(38,2)) AS '{$com.inventory.price$}',
+   ISNULL(COUNT(DISTINCT OrderID),0) AS '{$com.purchasedproductsreport.numberofpurchases$}'             
+FROM    
+   COM_SKU product
+   LEFT JOIN COM_OrderItem
+      ON product.SKUID = OrderItemSKUID      
+   LEFT JOIN COM_Order 
+      ON OrderID = OrderItemOrderID  
+      AND (ISNULL(OrderIsPaid,0) = 1 OR ISNULL(@OrderIsPaid,0) = 0)
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+      AND (product.SKUOptionCategoryID IS NULL OR (((@GlobalOptions = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID)))
+      AND (product.SKUOptionCategoryID IS NOT NULL OR ((@GlobalProducts = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID))
+   LEFT JOIN COM_Department AS Departments 
+      ON Departments.DepartmentID = product.SKUDepartmentID
+   LEFT JOIN COM_Manufacturer AS Manufacturers
+      ON product.SKUManufacturerID = Manufacturers.ManufacturerID
+   LEFT JOIN COM_Supplier AS Suppliers
+      ON Suppliers.SupplierID = product.SKUSupplierID
+   LEFT JOIN COM_OptionCategory 
+      ON CategoryID = product.SKUOptionCategoryID
+   LEFT JOIN COM_SKU parent
+      ON product.SKUParentSKUID = parent.SKUID
+   LEFT JOIN COM_Department parentDepartment 
+      ON parentDepartment.DepartmentID = parent.SKUDepartmentID
+   LEFT JOIN COM_Manufacturer parentManufacturer
+      ON parent.SKUManufacturerID = parentManufacturer.ManufacturerID
+   LEFT JOIN COM_Supplier parentSupplier
+      ON parentSupplier.SupplierID = parent.SKUSupplierID
+WHERE 
+   (product.SKUOptionCategoryID IS NULL OR ((@GlobalOptions = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID))
+   AND (product.SKUOptionCategoryID IS NOT NULL OR ((@GlobalProducts = 1 AND product.SKUSiteID IS NULL) OR product.SKUSiteID = @CMSContextCurrentSiteID))
+   AND (product.SKUOptionCategoryID IS NULL OR (CategoryType = 'PRODUCTS'))  
+   AND ((product.SKUEnabled = 1 AND (parent.SKUEnabled IS NULL OR parent.SKUEnabled = 1))
+         OR (product.SKUID IN (SELECT OrderItemSKUID FROM COM_OrderItem WHERE OrderItemOrderID IN (SELECT OrderID FROM COM_Order WHERE OrderSiteID=@CMSContextCurrentSiteID))))
+   AND (@DepartmentID = product.SKUDepartmentID OR @DepartmentID < 0 OR (@DepartmentID IS NULL AND product.SKUDepartmentID IS NULL))
+   AND (@ManufacturerID = product.SKUManufacturerID OR @ManufacturerID < 0 OR (@ManufacturerID IS NULL AND product.SKUManufacturerID IS NULL))
+   AND (@SupplierID = product.SKUSupplierID OR @SupplierID < 0 OR (@SupplierID IS NULL AND product.SKUSupplierID IS NULL))
+   AND (@PublicStatusID = product.SKUPublicStatusID OR @PublicStatusID < 0 OR (@PublicStatusID IS NULL AND product.SKUPublicStatusID IS NULL))
+   AND (@InternalStatusID = product.SKUInternalStatusID OR @InternalStatusID < 0 OR (@InternalStatusID IS NULL AND product.SKUInternalStatusID IS NULL))
+   AND (product.SKUName LIKE ('%'+@ProductName+'%') OR @ProductName IS NULL)
+   AND (product.SKUNumber LIKE ('%'+@ProductNumber+'%') OR @ProductNumber IS NULL OR @ProductNumber = '')        
+   AND COM_Order.OrderSiteID = @CMSContextCurrentSiteID
+GROUP BY 
+   product.SKUID,
+   ISNULL(parent.SKUName + ': ', '') + product.SKUName + ISNULL(' (' + COM_OptionCategory.CategoryDisplayName + ')', ''),
+   product.SKUNumber,
+   product.SKUPrice,
+   ISNULL(Departments.DepartmentDisplayName, parentDepartment.DepartmentDisplayName),
+   ISNULL(Manufacturers.ManufacturerDisplayName,parentManufacturer.ManufacturerDisplayName),
+   ISNULL(Suppliers.SupplierDisplayName,parentSupplier.SupplierDisplayName)
+HAVING
+   ISNULL(COUNT(DISTINCT OrderID),0) > 0
+ORDER BY 
+   COUNT(DISTINCT OrderID) DESC,
+   ISNULL(parent.SKUName + ': ', '') + product.SKUName + ISNULL(' (' + COM_OptionCategory.CategoryDisplayName + ')', '') ASC,
+   product.SKUNumber ASC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>TopProductsByNumberOfPurchases</CodeName>
+    <GUID>dc93af4d-777d-46a2-9aa8-cc8c5c436e8c</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

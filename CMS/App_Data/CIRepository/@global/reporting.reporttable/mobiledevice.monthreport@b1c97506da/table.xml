@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>d1cbf70e-30e5-4dde-ba12-3f267a270624</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'month');
+SELECT TOP 100 
+ StatisticsObjectName AS '{$reports_mobiledevice.name_header$}', 
+ SUM(HitsCount) AS '{$reports_mobiledevice.count_header$}', 
+ CAST(CAST(100*CAST(SUM(HitsCount) AS float)/NULLIF((
+  SELECT SUM(HitsCount) 
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_DayHits ON Analytics_Statistics.StatisticsID = Analytics_DayHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID) 
+  AND (StatisticsCode=@CodeName) 
+  AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)), 0) AS decimal(5,2)) 
+ AS VARCHAR)+'%' AS '{$reports_mobiledevice.percent_header$}' 
+ FROM Analytics_Statistics
+ INNER JOIN Analytics_DayHits ON Analytics_Statistics.StatisticsID = Analytics_DayHits.HitsStatisticsID
+ WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+ AND (StatisticsCode=@CodeName) 
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+ GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>mobiledevice.monthreport</CodeName>
+    <GUID>a6f2b6b9-2b37-451c-90e0-7fdef1984415</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>ecommerce.orderitemskufile</CodeName>
+    <GUID>c2573c54-8d0d-4d88-a4a0-06c63cb3eb4c</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>a805c371-de3f-40d6-97d8-e724b5fc867e</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectallwithdetails</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT COM_OrderItemSKUFile.*, COM_SKUFile.FileName, COM_SKUFile.FilePath, COM_OrderItem.OrderItemSKUName, COM_OrderItem.OrderItemValidTo, COM_Order.OrderSiteID
+FROM COM_OrderItemSKUFile
+JOIN COM_SKUFile ON COM_SKUFile.FileID = COM_OrderItemSKUFile.FileID
+JOIN COM_OrderItem ON COM_OrderItem.OrderItemID = COM_OrderItemSKUFile.OrderItemID
+JOIN COM_Order ON COM_Order.OrderID = COM_OrderItem.OrderItemOrderID
+WHERE (##WHERE##)
+ORDER BY (##ORDERBY##)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

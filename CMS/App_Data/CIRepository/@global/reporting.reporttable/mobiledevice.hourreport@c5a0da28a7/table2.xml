@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table2</TableDisplayName>
+  <TableGUID>e41c3e18-024d-48a0-bd3f-df04fbe34b0d</TableGUID>
+  <TableName>table2</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'day');
+
+DECLARE @MobileVisits INT;
+DECLARE @Visits INT;
+
+SET @MobileVisits = ISNULL((SELECT SUM(HitsCount)
+  FROM Analytics_Statistics INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID)
+  AND (StatisticsCode= @CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)),0);
+
+SET @Visits = ISNULL((SELECT SUM(HitsCount)
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID)
+  AND (StatisticsCode LIKE 'visit%')
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)),0);
+
+IF (@Visits != 0)
+BEGIN
+SELECT
+ '{$general.no$}' AS '{$reports_mobiledevice.ismobilevisit$}',
+ @Visits - @MobileVisits AS '{$reports_mobiledevice.count_header$}',
+ CAST(CAST(100*CAST(@Visits-@MobileVisits AS float)/NULLIF(@Visits, 0) AS decimal(15,2)) AS VARCHAR) + '%' AS '{$reports_mobiledevice.percent_header$}'
+UNION ALL
+SELECT
+ '{$general.yes$}' AS '{$reports_mobiledevice.ismobilevisit$}', 
+ @MobileVisits AS '{$reports_mobiledevice.count_header$}', 
+ CAST(CAST(100*CAST(@MobileVisits AS float)/NULLIF(@Visits, 0) AS decimal(15,2)) AS VARCHAR) + '%' AS '{$reports_mobiledevice.percent_header$}'
+END
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>mobiledevice.hourreport</CodeName>
+    <GUID>d367b4c3-6ccb-4ac2-98f9-e8737ddba369</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

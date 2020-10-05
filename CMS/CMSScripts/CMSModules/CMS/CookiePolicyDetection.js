@@ -25,13 +25,18 @@ cmsdefine(['CMS/MessageService'], function (MessageService) {
         };
 
         window.addEventListener('message', function (event) {
-            clearTimeout(timeoutTimer);
+            if ((event.origin === targetOrigin)
+                && event.data
+                && (event.data.msg === "COOKIE_DETECTION_POLICY_MESSAGE")) {
 
-            if (event.origin === targetOrigin) {
-                // If event.data is falsy it means that browser hasn't set the cookie
-                // If event.data contains a value, the value might not have been set by the iframe, so let's compare that value to the expected one.
-                if (!event.data || event.data !== cookieValue) {
-                    showMessage();
+                if (timeoutTimer) {
+                    clearTimeout(timeoutTimer);
+                    timeoutTimer = null;
+
+                    // If event.data.value contains a value, the value might not have been set by the iframe, so let's compare that value to the expected one.
+                    if (event.data.value !== cookieValue) {
+                        showMessage();
+                    }
                 }
             }
         });

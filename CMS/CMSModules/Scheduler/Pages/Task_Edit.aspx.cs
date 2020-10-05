@@ -8,15 +8,14 @@ using CMS.Helpers;
 using CMS.Membership;
 using CMS.Scheduler;
 using CMS.UIControls;
-using CMS.WebFarmSync;
 
 
 public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPage
 {
     #region "Variables"
 
-    protected int? mTaskId = null;
-    protected TaskInfo mTaskObj = null;
+    protected int? mTaskId;
+    protected TaskInfo mTaskObj;
     protected bool developmentMode = SystemContext.DevelopmentMode;
 
     #endregion
@@ -47,7 +46,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
     {
         get
         {
-            return mTaskObj ?? (mTaskObj = TaskInfoProvider.GetTaskInfo(TaskID));
+            return mTaskObj ?? (mTaskObj = TaskInfo.Provider.Get(TaskID));
         }
         set
         {
@@ -55,12 +54,15 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
         }
     }
 
+
+    private bool IsTaskStandard => TaskInfo == null || TaskInfo.TaskType != ScheduledTaskTypeEnum.System;
+
     #endregion
 
 
     protected override void OnPreInit(EventArgs e)
     {
-        // Page is used for creating and editing global and site tasks 
+        // Page is used for creating and editing global and site tasks
         string elementName = null;
 
         if (TaskID == 0)
@@ -87,18 +89,20 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
     }
 
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         // Control initializations
         rfvDisplayName.ErrorMessage = GetString("general.requiresdisplayname");
         rfvName.ErrorMessage = GetString("Task_Edit.EmptyName");
         lblFrom.Text = GetString("scheduler.from");
         btnReset.OnClientClick = "if (!confirm(" + ScriptHelper.GetLocalizedString("tasks.reset") + ")) return false;";
 
-        plcDevelopment.Visible = developmentMode;
+        rbTaskAvailability.CurrentSelector.AutoPostBack = true;
+        rbTaskAvailability.CurrentSelector.SelectedIndexChanged += rbTaskAvailability_SelectedIndexChanged;
 
-        // Show 'Allow run in external service' check-box in development mode
-        plcAllowExternalService.Visible = developmentMode;
+        plcDevelopment.Visible = developmentMode;
 
         string currentTask = GetString("Task_Edit.NewItemCaption");
 
@@ -107,25 +111,22 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             // Set edited object
             EditedObject = TaskInfo;
 
-            if (TaskInfo != null)
+            // Global task and user is not global administrator and task's site id is different than current site id
+            if (!MembershipContext.AuthenticatedUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) && ((TaskInfo.TaskSiteID == 0) || (TaskInfo.TaskSiteID != SiteID)))
             {
-                // Global task and user is not global administrator and task's site id is different than current site id
-                if (!MembershipContext.AuthenticatedUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) && ((TaskInfo.TaskSiteID == 0) || (TaskInfo.TaskSiteID != SiteID)))
+                RedirectToAccessDenied(GetString("general.nopermission"));
+            }
+
+            currentTask = TaskInfo.TaskDisplayName;
+
+            if (!RequestHelper.IsPostBack())
+            {
+                ReloadData();
+
+                // Show that the task was created or updated successfully
+                if (QueryHelper.GetBoolean("saved", false))
                 {
-                    RedirectToAccessDenied(GetString("general.nopermission"));
-                }
-
-                currentTask = TaskInfo.TaskDisplayName;
-
-                if (!RequestHelper.IsPostBack())
-                {
-                    ReloadData();
-
-                    // Show that the task was created or updated successfully
-                    if (QueryHelper.GetBoolean("saved", false))
-                    {
-                        ShowChangesSaved();
-                    }
+                    ShowChangesSaved();
                 }
             }
         }
@@ -137,24 +138,23 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
                 RedirectToAccessDenied("CMS.ScheduledTasks", "Modify");
             }
 
-            if (WebFarmContext.WebFarmEnabled)
+            if (!RequestHelper.IsPostBack())
             {
-                if (!RequestHelper.IsPostBack())
-                {
-                    chkAllServers.Visible = true;
-                }
-                chkAllServers.Attributes.Add("onclick", "document.getElementById('" + txtServerName.ClientID + "').disabled = document.getElementById('" + chkAllServers.ClientID + "').checked;");
+                rbTaskAvailability.Value = TaskAvailabilityEnum.Administration;
+                InitExternalServiceRelatedControls();
             }
         }
 
-        plcRunIndividually.Visible = (SiteID <= 0);
+        InitTaskAvailabilityRelatedControls();
 
-        // Initializes page title control		
+        plcRunIndividually.Visible = SiteID <= 0;
+        plcTaskAvailability.Visible = SiteID > 0 && IsTaskStandard;
+
+        // Initializes page title control
         BreadcrumbItem tasksLink = new BreadcrumbItem();
         tasksLink.Text = GetString("Task_Edit.ItemListLink");
 
-        bool notSystem = (TaskInfo == null) || (TaskInfo.TaskType != ScheduledTaskTypeEnum.System);
-        string listUrl = UIContextHelper.GetElementUrl("CMS.ScheduledTasks", GetElementName(notSystem ? "Tasks" : "SystemTasks"), true);
+        string listUrl = UIContextHelper.GetElementUrl("CMS.ScheduledTasks", GetElementName(IsTaskStandard ? "Tasks" : "SystemTasks"), true);
         listUrl = URLHelper.AddParameterToUrl(listUrl, "siteid", SiteID.ToString());
         tasksLink.RedirectUrl = listUrl;
 
@@ -187,15 +187,11 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             chkRunTaskInSeparateThread.Checked = TaskInfo.TaskRunInSeparateThread;
             ucMacroEditor.Text = TaskInfo.TaskCondition;
             chkRunIndividually.Checked = ValidationHelper.GetBoolean(TaskInfo.TaskRunIndividuallyForEachSite, false);
+            rbTaskAvailability.Value = (int)TaskInfo.TaskAvailability;
+
+            InitExternalServiceRelatedControls();
 
             lblFrom.Text += " " + ((TaskInfo.TaskLastExecutionReset != DateTimeHelper.ZERO_TIME) ? TaskInfo.TaskLastExecutionReset.ToString("d") : " - ");
-
-            bool allowExternalService = TaskInfo.TaskAllowExternalService;
-            chkTaskAllowExternalService.Checked = allowExternalService;
-            chkTaskUseExternalService.Checked = TaskInfo.TaskUseExternalService;
-
-            // Show 'Use external service' if task can run in external service
-            plcUseExternalService.Visible = developmentMode || allowExternalService;
 
             drpModule.Value = TaskInfo.TaskResourceID;
             ucUser.Value = TaskInfo.TaskUserID;
@@ -264,7 +260,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
         else
         {
             // Check existing task name
-            TaskInfo existingTask = TaskInfoProvider.GetTaskInfo(txtTaskName.Text.Trim(), SiteInfo != null ? SiteInfo.SiteName : null);
+            TaskInfo existingTask = TaskInfo.Provider.Get(txtTaskName.Text.Trim(), SiteInfo != null ? SiteInfo.SiteID : 0);
 
             if ((existingTask != null) && ((TaskInfo == null) || (existingTask.TaskID != TaskInfo.TaskID)))
             {
@@ -276,11 +272,9 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             {
                 // create new item -> insert
                 TaskInfo = new TaskInfo { TaskSiteID = SiteID };
-                if (!developmentMode)
-                {
-                    TaskInfo.TaskAllowExternalService = true;
-                }
             }
+
+            var availability = (TaskAvailabilityEnum)ValidationHelper.GetInteger(rbTaskAvailability.Value, 0);
 
             TaskInfo.TaskAssemblyName = assemblyElem.AssemblyName.Trim();
             TaskInfo.TaskClass = assemblyElem.ClassName.Trim();
@@ -292,18 +286,11 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             TaskInfo.TaskDisplayName = txtTaskDisplayName.Text.Trim();
             TaskInfo.TaskServerName = txtServerName.Text.Trim();
             TaskInfo.TaskRunInSeparateThread = chkRunTaskInSeparateThread.Checked;
-            TaskInfo.TaskUseExternalService = chkTaskUseExternalService.Checked;
+            TaskInfo.TaskAllowExternalService = plcAllowExternalService.Visible ? chkTaskAllowExternalService.Checked : TaskInfo.TaskAllowExternalService;
+            TaskInfo.TaskUseExternalService = availability != TaskAvailabilityEnum.LiveSite && chkTaskUseExternalService.Checked;
             TaskInfo.TaskCondition = ucMacroEditor.Text;
             TaskInfo.TaskRunIndividuallyForEachSite = chkRunIndividually.Checked;
-
-            if (plcAllowExternalService.Visible)
-            {
-                TaskInfo.TaskAllowExternalService = chkTaskAllowExternalService.Checked;
-            }
-            if (plcUseExternalService.Visible)
-            {
-                TaskInfo.TaskUseExternalService = chkTaskUseExternalService.Checked;
-            }
+            TaskInfo.TaskAvailability = availability;
 
             TaskInfo.TaskNextRunTime = SchedulingHelper.GetFirstRunTime(SchedulingHelper.DecodeInterval(TaskInfo.TaskInterval));
 
@@ -320,22 +307,13 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             TaskInfo.Generalized.LogIntegration = true;
             TaskInfo.Generalized.LogEvents = true;
 
-            // If web farm support, create the tasks for all servers
-            if (chkAllServers.Checked)
-            {
-                TaskInfoProvider.CreateWebFarmTasks(TaskInfo);
-            }
-            else
-            {
-                TaskInfoProvider.SetTaskInfo(TaskInfo);
-            }
+            TaskInfo.Provider.Set(TaskInfo);
 
             // Restore original settings
             TaskInfo.Generalized.RestoreSettings();
 
-            bool notSystem = (TaskInfo == null) || (TaskInfo.TaskType != ScheduledTaskTypeEnum.System);
-            string url = UIContextHelper.GetElementUrl("CMS.ScheduledTasks", GetElementName(notSystem ? "EditTask" : "EditSystemTask"), true);
-            
+            string url = UIContextHelper.GetElementUrl("CMS.ScheduledTasks", GetElementName(IsTaskStandard ? "EditTask" : "EditSystemTask"), true);
+
             // Add task ID and saved="1" query parameters
             url = URLHelper.AddParameterToUrl(String.Format(url, TaskInfo.TaskID), "saved", "1");
 
@@ -354,12 +332,40 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
         {
             TaskInfo.TaskExecutions = 0;
             TaskInfo.TaskLastExecutionReset = DateTime.Now;
-            TaskInfoProvider.SetTaskInfo(TaskInfo);
+            TaskInfo.Provider.Set(TaskInfo);
 
             lblFrom.Text += " " + DateTime.Now.ToString("d");
             plcResetFrom.Visible = true;
 
             ShowConfirmation(GetString("task.executions.reseted"));
         }
+    }
+
+
+    protected void rbTaskAvailability_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        InitTaskAvailabilityRelatedControls();
+        InitExternalServiceRelatedControls();
+    }
+
+
+    private void InitTaskAvailabilityRelatedControls()
+    {
+        assemblyElem.SimpleMode = (TaskAvailabilityEnum)ValidationHelper.GetInteger(rbTaskAvailability.Value, 0) == TaskAvailabilityEnum.LiveSite;
+    }
+
+
+    private void InitExternalServiceRelatedControls()
+    {
+        var allowExternalService = TaskInfo?.TaskAllowExternalService ?? developmentMode;
+        var runsInAdministration = (TaskAvailabilityEnum)ValidationHelper.GetInteger(rbTaskAvailability.Value, 0) == TaskAvailabilityEnum.Administration;
+
+        // "Allow external service" for new tasks in development mode is TRUE by default
+        chkTaskAllowExternalService.Checked = allowExternalService;
+        // "Use external service" for new tasks is FALSE by default
+        chkTaskUseExternalService.Checked = TaskInfo?.TaskUseExternalService ?? false;
+
+        plcAllowExternalService.Visible = runsInAdministration && developmentMode;
+        plcUseExternalService.Visible = runsInAdministration && (developmentMode || (!developmentMode && allowExternalService));
     }
 }

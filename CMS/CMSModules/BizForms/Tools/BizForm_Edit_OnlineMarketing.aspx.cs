@@ -87,7 +87,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_OnlineMarketing : CM
 
             // Update the form
             form.FormLogActivity = chkLogActivity.Checked;
-            BizFormInfoProvider.SetBizFormInfo(form);
+            BizFormInfo.Provider.Set(form);
 
             // Show save information
             ShowChangesSaved();

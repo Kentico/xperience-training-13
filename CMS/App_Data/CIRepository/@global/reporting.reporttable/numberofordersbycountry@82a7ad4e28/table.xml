@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>ee486b28-062f-4bd1-b6eb-0648d75a48d8</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Selects the number of orders from different countries. */
+SELECT
+   ISNULL(CountryDisplayName,'-') AS '{$customerlist.country$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'
+FROM
+   COM_Order
+   LEFT JOIN COM_OrderAddress
+      ON (OrderID = AddressOrderID AND AddressType = @Address)
+   LEFT JOIN CMS_Country
+      ON AddressCountryID = CountryID
+WHERE
+   (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+   AND OrderSiteID = @CMSContextCurrentSiteID
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+   AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+GROUP BY CountryDisplayName
+ORDER BY
+   COUNT(OrderID) DESC, CountryDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByCountry</CodeName>
+    <GUID>1d10875c-fc55-424d-b99f-6591621a4f19</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

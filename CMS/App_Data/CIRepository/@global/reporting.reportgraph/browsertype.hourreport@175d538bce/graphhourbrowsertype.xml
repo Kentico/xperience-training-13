@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>d542aa16-7a34-4f62-9d2d-ffe2790a9ed3</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>GraphHourBrowserType</GraphName>
+  <GraphQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+SELECT StatisticsObjectName , SUM(HitsCount)
+   FROM
+Analytics_Statistics, Analytics_HourHits WHERE
+ (StatisticsSiteID = @CMSContextCurrentSiteID) AND (StatisticsCode=@CodeName) AND (StatisticsID = HitsStatisticsID)
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>browsertype.hourreport</CodeName>
+    <GUID>299df727-7f55-460a-b802-89af9184977b</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#PERCENT{P1} (#VALY)</itemvalueformat>
+      <legendinside>True</legendinside>
+      <legendposition>Right</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <pieothervalue>5</pieothervalue>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX  -   #PERCENT{P1}</seriesitemtooltip>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.resource</CodeName>
+    <GUID>93746c62-21e4-4fda-bcbd-61c5fcee9945</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>7b8e41c9-671c-48b4-92bc-445444c02f3c</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectrequiredusers</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## ##COLUMNS## FROM [View_CMS_User] WHERE UserID IN (SELECT UserID FROM [View_CMS_UserRoleMembershipRole] 
+WHERE (ValidTo IS NULL OR ValidTo > @Now) AND RoleID IN (SELECT RoleID FROM CMS_Role WHERE RoleID IN 
+(SELECT RoleID FROM CMS_RolePermission WHERE PermissionID IN
+(SELECT PermissionID FROM CMS_Permission WHERE PermissionName=@PermissionName AND ResourceID IN 
+(SELECT ResourceID FROM CMS_Resource WHERE ResourceName=@ResourceName))) AND (SiteID=@SiteID OR SiteID IS NULL))) AND (##WHERE##) ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

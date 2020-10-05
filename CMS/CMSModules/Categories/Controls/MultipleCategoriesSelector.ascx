@@ -6,4 +6,4 @@
 <cms:UniSelector ID="selectCategory" runat="server" ReturnColumnName="CategoryID"
     ObjectType="cms.categorylist" ResourcePrefix="categoryselector" OrderBy="CategoryNamePath"
     AdditionalColumns="CategoryNamePath,CategoryEnabled" SelectionMode="Multiple"
-    AllowEmpty="false" IsLiveSite="false" />
+    AllowEmpty="false" IsLiveSite="false" DialogWindowWidth="800" />

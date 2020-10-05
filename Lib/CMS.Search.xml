@@ -228,7 +228,7 @@
         </member>
         <member name="T:CMS.Search.SearchSynchronization">
             <summary>
-            Web farm synchronization for Forums.
+            Web farm synchronization for search.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchSynchronization.SynchronizeSmartSearch">
@@ -512,6 +512,290 @@
             Converts the date time from to its string representation
             </summary>
             <param name="input">Input date</param>
+        </member>
+        <member name="T:CMS.Search.CrawlerAuthCookieBuilder">
+            <summary>
+            Builds authentication cookie for Smart search crawler.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.CrawlerAuthCookieBuilder.#ctor">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.Search.CrawlerAuthCookieBuilder"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.CrawlerAuthCookieBuilder.#ctor(CMS.Core.Internal.IDateTimeNowService,CMS.Search.Internal.ICrawlerTokenManager)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.Search.CrawlerAuthCookieBuilder"/> class.
+            </summary>
+            <param name="dateTimeNowService">Service encapsulating <see cref="P:System.DateTime.Now"/>.</param>
+            <param name="tokenManager">Token manager.</param>
+        </member>
+        <member name="M:CMS.Search.CrawlerAuthCookieBuilder.Build(System.String,System.String)">
+            <summary>
+            Builds <see cref="T:System.Net.CookieContainer"/> containing crawler authentication cookie.
+            </summary>
+            <param name="userName">User which should be included in authentication cookie.</param>
+            <param name="url">URL for which the cookie is built.</param>
+        </member>
+        <member name="T:CMS.Search.Internal.CrawlerTokenManager">
+            <summary>
+            Encapsulates access to JWT tokens for search crawler.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.CrawlerTokenManager.#ctor">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.Search.Internal.CrawlerTokenManager"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.CrawlerTokenManager.#ctor(CMS.Core.Internal.IDateTimeNowService,CMS.Base.IAuthenticationService,CMS.Core.IEventLogService)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.Search.Internal.CrawlerTokenManager"/> class.
+            </summary>
+            <param name="dateTimeNowService">Service encapsulating <see cref="P:System.DateTime.Now"/>.</param>
+            <param name="authenticationService">Authentication service.</param>
+            <param name="eventLogService">Event log service.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.CrawlerTokenManager.GetToken(System.String,System.String)">
+            <summary>
+            Generates token for given <paramref name="userName"/> and <paramref name="domain"/>.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="domain">Domain for which a JWT token should be created.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.CrawlerTokenManager.GetPrincipalFromToken(System.String,System.String)">
+            <summary>
+            Return <see cref="T:System.Security.Claims.ClaimsPrincipal"/> from given <paramref name="token"/>.
+            </summary>
+            <param name="domain">Domain for which the <paramref name="token"/> was created.</param>
+            <param name="token">The JWT token.</param>
+        </member>
+        <member name="T:CMS.Search.Internal.ICrawlerTokenManager">
+            <summary>
+            Encapsulates access to JWT tokens for search crawler.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.ICrawlerTokenManager.GetPrincipalFromToken(System.String,System.String)">
+            <summary>
+            Return <see cref="T:System.Security.Claims.ClaimsPrincipal"/> from given <paramref name="token"/>.
+            </summary>
+            <param name="domain">Domain for which the <paramref name="token"/> was created.</param>
+            <param name="token">The JWT token.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.ICrawlerTokenManager.GetToken(System.String,System.String)">
+            <summary>
+            Generates token for given <paramref name="userName"/> and <paramref name="domain"/>.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="domain">Domain for which a JWT token should be created.</param>
+        </member>
+        <member name="T:CMS.Search.Internal.FileLock">
+            <summary>
+            Provides instance methods locking functionality. Uses file in file system for this purpose.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.FileLock.#ctor(System.String,System.String)">
+            <summary>
+            Creates new instance of FileLock class.
+            </summary>
+            <param name="dirPath">Path to directory.</param>
+            <param name="lockName">Lock file name.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.FileLock.IsLocked">
+            <summary>
+            Returns whether current file lock exists.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.FileLock.ObtainForInstance(System.String)">
+            <summary>
+            Obtains file lock for web farm instance given by <paramref name="instanceName"/>, which is stored inside lock file.
+            </summary>
+            <param name="instanceName">Name of instance for which to obtain lock.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.FileLock.Obtain">
+            <summary>
+            Obtains file lock.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.FileLock.Release">
+            <summary>
+            Releases file lock.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.Internal.IndexLogger">
+            <summary>
+            Class encapsulates logic to log actions related to indexes and search tasks.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogTaskStart(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Logs task started message to the log context. 
+            </summary>
+            <param name="taskInfo"></param>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchStart(System.Int32,System.Int32)">
+            <summary>
+            Logs the start of batch processing. 
+            </summary>
+            <param name="batchNumber">Number of batch</param>
+            <param name="lastID">ID of last item that is not present in the batch</param>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchEnd(System.Int32)">
+            <summary>
+            Logs the end of the batch processing.
+            </summary>
+            <param name="itemsCount"></param>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchStart(System.Int32,System.Int32,System.String)">
+            <summary>
+            Logs start of batch processing. 
+            </summary>
+            <param name="batchNumber">Number of batch.</param>
+            <param name="lastID">ID of last item that is not present in the batch.</param>
+            <param name="objectType">Object type of processed objects</param>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogCustomTableBatchStart(System.Int32,System.Int32,System.String)">
+            <summary>
+            Logs start of batch processing. 
+            </summary>
+            <param name="batchNumber">Number of batch.</param>
+            <param name="lastID">ID of last item that is not present in the batch.</param>
+            <param name="tableName">Code name of the table of processed objects</param>
+        </member>
+        <member name="M:CMS.Search.Internal.IndexLogger.LogMessage(System.String)">
+            <summary>
+            Appends line to the log context. 
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:CMS.Search.Internal.SearchablesRetriever">
+            <summary>
+            Helps with retrieving <see cref="T:CMS.DataEngine.ISearchable"/> objects and <see cref="T:CMS.Search.SearchIndexInfo"/>s
+            related to search tasks.
+            </summary>
+            <seealso cref="M:CMS.Search.Internal.SearchablesRetrievers.Register``1(System.String)"/>
+        </member>
+        <member name="P:CMS.Search.Internal.SearchablesRetriever.Logger">
+            <summary>
+            Logs progress of a search task.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(System.String,System.String,System.String)">
+            <summary>
+            Gets relevant indexes for given <paramref name="objectType"/>, <paramref name="siteName"/> and <paramref name="searchProvider"/>.
+            </summary>
+            <param name="objectType">Defines object type that index should cover.</param>
+            <param name="siteName">Only indexes on given site are checked. If not specified then indexes through all sites are checked if they are relevant.</param>
+            <param name="searchProvider">
+            Defines search provider for which to return relevant indexes.
+            If not defined then indexes for all search providers are returned.
+            </param>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(CMS.DataEngine.ISearchable,System.String)">
+            <summary>
+            Gets the list of indexes relevant to the given object.
+            </summary>
+            <param name="searchObject">Search object.</param>
+            <param name="searchProvider">
+            Defines search provider for which to return relevant indexes.
+            If not defined then indexes for all search providers are returned.
+            </param>
+            <seealso cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(System.String,System.String)">
+            <summary>
+            Returns dataset of index IDs for specific type.
+            </summary>
+            <param name="taskType">Task type.</param>
+            <param name="searchProvider">
+            Defines search provider for which to return relevant indexes.
+            If not defined then indexes for all search providers are returned.
+            </param>
+            <seealso cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.IsObjectTypeIndexed(CMS.Search.SearchIndexInfo,System.String)">
+            <summary>
+            Indicates whether <paramref name="objectType"/> is to be included in <paramref name="index"/>.
+            </summary>
+            <param name="index">Index for which to perform the test.</param>
+            <param name="objectType">Object type whose presence in <paramref name="index"/> to test.</param>
+            <returns>True if <paramref name="objectType"/> is to be included in <paramref name="index"/> based on index settings, otherwise false.</returns>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObject(CMS.Search.SearchIndexInfo,System.String,System.String,System.String)">
+            <summary>
+            Returns <see cref="T:CMS.DataEngine.ISearchable"/> object for given <paramref name="index"/>
+            that satisfies conditions given by <paramref name="objectType"/>, <paramref name="value"/> and <paramref name="field"/>.
+            Returns null if no <see cref="T:CMS.DataEngine.ISearchable"/> object satisfies given conditions.
+            </summary>
+            <param name="index">Index for which to return <see cref="T:CMS.DataEngine.ISearchable"/> object.</param>
+            <param name="objectType">Returned <see cref="T:CMS.DataEngine.ISearchable"/> object with given <paramref name="objectType"/>.</param>
+            <param name="value">Returned <see cref="T:CMS.DataEngine.ISearchable"/> object with given <paramref name="value"/> in given <paramref name="field"/>.</param>
+            <param name="field">Defines where to find <paramref name="value"/> and in what form to expect given data for a <see cref="T:CMS.DataEngine.ISearchable"/> object.</param>
+            <seealso cref="M:CMS.Search.Internal.SearchablesRetriever.IsObjectTypeIndexed(CMS.Search.SearchIndexInfo,System.String)"/>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObjects(CMS.Search.SearchIndexInfo)">
+            <summary>
+            Returns collection of all <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="indexInfo"/>.
+            </summary>
+            <param name="indexInfo"><see cref="T:CMS.Search.SearchIndexInfo"/> for which to return collection of <see cref="T:CMS.DataEngine.ISearchable"/>s.</param>
+            <seealso cref="M:CMS.DataEngine.ISearchable.GetSearchDocument(CMS.DataEngine.ISearchIndexInfo)"/>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObjects(CMS.Search.SearchIndexInfo,System.String,System.String)">
+            <summary>
+            Returns <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="nodeAliasPath"/>.
+            </summary>
+            <param name="index">Index for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects.</param>
+            <param name="nodeAliasPath">Node alias path for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects.</param>
+            <param name="siteName">Site for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects. By default are used sites from <paramref name="index"/>'s settings.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetObjectID(System.String,System.String@)">
+            <summary>
+            Returns object ID from potentially compound ID (Id;objecttype in case of BizForms).
+            </summary>
+            <param name="itemId">Object ID</param>
+            <param name="objectType">Object type received from compound key</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetObjectID(System.String)">
+            <summary>
+            Returns object ID from potentially compound ID.
+            </summary>
+            <param name="itemId">Object ID</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetriever.LogFormBatchStart(System.Int32,System.Int32,System.String)">
+            <summary>
+            Logs start of batch processing.
+            </summary>
+            <param name="batchNumber">Number of batch.</param>
+            <param name="lastID">ID of last item that is not present in the batch.</param>
+            <param name="formDisplayName">Form name</param>
+        </member>
+        <member name="T:CMS.Search.Internal.SearchablesRetrievers">
+            <summary>
+            Manages searchables retrievers used for specific object type.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetrievers.Register``1(System.String)">
+            <summary>
+            Registers given searchables retriever for the specific object type.
+            </summary>
+            <param name="objectType">Object type.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SearchablesRetrievers.Get(System.String)">
+            <summary>
+            Gets searchables retriever related to given <paramref name="objectType"/>.
+            </summary>
+            <param name="objectType">Object type.</param>
+        </member>
+        <member name="T:CMS.Search.ICrawlerAuthCookieBuilder">
+            <summary>
+            Represents a builder that is responsible for building authentication cookie for Smart search crawler.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ICrawlerAuthCookieBuilder.Build(System.String,System.String)">
+            <summary>
+            Builds <see cref="T:System.Net.CookieContainer"/> containing crawler authentication cookie.
+            </summary>
+            <param name="userName">User which should be included in authentication cookie.</param>
+            <param name="url">URL for which the cookie is built.</param>
         </member>
         <member name="T:CMS.Search.DocumentSearchCondition">
             <summary>
@@ -960,203 +1244,6 @@
             <returns>Updated field</returns>
             <exception cref="T:System.InvalidOperationException">When StoreValues is true and we try to add already existing field but with different value.</exception>
             <exception cref="T:System.InvalidOperationException">When field with given field name doesn't exist.</exception>
-        </member>
-        <member name="T:CMS.Search.Internal.FileLock">
-            <summary>
-            Provides instance methods locking functionality. Uses file in file system for this purpose.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.FileLock.#ctor(System.String,System.String)">
-            <summary>
-            Creates new instance of FileLock class.
-            </summary>
-            <param name="dirPath">Path to directory.</param>
-            <param name="lockName">Lock file name.</param>
-        </member>
-        <member name="M:CMS.Search.Internal.FileLock.IsLocked">
-            <summary>
-            Returns whether current file lock exists.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.FileLock.ObtainForInstance(System.String)">
-            <summary>
-            Obtains file lock for web farm instance given by <paramref name="instanceName"/>, which is stored inside lock file.
-            </summary>
-            <param name="instanceName">Name of instance for which to obtain lock.</param>
-        </member>
-        <member name="M:CMS.Search.Internal.FileLock.Obtain">
-            <summary>
-            Obtains file lock.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.FileLock.Release">
-            <summary>
-            Releases file lock.
-            </summary>
-        </member>
-        <member name="T:CMS.Search.Internal.IndexLogger">
-            <summary>
-            Class encapsulates logic to log actions related to indexes and search tasks.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogTaskStart(CMS.Search.SearchTaskInfo)">
-            <summary>
-            Logs task started message to the log context. 
-            </summary>
-            <param name="taskInfo"></param>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchStart(System.Int32,System.Int32)">
-            <summary>
-            Logs the start of batch processing. 
-            </summary>
-            <param name="batchNumber">Number of batch</param>
-            <param name="lastID">ID of last item that is not present in the batch</param>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchEnd(System.Int32)">
-            <summary>
-            Logs the end of the batch processing.
-            </summary>
-            <param name="itemsCount"></param>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogBatchStart(System.Int32,System.Int32,System.String)">
-            <summary>
-            Logs start of batch processing. 
-            </summary>
-            <param name="batchNumber">Number of batch.</param>
-            <param name="lastID">ID of last item that is not present in the batch.</param>
-            <param name="objectType">Object type of processed objects</param>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogCustomTableBatchStart(System.Int32,System.Int32,System.String)">
-            <summary>
-            Logs start of batch processing. 
-            </summary>
-            <param name="batchNumber">Number of batch.</param>
-            <param name="lastID">ID of last item that is not present in the batch.</param>
-            <param name="tableName">Code name of the table of processed objects</param>
-        </member>
-        <member name="M:CMS.Search.Internal.IndexLogger.LogMessage(System.String)">
-            <summary>
-            Appends line to the log context. 
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="T:CMS.Search.Internal.SearchablesRetriever">
-            <summary>
-            Helps with retrieving <see cref="T:CMS.DataEngine.ISearchable"/> objects and <see cref="T:CMS.Search.SearchIndexInfo"/>s
-            related to search tasks.
-            </summary>
-            <seealso cref="M:CMS.Search.Internal.SearchablesRetrievers.Register``1(System.String)"/>
-        </member>
-        <member name="P:CMS.Search.Internal.SearchablesRetriever.Logger">
-            <summary>
-            Logs progress of a search task.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(System.String,System.String,System.String)">
-            <summary>
-            Gets relevant indexes for given <paramref name="objectType"/>, <paramref name="siteName"/> and <paramref name="searchProvider"/>.
-            </summary>
-            <param name="objectType">Defines object type that index should cover.</param>
-            <param name="siteName">Only indexes on given site are checked. If not specified then indexes through all sites are checked if they are relevant.</param>
-            <param name="searchProvider">
-            Defines search provider for which to return relevant indexes.
-            If not defined then indexes for all search providers are returned.
-            </param>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(CMS.DataEngine.ISearchable,System.String)">
-            <summary>
-            Gets the list of indexes relevant to the given object.
-            </summary>
-            <param name="searchObject">Search object.</param>
-            <param name="searchProvider">
-            Defines search provider for which to return relevant indexes.
-            If not defined then indexes for all search providers are returned.
-            </param>
-            <seealso cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetRelevantIndexes(System.String,System.String)">
-            <summary>
-            Returns dataset of index IDs for specific type.
-            </summary>
-            <param name="taskType">Task type.</param>
-            <param name="searchProvider">
-            Defines search provider for which to return relevant indexes.
-            If not defined then indexes for all search providers are returned.
-            </param>
-            <seealso cref="P:CMS.Search.SearchIndexInfo.IndexProvider"/>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.IsObjectTypeIndexed(CMS.Search.SearchIndexInfo,System.String)">
-            <summary>
-            Indicates whether <paramref name="objectType"/> is to be included in <paramref name="index"/>.
-            </summary>
-            <param name="index">Index for which to perform the test.</param>
-            <param name="objectType">Object type whose presence in <paramref name="index"/> to test.</param>
-            <returns>True if <paramref name="objectType"/> is to be included in <paramref name="index"/> based on index settings, otherwise false.</returns>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObject(CMS.Search.SearchIndexInfo,System.String,System.String,System.String)">
-            <summary>
-            Returns <see cref="T:CMS.DataEngine.ISearchable"/> object for given <paramref name="index"/>
-            that satisfies conditions given by <paramref name="objectType"/>, <paramref name="value"/> and <paramref name="field"/>.
-            Returns null if no <see cref="T:CMS.DataEngine.ISearchable"/> object satisfies given conditions.
-            </summary>
-            <param name="index">Index for which to return <see cref="T:CMS.DataEngine.ISearchable"/> object.</param>
-            <param name="objectType">Returned <see cref="T:CMS.DataEngine.ISearchable"/> object with given <paramref name="objectType"/>.</param>
-            <param name="value">Returned <see cref="T:CMS.DataEngine.ISearchable"/> object with given <paramref name="value"/> in given <paramref name="field"/>.</param>
-            <param name="field">Defines where to find <paramref name="value"/> and in what form to expect given data for a <see cref="T:CMS.DataEngine.ISearchable"/> object.</param>
-            <seealso cref="M:CMS.Search.Internal.SearchablesRetriever.IsObjectTypeIndexed(CMS.Search.SearchIndexInfo,System.String)"/>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObjects(CMS.Search.SearchIndexInfo)">
-            <summary>
-            Returns collection of all <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="indexInfo"/>.
-            </summary>
-            <param name="indexInfo"><see cref="T:CMS.Search.SearchIndexInfo"/> for which to return collection of <see cref="T:CMS.DataEngine.ISearchable"/>s.</param>
-            <seealso cref="M:CMS.DataEngine.ISearchable.GetSearchDocument(CMS.DataEngine.ISearchIndexInfo)"/>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetSearchableObjects(CMS.Search.SearchIndexInfo,System.String,System.String)">
-            <summary>
-            Returns <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="nodeAliasPath"/>.
-            </summary>
-            <param name="index">Index for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects.</param>
-            <param name="nodeAliasPath">Node alias path for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects.</param>
-            <param name="siteName">Site for which to find <see cref="T:CMS.DataEngine.ISearchable"/> objects. By default are used sites from <paramref name="index"/>'s settings.</param>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetObjectID(System.String,System.String@)">
-            <summary>
-            Returns object ID from potentially compound ID (Id;objecttype in case of BizForms).
-            </summary>
-            <param name="itemId">Object ID</param>
-            <param name="objectType">Object type received from compound key</param>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.GetObjectID(System.String)">
-            <summary>
-            Returns object ID from potentially compound ID.
-            </summary>
-            <param name="itemId">Object ID</param>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetriever.LogFormBatchStart(System.Int32,System.Int32,System.String)">
-            <summary>
-            Logs start of batch processing.
-            </summary>
-            <param name="batchNumber">Number of batch.</param>
-            <param name="lastID">ID of last item that is not present in the batch.</param>
-            <param name="formDisplayName">Form name</param>
-        </member>
-        <member name="T:CMS.Search.Internal.SearchablesRetrievers">
-            <summary>
-            Manages searchables retrievers used for specific object type.
-            </summary>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetrievers.Register``1(System.String)">
-            <summary>
-            Registers given searchables retriever for the specific object type.
-            </summary>
-            <param name="objectType">Object type.</param>
-        </member>
-        <member name="M:CMS.Search.Internal.SearchablesRetrievers.Get(System.String)">
-            <summary>
-            Gets searchables retriever related to given <paramref name="objectType"/>.
-            </summary>
-            <param name="objectType">Object type.</param>
         </member>
         <member name="T:CMS.Search.CustomSearchIndexer">
             <summary>
@@ -1822,7 +1909,7 @@
         </member>
         <member name="P:CMS.Search.SearchIndexInfo.IndexType">
             <summary>
-            Gets or sets the index type (documents, forums, etc).
+            Gets or sets the index type (documents, etc).
             </summary>
         </member>
         <member name="P:CMS.Search.SearchIndexInfo.IndexCodeName">
@@ -1861,34 +1948,14 @@
             <seealso cref="P:CMS.Search.SearchIndexInfo.IndexSearchServiceName"/>
             <seealso cref="P:CMS.Search.SearchIndexInfo.IndexAdminKey"/>
         </member>
-        <member name="P:CMS.Search.SearchIndexInfo.IndexCrawlerDomain">
-            <summary>
-            Domain under which the crawler scans the site.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchIndexInfo.IndexCrawlerUserName">
+        <member name="P:CMS.Search.SearchIndexInfo.IndexCrawlerUser">
             <summary>
             Index user name - credentials for document crawler.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchIndexInfo.IndexCrawlerFormsUserName">
-            <summary>
-            Index user name - credentials for document crawler for forms authentication.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchIndexInfo.IndexCrawlerUserPassword">
-            <summary>
-            Index user password - credentials for document crawler.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchIndexInfo.IndexAnalyzerType">
             <summary>
             Index analyzer type.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchIndexInfo.IndexIsCommunityGroup">
-            <summary>
-            Is community group.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchIndexInfo.IndexIsOutdated">
@@ -2952,19 +3019,9 @@
             Contract for a search crawler which indexes HTML content of a web page.
             </summary>
         </member>
-        <member name="P:CMS.Search.ISearchCrawler.CrawlerPassword">
+        <member name="P:CMS.Search.ISearchCrawler.CrawlerUser">
             <summary>
-            Gets the crawler user password.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.ISearchCrawler.CrawlerUserName">
-            <summary>
-            Gets the crawler user name which should be used for current search.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.ISearchCrawler.CrawlerFormsUserName">
-            <summary>
-            Gets the user name which should be used for crawler search.
+            Gets or sets the user name which should be used for crawler search.
             </summary>
         </member>
         <member name="M:CMS.Search.ISearchCrawler.DownloadHtmlContent(System.String)">
@@ -3049,10 +3106,16 @@
             Fires when html to plain text process is required.
             </summary>
         </member>
-        <member name="P:CMS.Search.SearchCrawler.CrawlerDomainName">
+        <member name="M:CMS.Search.SearchCrawler.#ctor">
             <summary>
-            Gets the domain specified in app keys which should be used for crawler indexer.
+            Initializes an instance of the <see cref="T:CMS.Search.SearchCrawler"/> class.
             </summary>
+        </member>
+        <member name="M:CMS.Search.SearchCrawler.#ctor(CMS.Search.ICrawlerAuthCookieBuilder)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.Search.SearchCrawler"/> class.
+            </summary>
+            <param name="authCookieBuilder">Builder responsible for authentication cookie creation.</param>
         </member>
         <member name="P:CMS.Search.SearchCrawler.CrawlerUserAgent">
             <summary>
@@ -3064,29 +3127,14 @@
             Determines whether to allow redirection within site aliases when crawler gets redirection HTTP response from main alias.
             </summary>
         </member>
-        <member name="P:CMS.Search.SearchCrawler.CrawlerFormsUserName">
+        <member name="P:CMS.Search.SearchCrawler.CrawlerUser">
             <summary>
-            Gets the user name which should be used for crawler search.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchCrawler.CrawlerUserName">
-            <summary>
-            Gets the crawler user name which should be used for current search.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchCrawler.CrawlerPassword">
-            <summary>
-            Gets the crawler user password.
+            Gets or sets the user name which should be used for crawler search.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchCrawler.CrawlerID">
             <summary>
              Gets or sets the crawler id which is sent within the request.
-            </summary>
-        </member>
-        <member name="P:CMS.Search.SearchCrawler.CrawlerDomain">
-            <summary>
-            Gets the crawler user domain.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchCrawler.AcceptInvalidServerCertificate">
@@ -3100,42 +3148,30 @@
             Indicates whether request is based on a page crawler index.
             </summary>
         </member>
-        <member name="M:CMS.Search.SearchCrawler.ExtractUserDomain(System.String)">
-            <summary>
-            Extracts the user domain from given username
-            </summary>
-            <param name="username"></param>
-            <returns></returns>
-        </member>
         <member name="M:CMS.Search.SearchCrawler.HtmlToPlainText(System.String)">
             <summary>
             Converts html to the plain text (body part).
             </summary>
             <param name="htmlCode">HTML code</param>
         </member>
-        <member name="M:CMS.Search.SearchCrawler.GetCrawlerCookieContainer(System.String,System.String)">
-            <summary>
-            Returns authentication cookie for specific user and url (domain) which is used for crawling.
-            </summary>
-            <param name="user">Username</param>
-            <param name="url">Full url to get domain</param>
-        </member>
-        <member name="M:CMS.Search.SearchCrawler.GetCrawlerCredentials">
-            <summary>
-            Returns network credential for crawler.
-            </summary>
-        </member>
         <member name="M:CMS.Search.SearchCrawler.CreateRequest(System.String)">
             <summary>
             Creates HttpWebRequest for specific URL.
             </summary>
-            <param name="url">Target URL</param>
+            <param name="url">Target URL.</param>
         </member>
         <member name="M:CMS.Search.SearchCrawler.DownloadHtmlContent(System.String)">
             <summary>
             Downloads the HTML code for the specified URL.
             </summary>
-            <param name="url">Page URL</param>
+            <param name="url">Page URL.</param>
+        </member>
+        <member name="M:CMS.Search.SearchCrawler.IsRedirectAllowed(System.String,System.String)">
+            <summary>
+            Checks if redirect is allowed for URL.
+            </summary>
+            <param name="originalUrl">Original URL in absolute format.</param>
+            <param name="redirectUrl">Absolute URL where redirection should proceed.</param>
         </member>
         <member name="M:CMS.Search.SearchCrawler.AddCrawlerIdToUrl(System.String)">
             <summary>
@@ -3147,6 +3183,22 @@
             <summary>
             Returns true if current request was initialized by smart search crawler.
             </summary>
+        </member>
+        <member name="T:CMS.Search.SearchCrawlerChecker">
+            <summary>
+            Crawler checker extending basic implementation by search crawler checks.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchCrawlerChecker.#ctor(CMS.Helpers.Internal.ICrawlerChecker)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.Search.SearchCrawlerChecker"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchCrawlerChecker.IsCrawler">
+            <summary>
+            Checks whether the current request comes from crawler.
+            </summary>
+            <returns>True, if current request comes from crawler; otherwise, false</returns>
         </member>
         <member name="T:CMS.Search.SearchHelper">
             <summary>
@@ -4673,6 +4725,28 @@
             <summary>
             Represents indexer thread.
             </summary>
+        </member>
+        <member name="T:CMS.Search.SearchIndexOptimizer">
+            <summary>
+            Class creating scheduled task for optimizing all local search indexes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchIndexOptimizer.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Optimizes all local search indexes.
+            </summary>
+            <param name="task">Task to start.</param>
+        </member>
+        <member name="T:CMS.Search.SearchTaskExecutor">
+            <summary>
+            Class used by scheduler to execute the task.
+            </summary>  
+        </member>
+        <member name="M:CMS.Search.SearchTaskExecutor.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Processes search tasks (starts indexer).
+            </summary>
+            <param name="task">Task to start</param>
         </member>
         <member name="T:CMS.Search.ISearchSyntaxHelper">
             <summary>

@@ -106,7 +106,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_U
         {
             if (SubmissionID > 0)
             {
-                Submission = TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(SubmissionID);
+                Submission = TranslationSubmissionInfo.Provider.Get(SubmissionID);
 
                 if (CheckTranslationsPermissions && (Submission != null))
                 {
@@ -121,11 +121,11 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_U
             {
                 if (SubmissionItemID > 0)
                 {
-                    SubmissionItem = TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItemInfo(SubmissionItemID);
+                    SubmissionItem = TranslationSubmissionItemInfo.Provider.Get(SubmissionItemID);
 
                     if (CheckTranslationsPermissions && (SubmissionItem != null))
                     {
-                        TranslationSubmissionInfo submission = TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(SubmissionItem.SubmissionItemSubmissionID);
+                        TranslationSubmissionInfo submission = TranslationSubmissionInfo.Provider.Get(SubmissionItem.SubmissionItemSubmissionID);
                         if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerObject(PermissionsEnum.Modify, submission, SiteInfoProvider.GetSiteName(submission.SubmissionSiteID)))
                         {
                             RedirectToAccessDenied("CMS.TranslationServices", "Modify");
@@ -189,7 +189,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_U
                 }
 
                 SubmissionItem.SubmissionItemTargetXLIFF = Encoding.UTF8.GetString(uploadElem.FileBytes);
-                TranslationSubmissionItemInfoProvider.SetTranslationSubmissionItemInfo(SubmissionItem);
+                TranslationSubmissionItemInfo.Provider.Set(SubmissionItem);
 
                 return true;
             }
@@ -202,7 +202,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_U
                     {
                         // Update status of the submission to "Translation ready"
                         Submission.SubmissionStatus = TranslationStatusEnum.TranslationReady;
-                        TranslationSubmissionInfoProvider.SetTranslationSubmissionInfo(Submission);
+                        TranslationSubmissionInfo.Provider.Set(Submission);
 
                         if (!AutoImport)
                         {

@@ -53,7 +53,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_List : CMSBizFormPage
             return "FormSiteID = " + SiteContext.CurrentSiteID;
         }
 
-        var bizFormsAvailableForUser = BizFormInfoProvider.GetBizForms()
+        var bizFormsAvailableForUser = BizFormInfo.Provider.Get()
                                                           .Column("CMS_Form.FormID")
                                                           .OnSite(SiteContext.CurrentSiteID)
                                                           .Distinct()
@@ -96,7 +96,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_List : CMSBizFormPage
                 RedirectToAccessDenied("cms.form", "DeleteFormAndData");
             }
 
-            BizFormInfoProvider.DeleteBizFormInfo(ValidationHelper.GetInteger(actionArgument, 0));
+            BizFormInfo.Provider.Get(ValidationHelper.GetInteger(actionArgument, 0))?.Delete();
         }
     }
 }

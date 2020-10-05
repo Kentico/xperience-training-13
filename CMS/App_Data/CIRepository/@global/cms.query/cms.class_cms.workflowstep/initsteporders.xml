@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.workflowstep</CodeName>
+    <GUID>6fc9d49b-83c2-4a7e-9a33-037883a76a26</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>b77c6233-82cb-4f7d-ba81-bf465554d515</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>InitStepOrders</QueryName>
+  <QueryRequiresTransaction>True</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+DECLARE @currentIndex INT;
+SET @currentIndex = (SELECT TOP 1 StepOrder FROM CMS_WorkflowStep WHERE StepWorkflowID = @StepWorkflowID AND StepType NOT IN (100, 101) ORDER BY StepOrder DESC); 
+
+/* Set the edit step */
+UPDATE CMS_WorkflowStep SET StepOrder = 0 WHERE StepWorkflowID = @StepWorkflowID AND StepType = 2;
+/* Set the published step */
+UPDATE CMS_WorkflowStep SET StepOrder = @currentIndex + 1 WHERE StepWorkflowID = @StepWorkflowID AND StepType = 100;
+/* Set the archived step */
+UPDATE CMS_WorkflowStep SET StepOrder = @currentIndex + 2 WHERE StepWorkflowID = @StepWorkflowID AND StepType = 101;
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

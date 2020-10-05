@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>newsletter.issue</CodeName>
+    <GUID>41f64b98-ae6d-4ba4-867a-0079ef839a1a</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="IssueID" guid="3ad0237a-4845-4629-953a-19e6580d7ffe" isunique="true" visible="" />
+      <field column="IssueVariantName" guid="71b224ff-e425-4c0b-befe-1f048117d73b" order="1">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.name$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%!String.IsNullOrEmpty(Value)|(identity)GlobalAdministrator|(hash)e33e38d9d2d7d013f24e52c8467caac5dd9a5848419ac3bc50ca1a1571503c90%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="IssueDisplayName" guid="7035e085-978d-4c69-8f7c-2a1192b68d9e" order="2">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <ResolveMacros>True</ResolveMacros>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+      </field>
+      <field column="IssueSubject" guid="c76b7d41-5eca-495d-91ed-f3a593179b64" order="3">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <ResolveMacros>False</ResolveMacros>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.subject$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="IssueStatus" guid="7517bfa4-1d1b-497c-92b8-7a56f3a072f5" columnprecision="" columnsize="" order="4">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <OutputFormat>
+            <![CDATA[{% GetResourceString("newsletterissuestatus." + ToStringRepresentation(Value, "CMS.Newsletters", "CMS.Newsletters.IssueStatusEnum")) |(identity)GlobalAdministrator|(hash)32b3f63db7053718f9a32ddf53aafbc7b36b54da9031e3f5e18de8622028e6e5%}]]>
+          </OutputFormat>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.status$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="IssueMailoutTime" guid="19952e2d-5f76-447a-bf5d-8a15f3d1300d" order="5">
+        <settings>
+          <controlname>LabelControl</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>
+            <![CDATA[{$unigrid.newsletter_issue.columns.issuemailouttime$}]]>
+          </fieldcaption>
+        </properties>
+      </field>
+      <field column="IssueIsABTest" guid="6af3eec1-f933-454d-bf9e-90c58b46407c" order="6">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#yesno</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$newsletters.isabtest$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%LicenseHelper.CheckFeature(FeatureEnum.CampaignAndConversions)|(identity)GlobalAdministrator|(hash)a4c5e9e08a01340682ee3c8c705f4d774f64127ae13301d15c345de7298ddfde%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="IssueSenderName" guid="a90a76a8-3c04-4c83-9efb-67a5f1b60182" order="7">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$newsletterissue.sender.name$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="IssueSenderEmail" guid="7f7d1d3d-368f-416d-81e7-89526765a3dc" order="8">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$newsletterissue.sender.email$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="IssueUTMSource" guid="a27a8b07-c8cf-4366-99b7-b4b4837d4354" order="9">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$newsletterissue.utm.source$}</fieldcaption>
+          <visiblemacro ismacro="true">{%IssueUseUTM%}</visiblemacro>
+        </properties>
+      </field>
+      <field allowempty="true" column="IssueUTMMedium" columnsize="200" columntype="text" dummy="altform" guid="1a0ce2e0-9178-4aa8-af6f-bf3e9d9243db" system="true" visible="true" order="10">
+        <properties>
+          <defaultvalue>email</defaultvalue>
+          <fieldcaption>{$newsletterissue.utm.medium$}</fieldcaption>
+          <visiblemacro ismacro="true">{%IssueUseUTM%}</visiblemacro>
+        </properties>
+        <settings>
+          <controlname>LabelControl</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+      </field>
+      <field column="IssueUTMCampaign" guid="9eb0af21-4c17-4104-857f-22393838f129" order="11">
+        <settings>
+          <controlname>LabelControl</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>{$newsletterissue.utm.campaign$}</fieldcaption>
+          <visiblemacro ismacro="true">{%IssueUseUTM%}</visiblemacro>
+        </properties>
+      </field>
+      <field column="IssueText" guid="19d940b9-812e-4d0c-b004-7387b6e5ca83" visible="" order="12" />
+      <field column="IssueUnsubscribed" guid="83a6d090-6ca5-4158-b33c-caac981286dc" visible="" order="13" />
+      <field column="IssueNewsletterID" guid="a6593118-440c-41b2-b429-8d6a1a8bebc2" visible="" order="14" />
+      <field column="IssueTemplateID" guid="1a3e6d4f-8033-43ad-9030-8a7fde5c008b" visible="" order="15" />
+      <field column="IssueSentEmails" guid="cd57795d-b3d4-4bc3-a0da-1eba07686321" visible="" order="16" />
+      <field column="IssueGUID" guid="14b5a58e-f743-4d02-a9f0-fa6ba651b4fc" visible="" order="17">
+        <settings>
+          <controlname>LabelControl</controlname>
+        </settings>
+      </field>
+      <field column="IssueLastModified" guid="9ff1a720-44e6-4512-b7a4-b727521cec21" visible="" order="18" />
+      <field column="IssueSiteID" guid="86738948-992a-447b-9738-5ec12fd8e9b9" visible="" order="19" />
+      <field column="IssueOpenedEmails" guid="abc89a21-5699-4da5-9529-a7c15b631c44" visible="" order="20" />
+      <field column="IssueBounces" guid="7994348e-918e-4d5e-9245-4d610357552a" visible="" order="21" />
+      <field column="IssueVariantOfIssueID" guid="dce0315a-42f0-4f42-bcc8-4d1e7d79a870" visible="" order="22" />
+      <field column="IssueScheduledTaskID" guid="088b5e5d-a9c4-40bb-882b-2450aeea52a0" visible="" order="23" />
+      <field column="IssueUseUTM" guid="8fbc5e77-dcb1-4943-8d85-4377dc7ec7b3" visible="" order="24">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="IssueWidgets" guid="ab70c6f5-3c19-4ac7-ac26-9d583d64358e" order="25" />
+      <field column="IssuePreheader" guid="58ca0876-d39a-47e3-8b79-255612dd2fa5" visible="" order="26" />
+      <field column="IssuePlainText" guid="f9d1d91b-0907-4f20-94af-71484a050014" visible="" order="27" />
+      <field column="IssueForAutomation" guid="fb4585ec-5eed-4af0-a3ef-c70de84ab26e" visible="false" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>IssueOverview</FormDisplayName>
+  <FormGUID>34ad0618-4cd7-44c0-8d57-ab32edec95a9</FormGUID>
+  <FormHideNewParentFields>True</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>IssueOverview</FormName>
+</cms.alternativeform>

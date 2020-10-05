@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
-    
+public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document
+{
+
     /// <summary>
     /// pnlCheck control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder pnlCheck;
-    
+
     /// <summary>
     /// chkDocuments control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkDocuments;
-    
+
     /// <summary>
     /// pnlDocumentData control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder pnlDocumentData;
-    
+
     /// <summary>
     /// chkDocumentsHistory control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkDocumentsHistory;
-    
+
     /// <summary>
     /// chkRelationships control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkRelationships;
-    
+
     /// <summary>
     /// chkACLs control.
     /// </summary>
@@ -64,43 +65,7 @@ public partial class CMSModules_ImportExport_Controls_Import_Site_cms_document {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkACLs;
-    
-    /// <summary>
-    /// chkUserPersonalizations control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkUserPersonalizations;
-    
-    /// <summary>
-    /// pnlModules control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder pnlModules;
-    
-    /// <summary>
-    /// chkBlogComments control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkBlogComments;
-    
-    /// <summary>
-    /// chkEventAttendees control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkEventAttendees;
-    
+
     /// <summary>
     /// ltlScript control.
     /// </summary>

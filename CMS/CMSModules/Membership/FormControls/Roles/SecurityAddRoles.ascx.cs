@@ -89,27 +89,9 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
 
 
     /// <summary>
-    /// Gets or sets poll id.
-    /// </summary>
-    public int PollID { get; set; }
-
-
-    /// <summary>
     /// Gets or sets bizform id.
     /// </summary>
     public int FormID { get; set; }
-
-
-    /// <summary>
-    /// Gets or sets board id.
-    /// </summary>
-    public int BoardID { get; set; }
-
-
-    /// <summary>
-    /// Gets or sets group id.
-    /// </summary>
-    public int GroupID { get; set; }
 
 
     /// <summary>
@@ -172,23 +154,6 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
         // Add event handling
         usRoles.OnItemsSelected += usRoles_OnItemsSelected;
 
-        // Check if document is owned by group 
-        if (GroupID > 0)
-        {
-            if (NodeID > 0)
-            {
-                usRoles.SetValue("GroupID", GroupID.ToString());
-            }
-            else
-            {
-                usRoles.WhereCondition = "RoleGroupID=" + GroupID;
-            }
-        }
-        else
-        {
-            usRoles.WhereCondition = SqlHelper.AddWhereCondition(usRoles.WhereCondition, "RoleGroupID IS NULL");
-        }
-
         // Check if site filter should be displayed
         if (ShowSiteFilter)
         {
@@ -206,21 +171,11 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
         if (Node != null)
         {
             // Check if filter should be used
-            if ((GroupID > 0) || ShowSiteFilter)
+            if (ShowSiteFilter)
             {
                 // Add sites filter
                 usRoles.FilterControl = "~/CMSFormControls/Filters/SiteGroupFilter.ascx";
                 usRoles.SetValue("FilterMode", "role");
-            }
-
-            // Allow group administrator edit group document permissions on live site
-            if ((GroupID > 0) && IsLiveSite)
-            {
-                if (MembershipContext.AuthenticatedUser.IsGroupAdministrator(GroupID))
-                {
-                    usRoles.Enabled = true;
-                    return;
-                }
             }
 
             if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.ModifyPermissions) != AuthorizationResultEnum.Allowed)
@@ -237,50 +192,6 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
             {
                 usRoles.Enabled = false;
                 return;
-            }
-        }
-
-        // Check poll permission
-        if (PollID > 0)
-        {
-            if (GroupID > 0)
-            {
-                if (!MembershipContext.AuthenticatedUser.IsGroupAdministrator(GroupID))
-                {
-                    usRoles.Enabled = false;
-                    return;
-                }
-            }
-            else
-            {
-                if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("cms.polls", "Modify"))
-                {
-                    usRoles.Enabled = false;
-                    return;
-                }
-            }
-        }
-
-        // Check message board permission
-        if (BoardID > 0)
-        {
-            GeneralizedInfo boardObj = ModuleCommands.MessageBoardGetMessageBoardInfo(BoardID);
-            if (boardObj != null)
-            {
-                int boardGroupId = ValidationHelper.GetInteger(boardObj.GetValue("BoardGroupID"), 0);
-                if (boardGroupId > 0)
-                {
-                    if (!MembershipContext.AuthenticatedUser.IsGroupAdministrator(boardGroupId))
-                    {
-                        usRoles.Enabled = false;
-                        return;
-                    }
-                }
-                else if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("CMS.MessageBoards", "Modify"))
-                {
-                    usRoles.Enabled = false;
-                    return;
-                }
             }
         }
 
@@ -317,20 +228,10 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
             {
                 int roleID = ValidationHelper.GetInteger(item, 0);
 
-                if (PollID > 0)
-                {
-                    // Remove role from poll
-                    ModuleCommands.PollsRemoveRoleFromPoll(roleID, PollID);
-                }
-                else if (FormID > 0)
+                if (FormID > 0)
                 {
                     // Remove role from form
-                    BizFormRoleInfoProvider.DeleteBizFormRoleInfo(roleID, FormID);
-                }
-                else if (BoardID > 0)
-                {
-                    // Remove message board from board
-                    ModuleCommands.MessageBoardRemoveRoleFromBoard(roleID, BoardID);
+                    BizFormRoleInfo.Provider.Remove(roleID, FormID);
                 }
                 else if (Node != null)
                 {
@@ -352,20 +253,10 @@ public partial class CMSModules_Membership_FormControls_Roles_SecurityAddRoles :
             {
                 int roleID = ValidationHelper.GetInteger(item, 0);
 
-                if (PollID > 0)
-                {
-                    // Add poll role
-                    ModuleCommands.PollsAddRoleToPoll(roleID, PollID);
-                }
-                else if (FormID > 0)
+                if (FormID > 0)
                 {
                     // Add BizForm role
-                    BizFormRoleInfoProvider.SetBizFormRoleInfo(roleID, FormID);
-                }
-                else if (BoardID > 0)
-                {
-                    // Add role to the message board
-                    ModuleCommands.MessageBoardAddRoleToBoard(roleID, BoardID);
+                    BizFormRoleInfo.Provider.Add(roleID, FormID);
                 }
                 else if (Node != null)
                 {

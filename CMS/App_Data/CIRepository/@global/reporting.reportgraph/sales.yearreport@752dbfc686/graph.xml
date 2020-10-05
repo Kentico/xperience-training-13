@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>a856a094-de10-4fde-b9dd-3f59b22fac40</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+IF @FromDate <= @ToDate
+BEGIN
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+
+SELECT 
+   [Date] AS StartTime, 
+   CAST(SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) AS DECIMAL(38,2)) AS 'Income' 
+FROM 
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS Dates
+   LEFT JOIN COM_Order
+      ON Dates.Date = DATENAME(year, OrderDate)
+      AND  OrderSiteID = @CMSContextCurrentSiteID 
+GROUP BY [Date]
+ORDER BY [Date]
+END
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Sales.YearReport</CodeName>
+    <GUID>b8401ba0-83ba-45e1-9612-b3e90be7d224</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <BarDrawingStyle>Bar</BarDrawingStyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <BorderSkinStyle>None</BorderSkinStyle>
+      <ChartAreaBorderStyle>NotSet</ChartAreaBorderStyle>
+      <ChartAreaGradient>None</ChartAreaGradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <LegendBorderSize>0</LegendBorderSize>
+      <LegendBorderStyle>NotSet</LegendBorderStyle>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <PieDoughnutRadius>70</PieDoughnutRadius>
+      <PieDrawingDesign>Default</PieDrawingDesign>
+      <PieDrawingStyle>Doughnut</PieDrawingStyle>
+      <PieLabelStyle>Outside</PieLabelStyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <PlotAreaBorderSize>0</PlotAreaBorderSize>
+      <PlotAreaBorderStyle>NotSet</PlotAreaBorderStyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <SeriesBorderSize>4</SeriesBorderSize>
+      <SeriesBorderStyle>Solid</SeriesBorderStyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <SeriesSymbols>Circle</SeriesSymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <StackedBarDrawingStyle>Bar</StackedBarDrawingStyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisformat>{yyyy}</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxisfont>Arial;bold;11;;</yaxisfont>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$ecommerce.report_year$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$com.sales.volumeofsales$}</GraphYAxisTitle>
+</reporting.reportgraph>

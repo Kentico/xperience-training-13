@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Header.ascx.cs" Inherits="CMSAdminControls_UI_Header" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false" CodeBehind="Header.ascx.cs" Inherits="CMSAdminControls_UI_Header" %>
 <%@ Register Src="~/CMSFormControls/Sites/SiteSelector.ascx" TagName="SiteSelector" TagPrefix="cms" %>
 <%@ Register Src="~/CMSModules/Membership/Controls/PasswordExpiration.ascx" TagPrefix="cms" TagName="PasswordExpiration" %>
 <%@ Register Src="~/CMSAdminControls/UI/UserMenu.ascx" TagPrefix="cms" TagName="UserMenu" %>
@@ -13,9 +13,9 @@
     </asp:PlaceHolder>
     <h2 class="sr-only"><%= GetString("breadcrumbs.title")  %></h2>
     <ul class="navbar-left breadcrumb cms-nav-breadcrumb" id="js-nav-breadcrumb">
-        <li class="no-ico">
+        <li>
             <cms:localizedhyperlink id="lnkDashboard" runat="server" enableviewstate="false" tooltipresourcestring="cms.dashboard.back">
-                <i aria-hidden="true" class="icon-home cms-nav-icon-medium"></i> 
+                <i aria-hidden="true" class="icon-home cms-nav-icon-medium"></i>
                 <span class="sr-only"><%= GetString("cms.dashboard.back") %></span>
             </cms:localizedhyperlink>
         </li>
@@ -40,7 +40,6 @@
                 <asp:PlaceHolder runat="server" ID="plcStagingTaskGroup" Visible="false"/>
             </li>
         </asp:PlaceHolder>
-        <asp:PlaceHolder runat="server" ID="plcSupportChat" Visible="false" />
         <li>
             <cms:contexthelp runat="server" id="contextHelp" />
         </li>
@@ -61,13 +60,25 @@
         <asp:Literal ID="ltlText" runat="server" EnableViewState="false" />
         <a href="#" class="alert-link" onclick="HideWarning('<%= pnlTrial.ClientID %>', '<% = SESSION_KEY_TRIAL %>'); return false;"><%= GetString("general.close") %></a>
     </asp:Panel>
+
+    <!-- Subscription Licenses -->
+    <asp:Panel runat="server" ID="pnlSubscriptionLicencesWarning" CssClass="message-panel alert-warning" Visible="False">
+        <asp:Literal ID="ltlSubscriptionLicenceWarning" runat="server" EnableViewState="false" />
+        <a href="#" class="alert-link" onclick="HideWarning('<%= pnlSubscriptionLicencesWarning.ClientID %>', '<% = SESSION_KEY_SUBSCRIPTION_LICENCES %>'); return false;"><%= GetString("general.close") %></a>
+    </asp:Panel>
+
+    <asp:Panel runat="server" ID="pnlSubscriptionLicencesError" CssClass="message-panel alert-error" Visible="False">
+        <asp:Literal ID="ltlSubscriptionLicenceError" runat="server" EnableViewState="false" />
+    </asp:Panel>
+    <!-- Subscription Licenses -->
+
     <asp:Panel runat="server" ID="pnlLicenseLimitations" CssClass="message-panel alert-error" Visible="False">
         <span class="alert-icon">
             <i aria-hidden="true" class="icon-exclamation-triangle cms-icon-150"></i>
         </span>
         <div class="alert-label">
             <asp:Literal  ID="ltlLicenseLimitations" runat="server" EnableViewState="false" />
-        </div>  
+        </div>
     </asp:Panel>
     <asp:Panel runat="server" ID="pnlPwdExp" CssClass="message-panel alert-warning">
         <cms:passwordexpiration id="pwdExpiration" runat="server" enableviewstate="false"

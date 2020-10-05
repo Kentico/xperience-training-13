@@ -14,31 +14,13 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
     #region "Private Variables"
 
     private int mSiteId;
-    private int mGroupId;
     private int mRoleId;
-    private Guid mGroupGuid = Guid.Empty;
     private bool mGlobalRole;
 
     #endregion
 
 
     #region "Public properties"
-
-    /// <summary>
-    /// Gets or sets the group GUID.
-    /// </summary>
-    public Guid GroupGUID
-    {
-        get
-        {
-            return mGroupGuid;
-        }
-        set
-        {
-            mGroupGuid = value;
-        }
-    }
-
 
     /// <summary>
     /// Indicates whether the role is global (independent on site).
@@ -52,22 +34,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
         set
         {
             mGlobalRole = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets the group ID for which the roles should be displayed (0 means all groups).
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return mGroupId;
-        }
-        set
-        {
-            mGroupId = value;
         }
     }
 
@@ -149,11 +115,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
         txtRoleDisplayName.IsLiveSite = IsLiveSite;
         txtDescription.IsLiveSite = IsLiveSite;
 
-        if (GroupID > 0)
-        {
-            plcIsPublic.Visible = true;
-        }
-
         ReloadData(false);
     }
 
@@ -207,9 +168,8 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
                 txtRoleDisplayName.Text = null;
                 txtDescription.Text = null;
                 chkIsDomain.Checked = false;
-                chkIsAdmin.Checked = false;
             }
-            bool displayIsDomain = ((roleName != RoleName.EVERYONE) && (roleName != RoleName.AUTHENTICATED) && (roleName != RoleName.NOTAUTHENTICATED) && (GroupID == 0));
+            bool displayIsDomain = (roleName != RoleName.EVERYONE) && (roleName != RoleName.AUTHENTICATED) && (roleName != RoleName.NOTAUTHENTICATED);
             plcIsDomain.Visible = displayIsDomain;
         }
     }
@@ -223,7 +183,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
         txtRoleCodeName.Text = ri.RoleName;
         txtRoleDisplayName.Text = ri.RoleDisplayName;
         txtDescription.Text = ri.RoleDescription;
-        chkIsAdmin.Checked = ri.RoleIsGroupAdministrator;
         chkIsDomain.Checked = ri.RoleIsDomain;
     }
 
@@ -268,7 +227,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
                 if (si != null)
                 {
                     // Check unique name
-                    RoleInfo ri = (GroupID > 0) ? RoleInfoProvider.GetExistingRoleInfo(codeName, si.SiteID, GroupID) : RoleInfo.Provider.Get(codeName, si.SiteID);
+                    RoleInfo ri = RoleInfo.Provider.Get(codeName, si.SiteID);
                     if ((ri == null) || (ri.RoleID == ItemID) || (codeName == InfoHelper.CODENAME_AUTOMATIC))
                     {
                         SaveRole(ri, codeName, displayName);
@@ -315,14 +274,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit : CMSAdminEdi
         ri.RoleDescription = txtDescription.Text;
         ri.SiteID = mSiteId;
         ri.RoleIsDomain = chkIsDomain.Checked;
-
-        // If group id is present then it's group role
-        if (GroupID > 0)
-        {
-            ri.RoleGroupID = mGroupId;
-            ri.RoleIsGroupAdministrator = chkIsAdmin.Checked;
-        }
-
 
         RoleInfo.Provider.Set(ri);
         ItemID = ri.RoleID;

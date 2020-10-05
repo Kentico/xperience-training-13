@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 using CMS.Base.Web.UI;
 using CMS.UIControls;
 
-public partial class CMSMasterPages_LiveSite_SimplePage : CMSLiveMasterPage
+public partial class CMSMasterPages_LiveSite_SimplePage : AbstractMasterPage
 {
     #region "Properties"
 

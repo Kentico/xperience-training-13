@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>0</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>Sales</CodeName>
+    <GUID>6b5745fd-6483-46b0-ae14-539b5ce8989f</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString />
+  <ReportDisplayName>Sales - Monthly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>512a4757-91ac-402d-9458-00fae47a988b</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+%%control:ReportGraph?Sales.MonthReport.graph%%
+<h4>{$com.sales.totalvolumeofsales$}:&nbsp;%%control:ReportValue?Sales.MonthReport.value%%</h4>
+%%control:ReportTable?Sales.MonthReport.table%%
+]]>
+  </ReportLayout>
+  <ReportName>Sales.MonthReport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="8636ea4c-af1d-4651-a823-8174f45bc6d3" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddYears(-1).Date|(identity)GlobalAdministrator|(hash)03e2e9d76b2b7c2f0871530f9d00e1d98b9c444834fc880d0d63d0b72a8bfb8c%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="8d497d88-093c-4dcd-ba04-4eb22770f280" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

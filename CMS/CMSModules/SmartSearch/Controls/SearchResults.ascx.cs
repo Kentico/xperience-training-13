@@ -8,12 +8,9 @@ using CMS.Helpers;
 using CMS.Localization;
 using CMS.MacroEngine;
 using CMS.Membership;
-using CMS.PortalEngine;
 using CMS.Search;
 using CMS.SiteProvider;
 using CMS.UIControls;
-using CMS.WebAnalytics;
-
 
 public partial class CMSModules_SmartSearch_Controls_SearchResults : CMSUserControl, ISearchFilterable, IUniPageable
 {
@@ -1349,7 +1346,7 @@ public partial class CMSModules_SmartSearch_Controls_SearchResults : CMSUserCont
             if (searchAllowed && (searchTextIsNotEmptyOrNotRequired || !SearchHelper.SearchOnlyWhenContentPresent))
             {
                 string searchMode = QueryHelper.GetString("searchMode", "");
-                SearchModeEnum searchModeEnum = searchMode.ToEnum<SearchModeEnum>();
+                SearchModeEnum searchModeEnum = EnumStringRepresentationExtensions.ToEnum<SearchModeEnum>(searchMode);
 
                 // Get current culture
                 string culture = CultureCode;
@@ -1368,16 +1365,6 @@ public partial class CMSModules_SmartSearch_Controls_SearchResults : CMSUserCont
                 if (!string.IsNullOrEmpty(path))
                 {
                     path = MacroResolver.ResolveCurrentPath(Path);
-                }
-
-                // Check if search action was fired really on the live site
-                if (PortalContext.ViewMode.IsLiveSite() && (DocumentContext.CurrentPageInfo != null))
-                {
-                    if (AnalyticsHelper.AnalyticsEnabled(siteName) && !string.IsNullOrEmpty(searchText))
-                    {
-                        // Log on site keywords
-                        AnalyticsHelper.LogOnSiteSearchKeywords(siteName, DocumentContext.CurrentAliasPath, culture, searchText, 0, 1);
-                    }
                 }
 
                 // Prepare search text

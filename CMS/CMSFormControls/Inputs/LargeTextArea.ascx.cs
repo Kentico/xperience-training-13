@@ -525,7 +525,7 @@ function StartProgress(iconClientId) {
     /// <returns>Translation of an original text</returns>
     private string GetTranslatedText(string serviceName, string textToTranslate)
     {
-        TranslationServiceInfo info = TranslationServiceInfoProvider.GetTranslationServiceInfo(serviceName);
+        TranslationServiceInfo info = TranslationServiceInfo.Provider.Get(serviceName);
         if (info != null)
         {
             if (info.TranslationServiceIsMachine)

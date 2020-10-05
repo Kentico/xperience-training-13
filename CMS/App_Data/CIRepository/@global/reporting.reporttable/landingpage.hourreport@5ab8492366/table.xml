@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>d7c8fc90-1907-4dae-a75e-8a6649dda1ec</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @PageViews TABLE
+	(
+		PagePath NVARCHAR(500),
+		Pageviews INT,
+		Percents DECIMAL(10,2)  
+	)
+
+	DECLARE @Sum DECIMAL;
+
+	SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+	SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+
+	SELECT @Sum =   
+		SUM(HitsCount)
+		FROM Analytics_Statistics
+		INNER JOIN Analytics_HourHits ON Analytics_HourHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+		WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+		AND (StatisticsCode=@CodeName)
+		AND (HitsStartTime >= @FromDate)
+		AND (HitsEndTime <= @ToDate)
+
+	INSERT INTO @PageViews (PagePath, PageViews, Percents)
+		SELECT TOP 100 StatsWithPath.NodeAliasPath, SUM(StatsWithPath.HitsCount) AS PageViews, (SUM(StatsWithPath.HitsCount)/@Sum)*100 AS Percents FROM
+		(
+		SELECT
+			StatisticsObjectName AS NodeAliasPath, StatisticsObjectID AS ObjectID, HitsCount 
+			FROM Analytics_Statistics
+			INNER JOIN Analytics_HourHits ON Analytics_HourHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+			WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) AND (StatisticsCode = @CodeName)
+		) AS StatsWithPath
+		GROUP BY StatsWithPath.NodeAliasPath, StatsWithPath.ObjectID
+		ORDER BY PageViews DESC 
+  
+	SELECT PagePath AS '{$reports_landingpage_Hour.path_header$}', PageViews AS '{$reports_landingpage_Hour.hits_header$}',
+		CAST (Percents AS NVARCHAR(10))+'%' AS '{$reports_landingpage_Hour.hits_percent_header$}'
+		FROM @PageViews ORDER BY PageViews DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>landingpage.hourreport</CodeName>
+    <GUID>f6c0efa4-9079-4071-9b18-7470eb9c993c</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

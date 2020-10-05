@@ -70,7 +70,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_List : CMSCamp
     private static IList<CampaignListItemViewModel> GetCampaigns()
     {
         var now = DateTime.Now;
-        return CampaignInfoProvider.GetCampaigns()
+        return CampaignInfo.Provider.Get()
                                    .OnSite(SiteContext.CurrentSiteID)
                                    .ToList()
                                    .OrderBy(campaign => (int)campaign.GetCampaignStatus(now))

@@ -324,11 +324,12 @@
             and for saving the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/> objects into the database.
             </summary>
         </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.#ctor(CMS.Activities.IActivityTypeInfoProvider)">
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.#ctor(CMS.Activities.IActivityTypeInfoProvider,CMS.WebAnalytics.ICampaignConversionInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionService"/> class.
             </summary>
             <param name="activityTypeInfoProvider">Provider for <see cref="T:CMS.Activities.ActivityTypeInfo"/> management.</param>
+            <param name="campaignConversionInfoProvider">Provider for <see cref="T:CMS.WebAnalytics.CampaignConversionInfo"/> management.</param>
         </member>
         <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionService.GetConversionViewModel(CMS.WebAnalytics.CampaignConversionInfo)">
             <summary>
@@ -380,6 +381,12 @@
             <param name="dateTime">Datetime, used to calculate the current status of campaign</param>
             <exception cref="T:System.ArgumentNullException"><paramref name="campaign"/> is null</exception>
         </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveService.#ctor(CMS.WebAnalytics.ICampaignObjectiveInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveService"/> class.
+            </summary>
+            <param name="campaignObjectiveInfoProvider">Provider for <see cref="T:CMS.WebAnalytics.CampaignObjectiveInfo"/> management.</param>
+        </member>
         <member name="M:CMS.WebAnalytics.Web.UI.CampaignObjectiveService.GetObjectiveViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
             <summary>
             Returns view model from specified objective (<paramref name="info"/>).
@@ -402,6 +409,13 @@
             <summary>
             Service providing methods to work with campaign reports.
             </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportService.#ctor(CMS.WebAnalytics.ICampaignInfoProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignReportService"/> class.
+            </summary>
+            <param name="campaignInfoProvider">Provider for <see cref="T:CMS.WebAnalytics.CampaignInfo"/> management.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="campaignInfoProvider"/> is null.</exception>
         </member>
         <member name="M:CMS.WebAnalytics.Web.UI.CampaignReportService.InvalidateCampaignReport(System.Int32)">
             <summary>
@@ -1024,41 +1038,6 @@
             </summary>
             <param name="statCodeName">Analytics code name (pageviews, pageviews.multilingual...)</param>
         </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.Filters.DoNotTrackAttribute">
-            <summary>
-            Adds header to the response telling the crawlers not to track the site the request was made for.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.Filters.DoNotTrackAttribute.OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext)">
-            <summary>
-            Occurs after the action method is invoked.
-            </summary>
-            <param name="actionExecutedContext">The action executed context.</param>
-        </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute">
-            <summary>
-            Checks whether the request was made by crawler. If so, returns 403 Forbidden message.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.#ctor">
-            <summary>
-            Creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/> with <see cref="T:CMS.WebAnalytics.Internal.ISearchEnginesDetector"/> resolved from service locator.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.#ctor(CMS.WebAnalytics.Internal.ISearchEnginesDetector)">
-            <summary>
-            Creates new instance of <see cref="T:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute"/>.
-            </summary>
-            <param name="searchEnginesDetector">Implementation of <see cref="T:CMS.WebAnalytics.Internal.ISearchEnginesDetector"/> used to detect seach engines.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="searchEnginesDetector"/> is <c>null</c>.</exception>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.Filters.FilterCrawlersAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            Calls when a process requests authorization.
-            </summary>
-            <param name="actionContext">The action context, which encapsulates information for using <see cref="T:System.Web.Http.Filters.AuthorizationFilterAttribute"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="actionContext"/> is null.</exception>
-        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsLiveTileModelProvider">
             <summary>
             Provides live model for the Web analytics dashboard tile.
@@ -1088,63 +1067,6 @@
             <exception cref="T:System.ArgumentException"><paramref name="statisticsCode"/> is null or empty.</exception>
             <returns>Visitors count</returns>
         </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers">
-            <summary>
-            Web analytics Web UI events handlers
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CAMPAIGN_URL_TRACKING_PARAMETER">
-            <summary>
-            Query parameter name for the campaign tracking.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SOURCE_URL_TRACKING_PARAMETER">
-            <summary>
-            Query parameter name for the source tracking.
-            </summary>
-        </member>
-        <member name="F:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CONTENT_URL_TRACKING_PARAMETER">
-            <summary>
-            Query parameter name for the content tracking.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.Init">
-            <summary>
-            Initializes the events handlers.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.LogCampaign(System.Object,CMS.OutputFilter.OutputCacheEventArgs)">
-            <summary>
-            Logs campaign.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SetCampaign">
-            <summary>
-            If URL contains campaign code this sets campaign and also makes hit to the analytics.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.CanProceedInLogging">
-            <summary>
-            Determines whether conversions can be logged.
-            </summary>
-            <returns>True, if can proceed; otherwise, false</returns>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.LogPageViewConversion(System.Object,System.EventArgs)">
-            <summary>
-            Logs page view conversion. Requires access to the Session object.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.SetCampaign(System.Object,System.EventArgs)">
-            <summary>
-            Sets campaign.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIHandlers.DelayEndOfTheRequest(System.Object,CMS.OutputFilter.OutputCacheEventArgs)">
-            <summary>
-            Delays the end of the request when full page caching if Analytics or Activities are enabled.
-            Fired when cache successfully loaded.
-            </summary>
-        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.WebAnalyticsWebUIModule">
             <summary>
             Represents the Web Analytics Web UI module.
@@ -1173,11 +1095,6 @@
         <member name="M:CMS.WebAnalytics.Web.UI.CMSCampaignPage.OnInit(System.EventArgs)">
             <summary>
             Init event handler
-            </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.CMSConversionPage">
-            <summary>
-            Base page for conversions.
             </summary>
         </member>
         <member name="T:CMS.WebAnalytics.Web.UI.CMSWebAnalyticsPage">

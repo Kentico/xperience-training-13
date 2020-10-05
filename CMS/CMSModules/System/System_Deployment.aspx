@@ -38,12 +38,6 @@
             runat="server" />
     </div>
     <br />
-    <div class="checkbox-list-vertical">
-        <cms:CMSCheckBox ID="chkSaveCSS" ResourceString="Deployment.SaveCSS" runat="server"
-            EnableViewState="false" />
-        <cms:CMSCheckBox ID="chkSaveWebpartContainer" ResourceString="Deployment.SaveWebpartContainers"
-            runat="server" />
-    </div>
     <div style="padding-top: 15px">
         <p><cms:LocalizedLabel runat="server" ID="lblApplyChanges" EnableViewState="false" ResourceString="Deployment.ApplyChangesInfo" />
         &nbsp;<cms:LocalizedLabel

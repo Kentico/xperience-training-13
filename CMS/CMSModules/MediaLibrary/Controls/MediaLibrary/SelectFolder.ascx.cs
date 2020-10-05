@@ -120,16 +120,6 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_SelectFolder 
     }
 
 
-    protected void Page_PreRender(object sender, EventArgs e)
-    {
-        if (IsLiveSite)
-        {
-            // Register custom CSS
-            CssRegistration.RegisterCssLink(Page, DocumentContext.CurrentDocumentStylesheetName, "Skin.css");
-        }
-    }
-
-
     /// <summary>
     /// Initializes all the nested controls.
     /// </summary>

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.discount</CodeName>
+    <GUID>3cc5179a-b1f8-4a9a-98cb-06b92bc9604b</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="DiscountID" guid="4e022b02-5173-4eb0-ab6e-32faa8a7f355" />
+      <field column="DiscountDisplayName" guid="16e55b27-9c07-4b77-b046-e25fa9608fd9">
+        <properties>
+          <validationerrormessage>{$com.discount.displaynameempty$}</validationerrormessage>
+        </properties>
+      </field>
+      <field column="DiscountName" guid="00f12cf2-2b16-434c-98ca-ef881b253e45" />
+      <field column="DiscountDescription" guid="3385e1b8-158d-4be1-8b42-8542f539cb86" />
+      <field column="DiscountEnabled" guid="dcccc91e-bef8-415d-a625-8e8992992f79" />
+      <field column="DiscountIsFlat" guid="8378c821-6d34-466c-a6f8-c7c962cbdb45">
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+false; {$com.discount.percentage$}
+true; {$com.discount.fixedamount$}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+          <RepeatDirection />
+          <RepeatLayout />
+        </settings>
+      </field>
+      <field column="DiscountSiteID" guid="9280f349-116d-48e0-b82f-fcea23f78917" />
+      <field column="DiscountValue" guid="dbe3fd7d-9375-49be-b247-40d56b0acf00">
+        <settings>
+          <FilterType />
+        </settings>
+        <properties>
+          <controlcssclass>input-width-20</controlcssclass>
+          <validationerrormessage>{$com.discount.valueempty$}</validationerrormessage>
+        </properties>
+        <rules>
+          <rule errormsg="{$com.discount.amountpercentage$}">
+            <![CDATA[{%Rule("(DiscountIsFlat.Value? true: Value<=100)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>DiscountIsFlat.Value? true: Value&lt;=100</t><v>DiscountIsFlat.Value? true: Value&lt;=100</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")|(identity)GlobalAdministrator|(hash)9502f9c4878df5c5f76e8b03faa31b1356a1bf3f79e44ee20ecf3044536c7928%}]]>
+          </rule>
+          <rule errormsg="{$com.discount.minamount$}">
+            <![CDATA[{%Rule("(Value > 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>Value &gt; 0</t><v>Value &gt; 0</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="DiscountOrderAmount" guid="f4913082-74bf-4706-ad60-11f741e8585f" />
+      <field column="DiscountApplyTo" guid="95655a03-a081-4fdb-af10-00e6bcd25293" visible="">
+        <properties>
+          <defaultvalue>Products</defaultvalue>
+        </properties>
+      </field>
+      <field column="DiscountProductCondition" guid="a485d43e-89fb-4b78-9b77-a35ff5a3b227">
+        <settings>
+          <AddDataMacroBrackets>True</AddDataMacroBrackets>
+          <DefaultConditionText ismacro="true">{$com.discount.allproducts$}</DefaultConditionText>
+        </settings>
+        <properties>
+          <fielddescription>{$com.discount.applytodesc$}</fielddescription>
+        </properties>
+      </field>
+      <field column="DiscountCartCondition" guid="eeb69142-8a05-47d0-aee0-f19321a4f819" visible="" />
+      <field column="DiscountUsesCoupons" guid="145b313c-7eb9-4fc2-abd1-1262a18eaf69" visible="true">
+        <properties>
+          <captioncssclass />
+        </properties>
+      </field>
+      <field column="DiscountValidFrom" guid="f3ce6ac9-9eba-4bf0-8f5a-25fa29cbf2f9" />
+      <field column="DiscountValidTo" guid="5a5dbee3-f1a2-4e53-b86d-b766735c9698">
+        <settings>
+          <controlname>CalendarControl</controlname>
+        </settings>
+      </field>
+      <field column="DiscountCustomerRestriction" guid="c70bd58f-a720-418f-bb26-c1a12a96a9ad" />
+      <field column="DiscountRoles" guid="4e86869a-5ae4-4516-9475-ff74cb1c8b58">
+        <settings>
+          <ResourcePrefix>addroles</ResourcePrefix>
+          <ShowSiteFilter>False</ShowSiteFilter>
+        </settings>
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%DiscountCustomerRestriction.Value == "SelectedRoles"|(identity)GlobalAdministrator|(hash)90756e6892a29e2ab328d27270c8cb0e7f32dfec8fce43590366a143dc352db7%}]]>
+          </visiblemacro>
+          <enabledmacro />
+        </properties>
+      </field>
+      <field column="DiscountOrder" guid="6b14d539-6469-4046-87e0-4182267ab6cc">
+        <settings>
+          <controlname>TextBoxControl</controlname>
+        </settings>
+        <properties>
+          <explanationtext>(1 is the highest priority)</explanationtext>
+          <contentafter />
+        </properties>
+      </field>
+      <field column="DiscountApplyFurtherDiscounts" guid="e1f01fe0-0e06-40bb-b618-7698e8e865c1" />
+      <field column="DiscountGUID" guid="1472ccd6-cfd9-4fe8-8804-ba37b0f8dc6b" />
+      <field column="DiscountLastModified" guid="30e7c36b-b318-49a7-a715-e9df75857f60" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Catalog discount</FormDisplayName>
+  <FormGUID>f842f0e9-8b96-467d-a22b-03d7b6f23bbf</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>CatalogDiscount</FormName>
+</cms.alternativeform>

@@ -34,9 +34,6 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectEditPane
             page.HeaderActions = EditPanel.HeaderActions;
         }
 
-        // Css class for header actions
-        EditPanel.PreviewMode = true;
-
         base.OnInit(e);
     }
 

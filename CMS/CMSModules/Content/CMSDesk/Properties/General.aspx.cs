@@ -3,7 +3,6 @@ using System.Text;
 using System.Web;
 using System.Web.UI.WebControls;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
@@ -13,7 +12,6 @@ using CMS.Helpers;
 using CMS.Globalization;
 using CMS.Localization;
 using CMS.Membership;
-using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
@@ -26,12 +24,23 @@ public partial class CMSModules_Content_CMSDesk_Properties_General : CMSProperti
     #region "Variables"
 
     protected bool canEditOwner = false;
-    protected bool canEdit = true;
+    protected bool canEdit = true;    
 
     protected FormEngineUserControl usrOwner = null;
 
     #endregion
-
+    
+    protected bool IsAdvancedMode
+    {
+        get
+        {
+            return ValidationHelper.GetBoolean(ViewState["IsAdvancedMode"], false);
+        }
+        set
+        {
+            ViewState["IsAdvancedMode"] = value;
+        }
+    }
 
     #region "Page events"
 
@@ -77,22 +86,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_General : CMSProperti
         ScriptHelper.RegisterTooltip(Page);
         ScriptHelper.RegisterDialogScript(this);
 
-        // Set default item value
-        ctrlSiteSelectStyleSheet.AddDefaultRecord = false;
-        ctrlSiteSelectStyleSheet.CurrentSelector.SpecialFields.AllowDuplicates = true;
-
-        if (PortalContext.CurrentSiteStylesheet != null)
-        {
-            ctrlSiteSelectStyleSheet.CurrentSelector.SpecialFields.Add(new SpecialField { Text = GetString("general.defaultchoice"), Value = GetDefaultStylesheet() });
-        }
-        else
-        {
-            ctrlSiteSelectStyleSheet.CurrentSelector.AllowEmpty = true;
-        }
-
-        ctrlSiteSelectStyleSheet.ReturnColumnName = "StyleSheetID";
-        ctrlSiteSelectStyleSheet.SiteId = SiteContext.CurrentSiteID;
-
         if ((SiteContext.CurrentSite != null) && (usrOwner != null))
         {
             usrOwner.SetValue("SiteID", SiteContext.CurrentSite.SiteID);
@@ -103,7 +96,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_General : CMSProperti
         if (Node != null)
         {
             // Redirect to information page when no UI elements displayed
-            if (pnlUIDesign.IsHidden && pnlUIOther.IsHidden && pnlUIOwner.IsHidden && pnlUIAlias.IsHidden)
+            if (pnlUIOther.IsHidden && pnlUIOwner.IsHidden && pnlUIAlias.IsHidden)
             {
                 RedirectToUINotAvailable();
             }
@@ -124,34 +117,9 @@ public partial class CMSModules_Content_CMSDesk_Properties_General : CMSProperti
             txtAlias.MaxLength = TreePathUtils.MaxAliasLength;
 
             // Get strings for headings
-            headOtherProperties.Text = GetString("GeneralProperties.OtherGroup");
+            headOtherProperties.Text = GetString("GeneralProperties.OtherGroup");            
 
-            if (PortalContext.CurrentSiteStylesheet != null)
-            {
-                script.Append(@"
-var currentStyleSheetId;
-// Function raised before opening the Edit dialog of the CSS style sheet control. When 'default' style sheet is chosen, translate this value to the default site style sheet id.
-function US_GetEditedItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(selectedValue) {
-    currentStyleSheetId = selectedValue;
-    if (selectedValue == ""default"") {
-        return ", PortalContext.CurrentSiteStylesheet.StylesheetID, @";
-    }
-
-    return selectedValue;
-}
-
-// Function raised from New/Edit dialog after save action. When 'default' style is used, the new/edit dialog will try to choose a real style sheet id (which was edited), but it is necessary keep the selected value to be 'default'.
-function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyleSheetId) {
-    if ((currentStyleSheetId == ""default"") && (newStyleSheetId == ", PortalContext.CurrentSiteStylesheet.StylesheetID, @")) {
-        return currentStyleSheetId;
-    }
-
-    return newStyleSheetId;
-}");
-            }
-
-            canEditOwner = (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.ModifyPermissions) == AuthorizationResultEnum.Allowed);
-            ctrlSiteSelectStyleSheet.AliasPath = Node.NodeAliasPath;
+            canEditOwner = (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.ModifyPermissions) == AuthorizationResultEnum.Allowed);            
 
             ReloadData();
         }
@@ -160,12 +128,6 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
 
         // Reflect processing action
         pnlContent.Enabled = DocumentManager.AllowSave;
-
-        if (chkCssStyle.Checked && (PortalContext.CurrentSiteStylesheet != null))
-        {
-            // Enable the edit button
-            ctrlSiteSelectStyleSheet.ButtonEditEnabled = true;
-        }
     }
 
 
@@ -180,6 +142,16 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
         {
             ReloadData();
         }
+
+        SetAdvancedSection();
+    }
+
+
+    private void SetAdvancedSection()
+    {
+        icAdvanced.CssClass = IsAdvancedMode ? "icon-caret-up cms-icon-30" : "icon-caret-down cms-icon-30";
+        lnkAdvanced.ResourceString = IsAdvancedMode ? "content.ui.properties.simplified" : "general.advanced";
+        plcAdvanced.Visible = IsAdvancedMode;
     }
 
     #endregion
@@ -213,7 +185,8 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
                     usrOwner.Value = Node.GetValue("NodeOwner");
                 }
 
-                txtAlias.Text = Node.NodeAlias;
+                txtAlias.Text = Node.NodeAlias;                
+                chkExcludeFromSearch.Checked = Node.DocumentSearchExcluded;
             }
 
             // Load the data
@@ -245,34 +218,6 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
             lblCreated.Text = TimeZoneHelper.GetCurrentTimeZoneDateTimeString(createdWhen, MembershipContext.AuthenticatedUser, SiteContext.CurrentSite, out usedTimeZone);
             ScriptHelper.AppendTooltip(lblCreated, TimeZoneHelper.GetUTCLongStringOffset(usedTimeZone), "help");
 
-            // URL
-            if (Node.HasUrl())
-            {
-                string liveUrl = DocumentURLProvider.GetAbsoluteUrl(Node);
-
-                if (!string.IsNullOrEmpty(liveUrl))
-                {
-                    plcLive.Visible = true;
-                    lnkLiveURL.HRef = liveUrl;
-                    lnkLiveURL.InnerText = liveUrl;
-                }
-
-                // Hide preview URL for root node
-                if (!Node.IsRoot())
-                {
-                    var previewUrl = Node.GetPreviewLink(CurrentUser.UserName, embededInAdministration: false);
-                    if (!string.IsNullOrEmpty(previewUrl))
-                    {
-                        plcPreview.Visible = true;
-                        btnResetPreviewGuid.ToolTip = GetString("GeneralProperties.InvalidatePreviewURL");
-                        btnResetPreviewGuid.Click += btnResetPreviewGuid_Click;
-                        btnResetPreviewGuid.OnClientClick = "if(!confirm(" + ScriptHelper.GetLocalizedString("GeneralProperties.GeneratePreviewURLConf") + ")){return false;}";
-
-                        SetPreviewUrl(previewUrl);
-                    }
-                }
-            }
-
             lblGUID.Text = Convert.ToString(Node.NodeGUID);
             lblDocGUID.Text = (Node.DocumentGUID == Guid.Empty) ? ResHelper.Dash : Node.DocumentGUID.ToString();
             lblDocID.Text = Convert.ToString(Node.DocumentID);
@@ -292,62 +237,11 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
                 lblPublished.Text = GetString("General.No");
             }
 
-
-            if (!RequestHelper.IsPostBack())
-            {
-                if (Node.IsRoot())
-                {
-                    chkCssStyle.Visible = false;
-                }
-
-                var defaultStylesheet = GetDefaultStylesheet();
-
-                if (Node.DocumentInheritsStylesheet && !Node.IsRoot())
-                {
-                    chkCssStyle.Checked = true;
-
-                    // Get stylesheet from the parent node
-                    string value = GetStylesheetParentValue();
-                    ctrlSiteSelectStyleSheet.Value = String.IsNullOrEmpty(value) ? defaultStylesheet : value;
-                }
-                else
-                {
-                    // Get stylesheet from the current node
-                    var stylesheetId = Node.DocumentStylesheetID;
-                    ctrlSiteSelectStyleSheet.Value = (stylesheetId == 0) ? defaultStylesheet : stylesheetId.ToString();
-                }
-            }
-
-            // Disable new button if document inherit stylesheet
-            bool disableCssSelector = (!Node.IsRoot() && chkCssStyle.Checked);
-            ctrlSiteSelectStyleSheet.Enabled = !disableCssSelector;
-            ctrlSiteSelectStyleSheet.ButtonNewEnabled = !disableCssSelector;
-
-            // Initialize Rating control
-            RefreshCntRatingResult();
-
-            double rating = 0.0f;
-            if (Node.DocumentRatings > 0)
-            {
-                rating = Node.DocumentRatingValue / Node.DocumentRatings;
-            }
-            ratingControl.MaxRating = 10;
-            ratingControl.CurrentRating = rating;
-            ratingControl.Visible = true;
-            ratingControl.Enabled = false;
-
-            // Initialize Reset button for rating
-            btnResetRating.OnClientClick = "if (!confirm(" + ScriptHelper.GetString(GetString("GeneralProperties.ResetRatingConfirmation")) + ")) return false;";
-
             if (!canEdit)
             {
                 // Disable form editing                                                            
                 DisableFormEditing();
             }
-        }
-        else
-        {
-            btnResetRating.Visible = false;
         }
     }
 
@@ -380,9 +274,9 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
         TreeNode node = e.Node;
 
         SaveDocumentOwner(node);
-        SaveDocumentStylesheet(node);
         SaveAlias(e);
-    }
+        SaveSearch(node);
+    }    
 
 
     private void DocumentManager_OnAfterAction(object sender, DocumentManagerEventArgs e)
@@ -423,53 +317,12 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
     }
 
 
-    private void SaveDocumentStylesheet(TreeNode node)
+    private void SaveSearch(TreeNode node)
     {
-        if (pnlUIDesign.IsHidden)
+        if (!pnlUISearch.IsHidden)
         {
-            return;
+            node.DocumentSearchExcluded = chkExcludeFromSearch.Checked;
         }
-
-        if (!chkCssStyle.Checked)
-        {
-            // Set style sheet
-            int selectedCssId = ValidationHelper.GetInteger(ctrlSiteSelectStyleSheet.Value, 0);
-            node.DocumentStylesheetID = (selectedCssId > 0) ? selectedCssId : 0;
-            node.DocumentInheritsStylesheet = false;
-
-            ctrlSiteSelectStyleSheet.Enabled = true;
-        }
-        else
-        {
-            ctrlSiteSelectStyleSheet.Enabled = false;
-
-            node.DocumentInheritsStylesheet = true;
-            node.DocumentStylesheetID = 0;
-        }
-    }
-
-
-    protected void btnResetPreviewGuid_Click(object sender, EventArgs e)
-    {
-        if (Node == null)
-        {
-            return;
-        }
-
-        // Check modify permissions
-        if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) == AuthorizationResultEnum.Denied)
-        {
-            return;
-        }
-
-        using (new CMSActionContext { LogEvents = false })
-        {
-            Node.DocumentWorkflowCycleGUID = Guid.NewGuid();
-            Node.Update();
-        }
-
-        ShowConfirmation(GetString("GeneralProperties.PreviewLinkGenerated"));
-        SetPreviewUrl(Node.GetPreviewLink(CurrentUser.UserName, embededInAdministration: false));
     }
 
 
@@ -479,132 +332,25 @@ function US_GetNewItemId_", ctrlSiteSelectStyleSheet.ValueElementID, @"(newStyle
     protected void DisableFormEditing()
     {
         // Disable all panels
-        pnlDesign.Enabled = false;
         pnlOwner.Enabled = false;
 
         // Disable 'save button'
         menuElem.Enabled = false;
-
-        // Disable rating and owner selector
-        btnResetPreviewGuid.Enabled = false;
-        btnResetPreviewGuid.CssClass = "Disabled";
-        btnResetRating.Enabled = false;
+        
         usrOwner.Enabled = false;
-
-        ctrlSiteSelectStyleSheet.Enabled = false;
-        ctrlSiteSelectStyleSheet.ButtonNewEnabled = false;
 
         pnlAlias.Enabled = false;
     }
 
 
-    protected void chkCssStyle_CheckedChanged(object sender, EventArgs e)
-    {
-        if (chkCssStyle.Checked)
-        {
-            // Set stylesheet to stylesheet selector
-            ctrlSiteSelectStyleSheet.Enabled = false;
-            ctrlSiteSelectStyleSheet.ButtonNewEnabled = false;
-
-            string value = GetStylesheetParentValue();
-            if (String.IsNullOrEmpty(value))
-            {
-                ctrlSiteSelectStyleSheet.Value = GetDefaultStylesheet();
-            }
-            else
-            {
-                try
-                {
-                    ctrlSiteSelectStyleSheet.Value = value;
-                }
-                catch
-                {
-                }
-            }
-        }
-        else
-        {
-            ctrlSiteSelectStyleSheet.Enabled = true;
-            ctrlSiteSelectStyleSheet.ButtonNewEnabled = true;
-        }
-    }
-
-
     /// <summary>
-    /// Refreshes current rating result.
+    /// Switches simple/advanced mode.
     /// </summary>
-    protected void RefreshCntRatingResult()
+    protected void advancedLink_Click(object sender, EventArgs e)
     {
-        string msg = null;
+        IsAdvancedMode = !IsAdvancedMode;
 
-        // Avoid division by zero
-        if ((Node != null) && (Node.DocumentRatings > 0))
-        {
-            msg = String.Format(GetString("GeneralProperties.ContentRatingResult"), (Node.DocumentRatingValue * 10) / Node.DocumentRatings, Node.DocumentRatings);
-        }
-
-        // Document wasn't rated
-        if (msg == null)
-        {
-            msg = GetString("generalproperties.contentratingnoresult");
-        }
-
-        lblContentRatingResult.Text = msg;
-    }
-
-
-    /// <summary>
-    /// Resets content rating score.
-    /// </summary>
-    /// <param name="sender">Sender</param>
-    /// <param name="e">Args</param>
-    protected void btnResetRating_Click(object sender, EventArgs e)
-    {
-        if (Node == null)
-        {
-            return;
-        }
-
-        // Check modify permissions
-        if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) == AuthorizationResultEnum.Denied)
-        {
-            return;
-        }
-
-        // Reset rating
-        TreeProvider.ResetRating(Node);
-        RefreshCntRatingResult();
-        ratingControl.CurrentRating = 0.0;
-        ratingControl.ReloadData();
-
-        ShowChangesSaved();
-    }
-
-
-    private void SetPreviewUrl(string url)
-    {
-        lnkPreviewURL.Attributes.Add("href", url);
-    }
-
-
-    /// <summary>
-    /// Gets the default style sheet for the current site.
-    /// </summary>
-    private string GetDefaultStylesheet()
-    {
-        // If default stylesheet exists
-        return (PortalContext.CurrentSiteStylesheet != null) ? "default" : null;
-    }
-
-
-    /// <summary>
-    /// Gets stylesheet identifier value from parent node
-    /// </summary>
-    private string GetStylesheetParentValue()
-    {
-        var where = new WhereCondition().WhereNotEquals("DocumentInheritsStylesheet", true);
-
-        return PageInfoProvider.GetParentProperty<string>(Node.NodeSiteID, Node.NodeAliasPath, "DocumentStylesheetID", Node.DocumentCulture, where);
+        ScriptHelper.RegisterStartupScript(this, typeof(string), "InitUpdatePanelChanges", "CMSContentManager.initChanges();", true);
     }
 
     #endregion

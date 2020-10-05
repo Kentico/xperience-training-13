@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
@@ -15,13 +16,15 @@ using CMS.Newsletters.Web.UI;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 /// <summary>
 /// Displays a list of issues for a specified newsletter.
 /// </summary>
 [ParentObject(NewsletterInfo.OBJECT_TYPE, "parentobjectid")]
 [UIElement("CMS.Newsletter", "Newsletter.Issues")]
-public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_List : CMSNewsletterPage
+public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_List : CMSNewsletterPage, ICallbackEventHandler
 {
     private const string ZERO_PERCENT = "0%";
     private const string ZERO = "0";
@@ -32,6 +35,8 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
     private DataSet mClickedLinksSummary;
     private DataSet mVariantIssueSummaries;
     private DataSet mVariantIssues;
+    private string confirmMessage;
+    private int issueIdToConfirm;
 
 
     protected override void OnLoad(EventArgs e)
@@ -58,7 +63,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
             ShowInformation(GetString("newsletter.viewadditionalstatsmessage"));
         }
 
-        ScriptHelper.RegisterTooltip(this);
+        RegisterScripts();
 
         InitializeUnigrid();
 
@@ -90,13 +95,39 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
     }
 
 
+    private void RegisterScripts()
+    {
+        var script = $@"
+showConfirmMessage = function(callbackResult) {{
+    var result = JSON.parse(callbackResult);
+
+    if (confirm(result.message)) {{
+        window.CMS.UG_{UniGrid.ClientID}.command('delete', result.issueId);
+    }}
+}}";
+
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "EM_ConfirmIssueDeletion", ScriptHelper.GetScript(script));
+        ScriptHelper.RegisterTooltip(this);
+    }
+
+
     private void InitializeUnigrid()
     {
+        InitDeleteActions();
+
         UniGrid.WhereCondition = $"IssueNewsletterID={mNewsletter.NewsletterID} AND IssueVariantOfIssueID IS NULL";
         UniGrid.ZeroRowsText = GetString("Newsletter_Issue_List.NoIssuesFound");
         UniGrid.OnAction += uniGrid_OnAction;
         UniGrid.OnBeforeDataReload += UniGrid_OnBeforeDataReload;
         UniGrid.OnExternalDataBound += UniGrid_OnExternalDataBound;
+    }
+
+
+    private void InitDeleteActions()
+    {
+        UniGrid.GridActions.Actions
+            .Where(a => a.Name.Equals("delete", StringComparison.OrdinalIgnoreCase)).ToList()
+            .ForEach(a => a.OnClick = $"{Page.ClientScript.GetCallbackEventReference(this, "'{0}'", "showConfirmMessage", null)}; return false;");
     }
 
 
@@ -457,12 +488,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
 
     private void EditIssue(int issueId)
     {
-        var issue = IssueInfo.Provider.Get(issueId);
-
-        if (issue == null)
-        {
-            RedirectToAccessDenied(GetString("general.invalidparameters"));
-        }
+        var issue = GetIssueOrRedirect(issueId);
 
         var url = UIContextHelper.GetElementUrl("cms.newsletter", "EditIssueProperties", false, issueId);
         url = URLHelper.AddParameterToUrl(url, "parentobjectid", Convert.ToString(mNewsletter.NewsletterID));
@@ -488,12 +514,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
     /// <param name="issueId">Issue's ID</param>
     private static void DeleteIssue(int issueId)
     {
-        var issue = IssueInfo.Provider.Get(issueId);
-
-        if (issue == null)
-        {
-            RedirectToAccessDenied(GetString("general.invalidparameters"));
-        }
+        var issue = GetIssueOrRedirect(issueId);
 
         // User has to have both destroy and issue privileges to be able to delete the issue.
         if (!issue.CheckPermissions(PermissionsEnum.Delete, SiteContext.CurrentSiteName, MembershipContext.AuthenticatedUser))
@@ -508,5 +529,49 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_L
         }
 
         IssueInfo.Provider.Delete(issue);
+    }
+
+
+    private static IssueInfo GetIssueOrRedirect(int issueId)
+    {
+        var issue = IssueInfo.Provider.Get(issueId);
+
+        if (issue == null)
+        {
+            RedirectToAccessDenied(GetString("general.invalidparameters"));
+        }
+
+        return issue;
+    }
+
+
+    public void RaiseCallbackEvent(string eventArgument)
+    {
+        confirmMessage = GetString("General.ConfirmDelete");
+        issueIdToConfirm = ValidationHelper.GetInteger(eventArgument, 0);
+
+        var issue = GetIssueOrRedirect(issueIdToConfirm);
+
+        // For issues referenced in a Marketing automation process show different confirmation message.
+        if (issue.IssueForAutomation)
+        {
+            var processNames = NewsletterIssueAutomationHelper.GetProcessNamesWhereIssueIsUsed(issue);
+            if (processNames.Any())
+            {
+                confirmMessage = String.Format(GetString("newsletter.issue.confirm.emailusedinmarketingautomation"), processNames.Join(Environment.NewLine));
+            }
+        }
+    }
+
+
+    public string GetCallbackResult()
+    {
+        var result = new
+        {
+            Message = confirmMessage,
+            IssueId = issueIdToConfirm
+        };
+
+        return JsonConvert.SerializeObject(result, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
     }
 }

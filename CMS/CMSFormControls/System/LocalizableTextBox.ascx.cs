@@ -354,18 +354,8 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
 
 
     /// <summary>
-    /// Indicates if control is used on live site. Default value is FALSE for localizable text box.
-    /// </summary>
-    public override bool IsLiveSite
-    {
-        get;
-        set;
-    }
-
-
-    /// <summary>
     /// Indicates if textbox value is used in content.
-    /// Default value is FALSE for localizable text box. 
+    /// Default value is FALSE for localizable text box.
     /// </summary>
     public bool ValueIsContent
     {
@@ -394,6 +384,16 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
             SetValue("WatermarkText", value);
             TextBox.WatermarkText = value;
         }
+    }
+
+
+    /// <summary>
+    /// Indicates whether the validation errors are hidden. Default value is <c>false</c>.
+    /// </summary>
+    public bool HideValidationErrors
+    {
+        get;
+        set;
     }
 
     #endregion
@@ -510,7 +510,7 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
     /// <summary>
     /// Sets the dialog parameters to the context.
     /// </summary>
-    protected void SetFieldDialogParameters(string textboxValue)
+    private void SetFieldDialogParameters(string textboxValue)
     {
         Hashtable parameters = new Hashtable();
         parameters["TextBoxValue"] = textboxValue;
@@ -574,7 +574,7 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
     /// <summary>
     /// Reloads control.
     /// </summary>
-    public void Reload()
+    private void Reload()
     {
         // Textbox contains translated macro
         if (IsLocalizationMacro && LocalizationExists)
@@ -633,7 +633,7 @@ function SetResource(hdnValId, resKey, textBoxId, textBoxValue, btnLocalizeField
     $textBox.trigger('change');
 
     $cmsj('#' + localizedContainerId).addClass('", TEXT_BOX_LOCALIZED_CSS, @"').trigger('checkScrollbar');
-    
+
     $cmsj('#' + btnLocalizeFieldId).hide();
     $cmsj('#' + btnLocalizeStringId).css('display', 'inline');
     $cmsj('#' + btnRemoveLocalizationId).css('display', 'inline');
@@ -656,7 +656,7 @@ function LocalizeFieldReady(rvalue, context) {
 function LocalizeString(hdnValId, textBoxId) {
     var stringKey = Get(hdnValId).value;
     stringKey = stringKey.substring(", MACRO_START.Length, @", stringKey.length - ", MACRO_END.Length, @");
-    modalDialog('", ResolveUrl(LOCALIZE_STRING), @"?hiddenValueControl=' + hdnValId + '&stringKey=' + escape(stringKey) + '&parentTextbox=' + textBoxId, 'localizableString', 900, 635, null, null, true);
+    modalDialog('", ResolveUrl(LOCALIZE_STRING), @"?hiddenValueControl=' + hdnValId + '&stringKey=' + escape(stringKey) + '&parentTextbox=' + textBoxId + '&processMacroSecurity=", textbox.ProcessMacroSecurity, "&valueIsMacro=", textbox.ValueIsMacro, @"', 'localizableString', 900, 635, null, null, true);
     return false;
 }
 
@@ -711,8 +711,7 @@ function LocalizationDialog", ClientID, @"(value) {
                 var translationText = TextBox.Text.Trim();
                 if (string.IsNullOrEmpty(translationText))
                 {
-                    lblError.Visible = true;
-                    lblError.ResourceString = "localize.entertext";
+                    ShowValidationError();
                     return false;
                 }
 
@@ -778,6 +777,18 @@ function LocalizationDialog", ClientID, @"(value) {
         }
 
         return base.SetValue(propertyName, value);
+    }
+
+
+    private void ShowValidationError()
+    {
+        if (HideValidationErrors)
+        {
+            return;
+        }
+
+        lblError.Visible = true;
+        lblError.ResourceString = "localize.entertext";
     }
 
     #endregion

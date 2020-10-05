@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.macrorule>
+  <MacroRuleAvailability>0</MacroRuleAvailability>
+  <MacroRuleCondition>
+    <![CDATA[{_is}(SKU.IsInSections("{sections}".Split(";", true))]]>
+  </MacroRuleCondition>
+  <MacroRuleDescription>
+    <![CDATA[Checks whether the product is placed under one of the selected sections of the product tree.]]>
+  </MacroRuleDescription>
+  <MacroRuleDisplayName>Product is in sections</MacroRuleDisplayName>
+  <MacroRuleEnabled>True</MacroRuleEnabled>
+  <MacroRuleGUID>8156854a-8617-4ef2-aca2-af470a2016d1</MacroRuleGUID>
+  <MacroRuleIsCustom>False</MacroRuleIsCustom>
+  <MacroRuleName>CMSSKUSection</MacroRuleName>
+  <MacroRuleParameters>
+    <form version="2">
+      <field allowempty="true" column="_is" columnsize="100" columntype="text" guid="4ff689b6-97c7-4ac7-a590-3c1e36b97788" visible="true">
+        <properties>
+          <defaultvalue>;is</defaultvalue>
+          <fieldcaption>select operation</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>MacroNegationOperator</controlname>
+          <EditText>false</EditText>
+          <Options>
+<![CDATA[
+;is
+!;is not
+]]>
+          </Options>
+        </settings>
+      </field>
+      <field column="sections" columnsize="1000" columntype="text" guid="863f6151-6ee8-4223-9538-1879c25851ce" visible="true">
+        <properties>
+          <fieldcaption>select sections</fieldcaption>
+        </properties>
+        <settings>
+          <AdditionalColumns>NodeAliasPath</AdditionalColumns>
+          <controlname>ProductSectionsSelector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DisplayNameFormat>{% NodeName %}</DisplayNameFormat>
+          <OrderBy>NodeAliasPath</OrderBy>
+          <ReturnColumnName>NodeGUID</ReturnColumnName>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+    </form>
+  </MacroRuleParameters>
+  <MacroRuleRequiresContext>False</MacroRuleRequiresContext>
+  <MacroRuleResourceName>com.catalogdiscount</MacroRuleResourceName>
+  <MacroRuleText>
+    <![CDATA[Product {_is} in one of the following sections: {sections}]]>
+  </MacroRuleText>
+</cms.macrorule>

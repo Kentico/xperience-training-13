@@ -7,10 +7,10 @@
     {
         foreach (var socialLink in Model)
         {
-            if (!string.IsNullOrEmpty(socialLink.IconServerPath))
+            if (socialLink.IconUrl != null)
             {
                 <a href="@Html.Raw(socialLink.Url)">
-                    <img src="@Url.Kentico().ImageUrl(socialLink.IconServerPath, SizeConstraint.Empty)" alt="@Html.DisplayFor(model => socialLink.Name)" />
+                    <img src="@socialLink.IconUrl.AbsoluteUrl" alt="@Html.DisplayFor(model => socialLink.Name)" />
                 </a>
             }
         }

@@ -1,6 +1,7 @@
 ﻿.dashboard {
-	padding: (6 * @base-unit) @base-unit (2 * @base-unit) (12 * @base-unit);
-	background: @dashboard-bg url(../../CMSPages/GetResource.ashx?image=background.png) no-repeat center bottom fixed;
+	@tile-margin: (@base-unit * 1.5);
+	padding: (6 * @base-unit) @base-unit (2 * @base-unit) @base-unit;
+	background: @dashboard-bg url('./Images/background.svg') no-repeat center bottom fixed;
 	background-size: cover;
 	min-height: 100%;
 	width: 100%;
@@ -9,8 +10,10 @@
 	box-sizing: border-box;
 
 	.dashboard-inner {
-		max-width: (7 * (@tile-width + (@base-unit * 0.5)));
+		max-width: 7 * (@tile-width + @tile-margin);
 		overflow: hidden;
+		margin: 0 auto;
+		padding-left: @tile-margin;
 	}
 
 	.drag-placeholder {
@@ -54,7 +57,6 @@
 		cursor: move;
 		right: 0px;
 	}
-
 	// Animations
 	@add: -add;
 	@active: -active;
@@ -146,9 +148,11 @@
 
 	.tile {
 		display: inline-block;
-		margin: 0 (@base-unit * 0.5) (@base-unit * 0.5) 0;
+		margin: 0 @tile-margin @tile-margin 0;
 		float: left;
 		position: relative;
+		border-radius: @border-radius;
+		overflow: hidden;
 
 		&:last-child {
 			margin-left: 0;
@@ -159,10 +163,10 @@
 		}
 
 		.welcome-tile {
-			@tile-padding: 2 * @base-unit;
-			@w-tile-width: (3 * @tile-width) + (2 * @base-unit * 0.5) - (2 * @tile-padding);
-			@w-tile-height: (2 * @tile-height) + (@base-unit * 0.5) - (2 * @tile-padding);
-			background-color: @tile-bg;
+			@tile-padding: 0;
+			@w-tile-width: (3 * @tile-width) + (2 * @tile-margin) - (2 * @tile-padding);
+			@w-tile-height: (1 * @tile-height) + @tile-margin - 2* @base-unit;
+			background-color: transparent;
 			color: @color-gray-50;
 			padding: @tile-padding;
 			text-align: left;
@@ -178,13 +182,35 @@
 				width: @w-tile-width;
 				height: @base-unit * 2.5;
 				overflow: hidden;
+				margin-top: @base-unit;
+				margin-bottom: 2.25 * @base-unit;
 			}
 
 			.lead {
-				margin-bottom: @base-unit * 2.25;
+				@icon-size: @base-unit * 1.25;
 				width: @w-tile-width;
-				height: @base-unit * 3;
+				max-height: @base-unit * 5;
 				overflow: hidden;
+
+				a {
+					vertical-align: middle;
+				}
+
+				i {
+					font-size: @icon-size;
+				}
+
+				.icon-xperience {
+					display: inline-block;
+					width: @icon-size;
+					height: @icon-size;
+					background: url('./Images/xperience-icon.svg') no-repeat;
+					background-size: cover;
+
+					&:before {
+						content: none;
+					}
+				}
 			}
 
 			a {
@@ -222,17 +248,6 @@
 						overflow: hidden;
 					}
 				}
-			}
-
-			// Home icon
-			&:after {
-				content: @icon-home;
-				font-family: @icon-font-name;
-				display: block;
-				font-size: 7em;
-				position: absolute;
-				left: 2 * @base-unit;
-				bottom: 2 * @base-unit;
 			}
 		}
 
@@ -283,7 +298,6 @@
 			}
 		}
 	}
-
 	// Dead tiles
 	.tile-dead {
 		text-align: center;
@@ -310,7 +324,6 @@
 			border-bottom: none;
 		}
 	}
-
 	// Empty tile with plus sign to add a new app
 	.tile-btn-add {
 		border: @empty-tile-border-width dashed @color-gray-100;
@@ -323,14 +336,12 @@
 		width: @tile-width;
 		height: @tile-height;
 	}
-
 	// Both Live & Dead tiles
 	.tile-dead, .tile-live {
 		height: 100%;
 		width: @tile-width;
 		float: left;
 	}
-
 	// Live tiles
 	.tile-live {
 		h3 {
@@ -382,7 +393,6 @@
 	.tile-empty {
 		.empty .tile;
 	}
-
 	// Single object tile
 	.tile-single-object {
 		.tile-live;
@@ -542,34 +552,34 @@
 
 // Edit mode button
 .context-menu {
-    .btn-primary {
-        border-radius: 0;
-    }
+	.btn-primary {
+		border-radius: 0;
+	}
 
-    .btn-edit {
-        background: @color-white;
-        color: @color-gray-130;
-        border-radius: 0;
-    }
+	.btn-edit {
+		background: @color-white;
+		color: @color-gray-130;
+		border-radius: 0;
+	}
 }
 
 @media screen and (max-height: 750px) {
-    .dashboard {
-        padding-top: 2 * @base-unit;
-    }
+	.dashboard {
+		padding-top: 2 * @base-unit;
+	}
 }
 
 @media screen and (max-width: @screen-lg) {
-    .dashboard {
-        padding-left: @base-unit;
-    }
+	.dashboard {
+		padding-left: @base-unit;
+	}
 }
 
 // License owner info
 .license-owner-info {
-    background-color: @color-gray-140;
-    position: fixed;
-    bottom: (@base-unit / 2);
-    left: (@base-unit / 2);
-    padding: @padding-small-vertical @padding-small-horizontal;
+	background-color: @color-gray-140;
+	position: fixed;
+	bottom: (@base-unit / 2);
+	left: (@base-unit / 2);
+	padding: @padding-small-vertical @padding-small-horizontal;
 }

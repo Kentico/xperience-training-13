@@ -9,6 +9,11 @@ using CMS.UIControls;
 [EditedObject("cms.documenttype", "objectid")]
 public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edit_Features : GlobalAdminPage
 {
+    private const string REFRESH_PARENT_SCRIPT = @"
+var currentParentUrl = window.parent.location.href.replace(/&saved=1/g, '').replace(/&tabname=([^&]*)/g, '');
+window.parent.location.href = currentParentUrl + '&tabname=features&saved=1'";
+
+
     public DocumentTypeInfo DocumentType
     {
         get
@@ -43,7 +48,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
         chbUrl.Checked = DocumentType.ClassHasURL;
         chbMetadata.Checked = DocumentType.ClassHasMetadata;
 
-        if(ExistsPageCreatedOnPageType())
+        if (ExistsPageCreatedOnPageType())
         {
             chbUrl.Enabled = false;
             lblHasURL.Enabled = false;
@@ -57,14 +62,21 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
             }
         }
     }
-   
+
 
     private void Form_OnBeforeSave(object sender, EventArgs e)
     {
+        var needsFullRefresh = DocumentType.ClassHasURL != chbUrl.Checked;
+
         DocumentType.ClassUsesPageBuilder = chbPageBuilder.Checked;
         DocumentType.ClassIsNavigationItem = chbNavigationItem.Checked;
         DocumentType.ClassHasURL = chbUrl.Checked;
         DocumentType.ClassHasMetadata = chbMetadata.Checked;
+
+        if (needsFullRefresh)
+        {
+            ScriptHelper.RegisterStartupScript(Page, typeof(string), "RefreshParent", ScriptHelper.GetScript(REFRESH_PARENT_SCRIPT));
+        }
     }
 
 

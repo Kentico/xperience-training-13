@@ -31,60 +31,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_General
     protected global::System.Web.UI.WebControls.Panel pnlContent;
 
     /// <summary>
-    /// pnlUIDesign control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.UIControls.UIPlaceHolder pnlUIDesign;
-
-    /// <summary>
-    /// pnlDesign control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlDesign;
-
-    /// <summary>
-    /// headDesign control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedHeading headDesign;
-
-    /// <summary>
-    /// lblCssStyle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblCssStyle;
-
-    /// <summary>
-    /// chkCssStyle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkCssStyle;
-
-    /// <summary>
-    /// ctrlSiteSelectStyleSheet control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSFormControls_SelectCssStylesheet ctrlSiteSelectStyleSheet;
-
-    /// <summary>
     /// pnlUIOther control.
     /// </summary>
     /// <remarks>
@@ -128,6 +74,24 @@ public partial class CMSModules_Content_CMSDesk_Properties_General
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblName;
+
+    /// <summary>
+    /// lblPublishedTitle control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblPublishedTitle;
+
+    /// <summary>
+    /// lblPublished control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblPublished;
 
     /// <summary>
     /// lblTypeTitle control.
@@ -220,49 +184,184 @@ public partial class CMSModules_Content_CMSDesk_Properties_General
     protected global::System.Web.UI.WebControls.Label lblLastModified;
 
     /// <summary>
-    /// plcRating control.
+    /// lblCultureTitle control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcRating;
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblCultureTitle;
 
     /// <summary>
-    /// lblContentRating control.
+    /// lblCulture control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblContentRating;
+    protected global::System.Web.UI.WebControls.Label lblCulture;
 
     /// <summary>
-    /// ratingControl control.
+    /// pnlUISearch control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMSAdminControls_ContentRating_Controls_Stars ratingControl;
+    protected global::CMS.UIControls.UIPlaceHolder pnlUISearch;
 
     /// <summary>
-    /// lblContentRatingResult control.
+    /// pnlSearch control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblContentRatingResult;
+    protected global::System.Web.UI.WebControls.Panel pnlSearch;
 
     /// <summary>
-    /// btnResetRating control.
+    /// headSearch control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnResetRating;
+    protected global::CMS.Base.Web.UI.LocalizedHeading headSearch;
+
+    /// <summary>
+    /// lblExcludeFromSearch control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblExcludeFromSearch;
+
+    /// <summary>
+    /// chkExcludeFromSearch control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSCheckBox chkExcludeFromSearch;
+
+    /// <summary>
+    /// pnlUIOwner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.UIControls.UIPlaceHolder pnlUIOwner;
+
+    /// <summary>
+    /// pnlOwner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlOwner;
+
+    /// <summary>
+    /// headOwner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedHeading headOwner;
+
+    /// <summary>
+    /// lblOwnerTitle control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblOwnerTitle;
+
+    /// <summary>
+    /// lblOwner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblOwner;
+
+    /// <summary>
+    /// plcUsrOwner control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcUsrOwner;
+
+    /// <summary>
+    /// pnlSwitch control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlSwitch;
+
+    /// <summary>
+    /// icAdvanced control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon icAdvanced;
+
+    /// <summary>
+    /// lnkAdvanced control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLinkButton lnkAdvanced;
+
+    /// <summary>
+    /// plcAdvanced control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcAdvanced;
+
+    /// <summary>
+    /// pnlUIDesignation control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.UIControls.UIPlaceHolder pnlUIDesignation;
+
+    /// <summary>
+    /// pnlDesignation control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlDesignation;
+
+    /// <summary>
+    /// headDesignation control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedHeading headDesignation;
 
     /// <summary>
     /// lblNodeIDTitle control.
@@ -337,186 +436,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_General
     protected global::System.Web.UI.WebControls.Label lblDocGUID;
 
     /// <summary>
-    /// lblAliasPathTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblAliasPathTitle;
-
-    /// <summary>
-    /// lblAliasPath control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblAliasPath;
-
-    /// <summary>
-    /// lblCultureTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblCultureTitle;
-
-    /// <summary>
-    /// lblCulture control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblCulture;
-
-    /// <summary>
-    /// plcLive control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcLive;
-
-    /// <summary>
-    /// lblLiveURLTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblLiveURLTitle;
-
-    /// <summary>
-    /// lnkLiveURL control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkLiveURL;
-
-    /// <summary>
-    /// plcPreview control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcPreview;
-
-    /// <summary>
-    /// lblPreviewURLTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblPreviewURLTitle;
-
-    /// <summary>
-    /// pnlUpdatePreviewUrl control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdatePreviewUrl;
-
-    /// <summary>
-    /// lnkPreviewURL control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkPreviewURL;
-
-    /// <summary>
-    /// btnResetPreviewGuid control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSAccessibleButton btnResetPreviewGuid;
-
-    /// <summary>
-    /// lblPublishedTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblPublishedTitle;
-
-    /// <summary>
-    /// lblPublished control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblPublished;
-
-    /// <summary>
-    /// pnlUIOwner control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.UIControls.UIPlaceHolder pnlUIOwner;
-
-    /// <summary>
-    /// pnlOwner control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlOwner;
-
-    /// <summary>
-    /// headOwner control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedHeading headOwner;
-
-    /// <summary>
-    /// lblOwnerTitle control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblOwnerTitle;
-
-    /// <summary>
-    /// lblOwner control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblOwner;
-
-    /// <summary>
-    /// plcUsrOwner control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcUsrOwner;
-
-    /// <summary>
     /// pnlUIAlias control.
     /// </summary>
     /// <remarks>
@@ -542,6 +461,24 @@ public partial class CMSModules_Content_CMSDesk_Properties_General
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headAlias;
+
+    /// <summary>
+    /// lblAliasPathTitle control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblAliasPathTitle;
+
+    /// <summary>
+    /// lblAliasPath control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblAliasPath;
 
     /// <summary>
     /// lblAlias control.

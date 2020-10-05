@@ -421,14 +421,14 @@ public partial class CMSModules_Staging_Tools_Objects_Tasks : CMSStagingTasksPag
 
         using (new CMSActionContext() { AllowAsyncActions = false })
         {
-            var tasks = TaskInfoProvider.GetTasks().Where(where).TypedResult;
+            var tasks = TaskInfo.Provider.Get().Where(where).TypedResult;
             foreach (var task in tasks)
             {
                 task.Generalized.StoreSettings();
                 task.Generalized.LogSynchronization = SynchronizationTypeEnum.LogSynchronization;
                 task.Generalized.LogEvents = true;
 
-                TaskInfoProvider.SetTaskInfo(task);
+                TaskInfo.Provider.Set(task);
 
                 task.Generalized.RestoreSettings();
             }

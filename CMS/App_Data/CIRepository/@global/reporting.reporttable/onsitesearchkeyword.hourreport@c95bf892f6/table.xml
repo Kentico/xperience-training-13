@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>6d253012-50ed-40b9-a8ed-8a2715d6f32e</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'hour');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'hour');
+SELECT TOP 100
+StatisticsObjectName  AS '{$reports_onsitesearchkeyword.name_header$}',
+ SUM(HitsCount) AS '{$reports_onsitesearchkeyword.hits_header$}',
+ CAST(CAST(100*CAST(SUM(HitsCount) AS float)/NULLIF((
+  SELECT SUM(HitsCount)
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID=@CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+  AND (HitsEndTime <= @ToDate)), 0) AS decimal(3)) AS VARCHAR)+'%' AS '{$reports_onsitesearchkeyword.percent_header$}'
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_HourHits ON Analytics_Statistics.StatisticsID = Analytics_HourHits.HitsStatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+  GROUP BY StatisticsObjectName
+  ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>onsitesearchkeyword.hourreport</CodeName>
+    <GUID>9b8bb352-7504-4d14-94f3-3f2b122435e3</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>true</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

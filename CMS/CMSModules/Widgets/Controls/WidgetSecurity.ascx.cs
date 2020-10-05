@@ -170,12 +170,11 @@ public partial class CMSModules_Widgets_Controls_WidgetSecurity : CMSAdminEditCo
                 parameters.Add("@WidgetID", WidgetID);
                 parameters.Add("@SiteID", siteId);
 
-                // Do not show community roles
-                string where = "RoleGroupID IS NULL";
+                string where = null;
 
                 if (permissionArray != null)
                 {
-                    where += " AND PermissionName IN (";
+                    where = "PermissionName IN (";
                     foreach (string permission in permissionArray)
                     {
                         where += "'" + permission + "',";

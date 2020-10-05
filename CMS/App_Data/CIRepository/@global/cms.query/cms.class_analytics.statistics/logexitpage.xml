@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>analytics.statistics</CodeName>
+    <GUID>75b95c91-bc3e-45a7-b40d-27581d8b67bc</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>843ace51-9c16-4148-af62-402104631b04</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>logexitpage</QueryName>
+  <QueryRequiresTransaction>True</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+UPDATE [Analytics_ExitPages] SET [ExitPageUrl] = @Url, [ExitPageLastModified] = @Date, [ExitPageSiteID] = @SiteID, [ExitPageCulture] = @Culture
+WHERE [ExitPageSessionIdentifier] = @SessionID
+
+IF (@@ROWCOUNT = 0)
+BEGIN
+  INSERT INTO [Analytics_ExitPages] ([ExitPageSessionIdentifier], [ExitPageUrl], [ExitPageLastModified], [ExitPageSiteID], [ExitPageCulture]) 
+  VALUES (@SessionID, @Url, @Date, @SiteID, @Culture)
+END
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

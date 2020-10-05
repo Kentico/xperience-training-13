@@ -625,11 +625,6 @@ select.change(function(){{
                                 disabledRoles.Append(role);
                             }
 
-                            if (ValidationHelper.GetInteger(drAclItem["RoleGroupID"], 0) > 0)
-                            {
-                                operName += " " + GetString("security.grouprole");
-                            }
-
                             // Add global postfix
                             if (ValidationHelper.GetInteger(drAclItem["SiteID"], 0) == 0)
                             {
@@ -712,7 +707,7 @@ select.change(function(){{
         }
 
         var orderBy = new[] { "OperatorName", "Operator", "Inherited DESC" };
-        var columns = new[] { "Operator", "ACLOwnerNodeID", "OperatorName", "OperatorFullName", "Allowed", "Denied", "RoleGroupID", "RoleID", "SiteID", "CASE WHEN (ACLOwnerNodeID = " + Node.NodeID + ") THEN 0 ELSE 1 END AS Inherited" };
+        var columns = new[] { "Operator", "ACLOwnerNodeID", "OperatorName", "OperatorFullName", "Allowed", "Denied", "RoleID", "SiteID", "CASE WHEN (ACLOwnerNodeID = " + Node.NodeID + ") THEN 0 ELSE 1 END AS Inherited" };
 
         string where = GetWhereCondition();
         dsAclItems = AclItemInfoProvider.GetACLItemsAndOperators(Node.NodeID)

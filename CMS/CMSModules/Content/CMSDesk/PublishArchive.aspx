@@ -32,7 +32,7 @@
                 <div class="keep-white-space-fixed">
                     <cms:LocalizedButton ID="btnOk" runat="server" ButtonStyle="Primary" OnClick="btnOK_Click"
                         ResourceString="general.yes" EnableViewState="false" />
-                    <cms:LocalizedButton ID="btnNo" runat="server" ButtonStyle="Primary" OnClick="btnNo_Click"
+                    <cms:LocalizedButton ID="btnNo" runat="server" ButtonStyle="Default" OnClick="btnNo_Click"
                         ResourceString="general.no" EnableViewState="false" />
                 </div>
             </div>

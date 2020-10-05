@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSAdminControls_UI_Header {
-    
+public partial class CMSAdminControls_UI_Header
+{
+
     /// <summary>
     /// plcToggle control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcToggle;
-    
+
     /// <summary>
     /// lnkDashboard control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHyperlink lnkDashboard;
-    
+
     /// <summary>
     /// plcSiteSelector control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcSiteSelector;
-    
+
     /// <summary>
     /// siteSelector control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Sites_SiteSelector siteSelector;
-    
+
     /// <summary>
     /// plcStagingTaskGroupContainer control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcStagingTaskGroupContainer;
-    
+
     /// <summary>
     /// plcStagingTaskGroup control.
     /// </summary>
@@ -64,16 +65,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcStagingTaskGroup;
-    
-    /// <summary>
-    /// plcSupportChat control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcSupportChat;
-    
+
     /// <summary>
     /// contextHelp control.
     /// </summary>
@@ -82,7 +74,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_ContextHelp contextHelp;
-    
+
     /// <summary>
     /// userMenu control.
     /// </summary>
@@ -91,7 +83,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_UserMenu userMenu;
-    
+
     /// <summary>
     /// pnlTechPreview control.
     /// </summary>
@@ -100,7 +92,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTechPreview;
-    
+
     /// <summary>
     /// pnlTrial control.
     /// </summary>
@@ -109,7 +101,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTrial;
-    
+
     /// <summary>
     /// ltlText control.
     /// </summary>
@@ -118,7 +110,43 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlText;
-    
+
+    /// <summary>
+    /// pnlSubscriptionLicencesWarning control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlSubscriptionLicencesWarning;
+
+    /// <summary>
+    /// ltlSubscriptionLicenceWarning control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Literal ltlSubscriptionLicenceWarning;
+
+    /// <summary>
+    /// pnlSubscriptionLicencesError control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlSubscriptionLicencesError;
+
+    /// <summary>
+    /// ltlSubscriptionLicenceError control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Literal ltlSubscriptionLicenceError;
+
     /// <summary>
     /// pnlLicenseLimitations control.
     /// </summary>
@@ -127,7 +155,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlLicenseLimitations;
-    
+
     /// <summary>
     /// ltlLicenseLimitations control.
     /// </summary>
@@ -136,7 +164,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlLicenseLimitations;
-    
+
     /// <summary>
     /// pnlPwdExp control.
     /// </summary>
@@ -145,7 +173,7 @@ public partial class CMSAdminControls_UI_Header {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlPwdExp;
-    
+
     /// <summary>
     /// pwdExpiration control.
     /// </summary>

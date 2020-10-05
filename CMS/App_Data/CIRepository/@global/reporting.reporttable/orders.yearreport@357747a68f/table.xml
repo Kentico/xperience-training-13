@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>5f0ffe41-93ba-4e5e-b2ed-24eeb431da44</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+IF @FromDate <= @ToDate 
+BEGIN
+/* Trims the value of @FromDate to be able to display years in the table. */
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+/* Selects the number of orders created in the given years. */
+SELECT 
+   DATEPART(YEAR,[Date]) AS '{$ecommerce.report_year$}', 
+   COUNT(OrderDate) AS '{$ecommerce.report_numberoforders$}'  
+FROM
+   -- returns a column of dates, each year in a new row
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS Dates
+   LEFT JOIN COM_Order  
+      ON ([Date] <= OrderDate  AND  DATEADD(YEAR,1,[Date]) > OrderDate) 
+      AND OrderSiteID = @CMSContextCurrentSiteID
+GROUP BY [Date]
+ORDER BY [Date] DESC
+END
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Orders.YearReport</CodeName>
+    <GUID>bdb0ff62-087d-4e2c-a187-e5dfbfe1eeb9</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

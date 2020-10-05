@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.WebFarmTask</CodeName>
+    <GUID>44576ef8-a9b8-44e6-ba9d-4643f7de17cf</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>8b336e9f-5c1e-4bf7-9690-200bbf92d6f0</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>DeleteMemoryTasks</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+UPDATE STATISTICS CMS_WebFarmTask PK_CMS_WebFarmTask
+
+DELETE WFST
+FROM CMS_WebFarmServerTask WFST
+INNER JOIN CMS_WebFarmTask WFT WITH (NOLOCK)
+	ON WFT.TaskID = WFST.TaskID
+WHERE 
+	WFST.[ServerID] = @ServerID
+	AND WFT.[TaskIsMemory] = 1
+	AND WFT.[TaskCreated] < @TaskCreated
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

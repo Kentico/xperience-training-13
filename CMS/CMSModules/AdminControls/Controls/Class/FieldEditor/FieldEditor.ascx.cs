@@ -3380,29 +3380,10 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_FieldEd
                 {
                     return GetString("TemplateDesigner.ErrorExistingColumnInJoinedTable");
                 }
-
-                // Check whether current column is unique in tables used to create views - applied only for system tables
-                if ((Mode == FieldEditorModeEnum.SystemTable) && ColumnExistsInUserView(fieldInfo.Name))
-                {
-                    return GetString("TemplateDesigner.ErrorExistingColumnInJoinedTable");
-                }
             }
         }
 
         return null;
-    }
-
-
-    private bool ColumnExistsInUserView(string columnName)
-    {
-        if (String.Equals(ClassName, PredefinedObjectType.USER, StringComparison.OrdinalIgnoreCase) 
-            || String.Equals(ClassName, PredefinedObjectType.USERSETTINGS, StringComparison.OrdinalIgnoreCase))
-        {
-            TableManager tableManager = new TableManager(null);
-            return tableManager.ColumnExistsInView("View_Community_Member", columnName);
-        }
-
-        return false;
     }
 
 

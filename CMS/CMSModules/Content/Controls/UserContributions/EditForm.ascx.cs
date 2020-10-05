@@ -19,7 +19,6 @@ using CMS.LicenseProvider;
 using CMS.Localization;
 using CMS.Membership;
 using CMS.PortalEngine;
-using CMS.Protection;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
@@ -521,7 +520,6 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
         DocumentManager.LocalMessagesPlaceHolder = formElem.MessagesPlaceHolder;
 
         DocumentManager.OnAfterAction += DocumentManager_OnAfterAction;
-        DocumentManager.OnValidateData += DocumentManager_OnValidateData;
         DocumentManager.OnLoadData += DocumentManager_OnLoadData;
 
         formElem.StopProcessing = true;
@@ -967,38 +965,11 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
     }
 
 
-    void DocumentManager_OnValidateData(object sender, DocumentManagerEventArgs e)
-    {
-        // Additional validation
-        if (e.IsValid)
-        {
-            e.IsValid = !IsBannedIP();
-            if (!e.IsValid)
-            {
-                e.ErrorMessage = GetString("General.BannedIP");
-            }
-        }
-    }
-
-
     void DocumentManager_OnAfterAction(object sender, DocumentManagerEventArgs e)
     {
         switch (e.ActionName)
         {
             case ComponentEvents.SAVE:
-                // Clear cache if current document is blogpost or blog
-                if (ci != null)
-                {
-                    if ((ci.ClassName.ToLowerCSafe() == "cms.blogpost") || (ci.ClassName.ToLowerCSafe() == "cms.blog"))
-                    {
-                        // Clear cache
-                        if (PortalContext.CurrentPageManager != null)
-                        {
-                            PortalContext.CurrentPageManager.ClearCache();
-                        }
-                    }
-                }
-
                 // Set the edit mode
                 if (Node != null)
                 {
@@ -1085,11 +1056,6 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
     /// </summary>
     protected void btnOK_Click(object sender, EventArgs e)
     {
-        if (IsBannedIP())
-        {
-            return;
-        }
-
         Action = "newculture";
         CopyDefaultDataFromDocumentID = radCopy.Checked ? ValidationHelper.GetInteger(lstCultures.SelectedValue, 0) : 0;
         DocumentManager.ClearNode();
@@ -1103,11 +1069,6 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
     /// </summary>
     protected void btnYes_Click(object sender, EventArgs e)
     {
-        if (IsBannedIP())
-        {
-            return;
-        }
-
         // Prepare the where condition
         string where = "NodeID = " + NodeID;
 
@@ -1209,11 +1170,6 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
     /// </summary>
     protected void btnDelete_Click(object sender, EventArgs e)
     {
-        if (IsBannedIP())
-        {
-            return;
-        }
-
         Action = "delete";
         ReloadData(true);
     }
@@ -1298,22 +1254,6 @@ public partial class CMSModules_Content_Controls_UserContributions_EditForm : CM
         }
 
         return isAuthorized;
-    }
-
-
-    /// <summary>
-    /// Check if user IP is banned.
-    /// </summary>
-    private bool IsBannedIP()
-    {
-        // Check banned IP
-        if (!BannedIPInfoProvider.IsAllowed(SiteContext.CurrentSiteName, BanControlEnum.AllNonComplete))
-        {
-            AddAlert(GetString("General.BannedIP"));
-            return true;
-        }
-
-        return false;
     }
 
 

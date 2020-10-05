@@ -13,7 +13,11 @@ namespace Business.Repositories
         public override Models.SocialLink MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Models.SocialLink dto)
         {
             dto.Url = page?.Url;
-            dto.IconServerPath = page?.Fields?.Icon?.GetPath();
+
+            if (page?.Fields?.Icon != null)
+            {
+                dto.IconUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(page?.Fields?.Icon);
+            }
 
             return dto;
         }

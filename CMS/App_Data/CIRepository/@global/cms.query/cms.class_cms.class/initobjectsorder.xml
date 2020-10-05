@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.class</CodeName>
+    <GUID>d7e91104-201b-4b11-9550-e93ad9a4d81f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>61b900c9-14bd-4e85-8023-7c5d435f1b3c</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>InitObjectsOrder</QueryName>
+  <QueryRequiresTransaction>True</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+WITH To_Be_Ordered
+AS
+(
+SELECT [##ORDERCOLUMN##], ROW_NUMBER() OVER (ORDER BY ##ORDERBYDEF##) AS CMS_RN FROM ##TABLESELECT## WHERE ##WHERE##
+)
+UPDATE To_Be_Ordered SET [##ORDERCOLUMN##] = CMS_RN
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>analytics.statistics</CodeName>
+    <GUID>75b95c91-bc3e-45a7-b40d-27581d8b67bc</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>ac926217-6c7e-4a18-ab63-b4fd67bd2b69</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>removeanalyticsdata</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+
+    DECLARE @Year1Start datetime;
+    DECLARE @Year1End datetime;
+    DECLARE @Year2Start datetime;
+    DECLARE @Year2End datetime;
+    
+    DECLARE @Week1Start datetime;
+    DECLARE @Week1End datetime;
+    DECLARE @Week2Start datetime;
+    DECLARE @Week2End datetime;
+    
+    DECLARE @Month1Start datetime;
+    DECLARE @Month1End datetime;
+    DECLARE @Month2Start datetime;
+    DECLARE @Month2End datetime;
+    		
+	-- Trim years
+	SET @Year1Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@From ,'year');
+	SET @Year1End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@From ,'year');
+	SET @Year2Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@To ,'year');
+	SET @Year2End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@To ,'year');	
+	
+	-- Trim months
+	SET @Month1Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@From ,'month');
+	SET @Month1End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@From ,'month');
+	SET @Month2Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@To ,'month');
+	SET @Month2End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@To ,'month');	
+	
+	-- Trim week
+	SET @Week1Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@From ,'week');
+	SET @Week1End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@From ,'week');
+	SET @Week2Start = {%DatabaseSchema%}.Func_Analytics_DateTrim (@To ,'week');
+	SET @Week2End = {%DatabaseSchema%}.Func_Analytics_EndDateTrim (@To ,'week');	
+
+
+SET NOCOUNT ON;
+	DECLARE @HitsStatID int;
+	DECLARE @Cnt int;
+	DECLARE @CntL int;
+	DECLARE @CntM int;
+	DECLARE @CntR int;
+       	DECLARE @ValL int;
+	DECLARE @ValM int;
+	DECLARE @ValR int;
+	DECLARE @hitsID int;
+	DECLARE @hitsCount int;
+        DECLARE @hitsValue int;
+	DECLARE mycursor CURSOR FOR SELECT HitsStatisticsID FROM Analytics_Statistics, Analytics_DayHits
+		  WHERE (StatisticsSiteID=@SiteID OR @SiteID = 0) AND  (##WHERE##) AND
+		  StatisticsID=HitsStatisticsID AND HitsStartTime >= @From AND
+		  @To >= HitsEndTime
+	OPEN mycursor;
+	FETCH NEXT FROM mycursor INTO @HitsStatID
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+
+-- WEEKS
+    IF (@Week1End < @To)
+    BEGIN
+        SET @CntL = 0;
+		SELECT @CntL = SUM(HitsCount),@ValL = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##) AND StatisticsID=HitsStatisticsID AND
+		              HitsStartTime >= @From AND @Week1End >= HitsEndTime AND StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_WeekHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Week1Start AND HitsEndTime<=@Week1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_WeekHits] SET HitsCount=(@hitsCount-@CntL), HitsValue=(@hitsValue-@ValL) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Week2Start > @From)
+    BEGIN
+        SET @CntR = 0;
+		SELECT @CntR = SUM(HitsCount),@ValR = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##) AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @Week2Start AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_WeekHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Week2Start AND HitsEndTime<=@Week2End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_WeekHits] SET HitsCount=(@hitsCount-@CntR),HitsValue=(@hitsValue-@ValR) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Week1Start <= @From AND @To <= @Week1End)
+    BEGIN
+        SET @CntM = 0;
+		SELECT @CntM = SUM(HitsCount),@ValM = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @From AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue  FROM [Analytics_WeekHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Week1Start AND HitsEndTime<=@Week1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_WeekHits] SET HitsCount=(@hitsCount-@CntM),HitsValue=(@hitsValue-@ValM) WHERE HitsID=@hitsID;
+		END;
+    END;
+-- MONTHS
+    IF (@Month1End < @To)
+    BEGIN
+        SET @CntL = 0;
+		SELECT @CntL = SUM(HitsCount),@ValL = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @From AND @Month1End >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_MonthHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Month1Start AND HitsEndTime<=@Month1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_MonthHits] SET HitsCount=(@hitsCount-@CntL),HitsValue=(@hitsValue-@ValL) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Month2Start > @From)
+    BEGIN
+        SET @CntR = 0;
+		SELECT @CntR = SUM(HitsCount),@ValR = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @Month2Start AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_MonthHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Month2Start AND HitsEndTime<=@Month2End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_MonthHits] SET HitsCount=(@hitsCount-@CntR),HitsValue=(@hitsValue-@ValR) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Month1Start <= @From AND @To <= @Month1End)
+    BEGIN
+        SET @CntM = 0;
+		SELECT @CntM = SUM(HitsCount),@ValM = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @From AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_MonthHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Month1Start AND HitsEndTime<=@Month1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_MonthHits] SET HitsCount=(@hitsCount-@CntM),HitsValue=(@hitsValue-@ValM) WHERE HitsID=@hitsID;
+		END;
+    END;
+-- YEARS
+    IF (@Year1End < @To)
+    BEGIN
+        SET @CntL = 0;
+		SELECT @CntL = SUM(HitsCount),@ValL = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @From AND @Year1End >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_YearHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Year1Start AND HitsEndTime<=@Year1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_YearHits] SET HitsCount=(@hitsCount-@CntL),HitsValue=(@hitsValue-@ValL) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Year2Start > @From)
+    BEGIN
+        SET @CntR = 0;
+		SELECT @CntR = SUM(HitsCount),@ValR = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @Year2Start AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_YearHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Year2Start AND HitsEndTime<=@Year2End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_YearHits] SET HitsCount=(@hitsCount-@CntR),HitsValue=(@hitsValue-@ValR) WHERE HitsID=@hitsID;
+		END;
+    END
+    IF (@Year1Start <= @From AND @To <= @Year1End)
+    BEGIN
+        SET @CntM = 0;
+		SELECT @CntM = SUM(HitsCount),@ValM = SUM(HitsValue) FROM Analytics_Statistics, Analytics_DayHits
+			  WHERE (##WHERE##)  AND StatisticsID=HitsStatisticsID AND
+              HitsStartTime >= @From AND @To >= HitsEndTime AND
+              StatisticsID = @HitsStatID
+		GROUP BY StatisticsID, StatisticsObjectName, StatisticsObjectID, StatisticsObjectCulture, HitsStatisticsID
+		SET @hitsID = 0;
+		SELECT @hitsID = HitsID, @hitsCount = HitsCount,@hitsValue = HitsValue FROM [Analytics_YearHits]
+		WHERE HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Year1Start AND HitsEndTime<=@Year1End;
+		IF @hitsID > 0
+		BEGIN
+			UPDATE [Analytics_YearHits] SET HitsCount=(@hitsCount-@CntM),HitsValue=(@hitsValue-@ValM) WHERE HitsID=@hitsID;
+		END;
+    END;
+	    DELETE FROM [Analytics_HourHits] WHERE 
+	      HitsStatisticsID=@HitsStatID AND HitsStartTime>=@From AND HitsEndTime<=@To;
+	    DELETE FROM [Analytics_DayHits] WHERE 
+	      HitsStatisticsID=@HitsStatID AND HitsStartTime>=@From AND HitsEndTime<=@To;
+	    IF (@From <= @Week1End AND @Week2Start <= @To)
+	    BEGIN
+	    DELETE FROM [Analytics_WeekHits] WHERE 
+	      HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Week1End AND HitsEndTime<=@Week2Start;
+	    END;
+	    IF (@From <= @Month1End AND @Month2Start <= @To)
+	    BEGIN
+	    DELETE FROM [Analytics_MonthHits] WHERE 
+	      HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Month1End AND HitsEndTime<=@Month2Start;
+	    END;    
+	    IF (@From <= @Year1End AND @Year2Start <= @To)
+	    BEGIN
+	    DELETE FROM [Analytics_YearHits] WHERE 
+	      HitsStatisticsID=@HitsStatID AND HitsStartTime>=@Year1End AND HitsEndTime<=@Year2Start;
+	    END;    
+		FETCH NEXT FROM mycursor INTO @HitsStatID
+      END
+	DEALLOCATE mycursor;
+	-- Delete zero stats
+	DELETE FROM [Analytics_HourHits] WHERE HitsCount <= 0
+	DELETE FROM [Analytics_DayHits] WHERE HitsCount <= 0
+	DELETE FROM [Analytics_MonthHits] WHERE HitsCount <= 0
+	DELETE FROM [Analytics_WeekHits] WHERE HitsCount <= 0
+	DELETE FROM [Analytics_YearHits] WHERE HitsCount <= 0
+	DECLARE @stat TABLE (
+	  StatisticsID int
+	)
+	-- Get stats ID with no stats
+	INSERT INTO @stat SELECT StatisticsID FROM (
+	(SELECT StatisticsID FROM [Analytics_Statistics] WHERE StatisticsID NOT IN (SELECT HitsStatisticsID FROM [Analytics_HourHits])) UNION
+	(SELECT StatisticsID FROM [Analytics_Statistics] WHERE StatisticsID NOT IN (SELECT HitsStatisticsID FROM [Analytics_DayHits])) UNION
+	(SELECT StatisticsID FROM [Analytics_Statistics] WHERE StatisticsID NOT IN (SELECT HitsStatisticsID FROM [Analytics_WeekHits])) UNION
+	(SELECT StatisticsID FROM [Analytics_Statistics] WHERE StatisticsID NOT IN (SELECT HitsStatisticsID FROM [Analytics_MonthHits])) UNION
+	(SELECT StatisticsID FROM [Analytics_Statistics] WHERE StatisticsID NOT IN (SELECT HitsStatisticsID FROM [Analytics_YearHits]))
+	) as tab
+	-- Remove dependencies
+	DELETE FROM [Analytics_HourHits] WHERE HitsStatisticsID IN (SELECT StatisticsID FROM @stat)
+	DELETE FROM [Analytics_DayHits] WHERE HitsStatisticsID IN (SELECT StatisticsID FROM @stat)
+	DELETE FROM [Analytics_WeekHits] WHERE HitsStatisticsID IN (SELECT StatisticsID FROM @stat)
+	DELETE FROM [Analytics_MonthHits] WHERE HitsStatisticsID IN (SELECT StatisticsID FROM @stat)
+	DELETE FROM [Analytics_YearHits] WHERE HitsStatisticsID IN (SELECT StatisticsID FROM @stat)
+	-- Remove master record
+	DELETE FROM [Analytics_Statistics] WHERE StatisticsID IN (SELECT StatisticsID FROM @stat)
+
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

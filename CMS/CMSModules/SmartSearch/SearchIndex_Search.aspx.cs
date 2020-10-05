@@ -55,7 +55,7 @@ public partial class CMSModules_SmartSearch_SearchIndex_Search : GlobalAdminPage
             {
                 // Get current search mode from query string
                 string searchMode = QueryHelper.GetString("searchmode", "");
-                SearchModeEnum searchModeEnum = searchMode.ToEnum<SearchModeEnum>();
+                SearchModeEnum searchModeEnum = EnumStringRepresentationExtensions.ToEnum<SearchModeEnum>(searchMode);
 
                 // Check whether index info exists
                 if (sii != null)

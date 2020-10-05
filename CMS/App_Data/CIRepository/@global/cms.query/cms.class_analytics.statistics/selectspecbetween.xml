@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>analytics.statistics</CodeName>
+    <GUID>75b95c91-bc3e-45a7-b40d-27581d8b67bc</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>2ac9b98b-9c1e-4830-878b-211531bcfc37</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectspecbetween</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##COLUMNS## FROM Analytics_Statistics, ##HITSTABLE## WHERE StatisticsSiteID=@SiteID 
+AND StatisticsCode LIKE @CodeName 
+AND StatisticsID=HitsStatisticsID 
+AND HitsStartTime >= @StartTime 
+AND HitsEndTime <= @EndTime
+AND (StatisticsObjectCulture IS NULL OR StatisticsObjectCulture = '' OR StatisticsObjectCulture = @Culture OR @Culture = '' OR @Culture IS NULL)
+AND (##WHERE##)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

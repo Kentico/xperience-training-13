@@ -596,8 +596,8 @@ function Edit_{0}(attachmentGUID, formGUID, versionHistoryID, parentId, hash, im
 }}",
             ClientID,
             (((Node != null) ? String.Format("else{{ form = '&siteid=' + {0}; }}", Node.NodeSiteID) : string.Empty)),
-            "'" + ResolveUrl((IsLiveSite ? "~/CMSFormControls/LiveSelectors/ImageEditor.aspx" : CONTENT_FOLDER + "CMSDesk/Edit/ImageEditor.aspx") + "?attachmentGUID=' + attachmentGUID + '&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&refresh=1&hash=' + hash"),
-            "'" + ApplicationUrlHelper.ResolveDialogUrl(String.Format("{0}?attachmentGUID=' + attachmentGUID + '&versionHistoryID=' + versionHistoryID + form + '&clientid={1}&refresh=1&hash=' + hash", (IsLiveSite ? CONTENT_FOLDER + "Attachments/CMSPages/MetaDataEditor.aspx" : CONTENT_FOLDER + "Attachments/Dialogs/MetaDataEditor.aspx"), ClientID))
+            "'" + ResolveUrl((CONTENT_FOLDER + "CMSDesk/Edit/ImageEditor.aspx") + "?attachmentGUID=' + attachmentGUID + '&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&refresh=1&hash=' + hash"),
+            "'" + ApplicationUrlHelper.ResolveDialogUrl(String.Format("{0}?attachmentGUID=' + attachmentGUID + '&versionHistoryID=' + versionHistoryID + form + '&clientid={1}&refresh=1&hash=' + hash", CONTENT_FOLDER + "Attachments/Dialogs/MetaDataEditor.aspx", ClientID))
         ));
 
         // Register script for editing attachment

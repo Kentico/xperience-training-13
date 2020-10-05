@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>5b39ef5b-5102-4c79-896b-666a9f5e7978</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Selects top customers of the current site by number of orders. */   
+SELECT TOP (@TopCustomers) 
+   CustomerFirstName AS '{$general.firstname$}',
+   CustomerLastName AS '{$general.lastname$}',
+   CustomerCompany AS '{$Company$}',
+   CustomerEmail AS '{$unigrid.userlist.columns.email$}',        
+   ISNULL(COUNT(OrderID),0) AS '{$ecommerce.report_numberoforders$}'
+FROM 
+   COM_Customer 
+   LEFT JOIN COM_Order 
+      ON CustomerID = OrderCustomerID
+      AND OrderSiteID = @CMSContextCurrentSiteID
+      AND OrderIsPaid = 1
+WHERE 
+   (CustomerID IN (SELECT OrderCustomerID FROM COM_Order WHERE OrderSiteID=@CMSContextCurrentSiteID))
+   AND (@FirstName IS NULL OR @FirstName = '' OR CustomerFirstName LIKE ('%'+@FirstName+'%'))
+   AND (@LastName IS NULL OR @LastName = '' OR CustomerLastName LIKE ('%'+@LastName+'%'))
+   AND (@Company IS NULL OR @Company = '' OR CustomerCompany LIKE ('%'+@Company+'%')) 
+   AND (@Email IS NULL OR @Email = '' OR CustomerEmail LIKE ('%' + @Email + '%'))  
+GROUP BY 
+   CustomerID,
+   CustomerFirstName, 
+   CustomerLastName, 
+   CustomerEmail, 
+   CustomerPhone, 
+   CustomerCompany
+ORDER BY
+   COUNT(OrderID) DESC,
+   CustomerLastName,   
+   CustomerFirstName,
+   CustomerCompany
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>TopCustomersByNumberOfOrders</CodeName>
+    <GUID>ea3bd58b-ee47-4331-a3d3-e1a5a37843e9</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

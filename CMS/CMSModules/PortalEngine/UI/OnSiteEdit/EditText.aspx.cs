@@ -2,7 +2,6 @@
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
 using CMS.UIControls;
@@ -100,12 +99,6 @@ public partial class CMSModules_PortalEngine_UI_OnSiteEdit_EditText : CMSAbstrac
 
 
             ScriptHelper.RegisterClientScriptBlock(this, typeof(Page), "ResizeEditableArea", ScriptHelper.GetScript(resizeScript));
-        }
-
-        if (DeviceContext.CurrentDevice.IsMobile())
-        {
-            // Do not use fixed positioning for mobile devices
-            (CurrentMaster.HeaderContainer as CMSPanel).FixedPosition = false;
         }
     }
 

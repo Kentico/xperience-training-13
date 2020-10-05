@@ -3,7 +3,6 @@ using System.Web;
 
 using CMS.Base.Web.UI;
 using CMS.Core;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using CMS.Localization;
@@ -19,7 +18,6 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
 
     private int? mResultNodeID;
     private string mResultMode;
-    private string mResultDevice;
 	private readonly ContentUrlRetriever urlRetriever;
 
     #endregion
@@ -59,15 +57,6 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
         get
         {
             return ValidationHelper.GetString(Request.Params["selectedMode"], null);
-        }
-    }
-
-
-    private string SelectedDevice
-    {
-        get
-        {
-			return ValidationHelper.GetString(Request.Params["selectedDevice"], null);
         }
     }
 
@@ -131,18 +120,6 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
         get
         {
             return mResultMode ?? (mResultMode = SelectedMode ?? (Mode ?? "edit"));
-        }
-    }
-
-
-    /// <summary>
-    /// Resulting device. Prefers user choice over query string setting.
-    /// </summary>
-    protected string ResultDevice
-    {
-        get
-        {
-            return mResultDevice ?? (mResultDevice = SelectedDevice ?? (Device ?? DeviceContext.CurrentDeviceProfileName));
         }
     }
 

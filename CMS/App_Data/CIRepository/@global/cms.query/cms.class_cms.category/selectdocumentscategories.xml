@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.category</CodeName>
+    <GUID>f9bd0914-ee13-41f8-85a3-4f2b50875c99</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>683ce131-02ae-4dce-b0bd-7706b04565bf</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectDocumentsCategories</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+WITH AllData (CategoryID, CategoryDisplayName, CategoryName, CategoryCount, CategoryNamePath, CategoryIDPath, CategoryUserID, CategorySiteID, CategoryParentID)
+AS
+(
+SELECT CMS_Category.CategoryID, CMS_Category.CategoryDisplayName, CMS_Category.CategoryName, count(DocumentID) as CategoryCount, CMS_Category.CategoryNamePath, CMS_Category.CategoryIDPath, CMS_Category.CategoryUserID, CMS_Category.CategorySiteID, CMS_Category.CategoryParentID
+FROM CMS_Category INNER JOIN CMS_DocumentCategory ON CMS_Category.CategoryID = CMS_DocumentCategory.CategoryID WHERE DocumentID IN (SELECT DocumentID FROM View_CMS_Tree_Joined WHERE ##WHERE##) 
+GROUP BY CMS_Category.CategoryID, CMS_Category.CategoryDisplayName, CMS_Category.CategoryName, CMS_Category.CategoryNamePath, CMS_Category.CategoryIDPath, CMS_Category.CategoryUserID, CMS_Category.CategorySiteID, CMS_Category.CategoryParentID
+)
+
+SELECT ##TOPN## CategoryID, CategoryDisplayName, CategoryName, CategoryCount, CategoryNamePath, CategoryIDPath, CategoryUserID, CategorySiteID, CategoryParentID 
+FROM AllData AS cats
+WHERE NOT EXISTS (SELECT CategoryID FROM AllData WHERE CategoryParentID = cats.CategoryID)
+ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

@@ -340,12 +340,12 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         {
             if (Config.LibStartingPath != string.Empty)
             {
-                string startingPath = Path.EnsureSlashes(Config.LibStartingPath);
+                string startingPath = Path.EnsureForwardSlashes(Config.LibStartingPath);
                 if (startingPath != "/")
                 {
                     startingPath = startingPath.Trim('/') + "/";
 
-                    return Path.EnsureSlashes(startingPath);
+                    return Path.EnsureForwardSlashes(startingPath);
                 }
             }
             return string.Empty;
@@ -622,7 +622,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
     {
         if (!string.IsNullOrEmpty(argument))
         {
-            argument = Path.EnsureSlashes(argument);
+            argument = Path.EnsureForwardSlashes(argument);
 
             int rootFolderNameIndex = argument.IndexOf("/", StringComparison.Ordinal);
 
@@ -789,7 +789,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
     {
         if (LibraryInfo != null && path != null)
         {
-            return Path.EnsureSlashes(String.Format("{0}/{1}", LibraryInfo.LibraryFolder, path), true);
+            return Path.EnsureForwardSlashes(String.Format("{0}/{1}", LibraryInfo.LibraryFolder, path), true);
         }
 
         return string.Empty;
@@ -805,7 +805,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
     {
         if (!string.IsNullOrEmpty(path))
         {
-            path = Path.EnsureSlashes(path);
+            path = Path.EnsureForwardSlashes(path);
 
             int lastSlash = path.LastIndexOf("/", StringComparison.Ordinal);
             path = lastSlash > -1 ? path.Substring(0, lastSlash).Trim('/') : string.Empty;
@@ -857,7 +857,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         {
             // Get path to the currently selected folder
             string dirPath = DirectoryHelper.CombinePath(MediaLibraryRootFolder, LibraryInfo.LibraryFolder) + ((StartingPath != string.Empty) ? "\\" + StartingPath : string.Empty) + ((LastFolderPath != string.Empty) ? "\\" + LastFolderPath : string.Empty);
-            dirPath = Path.EnsureBackslashes(dirPath, true);
+            dirPath = Path.EnsureSlashes(dirPath, true);
 
             if (Directory.Exists(dirPath))
             {
@@ -934,7 +934,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         if (FileList == null)
         {
             string where = String.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{0}_%/%' AND FileLibraryID = {1}",
-                                         Path.EnsureSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'),
+                                         Path.EnsureForwardSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'),
                                          LibraryID);
 
             if (!string.IsNullOrEmpty(LastSearchedValue))
@@ -968,7 +968,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
             }
             else
             {
-                string filePath = String.Format("{0}/{1}", Path.EnsureSlashes(LastFolderPath).Trim('/'), fileName);
+                string filePath = String.Format("{0}/{1}", Path.EnsureForwardSlashes(LastFolderPath).Trim('/'), fileName);
                 if (FileList.Contains(filePath))
                 {
                     return (FileList[filePath] as DataRow);
@@ -1000,16 +1000,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
             if ((mediaSource.MediaFileLibraryID > 0) && (library != null))
             {
                 librarySelector.SelectedLibraryID = mediaSource.MediaFileLibraryID;
-
-                if (mediaSource.MediaFileLibraryGroupID > 0)
-                {
-                    librarySelector.SelectedGroupID = mediaSource.MediaFileLibraryGroupID;
-                    librarySelector.GroupLibraryName = library.LibraryName;
-                }
-                else
-                {
-                    librarySelector.GlobalLibraryName = library.LibraryName;
-                }
+                librarySelector.GlobalLibraryName = library.LibraryName;
             }
 
             // Try to pre-select path
@@ -1144,7 +1135,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
                     {
                         librarySelector.SelectedSiteName = siteName;
                         librarySelector.SelectedLibraryID = mli.LibraryID;
-                        librarySelector.SelectedGroupID = mli.LibraryGroupID;
                     }
                 }
 
@@ -1289,7 +1279,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         mediaView.LibraryID = LibraryID;
         mediaView.IsLiveSite = IsLiveSite;
 
-        UsePermanentUrls = SettingsKeyInfoProvider.GetBoolValue(SiteContext.CurrentSiteName + ".CMSMediaUsePermanentURLs");
+        UsePermanentUrls = true;
         mediaView.UsePermanentUrls = UsePermanentUrls;
 
         mediaView.ListViewControl.OnBeforeSorting += ListViewControl_OnBeforeSorting;
@@ -1376,12 +1366,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
 
         // Sites
         librarySelector.Sites = Config.LibSites;
-
-        // Groups
-        librarySelector.Groups = Config.LibGroups;
-        librarySelector.GroupName = Config.LibGroupName;
-        librarySelector.GroupLibraries = Config.LibGroupLibraries;
-        librarySelector.GroupLibraryName = Config.LibGroupLibraryName;
 
         // Libraries
         librarySelector.GlobalLibraries = Config.LibGlobalLibraries;
@@ -1505,7 +1489,7 @@ function imageEdit_Refresh(guid){{
             string err = CheckPermissions();
             if (err == string.Empty)
             {
-                string filePath = (StartingPath + Path.EnsureSlashes(FolderPath)).Trim('/');
+                string filePath = (StartingPath + Path.EnsureForwardSlashes(FolderPath)).Trim('/');
                 filePath = SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(filePath));
 
                 // Create WHERE condition

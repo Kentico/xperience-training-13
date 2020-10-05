@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Theme="Default"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Theme="Default"
     Inherits="CMSModules_Reporting_Tools_Report_Print"  Codebehind="Report_Print.aspx.cs" %>
 
 <%@ Register Src="~/CMSModules/Reporting/Controls/DisplayReport.ascx" TagName="DisplayReport" TagPrefix="cms" %>
@@ -8,15 +8,16 @@
     <title>Report Print</title>
     <base target="_self" />
     <style type="text/css">
-        body
-        {
-            padding: 0px;
-            margin: 0px;
+        @media print {
+            body {
+                padding: 0;
+            }
         }
-        .ReportBody
-        {
-            margin: 10px;
-        }    
+        @media not print {
+            body {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body onload="window.print();" class="<%=mBodyClass%>">

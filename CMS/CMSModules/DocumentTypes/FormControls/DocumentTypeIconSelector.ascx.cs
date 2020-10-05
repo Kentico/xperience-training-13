@@ -99,7 +99,7 @@ public partial class CMSModules_DocumentTypes_FormControls_DocumentTypeIconSelec
         {
             InitializeControl();
 
-            iconType = lstOptions.SelectedValue.ToEnum<IconTypeEnum>();
+            iconType = EnumStringRepresentationExtensions.ToEnum<IconTypeEnum>(lstOptions.SelectedValue);
         }
 
         CheckFieldEmptiness = false;
@@ -161,7 +161,7 @@ public partial class CMSModules_DocumentTypes_FormControls_DocumentTypeIconSelec
     /// </summary>
     private void lstOptions_SelectedIndexChanged(object sender, EventArgs e)
     {
-        iconType = lstOptions.SelectedValue.ToEnum<IconTypeEnum>();
+        iconType = EnumStringRepresentationExtensions.ToEnum<IconTypeEnum>(lstOptions.SelectedValue);
     }
 
     #endregion

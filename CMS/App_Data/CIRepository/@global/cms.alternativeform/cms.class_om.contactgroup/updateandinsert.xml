@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>OM.ContactGroup</CodeName>
+    <GUID>97f104ff-d87a-48b8-a5db-216786f9344e</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="ContactGroupID" guid="8254be8f-7554-4c85-8d8b-f16e0ec2bd5f" />
+      <field column="ContactGroupDisplayName" guid="0b8230c0-06a2-4378-9435-8f475865687a" />
+      <field column="ContactGroupName" guid="5c5692fb-85c4-409f-a6e6-6f6670a52f7d" />
+      <field column="ContactGroupDescription" guid="99c12065-9aa0-4dce-835d-949a31f4162e" />
+      <field column="ContactGroupEnabled" guid="b2572394-a920-4f7e-81a9-5cc435925099" />
+      <field column="ContactGroupLastModified" guid="b6dff322-4c32-46ec-a06b-2b096a148658" />
+      <field column="ContactGroupGUID" guid="affe9d0f-3c70-4a67-90f8-d61075eb1b55" />
+      <field allowempty="true" column="ContactGroupIsDynamicCondition" columntype="boolean" dummy="altform" guid="951b492a-a7ac-48b7-8a07-9b9bc4f3cc8d" hasdependingfields="true" system="true" visible="true" order="7">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% !String.IsNullOrEmpty(EditedObject.ContactGroupDynamicCondition) |(identity)GlobalAdministrator|(hash)95676c0c0d53a56dbfd47f0d73d8f2d388bf4a7950f5d616275281f66e0c8950%}]]>
+          </defaultvalue>
+          <explanationtext>{$om.contactgroup.dynamic.description$}</explanationtext>
+          <fieldcaption>{$om.contactgroup.dynamic$}</fieldcaption>
+          <fielddescription>{$om.contactgroup.dynamic.description$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%LicenseHelper.CheckFeature(FeatureEnum.FullContactManagement)|(identity)GlobalAdministrator|(hash)1d8e7ba124a2ed5831b532e85e33c292efa11b96ffe8bc9b1765f0e9d41d4f5d%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="ContactGroupDynamicCondition" guid="fd9391ed-bfab-4753-bc4d-a98e0457ce1a" reftype="Required">
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ContactGroupIsDynamicCondition && LicenseHelper.CheckFeature(FeatureEnum.FullContactManagement)|(identity)GlobalAdministrator|(hash)bd2d17bf4a9b880041a0a585b180edcb1837aa0b4df8bdd0de9e4943068241d4%}]]>
+          </visiblemacro>
+          <enabledmacro />
+        </properties>
+      </field>
+      <field allowempty="true" column="ContactGroupIsAutomaticallyRebuilt" columntype="boolean" dummy="altform" guid="5264e823-c27d-4126-8a11-56084cee000d" system="true" visible="true" order="9">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% EditedObject.IsRebuildScheduled |(identity)GlobalAdministrator|(hash)917a05784e8e8be2b4ba2e1f54d98720fe67d2d2d2c29ce800b93d145c3e5359%}]]>
+          </defaultvalue>
+          <explanationtext>{$om.contactgroup.schedule.description$}</explanationtext>
+          <fieldcaption>{$om.contactgroup.schedule$}</fieldcaption>
+          <fielddescription>{$om.contactgroup.schedule.description.tooltip$}</fielddescription>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ContactGroupIsDynamicCondition && LicenseHelper.CheckFeature(FeatureEnum.FullContactManagement)|(identity)GlobalAdministrator|(hash)bd2d17bf4a9b880041a0a585b180edcb1837aa0b4df8bdd0de9e4943068241d4%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="ContactGroupStatus" guid="8c338293-e30c-4b0c-bae3-58eea2993f58" order="10" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>update and insert</FormDisplayName>
+  <FormGUID>05538662-ed53-461d-9685-7752704828d6</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>UpdateAndInsert</FormName>
+</cms.alternativeform>

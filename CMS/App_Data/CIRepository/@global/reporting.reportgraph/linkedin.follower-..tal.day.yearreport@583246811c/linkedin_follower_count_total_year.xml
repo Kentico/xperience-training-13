@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>81128399-3f6e-4a3a-9c16-0877f10e131c</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>LinkedIn_follower_count_total_year</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE
+@CodeName AS NVARCHAR(MAX) = N'LinkedIn.total-follower-count';
+
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+
+IF (@ExternalID IS NOT NULL) AND (@ExternalID != N'') AND 
+  EXISTS(SELECT [InsightHitID] FROM [SM_Insight] 
+    INNER JOIN [SM_InsightHit_Year] ON [SM_InsightHit_Year].[InsightHitInsightID] = [SM_Insight].[InsightID]
+    WHERE ([InsightCodeName] = @CodeName) AND ([InsightPeriodType] = @PeriodType)
+      AND ([InsightExternalID] = @ExternalID) AND ([InsightHitPeriodFrom] BETWEEN @FromDate AND @ToDate)
+  )
+BEGIN
+  SELECT [Date] AS [StartTime], [T1].[Values]
+    FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS [Dates]
+    LEFT JOIN
+      (SELECT [InsightHitPeriodFrom] AS [StartTime], [InsightHitValue] AS [Values]
+      FROM [SM_Insight]
+      INNER JOIN [SM_InsightHit_Year] ON [SM_InsightHit_Year].[InsightHitInsightID] = [SM_Insight].[InsightID]
+        WHERE ([InsightCodeName] = @CodeName) AND ([InsightPeriodType] = @PeriodType)
+          AND (InsightExternalID = @ExternalID)
+      ) AS [T1]
+    ON [T1].[StartTime] = [Date]
+END
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>LinkedIn.follower-count-total.day.yearreport</CodeName>
+    <GUID>466c2cbb-1cd6-43eb-a698-78a0c2c59178</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareabordersize>0</chartareabordersize>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>{$sm.ins.nodata$}</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisformat>yyyy</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle>{$sm.ins.linkedin.follower-count-total$}</GraphTitle>
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_years$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$sm.ins.linkedin.follower-count-total.value$}</GraphYAxisTitle>
+</reporting.reportgraph>

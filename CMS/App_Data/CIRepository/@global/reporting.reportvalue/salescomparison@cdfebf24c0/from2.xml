@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>from2</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>797bbb62-2752-4094-acb5-0d393ffab8fb</ValueGUID>
+  <ValueName>from2</ValueName>
+  <ValueQuery>
+<![CDATA[
+DECLARE @from1 datetime;
+DECLARE @from2 datetime;
+DECLARE @to1 datetime;
+DECLARE @to2 datetime;
+
+IF (@Period1 = 'custom')
+	BEGIN
+		SET @from1 = @Period1From;
+		SET @to1 = @Period1To;
+        END
+ELSE
+	BEGIN
+		SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate(@Period1);
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate(@Period1);
+        END
+
+IF (@Period2 = 'custom')
+	BEGIN
+		SET @from2 = @Period2From;
+		SET @to2 = @Period2To;
+        END
+ELSE
+	BEGIN
+		SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate(@Period2);
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate(@Period2);
+        END
+
+SELECT @from2
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>SalesComparison</CodeName>
+    <GUID>47243a76-621b-4a8c-a6c8-077fb3ca8855</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

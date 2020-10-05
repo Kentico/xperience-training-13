@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>mobiledevices</CodeName>
+    <GUID>8ba3743b-9945-47b3-9cf5-c8b3a0f336fd</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString />
+  <ReportDisplayName>Mobile devices - Yearly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>39034a24-202b-49c2-9992-57ef11c8d6a6</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+<p>%%control:ReportGraph?mobiledevice.yearreport.graph%%</p>
+<p>%%control:ReportTable?mobiledevice.yearreport.table2%%</p>
+<p> %%control:ReportTable?mobiledevice.yearreport.table%%</p>
+
+<p>{$reports_general.created$} {%cmscontextcurrenttime%} {$reports_general.by$} {%cmscontextcurrentusername%}</p>
+
+]]>
+  </ReportLayout>
+  <ReportName>mobiledevice.yearreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="0d626be8-a24a-4bb8-918d-b3063c273c68" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddYears(-6).Date|(identity)GlobalAdministrator|(hash)901ea18ea8497e2cb6fc816d9b5c801f23cf8a18def0bcc6a2c1c097506341bd%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="364ad33a-562a-4557-ae4e-e91ad208c8f7" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="CodeName" columnsize="50" columntype="text" guid="749242e1-afe5-494c-af29-edc444ca051f" spellcheck="false">
+        <properties>
+          <defaultvalue>mobiledevice</defaultvalue>
+          <fieldcaption>From Date</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

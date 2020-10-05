@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>Ecommerce.GiftCard</CodeName>
+    <GUID>20b911c3-b43c-423d-b19b-eb2f77a6716e</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="GiftCardID" guid="7942b9b7-baca-4b80-bedb-f8176abc75c8" />
+      <field column="GiftCardGuid" guid="6abc2a41-a5c9-4909-9b7f-08c9f0e3adf0" />
+      <field column="GiftCardDisplayName" guid="d38da7c4-f0ad-4181-bd0e-d21feb866ff7" />
+      <field column="GiftCardName" guid="f1b69023-ad8f-4bd6-a70c-f99c2b2431a0" />
+      <field column="GiftCardDescription" guid="f76711bb-bc07-41c9-be49-46798fbb0015" />
+      <field column="GiftCardEnabled" guid="4ba556e3-43b3-4372-b13c-effdebc3164c" />
+      <field column="GiftCardLastModified" guid="fc08d122-1acd-4863-ad16-7f6f0b915570" />
+      <field column="GiftCardSiteID" guid="121f6aeb-fbf4-4a67-a7a1-6ee689f2a7ab" />
+      <field column="GiftCardValue" guid="02cea2a4-edd0-440f-bc8b-e4135ae656a0">
+        <properties>
+          <contentafter ismacro="true">
+<![CDATA[
+<span class="form-control-text">
+{%
+	siteID = GiftCardSiteID == 0 ? CMSContext.CurrentSiteID : GiftCardSiteID;
+	HTMLEncode(GetMainSiteCurrency(siteID).CurrencyCode);
+|(identity)GlobalAdministrator|(hash)62c4437af97061d0fcbdfe714c74d6744c9cce919362a93309e185a3d5869ea8%}
+</span>
+]]>
+          </contentafter>
+          <controlcssclass>input-width-20</controlcssclass>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%EditedObject.Children.GiftCardCouponCodes.Count == 0|(identity)GlobalAdministrator|(hash)9cf9636e030443b5493d711142b66276fca3bb58ed9210f70f1806eec6eec61e%}]]>
+          </enabledmacro>
+          <validationerrormessage>{$com.discount.valueempty$}</validationerrormessage>
+        </properties>
+        <rules>
+          <rule errormsg="{$com.discount.minamount$}">
+            <![CDATA[{%Rule("(Value > 0)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"GeneralCondition\" ><p n=\"condition\"><t>Value &gt; 0</t><v>Value &gt; 0</v><r>0</r><d></d><vt>longtext</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="GiftCardMinimumOrderPrice" guid="d7fef411-c168-4778-8351-065cc02ce9d5">
+        <properties>
+          <contentafter ismacro="true">
+<![CDATA[
+<span class="form-control-text">
+{%
+	siteID = GiftCardSiteID == 0 ? CMSContext.CurrentSiteID : GiftCardSiteID;
+	HTMLEncode(GetMainSiteCurrency(siteID).CurrencyCode);
+|(identity)GlobalAdministrator|(hash)62c4437af97061d0fcbdfe714c74d6744c9cce919362a93309e185a3d5869ea8%}
+</span>
+]]>
+          </contentafter>
+          <controlcssclass>input-width-20</controlcssclass>
+        </properties>
+      </field>
+      <field column="GiftCardCartCondition" guid="3dab3f5b-6872-49f2-84ae-62e9e33ff2db" />
+      <field column="GiftCardValidFrom" guid="74087089-b8c7-4267-88a4-6d937d7ac375" />
+      <field column="GiftCardValidTo" guid="14ea2dfb-4231-46ac-bc90-fc7f5a2c04d9" />
+      <field column="GiftCardCustomerRestriction" guid="f6599af5-0f4b-4ff4-bc5d-91b1b162d9af" />
+      <field column="GiftCardRoles" guid="5d7e55d8-5589-4a1b-9448-af0f58883edb">
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%GiftCardCustomerRestriction.Value == "SelectedRoles"|(identity)GlobalAdministrator|(hash)197ccf4675cb1143f7a32bf52250fbf1116a50b98e6d1eecc6f4d53bd028e92a%}]]>
+          </visiblemacro>
+          <enabledmacro />
+        </properties>
+      </field>
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Edit gift card</FormDisplayName>
+  <FormGUID>04db141e-1489-42dd-aeea-74b3cfe56a1f</FormGUID>
+  <FormHideNewParentFields>True</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>EditGiftCard</FormName>
+</cms.alternativeform>

@@ -8,16 +8,19 @@
             <div class="ma-template-selector-wrapper">
         </HeaderTemplate>
         <ItemTemplate>
-            <div class="ma-template-selector-item <%#Eval("FromScratchCssClass")%>" onclick="createWorkflow(<%#Eval("Id")%>)">
+            <div class="ma-template-selector-item <%#Eval("FromScratchCssClass")%>">
                 <div class="ma-template-selector-item-envelope" style="overflow: hidden" title="<%#Eval("Tooltip")%>">
-                    <span class="ma-template-selector-item-name h4">
-                        <%#Eval("Name")%>
-                    </span>
-                    <span class="ma-template-selector-item-description" title="<%#Eval("DescriptionTooltip")%>">
-                        <%#Eval("Description")%>
-                    </span>
-                    <div class="ma-template-selector-item-icon">
-                        <%#Eval("IconClass")%>
+                    <cms:CMSMoreOptionsButton ID="btnMoreOptions" runat="server" DropDownItemsAlignment="Right" RenderFirstActionSeparately="false" CssClass="ma-template-selector-item-actions" />
+                    <div class="ma-template-selector-item-content" onclick="createWorkflow(<%#Eval("Id")%>)">
+                        <div class="ma-template-selector-item-icon">
+                            <%#Eval("IconClass")%>
+                        </div>
+                        <span class="ma-template-selector-item-name h4" title="<%#Eval("NameTooltip")%>">
+                            <%#Eval("Name")%>
+                        </span>
+                        <span class="ma-template-selector-item-description" title="<%#Eval("DescriptionTooltip")%>">
+                            <%#Eval("Description")%>
+                        </span>
                     </div>
                 </div>
             </div>

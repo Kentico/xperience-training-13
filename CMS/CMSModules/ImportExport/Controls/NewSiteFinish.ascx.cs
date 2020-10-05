@@ -1,29 +1,14 @@
 ﻿using System;
-using System.Web.UI.WebControls;
 
 using CMS.Helpers;
 using CMS.UIControls;
 
-
 public partial class CMSModules_ImportExport_Controls_NewSiteFinish : CMSUserControl
 {
-    private string mDomain = "";
-
-
     /// <summary>
     /// Site domain.
     /// </summary>
-    public string Domain
-    {
-        get
-        {
-            return mDomain;
-        }
-        set
-        {
-            mDomain = value;
-        }
-    }
+    public string Domain { get; set; } = String.Empty;
 
 
     /// <summary>
@@ -38,20 +23,6 @@ public partial class CMSModules_ImportExport_Controls_NewSiteFinish : CMSUserCon
         set
         {
             ViewState["SiteIsRunning"] = value;
-        }
-    }
-
-
-    // Label
-    public PlaceHolder Placeholder
-    {
-        get
-        {
-            return plcFinish;
-        }
-        set
-        {
-            plcFinish = value;
         }
     }
 

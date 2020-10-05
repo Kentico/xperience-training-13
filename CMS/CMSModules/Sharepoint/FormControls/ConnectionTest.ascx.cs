@@ -26,30 +26,6 @@ public partial class CMSModules_SharePoint_FormControls_ConnectionTest : FormEng
 
 
     /// <summary>
-    /// SharePoint version currently filled in the form.
-    /// </summary>
-    private string SharePointConnectionSharePointVersion
-    {
-        get
-        {
-            return ValidationHelper.GetString(Form.GetFieldValue("SharePointConnectionSharePointVersion"), String.Empty);
-        }
-    }
-
-
-    /// <summary>
-    /// SharePoint authentication mode currently filled in the form.
-    /// </summary>
-    private string SharePointConnectionAuthMode
-    {
-        get
-        {
-            return ValidationHelper.GetString(Form.GetFieldValue("SharePointConnectionAuthMode"), String.Empty);
-        }
-    }
-
-
-    /// <summary>
     /// SharePoint user name currently filled in the form.
     /// </summary>
     private string SharePointConnectionUserName
@@ -57,18 +33,6 @@ public partial class CMSModules_SharePoint_FormControls_ConnectionTest : FormEng
         get
         {
             return ValidationHelper.GetString(Form.GetFieldValue("SharePointConnectionUserName"), String.Empty);
-        }
-    }
-
-
-    /// <summary>
-    /// SharePoint domain currently filled in the form.
-    /// </summary>
-    private string SharePointConnectionDomain
-    {
-        get
-        {
-            return ValidationHelper.GetString(Form.GetFieldValue("SharePointConnectionDomain"), String.Empty);
         }
     }
 
@@ -153,12 +117,6 @@ public partial class CMSModules_SharePoint_FormControls_ConnectionTest : FormEng
             // The ISiteService implementation rejected connection data
             DisplayConnectionStatus(GetString("sharepoint.invalidconfiguration"), false);
         }
-        catch (SharePointCCSDKException ex)
-        {
-            var message = string.Format(GetString("sharepoint.ccsdk.idcrl.msoidclilerror"), DocumentationHelper.GetDocumentationTopicUrl("sharepoint_online_connecting"));
-            DisplayConnectionStatus(message, false, true);
-            Service.Resolve<IEventLogService>().LogException("SharePoint", "TESTCONNECTION", ex);
-        }
         catch (WebException ex)
         {
             if (ex.Status == WebExceptionStatus.ProtocolError)
@@ -207,10 +165,7 @@ public partial class CMSModules_SharePoint_FormControls_ConnectionTest : FormEng
     {
         var connectionData = new SharePointConnectionData()
         {
-            SharePointConnectionAuthMode = SharePointConnectionAuthMode,
-            SharePointConnectionDomain = SharePointConnectionDomain,
             SharePointConnectionPassword = SharePointConnectionPassword,
-            SharePointConnectionSharePointVersion = SharePointConnectionSharePointVersion,
             SharePointConnectionSiteUrl = SharePointConnectionSiteUrl,
             SharePointConnectionUserName = SharePointConnectionUserName
         };

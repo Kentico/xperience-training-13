@@ -271,21 +271,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
             etaCode.TopOffset = 40;
         }
 
-        // Add preview action
-        if (!isNew)
-        {
-            HeaderAction preview = new HeaderAction
-            {
-                Text = GetString("general.preview"),
-                OnClientClick = "performToolbarAction('split');return false;",
-                Visible = false,
-                Tooltip = GetString("preview.tooltip"),
-                Index = 1,
-            };
-            editMenuElem.ObjectEditMenu.AddExtraAction(preview);
-        }
-
-        editMenuElem.ObjectEditMenu.PreviewMode = true;
         editMenuElem.MenuPanel.CssClass = "PreviewMenu";
         editMenuElem.ObjectManager.OnBeforeAction += ObjectManager_OnBeforeAction;
         editMenuElem.ObjectManager.OnAfterAction += ObjectManager_OnAfterAction;
@@ -491,8 +476,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_General : CMSPrevie
 
             // Do not display the layout control in a preview mode for a new or default layout
             previewIsActive = false;
-            // Tell parent preview hierarchy control to hide preview
-            ShowPreview = false;
 
             if ((LayoutCodeName == "|new|") || isSiteManager)
             {

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>29ae191f-c42f-41e5-a448-7b4d1778ae84</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Changes in the query should be reflected both in the SELECT and @totalsum variable */ 
+DECLARE @totalsum float;
+SET @totalsum = (SELECT
+                    ISNULL(SUM(OrderGrandTotalInMainCurrency),0)
+                 FROM
+                    COM_Order
+                    LEFT JOIN COM_OrderAddress
+                       ON (OrderID = AddressOrderID AND AddressType = @Address)
+                    LEFT JOIN CMS_Country
+                       ON AddressCountryID = CountryID
+                 WHERE
+                    (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+                    AND OrderSiteID = @CMSContextCurrentSiteID
+                    AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+                    AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL));
+SELECT
+   ISNULL(CountryDisplayName,'-') AS '{$customerlist.country$}',
+   ISNULL(CAST(ROUND(SUM(OrderGrandTotalInMainCurrency),1) AS DECIMAL(38,1)),0) AS '{$com.sales.volumeofsales$}',
+   CAST(ISNULL(CASE WHEN @totalsum != 0
+                    THEN CAST(ROUND(SUM(OrderGrandTotalInMainCurrency),1)/@totalsum*100 AS DECIMAL(38,1))
+                    ELSE 0
+                    END,0) AS VARCHAR(20)) + ' %' AS '{$reports_pageviews.percent_header$}'
+FROM
+   COM_Order
+   LEFT JOIN COM_OrderAddress
+      ON (OrderID = AddressOrderID AND AddressType = @Address)
+   LEFT JOIN CMS_Country
+      ON AddressCountryID = CountryID
+WHERE
+   (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+   AND OrderSiteID = @CMSContextCurrentSiteID
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+   AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+GROUP BY CountryDisplayName
+ORDER BY
+   SUM(OrderGrandTotalInMainCurrency) DESC,
+   CountryDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesByCountry</CodeName>
+    <GUID>f7e90d3b-2985-4807-9859-f5c3df4f646e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

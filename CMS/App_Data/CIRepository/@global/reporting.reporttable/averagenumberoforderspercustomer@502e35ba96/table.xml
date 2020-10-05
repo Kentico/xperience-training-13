@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>ac51249a-d988-4069-85da-1471e5ad64bc</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Variables used to calculate the median value. */
+DECLARE @BottomHalf float
+DECLARE @TopHalf float
+DECLARE @median float
+
+/* Table with the number of orders per customer. */
+DECLARE @medianOrderTable TABLE(
+   CustomerID int,
+   SumOfOrder float)
+   
+INSERT INTO @medianOrderTable(
+   CustomerID, 
+   SumOfOrder)
+      SELECT
+         CustomerID AS ID,
+         COUNT(OrderID) AS TotalCount
+      FROM
+         COM_Order
+         LEFT JOIN COM_Customer
+            ON OrderCustomerID = CustomerID
+      WHERE 
+         OrderSiteID = @CMSContextCurrentSiteID
+         AND (OrderIsPaid = 1 OR ISNULL(@OnlyPaid,0) = 0)
+         AND (@FromDate IS NULL OR OrderDate >= @FromDate)
+         AND (@ToDate IS NULL OR OrderDate <= DATEADD(day,1,@ToDate))
+      GROUP BY CustomerID
+
+SET @BottomHalf = (SELECT MAX(SumOfOrder) FROM (SELECT TOP 50 PERCENT SumOfOrder FROM @medianOrderTable ORDER BY SumOfOrder) AS BottomHalf)
+SET @TopHalf = (SELECT MIN(SumOfOrder) FROM (SELECT TOP 50 PERCENT SumOfOrder FROM @medianOrderTable ORDER BY SumOfOrder DESC) AS TopHalf)
+SET @median = (@BottomHalf + @TopHalf)/2
+
+SELECT 
+   '{$com.report.averagecustomernumberoforders$}' AS '{$rep.webparrts.parametername$}',
+   CAST(ISNULL(AVG(SumOfOrder),0) AS DECIMAL(38,1)) AS '{$com.report.averagevalue$}',
+   CAST(ISNULL(@median,0) AS decimal(38,1)) AS '{$com.report.medianvalue$}'
+FROM
+   @medianOrderTable
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>AverageNumberOfOrdersPerCustomer</CodeName>
+    <GUID>4b882bb9-b59d-48b8-ba44-2c7409f92f35</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

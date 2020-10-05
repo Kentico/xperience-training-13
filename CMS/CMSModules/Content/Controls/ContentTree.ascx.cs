@@ -495,7 +495,7 @@ public partial class CMSModules_Content_Controls_ContentTree : ContentActionsCon
             isRTL = CultureHelper.IsPreferredCultureRTL();
         }
 
-        treeElem.LineImagesFolder = GetImageUrl(isRTL ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree", IsLiveSite);
+        treeElem.LineImagesFolder = GetImageUrl(isRTL ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree");
         treeElem.ImageSet = TreeViewImageSet.Custom;
         treeElem.ExpandImageToolTip = GetString("general.expand");
         treeElem.CollapseImageToolTip = GetString("general.collapse");

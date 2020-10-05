@@ -34,7 +34,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_DisabledModule
     {
         get
         {
-            return GetStringContextValue("KeyScope", "Both").ToEnum<DisabledModuleScope>();
+            return EnumStringRepresentationExtensions.ToEnum<DisabledModuleScope>(GetStringContextValue("KeyScope", "Both"));
         }
         set
         {

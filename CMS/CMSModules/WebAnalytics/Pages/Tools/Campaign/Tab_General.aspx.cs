@@ -46,7 +46,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
     private string PrepareUrlAssetTargetRegex()
     {        
         var site = SiteContext.CurrentSite;
-        var presentationUrls = new PresentationUrlsRetriever(site).Retrieve().Select(url => url.Url.TrimEnd('/'));
+        var presentationUrls = new SitePresentationUrlsRetriever(site).Retrieve(PresentationUrlSourceEnum.LiveSite).Select(url => url.Url.TrimEnd('/'));
 
         var campaignUrlAssetTargetInputRegex = @"^(http(s?)://)(www\.)?(" + presentationUrls.Join("|") + ")";
         campaignUrlAssetTargetInputRegex += @"(|\/[^\?\&\#]*)$";
@@ -159,7 +159,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
     private object GetObjective(int campaignID)
     {
         var service = Service.Resolve<ICampaignObjectiveService>();
-        return CampaignObjectiveInfoProvider.GetCampaignObjectives()
+        return CampaignObjectiveInfo.Provider.Get()
             .WhereEquals("CampaignObjectiveCampaignID", campaignID)
             .ToList()
             .Select(service.GetObjectiveViewModel)
@@ -238,7 +238,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
     private Dictionary<int, CampaignAssetViewModel> GetAssets(int campaignId)
     {
         var service = Service.Resolve<ICampaignAssetModelService>();
-        return CampaignAssetInfoProvider.GetCampaignAssets()
+        return CampaignAssetInfo.Provider.Get()
             .WhereEquals("CampaignAssetCampaignID", campaignId)
             .ToList()
             .Select(x => service.GetStrategy(x.CampaignAssetType).GetAssetViewModel(x))
@@ -249,7 +249,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
     private IEnumerable<CampaignConversionViewModel> GetConversions(int campaignId)
     {
         var service = Service.Resolve<ICampaignConversionService>();
-        return CampaignConversionInfoProvider.GetCampaignConversions()
+        return CampaignConversionInfo.Provider.Get()
             .WhereEquals("CampaignConversionCampaignID", campaignId)
             .OrderBy("CampaignConversionOrder")
             .ToList()

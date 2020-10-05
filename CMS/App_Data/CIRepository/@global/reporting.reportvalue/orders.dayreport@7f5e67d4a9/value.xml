@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>b56beb49-228b-41d4-bded-aaec2a950140</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the number of orders from @FromDate to @ToDate */
+SELECT
+   CAST(ISNULL(COUNT(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,0))
+FROM
+   COM_Order
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (@FromDate <= OrderDate OR @FromDate IS NULL)
+   AND (DATEADD(DAY,1,@ToDate) > OrderDate OR @ToDate IS NULL)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Orders.DayReport</CodeName>
+    <GUID>272d3182-0726-4d13-bdb2-dcd54cb5c16d</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

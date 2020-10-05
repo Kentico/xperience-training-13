@@ -240,7 +240,7 @@ public partial class CMSModules_WebAnalytics_FormControls_SelectCampaign : FormE
             }
 
             // If campaign object not found
-            var ci = CampaignInfoProvider.GetCampaignInfo(value, SiteInfoProvider.GetSiteName(SiteID));
+            var ci = CampaignInfo.Provider.Get(value, SiteID);
 
             // Handle info not found
             if (ci == null)
@@ -266,7 +266,7 @@ public partial class CMSModules_WebAnalytics_FormControls_SelectCampaign : FormE
                 ci.CampaignDisplayName = value;
                 ci.CampaignSiteID = SiteID;
 
-                CampaignInfoProvider.SetCampaignInfo(ci);
+                CampaignInfo.Provider.Set(ci);
             }
         }
 

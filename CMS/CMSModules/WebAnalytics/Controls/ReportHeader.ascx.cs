@@ -8,9 +8,10 @@ using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Membership;
+using CMS.Reporting;
+using CMS.Reporting.Web.UI;
 using CMS.UIControls;
 using CMS.WebAnalytics;
-
 
 public partial class CMSModules_WebAnalytics_Controls_ReportHeader : CMSAdminControl
 {
@@ -155,7 +156,7 @@ public partial class CMSModules_WebAnalytics_Controls_ReportHeader : CMSAdminCon
                 // Subscription
                 mSubscriptionAction = new HeaderAction
                 {
-                    Text = GetString("notifications.subscribe"),
+                    Text = GetString("reporting.subscribe"),
                     ButtonStyle = ButtonStyle.Default,
                 };
                 headerActions.AddAction(mSubscriptionAction);
@@ -180,7 +181,7 @@ public partial class CMSModules_WebAnalytics_Controls_ReportHeader : CMSAdminCon
         var printDialogUrl = String.Format("{0}?reportname={1}&parameters={2}",
             ResolveUrl(PrintPageURL),
             ReportName,
-            AnalyticsHelper.GetQueryStringParameters(ReportParameters));
+            ReportUIHelper.GetQueryStringParameters(ReportParameters));
 
         var printScript = String.Format("myModalDialog('{0}&UILang={1}&hash={2}','PrintReport {3}',800,700);return false",
             printDialogUrl,
@@ -191,10 +192,10 @@ public partial class CMSModules_WebAnalytics_Controls_ReportHeader : CMSAdminCon
         var subscriptionScript = String.Format("modalDialog('{0}?reportname={1}&parameters={2}&interval={3}','Subscription',{4},{5});return false",
             ResolveUrl("~/CMSModules/Reporting/Dialogs/EditSubscription.aspx"),
             ReportName,
-            AnalyticsHelper.GetQueryStringParameters(ReportParameters),
+            ReportUIHelper.GetQueryStringParameters(ReportParameters),
             HitsIntervalEnumFunctions.HitsConversionToString(SelectedInterval),
-            AnalyticsHelper.SUBSCRIPTION_WINDOW_WIDTH,
-            AnalyticsHelper.SUBSCRIPTION_WINDOW_HEIGHT);
+            ReportHelper.SUBSCRIPTION_WINDOW_WIDTH,
+            ReportHelper.SUBSCRIPTION_WINDOW_HEIGHT);
 
         var refreshScript = "function RefreshPage() {" + ControlsHelper.GetPostBackEventReference(this, "") + "};";
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "RefreshScript", ScriptHelper.GetScript(refreshScript));

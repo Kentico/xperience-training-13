@@ -53,10 +53,7 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
     #region "Variables"
 
-    private bool mShowGroups;
     private bool mIsAdvancedMode;
-    private FormEngineUserControl mSelectInGroups;
-    private FormEngineUserControl mSelectNotInGroups;
     private FormEngineUserControl mScoreSelector;
     private bool? mDisplayGuestsByDefault;
     private bool mShowPrivilegeFilter;
@@ -288,28 +285,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
         var uiContext = UIContextHelper.GetUIContext(this);
         SiteID = ApplicationUIHelper.IsAccessibleOnlyByGlobalAdministrator(uiContext.UIElement) ? querySiteID : SiteContext.CurrentSiteID;
 
-        if (ModuleEntryManager.IsModuleLoaded(ModuleName.COMMUNITY))
-        {
-            Control ctrl = LoadUserControl(GROUP_SELECTOR_PATH);
-            if (ctrl != null)
-            {
-                mSelectInGroups = ctrl as FormEngineUserControl;
-                ctrl.ID = "selGroups";
-                ctrl = LoadUserControl(GROUP_SELECTOR_PATH);
-                mSelectNotInGroups = ctrl as FormEngineUserControl;
-                ctrl.ID = "selNoGroups";
-
-                plcGroups.Visible = true;
-                plcSelectInGroups.Controls.Add(mSelectInGroups);
-                plcSelectNotInGroups.Controls.Add(mSelectNotInGroups);
-
-                mSelectNotInGroups.SetValue("UseFriendlyMode", true);
-                mSelectInGroups.IsLiveSite = false;
-                mSelectInGroups.SetValue("UseFriendlyMode", true);
-                mSelectNotInGroups.IsLiveSite = false;
-            }
-        }
-
         if (DisplayScore && SettingsKeyInfoProvider.GetBoolValue(SiteContext.CurrentSiteName + ".CMSEnableOnlineMarketing"))
         {
             Control ctrl = LoadUserControl(SCORE_SELECTOR_PATH);
@@ -413,16 +388,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
             mShowPrivilegeFilter = false;
         }
 
-        // Show group filter only if enabled
-        if (SiteID > 0)
-        {
-            SiteInfo si = SiteInfo.Provider.Get(SiteID);
-            if ((si != null) && mIsAdvancedMode)
-            {
-                mShowGroups = ModuleCommands.CommunitySiteHasGroup(si.SiteID);
-            }
-        }
-
         // Setup role selector
         selectNotInRole.SiteID = SiteID;
         selectRoleElem.SiteID = SiteID;
@@ -430,20 +395,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
         selectNotInRole.CurrentSelector.ResourcePrefix = "addroles";
         selectRoleElem.UseFriendlyMode = true;
         selectNotInRole.UseFriendlyMode = true;
-
-        // Setup groups selectors
-        plcGroups.Visible = mShowGroups;
-        if (mSelectInGroups != null)
-        {
-            mSelectInGroups.StopProcessing = !mShowGroups;
-            mSelectInGroups.FormControlParameter = SiteID;
-        }
-
-        if (mSelectNotInGroups != null)
-        {
-            mSelectNotInGroups.StopProcessing = !mShowGroups;
-            mSelectNotInGroups.FormControlParameter = SiteID;
-        }
 
         if (SessionInsteadOfUser && DisplayGuestsByDefault)
         {
@@ -513,9 +464,7 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
         fltNickName.ResetFilter();
         fltFullName.ResetFilter();
 
-        drpTypeSelectInGroups.SelectedIndex = 0;
         drpTypeSelectInRoles.SelectedIndex = 0;
-        drpTypeSelectNotInGroups.SelectedIndex = 0;
         drpTypeSelectNotInRoles.SelectedIndex = 0;
         drpPrivilege.SelectedIndex = 0;
 
@@ -531,16 +480,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
         selectRoleElem.Value = "";
         selectNotInRole.Value = "";
-
-        if (mSelectInGroups != null)
-        {
-            mSelectNotInGroups.Value = "";
-        }
-
-        if (mSelectNotInGroups != null)
-        {
-            mSelectInGroups.Value = "";
-        }
 
         chkDisplayAnonymous.Checked = DisplayGuestsByDefault;
         chkEnabled.Checked = false;
@@ -565,8 +504,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
         {
             AddItemsAllAny(drpTypeSelectInRoles);
             AddItemsAllAny(drpTypeSelectNotInRoles);
-            AddItemsAllAny(drpTypeSelectInGroups);
-            AddItemsAllAny(drpTypeSelectNotInGroups);
 
             // Init lock account reason filter
             AddItemsFromEnum<UserAccountLockEnum>(drpLockReason, "userlist.account");
@@ -712,7 +649,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
             .Where(fltNickName.GetCondition());
 
         AddRoleCondition(whereCondition);
-        AddGroupCondition(whereCondition);
 
         if (mShowPrivilegeFilter)
         {
@@ -902,28 +838,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
 
     /// <summary>
-    /// Adds group conditions to given <paramref name="whereCondition"/> when necessary.
-    /// </summary>
-    private void AddGroupCondition(WhereCondition whereCondition)
-    {
-        if (!mShowGroups)
-        {
-            return;
-        }
-
-        var assignedGroupSelectionMode = drpTypeSelectInGroups.SelectedValue;
-        var unassignedGroupSelectionMode = drpTypeSelectNotInGroups.SelectedValue;
-
-        var assignedGroups = mSelectInGroups.Value.ToString();
-        var unassignedGroups = mSelectNotInGroups.Value.ToString();
-
-        whereCondition
-            .Where(GetGroupsSelectorCondition(assignedGroupSelectionMode, assignedGroups))
-            .WhereNot(GetGroupsSelectorCondition(unassignedGroupSelectionMode, unassignedGroups));
-    }
-
-
-    /// <summary>
     /// Adds role condition to given <paramref name="whereCondition"/>.
     /// </summary>
     private void AddRoleCondition(WhereCondition whereCondition)
@@ -1040,43 +954,6 @@ public partial class CMSModules_Membership_Controls_Users_UserFilter : CMSAbstra
 
         return siteRolesCondition.WhereIn("RoleName", siteRoles);
     }
-
-
-    /// <summary>
-    /// Returns where condition for specialized group conditions or <c>null</c> in case no groups were selected.
-    /// </summary>
-    /// <param name="selector">Condition to use (ANY/ALL)</param>
-    /// <param name="selectedGroups">Values separated with semicolon</param>
-    /// <remarks>
-    /// <c>null</c> is returned in order to allow calling <see cref="WhereConditionBase{TParent}.WhereNot"/> on method's result 
-    /// (empty <see cref="WhereCondition"/> would cause appending "NOT" to SQL query).
-    /// </remarks>
-    private WhereCondition GetGroupsSelectorCondition(string selector, string selectedGroups)
-    {
-        if (String.IsNullOrEmpty(selectedGroups))
-        {
-            return null;
-        }
-
-        string[] items = selectedGroups.Split(';');
-
-        var query = new ObjectQuery(PredefinedObjectType.GROUPMEMBER)
-            .Column("MemberUserID")
-            .WhereIn("MemberGroupID", new ObjectQuery(PredefinedObjectType.GROUP)
-                .Column("GroupID")
-                .WhereIn("GroupName", items))
-            .GroupBy("MemberUserID");
-
-        if (selector.Equals(UniGrid.ALL, StringComparison.OrdinalIgnoreCase))
-        {
-            query.Having(condition => condition.WhereEquals(new CountColumn("MemberGroupID"), items.Length));
-        }
-
-        var userIdColumn = SessionInsteadOfUser ? "SessionUserID" : "UserID";
-
-        return new WhereCondition().WhereIn(userIdColumn, query);
-    }
-
 
     #endregion
 

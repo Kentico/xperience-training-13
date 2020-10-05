@@ -79,7 +79,7 @@ public partial class CMSModules_SocialMarketing_Pages_FacebookPostDetailDialog :
         lblPeopleReachedValue.Text = ValidationHelper.GetString(post.FacebookPostInsightPeopleReached, String.Empty);
         if (post.FacebookPostCampaignID.HasValue)
         {
-            CampaignInfo campaign = CampaignInfoProvider.GetCampaignInfo(post.FacebookPostCampaignID.Value);
+            CampaignInfo campaign = CampaignInfo.Provider.Get(post.FacebookPostCampaignID.Value);
             if (campaign != null)
             {
                 lblCampaign.Text = HTMLHelper.HTMLEncode(campaign.CampaignDisplayName);

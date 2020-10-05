@@ -38,7 +38,7 @@ public class PageTemplateEditControlExtender : ControlExtender<UIForm>
         }
 
         String result = String.Empty;
-        PageTemplateTypeEnum type = (Control.GetFieldValue("PageTemplateType") as String).ToEnum<PageTemplateTypeEnum>();
+        PageTemplateTypeEnum type = EnumStringRepresentationExtensions.ToEnum<PageTemplateTypeEnum>((Control.GetFieldValue("PageTemplateType") as String));
 
         // Check dashboard prerequisites
         if ((pti.PageTemplateId > 0) && (type == PageTemplateTypeEnum.Dashboard))

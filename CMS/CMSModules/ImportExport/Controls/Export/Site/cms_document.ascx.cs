@@ -16,12 +16,10 @@ public partial class CMSModules_ImportExport_Controls_Export_Site_cms_document :
         chkDocumentsHistory.Text = GetString("ExportDocuments.ExportDocumentsHistory");
         chkRelationships.Text = GetString("ExportDocuments.ExportRelationships");
         chkACLs.Text = GetString("ExportDocuments.ExportACLs");
-        chkEventAttendees.Text = GetString("ExportDocuments.ExportEventAttendees");
-        chkBlogComments.Text = GetString("ExportDocuments.ExportBlogComments");
 
         // Javascript
         string script = "var ed_parent = document.getElementById('" + chkDocuments.ClientID + "'); \n" +
-                        "var childIDs = ['" + chkDocumentsHistory.ClientID + "', '" + chkRelationships.ClientID + "', '" + chkBlogComments.ClientID + "', '" + chkEventAttendees.ClientID + "', '" + chkACLs.ClientID + "']; \n" +
+                        "var childIDs = ['" + chkDocumentsHistory.ClientID + "', '" + chkRelationships.ClientID + "', '" + chkACLs.ClientID + "']; \n" +
                         "InitCheckboxes(); \n";
 
         ltlScript.Text = ScriptHelper.GetScript(script);
@@ -50,8 +48,6 @@ public partial class CMSModules_ImportExport_Controls_Export_Site_cms_document :
 
         Settings.SetSettings(ImportExportHelper.SETTINGS_DOC_RELATIONSHIPS, chkRelationships.Checked);
         Settings.SetSettings(ImportExportHelper.SETTINGS_DOC_ACLS, chkACLs.Checked);
-        Settings.SetSettings(ImportExportHelper.SETTINGS_EVENT_ATTENDEES, chkEventAttendees.Checked);
-        Settings.SetSettings(ImportExportHelper.SETTINGS_BLOG_COMMENTS, chkBlogComments.Checked);
     }
 
 
@@ -65,7 +61,5 @@ public partial class CMSModules_ImportExport_Controls_Export_Site_cms_document :
 
         chkRelationships.Checked = ValidationHelper.GetBoolean(Settings.GetSettings(ImportExportHelper.SETTINGS_DOC_RELATIONSHIPS), false);
         chkACLs.Checked = ValidationHelper.GetBoolean(Settings.GetSettings(ImportExportHelper.SETTINGS_DOC_ACLS), false);
-        chkEventAttendees.Checked = ValidationHelper.GetBoolean(Settings.GetSettings(ImportExportHelper.SETTINGS_EVENT_ATTENDEES), false);
-        chkBlogComments.Checked = ValidationHelper.GetBoolean(Settings.GetSettings(ImportExportHelper.SETTINGS_BLOG_COMMENTS), false);
     }
 }

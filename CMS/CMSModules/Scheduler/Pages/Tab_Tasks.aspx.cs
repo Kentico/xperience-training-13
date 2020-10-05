@@ -79,19 +79,21 @@ public partial class CMSModules_Scheduler_Pages_Tab_Tasks : CMSScheduledTasksPag
         HeaderActions.AddAction(new HeaderAction
         {
             Text = GetString("General.Refresh"),
-            OnClientClick = "RefreshGrid();"
+            OnClientClick = "RefreshGrid();",
+            ButtonStyle = ButtonStyle.Default
         });
 
         if (SiteInfo != null)
         {
-            bool usesTimer = SchedulingHelper.UseAutomaticScheduler || !SchedulingHelper.RunSchedulerWithinRequest;
+            bool usesTimer = SchedulingHelper.UseAutomaticScheduler;
             if (usesTimer)
             {
                 // Restart timer action
                 rightHeaderActions.AddAction(new HeaderAction
                 {
                     Text = GetString("Task_List.Restart"),
-                    EventName = TASKS_RESTART_TIMER
+                    EventName = TASKS_RESTART_TIMER,
+                    ButtonStyle = ButtonStyle.Default
                 });
             }
 
@@ -135,7 +137,7 @@ public partial class CMSModules_Scheduler_Pages_Tab_Tasks : CMSScheduledTasksPag
     {
         if (SiteInfo != null)
         {
-            if (SchedulingHelper.UseAutomaticScheduler || !SchedulingHelper.RunSchedulerWithinRequest)
+            if (SchedulingHelper.UseAutomaticScheduler)
             {
                 lblLastRun.Visible = true;
 

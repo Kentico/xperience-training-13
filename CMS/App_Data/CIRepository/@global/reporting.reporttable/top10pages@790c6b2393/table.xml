@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>24dd4953-f8fa-4c83-a4ce-00504c72b6b0</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @PaveViews TABLE
+(
+  NodeAliasPath NVARCHAR(450),
+  Pageviews INT,
+  Percents DECIMAL(10,2)  
+)
+
+DECLARE @Sum DECIMAL;
+
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'day');
+
+SELECT @Sum =   
+  SUM(HitsCount) 
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_DayHits ON Analytics_DayHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  LEFT JOIN View_CMS_Tree_Joined ON View_CMS_Tree_Joined.NodeID = Analytics_Statistics.StatisticsObjectID AND DocumentCulture = StatisticsObjectCulture
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+ AND (HitsEndTime <= @ToDate)
+
+INSERT INTO @PaveViews (NodeAliasPath,pageViews,percents)
+SELECT TOP 10
+ CASE
+  WHEN NodeAliasPath LIKE '' OR NodeAliasPath IS NULL THEN StatisticsObjectName
+  ELSE NodeAliasPath
+ END , SUM(HitsCount), (SUM(HitsCount)/@Sum)*100
+ FROM Analytics_Statistics
+ INNER JOIN Analytics_DayHits ON Analytics_DayHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+ LEFT JOIN View_CMS_Tree_Joined ON Analytics_Statistics.StatisticsObjectID = View_CMS_Tree_Joined.NodeID AND DocumentCulture = StatisticsObjectCulture
+ WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate)
+ AND (StatisticsCode=@CodeName)
+ GROUP BY NodeAliasPath, StatisticsObjectName
+ ORDER BY SUM(HitsCount) DESC
+ 
+  
+ SELECT NodeAliasPath AS '{$reports_landingpage_Day.path_header$}',pageviews AS  '{$reports_landingpage_Day.hits_header$}',
+   CAST (Percents AS NVARCHAR(10))+'%' AS '{$reports_landingpage_Day.hits_percent_header$}'
+   FROM @PaveViews ORDER BY PageViews DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>TOP10Pages</CodeName>
+    <GUID>1981f3d6-e9e0-4ded-ae20-feef07c13b56</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

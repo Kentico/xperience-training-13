@@ -303,7 +303,7 @@ function DS_ClearDocument(txtClientID, hiddenClientId) {
     /// </summary>
     private string GetDialogUrl()
     {
-        string url = CMSDialogHelper.GetDialogUrl(Config, IsLiveSite, false, null, false);
+        string url = CMSDialogHelper.GetDialogUrl(Config, false, null, false);
 
         url = URLHelper.RemoveParameterFromUrl(url, "hash");
         url = URLHelper.AddParameterToUrl(url, "selectionmode", "single");

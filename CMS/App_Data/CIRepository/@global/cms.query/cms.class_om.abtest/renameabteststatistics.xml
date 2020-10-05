@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>OM.ABTest</CodeName>
+    <GUID>71a1d617-6161-4ad6-aee2-be5756048223</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>a781fb52-81ea-4553-872a-62638425c738</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>RenameABTestStatistics</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+UPDATE Analytics_Statistics SET StatisticsCode = 'abconversion;'+@NewName + ';' + SUBSTRING(StatisticsCode, CHARINDEX(';',StatisticsCode,14)+1,LEN (StatisticsCode))  
+WHERE StatisticsCode LIKE 'abconversion;'+ @OldName +';%' AND StatisticsSiteID = @SiteID
+
+UPDATE Analytics_Statistics SET StatisticsCode = 'absessionconversionfirst;'+@NewName + ';' + SUBSTRING(StatisticsCode, CHARINDEX(';',StatisticsCode,26)+1,LEN (StatisticsCode))  
+WHERE StatisticsCode LIKE 'absessionconversionfirst;'+ @OldName +';%' AND StatisticsSiteID = @SiteID
+
+UPDATE Analytics_Statistics SET StatisticsCode = 'absessionconversionrecurring;'+@NewName + ';' + SUBSTRING(StatisticsCode, CHARINDEX(';',StatisticsCode,30)+1,LEN (StatisticsCode))  
+WHERE StatisticsCode LIKE 'absessionconversionrecurring;'+ @OldName +';%' AND StatisticsSiteID = @SiteID
+
+UPDATE Analytics_Statistics SET StatisticsCode = 'abvisitfirst;'+@NewName + ';' + SUBSTRING(StatisticsCode, CHARINDEX(';',StatisticsCode,14)+1,LEN (StatisticsCode))  
+WHERE StatisticsCode LIKE 'abvisitfirst;'+ @OldName +';%' AND StatisticsSiteID = @SiteID
+
+UPDATE Analytics_Statistics SET StatisticsCode = 'abvisitreturn;'+@NewName + ';' + SUBSTRING(StatisticsCode, CHARINDEX(';',StatisticsCode,15)+1,LEN (StatisticsCode))  
+WHERE StatisticsCode LIKE 'abvisitreturn;'+ @OldName +';%' AND StatisticsSiteID = @SiteID
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

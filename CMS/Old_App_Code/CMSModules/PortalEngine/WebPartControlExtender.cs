@@ -1,12 +1,5 @@
-﻿using System;
-using System.Linq;
-
-using CMS;
-using CMS.Base;
+﻿using CMS;
 using CMS.Base.Web.UI;
-using CMS.Helpers;
-using CMS.IO;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
 [assembly: RegisterCustomClass("WebPartHeaderControlExtender", typeof(WebPartHeaderControlExtender))]
@@ -29,29 +22,5 @@ public class WebPartHeaderControlExtender : UITabsExtender
     /// </summary>
     public override void OnInitTabs()
     {
-        Control.OnTabCreated += OnTabCreated;
-    }
-
-
-    void OnTabCreated(object sender, TabCreatedEventArgs e)
-    {
-        if (e.Tab == null)
-        {
-            return;
-        }
-
-        var tab = e.Tab;
-
-        switch (tab.TabName.ToLowerCSafe())
-        {
-            case "webpart.theme":
-                var wpi = Control.UIContext.EditedObject as WebPartInfo;
-
-                if ((wpi != null) && StorageHelper.IsExternalStorage(wpi.GetThemePath()))
-                {
-                    e.Tab = null;
-                }
-                break;
-        }
     }
 }

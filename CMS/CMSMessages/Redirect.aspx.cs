@@ -31,13 +31,6 @@ public partial class CMSMessages_Redirect : MessagePage
         string url = QueryHelper.GetString("url", String.Empty);
         string target = QueryHelper.GetString("target", String.Empty);
         string frame = QueryHelper.GetString("frame", String.Empty);
-        
-        // Change view mode to live site
-        bool liveSite = QueryHelper.GetBoolean("livesite", false);
-        if (liveSite)
-        {
-            PortalContext.ViewMode = ViewModeEnum.LiveSite;
-        }
 
         bool urlIsRelative = URLHelper.IsLocalUrl(url);
 

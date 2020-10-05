@@ -3,7 +3,7 @@
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
-using CMS.DocumentEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
 using CMS.OnlineForms;
 using CMS.SiteProvider;
@@ -30,7 +30,7 @@ public partial class CMSModules_Activities_Controls_UI_ActivityDetails_BizFormDe
 
         if ((bizId > 0) && (recId > 0))
         {
-            var bfi = BizFormInfoProvider.GetBizFormInfo(bizId);
+            var bfi = BizFormInfo.Provider.Get(bizId);
             if (bfi == null)
             {
                 return;
@@ -38,16 +38,18 @@ public partial class CMSModules_Activities_Controls_UI_ActivityDetails_BizFormDe
 
             var path = string.Format(FORM_ITEM_PREVIEW_ROUTE_TEMPLATE, bfi.FormID, recId);
             var site = bfi.Site as SiteInfo;
-            var url = DocumentURLProvider.GetPresentationUrl(site.SiteID);
+            var url = new PresentationUrlRetriever().RetrieveForAdministration(site.SiteName);
 
             // Modify frame 'src' attribute and add administration domain into it
             ScriptHelper.RegisterModule(this, "CMS.Builder/FrameSrcAttributeModifier", new
             {
                 frameId = mvcFrame.ClientID,
-                frameSrc = url.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path, CurrentUser.UserName),
+                frameSrc = url.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path),
                 mixedContentMessage = GetString("builder.ui.mixedcontenterrormessage"),
                 applicationPath = SystemContext.ApplicationPath
             });
+            
+            RegisterCookiePolicyDetection();
         }
     }
 }

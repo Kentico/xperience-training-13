@@ -2,7 +2,6 @@
 
 using CMS.Base.Web.UI;
 using CMS.Helpers;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
 
@@ -17,13 +16,6 @@ public partial class CMSAdminControls_UI_Macros_Dialogs_Tab_InsertMacroTree : CM
     protected override void OnPreRender(EventArgs e)
     {
         base.OnPreRender(e);
-
-        if (PortalContext.ViewMode.IsLiveSite())
-        {
-            // Register custom css if exists
-            RegisterDialogCSSLink();
-            SetLiveDialogClass();
-        }
 
         string script = @"
 function InsertMacro(macro) {

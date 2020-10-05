@@ -75,22 +75,6 @@ public partial class CMSModules_Membership_FormControls_Users_SelectUser : FormE
 
 
     /// <summary>
-    /// Gets or sets the id of the group to display.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return ValidationHelper.GetInteger(GetValue("GroupID"), 0);
-        }
-        set
-        {
-            SetValue("GroupID", value);
-        }
-    }
-
-
-    /// <summary>
     /// Gets or sets ID of the role. User of this role are displayed.
     /// </summary>
     public int RoleID
@@ -498,7 +482,7 @@ public partial class CMSModules_Membership_FormControls_Users_SelectUser : FormE
     protected void SetupControls()
     {
         // If current control context is widget or livesite hide site selector
-        if (ControlsHelper.CheckControlContext(this, ControlContext.WIDGET_PROPERTIES) || ControlsHelper.CheckControlContext(this, ControlContext.LIVE_SITE))
+        if (ControlsHelper.CheckControlContext(this, ControlContext.WIDGET_PROPERTIES))
         {
             ShowSiteFilter = false;
         }
@@ -549,23 +533,6 @@ public partial class CMSModules_Membership_FormControls_Users_SelectUser : FormE
 
             var approvedUsersCondition = new WhereCondition().WhereIn(userTypeInfo.IDColumn, approvedUserIDs);
             usersWhereCondition.And(approvedUsersCondition);
-        }
-
-        // Select group users
-        if (GroupID > 0)
-        {
-            var groupUserIDs = new ObjectQuery(PredefinedObjectType.GROUPMEMBER)
-                                    .WhereEquals("MemberGroupID", GroupID)
-                                    .Column("MemberUserID");
-
-            // Hide non-approved group users
-            if (HideNonApprovedUsers)
-            {
-                groupUserIDs.WhereNull("MemberRejectedWhen");
-            }
-
-            var usersInGroupCondition = new WhereCondition().WhereIn(userTypeInfo.IDColumn, groupUserIDs);
-            usersWhereCondition.And(usersInGroupCondition);
         }
 
         // Select users in role

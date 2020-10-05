@@ -11,7 +11,6 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Web.UI;
 using CMS.EventLog;
@@ -1134,13 +1133,6 @@ function RefreshGrid()
 
                         string selectFunction = SelectItemJSFunction + "(" + currentNodeId + ", " + nodeParentId + ");";
                         sb.Append("<a href=\"javascript: ", selectFunction, "\"");
-
-                        // Ensure onclick action on mobile devices. This is necessary due to Tip/UnTip functions. They block default click behavior on mobile devices.
-                        if (DeviceContext.CurrentDevice.IsMobile())
-                        {
-                            sb.Append(" ontouchend=\"", selectFunction, "\"");
-                        }
-
                         sb.Append(" onmouseout=\"UnTip()\" onmouseover=\"Tip('", HTMLHelper.EncodeForHtmlAttribute(tooltip), "')\">", safeName, cultureString, "</a>");
                     }
                     else
@@ -1302,7 +1294,7 @@ function RefreshGrid()
                     Config.ContentStartingPath = CopyMoveLinkStartingPath;
                 }
 
-                return CMSDialogHelper.GetDialogUrl(Config, false, false, null, false);
+                return CMSDialogHelper.GetDialogUrl(Config, false, null, false);
             },
             TranslateReturnUrl = TranslateReturnUrl,
             PublishReturnUrl = PublishReturnUrl,

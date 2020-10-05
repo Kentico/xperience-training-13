@@ -10,7 +10,6 @@ using System.Web.UI.WebControls;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.CMSImportExport;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.Globalization;
@@ -24,7 +23,6 @@ using CMS.Modules;
 using CMS.UIControls;
 
 using MessageTypeEnum = CMS.DataEngine.MessageTypeEnum;
-using ProcessStatus = CMS.Base.ProcessStatus;
 
 public partial class CMSInstall_install : CMSPage
 {
@@ -36,14 +34,6 @@ public partial class CMSInstall_install : CMSPage
     [Serializable]
     private class InstallInfo
     {
-        #region "Variables"
-
-        private string mScriptsFullPath;
-        private string mConnectionString;
-
-        #endregion
-
-
         #region "Properties"
 
         /// <summary>
@@ -51,15 +41,8 @@ public partial class CMSInstall_install : CMSPage
         /// </summary>
         public string ConnectionString
         {
-            get
-            {
-                return mConnectionString;
-            }
-
-            set
-            {
-                mConnectionString = value;
-            }
+            get;
+            set;
         }
 
 
@@ -68,15 +51,8 @@ public partial class CMSInstall_install : CMSPage
         /// </summary>
         public string ScriptsFullPath
         {
-            get
-            {
-                return mScriptsFullPath;
-            }
-
-            set
-            {
-                mScriptsFullPath = value;
-            }
+            get;
+            set;
         }
 
 
@@ -120,9 +96,9 @@ public partial class CMSInstall_install : CMSPage
 
     // Short link to help topic page regarding SQL error.
     private const string HELP_TOPIC_SQL_ERROR_LINK = HELP_TOPIC_LINK;
-    
+
     // Index of collation dialog step in wizard
-    private const int COLLATION_DIALOG_INDEX = 8;
+    private const int COLLATION_DIALOG_INDEX = 6;
 
     private const string INSTALL_CHECK_PAYLOAD = "Install Check Payload";
     private const string INSTALL_CHECK_PURPOSE = "Install POST Check";
@@ -135,13 +111,9 @@ public partial class CMSInstall_install : CMSPage
     #region "Variables"
 
     private static readonly SafeDictionary<string, InstallInfo> mInstallInfos = new SafeDictionary<string, InstallInfo>();
-    private static readonly SafeDictionary<string, ImportManager> mManagers = new SafeDictionary<string, ImportManager>();
 
-    private string hostName = RequestContext.URL.Host.ToLowerCSafe();
-    private static bool dbReady;
+    private readonly string hostName = RequestContext.URL.Host.ToLowerInvariant();
     private static bool writePermissions = true;
-
-    private UserInfo mImportUser;
 
     private LocalizedButton mNextButton;
     private LocalizedButton mPreviousButton;
@@ -153,24 +125,6 @@ public partial class CMSInstall_install : CMSPage
     #region "Properties"
 
     /// <summary>
-    /// User for actions context
-    /// </summary>
-    private UserInfo ImportUser
-    {
-        get
-        {
-            if (mImportUser == null)
-            {
-                mImportUser = UserInfoProvider.AdministratorUser;
-                CMSActionContext.CurrentUser = mImportUser;
-            }
-
-            return mImportUser;
-        }
-    }
-
-
-    /// <summary>
     /// Database is created.
     /// </summary>
     private bool DBCreated
@@ -178,11 +132,6 @@ public partial class CMSInstall_install : CMSPage
         get
         {
             return ValidationHelper.GetBoolean(ViewState["DBCreated"], false);
-        }
-
-        set
-        {
-            ViewState["DBCreated"] = value;
         }
     }
 
@@ -196,7 +145,6 @@ public partial class CMSInstall_install : CMSPage
         {
             return ValidationHelper.GetBoolean(ViewState["DBInstalled"], false);
         }
-
         set
         {
             ViewState["DBInstalled"] = value;
@@ -207,7 +155,7 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Process GUID.
     /// </summary>
-    public Guid ProcessGUID
+    private Guid ProcessGUID
     {
         get
         {
@@ -263,7 +211,7 @@ public partial class CMSInstall_install : CMSPage
     {
         get
         {
-            return ValidationHelper.GetString(ViewState["Database"], "");
+            return ValidationHelper.GetString(ViewState["Database"], String.Empty);
         }
         set
         {
@@ -273,49 +221,13 @@ public partial class CMSInstall_install : CMSPage
 
 
     /// <summary>
-    /// Import manager.
+    /// New site name.
     /// </summary>
-    private ImportManager ImportManager
+    private string SiteName
     {
         get
         {
-            string key = "imManagers_" + ProcessGUID;
-
-            return mManagers[key] ?? (mManagers[key] = CreateManager());
-        }
-    }
-
-
-    /// <summary>
-    /// New site domain.
-    /// </summary>
-    public string Domain
-    {
-        get
-        {
-            return ValidationHelper.GetString(ViewState["Domain"], "");
-        }
-
-        set
-        {
-            ViewState["Domain"] = value;
-        }
-    }
-
-
-    /// <summary>
-    /// New site site name.
-    /// </summary>
-    public string SiteName
-    {
-        get
-        {
-            return ValidationHelper.GetString(ViewState["SiteName"], "");
-        }
-
-        set
-        {
-            ViewState["SiteName"] = value;
+            return ValidationHelper.GetString(ViewState["SiteName"], String.Empty);
         }
     }
 
@@ -323,17 +235,16 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Connection string.
     /// </summary>
-    public string ConnectionString
+    private string ConnectionString
     {
         get
         {
             if (ViewState["connString"] == null)
             {
-                ViewState["connString"] = "";
+                ViewState["connString"] = String.Empty;
             }
             return (string)ViewState["connString"];
         }
-
         set
         {
             ViewState["connString"] = value;
@@ -344,7 +255,7 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Step index.
     /// </summary>
-    public int StepIndex
+    private int StepIndex
     {
         get
         {
@@ -354,7 +265,6 @@ public partial class CMSInstall_install : CMSPage
             }
             return (int)ViewState["stepIndex"];
         }
-
         set
         {
             ViewState["stepIndex"] = value;
@@ -362,7 +272,7 @@ public partial class CMSInstall_install : CMSPage
     }
 
 
-    private string mResult
+    private string Result
     {
         get
         {
@@ -382,7 +292,7 @@ public partial class CMSInstall_install : CMSPage
     }
 
 
-    private bool mDisplayLog
+    private bool DisplayLog
     {
         get
         {
@@ -512,7 +422,7 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Previous button.
     /// </summary>
-    public LocalizedButton PreviousButton
+    private LocalizedButton PreviousButton
     {
         get
         {
@@ -524,7 +434,7 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Next button.
     /// </summary>
-    public LocalizedButton NextButton
+    private LocalizedButton NextButton
     {
         get
         {
@@ -536,7 +446,7 @@ public partial class CMSInstall_install : CMSPage
     /// <summary>
     /// Next button.
     /// </summary>
-    public LocalizedButton StartNextButton
+    private LocalizedButton StartNextButton
     {
         get
         {
@@ -549,32 +459,11 @@ public partial class CMSInstall_install : CMSPage
 
     #region "Methods"
 
-    private ImportManager CreateManager()
-    {
-        var settings = new SiteImportSettings(ImportUser);
-
-        settings.IsWebTemplate = true;
-
-        // Import all, but only add new data
-        settings.ImportType = ImportTypeEnum.AllNonConflicting;
-        settings.ImportOnlyNewObjects = true;
-        settings.CopyFiles = false;
-
-        // Allow bulk inserts for faster import, web templates must be consistent enough to allow this without collisions
-        settings.AllowBulkInsert = true;
-
-        settings.EnableSearchTasks = false;
-
-        ImportManager im = new ImportManager(settings);
-        return im;
-    }
-
-
     private void ValidatePostRequest()
     {
         if (RequestHelper.IsPostBack())
         {
-            var isValidPostRequest = false;
+            bool isValidPostRequest;
             try
             {
                 var cookieValue = CookieHelper.GetValue(INSTALL_CHECK_COOKIE_NAME);
@@ -594,8 +483,10 @@ public partial class CMSInstall_install : CMSPage
     }
 
 
-    protected void Page_Load(Object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         ValidatePostRequest();
 
         // Disable CSS minification
@@ -608,7 +499,6 @@ public partial class CMSInstall_install : CMSPage
         {
             EnsureApplicationConfiguration();
 
-            ctlAsyncImport.OnFinished += worker_OnFinished;
             ctlAsyncDB.OnFinished += workerDB_OnFinished;
             databaseDialog.ServerName = userServer.ServerName;
 
@@ -618,37 +508,30 @@ public partial class CMSInstall_install : CMSPage
             ScriptManager.RegisterClientScriptBlock(this, GetType(), "fixPendingCallbacks", "WebForm_CallbackComplete = WebForm_CallbackComplete_SyncFixed", true);
 
             // Javascript functions
-            string script = String.Format(
-@"
+            string script = $@"
 function Finished(sender) {{
-    var errorElement = document.getElementById('{2}');
+    var errorElement = document.getElementById('{pnlError.ClientID}');
 
     var errorText = sender.getErrors();
-    if (errorText != '') {{ 
+    if (errorText != '') {{
         errorElement.innerHTML = errorText;
     }}
 
-    var warningElement = document.getElementById('{3}');
-    
-    var warningText = sender.getWarnings();
-    if (warningText != '') {{ 
-        warningElement.innerHTML = warningText;
-    }}    
+    var warningElement = document.getElementById('{pnlWarning.ClientID}');
 
-    var actDiv = document.getElementById('actDiv');
-    if (actDiv != null) {{ 
-        actDiv.style.display = 'none'; 
+    var warningText = sender.getWarnings();
+    if (warningText != '') {{
+        warningElement.innerHTML = warningText;
     }}
 
-    BTN_Disable('{0}');
-    BTN_Enable('{1}');
-}}
-",
-                PreviousButton.ClientID,
-                NextButton.ClientID,
-                pnlError.ClientID,
-                pnlWarning.ClientID
-            );
+    var actDiv = document.getElementById('actDiv');
+    if (actDiv != null) {{
+        actDiv.style.display = 'none';
+    }}
+
+    BTN_Disable('{PreviousButton.ClientID}');
+    BTN_Enable('{NextButton.ClientID}');
+}}";
 
             // Register the script to perform get flags for showing buttons retrieval callback
             ScriptHelper.RegisterClientScriptBlock(this, GetType(), "InstallFunctions", ScriptHelper.GetScript(script));
@@ -661,7 +544,6 @@ function Finished(sender) {{
 
             Help.Tooltip = ResHelper.GetFileString("install.tooltip");
             Help.IconCssClass = "cms-icon-80";
-
 
             btnPermissionTest.Click += btnPermissionTest_Click;
             btnPermissionSkip.Click += btnPermissionSkip_Click;
@@ -724,7 +606,7 @@ function Finished(sender) {{
 
             if (!RequestHelper.IsPostBack())
             {
-                if ((HttpContext.Current != null) && !ValidationHelper.GetBoolean(Service.Resolve<IAppSettingsService>()["CMSWWAGInstallation"], false))
+                if ((HttpContext.Current != null) && !ValidationHelper.GetBoolean(Service.Resolve<IAppSettingsService>()[WWAG_KEY], false))
                 {
                     userServer.ServerName = SystemContext.MachineName;
                 }
@@ -732,35 +614,34 @@ function Finished(sender) {{
 
                 wzdInstaller.ActiveStepIndex = 0;
             }
-            else
+            else if (Password == null)
             {
-                if (Password == null)
-                {
-                    Password = userServer.DBPassword;
-                }
+                Password = userServer.DBPassword;
             }
 
             // Load the strings
-            mDisplayLog = false;
+            DisplayLog = false;
 
             lblCompleted.Text = ResHelper.GetFileString("Install.DBSetupOK");
             lblMediumTrustInfo.Text = ResHelper.GetFileString("Install.MediumTrustInfo");
 
-            ltlScript.Text = ScriptHelper.GetScript(
-                "function NextStep(btnNext,elementDiv)\n" +
-                "{\n" +
-                "   btnNext.disabled=true;\n" +
-                "   try{BTN_Disable('" + PreviousButton.ClientID + "');}catch(err){}\n" +
-                ClientScript.GetPostBackEventReference(btnHiddenNext, null) +
-                "}\n" +
-                "function PrevStep(btnPrev,elementDiv)\n" +
-                "{" +
-                "   btnPrev.disabled=true;\n" +
-                "   try{BTN_Disable('" + NextButton.ClientID + "');}catch(err){}\n" +
-                ClientScript.GetPostBackEventReference(btnHiddenBack, null) +
-                "}\n"
-                );
-            mResult = "";
+            ltlScript.Text = ScriptHelper.GetScript($@"
+function NextStep(btnNext,elementDiv) {{
+    btnNext.disabled=true;
+    try {{
+        BTN_Disable('{PreviousButton.ClientID}');
+    }} catch(err) {{}}
+    {ClientScript.GetPostBackEventReference(btnHiddenNext, null)}
+}}
+
+function PrevStep(btnPrev,elementDiv) {{
+    btnPrev.disabled=true;
+    try {{
+        BTN_Disable('{NextButton.ClientID}');
+    }} catch(err) {{}}
+    {ClientScript.GetPostBackEventReference(btnHiddenBack, null)}
+}}");
+            Result = String.Empty;
 
             // Sets connection string panel
             lblConnectionString.Text = ResHelper.GetFileString("Install.lblConnectionString");
@@ -802,24 +683,20 @@ function Finished(sender) {{
     }
 
 
-    protected void Page_PreRender(object sender, EventArgs e)
+    protected override void OnPreRender(EventArgs e)
     {
-        if (dbReady || ConnectionHelper.ConnectionAvailable)
-        {
-            ucSiteCreationDialog.StopProcessing = false;
-            ucSiteCreationDialog.ReloadData();
-        }
+        base.OnPreRender(e);
 
         // Display the log if result filled
-        if (mDisplayLog)
+        if (DisplayLog)
         {
-            logPanel.DisplayLog(mResult);
+            logPanel.DisplayLog(Result);
         }
 
         InitializeHeader(wzdInstaller.ActiveStepIndex);
         EnsureDefaultButton();
 
-        PreviousButton.Visible = !ConnectionHelper.IsConnectionStringInitialized && (wzdInstaller.ActiveStepIndex != 0) && (wzdInstaller.ActiveStepIndex != 4) ||
+        PreviousButton.Visible = (!ConnectionHelper.IsConnectionStringInitialized && (wzdInstaller.ActiveStepIndex != 0) && (wzdInstaller.ActiveStepIndex != 4)) ||
             (wzdInstaller.ActiveStepIndex == 6);
     }
 
@@ -831,7 +708,7 @@ function Finished(sender) {{
             case 1:
                 break;
             // Finish step
-            case 7:
+            case 5:
                 // Set current user default culture of the site
                 LocalizationContext.PreferredCultureCode = SettingsKeyInfoProvider.GetValue(SiteName + ".CMSDefaultCultureCode");
 
@@ -888,7 +765,7 @@ function Finished(sender) {{
     protected void btnHiddenBack_onClick(object sender, EventArgs e)
     {
         StepOperation = -1;
-        if ((wzdInstaller.ActiveStepIndex == COLLATION_DIALOG_INDEX) || (wzdInstaller.ActiveStepIndex == 3))
+        if (wzdInstaller.ActiveStepIndex == COLLATION_DIALOG_INDEX || wzdInstaller.ActiveStepIndex == 3)
         {
             StepIndex = 2;
             wzdInstaller.ActiveStepIndex = 1;
@@ -931,7 +808,7 @@ function Finished(sender) {{
 
                 // Check if it is possible to connect to the database
                 string res = ConnectionHelper.TestConnection(AuthenticationType, userServer.ServerName, String.Empty, userServer.DBUsername, Password);
-                if (!string.IsNullOrEmpty(res))
+                if (!String.IsNullOrEmpty(res))
                 {
                     HandleError(res, "Install.ErrorSqlTroubleshoot", HELP_TOPIC_SQL_ERROR_LINK);
                     return;
@@ -950,9 +827,9 @@ function Finished(sender) {{
             case 1:
             case COLLATION_DIALOG_INDEX:
                 // Get database name
-                Database = TextHelper.LimitLength((databaseDialog.CreateNewChecked ? databaseDialog.NewDatabaseName : databaseDialog.ExistingDatabaseName), 100);
+                Database = TextHelper.LimitLength(databaseDialog.CreateNewChecked ? databaseDialog.NewDatabaseName : databaseDialog.ExistingDatabaseName, 100);
 
-                if (string.IsNullOrEmpty(Database))
+                if (String.IsNullOrEmpty(Database))
                 {
                     HandleError(ResHelper.GetFileString("Install.ErrorDBNameEmpty"));
                     return;
@@ -1039,7 +916,7 @@ function Finished(sender) {{
                     // Create a new database
                     if (!CreateDatabase(null))
                     {
-                        HandleError(string.Format(ResHelper.GetFileString("Install.ErrorCreateDB"), databaseDialog.NewDatabaseName));
+                        HandleError(String.Format(ResHelper.GetFileString("Install.ErrorCreateDB"), databaseDialog.NewDatabaseName));
                         return;
                     }
 
@@ -1151,116 +1028,10 @@ function Finished(sender) {{
                 }
                 break;
 
-            // Site creation
-            case 5:
-                switch (ucSiteCreationDialog.CreationType)
-                {
-                    case CMSInstall_Controls_WizardSteps_SiteCreationDialog.CreationTypeEnum.Template:
-                        {
-                            // Get web template
-                            if (ucSiteCreationDialog.TemplateName == "")
-                            {
-                                HandleError(ResHelper.GetFileString("install.notemplate"));
-                                return;
-                            }
-
-                            var ti = WebTemplateInfoProvider.GetWebTemplateInfo(ucSiteCreationDialog.TemplateName);
-                            if (ti == null)
-                            {
-                                HandleError("[Install]: Template not found.");
-                                return;
-                            }
-
-                            var settings = PrepareSettings(ti);
-
-                            SiteName = settings.SiteName;
-
-                            // Import the site asynchronously
-                            ImportManager.Settings = settings;
-
-                            settings.LogContext = ctlAsyncImport.LogContext;
-
-                            ctlAsyncImport.RunAsync(ImportManager.Import, WindowsIdentity.GetCurrent());
-
-                            NextButton.Attributes.Add("disabled", "true");
-                            PreviousButton.Attributes.Add("disabled", "true");
-                            wzdInstaller.ActiveStepIndex = 6;
-                        }
-                        break;
-
-                    // Else redirect to the sites application
-                    case CMSInstall_Controls_WizardSteps_SiteCreationDialog.CreationTypeEnum.AddOrImportSite:
-                        {
-                            AuthenticationHelper.AuthenticateUser(UserInfoProvider.AdministratorUserName, false);
-                            URLHelper.Redirect(ApplicationUrlHelper.GetApplicationUrl("cms", "sites"));
-                        }
-                        break;
-                }
-                break;
-
             default:
                 wzdInstaller.ActiveStepIndex++;
                 break;
         }
-    }
-
-
-    private SiteImportSettings PrepareSettings(WebTemplateInfo ti)
-    {
-        // Settings preparation
-        var settings = new SiteImportSettings(ImportUser);
-
-        // Import all, but only add new data
-        settings.ImportType = ImportTypeEnum.AllNonConflicting;
-        settings.ImportOnlyNewObjects = true;
-        settings.CopyFiles = false;
-
-        // Allow bulk inserts for faster import, web templates must be consistent enough to allow this without collisions
-        settings.AllowBulkInsert = true;
-
-        settings.IsWebTemplate = true;
-        settings.EnableSearchTasks = false;
-        settings.CreateVersion = false;
-        settings.SiteName = ti.WebTemplateName;
-        settings.SiteDisplayName = ti.WebTemplateDisplayName;
-
-        if (HttpContext.Current != null)
-        {
-            const string www = "www.";
-            if (hostName.StartsWithCSafe(www))
-            {
-                hostName = hostName.Remove(0, www.Length);
-            }
-
-            if (!RequestContext.URL.IsDefaultPort)
-            {
-                hostName += ":" + RequestContext.URL.Port;
-            }
-
-            settings.SiteDomain = hostName;
-            Domain = hostName;
-
-            string path = HttpContext.Current.Server.MapPath(ti.WebTemplateFileName);
-            if (File.Exists(path + "\\template.zip"))
-            {
-                // Template from zip file
-                path += "\\" + ZipStorageProvider.GetZipFileName("template.zip");
-                settings.TemporaryFilesPath = path;
-                settings.SourceFilePath = path;
-                settings.TemporaryFilesCreated = true;
-            }
-            else
-            {
-                settings.SourceFilePath = path;
-            }
-
-            settings.WebsitePath = HttpContext.Current.Server.MapPath("~/");
-        }
-
-        settings.SetSettings(ImportExportHelper.SETTINGS_DELETE_SITE, true);
-        settings.SetSettings(ImportExportHelper.SETTINGS_DELETE_TEMPORARY_FILES, false);
-
-        return settings;
     }
 
 
@@ -1286,22 +1057,6 @@ function Finished(sender) {{
     }
 
 
-    private void worker_OnFinished(object sender, EventArgs e)
-    {
-        DBCreated = true;
-
-        // If the import finished without error
-        if ((ImportManager.ImportStatus != ProcessStatus.Error) && (ImportManager.ImportStatus != ProcessStatus.Restarted))
-        {
-            wzdInstaller.ActiveStepIndex = 7;
-        }
-        else
-        {
-            NextButton.Enabled = false;
-        }
-    }
-
-
     private void workerDB_OnFinished(object sender, EventArgs e)
     {
         CreateDBObjects = databaseDialog.CreateDatabaseObjects;
@@ -1323,7 +1078,7 @@ function Finished(sender) {{
 
 
     /// <summary>
-    /// Sets connection string, inits application and finalizes the database data (macro signatures, time zones, license). 
+    /// Sets connection string, inits application and finalizes the database data (macro signatures, time zones, license).
     /// </summary>
     private void FinalizeDBInstallation()
     {
@@ -1343,32 +1098,27 @@ function Finished(sender) {{
     /// </summary>
     private void CheckLicense()
     {
-        // Add license keys
-        bool licensesAdded = true;
-
         // Try to add trial license
-        if (CreateDBObjects && (ucSiteCreationDialog.CreationType == CMSInstall_Controls_WizardSteps_SiteCreationDialog.CreationTypeEnum.Template))
+        if (CreateDBObjects)
         {
-            licensesAdded = AddTrialLicenseKeys();
-        }
-
-        if (licensesAdded)
-        {
-            if ((hostName != "localhost") && (hostName != "127.0.0.1"))
+            if (AddTrialLicenseKeys())
             {
-                // Check if license key for current domain is present
-                LicenseKeyInfo lki = LicenseKeyInfoProvider.GetLicenseKeyInfo(hostName);
-                wzdInstaller.ActiveStepIndex = (lki == null) ? 4 : 5;
+                if (hostName != "localhost" && hostName != "127.0.0.1")
+                {
+                    // Check if license key for current domain is present
+                    LicenseKeyInfo lki = LicenseKeyInfoProvider.GetLicenseKeyInfo(hostName);
+                    wzdInstaller.ActiveStepIndex = (lki == null) ? 4 : 5;
+                }
+                else
+                {
+                    wzdInstaller.ActiveStepIndex = 5;
+                }
             }
             else
             {
-                wzdInstaller.ActiveStepIndex = 5;
+                wzdInstaller.ActiveStepIndex = 4;
+                ucLicenseDialog.SetLicenseExpired();
             }
-        }
-        else
-        {
-            wzdInstaller.ActiveStepIndex = 4;
-            ucLicenseDialog.SetLicenseExpired();
         }
     }
 
@@ -1378,15 +1128,16 @@ function Finished(sender) {{
     /// </summary>
     private void ManualConnectionStringInsertion()
     {
-        string encodedPassword = HttpUtility.HtmlEncode(HttpUtility.HtmlEncode(Password));
-        string connectionString = ConnectionHelper.BuildConnectionString(AuthenticationType, userServer.ServerName, Database, userServer.DBUsername, encodedPassword, SqlInstallationHelper.DB_CONNECTION_TIMEOUT, isForAzure: SystemContext.IsRunningOnAzure);
+        var encodedPassword = HttpUtility.HtmlEncode(HttpUtility.HtmlEncode(Password));
+        var connectionString = ConnectionHelper.BuildConnectionString(AuthenticationType, userServer.ServerName, Database, userServer.DBUsername, encodedPassword, SqlInstallationHelper.DB_CONNECTION_TIMEOUT, isForAzure: SystemContext.IsRunningOnAzure);
 
         // Set error message
-        string connectionStringEntry = "&lt;add name=\"CMSConnectionString\" connectionString=\"" + connectionString + "\"/&gt;";
-        string applicationSettingsEntry = "&lt;Setting name=\"CMSConnectionString\" value=\"" + connectionString + "\"/&gt;";
+        var connectionStringEntry = $"&lt;add name=\"CMSConnectionString\" connectionString=\"{connectionString}\"/&gt;";
+        var applicationSettingsEntry = $"&lt;Setting name=\"CMSConnectionString\" value=\"{connectionString}\"/&gt;";
 
-        string errorMessage = SystemContext.IsRunningOnAzure ? string.Format(ResHelper.GetFileString("Install.ConnectionStringAzure"), connectionStringEntry, applicationSettingsEntry) : string.Format(ResHelper.GetFileString("Install.ConnectionStringError"), connectionStringEntry);
-        lblErrorConnMessage.Text = errorMessage;
+        lblErrorConnMessage.Text = SystemContext.IsRunningOnAzure
+            ? String.Format(ResHelper.GetFileString("Install.ConnectionStringAzure"), connectionStringEntry, applicationSettingsEntry)
+            : String.Format(ResHelper.GetFileString("Install.ConnectionStringError"), connectionStringEntry);
 
         // Set step that prompts user to enter connection string to web.config
         wzdInstaller.ActiveStepIndex = 2;
@@ -1405,7 +1156,6 @@ function Finished(sender) {{
     private void SetAppConnectionString()
     {
         ConnectionHelper.ConnectionString = ConnectionString;
-        dbReady = true;
 
         // Init core
         CMSApplication.Init();
@@ -1434,7 +1184,7 @@ function Finished(sender) {{
     protected void wzdInstaller_PreviousButtonClick(object sender, WizardNavigationEventArgs e)
     {
         --StepIndex;
-        wzdInstaller.ActiveStepIndex -= 1;
+        wzdInstaller.ActiveStepIndex--;
     }
 
 
@@ -1471,13 +1221,12 @@ function Finished(sender) {{
         StartHelp.Visible = true;
         StartHelp.TopicName = Help.TopicName = HELP_TOPIC_LINK;
 
-        lblHeader.Text = ResHelper.GetFileString("Install.Step") + " - ";
+        lblHeader.Text = $"{ResHelper.GetFileString("Install.Step")} - ";
 
-        string[] stepIcons = 
+        string[] stepIcons =
         {
             " icon-cogwheel",
             " icon-database",
-            " icon-layout",
             " icon-check-circle icon-style-allow"
         };
 
@@ -1485,7 +1234,6 @@ function Finished(sender) {{
         {
             ResHelper.GetFileString("install.sqlsetting"),
             ResHelper.GetFileString("install.lbldatabase"),
-            ResHelper.GetFileString("install.step5"),
             ResHelper.GetFileString("install.finishstep")
         };
 
@@ -1533,76 +1281,47 @@ function Finished(sender) {{
         {
             // SQL server and authentication mode
             case 0:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step0");
-                    SetSelectedCSSClass("stepPanel0");
-                    break;
-                }
+                lblHeader.Text += ResHelper.GetFileString("Install.Step0");
+                SetSelectedCSSClass("stepPanel0");
+                break;
+
             // Database
             case 1:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step1");
-                    SetSelectedCSSClass("stepPanel1");
-                    break;
-                }
+                lblHeader.Text += ResHelper.GetFileString("Install.Step1");
+                SetSelectedCSSClass("stepPanel1");
+                break;
+
             // web.config permissions
             case 2:
-                {
-                    StartHelp.Visible = Help.Visible = false;
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step3");
-                    SetSelectedCSSClass("stepPanel1");
-                    break;
-                }
+                StartHelp.Visible = Help.Visible = false;
+                lblHeader.Text += ResHelper.GetFileString("Install.Step3");
+                SetSelectedCSSClass("stepPanel1");
+                break;
 
             // Database creation log
             case 3:
-                {
-                    StartHelp.Visible = Help.Visible = false;
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step2");
-                    lblDBProgress.Text = ResHelper.GetFileString("Install.lblDBProgress");
-                    SetSelectedCSSClass("stepPanel1");
-                    break;
-                }
+                StartHelp.Visible = Help.Visible = false;
+                lblHeader.Text += ResHelper.GetFileString("Install.Step2");
+                lblDBProgress.Text = ResHelper.GetFileString("Install.lblDBProgress");
+                SetSelectedCSSClass("stepPanel1");
+                break;
 
             // License import
             case 4:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step4");
-                    SetSelectedCSSClass("stepPanel1");
-                    break;
-                }
-
-            // Starter site selection
-            case 5:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step5");
-                    SetSelectedCSSClass("stepPanel2");
-                    break;
-                }
-
-            // Import log
-            case 6:
-                {
-                    StartHelp.Visible = Help.Visible = false;
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step6");
-                    SetSelectedCSSClass("stepPanel2");
-                    break;
-                }
+                lblHeader.Text += ResHelper.GetFileString("Install.Step4");
+                SetSelectedCSSClass("stepPanel1");
+                break;
 
             // Finish step
-            case 7:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step7");
-                    SetSelectedCSSClass("stepPanel3");
-                    break;
-                }
+            case 5:
+                lblHeader.Text += ResHelper.GetFileString("Install.Step5");
+                SetSelectedCSSClass("stepPanel2");
+                break;
 
             case COLLATION_DIALOG_INDEX:
-                {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step8");
-                    SetSelectedCSSClass("stepPanel1");
-                    break;
-                }
+                lblHeader.Text += ResHelper.GetFileString("Install.Step6");
+                SetSelectedCSSClass("stepPanel1");
+                break;
         }
 
         // Calculate step number
@@ -1611,7 +1330,7 @@ function Finished(sender) {{
             StepOperation = 0;
         }
         ActualStep += StepOperation;
-        lblHeader.Text = string.Format(lblHeader.Text, ActualStep + 1);
+        lblHeader.Text = String.Format(lblHeader.Text, ActualStep + 1);
         PreviousStep = index;
     }
 
@@ -1636,15 +1355,15 @@ function Finished(sender) {{
 
     #region "Installation methods"
 
-    public bool CreateDatabase(string collation)
+    private bool CreateDatabase(string collation)
     {
         try
         {
-            string message = ResHelper.GetFileString("Installer.LogCreatingDatabase") + " " + databaseDialog.NewDatabaseName;
+            var message = $"{ResHelper.GetFileString("Installer.LogCreatingDatabase")} {databaseDialog.NewDatabaseName}";
             AddResult(message);
             LogProgressState(LogStatusEnum.Info, message);
 
-            string connectionString = ConnectionHelper.BuildConnectionString(AuthenticationType, userServer.ServerName, String.Empty, userServer.DBUsername, Password, SqlInstallationHelper.DB_CONNECTION_TIMEOUT);
+            var connectionString = ConnectionHelper.BuildConnectionString(AuthenticationType, userServer.ServerName, String.Empty, userServer.DBUsername, Password, SqlInstallationHelper.DB_CONNECTION_TIMEOUT);
 
             // Use default collation, if none specified
             if (String.IsNullOrEmpty(collation))
@@ -1661,8 +1380,8 @@ function Finished(sender) {{
         }
         catch (Exception ex)
         {
-            mDisplayLog = true;
-            string message = ResHelper.GetFileString("Intaller.LogErrorCreateDB") + " " + ex.Message;
+            DisplayLog = true;
+            var message = $"{ResHelper.GetFileString("Intaller.LogErrorCreateDB")} {ex.Message}";
             AddResult(message);
             LogProgressState(LogStatusEnum.Error, message);
         }
@@ -1676,7 +1395,7 @@ function Finished(sender) {{
     /// </summary>
     /// <param name="message">Message</param>
     /// <param name="type">Type of message ("E" - error, "I" - info)</param>
-    public void Log(string message, MessageTypeEnum type)
+    private void Log(string message, MessageTypeEnum type)
     {
         AddResult(message);
         switch (type)
@@ -1749,7 +1468,7 @@ function Finished(sender) {{
     private static void UpdateMacroSignatures()
     {
         var eventLogService = Service.Resolve<IEventLogService>();
-        
+
         void logErrorAction(string message)
         {
             using (new CMSActionContext { LogEvents = true })
@@ -1765,17 +1484,6 @@ function Finished(sender) {{
 
 
     #region "Error handling methods"
-
-    protected void HandleError(string message, WizardNavigationEventArgs e)
-    {
-        if (StepIndex > 1)
-        {
-            --StepIndex;
-        }
-        pnlError.ErrorLabelText = message;
-        e.Cancel = true;
-    }
-
 
     protected void HandleError(string message)
     {
@@ -1806,9 +1514,9 @@ function Finished(sender) {{
     /// Appends the result string to the result message.
     /// </summary>
     /// <param name="result">String to append</param>
-    public void AddResult(string result)
+    private void AddResult(string result)
     {
-        mResult = result + "\n" + mResult;
+        Result = $"{result}\n{Result}";
     }
 
 
@@ -1817,7 +1525,7 @@ function Finished(sender) {{
     /// </summary>
     /// <param name="type">Type of the message</param>
     /// <param name="message">Message to be logged</param>
-    public void LogProgressState(LogStatusEnum type, string message)
+    private void LogProgressState(LogStatusEnum type, string message)
     {
         message = HTMLHelper.HTMLEncode(message);
 

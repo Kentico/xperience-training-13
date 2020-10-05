@@ -1,23 +1,29 @@
 ﻿/**
 * Modifies frame 'src' attribute and adds administration domain into it.
 */
-cmsdefine(["CMS/UrlHelper", "CMS/CurrentUrlHelper", "CMS.Builder/Constants", "CMS/MessageService"], function (urlHelper, currentUrlHelper, constants, msgService) {
+cmsdefine([
+    "CMS/UrlHelper",
+    "CMS/CurrentUrlHelper",
+    "CMS.Builder/Constants",
+    "CMS/MessageService",
+    "CMS.Builder/FrameLoader"
+], function (urlHelper, currentUrlHelper, constants, msgService, frameLoader) {
 
   // Module constructor
   var Module = function (serverData) {
     serverData = serverData || {};
+    var frameId = serverData.frameId;
 
-    if (serverData.frameId && serverData.frameSrc && serverData.applicationPath && serverData.mixedContentMessage) {
-      var frame = document.getElementById(serverData.frameId);
+    if (frameId && serverData.frameSrc && serverData.applicationPath && serverData.mixedContentMessage) {
+      var frame = document.getElementById(frameId);
 
       if (frame) {
         var url = serverData.frameSrc;
         var applicationPath = serverData.applicationPath;
-        var blankPage = "about:blank";
 
         if (urlHelper.isUrlSecure(currentUrlHelper.getCurrentUrl()) && !urlHelper.isUrlSecure(url)) {
             msgService.showWarning(serverData.mixedContentMessage, true);
-            frame.setAttribute("src", blankPage);
+            frame.setAttribute("src", "about:blank");
             return;
         }
 
@@ -27,7 +33,8 @@ cmsdefine(["CMS/UrlHelper", "CMS/CurrentUrlHelper", "CMS.Builder/Constants", "CM
                 constants.ADMINISTRATION_DOMAIN_PARAMETER_NAME,
                 urlHelper.getHostWithScheme(currentUrlHelper.getCurrentUrl())) + applicationPath;
         }
-        frame.setAttribute("src", url);
+
+        frameLoader.loadFrame(frame, url);
       }
     }
   };

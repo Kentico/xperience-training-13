@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>9ebc9f68-464a-4ec6-addc-5a140b45c997</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the volume of sales from @FromDate to @ToDate */ 
+SELECT
+   CAST(ISNULL(SUM(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,1)) 
+FROM 
+   COM_Order
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (dateadd(hour,datediff(hour,0,@FromDate),0) <= OrderDate)
+   AND (dateadd(hour,datediff(hour,0,dateadd(hour,1,@ToDate)),0) > OrderDate)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Sales.HourReport</CodeName>
+    <GUID>baf1be2c-d83c-4f21-99f4-3a4cdfb8cba8</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings>
+    <CustomData>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </ValueSettings>
+</reporting.reportvalue>

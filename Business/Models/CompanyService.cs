@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Kentico.Content.Web.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 using XperienceAdapter.Models;
@@ -18,8 +19,8 @@ namespace Business.Models
         public string? ServiceDescription { get; set; }
 
         /// <summary>
-        /// Server path to the service icon file.
+        /// URL of the service icon file.
         /// </summary>
-        public string? IconServerPath { get; set; }
+        public IPageAttachmentUrl? IconUrl { get; set; }
     }
 }

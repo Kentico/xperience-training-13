@@ -91,17 +91,6 @@
                     isRequired: true
                 }
             },
-            eventbooking: {
-                selectorLabel: resolveFilter('campaign.conversion.eventselector'),
-                areParametersRequired: true,
-                errorMessage: resolveFilter('campaign.conversion.eventrequired'),
-                configuration: {
-                    restUrl: application.getData('applicationUrl') + 'cmsapi/CampaignConversionPage',
-                    restUrlParams: { objType: 'event' },
-                    isRequired: true,
-                    allowAny: true
-                }
-            },
             internalsearch: {
                 selectorLabel: '',
                 areParametersRequired: false,

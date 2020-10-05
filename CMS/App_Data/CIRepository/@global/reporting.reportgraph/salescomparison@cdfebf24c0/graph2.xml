@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph2</GraphDisplayName>
+  <GraphGUID>b2b8652a-ebea-42f6-bab1-69dbb2d67361</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph2</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @from1 datetime;
+DECLARE @to1 datetime;
+DECLARE @from2 datetime;
+DECLARE @to2 datetime;
+
+DECLARE @orders1 float;
+DECLARE @orders2 float;
+
+IF (@Period = 'custom')
+	BEGIN
+		SET @from1 = @Period1From;
+		SET @to1 = DATEADD(day,1,@Period1To);
+        SET @from2 = @Period2From;
+		SET @to2 = DATEADD(day,1,@Period2To);
+        END
+ELSE IF (@Period = 'day')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('yesterday');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('yesterday');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('today');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('today');
+        END
+ELSE IF (@Period = 'week')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastWeek');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastWeek');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisWeek');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisWeek');
+        END
+ELSE IF (@Period = 'month')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastMonth');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastMonth');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisMonth');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisMonth');
+        END
+ELSE IF (@Period = 'quarter')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastQuarter');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastQuarter');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisQuarter');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisQuarter');
+        END
+ELSE IF (@Period = 'half')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastHalf');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastHalf');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisHalf');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisHalf');
+        END
+ELSE IF (@Period = 'year')
+        BEGIN
+              	SET @from1 ={%DatabaseSchema%}.Func_Analytics_StartingDate('lastYear');
+		SET @to1 ={%DatabaseSchema%}.Func_Analytics_EndingDate('lastYear');
+                SET @from2 ={%DatabaseSchema%}.Func_Analytics_StartingDate('thisYear');
+		SET @to2 ={%DatabaseSchema%}.Func_Analytics_EndingDate('thisYear');
+        END
+
+SET @orders1 = (SELECT COUNT(OrderID) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from1 OR @from1 IS NULL) AND (OrderDate < @to1 OR @to1 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+SET @orders2 = (SELECT COUNT(OrderID) FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID AND (OrderDate >= @from2 OR @from2 IS NULL) AND (OrderDate < @to2 OR @to2 IS NULL) AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1));
+
+SELECT '{$com.report.period1$}', @orders1
+UNION
+SELECT '{$com.report.period2$}', @orders2
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>SalesComparison</CodeName>
+    <GUID>47243a76-621b-4a8c-a6c8-077fb3ca8855</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle>{$ecommerce.report_numberoforders$}</GraphTitle>
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

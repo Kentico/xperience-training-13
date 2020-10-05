@@ -7,14 +7,13 @@ using System.Web.UI.WebControls;
 using CMS.Base.Web.UI;
 using CMS.CKEditor.Web.UI;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.DocumentEngine.Web.UI;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.MacroEngine;
 using CMS.PortalEngine.Web.UI;
 using CMS.SiteProvider;
-
 
 public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserControl
 {
@@ -253,7 +252,8 @@ public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserContr
             // Set editor area css
             if (!string.IsNullOrEmpty(cssStylesheetUrl))
             {
-                editor.EditorAreaCSS = DocumentURLProvider.GetAbsoluteUrl(cssStylesheetUrl, SiteContext.CurrentSiteName);
+                var presentationUrl = new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteName);                
+                editor.EditorAreaCSS = URLHelper.CombinePath(cssStylesheetUrl, '/', presentationUrl, null);
             }
             else
             {

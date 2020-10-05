@@ -7,7 +7,7 @@ using CMS.Taxonomy;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Categories_CMSPages_CategoryEdit : CMSLiveModalPage
+public partial class CMSModules_Categories_CMSPages_CategoryEdit : CMSPage
 {
     #region "Variables"
 

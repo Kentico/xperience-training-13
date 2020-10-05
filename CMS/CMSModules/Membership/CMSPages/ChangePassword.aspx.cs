@@ -3,7 +3,7 @@
 using CMS.UIControls;
 
 
-public partial class CMSModules_Membership_CMSPages_ChangePassword : CMSLiveModalPage
+public partial class CMSModules_Membership_CMSPages_ChangePassword : CMSPage
 {
     /// <summary>
     /// Page load event

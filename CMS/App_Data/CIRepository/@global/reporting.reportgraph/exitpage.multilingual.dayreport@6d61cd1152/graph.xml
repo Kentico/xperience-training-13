@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>afa5152b-37df-4acf-9e60-a22c1fa54680</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+ EXEC Proc_Analytics_RemoveTempTable
+ SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+ 
+ CREATE TABLE #AnalyticsTempTable (
+	StartTime DATETIME,  
+	Hits DECIMAL(15,2),
+	Name NVARCHAR(300) COLLATE database_default
+);
+
+-- SELECT INTO statement cannot be used, because it is not supported by Azure SQL
+INSERT INTO #AnalyticsTempTable
+SELECT [Date] AS StartTime, T1.Hits, StatisticsObjectCulture AS Name
+ FROM
+  {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'day') AS Dates   
+  LEFT JOIN
+  (SELECT HitsStartTime AS StartTime,SUM(HitsCount) AS hits,StatisticsObjectCulture
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_DayHits ON Analytics_DayHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND
+  (StatisticsCode = @CodeName)
+  GROUP BY HitsStartTime,StatisticsObjectCulture) AS T1
+  ON T1.StartTime = [Date]
+  
+  EXEC Proc_Analytics_Pivot 'day'
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>exitpage.multilingual.dayreport</CodeName>
+    <GUID>d2485a03-a42f-4958-be56-c5d3b408fe33</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>true</exportenabled>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{dddd, MMMM d, yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisformat>d</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_days$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$reports_pageviews.label_numofpageviews$}</GraphYAxisTitle>
+</reporting.reportgraph>

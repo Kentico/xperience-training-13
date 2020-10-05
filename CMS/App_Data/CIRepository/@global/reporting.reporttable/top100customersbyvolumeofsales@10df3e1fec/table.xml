@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Table</TableDisplayName>
+  <TableGUID>6fe00b31-2adf-4d5e-8bf3-8820563ecfca</TableGUID>
+  <TableName>Table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Selects top customers of the current site by volume of sales. 
+   Selects the sum of their paid orderds in the main currency. */
+   
+SELECT TOP (@NumberOfCustomers)
+   CustomerFirstName AS '{$ecommerce.report_customer_firstname$}',
+   CustomerLastName AS '{$ecommerce.report_customer_lastname$}',
+   CustomerCompany AS '{$ecommerce.report_customer_company$}',
+   CustomerEmail AS '{$unigrid.userlist.columns.email$}', 
+   CAST(SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}' 
+FROM 
+   COM_Customer 
+   LEFT JOIN COM_Order 
+      ON CustomerID = OrderCustomerID 
+      AND OrderSiteID=@CMSContextCurrentSiteID
+      AND OrderIsPaid = 1
+WHERE 
+   (CustomerID IN (SELECT OrderCustomerID FROM COM_Order WHERE OrderSiteID=@CMSContextCurrentSiteID))
+   AND (@FirstName IS NULL OR @FirstName = '' OR CustomerFirstName LIKE ('%'+@FirstName+'%'))
+   AND (@LastName IS NULL OR @LastName = '' OR CustomerLastName LIKE ('%'+@LastName+'%'))
+   AND (@Company IS NULL OR @Company = '' OR CustomerCompany LIKE ('%'+@Company+'%')) 
+   AND (@Email IS NULL OR @Email = '' OR CustomerEmail LIKE ('%' + @Email + '%')) 
+   
+GROUP BY 
+   CustomerID,
+   CustomerEmail, 
+   CustomerCompany, 
+   CustomerFirstName, 
+   CustomerLastName
+ORDER BY 
+   SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) DESC,
+   CustomerLastName,   
+   CustomerFirstName,
+   CustomerCompany
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Top100CustomersByVolumeOfSales</CodeName>
+    <GUID>ec3015f4-a532-4eb9-b9a6-4e1439303e03</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

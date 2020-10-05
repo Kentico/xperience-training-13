@@ -774,7 +774,6 @@ public partial class CMSModules_Objects_Controls_ViewObjectDataSet : CMSUserCont
             case "classsearchsettings":
             case "graphsettings":
             case "tablesettings":
-            case "transformationhierarchicalxml":
             case "issuetext":
             case "issuewidgets":
             case "savedreportparameters":

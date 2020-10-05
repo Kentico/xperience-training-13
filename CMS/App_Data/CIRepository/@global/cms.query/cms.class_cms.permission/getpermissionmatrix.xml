@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.permission</CodeName>
+    <GUID>83a574c4-dffd-45f1-bd21-c78f18dcaa72</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>7cc4d4d5-7073-4f97-8381-03ae1160f6c6</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>getpermissionMatrix</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[IF @type = 'r' SELECT ##TOPN## Matrix.*, (CASE WHEN CMS_RolePermission.RoleID IS NULL THEN 0 ELSE 1 END) AS [Allowed] FROM (SELECT CMS_Permission.PermissionID, CMS_Permission.PermissionDisplayName, CMS_Permission.PermissionName, CMS_Permission.ClassID, CMS_Permission.ResourceID,CMS_Permission.PermissionDescription, CMS_Role.RoleID, CMS_Role.Rolename, CMS_Role.RoleDisplayName FROM CMS_Permission, CMS_Role WHERE (CMS_Permission.PermissionDisplayInMatrix = @DisplayInMatrix OR ((@DisplayInMatrix=1) AND (CMS_Permission.PermissionDisplayInMatrix IS NULL))) AND ResourceID = @ID AND RoleID IN (SELECT RoleID FROM CMS_Role WHERE ##WHERE## AND (@SiteID = 0 OR SiteID = @SiteID)) ) Matrix LEFT JOIN CMS_RolePermission ON (Matrix.PermissionID = CMS_RolePermission.PermissionID AND CMS_RolePermission.RoleID = Matrix.RoleID) ORDER BY Matrix.RoleDisplayName, Matrix.RoleID, Matrix.PermissionDisplayName ELSE SELECT Matrix.*, 'Allowed' = CASE when CMS_RolePermission.RoleID IS NULL THEN 0 ELSE 1 END FROM (SELECT CMS_Permission.PermissionID, CMS_Permission.PermissionDisplayName, CMS_Permission.PermissionName, CMS_Permission.ClassID, CMS_Permission.ClassID AS ResourceID,CMS_Permission.PermissionDescription, CMS_Role.RoleID, CMS_Role.Rolename, CMS_Role.RoleDisplayName FROM CMS_Permission, CMS_Role WHERE (CMS_Permission.PermissionDisplayInMatrix = @DisplayInMatrix OR ((@DisplayInMatrix=1) AND (CMS_Permission.PermissionDisplayInMatrix IS NULL))) AND ClassID = @ID AND RoleID IN (SELECT RoleID FROM CMS_Role WHERE ##WHERE## AND (@SiteID = 0 OR SiteID = @SiteID)) ) Matrix LEFT JOIN CMS_RolePermission ON (Matrix.PermissionID = CMS_RolePermission.PermissionID AND CMS_RolePermission.RoleID = Matrix.RoleID) ORDER BY Matrix.RoleDisplayName, Matrix.RoleID, Matrix.PermissionDisplayName]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

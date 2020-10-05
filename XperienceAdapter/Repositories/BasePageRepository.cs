@@ -21,7 +21,7 @@ namespace XperienceAdapter.Repositories
         where TPageDto : BasePage, new()
         where TPage : TreeNode, new()
     {
-        protected readonly IRepositoryServices _repositoryDependencies;
+        protected readonly IRepositoryServices _repositoryServices;
 
         /// <summary>
         /// Default DTO factory method.
@@ -30,7 +30,7 @@ namespace XperienceAdapter.Repositories
 
         public BasePageRepository(IRepositoryServices repositoryDependencies)
         {
-            _repositoryDependencies = repositoryDependencies ?? throw new ArgumentNullException(nameof(repositoryDependencies));
+            _repositoryServices = repositoryDependencies ?? throw new ArgumentNullException(nameof(repositoryDependencies));
         }
 
         // TODO: How to access CLASS_NAME to set .PageType()?
@@ -47,7 +47,7 @@ namespace XperienceAdapter.Repositories
             bool includeAttachments = default,
             SiteCulture? culture = default)
         {
-            var result = _repositoryDependencies.PageRetriever.Retrieve(query =>
+            var result = _repositoryServices.PageRetriever.Retrieve(query =>
             {
                 query = FilterForSingleType(query, culture?.IsoCode);
                 query.Columns(DefaultDtoFactory().SourceColumns);
@@ -66,7 +66,7 @@ namespace XperienceAdapter.Repositories
             bool includeAttachments = default,
             SiteCulture? culture = default)
         {
-            var result = _repositoryDependencies.PageRetriever.RetrieveMultiple(query =>
+            var result = _repositoryServices.PageRetriever.RetrieveMultiple(query =>
             {
                 query = FilterForMultipleTypes(query, culture?.IsoCode);
                 query
@@ -107,11 +107,10 @@ namespace XperienceAdapter.Repositories
             culture = EnsureCulture(culture);
 
             query
-                .OnSite(_repositoryDependencies.SiteService.CurrentSite.SiteName)
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName)
                 .Culture(culture);
-            //.AddColumn("NodeSiteID") // TODO: Test if it is still necessary.
 
-            if (_repositoryDependencies.SiteContextService.IsPreviewEnabled)
+            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
             {
                 query
                     .LatestVersion()
@@ -147,11 +146,10 @@ namespace XperienceAdapter.Repositories
             culture = EnsureCulture(culture);
 
             query
-                .OnSite(_repositoryDependencies.SiteService.CurrentSite.SiteName)
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName)
                 .Culture(culture);
-            //.AddColumn("NodeSiteID") // TODO: Test if it is still necessary.
 
-            if (_repositoryDependencies.SiteContextService.IsPreviewEnabled)
+            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
             {
                 query
                     .LatestVersion()
@@ -174,7 +172,7 @@ namespace XperienceAdapter.Repositories
         /// <returns>Context-dependent culture.</returns>
         protected string EnsureCulture(string? culture)
         {
-            var contextService = _repositoryDependencies.SiteContextService;
+            var contextService = _repositoryServices.SiteContextService;
 
             if (string.IsNullOrEmpty(culture))
             {
@@ -247,7 +245,7 @@ namespace XperienceAdapter.Repositories
             dto.Name = page.DocumentName;
             dto.NodeAliasPath = page.NodeAliasPath;
             dto.ParentId = page.NodeParentID;
-            dto.Culture = _repositoryDependencies.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
+            dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
 
             if (includeAttachments)
             {
@@ -255,12 +253,13 @@ namespace XperienceAdapter.Repositories
                 {
                     dto.Attachments.Add(new PageAttachment
                     {
+                        AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
                         Extension = attachment.AttachmentExtension,
                         FileName = attachment.AttachmentName,
                         Guid = attachment.AttachmentGUID,
                         Id = attachment.ID,
                         MimeType = attachment.AttachmentMimeType,
-                        ServerPath = attachment.GetPath(null),
+                        //ServerPath = attachment.GetPath(null),
                         Title = attachment.AttachmentTitle
                     });
                 }

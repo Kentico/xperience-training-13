@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSFormControls_Classes_AssemblyClassSelector {
-    
+public partial class CMSFormControls_Classes_AssemblyClassSelector
+{
+
     /// <summary>
     /// drpAssemblyName control.
     /// </summary>
@@ -19,7 +20,16 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Basic_DropDownListControl drpAssemblyName;
-    
+
+    /// <summary>
+    /// txtAssemblyName control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSTextBox txtAssemblyName;
+
     /// <summary>
     /// lblAssembly control.
     /// </summary>
@@ -28,7 +38,7 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblAssembly;
-    
+
     /// <summary>
     /// drpClassName control.
     /// </summary>
@@ -37,7 +47,16 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Basic_DropDownListControl drpClassName;
-    
+
+    /// <summary>
+    /// txtClassName control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSTextBox txtClassName;
+
     /// <summary>
     /// lblClassName control.
     /// </summary>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>newsletter.emails</CodeName>
+    <GUID>551d4df2-d429-4a32-906b-c5821a04f7da</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>d50e9ad2-e003-4ceb-a3a5-7faa03e64830</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>removeduplicates</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+WITH Duplicates AS (
+  SELECT *,
+     row_number() OVER(PARTITION BY EmailAddress, EmailNewsletterIssueID ORDER BY EmailAddress) AS DuplicateIndex
+  FROM Newsletter_Emails
+) 
+DELETE Duplicates WHERE DuplicateIndex > 1
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

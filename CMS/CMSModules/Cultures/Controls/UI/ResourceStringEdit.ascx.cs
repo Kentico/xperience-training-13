@@ -415,7 +415,6 @@ public partial class CMSModules_Cultures_Controls_UI_ResourceStringEdit : CMSAdm
         var textArea = (FormEngineUserControl)LoadControl("~/CMSFormControls/Inputs/LargeTextArea.ascx");
         textArea.ID = cultureCode;
         textArea.Enabled = EnableTranslations;
-        textArea.SetValue("ProcessMacroSecurity", false);
 
         if (!String.IsNullOrEmpty(mResourceStringInfo.StringKey))
         {

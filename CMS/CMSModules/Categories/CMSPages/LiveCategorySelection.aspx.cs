@@ -5,7 +5,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Categories_CMSPages_LiveCategorySelection : CMSLiveModalPage
+public partial class CMSModules_Categories_CMSPages_LiveCategorySelection : CMSPage
 {
     protected override void OnInit(EventArgs e)
     {

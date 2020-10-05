@@ -61,8 +61,8 @@ public partial class CMSModules_Content_Controls_Attachments_DocumentAttachments
             attachmentUrl =
                 ApplicationUrlHelper.ResolveUIUrl(
                     AttachmentURLProvider.GetAttachmentUrl(
-                        mainAttachment.AttachmentGUID, 
-                        URLHelper.GetSafeFileName(attName, siteName)
+                        mainAttachment.AttachmentGUID,
+                        attName
                     )
                 );
         }
@@ -71,9 +71,8 @@ public partial class CMSModules_Content_Controls_Attachments_DocumentAttachments
             attachmentUrl = 
                 ApplicationUrlHelper.ResolveUIUrl(
                     AttachmentURLProvider.GetAttachmentUrl(
-                        mainAttachment.AttachmentGUID, 
-                        URLHelper.GetSafeFileName(attName, siteName), 
-                        null, 
+                        mainAttachment.AttachmentGUID,
+                        attName, 
                         // Do not include version history ID for temporary attachment
                         // Version history ID may be present in case of new culture version where may be mix of temporary and version attachments from source
                         (mainAttachment.AttachmentFormGUID == Guid.Empty) ? versionHistoryId : 0

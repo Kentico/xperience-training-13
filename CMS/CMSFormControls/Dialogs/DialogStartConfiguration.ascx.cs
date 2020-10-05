@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.UI.WebControls;
 
-using CMS.Base;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.FormEngine.Web.UI;
@@ -37,7 +36,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
 {
     #region "Variables"
 
-    protected bool communityLoaded;
     protected bool mediaLoaded;
 
     #endregion
@@ -182,18 +180,10 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
 
         lnkAdvacedFieldSettings.Click += lnkAdvacedFieldSettings_Click;
 
-        communityLoaded = ModuleEntryManager.IsModuleLoaded(ModuleName.COMMUNITY);
         mediaLoaded = ModuleEntryManager.IsModuleLoaded(ModuleName.MEDIALIBRARY);
-
-        if (communityLoaded)
-        {
-            drpGroups.OnSelectionChanged += drpGroups_SelectedIndexChanged;
-        }
 
         LoadSites();
         LoadSiteLibraries(null);
-        LoadSiteGroups(null);
-        LoadGroupLibraries(null, null);
     }
 
 
@@ -214,7 +204,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
         }
 
         plcMedia.Visible = mediaLoaded;
-        plcGroups.Visible = communityLoaded;
 
         selectPathElem.PathTextBox.ToolTip = GetString("formcontrols.dialogstartconfiguration.contentstartingpath");
     }
@@ -226,15 +215,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
     protected void lnkAdvacedFieldSettings_Click(object sender, EventArgs e)
     {
         ShowConfiguration = !ShowConfiguration;
-    }
-
-
-    /// <summary>
-    /// Group drop-down list event handler.
-    /// </summary>
-    protected void drpGroups_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        SelectGroup();
     }
 
 
@@ -257,30 +237,7 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
     /// </summary>
     private void SelectSite(string selectedSite)
     {
-        if (communityLoaded)
-        {
-            LoadSiteGroups(selectedSite);
-        }
         LoadSiteLibraries(selectedSite);
-        SelectGroup();
-    }
-
-
-    /// <summary>
-    /// Processes the data loading after the group is selected.
-    /// </summary>
-    private void SelectGroup()
-    {
-        bool isNone = string.Equals(drpGroups.DropDownSingleSelect.SelectedValue, NONE_VALUE, StringComparison.InvariantCultureIgnoreCase);
-        string selectedMediaSite = ValidationHelper.GetString(siteSelectorMedia.Value, String.Empty);
-        
-        drpGroupLibraries.Enabled = !isNone;
-        LoadGroupLibraries(selectedMediaSite, ValidationHelper.GetString(drpGroups.Value, String.Empty), isNone); 
-
-        if (isNone)
-        {
-            drpGroupLibraries.DropDownSingleSelect.SelectedIndex = 0;
-        }
     }
 
 
@@ -313,28 +270,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
 
 
     /// <summary>
-    /// Reloads the site groups.
-    /// </summary>
-    /// <param name="siteName">Name of the site</param>
-    private void LoadSiteGroups(string siteName)
-    {
-        if (communityLoaded && mediaLoaded)
-        {
-            drpGroups.DropDownItems.Clear();
-            drpGroups.SpecialFields.Add(new SpecialField { Text = GetString("general.selectall"), Value = String.Empty });
-            drpGroups.SpecialFields.Add(new SpecialField { Text = GetString("general.selectnone"), Value = NONE_VALUE });
-            drpGroups.SpecialFields.Add(new SpecialField { Text = GetString("dialogs.config.currentgroup"), Value = CURENT_VALUE });
-
-            if (siteName != null)
-            {
-                drpGroups.WhereCondition = "GroupSiteID IN (SELECT SiteID FROM CMS_Site WHERE SiteName = '" + SqlHelper.EscapeQuotes(siteName) + "')";
-                drpGroups.Reload(true);
-            }
-        }
-    }
-
-
-    /// <summary>
     /// Reloads the site media libraries.
     /// </summary>
     /// <param name="siteName">Name of the site</param>
@@ -352,36 +287,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
             {
                 drpSiteLibraries.WhereCondition = "LibrarySiteID IN (SELECT SiteID FROM CMS_Site WHERE SiteName = '" + SqlHelper.EscapeQuotes(siteName) + "')";
                 drpSiteLibraries.Reload(true);
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// Reloads the group media libraries.
-    /// </summary>
-    /// <param name="siteName">Name of the site</param>
-    /// <param name="groupName">Name of the group</param>
-    /// <param name="addNone">If true the (none) option is added</param>
-    private void LoadGroupLibraries(string siteName, string groupName, bool addNone = false)
-    {
-        if (mediaLoaded && communityLoaded)
-        {
-            drpGroupLibraries.DropDownItems.Clear();
-            
-            if (addNone)
-            {
-                drpGroupLibraries.Value = null;
-                drpGroupLibraries.SpecialFields.Add(new SpecialField { Text = GetString("general.selectnone"), Value = NONE_VALUE });
-            }
-
-            drpGroupLibraries.SpecialFields.Add(new SpecialField { Text = GetString("general.selectall"), Value = String.Empty });
-            drpGroupLibraries.SpecialFields.Add(new SpecialField { Text = GetString("dialogs.config.currentlibrary"), Value = CURENT_VALUE });
-
-            if ((siteName != null) && (groupName != null))
-            {
-                drpGroupLibraries.WhereCondition = String.Format("LibraryGroupID IN (SELECT GroupID FROM Community_Group WHERE GroupSiteID IN (SELECT SiteID FROM CMS_Site WHERE SiteName = '{0}') AND GroupName = N'{1}')", SqlHelper.EscapeQuotes(siteName), SqlHelper.EscapeQuotes(groupName));
-                drpGroupLibraries.Reload(true);
             }
         }
     }
@@ -497,23 +402,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
             if (ContainsColumn(DIALOGS_LIBRARIES_GLOBAL) && ContainsColumn(DIALOGS_LIBRARIES_GLOBAL_LIBNAME))
             {
                 SelectInDDL(drpSiteLibraries, DIALOGS_LIBRARIES_GLOBAL, DIALOGS_LIBRARIES_GLOBAL_LIBNAME);
-            }
-
-            if (communityLoaded)
-            {
-                // Groups DDL
-                if (ContainsColumn(DIALOGS_GROUPS) && ContainsColumn(DIALOGS_GROUPS_NAME))
-                {
-                    SelectInDDL(drpGroups, DIALOGS_GROUPS, DIALOGS_GROUPS_NAME);
-                }
-
-                SelectGroup();
-
-                // Group libraries DDL
-                if (ContainsColumn(DIALOGS_LIBRARIES_GROUP) && ContainsColumn(DIALOGS_LIBRARIES_GROUP_LIBNAME))
-                {
-                    SelectInDDL(drpGroupLibraries, DIALOGS_LIBRARIES_GROUP, DIALOGS_LIBRARIES_GROUP_LIBNAME);
-                }
             }
 
             // Starting path
@@ -634,33 +522,6 @@ public partial class CMSFormControls_Dialogs_DialogStartConfiguration : FormEngi
             {
                 values[9, 1] = SINGLE_VALUE;
                 values[10, 1] = value;
-            }
-
-            if (communityLoaded)
-            {
-                // Groups DDL
-                value = ValidationHelper.GetString(drpGroups.Value, String.Empty);
-                if ((value == NONE_VALUE) || (value == CURENT_VALUE))
-                {
-                    values[11, 1] = value;
-                }
-                else if (value != "")
-                {
-                    values[11, 1] = SINGLE_VALUE;
-                    values[12, 1] = value;
-                }
-
-                // Group libraries DDL
-                value = ValidationHelper.GetString(drpGroupLibraries.Value, String.Empty);
-                if ((value == NONE_VALUE) || (value == CURENT_VALUE))
-                {
-                    values[13, 1] = value;
-                }
-                else if (value != "")
-                {
-                    values[13, 1] = SINGLE_VALUE;
-                    values[14, 1] = value;
-                }
             }
 
             // Starting path

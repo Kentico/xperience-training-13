@@ -86,7 +86,7 @@ public partial class CMSModules_Scoring_Pages_ScheduleRecalculationDialog : CMSM
     {
         if (score.ScoreScheduledTaskID > 0)
         {
-            TaskInfo taskInfo = TaskInfoProvider.GetTaskInfo(score.ScoreScheduledTaskID);
+            TaskInfo taskInfo = TaskInfo.Provider.Get(score.ScoreScheduledTaskID);
             if ((taskInfo != null) && taskInfo.TaskEnabled)
             {
                 radLater.Checked = true;
@@ -108,7 +108,7 @@ public partial class CMSModules_Scoring_Pages_ScheduleRecalculationDialog : CMSM
         task.TaskNextRunTime = calendarControl.SelectedDateTime;
         task.TaskDeleteAfterLastRun = true;
         task.TaskEnabled = true;
-        TaskInfoProvider.SetTaskInfo(task);
+        TaskInfo.Provider.Set(task);
 
         // Update score
         score.ScoreScheduledTaskID = task.TaskID;
@@ -131,7 +131,7 @@ public partial class CMSModules_Scoring_Pages_ScheduleRecalculationDialog : CMSM
         // Delete already scheduled task, it is not needed
         if (score.ScoreScheduledTaskID > 0)
         {
-            TaskInfoProvider.DeleteTaskInfo(score.ScoreScheduledTaskID);
+            TaskInfo.Provider.Get(score.ScoreScheduledTaskID)?.Delete();
             score.ScoreScheduledTaskID = 0;
         }
 

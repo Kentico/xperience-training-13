@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>896266e2-9736-4c0e-855f-8ad4ba7343ad</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @globalCurrency bit;
+SET @globalCurrency = {%Settings.CMSStoreUseGlobalCurrencies?1:0|(identity)GlobalAdministrator|(hash)0ab7d8ea8682c49dbd98696beebc1fd5abee5b6cb085bdf3f17253c96532cf2b%};
+
+
+/* Selects the number of orders in the given currencies. */
+SELECT 
+   CurrencyCode AS '{$unigrid.currency.columns.currencycode$}',
+   CurrencyDisplayName AS '{$unigrid.currency.columns.currencydisplayname$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'
+FROM 
+   COM_Currency
+   LEFT JOIN COM_Order
+      ON CurrencyID = OrderCurrencyID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid, 0) = 1)
+WHERE 
+   (CurrencyEnabled = 1 OR CurrencyID IN (SELECT OrderCurrencyID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND CurrencyID IS NOT NULL
+   AND ((@globalCurrency = 1 AND CurrencySiteID IS NULL)OR(@globalCurrency = 0 AND CurrencySiteID = @CMSContextCurrentSiteID))   
+GROUP BY 
+   CurrencyCode, 
+   CurrencyDisplayName
+ORDER BY 
+   COUNT(OrderID) DESC,
+   CurrencyCode, 
+   CurrencyDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByCurrency</CodeName>
+    <GUID>b7cc93bb-98ce-4eeb-a2a3-44554177078d</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

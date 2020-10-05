@@ -182,7 +182,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_Data_SelectFields : 
 
         // Save report fields
         FormInfo.FormReportFields = reportFields;
-        BizFormInfoProvider.SetBizFormInfo(FormInfo);
+        BizFormInfo.Provider.Set(FormInfo);
 
         // Close dialog window
         ScriptHelper.RegisterStartupScript(this, typeof(string), "Forms_SelectFields", "CloseAndRefresh();", true);

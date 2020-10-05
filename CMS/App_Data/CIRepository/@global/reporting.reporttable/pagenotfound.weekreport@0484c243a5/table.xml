@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>f6686f82-a930-49d2-a08a-ba28392e4877</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'week');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'week');
+SELECT TOP 100 
+ StatisticsObjectName AS '{$reports_pagenotfound_Week.name_header$}', 
+ SUM(HitsCount) AS '{$reports_pagenotfound_Week.hits_header$}' 
+ FROM Analytics_Statistics
+ INNER JOIN Analytics_WeekHits ON Analytics_WeekHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+ WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+ AND (StatisticsCode=@CodeName)  
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+ GROUP BY StatisticsObjectName 
+ ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>pagenotfound.weekreport</CodeName>
+    <GUID>b6358504-390d-4bf7-82a0-8c6412f7126e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>true</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

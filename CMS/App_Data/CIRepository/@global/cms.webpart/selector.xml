@@ -1,0 +1,667 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.webpart>
+  <WebPartCategoryID>
+    <CodeName>Selector</CodeName>
+    <GUID>f1bbda0a-8a2d-4333-82da-6ea14daf48a1</GUID>
+    <ObjectType>cms.webpartcategory</ObjectType>
+  </WebPartCategoryID>
+  <WebPartDefaultValues>
+    <form />
+  </WebPartDefaultValues>
+  <WebPartDescription>
+    <![CDATA[Adds a UniSelector, which provides an interface for selecting system objects. The web part saves the value of the selected object into the UI context. You can access the value in other web parts on the template through macros: {%UIContext.<Context name>% }]]>
+  </WebPartDescription>
+  <WebPartDisplayName>Selector</WebPartDisplayName>
+  <WebPartFileName>
+    <![CDATA[~/CMSModules/AdminControls/Controls/UIControls/GeneralSelector.ascx]]>
+  </WebPartFileName>
+  <WebPartGUID>29abcb58-440e-43c8-9d12-521a04e979d0</WebPartGUID>
+  <WebPartIconClass>icon-w-selector</WebPartIconClass>
+  <WebPartName>Selector</WebPartName>
+  <WebPartProperties>
+    <form version="2">
+      <category name="General_settings">
+        <properties>
+          <caption>General settings</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="SelectorObjectType" columnsize="500" columntype="text" displayinsimplemode="true" guid="f5be74ee-d6c4-47ec-af56-9264eee4c124" visible="true">
+        <properties>
+          <fieldcaption>Object type</fieldcaption>
+          <fielddescription>{$documentation.property.objecttype$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ReturnColumnName" columnsize="500" columntype="text" displayinsimplemode="true" guid="b7e71d57-0f04-4969-9660-b464da775424" visible="true">
+        <properties>
+          <fieldcaption>Return column name</fieldcaption>
+          <fielddescription>{$documentation.property.returncolumnname$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ContextName" columnsize="100" columntype="text" guid="7815b660-e130-4a89-877f-2000cfc44d4f" visible="true">
+        <properties>
+          <fieldcaption>Context name</fieldcaption>
+          <fielddescription>{$documentation.property.contextname$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ObjectSiteName" columnsize="200" columntype="text" displayinsimplemode="true" guid="ab862c63-78e3-448e-9862-9032d7d142fd" visible="true">
+        <properties>
+          <fieldcaption>Object site name</fieldcaption>
+          <fielddescription>
+            <![CDATA[If set, the selector only offers objects that belong under the site with the specified code name. Only works if the object type has a SiteID column. If null or empty, the selector offers all objects. Use #currentsite for the current site, #global for only global objects.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="DisplayNameFormat" columnsize="1000" columntype="text" guid="20a19c61-2abc-4e71-b17a-97fc65c1aa16" visible="true">
+        <properties>
+          <fieldcaption>Display name format</fieldcaption>
+          <fielddescription>{$documentation.property.displaynameformat$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="SelectionMode" columntype="integer" displayinsimplemode="true" guid="b4133a1f-4fe5-46c6-8753-a520b2dccb47" visible="true">
+        <properties>
+          <fieldcaption>Selection mode</fieldcaption>
+          <fielddescription>{$documentation.property.selectionmode$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+0;Single text box
+1;Single drop-down list
+2;Multiple
+3;Multiple text box
+4;Single button
+5;Multiple button
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="AdditionalColumns" columnsize="500" columntype="text" guid="6d481cdf-3fcb-4707-a80e-b07716346737" visible="true">
+        <properties>
+          <fieldcaption>Additional columns</fieldcaption>
+          <fielddescription>{$documentation.property.additionalcolumns$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="WhereCondition" columnsize="1000" columntype="text" displayinsimplemode="true" guid="0a042fda-a566-4816-bb10-a334b9575d89" resolvedefaultvalue="False" visible="true">
+        <properties>
+          <fieldcaption>Where condition</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$documentation.property.uniselectorwherecondition$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>WhereCondition</controlname>
+          <QueryPart>1</QueryPart>
+        </settings>
+      </field>
+      <field allowempty="true" column="OrderBy" columnsize="500" columntype="text" displayinsimplemode="true" guid="097c1756-491a-4e31-9776-ffbe0eaff84a" resolvedefaultvalue="False" visible="true">
+        <properties>
+          <fieldcaption>Order by</fieldcaption>
+          <fielddescription>{$documentation.property.uniselectororderby$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>OrderBy</controlname>
+          <QueryPart>2</QueryPart>
+        </settings>
+      </field>
+      <field allowempty="true" column="EnabledColumnName" columnsize="500" columntype="text" guid="5238b63a-8aea-4a68-820d-4c5b88304743" visible="true">
+        <properties>
+          <fieldcaption>Enabled column name</fieldcaption>
+          <fielddescription>{$documentation.property.enabledcolumnname$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ValuesSeparator" columnsize="1" columntype="text" guid="0cbdb22a-5b22-41f3-9251-b6eb49d7ad74" resolvedefaultvalue="False" visible="true">
+        <properties>
+          <defaultvalue>;</defaultvalue>
+          <fieldcaption>Values separator</fieldcaption>
+          <fielddescription>{$documentation.property.valuesseparator$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="AllowEditTextBox" columntype="boolean" guid="3fa07128-a38a-4f5f-b638-6f820cc7de58" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Allow edit text box</fieldcaption>
+          <fielddescription>{$documentation.property.allowedittextbox$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="SelectedValue" columnsize="1000" columntype="text" guid="04880c00-35bb-4e28-91c1-c9c6a0c8264e" visible="true">
+        <properties>
+          <fieldcaption>Drop-down default value</fieldcaption>
+          <fielddescription>{$documentation.property.selectedvalue$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="PostbackOnChange" columntype="boolean" guid="1112e2e0-b468-4b07-8759-ed78d43fdca3" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>Postback on change</fieldcaption>
+          <fielddescription>{$documentation.property.postbackonchange$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <category name="SpecialFields">
+        <properties>
+          <caption>Special fields</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="AllowEmpty" columntype="boolean" displayinsimplemode="true" guid="f54fba5e-dc55-4f14-ab31-40cf850d4b5e" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Allow none</fieldcaption>
+          <fielddescription>{$documentation.property.uniselectorallowempty$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="AllowDefault" columntype="boolean" guid="549f2223-53d3-4685-8f88-b90045ec02c1" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Allow default</fieldcaption>
+          <fielddescription>{$documentation.property.uniselectorallowdefault$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="AllowAll" columntype="boolean" displayinsimplemode="true" guid="1137b73b-30bf-45e3-8349-80ab7749f1b4" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Allow all</fieldcaption>
+          <fielddescription>{$documentation.property.uniselectorallowall$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="SpecialFields" columntype="longtext" guid="44ad2654-5ec5-4512-b9dd-cafa69fcd240" resolvedefaultvalue="False" visible="true">
+        <properties>
+          <fieldcaption>Special fields</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$documentation.property.uniselectorspecialfields$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AllowMacro>True</AllowMacro>
+          <AllowQuery>True</AllowQuery>
+          <controlname>optionsselector</controlname>
+          <EditedFieldDataType ismacro="true">{%FieldEditorDataType%}</EditedFieldDataType>
+        </settings>
+      </field>
+      <category name="Display_settings">
+        <properties>
+          <caption>Display settings</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="IconPath" columnsize="1000" columntype="text" guid="9aa88a79-3f75-4920-b2ec-f4dbb1ca0528" visible="true">
+        <properties>
+          <fieldcaption>Icon path</fieldcaption>
+          <fielddescription>{$documentation.property.iconpath$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ResourcePrefix" columnsize="500" columntype="text" displayinsimplemode="true" guid="ca7a81c9-aa4d-42fd-b145-5255ffcb56f6" visible="true">
+        <properties>
+          <fieldcaption>Resource prefix</fieldcaption>
+          <fielddescription>{$documentation.property.resourceprefix$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="LocalizeItems" columntype="boolean" displayinsimplemode="true" guid="73305053-2ff0-4293-b395-dfcc0a8ed85d" visible="true">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>Localize items</fieldcaption>
+          <fielddescription>{$documentation.property.localizeitems$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="MaxDisplayedTotalItems" columntype="integer" guid="6cc83a6f-7a70-43f5-acb0-ab70c721cbc3" visible="true">
+        <properties>
+          <defaultvalue>50</defaultvalue>
+          <fieldcaption>Max displayed total items</fieldcaption>
+          <fielddescription>{$documentation.property.maxdisplayedtotalitems$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="MaxDisplayedItems" columntype="integer" guid="2165a3ad-d5aa-4446-a50d-68f6e6f8638e" visible="true">
+        <properties>
+          <defaultvalue>25</defaultvalue>
+          <fieldcaption>Max displayed items</fieldcaption>
+          <fielddescription>{$documentation.property.maxdisplayeditems$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="ItemsPerPage" columntype="integer" guid="b5cd93ea-9595-43d1-9b15-12499aa4a19e" visible="true">
+        <properties>
+          <defaultvalue>25</defaultvalue>
+          <fieldcaption>Items per page</fieldcaption>
+          <fielddescription>{$documentation.property.itemsperpage$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="AddGlobalObjectNamePrefix" columntype="boolean" guid="49c24e35-ad41-4a9f-9631-b90fd289c91c" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Add global object name prefix</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$documentation.property.allowglobalobjectnameprefix$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="AddGlobalObjectSuffix" columntype="boolean" guid="3ff19253-229a-4471-a7b1-2d53c6e85907" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Add global object suffix</fieldcaption>
+          <fielddescription>{$documentation.property.addglobalobjectsuffix$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="GlobalObjectSuffix" columnsize="500" columntype="text" guid="1c00ae88-d7b4-4252-91bf-de70ffdbc562" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{$general.global$}</defaultvalue>
+          <fieldcaption>Global object suffix</fieldcaption>
+          <fielddescription>{$documentation.property.globalobjectsuffix$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="EmptyReplacement" columnsize="100" columntype="text" guid="84ed4dbc-ee3e-4d4a-839b-e389bbe53a07" visible="true">
+        <properties>
+          <fieldcaption>Empty replacement</fieldcaption>
+          <fielddescription>{$documentation.property.emptyreplacement$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="RemoveMultipleCommas" columntype="boolean" guid="dda88ed1-4be5-4e00-9dba-f1056d180cc5" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Remove multiple commas</fieldcaption>
+          <fielddescription>{$documentation.property.removemultiplecommas$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="DisabledItems" columnsize="1000" columntype="text" guid="790d7367-8b1e-48d9-b3be-5186e48a0d04" visible="true">
+        <properties>
+          <fieldcaption>Disabled items</fieldcaption>
+          <fielddescription>{$documentation.property.disableditems$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="AdditionalUrlParameters" columnsize="500" columntype="text" guid="e5fbb417-eab7-4714-b434-628fbbd30f50" visible="true">
+        <properties>
+          <fieldcaption>Additional URL parameters</fieldcaption>
+          <fielddescription>{$documentation.property.additionalurlparameters$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="RemoveConfirmation" columnsize="1000" columntype="text" guid="35ed31a8-b269-4906-9cbe-b8caf03b5df4" visible="true">
+        <properties>
+          <fieldcaption>Remove confirmation message</fieldcaption>
+          <fielddescription>{$documentation.property.removeconfiguration$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textareacontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <IsTextArea>True</IsTextArea>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+      <field allowempty="true" column="ButtonImage" columnsize="500" columntype="text" guid="7a31f0ed-4fb6-4fc4-8d84-c0dc6b81c7d7" visible="true">
+        <properties>
+          <fieldcaption>Button image</fieldcaption>
+          <fielddescription>{$documentation.property.buttonimage$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <category name="Dialog_settings">
+        <properties>
+          <caption>Dialog settings</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="NewItemPageUrl" columnsize="500" columntype="text" guid="e8fb2679-8c52-4500-a96c-55630aea483b" visible="true">
+        <properties>
+          <fieldcaption>New item page URL</fieldcaption>
+          <fielddescription>{$documentation.property.newitempageurl$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="EditItemPageUrl" columnsize="500" columntype="text" guid="8ae4a2c1-d55a-4e15-bafe-a9f6a85e6ecc" visible="true">
+        <properties>
+          <fieldcaption>EditI iem page URL</fieldcaption>
+          <fielddescription>{$documentation.property.editpageurl$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="SelectItemPageUrl" columnsize="500" columntype="text" guid="76227390-bf5a-447b-8b86-13dd03120a06" visible="true">
+        <properties>
+          <fieldcaption>Select item page URL</fieldcaption>
+          <fielddescription>{$documentation.property.selectitempageurl$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="FilterControl" columnsize="250" columntype="text" guid="d6056b3e-b36a-445e-af8f-0bc59ad523dd" visible="true">
+        <properties>
+          <fieldcaption>Filter control</fieldcaption>
+          <fielddescription>{$documentation.property.FilterControl$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="DialogWindowName" columnsize="500" columntype="text" guid="de81d67f-e3f5-4f25-a50a-dcf283505c77" visible="true">
+        <properties>
+          <defaultvalue>SelectionDialog</defaultvalue>
+          <fieldcaption>Dialog window name</fieldcaption>
+          <fielddescription>{$documentation.property.DialogWindowName$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="DialogWindowWidth" columntype="integer" guid="65fb2309-4b3d-4169-849d-9e6b401acfdf" visible="true">
+        <properties>
+          <defaultvalue>668</defaultvalue>
+          <fieldcaption>Dialog window width</fieldcaption>
+          <fielddescription>{$documentation.property.DialogWindowWidth$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="DialogWindowHeight" columntype="integer" guid="56f1ec0c-a46d-46b0-a971-a76fb8f9b789" visible="true">
+        <properties>
+          <defaultvalue>590</defaultvalue>
+          <fieldcaption>{$documentation.property.DialogWindowHeight$}</fieldcaption>
+          <fielddescription>Sets the height of the selection dialog.</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="GridName" columnsize="500" columntype="text" guid="5d3e5a3a-03f0-4463-94a6-b14129d4cfc4" visible="true">
+        <properties>
+          <fieldcaption>Grid name</fieldcaption>
+          <fielddescription>
+            <![CDATA[Sets the path to the UniGrid XML definition file used by the list of selected items in Multiple selection mode.]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="DialogGridName" columnsize="1000" columntype="text" guid="80dd8116-6787-4c9b-ad8f-fe89db3c0cb7" visible="true">
+        <properties>
+          <fieldcaption>Dialog grid name</fieldcaption>
+          <fielddescription>{$documentation.property.DialogGridName$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <category name="JavaScript_methods">
+        <properties>
+          <caption>JavaScript methods</caption>
+          <visible>true</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="CallbackMethod" columnsize="500" columntype="text" guid="0b5394c3-d8d3-40f7-95c9-fd82c005ef3a" visible="true">
+        <properties>
+          <fieldcaption>Callback method</fieldcaption>
+          <fielddescription>{$documentation.property.CallbackMethod$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="OnBeforeClientChanged" columnsize="500" columntype="text" guid="ef566c62-44b9-43bb-ac01-5f49b563ae23" visible="true">
+        <properties>
+          <fieldcaption>On before client changed</fieldcaption>
+          <fielddescription>{$documentation.property.OnBeforeClientChanged$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="OnAfterClientChanged" columnsize="500" columntype="text" guid="76896de4-8c0c-4bda-947c-d9dbb9434c19" visible="true">
+        <properties>
+          <fieldcaption>On after client changed</fieldcaption>
+          <fielddescription>{$documentation.property.OnAfterClientChanged$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+    </form>
+  </WebPartProperties>
+  <WebPartSkipInsertProperties>False</WebPartSkipInsertProperties>
+  <WebPartType>9</WebPartType>
+</cms.webpart>

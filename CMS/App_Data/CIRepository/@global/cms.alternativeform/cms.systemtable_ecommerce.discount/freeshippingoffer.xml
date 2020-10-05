@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.discount</CodeName>
+    <GUID>3cc5179a-b1f8-4a9a-98cb-06b92bc9604b</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="DiscountID" guid="4e022b02-5173-4eb0-ab6e-32faa8a7f355" />
+      <field column="DiscountDisplayName" guid="16e55b27-9c07-4b77-b046-e25fa9608fd9">
+        <properties>
+          <validationerrormessage>{$com.discount.displaynameempty$}</validationerrormessage>
+        </properties>
+      </field>
+      <field column="DiscountName" guid="00f12cf2-2b16-434c-98ca-ef881b253e45" />
+      <field column="DiscountDescription" guid="3385e1b8-158d-4be1-8b42-8542f539cb86" />
+      <field column="DiscountEnabled" guid="dcccc91e-bef8-415d-a625-8e8992992f79" />
+      <category name="BasicProperties">
+        <properties>
+          <caption>{$com.discount.shippingconditionpanel$}</caption>
+        </properties>
+      </category>
+      <field column="DiscountIsFlat" guid="8378c821-6d34-466c-a6f8-c7c962cbdb45" visible="" />
+      <field column="DiscountSiteID" guid="9280f349-116d-48e0-b82f-fcea23f78917" />
+      <field column="DiscountValue" guid="dbe3fd7d-9375-49be-b247-40d56b0acf00" visible="">
+        <properties>
+          <defaultvalue>100</defaultvalue>
+        </properties>
+      </field>
+      <field column="DiscountOrderAmount" guid="f4913082-74bf-4706-ad60-11f741e8585f" visible="true">
+        <settings>
+          <controlname>TextBoxControl</controlname>
+          <FilterType>0|3</FilterType>
+          <Trim>True</Trim>
+          <ValidChars>,.</ValidChars>
+        </settings>
+        <properties>
+          <contentafter ismacro="true">
+<![CDATA[
+<span class="form-control-text">
+{%
+	siteID = DiscountSiteID == 0 ? CMSContext.CurrentSiteID : DiscountSiteID;
+	HTMLEncode(GetMainSiteCurrency(siteID).CurrencyCode);
+|(identity)GlobalAdministrator|(hash)8049a28073af52c59d76f137637862d6194bd2499f49837c612b2c769e7424c0%}
+</span>
+]]>
+          </contentafter>
+          <controlcellcssclass>control-group-inline control-group-units</controlcellcssclass>
+          <fielddescription>{$com.discount.orderamountdesc$}</fielddescription>
+          <validationerrormessage>{$com.discount.minorderamount$}</validationerrormessage>
+        </properties>
+        <rules>
+          <rule>
+            <![CDATA[{%Rule("Value >= 0", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>0</t><v>0</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="DiscountApplyTo" guid="95655a03-a081-4fdb-af10-00e6bcd25293" visible="">
+        <properties>
+          <defaultvalue>Shipping</defaultvalue>
+        </properties>
+      </field>
+      <field column="DiscountProductCondition" guid="a485d43e-89fb-4b78-9b77-a35ff5a3b227" visible="" />
+      <field column="DiscountCartCondition" guid="eeb69142-8a05-47d0-aee0-f19321a4f819">
+        <properties>
+          <fieldcaption>{$com.discount.shippingcondition$}</fieldcaption>
+          <fielddescription>{$com.discount.shippingconditiondescription$}</fielddescription>
+        </properties>
+      </field>
+      <category name="com.discount.coupons">
+        <properties>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="DiscountUsesCoupons" guid="145b313c-7eb9-4fc2-abd1-1262a18eaf69" spellcheck="false" visible="true">
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+        <properties>
+          <contentafter>
+<![CDATA[
+<span ID="CouponsInfoLabel" class="form-control-text" style="display : none;" >
+{% GetResourceString("com.discount.couponsredirect")|(identity)GlobalAdministrator|(hash)cedaaed0e52f413c19adca2cf5b65b9f38b53784473e850ae84cf53409a87541%}
+</span>
+</div>
+ 
+]]>
+          </contentafter>
+          <controlcellcssclass>control-group-inline control-group-units</controlcellcssclass>
+          <fieldcaption>{$com.discount.usescouponsshipping$}</fieldcaption>
+          <captioncssclass />
+        </properties>
+      </field>
+      <field column="DiscountValidFrom" guid="f3ce6ac9-9eba-4bf0-8f5a-25fa29cbf2f9" />
+      <field column="DiscountValidTo" guid="5a5dbee3-f1a2-4e53-b86d-b766735c9698" />
+      <field column="DiscountCustomerRestriction" guid="c70bd58f-a720-418f-bb26-c1a12a96a9ad" />
+      <field column="DiscountRoles" guid="4e86869a-5ae4-4516-9475-ff74cb1c8b58">
+        <settings>
+          <ResourcePrefix>addroles</ResourcePrefix>
+          <ShowSiteFilter>False</ShowSiteFilter>
+        </settings>
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%DiscountCustomerRestriction.Value == "SelectedRoles"|(identity)GlobalAdministrator|(hash)90756e6892a29e2ab328d27270c8cb0e7f32dfec8fce43590366a143dc352db7%}]]>
+          </visiblemacro>
+          <enabledmacro />
+        </properties>
+      </field>
+      <category name="RulesForDiscountCalculation">
+        <properties>
+          <caption>{$com.discount.promotioncalculation$}</caption>
+        </properties>
+      </category>
+      <field column="DiscountOrder" guid="6b14d539-6469-4046-87e0-4182267ab6cc" visible="">
+        <settings>
+          <AutoCompleteEnableCaching />
+          <AutoCompleteFirstRowSelected />
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem />
+          <controlname />
+          <FilterMode />
+          <Trim />
+        </settings>
+      </field>
+      <field column="DiscountApplyFurtherDiscounts" guid="e1f01fe0-0e06-40bb-b618-7698e8e865c1" visible="">
+        <settings>
+          <controlname />
+        </settings>
+      </field>
+      <field column="DiscountGUID" guid="1472ccd6-cfd9-4fe8-8804-ba37b0f8dc6b" />
+      <field column="DiscountLastModified" guid="30e7c36b-b318-49a7-a715-e9df75857f60" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Free shipping offer</FormDisplayName>
+  <FormGUID>79c0ec12-fe49-4916-983c-03b5894dd62e</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>FreeShippingOffer</FormName>
+</cms.alternativeform>

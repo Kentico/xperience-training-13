@@ -324,7 +324,7 @@ public partial class CMSAdminControls_UI_UniGrid_Controls_AdvancedExport : Advan
     {
         try
         {
-            ExportData(format.ToEnum<DataExportFormatEnum>(), isPreview ? (int?)100 : null);
+            ExportData(EnumStringRepresentationExtensions.ToEnum<DataExportFormatEnum>(format), isPreview ? (int?)100 : null);
         }
         catch (Exception ex)
         {

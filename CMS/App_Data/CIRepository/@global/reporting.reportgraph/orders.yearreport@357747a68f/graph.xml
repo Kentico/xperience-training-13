@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>44239d96-d33d-42d5-98fa-f971e15b6fb8</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+IF @FromDate <= @ToDate 
+BEGIN
+/* Trims the value of @FromDate to be able to display years in the graph. */
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+/* Selects the number of orders created in the given years. */
+SELECT 
+   [Date] AS StartTime, 
+   COUNT(OrderDate) AS '{$ecommerce.report_numberoforders$}'   
+FROM
+   -- returns a column of dates, each year in a new row 
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'year') AS Dates
+   LEFT JOIN COM_Order  
+      ON ([Date] <= OrderDate  AND  DATEADD(YEAR,1,[Date]) > OrderDate) 
+      AND OrderSiteID = @CMSContextCurrentSiteID
+GROUP BY [Date]
+ORDER BY [Date]
+END
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Orders.YearReport</CodeName>
+    <GUID>bdb0ff62-087d-4e2c-a187-e5dfbfe1eeb9</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <BarDrawingStyle>Bar</BarDrawingStyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <BorderSkinStyle>None</BorderSkinStyle>
+      <ChartAreaBorderStyle>NotSet</ChartAreaBorderStyle>
+      <ChartAreaGradient>None</ChartAreaGradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <LegendBorderSize>0</LegendBorderSize>
+      <LegendBorderStyle>NotSet</LegendBorderStyle>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <PieDoughnutRadius>70</PieDoughnutRadius>
+      <PieDrawingDesign>Default</PieDrawingDesign>
+      <PieDrawingStyle>Doughnut</PieDrawingStyle>
+      <PieLabelStyle>Outside</PieLabelStyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <PlotAreaBorderSize>0</PlotAreaBorderSize>
+      <PlotAreaBorderStyle>NotSet</PlotAreaBorderStyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <SeriesBorderSize>4</SeriesBorderSize>
+      <SeriesBorderStyle>Solid</SeriesBorderStyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <SeriesSymbols>Circle</SeriesSymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <StackedBarDrawingStyle>Bar</StackedBarDrawingStyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisformat>{yyyy}</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxisfont>Arial;bold;11;;</yaxisfont>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$ecommerce.report_year$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$ecommerce.report_numberoforders$}</GraphYAxisTitle>
+</reporting.reportgraph>

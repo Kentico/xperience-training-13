@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>Ecommerce.ShippingOption</CodeName>
+    <GUID>b556c066-57d3-4400-b601-78bb4f527447</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="ShippingOptionID" guid="dc7a8f97-f1cb-4517-8031-489213a2445d" />
+      <category name="com.ui.configurationshippingoptionsgeneral" dummy="true" />
+      <field column="ShippingOptionCarrierID" guid="44289ffa-5e1a-4b40-8def-bcbf4c392fd5" hasdependingfields="true" allowempty="">
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>True</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectSiteName>#currentsite</ObjectSiteName>
+          <ObjectType>ecommerce.carrier</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>carrierselector</ResourcePrefix>
+          <ReturnColumnName>CarrierID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>1</SelectionMode>
+          <UseAutocomplete>False</UseAutocomplete>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+        <properties>
+          <enabledmacro />
+        </properties>
+        <rules>
+          <rule errormsg="{$com.carrier.selectcarrier$}">
+            <![CDATA[{%Rule("Value >= 1", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MinValue\" ><p n=\"minvalue\"><t>1</t><v>1</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+      <field column="ShippingOptionCarrierServiceName" dependsonanotherfield="true" guid="b38ed66d-cba3-4b19-93f4-169fd5d82ec5" allowempty="">
+        <settings>
+          <CarrierIDColumnName>ShippingOptionCarrierID</CarrierIDColumnName>
+          <controlname>ShippingServiceSelector</controlname>
+          <OutputFormat />
+        </settings>
+        <properties>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ShippingOptionCarrierID.Value > 0|(identity)GlobalAdministrator|(hash)5eef517590147e597c2ca0aae94805524caada3e90e4e079da083ab3501bea8c%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="ShippingOptionDisplayName" guid="765b2b6e-52b1-41c9-ab12-ec94b3ef6ad7" />
+      <field column="ShippingOptionName" guid="9804163e-683a-4f71-91ed-d2b81643f483" />
+      <field column="ShippingOptionTaxClassID" guid="7d267933-0d0e-443b-80f8-54cf64ecd8a4" reftype="" />
+      <field column="ShippingOptionSiteID" guid="fd1414cc-26d1-4d35-8dfe-6d6c0edf3a92" order="7">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% SiteContext.CurrentSiteID |(identity)GlobalAdministrator|(hash)9b2c4ed2f83cafe4d9a9971ee6652de115caea580f03e025d8033d885be41d43%}]]>
+          </defaultvalue>
+        </properties>
+      </field>
+      <field column="ShippingOptionEnabled" guid="0fe5eaa7-6d54-4c76-90c5-376b35a11f9d" order="8" />
+      <category name="com.shippingoption.additional" order="9" />
+      <field column="ShippingOptionDescription" guid="0b53df7f-bcc9-49a4-8fcc-946b90068ca6" order="10">
+        <settings>
+          <controlname>LocalizableTextArea</controlname>
+          <TextMode>MultiLine</TextMode>
+          <ValueIsContent>False</ValueIsContent>
+        </settings>
+      </field>
+      <field column="ShippingOptionThumbnailGUID" guid="d2799e66-8102-4569-ba53-a826837785e5" order="11" />
+      <field column="ShippingOptionGUID" guid="18dd26bf-7cc3-4d53-9cd4-b3cb5df860da" />
+      <field column="ShippingOptionLastModified" guid="949f7f46-fd67-4cc3-8942-77064b1924cf" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>New</FormDisplayName>
+  <FormGUID>40ae9d37-66a2-4128-b657-afcc919fd718</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>New</FormName>
+</cms.alternativeform>

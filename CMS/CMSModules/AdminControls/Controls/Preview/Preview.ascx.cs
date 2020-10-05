@@ -7,9 +7,6 @@ using System.Text;
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
-using CMS.DataEngine;
-using CMS.DeviceProfiles;
-using CMS.LicenseProvider;
 using CMS.Localization;
 using CMS.SiteProvider;
 using CMS.UIControls;
@@ -17,13 +14,6 @@ using CMS.UIControls;
 
 public partial class CMSModules_AdminControls_Controls_Preview_Preview : CMSPreviewControl
 {
-    #region "Variables"
-
-    private InlineUserControl ucProfiles;
-
-    #endregion
-
-
     #region "Properties"
 
     /// <summary>
@@ -39,33 +29,6 @@ public partial class CMSModules_AdminControls_Controls_Preview_Preview : CMSPrev
 
 
     #region "Methods"
-
-    /// <summary>
-    /// Init event handler.
-    /// </summary>
-    protected override void OnInit(EventArgs e)
-    {
-        // Show devices selection button
-        if (DeviceProfileInfoProvider.IsDeviceProfilesEnabled(SiteContext.CurrentSiteName) && LicenseHelper.CheckFeature(RequestContext.CurrentDomain, FeatureEnum.DeviceProfiles))
-        {
-            ucProfiles = LoadControl("~/CMSModules/DeviceProfiles/Controls/ProfilesMenuControl.ascx") as InlineUserControl;
-            if (ucProfiles != null)
-            {
-                ucProfiles.ID = "ucProfiles";
-                ucProfiles.SetValue("UseSmallButton", true);
-                ucProfiles.SetValue("DisplayRotateButtons", true);
-                plcDevice.Controls.Add(ucProfiles);
-                plcDevice.Visible = true;
-            }
-        }
-        else
-        {
-            plcDevice.Visible = false;
-        }
-
-        base.OnInit(e);
-    }
-
 
     /// <summary>
     /// Handles the Load event of the Page control.
@@ -88,18 +51,7 @@ public partial class CMSModules_AdminControls_Controls_Preview_Preview : CMSPrev
 function ChangeLanguage(culture) {
     ", ControlsHelper.GetPostBackEventReference(btnLanguage, "#").Replace("'#'", "culture"), @"
 }
-
-function ChangeDevice(device) {
-    ", ControlsHelper.GetPostBackEventReference(btnDevice, "#").Replace("'#'", "device"), @"
-}
-
-$cmsj(document).ready(function () {
-    if (window.CMSDeviceProfile) {
-        CMSDeviceProfile.OnRotationFunction = (function(btn) {
-            ", ControlsHelper.GetPostBackEventReference(this, "rotate"), @";
-        });
-    }
-});");
+");
 
             ScriptHelper.RegisterStartupScript(this, typeof(String), "PostbackScript", sb.ToString(), true);
         }
@@ -122,7 +74,7 @@ $cmsj(document).ready(function () {
         if (LoadSessionValues)
         {
             // Get values from session
-            parameters = SessionHelper.GetValue(PreviewObjectName) as string[] ?? PreviewObjectPreferredDocument;
+            parameters = SessionHelper.GetValue(PreviewObjectName) as string[];
         }
 
         if ((parameters != null) && (parameters.Length == 4))
@@ -143,7 +95,7 @@ $cmsj(document).ready(function () {
                 // First time load
                 parameters = new String[4];
                 parameters[1] = SiteContext.CurrentSiteID.ToString();
-                parameters[3] = DeviceContext.CurrentDeviceProfileName;
+                parameters[3] = "";
 
                 if (!RequestHelper.IsPostBack() || SetControls)
                 {
@@ -175,19 +127,12 @@ $cmsj(document).ready(function () {
         if (!LoadSessionValues)
         {
             SessionHelper.SetValue(PreviewObjectName, parameters);
-            StoreNewPreferredDocument(parameters);
         }
 
         ucPath.Config.ContentSites = AvailableSitesEnum.All;
         ucSelectCulture.SiteID = ucPath.SiteID;
         ucPath.PathTextBox.WatermarkText = GetString("general.pleaseselectdots");
         ucPath.PathTextBox.WatermarkCssClass = "WatermarkText";
-
-        if (ucProfiles != null)
-        {
-            ucProfiles.SetValue("SelectedDevice", parameters[3]);
-        }
-
     }
 
 
@@ -216,13 +161,7 @@ $cmsj(document).ready(function () {
             parameters[1] = (siteID != 0) ? siteID.ToString() : parameters[1];
             parameters[2] = ValidationHelper.GetString(ucSelectCulture.SelectedCulture, LocalizationContext.PreferredCultureCode);
 
-            if (ucProfiles != null)
-            {
-                parameters[3] = ValidationHelper.GetString(ucProfiles.GetValue("SelectedDevice"), String.Empty);
-            }
-
             SessionHelper.SetValue(PreviewObjectName, parameters);
-            StoreNewPreferredDocument(parameters);
         }
 
         RegisterRefreshPreviewScript();
@@ -305,26 +244,6 @@ $cmsj(document).ready(function () {
         {
             ucSelectCulture.SelectedCulture = arg;
             UpdatePreview(true);
-        }
-
-        // Device change
-        if (target == btnDevice.UniqueID)
-        {
-            if (ucProfiles != null)
-            {
-                string deviceName = arg;
-                ucProfiles.SetValue("SelectedDevice", deviceName);
-                DeviceContext.CurrentDeviceProfileName = deviceName;
-                CookieHelper.Remove(CookieName.CurrentDeviceProfileRotate);
-            }
-
-            UpdatePreview(true);
-        }
-
-        // Device rotation
-        if (arg == "rotate")
-        {
-            UpdatePreview(false);
         }
     }
 

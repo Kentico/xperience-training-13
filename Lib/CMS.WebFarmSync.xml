@@ -478,6 +478,11 @@
             Returns a query for all the WebFarmServerMonitoringInfo objects.
             </summary>
         </member>
+        <member name="T:CMS.WebFarmSync.IWebFarmServerInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WebFarmSync.WebFarmServerInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.WebFarmSync.WebFarmServerInfo">
             <summary>
             WebFarmServerInfo data container class.
@@ -770,6 +775,47 @@
             Gets dataset with anonymous tasks with additional information about presence of binary data of the tasks.
             </summary>
         </member>
+        <member name="T:CMS.WebFarmSync.IWebFarmServerTaskInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> management.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.IWebFarmServerTaskInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding structure.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WebFarmSync.IWebFarmServerTaskInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding structure.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WebFarmSync.IWebFarmServerTaskInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+        </member>
+        <member name="M:CMS.WebFarmSync.IWebFarmServerTaskInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+        </member>
+        <member name="T:CMS.WebFarmSync.IWebFarmTaskInfoProvider">
+            <summary>
+            Declares members for <see cref="T:CMS.WebFarmSync.WebFarmTaskInfo"/> management.
+            </summary>
+        </member>
         <member name="T:CMS.WebFarmSync.WebFarmAnonymousTaskListInfo">
             <summary>
             WebFarmAnonymousTaskListInfo virtual object.
@@ -874,12 +920,36 @@
             Returns the query for all relationships between web farm servers and web farm server tasks.
             </summary>
         </member>
+        <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets an instance of the <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding structure.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+            <returns>Returns an instance of <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.GetAsync(System.Int32,System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously gets an instance of the <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding structure.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning either an instance of <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> corresponding to given identifiers or null.</returns>
+        </member>
         <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.GetWebFarmServerTaskInfo(System.Int32,System.Int32)">
             <summary>
             Returns the WebFarmServerTaskInfo structure for the specified Web Farm Server Task.
             </summary>
             <param name="serverId">Server ID</param>
             <param name="taskId">Task ID</param>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.Set(CMS.WebFarmSync.WebFarmServerTaskInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.SetWebFarmServerTaskInfo(CMS.WebFarmSync.WebFarmServerTaskInfo)">
             <summary>
@@ -898,12 +968,26 @@
             Provides delete query.
             </summary>
         </member>
+        <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.Remove(System.Int32,System.Int32)">
+            <summary>
+            Deletes <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
+        </member>
         <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.DeleteWebFarmServerTaskInfo(System.Int32,System.Int32)">
             <summary>
             Deletes specified Web Farm Server Task.
             </summary>
             <param name="serverId">Server ID</param>
             <param name="taskId">Task ID</param>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.Add(System.Int32,System.Int32)">
+            <summary>
+            Creates <see cref="T:CMS.WebFarmSync.WebFarmServerTaskInfo"/> binding.
+            </summary>
+            <param name="webFarmServerId">Web farm server ID.</param>
+            <param name="webFarmTaskId">Web farm task ID.</param>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmServerTaskInfoProvider.AddWebFarmServerTaskInfo(System.Int32,System.Int32)">
             <summary>
@@ -1055,7 +1139,7 @@
         <member name="M:CMS.WebFarmSync.WebFarmTaskInfoProvider.GetWebFarmTasks">
             <summary>
             Returns the query for all web farm server tasks.
-            </summary>   
+            </summary>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmTaskInfoProvider.GetWebFarmTasksInternal">
             <summary>
@@ -1073,6 +1157,13 @@
             Returns the WebFarmTaskInfo structure for the specified webFarmTask.
             </summary>
             <param name="webFarmTaskId">WebFarmTask id</param>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmTaskInfoProvider.Set(CMS.WebFarmSync.WebFarmTaskInfo)">
+            <summary>
+            Inserts or updates the <paramref name="info"/> object in the underlying data store.
+            </summary>
+            <param name="info">Info object to be inserted or updated.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="info"/> is null.</exception>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmTaskInfoProvider.SetWebFarmTaskInfo(CMS.WebFarmSync.WebFarmTaskInfo)">
             <summary>
@@ -1741,36 +1832,33 @@
             Returns true if for given <paramref name="domainName"/> the <see cref="F:CMS.DataEngine.FeatureEnum.Webfarm"/> feature is enabled and not exceeded.
             </summary>
             <param name="domainName">Domain to check.</param>
-            <remarks>
-            For request to public domain without a license, check only if number of healthy webfarm servers is smaller 
-            or equals to the webfarm count of the best possible license.
-            For request to public domain with a license that supports webfarms, check if number of healthy webfarm servers is smaller 
-            or equals to the webfarm count of the best possible license.
-            For request to public domain with a license that does not support webfarms, false is returned.
-            If the method is called without <paramref name="domainName"/>, e.g. from worker thread, or for local domain, only check if the number of healthy webfarm servers is smaller 
-            or equals to the webfarm count of the best possible license. 
-            </remarks>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsLicenseValid(System.Boolean)">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsLicenseValid">
             <summary>
             Checks the license policy for web farms.
             Returns true if current license is valid and does not exceed the license limitations.
             </summary>
-            <param name="allowLocalDomainLicenses">If true, licenses for local domains are also taken into consideration when checking the maximum allowed number of web farm servers. Otherwise only public domain licenses are checked.</param>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsLicenseValidInternal(CMS.Helpers.CacheSettings,System.Boolean)">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowed(CMS.Helpers.CacheSettings)">
             <summary>
             Checks the license policy for web farms.
             Returns true if current license is valid and does not exceed the license limitations.
             </summary>
             <param name="cacheSettings">Cache settings.</param>
-            <param name="allowLocalDomainLicenses">If true, licenses for local domains are also taken into consideration when checking the maximum allowed number of web farm servers. Otherwise only public domain licenses are checked.</param>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowed(System.Boolean)">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowedInternal(System.Collections.Generic.Dictionary{System.String,CMS.LicenseProvider.LicenseKeyInfo},System.Collections.Generic.List{CMS.SiteProvider.SiteInfo},System.Collections.Generic.List{CMS.WebFarmSync.WebFarmServerInfo})">
             <summary>
-            Checks if current number of enabled web farm servers does not exceed the license limitations.
+            Checks the license policy for web farms.
+            Returns true if current license is valid and does not exceed the license limitations.
             </summary>
-            <param name="allowLocalDomainLicenses">If true, licenses for local domains are also taken into consideration when checking the maximum allowed number of web farm servers. Otherwise only public domain licenses are checked.</param>
+            <remarks>The method is used only for testing purposes and should not be used directly.</remarks>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetNumberOfWebFarmsForUrl(System.String,System.Collections.Generic.Dictionary{System.String,CMS.LicenseProvider.LicenseKeyInfo})">
+            <summary>
+            Returns number of web farms that are counted towards the web farm limit.
+            If license supports unlimited web farms the <see cref="F:System.Int32.MaxValue"/> is returned.
+            If there is no license for given <paramref name="url"/> then 0 is returned.
+            </summary>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.CheckLicense(System.String)">
             <summary>
@@ -1779,22 +1867,10 @@
             <param name="domainName">Domain to check.</param>
             <exception cref="T:CMS.DataEngine.LicenseException">Throws <see cref="T:CMS.DataEngine.LicenseException"/> if license check failed.</exception>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetServerCountForLicenseCheck">
-            <summary>
-            Gets number of servers that should count towards license check.
-            This means servers that are responding regularly.
-            </summary>
-        </member>
         <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetActiveWebFarmServers">
             <summary>
             Gets enabled healthy web farm servers.
             </summary>
-        </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetFreeExternalWebAppServersCount(System.Collections.Generic.List{CMS.WebFarmSync.WebFarmServerInfo})">
-            <summary>
-            Gets count of web farm servers, which are not counted in licensed servers.
-            </summary>
-            <param name="activeWebFarmServers">Active web farm servers.</param>
         </member>
         <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetLicensedDomains(CMS.Helpers.CacheSettings)">
             <summary>
@@ -1807,14 +1883,6 @@
             Gets all sites, which are currently running.
             </summary>
             <param name="cacheSettings">Cache settings.</param>
-        </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetLicensedRunningSitesCount(CMS.Helpers.CacheSettings,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.List{CMS.SiteProvider.SiteInfo})">
-            <summary>
-            Gets count of sites, which have at least one domain with valid license.
-            </summary>
-            <param name="cacheSettings">Cache settings.</param>
-            <param name="licensedDomains">License domains.</param>
-            <param name="runningSites">Running sites.</param>
         </member>
         <member name="T:CMS.WebFarmSync.WebFarmModeEnum">
             <summary>

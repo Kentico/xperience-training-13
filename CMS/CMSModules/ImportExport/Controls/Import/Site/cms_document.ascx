@@ -38,11 +38,6 @@
                         <cms:CMSCheckBox ID="chkDocumentsHistory" runat="server" />
                         <cms:CMSCheckBox ID="chkRelationships" runat="server" />
                         <cms:CMSCheckBox ID="chkACLs" runat="server" />
-                        <cms:CMSCheckBox ID="chkUserPersonalizations" runat="server" />
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder runat="server" ID="pnlModules">
-                        <cms:CMSCheckBox ID="chkBlogComments" runat="server" />
-                        <cms:CMSCheckBox ID="chkEventAttendees" runat="server" />
                     </asp:PlaceHolder>
                 </div>
             </div>

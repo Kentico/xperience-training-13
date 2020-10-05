@@ -32,7 +32,7 @@ public partial class CMSFormControls_Filters_DateTimeFilter : FormEngineUserCont
         {
             if (GetValue("timezonetype") != null)
             {
-                dtmTimeFrom.TimeZone = GetValue("timezonetype", String.Empty).ToEnum<TimeZoneTypeEnum>();
+                dtmTimeFrom.TimeZone = EnumStringRepresentationExtensions.ToEnum<TimeZoneTypeEnum>(GetValue("timezonetype", String.Empty));
             }
             if (GetValue("timezone") != null)
             {

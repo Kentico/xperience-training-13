@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.class</CodeName>
+    <GUID>d7e91104-201b-4b11-9550-e93ad9a4d81f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>7e39e718-f035-4b50-ab38-acd7c9efe690</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>SetObjectOrder</QueryName>
+  <QueryRequiresTransaction>True</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+-- Store max order so we keep the consistency of the orders (this matters when last item is being moved down)
+DECLARE @MaxOrder INT;
+DECLARE @CurrOrder INT;
+DECLARE @TargetOrder INT;
+SET @MaxOrder = (SELECT TOP 1 [##ORDERCOLUMN##] FROM [##TABLE##] WHERE ##WHERE## ORDER BY [##ORDERCOLUMN##] DESC);
+SET @CurrOrder = (SELECT TOP 1 [##ORDERCOLUMN##] FROM [##TABLE##] WHERE [##IDCOLUMN##] = @ObjectID);
+
+-- Set the absolute order according to relativity setting
+IF @RelativeOrder = 1
+BEGIN
+  SET @TargetOrder = @CurrOrder + @NewOrder;
+END 
+ELSE 
+BEGIN
+  SET @TargetOrder = @NewOrder;
+END
+
+IF @CurrOrder > @TargetOrder
+BEGIN
+  -- Moving from upper order to lower
+  UPDATE [##TABLE##] SET [##ORDERCOLUMN##] = [##ORDERCOLUMN##] + 1 WHERE [##ORDERCOLUMN##] >= @TargetOrder AND [##ORDERCOLUMN##] < @CurrOrder AND ##WHERE##
+END
+ELSE
+BEGIN
+  -- Moving from lower order to upper
+  UPDATE [##TABLE##] SET [##ORDERCOLUMN##] = [##ORDERCOLUMN##] - 1 WHERE [##ORDERCOLUMN##] <= @TargetOrder AND [##ORDERCOLUMN##] > @CurrOrder AND ##WHERE##
+END
+-- Update the moved item, make sure the index is not bigger than maximal index
+SET @TargetOrder = CASE WHEN @MaxOrder < @TargetOrder THEN @MaxOrder Else @TargetOrder END
+SET @TargetOrder = CASE WHEN @TargetOrder < 1 THEN 1 Else @TargetOrder END
+UPDATE [##TABLE##] SET [##ORDERCOLUMN##] = @TargetOrder WHERE [##IDCOLUMN##] = @ObjectID
+SELECT @TargetOrder
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

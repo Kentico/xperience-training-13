@@ -288,7 +288,7 @@ public partial class CMSModules_Scoring_Controls_UI_Rule_List : CMSAdminListCont
         // "Recalculation scheduled" status
         if (info.ScoreScheduledTaskID > 0)
         {
-            TaskInfo taskInfo = TaskInfoProvider.GetTaskInfo(info.ScoreScheduledTaskID);
+            TaskInfo taskInfo = TaskInfo.Provider.Get(info.ScoreScheduledTaskID);
             if (taskInfo != null && taskInfo.TaskEnabled)
             {
                 ShowInformation(String.Format(GetString("om.score.recalculatescheduledat"), taskInfo.TaskNextRunTime.ToString()));

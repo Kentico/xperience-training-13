@@ -10,6 +10,7 @@ using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
+using CMS.Membership;
 using CMS.SiteProvider;
 using CMS.Synchronization;
 using CMS.UIControls;
@@ -178,7 +179,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
                                 {
                                     string previewExtension = Path.GetExtension(ucFileUpload.PostedFile.FileName);
                                     string previewName = Path.GetFileNameWithoutExtension(MediaLibraryHelper.GetPreviewFileName(mediaFile.FileName, mediaFile.FileExtension, previewExtension, siteName, previewSuffix));
-                                    string previewFolder = DirectoryHelper.CombinePath(Path.EnsureSlashes(LibraryFolderPath.TrimEnd('/')), MediaLibraryHelper.GetMediaFileHiddenFolder(siteName));
+                                    string previewFolder = DirectoryHelper.CombinePath(Path.EnsureForwardSlashes(LibraryFolderPath.TrimEnd('/')), MediaLibraryHelper.GetMediaFileHiddenFolder(siteName));
 
                                     byte[] previewFileBinary = new byte[ucFileUpload.PostedFile.ContentLength];
                                     ucFileUpload.PostedFile.InputStream.Read(previewFileBinary, 0, ucFileUpload.PostedFile.ContentLength);
@@ -327,7 +328,7 @@ if ((window.parent != null) && (/parentelemid={1}/i.test(window.location.href)) 
                                                  FileSize = mediaFile.FileSize,
                                                  FileMimeType = mediaFile.FileMimeType,
                                                  FilePath = mediaFile.FilePath,
-                                                 FileModifiedByUserID = mediaFile.FileModifiedByUserID,
+                                                 FileModifiedByUserID = MembershipContext.AuthenticatedUser.UserID,
                                                  FileBinary = mediaFile.FileBinary,
                                                  FileImageHeight = mediaFile.FileImageHeight,
                                                  FileImageWidth = mediaFile.FileImageWidth,

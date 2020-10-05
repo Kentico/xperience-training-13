@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.user</CodeName>
+    <GUID>2e02c378-0f3d-45de-9b2d-b8cf2bd87b55</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>e4fab6ce-2588-4751-a4bd-5566ca2b764b</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>isauthorizedperresource</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[DECLARE @ResourceID int; SET @ResourceID = (SELECT FIRST ResourceID FROM CMS_Resource WHERE ResourceName = @ResourceName); DECLARE @PermissionID int; SET @PermissionID = (SELECT FIRST PermissionID FROM CMS_Permission WHERE PermissionName = @PermissionName); DECLARE @UserID int; SET @UserID = (SELECT FIRST UserID FROM CMS_User WHERE UserName = @UserName); SELECT * FROM CMS_Permission WHERE PermissionID = @PermissionID AND ResourceID = @ResourceID AND PermissionID IN ( SELECT PermissionID FROM CMS_RolePermission WHERE RoleID IN (SELECT RoleID FROM CMS_UserRole WHERE UserID = @UserID) )]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

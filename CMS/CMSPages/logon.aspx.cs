@@ -295,12 +295,7 @@ function UpdateLabel_", ClientID, @"(content, context) {
         bool showError = true;
         if (FailureLabel != null)
         {
-            // Ban IP addresses which are blocked for login
-            if (MembershipContext.UserIsBanned)
-            {
-                DisplayError(GetString("banip.ipisbannedlogin"));
-            }
-            else if (AuthenticationHelper.DisplayAccountLockInformation(SiteContext.CurrentSiteName) && MembershipContext.UserAccountLockedDueToInvalidLogonAttempts)
+            if (AuthenticationHelper.DisplayAccountLockInformation(SiteContext.CurrentSiteName) && MembershipContext.UserAccountLockedDueToInvalidLogonAttempts)
             {
                 DisplayAccountLockedError(GetString("invalidlogonattempts.unlockaccount.accountlocked"));
             }

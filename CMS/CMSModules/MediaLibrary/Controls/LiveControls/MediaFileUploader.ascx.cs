@@ -160,7 +160,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaFileUplo
                         String path;
                         if ((DestinationPath != null) && DestinationPath.TrimEnd('/') != "")
                         {
-                            path = DirectoryHelper.CombinePath(Path.EnsureBackslashes(DestinationPath, true), MediaLibraryHelper.GetMediaFileHiddenFolder(SiteContext.CurrentSiteName));
+                            path = DirectoryHelper.CombinePath(Path.EnsureSlashes(DestinationPath, true), MediaLibraryHelper.GetMediaFileHiddenFolder(SiteContext.CurrentSiteName));
                         }
                         else
                         {

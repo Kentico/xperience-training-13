@@ -275,7 +275,7 @@ public partial class CMSAdminControls_UI_UIProfiles_UIToolbar : UIToolbar
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 string url = ValidationHelper.GetString(dr["ElementTargetURL"], "");
-                UIElementTypeEnum type = ValidationHelper.GetString(dr["ElementType"], "").ToEnum<UIElementTypeEnum>();
+                UIElementTypeEnum type = EnumStringRepresentationExtensions.ToEnum<UIElementTypeEnum>(ValidationHelper.GetString(dr["ElementType"], ""));
 
                 Group group = new Group();
                 if (url.EndsWith("ascx", StringComparison.OrdinalIgnoreCase) && (type == UIElementTypeEnum.UserControl))

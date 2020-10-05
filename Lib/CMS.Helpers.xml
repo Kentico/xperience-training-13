@@ -100,6 +100,7 @@
             <summary>
             Represents a cache with reading, inserting and removing support.
             </summary>
+            <seealso cref="T:CMS.Helpers.Caching.Abstractions.ICompactableCache"/>
         </member>
         <member name="M:CMS.Helpers.Caching.Abstractions.ICacheAccessor.Insert(System.String,System.Object,CMS.Helpers.CMSCacheDependency,System.DateTime,System.TimeSpan,CMS.Helpers.CMSCacheItemPriority,CMS.Helpers.CMSCacheItemRemovedCallback)">
             <summary>
@@ -130,11 +131,39 @@
             <summary>Retrieves a dictionary enumerator used to iterate through the key settings and their values contained in the cache.</summary>
             </summary>
         </member>
-        <member name="T:CMS.Helpers.AutomaticCallbackMemoryCacheAccessor">
+        <member name="T:CMS.Helpers.Caching.Abstractions.ICompactableCache">
+            <summary>
+            Represents a cache that supports compacting to reduce its size.
+            </summary>
+            <seealso cref="T:CMS.Helpers.Caching.Abstractions.ICacheAccessor"/>
+        </member>
+        <member name="M:CMS.Helpers.Caching.Abstractions.ICompactableCache.Compact(System.Double)">
+            <summary>
+            Tries to remove the specified percentage of items from the cache.
+            </summary>
+            <param name="percentage">Percentage by which to reduce the cache size.</param>
+        </member>
+        <member name="T:CMS.Helpers.Caching.AutomaticCallbackMemoryCacheAccessor">
             <summary>
             This implementation of cache accessor ensures that item is removed from cache upon its expiration.
             Timely removal is guaranteed only when using absolute expiration.
             </summary>
+        </member>
+        <member name="T:CMS.Helpers.Caching.MemoryCacheAccessor">
+            <summary>
+            <see cref="T:CMS.Helpers.Caching.Abstractions.ICacheAccessor"/> implementation based on <see cref="T:Microsoft.Extensions.Caching.Memory.MemoryCache"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Helpers.Caching.MemoryCacheAccessor.Count">
+            <summary>
+            Gets the count of the cache entries.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.Caching.MemoryCacheAccessor.Compact(System.Double)">
+            <summary>
+            Tries to remove the specified percentage of items from the memory cache.
+            </summary>
+            <param name="percentage">Percentage by which to reduce the cache size.</param>
         </member>
         <member name="T:CMS.Helpers.CacheDebug">
             <summary>
@@ -392,11 +421,6 @@
             CSS caching key.
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CacheHelper.PARTIAL_KEY">
-            <summary>
-            Partial cache key.
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CacheHelper.MACRO_KEY">
             <summary>
             Macro cache key.
@@ -486,16 +510,6 @@
             Expired items count (removed by the system for expiration reasons).
             </summary>
         </member>
-        <member name="P:CMS.Helpers.CacheHelper.CurrentRequestDependencyList">
-            <summary>
-            Current request dependency list, if set the list is used for the cache dependencies of the page output.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.CacheHelper.TrackCacheDependencies">
-            <summary>
-            Returns true if the cache dependencies for the output cache are tracked.
-            </summary>
-        </member>
         <member name="P:CMS.Helpers.CacheHelper.AllowCacheByUserName">
             <summary>
             If true, the cache allows separate keys by user name.
@@ -514,6 +528,11 @@
         <member name="P:CMS.Helpers.CacheHelper.DefaultDependenciesRegex">
             <summary>
             Identifies default cache dependencies macro in string of cache dependencies
+            </summary>
+        </member>
+        <member name="P:CMS.Helpers.CacheHelper.ProgressiveCache">
+            <summary>
+            Gets or sets the underlying progressive cache.
             </summary>
         </member>
         <member name="P:CMS.Helpers.CacheHelper.AlwaysCacheFiles">
@@ -639,6 +658,68 @@
             </summary>
             <param name="loadMethod">Method that loads the data</param>
             <param name="settings">Cache settings</param>
+            <remarks>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadMethodAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadMethodAsync">Function accepting cache settings and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadMethodAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadMethodAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadMethodAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            <para>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadMethodAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadMethodAsync">Function accepting cache settings and a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadMethodAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadMethodAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadMethodAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            <para>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </para>
+            </remarks>
         </member>
         <member name="M:CMS.Helpers.CacheHelper.Cache``1(System.Func{``0},CMS.Helpers.CacheSettings)">
             <summary>
@@ -646,6 +727,68 @@
             </summary>
             <param name="loadMethod">Method that loads the data</param>
             <param name="settings">Cache settings</param>
+            <remarks>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadMethodAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadMethodAsync">Function returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadMethodAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadMethodAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadMethodAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            <para>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadMethodAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadMethodAsync">Function accepting a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadMethodAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadMethodAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadMethodAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            <para>
+            <see cref="T:CMS.Helpers.IProgressiveCache"/> can be used to avoid a dependency on this static method.
+            </para>
+            </remarks>
         </member>
         <member name="M:CMS.Helpers.CacheHelper.Add(System.String,System.Object,CMS.Helpers.CMSCacheDependency,System.DateTime,System.TimeSpan)">
             <summary>
@@ -747,10 +890,22 @@
             </summary>
             <param name="key">Cache key</param>
         </member>
+        <member name="M:CMS.Helpers.CacheHelper.CompactCache(System.Double)">
+            <summary>
+            Tries to remove the specified percentage of items from the underlying cache.
+            The return value indicates whether compacting was performed (i.e. whether the underlying cache supports compacting).
+            </summary>
+            <param name="percentage">Percentage by which to reduce the cache size.</param>
+            <returns>Returns false if the underlying cache does not support compacting. Otherwise returns true.</returns>
+            <remarks>
+            In a web site environment (<see cref="P:CMS.Base.SystemContext.IsWebSite"/>) on the .NET Framework platform the underlying cache is the HTTP runtime cache, which does not support compacting.
+            </remarks>
+        </member>
         <member name="M:CMS.Helpers.CacheHelper.ClearCache">
             <summary>
             Clears the entire system cache.
             </summary>
+            <see cref="M:CMS.Helpers.CacheHelper.CompactCache(System.Double)"/>
         </member>
         <member name="M:CMS.Helpers.CacheHelper.ClearCache(System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -774,21 +929,6 @@
         <member name="M:CMS.Helpers.CacheHelper.ClearFileNodeCache(System.String)">
             <summary>
             Clear the cache for the file document nodes.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.CacheHelper.ClearOutputCache(System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Clears the output cache for specific page.
-            </summary>
-            <param name="siteId">Site ID</param>
-            <param name="aliasPath">Alias path</param>
-            <param name="culture">Culture</param>
-            <param name="allCultures">Clear all cultures cache</param>
-            <param name="childNodes">If true, the output cache of the child nodes is cleared as well</param>
-        </member>
-        <member name="M:CMS.Helpers.CacheHelper.ClearPartialCache">
-            <summary>
-            Clear the partial cache (output cache) of the controls.
             </summary>
         </member>
         <member name="M:CMS.Helpers.CacheHelper.RemoveDependencyCallback(System.String)">
@@ -947,17 +1087,6 @@
             <param name="key">Key</param>
             <param name="value">Value</param>
             <param name="removedReason">Reason for removal</param>
-        </member>
-        <member name="M:CMS.Helpers.CacheHelper.AddOutputCacheDependencies(System.String[])">
-            <summary>
-            Adds the given keys as a dependency for current page output.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.CacheHelper.EnsureOutputCacheDependencies(System.String)">
-            <summary>
-            Ensures the dependency list for the given key, so the dependencies for current page output can be tracked. The dependencies are tracked automatically only when TrackCacheDependencies property is enabled.
-            </summary>
-            <param name="listKey">List key</param>
         </member>
         <member name="M:CMS.Helpers.CacheHelper.GetSettingsCacheItems(System.String)">
             <summary>
@@ -1501,10 +1630,179 @@
             Executes the callback to the target object
             </summary>
         </member>
-        <member name="T:CMS.Helpers.MemoryCacheAccessor">
+        <member name="T:CMS.Helpers.IProgressiveCache">
             <summary>
-            <see cref="T:CMS.Helpers.Caching.Abstractions.ICacheAccessor"/> implementation based on <see cref="T:Microsoft.Extensions.Caching.Memory.MemoryCache"/>.
+            Provides optimization of parallel data loads. The data are loaded once, stored into cache and the result is shared.
             </summary>
+            <remarks>
+            Use dependency on this interface rather than depending on static members of the <see cref="T:CMS.Helpers.CacheHelper"/> class (e.g. <see cref="M:CMS.Helpers.CacheHelper.Cache``1(System.Func{CMS.Helpers.CacheSettings,``0},CMS.Helpers.CacheSettings)"/>,
+            <see cref="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings,System.Threading.CancellationToken)"/> or <see cref="M:CMS.Helpers.CacheHelper.CacheAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings)"/>).
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveCache.Load``1(System.Func{CMS.Helpers.CacheSettings,``0},CMS.Helpers.CacheSettings)">
+            <summary>
+            Loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFunc"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFunc">Function accepting cache settings and returning the data.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFunc"/> or <paramref name="settings"/> is null.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFunc"/> is always executed.
+            </para>
+            <para>
+            The internals of the method are based on <see cref="T:CMS.Helpers.CachedSection`1"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveCache.LoadAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFuncAsync">Function accepting cache settings and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFuncAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFuncAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveCache.LoadAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFuncAsync">Function accepting cache settings and a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFuncAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFuncAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:CMS.Helpers.ProgressiveCache">
+            <summary>
+            Provides optimization of parallel data loads. The data are loaded once, stored into cache and the result is shared.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveCache.#ctor(CMS.Helpers.IProgressiveLoader,CMS.Helpers.ICacheHelperAccessor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Helpers.ProgressiveCache"/> class.
+            </summary>
+            <param name="progressiveLoader">Progressive loader for loading the data.</param>
+            <param name="cacheHelperAccessor"><see cref="T:CMS.Helpers.CacheHelper"/> accessor to store loaded data into.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveLoader"/> or <paramref name="cacheHelperAccessor"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveCache.Load``1(System.Func{CMS.Helpers.CacheSettings,``0},CMS.Helpers.CacheSettings)">
+            <summary>
+            Loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFunc"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFunc">Function accepting cache settings and returning the data.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFunc"/> or <paramref name="settings"/> is null.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFunc"/> is always executed.
+            </para>
+            <para>
+            The internals of the method are based on <see cref="T:CMS.Helpers.CachedSection`1"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveCache.LoadAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFuncAsync">Function accepting cache settings and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFuncAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFuncAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveCache.LoadAsync``1(System.Func{CMS.Helpers.CacheSettings,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},CMS.Helpers.CacheSettings,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load, stores the result into cache and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well. No data are cached in such a case.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="loadDataFuncAsync">Function accepting cache settings and a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="loadDataFuncAsync"/> or <paramref name="settings"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <see cref="P:CMS.Helpers.CacheSettings.CacheItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            Based on the <paramref name="settings"/> the data is stored into cache. If <see cref="P:CMS.Helpers.CacheSettings.Cached"/> is set to false, no caching is performed and fresh data are retrieved.
+            </para>
+            <para>
+            If both progressive load is allowed (both <see cref="P:CMS.Helpers.CacheSettings.AllowProgressiveCaching"/> and <see cref="P:CMS.Helpers.CacheHelper.ProgressiveCaching"/> are set to true), the fresh data retrieval is subject to progressive load
+            (i.e. only one threads executes the load and the result is distributed to other waiting threads).
+            Otherwise, the <paramref name="loadDataFuncAsync"/> is always executed.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
         </member>
         <member name="T:CMS.Helpers.ProtectedCache">
             <summary>
@@ -1552,6 +1850,234 @@
             <param name="loadFunc">Function, which loads value to be cached.</param>
             <param name="cacheSettings">Cache settings.</param>
             <remarks>Return value is intended to be used, just to satisfy standard cache method delegate.</remarks>
+        </member>
+        <member name="T:CMS.Helpers.CacheHelperAccessor">
+            <summary>
+            Provides access to static members of <see cref="T:CMS.Helpers.CacheHelper"/> for <see cref="T:CMS.Helpers.ProgressiveCache"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelperAccessor.#ctor(CMS.Core.Internal.IDateTimeNowService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Helpers.CacheHelperAccessor"/> class.
+            </summary>
+            <param name="dateTimeNowService">Provider of current date and time.</param>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelperAccessor.TryGetItem``1(System.String,``0@)">
+            <summary>
+            Returns true if the cache contains an item with the specified key.
+            </summary>
+            <typeparam name="TData">Type of cached data.</typeparam>
+            <param name="key">Cache key.</param>
+            <param name="value">When the method returns true, contains the data retrieved from the cache. Otherwise contains the default value of the data type.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.CacheHelperAccessor.Add``1(CMS.Helpers.CacheSettings,``0)">
+            <summary>
+            Adds a new item to the cache.
+            </summary>
+            <typeparam name="TData">Type of cached data.</typeparam>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="value">Value to be cached.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="settings"/> is null.</exception>
+        </member>
+        <member name="T:CMS.Helpers.ICacheHelperAccessor">
+            <summary>
+            Provides access to static members of <see cref="T:CMS.Helpers.CacheHelper"/> for <see cref="T:CMS.Helpers.ProgressiveCache"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.ICacheHelperAccessor.TryGetItem``1(System.String,``0@)">
+            <summary>
+            Returns true if the cache contains an item with the specified key.
+            </summary>
+            <typeparam name="TData">Type of cached data.</typeparam>
+            <param name="key">Cache key.</param>
+            <param name="value">When the method returns true, contains the data retrieved from the cache. Otherwise contains the default value of the data type.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.ICacheHelperAccessor.Add``1(CMS.Helpers.CacheSettings,``0)">
+            <summary>
+            Adds a new item to the cache.
+            </summary>
+            <typeparam name="TData">Type of cached data.</typeparam>
+            <param name="settings">Settings configuring the cache.</param>
+            <param name="value">Value to be cached.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="settings"/> is null.</exception>
+        </member>
+        <member name="T:CMS.Helpers.IProgressiveLoader">
+            <summary>
+            Provides optimization of parallel data loads. The data are loaded once and the result is shared.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveLoader.LoadAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="progressiveItemName">Name of the progressive item.</param>
+            <param name="loadDataFuncAsync">Function returning the asynchronous data loading task.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveItemName"/> or <paramref name="loadDataFuncAsync"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <paramref name="progressiveItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            The progressive loader is not a persistent cache. Once the data is loaded and the result is distributed to all waiting threads, the data is freed from the memory.
+            Use the method to avoid parallel load of the same data while still loading the latest version of the data for consecutive loads.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying progressive load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveLoader.LoadAsync``1(System.String,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="progressiveItemName">Name of the progressive item.</param>
+            <param name="loadDataFuncAsync">Function accepting a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveItemName"/> or <paramref name="loadDataFuncAsync"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <paramref name="progressiveItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            The progressive loader is not a persistent cache. Once the data is loaded and the result is distributed to all waiting threads, the data is freed from the memory.
+            Use the method to avoid parallel load of the same data while still loading the latest version of the data for consecutive loads.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying progressive load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:CMS.Helpers.IProgressiveLoaderStore">
+            <summary>
+            Represents a store for data being progressively loaded.
+            </summary>
+            <seealso cref="T:CMS.Helpers.IProgressiveLoader"/>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveLoaderStore.GetOrAdd(System.String,CMS.Helpers.IProgressiveLoadItem)">
+            <summary>
+            Adds an item to the store if its key does not already exist. Returns the new item, or the existing item if its key exists.
+            </summary>
+            <param name="key">The key of the item to add.</param>
+            <param name="item">The item to be added.</param>
+            <returns>Returns the new item, or the existing item if <paramref name="key"/> is already present in the store.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.IProgressiveLoaderStore.Remove(System.String)">
+            <summary>
+            Removes an item from the store based on its key.
+            </summary>
+            <param name="key">The key of the item to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="T:CMS.Helpers.IProgressiveLoadItem">
+            <summary>
+            Represents data being progressively loaded using <see cref="T:CMS.Helpers.ProgressiveLoader"/>.
+            </summary>
+        </member>
+        <member name="T:CMS.Helpers.ProgressiveLoader">
+            <summary>
+            Provides optimization of parallel data loads. The data are loaded once and the result is shared.
+            </summary>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoader.#ctor(CMS.Helpers.IProgressiveLoaderStore)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Helpers.ProgressiveLoader"/> class.
+            </summary>
+            <param name="progressiveLoaderStore">Store for items being progressively loaded.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveLoaderStore"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoader.LoadAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="progressiveItemName">Name of the progressive item.</param>
+            <param name="loadDataFuncAsync">Function returning the asynchronous data loading task.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveItemName"/> or <paramref name="loadDataFuncAsync"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <paramref name="progressiveItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            The progressive loader is not a persistent cache. Once the data is loaded and the result is distributed to all waiting threads, the data is freed from the memory.
+            Use the method to avoid parallel load of the same data while still loading the latest version of the data for consecutive loads.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying progressive load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoader.LoadAsync``1(System.String,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads data. If multiple threads are loading the same data, only one thread executes the load and the result is distributed to other waiting threads.
+            If an exception is thrown during <paramref name="loadDataFuncAsync"/> execution, the exception is distributed as well.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+            <param name="progressiveItemName">Name of the progressive item.</param>
+            <param name="loadDataFuncAsync">Function accepting a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the loaded data.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="progressiveItemName"/> or <paramref name="loadDataFuncAsync"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when multiple threads are loading the same item (identified by <paramref name="progressiveItemName"/>) with incompatible <typeparamref name="TData"/>.</exception>
+            <remarks>
+            <para>
+            The progressive loader is not a persistent cache. Once the data is loaded and the result is distributed to all waiting threads, the data is freed from the memory.
+            Use the method to avoid parallel load of the same data while still loading the latest version of the data for consecutive loads.
+            </para>
+            <para>
+            No assumptions must be made on which thread executes the <paramref name="loadDataFuncAsync"/>. The thread creating the underlying progressive load item
+            is not necessarily the one executing the item. Any of the waiting threads can execute the item.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:CMS.Helpers.ProgressiveLoaderStore">
+            <summary>
+            Represents a store for data being progressively loaded.
+            </summary>
+            <seealso cref="T:CMS.Helpers.ProgressiveLoader"/>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoaderStore.GetOrAdd(System.String,CMS.Helpers.IProgressiveLoadItem)">
+            <summary>
+            Adds an item to the store if its key does not already exist. Returns the new item, or the existing item if its key exists.
+            </summary>
+            <param name="key">The key of the item to add.</param>
+            <param name="item">The item to be added.</param>
+            <returns>Returns the new item, or the existing item if <paramref name="key"/> is already present in the store.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoaderStore.Remove(System.String)">
+            <summary>
+            Removes an item from the store based on its key.
+            </summary>
+            <param name="key">The key of the item to remove.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="T:CMS.Helpers.ProgressiveLoadItem`1">
+            <summary>
+            Represents data being progressively loaded using <see cref="T:CMS.Helpers.ProgressiveLoader"/>.
+            </summary>
+            <typeparam name="TData">Type of data to be loaded.</typeparam>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoadItem`1.#ctor(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{`0}},System.Action)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.Helpers.ProgressiveLoadItem`1"/> class.
+            </summary>
+            <param name="loadDataFuncAsync">Function accepting a cancellation token and returning the asynchronous data loading task.</param>
+            <param name="finishCallbackAction">Action to be executed upon the <see cref="F:CMS.Helpers.ProgressiveLoadItem`1.loadDataFuncAsync"/> finishes.</param>
+        </member>
+        <member name="M:CMS.Helpers.ProgressiveLoadItem`1.GetResultAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets the progressive load item result as an awaitable task. Only the first caller executes the load task and shares the result with other waiting threads.
+            </summary>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Returns a task returning the result of the load operation.</returns>
         </member>
         <member name="T:CMS.Helpers.ComparisonStatus">
             <summary>
@@ -2483,21 +3009,19 @@
             <param name="message">Message to display.</param>
             <returns>Access Denied page URL</returns>
         </member>
-        <member name="M:CMS.Helpers.AdministrationUrlHelper.GetImageUrl(System.String,System.Boolean,System.Boolean)">
+        <member name="M:CMS.Helpers.AdministrationUrlHelper.GetImageUrl(System.String,System.Boolean)">
             <summary>
             Gets UI image path.
             </summary>
             <param name="imagePath">Partial image path starting from ~/App_Themes/(Skin_Folder)/Images/ (e.g. '/CMSModules/Membership/module.png')</param>
-            <param name="isLiveSite">Indicates if URL should be returned for live site</param>
             <param name="ensureDefaultTheme">Indicates if default theme should be always used</param>
         </member>
-        <member name="M:CMS.Helpers.AdministrationUrlHelper.GetImagePath(System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:CMS.Helpers.AdministrationUrlHelper.GetImagePath(System.String,System.String,System.Boolean)">
             <summary>
             Gets UI image path for given theme.
             </summary>
             <param name="theme">Theme</param>
             <param name="imagePath">Partial image path starting from ~/App_Themes/(Skin_Folder)/Images/ (e.g. '/CMSModules/Membership/module.png')</param>
-            <param name="isLiveSite">Indicates if URL should be returned for live site</param>
             <param name="ensureDefaultTheme">Indicates if default theme should be always used</param>
         </member>
         <member name="M:CMS.Helpers.AdministrationUrlHelper.GetDocumentTypeIconPath(System.String,System.String,System.String,System.Boolean,System.Boolean)">
@@ -2743,14 +3267,6 @@
             <param name="useDefaultValue">Indicates whether the registered cookie default value will be returned when the cookie is not present in the request</param>
             <param name="allowSensitiveData">Allows retrieving data from sensitive authentication cookies</param>
         </member>
-        <member name="M:CMS.Helpers.CookieHelper.SetValue(System.String,System.String,System.DateTime)">
-            <summary>
-            Sets the cookie.
-            </summary>
-            <param name="name">Cookie name</param>
-            <param name="value">Cookie value</param>
-            <param name="expires">Expiration time</param>
-        </member>
         <member name="M:CMS.Helpers.CookieHelper.SetValue(System.String,System.String,System.String,System.DateTime)">
             <summary>
             Sets the cookie.
@@ -2780,6 +3296,19 @@
             <param name="expires">Expiration time</param>
             <param name="httpOnly">Defines httpOnly flag.</param>
             <param name="domain">Domain to associate the cookie with.</param>
+        </member>
+        <member name="M:CMS.Helpers.CookieHelper.SetValue(System.String,System.String,System.DateTime,System.String,System.Nullable{System.Boolean},System.String,CMS.Base.SameSiteMode,System.Boolean)">
+            <summary>
+            Sets the cookie.
+            </summary>
+            <param name="name">Cookie name</param>
+            <param name="value">Cookie value</param>
+            <param name="path">Cookie virtual path</param>
+            <param name="expires">Expiration time</param>
+            <param name="httpOnly">Defines httpOnly flag.</param>
+            <param name="domain">Domain to associate the cookie with.</param>
+            <param name="sameSiteMode">Value of the same site attribute.</param>
+            <param name="secure">Indicates whether the cookie should contain the secure attribute.</param>
         </member>
         <member name="M:CMS.Helpers.CookieHelper.ChangeCookieExpiration(System.String,System.DateTime,System.Boolean)">
             <summary>
@@ -2915,7 +3444,7 @@
             </summary>
             <param name="cookieName">Cookie name</param>
         </member>
-        <member name="M:CMS.Helpers.CookieHelper.SetValueInternal(System.String,System.String,System.String@,System.DateTime,System.Nullable{System.Boolean},System.String)">
+        <member name="M:CMS.Helpers.CookieHelper.SetValueInternal(System.String,System.String,System.String@,System.DateTime,System.Nullable{System.Boolean},System.String,CMS.Base.SameSiteMode,System.Boolean)">
             <summary>
             Sets the cookie.
             </summary>
@@ -2925,8 +3454,10 @@
             <param name="expires">Expiration time</param>
             <param name="httpOnly">Defines httpOnly flag.</param>
             <param name="domain">Domain to associate the cookie with.</param>
+            <param name="sameSite">Same site mode of the cookie.</param>
+            <param name="secure">Indicates whether secure attribute should be set for the cookie.</param>
         </member>
-        <member name="M:CMS.Helpers.CookieHelper.SetCookieValues(CMS.Base.Internal.IHttpCookie,System.String,System.String@,System.DateTime,System.Nullable{System.Boolean},System.String)">
+        <member name="M:CMS.Helpers.CookieHelper.SetCookieValues(CMS.Base.Internal.IHttpCookie,System.String,System.String@,System.DateTime,System.Nullable{System.Boolean},System.String,CMS.Base.SameSiteMode,System.Boolean)">
             <summary>
             Sets the cookie values
             </summary>
@@ -2936,6 +3467,8 @@
             <param name="expires">Expiration time</param>
             <param name="httpOnly">Defines httpOnly flag.</param>
             <param name="domain">Domain to associate the cookie with.</param>
+            <param name="sameSite">Same site mode of the cookie.</param>
+            <param name="secure">Indicates whether secure attribute should be set for the cookie.</param>
         </member>
         <member name="M:CMS.Helpers.CookieHelper.GetValueInternal(System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -3088,44 +3621,24 @@
             Shopping cart
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CookieName.ForumPostAnswer">
-            <summary>
-            Forum post answer flag to prevent multiple votes
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.VotedPolls">
-            <summary>
-            Voted polls to prevent multiple votes
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.RatedDocuments">
-            <summary>
-            Rated documents to prevent multiple votes
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.ChatLoggedInToken">
-            <summary>
-            Login token for the chat module
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.ChatSupportLoggedInToken">
-            <summary>
-            Login token for the chat module (support chat)
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CookieName.BodyClass">
             <summary>
             Body CSS class cookie
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CookieName.ShowDesktopVersion">
-            <summary>
-            Current device profile name
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CookieName.CsrfCookie">
             <summary>
             CSRF cookie used to store CSRF token
+            </summary>
+        </member>
+        <member name="F:CMS.Helpers.CookieName.VirtualContextAuthenticationCookie">
+            <summary>
+            VirtualContext authentication cookie.
+            </summary>
+        </member>
+        <member name="F:CMS.Helpers.CookieName.CrawlerAuthenticationCookie">
+            <summary>
+            Crawler authentication cookie.
             </summary>
         </member>
         <member name="F:CMS.Helpers.CookieName.PreferredUICulture">
@@ -3199,16 +3712,6 @@
             </summary>
             <param name="templateId">Template ID</param>
         </member>
-        <member name="F:CMS.Helpers.CookieName.CurrentDeviceProfileName">
-            <summary>
-            Current device profile name
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.CurrentDeviceProfileRotate">
-            <summary>
-            Gets the cookie name for the device rotation state
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CookieName.Impersonation">
             <summary>
             Cookie key for user impersonation
@@ -3240,16 +3743,6 @@
             Visitor status
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CookieName.VisitStatus">
-            <summary>
-            Visit status
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.CurrentVisitStatus">
-            <summary>
-            Current visit status
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CookieName.Campaign">
             <summary>
             Campaign
@@ -3265,42 +3758,20 @@
             Content
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CookieName.UrlReferrer">
-            <summary>
-            URL referrer
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.CookieName.CurrentContact">
             <summary>
             Current contact
             </summary>
         </member>
-        <member name="F:CMS.Helpers.CookieName.MVTPrefix">
+        <member name="F:CMS.Helpers.CookieName.WebAnalyticsData">
             <summary>
-            Prefix for MVT tests
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.CookieName.NoTestMVTPrefix">
-            <summary>
-            Prefix for pages without MVT test
+            Web analytics related data
             </summary>
         </member>
         <member name="F:CMS.Helpers.CookieName.LandingPageLoaded">
             <summary>
             Stores landing page visited flag.
             </summary>
-        </member>
-        <member name="M:CMS.Helpers.CookieName.GetMVTCookieName(System.String)">
-            <summary>
-            Gets the MVT test cookie name
-            </summary>
-            <param name="mvtTestName">MVT test name</param>
-        </member>
-        <member name="M:CMS.Helpers.CookieName.GetNoMVTCookieName(System.Int32)">
-            <summary>
-            Gets the cookie name when no MVT test is present
-            </summary>
-            <param name="templateId">Template ID</param>
         </member>
         <member name="T:CMS.Helpers.CookieSettings">
             <summary>
@@ -3326,9 +3797,9 @@
             <summary>
             Creates a new instance of <see cref="T:CMS.Helpers.CookieSettings"/> with given parameters.
             </summary>
-            <param name="level">Cookie level</param>
-            <param name="defaultValue">Default value</param>
-            <param name="isSensitive">Cookie sensitivity</param>
+            <param name="level">Cookie level.</param>
+            <param name="defaultValue">Default value.</param>
+            <param name="isSensitive">Cookie sensitivity.</param>
         </member>
         <member name="T:CMS.Helpers.CurrentCookieLevelProvider">
             <summary>
@@ -3459,7 +3930,7 @@
         </member>
         <member name="M:CMS.Helpers.FileHelper.GetFullFolderPhysicalPath(System.String,System.String)">
             <summary>
-            Returns full physical path for a folder. Ensures the trailing backslash
+            Returns full physical path for a folder. Ensures the trailing slash.
             </summary>
             <param name="path">Path</param>
             <param name="webFullPath">Full path to the root of the web project (e.g. c:\WebProject\)</param>
@@ -3786,32 +4257,11 @@
             Provides method for checking whether the current visitor is crawler.
             </summary>
         </member>
-        <member name="F:CMS.Helpers.Internal.DefaultCrawlerChecker.CrawlerKeywords">
-            <remark>
-            See https://github.com/wangkanai/Detection
-            </remark>
-        </member>
-        <member name="F:CMS.Helpers.Internal.DefaultCrawlerChecker.mHttpContextRetriever">
-            <summary>
-            The HTTP context accessor used to retrieve User-Agent header value from request.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.Internal.DefaultCrawlerChecker.#ctor(CMS.Base.Internal.IHttpContextRetriever)">
-            <summary>
-            Initializes a new instance of the <see cref="T:CMS.Helpers.Internal.DefaultCrawlerChecker"/> class.
-            </summary>
-            <param name="httpContextRetriever">The HTTP context accessor.</param>
-        </member>
         <member name="M:CMS.Helpers.Internal.DefaultCrawlerChecker.IsCrawler">
             <summary>
             Checks whether the current request comes from the crawler.
             </summary>
             <returns><c>true</c>, if current request comes from the crawler; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:CMS.Helpers.Internal.DefaultCrawlerChecker.IsUserAgentCrawler(System.String)">
-            <summary>
-            Parses UserAgent for known list of crawlers.
-            </summary>
         </member>
         <member name="T:CMS.Helpers.Internal.ICrawlerChecker">
             <summary>
@@ -3823,33 +4273,6 @@
             Checks whether the current request comes from the crawler.
             </summary>
             <returns>True, if current request comes from the crawler; otherwise, false</returns>
-        </member>
-        <member name="T:CMS.Helpers.Internal.ForbiddenException">
-            <summary>
-            Special exception class to break normal execution flow when access to resource
-            is forbidden and to be later caught by corresponding middleware.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.Internal.ForbiddenException.#ctor(System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:CMS.Helpers.Internal.ForbiddenException"/> class with a reference to
-            the inner exception that is the cause of this exception.
-            </summary>
-            <param name="innerException">
-            The exception that is the cause of the current exception, or a null reference if no inner
-            exception is specified.
-            </param>
-        </member>
-        <member name="M:CMS.Helpers.Internal.ForbiddenException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:CMS.Helpers.Internal.ForbiddenException"/> class with serialized data.
-            </summary>
-            <param name="info">
-            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.
-            </param>
-            <param name="context">
-            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
-            </param>
         </member>
         <member name="T:CMS.Helpers.Internal.RedirectException">
             <summary>
@@ -4332,24 +4755,9 @@
             Returns current request URL rewriting status.
             </summary>
         </member>
-        <member name="P:CMS.Helpers.RequestContext.IsContentPage">
-            <summary>
-            Indicates that the current request is a request to the content page.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestContext.UseGZip">
-            <summary>
-            If true, the filter uses GZip compression on output.
-            </summary>
-        </member>
         <member name="P:CMS.Helpers.RequestContext.ResponseIsCompressed">
             <summary>
             Indicates whether the current response contains compressed data.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestContext.LogPageHit">
-            <summary>
-            Indicates if page hit should be logged.
             </summary>
         </member>
         <member name="P:CMS.Helpers.RequestContext.RawURL">
@@ -4405,12 +4813,6 @@
         <member name="P:CMS.Helpers.RequestContext.UseNoCacheForRedirect">
             <summary>
             Indicates whether current redirect should add no-cache directive to the response header
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestContext.CurrentUrlExtension">
-            <summary>
-            Returns extension (part after last dot) contained in current URL.
-            Extension starting with . (.ext) or empty extension if there is no extension is returned.
             </summary>
         </member>
         <member name="P:CMS.Helpers.RequestContext.IsUserAuthenticated">
@@ -4471,66 +4873,6 @@
             Clones the object for new thread
             </summary>
         </member>
-        <member name="T:CMS.Helpers.RequestDebug">
-            <summary>
-            Request debug methods
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestDebug.Settings">
-            <summary>
-            Debug settings
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestDebug.CurrentRequestLog">
-            <summary>
-            Current request log.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.RequestDebug.DebugCurrentRequest">
-            <summary>
-            Debug current request processing.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.GetDebugSettings">
-            <summary>
-            Creates the settings for this debug
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.FinalizeData(System.Data.DataTable)">
-            <summary>
-            Finalizes the log data
-            </summary>
-            <param name="dt">Data</param>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.NewLogTable">
-            <summary>
-            Creates a new table for the cache log.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.LogRequestOperation(System.String,System.String,System.Int32)">
-            <summary>
-            Logs the request operation. Logs the request operation to the file and to current request log for debugging.
-            </summary>
-            <param name="method">Method (Operation)</param>
-            <param name="indent">Log indentation</param>
-            <param name="parameter">Parameter</param>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.LogToFile(System.String,System.String,System.Int32)">
-            <summary>
-            Logs the request operation to the log file.
-            </summary>
-            <param name="method">Method (Operation)</param>
-            <param name="parameter">Method parameter</param>
-            <param name="indent">Indentation</param>
-        </member>
-        <member name="M:CMS.Helpers.RequestDebug.LogRequestValues(System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            Logs the current request values.
-            </summary>
-            <param name="responseCookies">Log response cookies</param>
-            <param name="requestCookies">Log request cookies</param>
-            <param name="requestInfo">Log request information</param>
-        </member>
         <member name="T:CMS.Helpers.RequestHelper">
             <summary>
             Request helping methods.
@@ -4546,11 +4888,6 @@
             Range end constant
             </summary>
         </member>
-        <member name="P:CMS.Helpers.RequestHelper.AllowGZip">
-            <summary>
-            Allow GZip of the output.
-            </summary>
-        </member>
         <member name="P:CMS.Helpers.RequestHelper.AllowResourceCompression">
             <summary>
             Gets whether the resource compression is enabled.
@@ -4564,11 +4901,6 @@
         <member name="P:CMS.Helpers.RequestHelper.HttpMethod">
             <summary>
             Gets the HTTP data transfer method (such as GET, POST) used by client.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.RequestHelper.ResetPerformanceSettings">
-            <summary>
-            Sets all the performance settings to null and causes them to be reloaded.
             </summary>
         </member>
         <member name="M:CMS.Helpers.RequestHelper.IsPostBack">
@@ -4705,11 +5037,6 @@
             Url path isn't document page.
             </summary>
         </member>
-        <member name="F:CMS.Helpers.RequestStatusEnum.PathRewritten">
-            <summary>
-            Url path is rewritten, the page is document page.
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.RequestStatusEnum.PathRedirected">
             <summary>
             Url path is redirected.
@@ -4760,11 +5087,6 @@
             REST Service request
             </summary>
         </member>
-        <member name="F:CMS.Helpers.RequestStatusEnum.SentFromCache">
-            <summary>
-            The output was sent from the cache
-            </summary>
-        </member>
         <member name="T:CMS.Helpers.URLHelper">
             <summary>
             Url processing methods.
@@ -4794,16 +5116,6 @@
         <member name="P:CMS.Helpers.URLHelper.ProtocolRegex">
             <summary>
             Regex used to check or remove protocol
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.URLHelper.PortalTemplatePage">
-            <summary>
-            Page used as the portal template base page
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.URLHelper.PortalTemplatePageCheck">
-            <summary>
-            Page used for check of the portal template page
             </summary>
         </member>
         <member name="P:CMS.Helpers.URLHelper.UseLimitURLReplacements">
@@ -4981,9 +5293,10 @@
         </member>
         <member name="M:CMS.Helpers.URLHelper.GetFullApplicationUrl(System.String)">
             <summary>
-            Returns current application URL (absolute) with port, without trailing slashes.
+            Returns current application absolute URL.
             </summary>
-            <param name="domainName">Domain name, if not supplied <see cref="P:CMS.Helpers.RequestContext.FullDomain"/> is used instead</param>
+            <param name="domainName">Domain name (the value can possibly contain protocol, port and application path), if not supplied <see cref="P:CMS.Helpers.RequestContext.FullDomain"/> is used instead.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="domainName"/> has an invalid format.</exception>
         </member>
         <member name="M:CMS.Helpers.URLHelper.GetAbsoluteUrl(System.String,System.String)">
             <summary>
@@ -5537,6 +5850,11 @@
             Name of the preview link parameter
             </summary>
         </member>
+        <member name="F:CMS.Helpers.VirtualContext.PARAM_PREVIEW_MODE">
+            <summary>
+            Name of the parameter indicating that the request is in the preview mode and the user name is stored in the cookie.
+            </summary>
+        </member>
         <member name="F:CMS.Helpers.VirtualContext.PARAM_FORM_BUILDER_URL">
             <summary>
             Name of the parameter which indicates that data in the <see cref="T:CMS.Helpers.VirtualContext"/> URL belong to Form builder.
@@ -5712,6 +6030,13 @@
             </summary>
             <param name="nameValueCollection">Key-value pairs to store.</param>
         </member>
+        <member name="M:CMS.Helpers.VirtualContext.ValidatePrincipal(System.Security.Principal.IPrincipal)">
+            <summary>
+            Validates whether the request carries a valid user name.
+            The username can be either in the URL or in a cookie.
+            </summary>
+            <exception cref="T:CMS.Helpers.InvalidVirtualContextException">When the given <paramref name="principal"/> does not carry any user or the user is disabled.</exception>
+        </member>
         <member name="M:CMS.Helpers.VirtualContext.GetPreviewPathFromVirtualContext(System.String,System.Boolean,System.String,System.Boolean)">
             <summary>
             Gets preview path based on given path and current initialized context.
@@ -5721,25 +6046,21 @@
             <param name="cultureCode">Defines a culture code for resulting preview path. If not provided, culture code from current initialized context is used.</param>
             <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
         </member>
-        <member name="M:CMS.Helpers.VirtualContext.GetPreviewParameters(System.String,System.String,System.Guid,System.Boolean,System.Boolean)">
+        <member name="M:CMS.Helpers.VirtualContext.GetPreviewParameters(System.Nullable{System.Guid},System.String,System.Guid,System.Boolean,System.Boolean)">
             <summary>
             Gets the collection of parameters for preview path.
             </summary>
-            <param name="userName">Context of user for the preview.</param>
+            <param name="userGuid">Context of user for the preview. If left empty, user is not a part of a URL but is passed via a cookie.</param> 
             <param name="cultureCode">Context of culture for the preview.</param>
             <param name="workflowCycleGuid">Context of workflow cycle GUID.</param>
             <param name="readonlyMode">Indicates if readonly mode should be enabled to disallow modify actions and POST requests.</param>
             <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
         </member>
-        <member name="M:CMS.Helpers.VirtualContext.GetFormBuilderPath(System.String,System.String)">
+        <member name="M:CMS.Helpers.VirtualContext.GetFormBuilderPath(System.String)">
             <summary>
             Returns path containing <see cref="T:CMS.Helpers.VirtualContext"/> data required by Form builder.
             </summary>
             <param name="path">Application absolute path to be converted.</param>
-            <param name="userName">
-            User under whom the request for returned path is processed.
-            If parameter is not set then user name stored in <see cref="T:CMS.Helpers.VirtualContext"/> is used.
-            </param>
         </member>
         <member name="M:CMS.Helpers.VirtualContext.AddAdministrationDomain(System.String)">
             <summary>
@@ -6077,16 +6398,6 @@
         <member name="P:CMS.Helpers.RequestStockHelper.CurrentItems">
             <summary>
             Gets the current items.
-            </summary>
-        </member>
-        <member name="T:CMS.Helpers.RequestStockItemName">
-            <summary>
-            Contains system request stock item names.
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.RequestStockItemName.CurrentGroup">
-            <summary>
-            Current group in message board
             </summary>
         </member>
         <member name="T:CMS.Helpers.SessionHelper">
@@ -7753,6 +8064,11 @@
             App setting key for hash string salt. 
             </summary>
         </member>
+        <member name="F:CMS.Helpers.ValidationHelper.CMS_SETTINGS_JWT_TOKEN_ENCRYPTION_KEY">
+            <summary>
+            CMS setting key for JWT token encryption security key.
+            </summary>
+        </member>
         <member name="F:CMS.Helpers.ValidationHelper.MULTIPLE_EMAILS_LENGTH">
             <summary>
             Maximum length of multiple e-mails
@@ -7878,6 +8194,11 @@
             Salt used for hashing string in GetHashString() method.
             </summary>
         </member>
+        <member name="F:CMS.Helpers.ValidationHelper.mJwtTokenEncryptionKey">
+            <summary>
+            JWT token encryption security key.
+            </summary>
+        </member>
         <member name="F:CMS.Helpers.ValidationHelper.mConversionFunctions">
             <summary>
             Dictionary of conversion functions for standard system data types
@@ -7911,6 +8232,11 @@
         <member name="P:CMS.Helpers.ValidationHelper.HashStringSalt">
             <summary>
             Returns salt used for hashing string in GetHashString() method.
+            </summary>
+        </member>
+        <member name="P:CMS.Helpers.ValidationHelper.JwtTokenEncryptionKey">
+            <summary>
+            JWT token encryption security key.
             </summary>
         </member>
         <member name="M:CMS.Helpers.ValidationHelper.GetDefaultHashStringSalt">
@@ -9309,11 +9635,6 @@
             Request is processed by CMS handlers (GetAttachmentHandler, GetMetafileHandler, GetMediaHandler etc.)
             </summary>
         </member>
-        <member name="F:CMS.Helpers.ExcludedSystemEnum.PortalTemplate">
-            <summary>
-            Portal template page.
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.ExcludedSystemEnum.LogonPage">
             <summary>
             Logon page.
@@ -9625,6 +9946,13 @@
             Checks if culture code is neutral culture code.
             </summary>
             <param name="cultureCode">Culture code</param>
+        </member>
+        <member name="M:CMS.Helpers.CultureHelper.GetDefaultCultureCodeInternal(System.String)">
+            <summary>
+            Returns the default culture code.
+            </summary>
+            <param name="siteName">Site name</param>
+            <seealso cref="M:CMS.Helpers.CultureHelper.GetDefaultCultureCode(System.String)"/>
         </member>
         <member name="T:CMS.Helpers.DateTimeHelper">
             <summary>
@@ -10259,28 +10587,12 @@
             <param name="response">Response array</param>
             <param name="applicationPath">Application path</param>
         </member>
-        <member name="M:CMS.Helpers.AJAXHelper.ResolveURLs(System.Collections.ArrayList,System.String,System.Boolean)">
-            <summary>
-            Resolves URLs in the response array content.
-            </summary>
-            <param name="response">Response array</param>
-            <param name="applicationPath">Application path</param>
-            <param name="canResolveAllUrls">Determines whether resolving of all url can be used</param>
-        </member>
         <member name="M:CMS.Helpers.AJAXHelper.ResolveURLs(System.String,System.String)">
             <summary>
             Resolves URLs in the response array content.
             </summary>
             <param name="response">Response string</param>
             <param name="applicationPath">Application path</param>
-        </member>
-        <member name="M:CMS.Helpers.AJAXHelper.ResolveURLs(System.String,System.String,System.Boolean)">
-            <summary>
-            Resolves URLs in the response array content.
-            </summary>
-            <param name="response">Response string</param>
-            <param name="applicationPath">Application path</param>
-            <param name="canResolveAllUrls">Determines whether resolving of all url can be used</param>
         </member>
         <member name="M:CMS.Helpers.AJAXHelper.EnsureURLPrefixes(System.Collections.ArrayList,System.String,System.String)">
             <summary>
@@ -10708,33 +11020,12 @@
             <param name="url">URL to the stylesheet file</param>
             <returns>URL to stylesheet file</returns>
         </member>
-        <member name="M:CMS.Helpers.CssLinkHelper.GetPhysicalCssUrl(System.String,System.String)">
-            <summary>
-            Gets the URL for the Theme CSS file. Based in ~/App_Themes/[Theme] or ~/App_Themes/Default.
-            </summary>
-            <param name="theme">Stylesheet theme</param>
-            <param name="fileName">Name of the stylesheet file</param>
-        </member>
         <member name="M:CMS.Helpers.CssLinkHelper.GetCssUrl(System.String)">
             <summary>
             Returns path to the stylesheet handler
             </summary>
             <param name="parameters">Querystring arguments for the request, including the leading question mark</param>        
             <returns>URL to the stylesheet, using the querystring arguments</returns>
-        </member>
-        <member name="M:CMS.Helpers.CssLinkHelper.GetStylesheetUrl(System.String)">
-            <summary>
-            Returns virtual path to the stylesheet file.
-            </summary>
-            <param name="stylesheetName">Stylesheet name</param>
-        </member>
-        <member name="M:CMS.Helpers.CssLinkHelper.GetCssFileLink(System.String,System.String)">
-            <summary>
-            Returns the HTML link element that links to external stylesheet.
-            </summary>
-            <param name="url">URL pointing to an external stylesheet</param>
-            <param name="media">What device the linked document will be displayed on, or null</param>
-            <returns>HTML link to a stylesheet</returns>
         </member>
         <member name="M:CMS.Helpers.CssLinkHelper.GetCssFileLink(System.String)">
             <summary>
@@ -11092,21 +11383,36 @@
         </member>
         <member name="M:CMS.Helpers.HTMLHelper.UnResolveUrls(System.String,System.String,System.Func{System.String,System.String})">
             <summary>
-            Unresolves relative URI if used in "src=" or "href=" or "background=" or "url(".
+            Unresolves relative URI if used in "src=" or "href=" or "poster=" or "srcset=" or "url(".
             </summary>
             <param name="mHtml">HTML code.</param>
             <param name="applicationPath">Application path.</param>
             <param name="pathModifier">Method that is called after each of the local path is unresolved. Input parameter format: "~/relativePath?query=.."</param>
         </member>
-        <member name="M:CMS.Helpers.HTMLHelper.ResolveUrls(System.String,System.String,System.Boolean)">
+        <member name="M:CMS.Helpers.HTMLHelper.ResolveUrls(System.String,System.String)">
             <summary>
-            Resolves relative URLs in given HTML(string). 
-            If CMSResolveAllUrls application settings is true it resolves all URLs.
-            Otherwise it resolves URLs used in "src", "href", "background" and "url" attributes.
+            Resolves relative URLs in the given HTML(string). 
             </summary>
+            <remarks>
+            In the live site it resolves all URLs ("~/").
+            In the administration interface only URLs in "src", "href", "poster", "srcset" attributes and "url()" CSS function are resolved.
+            </remarks>
             <param name="mHtml">HTML code</param>
             <param name="applicationPath">Application path</param>
-            <param name="canResolveAllUrls">Determines whether resolving of all URL can be used, <c>true</c> is used by default</param>
+        </member>
+        <member name="M:CMS.Helpers.HTMLHelper.ResolveAllUrls(System.String,System.String)">
+            <summary>
+            Resolves all relative URLs ("~/") in the given HTML.
+            </summary>
+            <param name="html">HTML code to resolve</param>
+            <param name="applicationPath">Application path</param>
+        </member>
+        <member name="M:CMS.Helpers.HTMLHelper.ResolveAttributesUrls(System.String,System.String)">
+            <summary>
+            Resolves relative URLs in "src", "href", "poster", "srcset" attributes and "url()" CSS functions.
+            </summary>
+            <param name="html">HTML code to resolve</param>
+            <param name="applicationPath">Application path</param>
         </member>
         <member name="M:CMS.Helpers.HTMLHelper.EnsureURLPrefixes(System.String,System.String,System.String,CMS.Helpers.URLHelper.PathModifierHandler,System.Boolean,CMS.Helpers.HTMLHelper.DecoratePathArbiterHandler)">
             <summary>
@@ -11393,7 +11699,7 @@
             </summary>
             <remarks>
             Replaces all links in the format "/applicationPath/xxx*" to "~/xxx*". 
-            External link modification is available via the <see cref="M:CMS.Helpers.RichTextLinksConverter.#ctor(System.String,System.Func{System.String,System.String})"/>.
+            External link modification is available via the <see cref="M:CMS.Helpers.RichTextLinksConverter.#ctor(System.String,System.String,System.Func{System.String,System.String})"/>.
             </remarks>
         </member>
         <member name="F:CMS.Helpers.RichTextLinksConverter.pathModifier">
@@ -11406,12 +11712,14 @@
             The regular expression that searches for all local links (absolute path without a domain).
             </summary>
         </member>
-        <member name="M:CMS.Helpers.RichTextLinksConverter.#ctor(System.String,System.Func{System.String,System.String})">
+        <member name="M:CMS.Helpers.RichTextLinksConverter.#ctor(System.String,System.String,System.Func{System.String,System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.Helpers.RichTextLinksConverter"/> class.
             </summary>
+            <param name="domain">The domain that identifies links of the current site. Can be with or without port number, same as <seealso cref="P:System.Uri.Authority"/>.</param>
             <param name="applicationPath">The application path of links to be unresolved</param>
             <param name="pathModifier">Function that is called after each of the absolute URL paths is unresolved.</param>
+            <exception cref="T:System.ArgumentNullException">Is thrown when <paramref name="domain"/> or <paramref name="applicationPath"/> is null.</exception>
         </member>
         <member name="M:CMS.Helpers.RichTextLinksConverter.Unresolve(System.String)">
             <summary>
@@ -11419,11 +11727,10 @@
             </summary>
             <param name="html">HTML code to unresolve.</param>
         </member>
-        <member name="M:CMS.Helpers.RichTextLinksConverter.GetLinksRegex(System.String)">
+        <member name="M:CMS.Helpers.RichTextLinksConverter.GetLinksRegex">
             <summary>
-            Gets a regular expression that searches for all local links (absolute path without a domain).
+            Gets a regular expression that searches for all local links.
             </summary>
-            <param name="applicationPath">The application path.</param>
         </member>
         <member name="T:CMS.Helpers.WebLanguagesContext">
             <summary>
@@ -13269,6 +13576,11 @@
             Initializes the project file system
             </summary>
         </member>
+        <member name="M:CMS.Helpers.HelpersHandlers.BlockURLWithCookielessSessionPattern(System.Object,System.EventArgs)">
+            <summary>
+            Returns 404 response if request url contains a cookieless session pattern, which is potentially unsafe.
+            </summary>
+        </member>
         <member name="M:CMS.Helpers.HelpersHandlers.HandleClickjacking(System.Object,System.EventArgs)">
             <summary>
             Handles click jacking in current request
@@ -13822,11 +14134,6 @@
             Regular expression for replacing square brackets from like expressions.
             </summary>
         </member>
-        <member name="F:CMS.Helpers.SecurityHelper.mSchedulerAcceptAllCertificates">
-            <summary>
-            Indicates whether scheduler accepts all certificates (including invalid certificates).
-            </summary>
-        </member>
         <member name="F:CMS.Helpers.SecurityHelper.mStagingAcceptAllCertificates">
             <summary>
             Indicates whether staging accepts all certificates (including invalid certificates).
@@ -13841,11 +14148,6 @@
             <summary>
             Iterations count used within <see cref="T:System.Security.Cryptography.Rfc2898DeriveBytes"/>. 
             More iterations will generate more resistant hashes to brute-force attacks, however performance issues might arise when set to high. 
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.SecurityHelper.SchedulerAcceptAllCertificates">
-            <summary>
-            Indicates whether scheduler accepts all certificates (including invalid certificates).
             </summary>
         </member>
         <member name="P:CMS.Helpers.SecurityHelper.StagingAcceptAllCertificates">
@@ -13881,7 +14183,7 @@
         </member>
         <member name="M:CMS.Helpers.SecurityHelper.GetSecurityAccessEnum(System.Int32,System.Int32)">
             <summary>
-            Gets the SecurityAccessEnum equivalent of the permission information from the given forum access encoded info.
+            Gets the SecurityAccessEnum equivalent of the permission information from the given access encoded info.
             </summary>
             <param name="access">Encoded information on access parameters of permissions</param>
             <param name="position">Position of the permission within the access parameter</param> 
@@ -13896,14 +14198,14 @@
         </member>
         <member name="M:CMS.Helpers.SecurityHelper.GetCurrentAccessValue(System.Int32,System.Int32)">
             <summary>
-            Returns the value of the permission from the forum access info at specified position.
+            Returns the value of the permission from the access info at specified position.
             </summary>
             <param name="access">Encoded information on access parameters of permissions</param> 
             <param name="position">Position of the permission within the access parameter</param>  
         </member>
         <member name="M:CMS.Helpers.SecurityHelper.GenerateConfirmationEmailHash(System.String,System.DateTime)">
             <summary>
-            Generates hash for confirmation email which approves certain action (subscription to forum, password change, ...).  
+            Generates hash for confirmation email which approves certain action (password change, ...).  
             </summary>
             <param name="identifier">Request identifier.</param>
             <param name="time">Time when request was sent.</param>
@@ -13982,13 +14284,6 @@
             <param name="regularExpression">Regular expression to be met</param>
             <returns>True if policy met, false otherwise</returns>
         </member>
-        <member name="M:CMS.Helpers.SecurityHelper.IsXFrameOptionsExcluded(System.String,System.Uri)">
-            <summary>
-            Returns whether given path is excluded from adding X-Frame-Options HTTP header.
-            </summary>
-            <param name="path">Rewritten path or path prefix starting with /.</param>
-            <param name="url">Original URL including query string.</param>
-        </member>
         <member name="M:CMS.Helpers.SecurityHelper.ValidateSessionToken(System.String,System.String)">
             <summary>
             Validates if session token is equal given token. In case that session doesn't contain token returns true.
@@ -14033,6 +14328,11 @@
             Adds protection against clickjacking.
             </summary>
         </member>
+        <member name="M:CMS.Helpers.SecurityHelper.BlockURLWithCookielessSessionPattern">
+            <summary>
+            Returns 404 response if request url contains a cookieless session pattern, which is potentially unsafe.
+            </summary>
+        </member>
         <member name="M:CMS.Helpers.SecurityHelper.GetHash(System.String,System.Security.Cryptography.HashAlgorithm)">
             <summary>
             Returns hash of given data in given type.
@@ -14047,22 +14347,10 @@
             <param name="first">First byte array.</param>
             <param name="second">Second byte array.</param>
         </member>
-        <member name="T:CMS.Helpers.XFrameOptionsExcludedPathDetector">
+        <member name="M:CMS.Helpers.SecurityHelper.IsValidCookielessPattern(System.String,System.Int32,System.Int32)">
             <summary>
-            Encapsulates functionality detecting paths excluded from adding X-Frame-Options HTTP header.
+            Make sure sub-string is of the pattern: A(XXXX)N(XXXXX)P(XXXXX) and so on.
             </summary>
-        </member>
-        <member name="P:CMS.Helpers.XFrameOptionsExcludedPathDetector.XFrameOptionsExcluded">
-            <summary>
-            Specifies files which don't have specified X-Frame-Options HTTP header.
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.XFrameOptionsExcludedPathDetector.IsExcluded(System.String,System.Uri)">
-            <summary>
-            Returns whether given path is excluded from adding X-Frame-Options HTTP header.
-            </summary>
-            <param name="path">Rewritten path or path prefix starting with /.</param>
-            <param name="url">Original URL including query string.</param>
         </member>
         <member name="T:CMS.Helpers.CutTextEnum">
             <summary>

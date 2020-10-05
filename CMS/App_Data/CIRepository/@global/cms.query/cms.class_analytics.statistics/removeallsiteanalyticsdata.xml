@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>analytics.statistics</CodeName>
+    <GUID>75b95c91-bc3e-45a7-b40d-27581d8b67bc</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>4e7cf950-c5cd-44e0-89fd-df65cb3f1754</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>removeAllSiteAnalyticsData</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+DELETE FROM Analytics_HourHits  WHERE HitsStatisticsID IN (
+SELECT StatisticsID FROM Analytics_Statistics WHERE (StatisticsSiteID = @SiteID OR @SiteID = 0) AND (##WHERE##))    
+
+DELETE FROM Analytics_DayHits  WHERE HitsStatisticsID IN (
+SELECT StatisticsID FROM Analytics_Statistics WHERE (StatisticsSiteID = @SiteID OR @SiteID = 0) AND (##WHERE##))    
+
+DELETE FROM Analytics_WeekHits  WHERE  HitsStatisticsID IN (
+SELECT StatisticsID FROM Analytics_Statistics WHERE (StatisticsSiteID = @SiteID OR @SiteID = 0) AND (##WHERE##))    
+
+DELETE FROM Analytics_MonthHits  WHERE HitsStatisticsID IN (
+SELECT StatisticsID FROM Analytics_Statistics WHERE (StatisticsSiteID = @SiteID OR @SiteID = 0) AND (##WHERE##))    
+
+DELETE FROM Analytics_YearHits  WHERE HitsStatisticsID IN (
+SELECT StatisticsID FROM Analytics_Statistics WHERE (StatisticsSiteID = @SiteID OR @SiteID = 0) AND (##WHERE##))    
+
+DELETE FROM Analytics_Statistics WHERE 
+    StatisticsID NOT IN (SELECT HitsStatisticsID FROM Analytics_YearHits)   
+AND StatisticsID NOT IN (SELECT HitsStatisticsID FROM Analytics_MonthHits)  
+AND StatisticsID NOT IN (SELECT HitsStatisticsID FROM Analytics_WeekHits)   
+AND StatisticsID NOT IN (SELECT HitsStatisticsID FROM Analytics_DayHits)  
+AND StatisticsID NOT IN (SELECT HitsStatisticsID FROM Analytics_HourHits)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

@@ -16,7 +16,7 @@ public partial class CMSModules_EventLog_GetEventDetail : CMSEventLogPage
         }
 
         int eventId = QueryHelper.GetInteger("eventid", 0);
-        EventLogInfo ev = EventLogProvider.GetEventLogInfo(eventId);
+        EventLogInfo ev = EventLogInfo.Provider.Get(eventId);
         // Set edited object
         EditedObject = ev;
 

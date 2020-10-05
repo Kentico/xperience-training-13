@@ -174,16 +174,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
                 parameters.Add("@SiteID", LibraryInfo.LibrarySiteID);
 
                 // Exclude generic roles from matrix
-                string where = "(RoleName NOT IN ('_authenticated_', '_everyone_', '_notauthenticated_')) AND ";
-
-                if (LibraryInfo.LibraryGroupID > 0)
-                {
-                    where += "RoleGroupID=" + LibraryInfo.LibraryGroupID.ToString();
-                }
-                else
-                {
-                    where += "RoleGroupID IS NULL";
-                }
+                string where = "(RoleName NOT IN ('_authenticated_', '_everyone_', '_notauthenticated_'))";
 
                 if (permissionArray != null)
                 {
@@ -279,7 +270,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibrarySecurity : 
                 {
                     SecurityAccessEnum currentAccess = ((SecurityAccessEnum)accessNames[access, 1]);
                     // If the security isn't displayed as part of group section
-                    if (((currentAccess == SecurityAccessEnum.GroupAdmin) || (currentAccess == SecurityAccessEnum.GroupMembers)) && (!(LibraryInfo.LibraryGroupID > 0)))
+                    if ((currentAccess == SecurityAccessEnum.GroupAdmin) || (currentAccess == SecurityAccessEnum.GroupMembers))
                     {
                         // Do not render this access item
                     }

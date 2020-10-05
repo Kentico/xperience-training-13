@@ -172,7 +172,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
 
                 txtNewsletterDynamicURL.Value = EditedNewsletter.NewsletterDynamicURL;
 
-                TaskInfo task = TaskInfoProvider.GetTaskInfo(EditedNewsletter.NewsletterDynamicScheduledTaskID);
+                TaskInfo task = TaskInfo.Provider.Get(EditedNewsletter.NewsletterDynamicScheduledTaskID);
                 if (task != null)
                 {
                     chkSchedule.Checked = true;
@@ -343,7 +343,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
         if (deleteScheduledTaskId > 0)
         {
             // Delete scheduled task if schedule mail-outs were unchecked
-            TaskInfoProvider.DeleteTaskInfo(deleteScheduledTaskId);
+            TaskInfo.Provider.Get(deleteScheduledTaskId)?.Delete();
         }
 
         ShowChangesSaved();
@@ -439,7 +439,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
 
     private void UpdateDynamicNewsletterTask(NewsletterInfo newsletterObj, TaskInterval taskInterval)
     {
-        var currentTask = TaskInfoProvider.GetTaskInfo(newsletterObj.NewsletterDynamicScheduledTaskID);
+        var currentTask = TaskInfo.Provider.Get(newsletterObj.NewsletterDynamicScheduledTaskID);
         var taskIntervalStr = SchedulingHelper.EncodeInterval(taskInterval);
 
         if ((currentTask != null) && (currentTask.TaskInterval == taskIntervalStr))
@@ -450,7 +450,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
 
         // Update or create new task based on current taskInterval
         var task = NewsletterTasksManager.CreateOrUpdateDynamicNewsletterTask(newsletterObj, taskInterval, currentTask);
-        TaskInfoProvider.SetTaskInfo(task);
+        TaskInfo.Provider.Set(task);
 
         // Update taskID
         newsletterObj.NewsletterDynamicScheduledTaskID = task.TaskID;
@@ -596,6 +596,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
         pnlNewsletterBaseUrl.ToolTip = lblNewsletterBaseUrl.ToolTip = iconHelpBaseUrl.ToolTip = lblScreenReaderBaseUrl.Text = GetString("newsletter_edit.newsletterbaseurl.description");
         pnlNewsletterUnsubscriptionUrl.ToolTip = lblNewsletterUnsubscribeUrl.ToolTip = iconHelpUnsubscribeUrl.ToolTip = lblScreenReaderUnsubscribeUrl.Text = GetString("newsletter_edit.newsletterunsubscribeurl.description");
         pnlNewsletterEnableOptIn.ToolTip = lblEnableOptIn.ToolTip = iconHelpEnableOptIn.ToolTip = lblScreenReaderEnableOptIn.Text = GetString("newsletter_edit.newsletterenableoptin.description");
+        pnlNewsletterOptInApprovalUrl.ToolTip = lblOptInURL.ToolTip = iconHelpOptInURL.ToolTip = lblScreenReaderOptInURL.Text = GetString("newsletter_edit.newsletteroptinurl.description");
 
         ScriptHelper.RegisterBootstrapTooltip(Page, ".info-icon > i");
     }

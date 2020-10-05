@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.settingscategory</CodeName>
+    <GUID>e85e89d4-b387-48bc-b414-63ebbd2f6b40</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>6a2f4737-cee2-4a2d-8df1-f5a58f013b26</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>refreshdatacounts</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+-- Correct all IDPaths and child counts
+DECLARE @categoryCursor CURSOR;
+SET @categoryCursor = CURSOR FOR SELECT [CategoryID] FROM [CMS_SettingsCategory] ORDER BY [CategoryLevel], [CategoryID]
+DECLARE @categoryID int;
+OPEN @categoryCursor
+FETCH NEXT FROM @categoryCursor INTO @categoryID;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+UPDATE CMS_SettingsCategory SET CategoryChildCount = (SELECT COUNT(*) FROM CMS_SettingsCategory b WHERE b.CategoryParentID = a.CategoryID) FROM CMS_SettingsCategory a WHERE CategoryID = @categoryID
+
+FETCH NEXT FROM @categoryCursor INTO @categoryID;
+END
+
+CLOSE @categoryCursor;
+DEALLOCATE @categoryCursor;
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

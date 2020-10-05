@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.EventLog</CodeName>
+    <GUID>e497827b-e411-4975-9277-b73235b21f87</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>eb7f068b-8130-4075-b36d-d0f716568842</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectpreviousnext</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+ DECLARE @EventList TABLE (EventID INT, RN INT);
+ INSERT INTO @EventList (EventID, RN) SELECT EventID, ROW_NUMBER() OVER (ORDER BY ##ORDERBY##) AS RN FROM CMS_EventLog WHERE ##WHERE##;
+ DECLARE @num INT; SET @num = (SELECT RN FROM @EventList WHERE EventID = @EventID);
+ SELECT EventID, RN, @num AS BASE_RN FROM @EventList WHERE RN IN (@num - 1, @num + 1)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

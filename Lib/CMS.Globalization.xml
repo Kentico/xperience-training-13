@@ -490,6 +490,40 @@
             <param name="context">Evaluation context with child resolver</param>
             <param name="parameters">Method parameters</param>
         </member>
+        <member name="M:CMS.Globalization.GlobalizationMethods.GetDate(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns formatted date from the provided date-time value.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">
+            (Date-time value) OR
+            (Date-time value; Default value for invalid input)
+            (Date-time value; Default value for invalid input; Culture code)
+            </param>
+        </member>
+        <member name="M:CMS.Globalization.GlobalizationMethods.GetCountryDisplayName(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns country displayname based on its codename.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.Globalization.GlobalizationMethods.GetCountryDisplayName(System.String,System.Boolean,System.String)">
+            <summary>
+            Returns country displayname based on its codename.
+            </summary>
+            <param name="countryCode">Code name of country</param>
+            <param name="appendState">If true, state code is appended to country name</param>
+            <param name="format">Format for appending state to country. Default format is '{state}, {country}'</param>
+        </member>
+        <member name="M:CMS.Globalization.GlobalizationMethods.GetDate(System.Object,System.String,System.String)">
+            <summary>
+            Returns date from the provided date-time value.
+            </summary>
+            <param name="dateTime">Date-time</param>
+            <param name="defaultValue">Default value</param>
+            <param name="cultureCode">Culture code</param>
+        </member>
         <member name="T:CMS.Globalization.GlobalizationNamespace">
             <summary>
             Macro namespace for globalization macro methods.
@@ -1918,22 +1952,23 @@
             </summary>
             <param name="logTasks">If true, web farm tasks are logged</param>
         </member>
-        <member name="P:CMS.Localization.FileLocalizationSource.Instance">
-            <summary>
-            Singleton instance
-            </summary>
-        </member>
         <member name="P:CMS.Localization.FileLocalizationSource.DefaultCulture">
             <summary>
             Source default culture
             </summary>
         </member>
         <member name="M:CMS.Localization.FileLocalizationSource.GetString(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:CMS.Localization.IFileLocalizationStringSource">
             <summary>
-            Returns specified string from the localization string source.
+            Defines a contract for a source for resource strings that are retrieved from a file.
             </summary>
-            <param name="stringName">Name of the string</param>
-            <param name="culture">Culture</param>
+        </member>
+        <member name="T:CMS.Localization.ILocalizationStringSource">
+            <summary>
+            Defines a general contract for a source containing resource strings.
+            </summary>
         </member>
         <member name="P:CMS.Localization.ILocalizationStringSource.DefaultCulture">
             <summary>
@@ -1942,14 +1977,14 @@
         </member>
         <member name="M:CMS.Localization.ILocalizationStringSource.GetString(System.String,System.String)">
             <summary>
-            Returns specified string from the localization string source.
+            Returns specified string from the localization string source. In case the <paramref name="stringName"/> was not found, returns null.
             </summary>
             <param name="stringName">Name of the string</param>
             <param name="culture">Culture</param>
         </member>
-        <member name="P:CMS.Localization.SQLLocalizationSource.Instance">
+        <member name="T:CMS.Localization.ISQLLocalizationSource">
             <summary>
-            Singleton instance
+            Defines a contract for a source for resource strings that are retrieved from a file.
             </summary>
         </member>
         <member name="P:CMS.Localization.SQLLocalizationSource.DefaultCulture">
@@ -1958,11 +1993,7 @@
             </summary>
         </member>
         <member name="M:CMS.Localization.SQLLocalizationSource.GetString(System.String,System.String)">
-            <summary>
-            Returns specified string from the localization string source.
-            </summary>
-            <param name="stringName">Name of the string</param>
-            <param name="culture">Culture</param>
+            <inheritdoc/>
         </member>
         <member name="T:CMS.Localization.LocalizationContext">
             <summary>

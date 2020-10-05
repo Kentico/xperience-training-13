@@ -23,13 +23,13 @@ public class LicenseListControlExtender : ControlExtender<UniGrid>
     /// <summary>
     /// Client portal URL
     /// </summary>
-    private const string CLIENT_PORTAL = "http://client.kentico.com/";
+    private const string CLIENT_PORTAL = "https://client.kentico.com/";
 
 
     /// <summary>
     /// Sales e-mail address
     /// </summary>
-    private const string SALES_MAIL = "sales@kentico.com";
+    private const string SALES_MAIL = "sales@xperience.io";
 
     #endregion
 
@@ -118,7 +118,7 @@ public class LicenseListControlExtender : ControlExtender<UniGrid>
                 string edition = ValidationHelper.GetString(parameter, "").ToUpperCSafe();
                 try
                 {
-                    return LicenseHelper.GetEditionName(edition.ToEnum<ProductEditionEnum>());
+                    return LicenseHelper.GetEditionName(EnumStringRepresentationExtensions.ToEnum<ProductEditionEnum>(edition));
                 }
                 catch
                 {

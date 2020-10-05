@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>Page types</ElementCaption>
+  <ElementCheckModuleReadPermission>True</ElementCheckModuleReadPermission>
+  <ElementDisplayName>Page types</ElementDisplayName>
+  <ElementFromVersion>9.0</ElementFromVersion>
+  <ElementGUID>7b552abd-00da-4c72-8461-ff6d56f957c1</ElementGUID>
+  <ElementIconClass />
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>Site_SiteObjects_PageTypes</ElementName>
+  <ElementOrder>8</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>M_NEdit</CodeName>
+    <GUID>0cee6b71-596b-49c7-bd30-54175f6d7bdb</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>Site_SiteObjects</CodeName>
+    <GUID>82b4fe7b-0ead-4ef0-afec-279309766ee6</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS</CodeName>
+      <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <Data>
+      <BindingObjectType>cms.classsite</BindingObjectType>
+      <DialogWhereCondition>ClassResourceID IS NULL</DialogWhereCondition>
+      <DisplayBreadcrumbs>False</DisplayBreadcrumbs>
+      <ListPrefaceText ismacro="True">
+        <![CDATA[{% String.FormatString(GetResourceString("site_edit_siteobjects.objectsavailable"), GetResourceString("objecttasks.cms_documenttype").ToLower()) |(identity)GlobalAdministrator|(hash)c2085147edff78edcc4871e032b8960aee31ebe679b6405a104b1638a66bf711%}]]>
+      </ListPrefaceText>
+      <ResourcePrefix>cms_documenttype.select</ResourcePrefix>
+      <TargetObjectType>cms.documenttype</TargetObjectType>
+      <WhereCondition>
+<![CDATA[
+SiteID = {% UIContext.ObjectID @%}
+AND
+ClassID IN
+(
+  SELECT ClassID
+  FROM CMS_Class
+  WHERE
+    ClassIsDocumentType = 1
+    AND
+    ClassResourceID IS NULL
+)
+]]>
+      </WhereCondition>
+    </Data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS</CodeName>
+    <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+</cms.uielement>

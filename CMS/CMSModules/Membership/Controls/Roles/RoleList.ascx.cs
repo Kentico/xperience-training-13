@@ -12,30 +12,12 @@ public partial class CMSModules_Membership_Controls_Roles_RoleList : CMSAdminLis
     #region "Variables"
 
     private int mSiteId;
-    private int mGroupId;
     private int mGlobalRecordValue = UniSelector.US_GLOBAL_RECORD;
 
     #endregion
 
 
     #region "Public properties"
-
-    /// <summary>
-    /// Gets or sets the group ID for which the roles should be displayed (0 means all groups).
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return mGroupId;
-        }
-        set
-        {
-            mGroupId = value;
-            gridElem.WhereCondition = CreateWhereCondition();
-        }
-    }
-
 
     /// <summary>
     /// Gets or sets global record value (value for global item selected in drop down).
@@ -105,19 +87,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleList : CMSAdminLis
                 where += "(SiteID =" + SiteContext.CurrentSiteID + ")";
             }
 
-        if (!string.IsNullOrEmpty(where))
-        {
-            where += " AND ";
-        }
-        if (GroupID > 0 || IsGroupList)
-        {
-            where += "(RoleGroupID = " + GroupID + ")";
-        }
-        else
-        {
-            where += "(RoleGroupID IS NULL)";
-        }
-
         return where;
     }
 
@@ -125,7 +94,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleList : CMSAdminLis
     protected void Page_Init(object sender, EventArgs e)
     {
         gridElem.OnAction += new OnActionEventHandler(gridElem_OnAction);
-        gridElem.OnBeforeDataReload += gridElem_OnBeforeDataReload;
     }
 
 
@@ -143,19 +111,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleList : CMSAdminLis
         gridElem.OnAction += new OnActionEventHandler(gridElem_OnAction);
         gridElem.WhereCondition = CreateWhereCondition();
         gridElem.ZeroRowsText = GetString("general.nodatafound");
-        gridElem.GroupObject = (GroupID > 0);
-    }
-
-
-    /// <summary>
-    /// Differs loading depending on whether the displayed object belongs to group or not.
-    /// </summary>
-    protected void gridElem_OnBeforeDataReload()
-    {
-        if (GroupID > 0)
-        {
-            gridElem.ObjectType = RoleInfo.OBJECT_TYPE_GROUP;
-        }
     }
 
 

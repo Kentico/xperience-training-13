@@ -87,12 +87,14 @@
         &:hover,
         &:focus {
             background-color: @nav-tabs-active-link-bg;
+            box-shadow: @nav-tabs-active-tab-shadow;
         }
     }
 
     .active .dropdown-menu a {
         background-color: @dropdown-bg;
         cursor: pointer;
+        box-shadow: none;
 
         &:hover,
         &:focus {
@@ -121,12 +123,16 @@
 // Differences for horizontal tabs
 .nav-tabs-container-horizontal {
     background-color: @nav-tabs-container-bg;
-    //height: @nav-tabs-horizontal-height;
     line-height: @line-height-200;
     padding: 0 @padding-base-horizontal;
 
     li {
         float: left;
+
+        a, div {
+            padding: 0 @nav-tab-padding;
+            border-radius: @table-th-border-radius @table-th-border-radius 0 0;
+        }
 
         a > img {
             padding: @padding-small-horizontal;
@@ -140,7 +146,7 @@
 
 // Differences for vertical tabs
 .nav-tabs-container-vertical {
-    background-color: @nav-tabs-container-bg;
+    background-color: @color-sidebar-gray;
     width: @nav-tabs-vertical-width;
     line-height: @line-height-200;
     padding: 0 0 @padding-base-horizontal 0;
@@ -152,6 +158,16 @@
             & > a {
                 padding: @base-unit * 0.5 @padding-base-horizontal;
                 line-height: @line-height-150;
+            }
+        }
+
+        // Active state, and it's :hover to override normal :hover
+        .active a, .active div {
+            &,
+            &:hover,
+            &:focus {
+                background-color: @vertical-nav-tabs-active-link-bg;
+                box-shadow: none;
             }
         }
 
@@ -182,7 +198,7 @@
 }
 
 .nav-tabs-container-vertical-background {
-    background-color: @nav-tabs-container-bg;
+    background-color: @color-sidebar-gray;
     height: 100%;
 }
 
@@ -205,7 +221,7 @@
         .nav-tabs-container-vertical-hidden {
             width: @base-unit * 2;
             display: block;
-            background-color: @nav-tabs-container-bg;
+            background-color: @color-sidebar-gray;
             height: 100%;
             position: absolute;
             top: 0;
@@ -301,7 +317,6 @@
 // Differences for vertical tabs
 .nav-tabs-back {
     display: none;
-    background-color: @nav-tabs-container-bg;
     overflow: hidden;
     height: @nav-tabs-back-height;
 
@@ -374,7 +389,8 @@
 }
 
 // Specific dropdowns
-.nav-tabs .dropdown-menu {
-    // Remove the top rounded corners here since there is a hard edge above the menu
-    .border-top-radius(0);
+
+.nav-tabs-container-horizontal .dropdown-menu li a {
+    padding: 8px 16px;
+    border-radius: 0;
 }

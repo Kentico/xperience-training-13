@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.order</CodeName>
+    <GUID>58eb48fc-83f4-41f7-add2-bc3ce5de8909</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="OrderID" guid="f28fb94f-e177-48e6-aaf6-acfcd856ac3e" isunique="true" visible="true">
+        <properties>
+          <fieldcaption>{$order_edit.orderidlabel$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderShippingOptionID" guid="0eccbbc8-1bb0-4ef9-9c34-6d30c87ea79c" />
+      <field column="OrderTotalShipping" guid="075b59b9-762d-46f7-8e08-e0008ad055ea" />
+      <field column="OrderGrandTotal" guid="3cdb8bf9-6568-465a-8b43-a073d4bc125d" />
+      <field column="OrderGrandTotalInMainCurrency" guid="835d4981-f09e-4f83-922a-c9a8ef81878f" />
+      <field column="OrderTotalPrice" guid="fef6bb8a-2c7d-4ea3-8335-920498657802" />
+      <field column="OrderTotalPriceInMainCurrency" guid="a62bd496-944e-4f31-9f2d-530b849cd644" />
+      <field column="OrderTotalTax" guid="786aede8-95e6-4d3a-a285-1627661b9ca7" />
+      <field column="OrderTaxSummary" guid="b8fdab08-5003-4ee7-8520-4525e51715ed" order="8" />
+      <field column="OrderInvoiceNumber" guid="2e515b8c-5186-488f-8836-84ae1a3a73bb" visible="true" order="9">
+        <settings>
+          <controlname>labelcontrol</controlname>
+          <Transformation>#htmlencode</Transformation>
+        </settings>
+        <properties>
+          <fieldcaption>{$order_edit.invoicenumberlabel$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderCurrencyID" guid="efeadf73-e9a5-4283-b015-0702a04163e9" order="10" />
+      <field column="OrderCreatedByUserID" guid="1fda4f50-5db3-4803-aeb5-7c1ddfbf85ab" order="11" />
+      <field column="OrderSiteID" guid="72c87c0f-a61b-4ff4-8c2b-4f6b510e03a1" order="12" />
+      <field column="OrderPaymentOptionID" guid="d7942b91-97c7-46d0-a4b5-770a006065e1" order="13" />
+      <field column="OrderInvoice" guid="da660e03-1666-44e4-b05c-15b52a9e2f44" order="14" />
+      <field column="OrderStatusID" guid="11250533-9320-4950-b72c-f44d48c6903c" visible="true" order="15">
+        <settings>
+          <AddAllItemsRecord>False</AddAllItemsRecord>
+          <AddNoneRecord>False</AddNoneRecord>
+          <AllowCreate>False</AllowCreate>
+          <controlname>orderstatusselector</controlname>
+          <DisplayOnlyEnabled>True</DisplayOnlyEnabled>
+          <EnsureSelectedItem>True</EnsureSelectedItem>
+          <UseStatusNameForSelection>False</UseStatusNameForSelection>
+        </settings>
+        <properties>
+          <fieldcaption>{$order_edit.orderstatuslabel$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderCustomerID" guid="ae5f163d-d345-459c-97e2-3adb7150195f" visible="true" order="16">
+        <settings>
+          <controlname>objecttransformation</controlname>
+          <EncodeOutput>False</EncodeOutput>
+          <ObjectType>ecommerce.customer</ObjectType>
+          <Transformation>
+            <![CDATA[{%EditedObject.ApplyTransformation("Ecommerce.Transformations.Order_CustomerDetail")|(identity)GlobalAdministrator|(hash)a0303932812e44d1a7567156330aeb49c56d0522adfadfc052154e07691a4077%}]]>
+          </Transformation>
+        </settings>
+        <properties>
+          <controlcssclass>form-control-text</controlcssclass>
+          <fieldcaption>{$order_edit.customerlabel$}</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="OrderCustomerCompany" columntype="integer" dummy="altform" guid="20b7c5da-63d3-4d84-878d-5c017cba440a" system="true" visible="true" order="17">
+        <properties>
+          <controlcssclass>form-control-text</controlcssclass>
+          <defaultvalue ismacro="true">
+            <![CDATA[{% OrderCustomerID.Value |(identity)GlobalAdministrator|(hash)f8e3f8c432d6f980f4807658945f479e9b8343e3c03cc6d3bf3e4a3e48c8fe67%}]]>
+          </defaultvalue>
+          <fieldcaption>{$customerlist.company$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%EditedObject.OrderCustomer.CustomerHasCompanyInfo|(identity)GlobalAdministrator|(hash)30be3f892c46ad442140769c1cb5bb39039176620073c2c13ad8f4e8d7c30e58%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>objecttransformation</controlname>
+          <EncodeOutput>False</EncodeOutput>
+          <ObjectType>ecommerce.customer</ObjectType>
+          <Transformation>
+            <![CDATA[{%EditedObject.ApplyTransformation("Ecommerce.Transformations.Order_CustomerCompanyDetail")|(identity)GlobalAdministrator|(hash)2cf8d0d09c9c86a1b0003eaabe23c63f5ae6636a54d01cf92e0414b8570e2a22%}]]>
+          </Transformation>
+        </settings>
+      </field>
+      <field column="OrderDiscounts" guid="d1b49e10-4999-4dcc-9f06-5743bee08980" order="18" />
+      <field column="OrderOtherPayments" guid="5ea8a4cb-4421-4458-835e-8e362c6f20c8" order="19" />
+      <field column="OrderNote" guid="ad9e3376-04c8-42b3-b405-d0f36bebb606" visible="true" order="20">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextAreaControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Wrap>True</Wrap>
+        </settings>
+        <properties>
+          <fieldcaption>{$order_edit.ordernotelabel$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderIsPaid" guid="4f3c7a42-baa6-44bc-8c52-2f18dc8e20b9" order="21" />
+      <field column="OrderTrackingNumber" guid="a8e47954-ef84-46cc-a2e7-c8ae6515b4c5" order="22" />
+      <field column="OrderCustomData" guid="0162e231-adda-4951-b014-fde264ec2103" order="23" />
+      <field column="OrderPaymentResult" guid="59784e17-5d9d-48e0-93a1-ae6d97564121" order="24" />
+      <field column="OrderGUID" guid="cfcbbfde-eda8-4fd8-b94c-7d92bac0b907" order="25" />
+      <field column="OrderLastModified" guid="0554677d-56cc-4b16-8992-7e02ae6c46f7" order="26" />
+      <field allowempty="true" column="OrderCompanyAddressID" columntype="integer" dummy="altform" guid="3722cda0-b30d-43ca-93ee-507238e3b045" system="true" visible="true" order="27">
+        <properties>
+          <fieldcaption>{$order_edit.lblcompanyaddress$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%(OrderCompanyAddressID != null) && Settings.CMSStoreUseExtraCompanyAddress|(identity)GlobalAdministrator|(hash)432658fdb656c94fa36e457a8c64fb3a09ddd51e0873be7d5d923f2126db912d%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowHeight>590</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>668</DialogWindowWidth>
+          <EditDialogWindowHeight>630</EditDialogWindowHeight>
+          <EditDialogWindowWidth>680</EditDialogWindowWidth>
+          <EditItemElementName>EditAddressPropertiesCustomer</EditItemElementName>
+          <EditWindowName>EditWindow</EditWindowName>
+          <ElementResourceName>cms.ecommerce</ElementResourceName>
+          <EncodeOutput>False</EncodeOutput>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.orderaddress</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>AddressID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>6</SelectionMode>
+          <Transformation>
+            <![CDATA[{%EditedObject.OrderCompanyAddress.ApplyTransformation("Ecommerce.Transformations.Order_OrderAddressDetail")|(identity)GlobalAdministrator|(hash)a059a7245de2112705b5730f5754c78ca10414575006be776c4b874972779715%}]]>
+          </Transformation>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition>
+<![CDATA[
+AddressOrderID = {%EditedObject.OrderID|(identity)GlobalAdministrator|(hash)508642e77165e37c87633e8cde30f7593577988f442278b82dcf742a0e3f3388%} 
+AND 
+AddressType = 3
+]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="OrderCulture" guid="d4c36d0d-073d-4b64-a99c-5213b120cffc" order="28" />
+      <field column="OrderDate" guid="fc38316b-50bd-49f2-b469-2a8649440ed8" visible="true" order="29">
+        <settings>
+          <DisplayNow>True</DisplayNow>
+          <editTime>True</editTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+        <properties>
+          <fieldcaption>{$order_edit.orderdatelabel$}</fieldcaption>
+          <validationerrormessage>{$order_edit.dateerr$}</validationerrormessage>
+        </properties>
+      </field>
+      <field column="OrderCouponCodes" guid="0c00c13e-47a4-4e9f-92e5-fe64a24505ce" order="30" />
+      <field column="OrderExchangeRate" guid="a757801f-d433-4ba1-b48c-ed2a4810afcb" order="31" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Update general</FormDisplayName>
+  <FormGUID>b589b007-cad4-4699-8353-5e56c1141e1c</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>UpdateGeneral</FormName>
+</cms.alternativeform>

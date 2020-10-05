@@ -148,15 +148,6 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCopySiteFiles;
 
     /// <summary>
-    /// chkCopyForumCustomLayoutsFolder control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkCopyForumCustomLayoutsFolder;
-
-    /// <summary>
     /// ltlScript control.
     /// </summary>
     /// <remarks>

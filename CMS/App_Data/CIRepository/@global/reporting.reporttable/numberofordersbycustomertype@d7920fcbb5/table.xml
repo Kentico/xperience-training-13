@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>ed96b37f-8d66-42e6-ad82-f6f2996b6ff8</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Selects the number of anonymous customers. */
+(SELECT  
+    '{$com.orderscreatedbyreport.anonymouscustomers$}' AS '{$com.report.customertype$}',
+    COUNT(OrderID)  AS '{$ecommerce.report_numberoforders$}'    
+ FROM COM_Order 
+ WHERE 
+    (OrderCreatedByUserID = 0 OR OrderCreatedByUserID IS NULL)
+    AND (@DateFrom IS NULL OR (OrderDate >= @DateFrom)) 
+    AND (@DateTo IS NULL OR (OrderDate <= DATEADD(day,1,@DateTo)))
+    AND (ISNULL(OrderIsPaid, 0) = 1 OR ISNULL(@IsPaid,0) = 0)
+    AND OrderSiteID = @CMSContextCurrentSiteID)
+    
+UNION
+/* Selects the number of registered customers. */
+(SELECT  
+    '{$com.orderscreatedbyreport.registeredcustomers$}'AS '{$com.report.customertype$}',
+    COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'    
+ FROM COM_Order
+ WHERE 
+    (OrderCreatedByUserID > 0)
+    AND (@DateFrom IS NULL OR (OrderDate >= @DateFrom))
+    AND (@DateTo IS NULL OR (OrderDate <= DATEADD(day,1,@DateTo)))
+    AND (ISNULL(OrderIsPaid, 0) = 1 OR ISNULL(@IsPaid,0) = 0)
+    AND OrderSiteID = @CMSContextCurrentSiteID)
+ORDER BY COUNT(OrderID) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByCustomerType</CodeName>
+    <GUID>6471de1a-938a-4079-8a84-514f49e9b83f</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

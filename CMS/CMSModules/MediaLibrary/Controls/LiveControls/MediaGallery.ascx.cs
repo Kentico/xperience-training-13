@@ -779,7 +779,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaGallery 
                 // Set root folder with library path
                 folderTree.RootFolderPath = MediaLibraryHelper.GetMediaRootFolderPath(SiteContext.CurrentSiteName) + MediaLibrary.LibraryFolder;
                 folderTree.MediaLibraryFolder = Path.GetFileName(MediaLibraryPath);
-                folderTree.MediaLibraryPath = Path.EnsureSlashes(MediaLibraryPath);
+                folderTree.MediaLibraryPath = Path.EnsureForwardSlashes(MediaLibraryPath);
             }
 
             folderTree.FileIDQueryStringKey = FileIDQueryStringKey;
@@ -815,7 +815,6 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaGallery 
             // Data properties
             fileDataSource.TopN = SelectTopN;
             fileDataSource.SiteName = SiteContext.CurrentSiteName;
-            fileDataSource.GroupID = MediaLibrary.LibraryGroupID;
 
             // Cache settings
             fileDataSource.CacheItemName = CacheItemName;
@@ -854,7 +853,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaGallery 
             return;
         }
 
-        folderTree.ImageFolderPath = GetImageUrl(CultureHelper.IsPreferredCultureRTL() ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree", IsLiveSite, true);
+        folderTree.ImageFolderPath = GetImageUrl(CultureHelper.IsPreferredCultureRTL() ? "RTL/Design/Controls/Tree" : "Design/Controls/Tree", true);
     }
 
 

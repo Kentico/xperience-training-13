@@ -7,6 +7,8 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
+using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Globalization;
 using CMS.Helpers;
@@ -16,7 +18,6 @@ using CMS.Membership;
 using CMS.SiteProvider;
 using CMS.Synchronization;
 using CMS.UIControls;
-using CMS.EventLog;
 
 using IOExceptions = System.IO;
 
@@ -223,11 +224,10 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
     {
         get
         {
-            return ValidationHelper.GetBoolean(ViewState["IsLiveSite"], true);
+            return false;
         }
         set
         {
-            ViewState["IsLiveSite"] = value;
         }
     }
 
@@ -263,9 +263,10 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
             plcPreview.Visible = true;
 
             string fileName = AttachmentHelper.GetFullFileName(FileInfo.FileName, FileInfo.FileExtension);
-            string url = MediaFileURLProvider.GetMediaFileUrl(FileInfo.FileGUID, fileName);
-            url = URLHelper.UpdateParameterInUrl(url, "preview", "1");
-            lblPreviewPermaLink.Text = GetFileLinkHtml(UrlResolver.ResolveUrl(url));
+            string permanentUrl = MediaFileURLProvider.GetMediaFileUrl(FileInfo.FileGUID, fileName);
+            permanentUrl = URLHelper.UpdateParameterInUrl(permanentUrl, "preview", "1");            
+
+            lblPreviewPermaLink.Text = GetFileLinkHtml(permanentUrl, LibraryInfo.LibrarySiteID);
 
             if (MediaLibraryHelper.IsExternalLibrary(SiteContext.CurrentSiteName, LibraryInfo.LibraryFolder))
             {
@@ -274,7 +275,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
             else
             {
                 plcPrevDirPath.Visible = true;
-                lblPrevDirectLinkVal.Text = GetFileLinkHtml(GetPreviewDirectPath());
+                var directUrl = GetPreviewDirectPath();
+                lblPrevDirectLinkVal.Text = GetFileLinkHtml(directUrl, LibraryInfo.LibrarySiteID);
             }
         }
         else
@@ -397,13 +399,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
     }
 
 
-    /// <summary>
-    /// Returns link HTML to media file.
-    /// </summary>
-    /// <param name="url">Url to media file</param>
-    private static string GetFileLinkHtml(string url)
+    private static string GetFileLinkHtml(string relativeUrl, SiteInfoIdentifier site)
     {
-        return String.Format("<span class=\"form-control-text\"><a href=\"{0}\" target=\"_blank\">{0}</a></span>", url);
+        var absoluteUrl = DocumentURLProvider.GetAbsoluteUrl(relativeUrl, site);
+        var path = new UriBuilder(absoluteUrl).Path;
+        
+        return String.Format("<span class=\"form-control-text\"><a href=\"{0}\" target=\"_blank\">{1}</a></span>", absoluteUrl, path);
     }
 
 
@@ -423,12 +424,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
             }
             else
             {
-                string url = MediaFileURLProvider.GetMediaFileUrl(LibrarySiteInfo.SiteName, LibraryInfo.LibraryFolder, FileInfo.FilePath);
-                ltrDirPathValue.Text = GetFileLinkHtml(ResolveUrl(url));
+                string directUrl = MediaFileURLProvider.GetMediaFileUrl(LibrarySiteInfo.SiteName, LibraryInfo.LibraryFolder, FileInfo.FilePath);
+                ltrDirPathValue.Text = GetFileLinkHtml(directUrl, LibraryInfo.LibrarySiteID);
             }
 
             var permanentUrl = MediaFileURLProvider.GetMediaFileUrl(FileInfo.FileGUID, AttachmentHelper.GetFullFileName(FileInfo.FileName, FileInfo.FileExtension));
-            ltrPermaLinkValue.Text = GetFileLinkHtml(ResolveUrl(permanentUrl));
+            ltrPermaLinkValue.Text = GetFileLinkHtml(permanentUrl, LibraryInfo.LibrarySiteID);
             if (ImageHelper.IsImage(FileInfo.FileExtension))
             {
                 // Ensure max side size 200
@@ -882,11 +883,10 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
             string[] files = Directory.GetFiles(Path.GetDirectoryName(previewPath), Path.GetFileName(previewPath));
             if (files.Length > 0)
             {
-                previewFolder = Path.EnsureSlashes(Path.GetDirectoryName(previewFolder), true);
+                previewFolder = Path.EnsureForwardSlashes(Path.GetDirectoryName(previewFolder), true);
                 string prevFileName = Path.GetFileName(files[0]);
 
                 prevUrl = MediaFileURLProvider.GetMediaFileUrl(SiteContext.CurrentSiteName, LibraryInfo.LibraryFolder, previewFolder + '/' + prevFileName);
-                prevUrl = UrlResolver.ResolveUrl(prevUrl);
             }
         }
 
@@ -925,7 +925,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
                 return;
             }
 
-            string path = Path.EnsureSlashes(FilePath);
+            string path = Path.EnsureForwardSlashes(FilePath);
             string fileName = URLHelper.GetSafeFileName(txtEditName.Text.Trim(), SiteContext.CurrentSiteName, false);
             string origFileName = Path.GetFileNameWithoutExtension(fi.FullName);
 
@@ -960,7 +960,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
                         {
                             string newPath = (string.IsNullOrEmpty(Path.GetDirectoryName(path)) ? "" : Path.GetDirectoryName(path) + "/") + fileName + FileInfo.FileExtension;
                             MediaFileInfoProvider.MoveMediaFile(SiteContext.CurrentSiteName, FileInfo.FileLibraryID, path, newPath);
-                            FileInfo.FilePath = Path.EnsureSlashes(newPath);
+                            FileInfo.FilePath = Path.EnsureForwardSlashes(newPath);
                             FileInfo.FileExtension = Path.GetExtension(newPath);
                             FileInfo.FileMimeType = MimeTypeHelper.GetMimetype(FileInfo.FileExtension);
                         }
@@ -1105,7 +1105,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
     /// <param name="filePath">File path</param>
     public MediaFileInfo SaveNewFile(FileInfo fi, string title, string description, string name, string filePath)
     {
-        string path = Path.EnsureSlashes(filePath);
+        string path = Path.EnsureForwardSlashes(filePath);
         string fileName = name;
 
         string fullPath = fi.FullName;
@@ -1116,12 +1116,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
         {
             string oldPath = path;
             fullPath = MediaLibraryHelper.EnsureUniqueFileName(Path.GetDirectoryName(fullPath) + "\\" + fileName + extension);
-            path = Path.EnsureSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileName(fullPath)).TrimStart('/');
+            path = Path.EnsureForwardSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileName(fullPath)).TrimStart('/');
             MediaFileInfoProvider.MoveMediaFile(SiteContext.CurrentSiteName, MediaLibraryID, oldPath, path, true);
         }
 
         // Create media file info
-        MediaFileInfo fileInfo = new MediaFileInfo(fullPath, LibraryInfo.LibraryID, Path.EnsureSlashes(Path.GetDirectoryName(path)), 0, 0, 0);
+        MediaFileInfo fileInfo = new MediaFileInfo(fullPath, LibraryInfo.LibraryID, Path.EnsureForwardSlashes(Path.GetDirectoryName(path)), 0, 0, 0);
 
         fileInfo.FileTitle = title;
         fileInfo.FileDescription = description;

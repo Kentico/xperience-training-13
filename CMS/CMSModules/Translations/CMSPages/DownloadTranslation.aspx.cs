@@ -14,7 +14,7 @@ public partial class CMSModules_Translations_CMSPages_DownloadTranslation : CMST
         int itemId = QueryHelper.GetInteger("itemid", 0);
         if (submissionId > 0)
         {
-            TranslationSubmissionInfo info = TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(submissionId);
+            TranslationSubmissionInfo info = TranslationSubmissionInfo.Provider.Get(submissionId);
             if (info != null)
             {
                 TranslationServiceHelper.DownloadXLIFFinZIP(info, HttpContext.Current.Response);
@@ -22,7 +22,7 @@ public partial class CMSModules_Translations_CMSPages_DownloadTranslation : CMST
         }
         else if (itemId > 0)
         {
-            TranslationSubmissionItemInfo info = TranslationSubmissionItemInfoProvider.GetTranslationSubmissionItemInfo(itemId);
+            TranslationSubmissionItemInfo info = TranslationSubmissionItemInfo.Provider.Get(itemId);
             if (info != null)
             {
                 TranslationServiceHelper.DownloadXLIFF(info, Response);

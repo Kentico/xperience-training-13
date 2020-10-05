@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>Custom tables</ElementCaption>
+  <ElementCheckModuleReadPermission>True</ElementCheckModuleReadPermission>
+  <ElementDisplayName>Custom tables</ElementDisplayName>
+  <ElementFromVersion>9.0</ElementFromVersion>
+  <ElementGUID>bed647f8-e8e8-4baa-834d-a772a435e719</ElementGUID>
+  <ElementIconClass />
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>Site_SiteObjects_CustomTables</ElementName>
+  <ElementOrder>1</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>M_NEdit</CodeName>
+    <GUID>0cee6b71-596b-49c7-bd30-54175f6d7bdb</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>Site_SiteObjects</CodeName>
+    <GUID>82b4fe7b-0ead-4ef0-afec-279309766ee6</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS</CodeName>
+      <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <Data>
+      <BindingObjectType>cms.classsite</BindingObjectType>
+      <DisplayBreadcrumbs>False</DisplayBreadcrumbs>
+      <ListPrefaceText ismacro="True">
+        <![CDATA[{% String.FormatString(GetResourceString("site_edit_siteobjects.objectsavailable"), GetResourceString("objecttasks.cms_customtable").ToLower()) |(identity)GlobalAdministrator|(hash)c4993a99988096ce20ae987039f3464b52e3134d7c48b6c97f8ab4a71b9bc7df%}]]>
+      </ListPrefaceText>
+      <ResourcePrefix>cms_customtable.select</ResourcePrefix>
+      <TargetObjectType>cms.customtable</TargetObjectType>
+      <WhereCondition>
+<![CDATA[
+SiteID = {% UIContext.ObjectID @%}
+AND
+ClassID IN
+(
+  SELECT ClassID
+  FROM CMS_Class
+  WHERE ClassIsCustomTable = 1
+)
+]]>
+      </WhereCondition>
+    </Data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS</CodeName>
+    <GUID>ce1a65a0-80dc-4c53-b0e7-bdecf0aa8c02</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+</cms.uielement>

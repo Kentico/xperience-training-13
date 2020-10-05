@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>35c66205-b285-4c91-b7ef-fbd0029cbf02</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+/* Selects the number of anonymous customers. */
+(SELECT  
+   '{$com.orderscreatedbyreport.anonymouscustomers$}' AS '{$customerlist.customer$}',
+   COUNT(Orders.OrderID) AS '{$general.count$}'    
+ FROM COM_Order AS Orders
+ WHERE 
+    (Orders.OrderCreatedByUserID = 0 OR Orders.OrderCreatedByUserID IS NULL)
+    AND (@DateFrom IS NULL OR (Orders.OrderDate >= @DateFrom)) 
+    AND (@DateTo IS NULL OR (Orders.OrderDate <= DATEADD(day,1,@DateTo)))
+    AND (ISNULL(Orders.OrderIsPaid, 0) = 1 OR ISNULL(@IsPaid,0) = 0)
+    AND  Orders.OrderSiteID = @CMSContextCurrentSiteID
+ HAVING COUNT(Orders.OrderID) > 0)
+    
+UNION
+/* Selects the number of registered customers. */
+(SELECT  
+   '{$com.orderscreatedbyreport.registeredcustomers$}'AS '{$customerlist.customer$}',
+   COUNT(Orders.OrderID) AS '{$general.count$}'    
+ FROM COM_Order AS Orders
+ WHERE 
+    (Orders.OrderCreatedByUserID > 0)
+    AND (@DateFrom IS NULL OR (Orders.OrderDate >= @DateFrom)) 
+    AND (@DateTo IS NULL OR (Orders.OrderDate <= DATEADD(day,1,@DateTo)))
+    AND (ISNULL(Orders.OrderIsPaid, 0) = 1 OR ISNULL(@IsPaid,0) = 0)
+    AND  Orders.OrderSiteID = @CMSContextCurrentSiteID
+ HAVING COUNT(Orders.OrderID) > 0)
+ORDER BY '{$general.count$}' DESC
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>NumberOfOrdersByCustomerType</CodeName>
+    <GUID>6471de1a-938a-4079-8a84-514f49e9b83f</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$customerlist.customer$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$general.count$}</GraphYAxisTitle>
+</reporting.reportgraph>

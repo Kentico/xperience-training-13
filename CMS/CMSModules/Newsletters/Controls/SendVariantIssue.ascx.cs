@@ -368,7 +368,7 @@ public partial class CMSModules_Newsletters_Controls_SendVariantIssue : CMSAdmin
     private string GetWaitingToSelectWinnerInfoMessage(IssueInfo issue, ABTestWinnerSelectionEnum winnerOption)
     {
         // Get current planned winner selection task
-        var taskToSelectWinner = TaskInfoProvider.GetTaskInfo(mABTest.TestWinnerScheduledTaskID);
+        var taskToSelectWinner = TaskInfo.Provider.Get(mABTest.TestWinnerScheduledTaskID);
         var plannedWinnerSelectionTime = taskToSelectWinner?.TaskNextRunTime ?? DateTimeHelper.ZERO_TIME;
 
         switch (winnerOption)

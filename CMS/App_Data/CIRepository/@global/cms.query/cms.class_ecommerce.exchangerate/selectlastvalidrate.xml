@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>ecommerce.exchangerate</CodeName>
+    <GUID>8cae6e0b-2da2-46a7-9a0b-fa73aed5e96b</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>3bae8d74-46c7-4da3-892b-69e982067153</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectlastvalidrate</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ExchangeRateValue 
+FROM COM_CurrencyExchangeRate INNER JOIN COM_ExchangeTable ON COM_CurrencyExchangeRate.ExchangeTableID = COM_ExchangeTable.ExchangeTableID 
+WHERE ((ExchangeRateToCurrencyID = @CurrencyID) AND (ISNULL(COM_ExchangeTable.ExchangeTableSiteID, 0) = @SiteID) AND ((ExchangeTableValidFrom <= @CurrentDate) OR (ExchangeTableValidFrom IS NULL)) AND ((ExchangeTableValidTo >= @CurrentDate) OR (ExchangeTableValidTo IS NULL))) 
+ORDER BY ExchangeTableValidFrom DESC, CASE WHEN ExchangeTableValidTo IS NULL THEN 2 ELSE 1 END, ExchangeTableValidTo
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

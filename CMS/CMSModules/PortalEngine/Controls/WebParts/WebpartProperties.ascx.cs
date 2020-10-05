@@ -692,7 +692,7 @@ public partial class CMSModules_PortalEngine_Controls_WebParts_WebpartProperties
                 UserInfo ui = UserInfo.Provider.Get(pti.Generalized.IsCheckedOutByUserID);
                 if (ui != null)
                 {
-                    userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));
+                    userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(false));
                 }
 
                 ShowError(string.Format(GetString("ObjectEditMenu.CheckedOutByAnotherUser"), pti.TypeInfo.ObjectType, pti.DisplayName, userName));

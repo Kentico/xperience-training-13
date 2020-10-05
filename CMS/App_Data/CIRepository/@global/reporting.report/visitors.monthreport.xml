@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>1</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>Visits</CodeName>
+    <GUID>7f32b999-d7e0-4909-9a74-4d6e1d02b175</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString />
+  <ReportDisplayName>Visits - Monthly report</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>340c5b68-09b6-47ea-9de4-d1fb8b6a7214</ReportGUID>
+  <ReportLayout>
+<![CDATA[
+<p>%%control:ReportGraph?GraphMonthVisitors%%</p>
+<p>%%control:ReportGraph?GraphMonthNewReturnVisitors%%</p>
+
+<p>{$reports_general.created$} {%CMSContextCurrentTime%} {$reports_general.by$} {%CMSContextCurrentUserName%}</p>
+
+]]>
+  </ReportLayout>
+  <ReportName>visitors.monthreport</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="FromDate" columntype="datetime" guid="40ae4c22-33fd-4fae-a30e-69358914ac37" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[{%CurrentDateTime.AddYears(-1).Date|(identity)GlobalAdministrator|(hash)03e2e9d76b2b7c2f0871530f9d00e1d98b9c444834fc880d0d63d0b72a8bfb8c%}]]>
+          </defaultvalue>
+          <fieldcaption>{$general.from$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="ToDate" columntype="datetime" guid="f97c770e-eefd-4e84-8b79-343fba8adf37" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue ismacro="true">{%CurrentDateTime%}</defaultvalue>
+          <fieldcaption>{$general.to$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>calendarcontrol</controlname>
+          <DisplayNow>True</DisplayNow>
+          <EditTime>False</EditTime>
+          <TimeZoneType>inherit</TimeZoneType>
+        </settings>
+      </field>
+      <field column="FirstCategory" columnsize="50" columntype="text" guid="00000000-0000-0000-0000-000000000000" spellcheck="false">
+        <properties>
+          <defaultvalue>visitfirst</defaultvalue>
+          <fieldcaption>First category</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <query>
+            <![CDATA[SELECT DISTINCT StatisticsCode, StatisticsCode FROM Analytics_Statistics]]>
+          </query>
+        </settings>
+      </field>
+      <field column="SecondCategory" columnsize="50" columntype="text" guid="00000000-0000-0000-0000-000000000000" spellcheck="false">
+        <properties>
+          <defaultvalue>visitreturn</defaultvalue>
+          <fieldcaption>Second category</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <query>
+            <![CDATA[SELECT DISTINCT StatisticsCode, StatisticsCode FROM Analytics_Statistics]]>
+          </query>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

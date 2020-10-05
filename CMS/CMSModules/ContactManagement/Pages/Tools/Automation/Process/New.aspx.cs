@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 using CMS.Automation;
 using CMS.Base.Web.UI;
@@ -26,16 +28,37 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     private const string STEPS_TAB_CODE_NAME = "EditProcessSteps";
     private const string EDIT_ELEMENT_CODE_NAME = "EditProcess";
     private const int CREATE_FROM_SCRATCH_ID = -10;
+    private const char SEPARATOR = '#';
+
+
+    /// <summary>
+    /// Available tile actions.
+    /// </summary>
+    private enum TileAction
+    {
+        None,
+        Create,
+        Delete
+    }
+
 
     private WorkflowInfo mWorkflow;
+
+
+    private TileAction CurrentAction { get; set; }
 
 
     private string CreationMessageError => GetString("ma.process.creationerror");
 
 
+    private bool CanManageTemplates => LicenseIsSufficient && AuthorizedToManageTemplates;
+
+
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
+
+        repeaterElement.ItemDataBound += RepeaterElement_ItemDataBound;
 
         MessagesPlaceHolder.ErrorText = CreationMessageError;
         MessagesPlaceHolder.ErrorLabel.CssClass += " alert-error hidden";
@@ -55,6 +78,13 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
     private void RegisterScripts()
     {
+        RegisterCreateWorkflowScripts();
+        RegisterManageTemplateScripts();
+    }
+
+
+    private void RegisterCreateWorkflowScripts()
+    {
         var script = $@"
 function processResult(callbackResult, context) {{
     var result = JSON.parse(callbackResult);
@@ -70,20 +100,96 @@ function processResult(callbackResult, context) {{
     }}
 }}
 
-function createWorkflow(id) {{
-    {Page.ClientScript.GetCallbackEventReference(this, "id", "processResult", null)}
+function createWorkflow(templateId) {{
+    var argument = '{TileAction.Create}{SEPARATOR}' + templateId;
+    {Page.ClientScript.GetCallbackEventReference(this, "argument", "processResult", null)}
     if (window.Loader) {{
         window.Loader.show();
     }}
 }}";
 
-        ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "createWorkflowAndRedirectScript", ScriptHelper.GetScript(script));
+        ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "MA_CreateWorkflowAndRedirect", ScriptHelper.GetScript(script));
         ScriptHelper.RegisterRequireJs(this);
-        ScriptHelper.RegisterStartupScript(this, typeof(string), "createWorkflowAndRedirectStartupScript", ScriptHelper.GetScript(@"
+        ScriptHelper.RegisterStartupScript(this, typeof(string), "MA_CreateWorkflowAndRedirectStartup", ScriptHelper.GetScript(@"
             cmsrequire(['CMS/MessageService'], function (msgService) {{
                     window.msgService = msgService;
             }});
         "));
+    }
+
+
+    private void RegisterManageTemplateScripts()
+    {
+        if (!CanManageTemplates)
+        {
+            return;
+        }
+
+        var editTemplateScript = $@"
+function editTemplate(templateId) {{
+    modalDialog('{HttpUtility.JavaScriptStringEncode(UrlResolver.ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Template_Edit.aspx"))}?templateId=' + templateId, 'MA_Edit_Template', 800, 650);
+}}";
+
+        var deleteTemplateScript = $@"
+function deleteTemplate(templateId) {{
+    if (confirm({ScriptHelper.GetLocalizedString("ma.template.delete.confirmation")})) {{
+        var argument = '{TileAction.Delete}{SEPARATOR}' + templateId;
+        {Page.ClientScript.GetCallbackEventReference(this, "argument", "refreshPage", null)};
+    }}
+}}";
+
+        var refreshPageScript = @"
+function refreshPage() {
+    window.location = window.location.href;
+}";
+
+        ScriptHelper.RegisterDialogScript(this);
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_RefreshPage", ScriptHelper.GetScript(refreshPageScript));
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_SaveAsTemplate", ScriptHelper.GetScript(editTemplateScript));
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_DeleteTemplate", ScriptHelper.GetScript(deleteTemplateScript));
+    }
+
+
+    private void RepeaterElement_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (!CanManageTemplates)
+        {
+            return;
+        }
+
+        var item = e.Item;
+
+        if (item.ItemType != ListItemType.Item && item.ItemType != ListItemType.AlternatingItem)
+        {
+            return;
+        }
+
+        var templateId = ((AutomationTemplateViewModel)item.DataItem).Id;
+
+        if (templateId == CREATE_FROM_SCRATCH_ID)
+        {
+            return;
+        }
+
+        var tileOptions = ControlsHelper.GetChildControl<CMSMoreOptionsButton>(item);
+
+        tileOptions.Visible = true;
+        tileOptions.ToolTip = GetString("EditMenu.MoreActions");
+        tileOptions.Actions = new List<CMSButtonAction>()
+        {
+            new CMSButtonAction
+            {
+                Text = GetString("general.edit"),
+                ToolTip = GetString("general.edit"),
+                OnClientClick = $"editTemplate({templateId}); return false;"
+            },
+            new CMSButtonAction
+            {
+                Text = GetString("general.delete"),
+                ToolTip = GetString("general.delete"),
+                OnClientClick = $"deleteTemplate({templateId}); return false;"
+            }
+        };
     }
 
 
@@ -114,24 +220,64 @@ function createWorkflow(id) {{
     {
         try
         {
-            var id = ValidationHelper.GetInteger(eventArgument, CREATE_FROM_SCRATCH_ID);
-            if (id == CREATE_FROM_SCRATCH_ID)
+            var args = ParseEventArguments(eventArgument);
+            var templateId = args.Value;
+            CurrentAction = args.Key;
+
+            switch (CurrentAction)
             {
-                mWorkflow = AutomationHelper.CreateEmptyWorkflow();
-            }
-            else
-            {
-                var template = AutomationTemplateInfo.Provider.Get(id);
-                if (template != null)
-                {
-                    mWorkflow = AutomationTemplateManager.CreateAutomationProcessFromTemplate(template, MacroIdentityOption.FromUserInfo(CurrentUser));
-                }
+                case TileAction.Create:
+                    ExecuteCreateAction(templateId);
+                    break;
+                case TileAction.Delete:
+                    ExecuteDeleteAction(templateId);
+                    break;
             }
         }
         catch (Exception e)
         {
-            Service.Resolve<IEventLogService>().LogException("Automation process", "CREATEOBJ ERROR", e);
+            Service.Resolve<IEventLogService>().LogException("Automation process", "MANAGEOBJ", e);
         }
+    }
+
+
+    private void ExecuteCreateAction(int templateId)
+    {
+        if (templateId == CREATE_FROM_SCRATCH_ID)
+        {
+            mWorkflow = AutomationHelper.CreateEmptyWorkflow();
+        }
+        else
+        {
+            var template = AutomationTemplateInfo.Provider.Get(templateId);
+            if (template != null)
+            {
+                mWorkflow = AutomationTemplateManager.CreateAutomationProcessFromTemplate(template, MacroIdentityOption.FromUserInfo(CurrentUser));
+            }
+        }
+    }
+
+
+    private void ExecuteDeleteAction(int templateId)
+    {
+        if (templateId <= 0)
+        {
+            return;
+        }
+
+        var template = AutomationTemplateInfo.Provider.Get(templateId);
+        if (template != null)
+        {
+            AutomationTemplateInfo.Provider.Delete(template);
+        }
+    }
+
+
+    private KeyValuePair<TileAction, int> ParseEventArguments(string eventArgument)
+    {
+        var args = eventArgument.Split(new[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+
+        return new KeyValuePair<TileAction, int>(EnumStringRepresentationExtensions.ToEnum<TileAction>(args[0]), ValidationHelper.GetInteger(args[1], CREATE_FROM_SCRATCH_ID));
     }
 
 
@@ -140,6 +286,11 @@ function createWorkflow(id) {{
     /// </summary>
     public string GetCallbackResult()
     {
+        if (CurrentAction != TileAction.Create)
+        {
+            return String.Empty;
+        }
+
         object result;
 
         if (mWorkflow != null)

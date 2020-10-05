@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>NumberOfPagesInWorkflowStep</GraphDisplayName>
+  <GraphGUID>8a771ab5-5434-4867-91b9-89ddd52b8f13</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>NumberOfDocumentsInWorkflowStep</GraphName>
+  <GraphQuery>
+<![CDATA[
+SELECT 
+  StepDisplayName AS 'Name',
+  [Value]
+FROM (
+  SELECT
+    COUNT(DocumentID) as 'Value',
+    DocumentWorkflowStepID
+  FROM View_CMS_Tree_Joined
+  WHERE DocumentWorkflowStepID IN (
+    SELECT StepID FROM CMS_WorkflowStep WHERE StepWorkflowID = @WorkflowID
+  ) AND NodeSiteID = @CMSContextCurrentSiteID
+  GROUP BY DocumentWorkflowStepID
+) Groups JOIN CMS_WorkflowStep ON Groups.DocumentWorkflowStepID = StepID
+ORDER BY StepType
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Number_of_documents_in_workflow_step</CodeName>
+    <GUID>62cf95b5-5935-4968-a4fe-33d2da5f8837</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Right</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>0</seriesbordersize>
+      <seriesborderstyle>NotSet</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX - #VALY</seriesitemtooltip>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

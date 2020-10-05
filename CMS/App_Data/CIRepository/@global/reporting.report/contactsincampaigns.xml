@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.report>
+  <ReportAccess>0</ReportAccess>
+  <ReportCategoryID>
+    <CodeName>OnlineMarketing</CodeName>
+    <GUID>7d018864-446f-4eda-b802-a607021b9380</GUID>
+    <ObjectType>reporting.reportcategory</ObjectType>
+  </ReportCategoryID>
+  <ReportConnectionString>CMSConnectionString</ReportConnectionString>
+  <ReportDisplayName>Contacts in campaigns</ReportDisplayName>
+  <ReportEnableSubscription>True</ReportEnableSubscription>
+  <ReportGUID>a060a819-d782-4e99-9b59-5ccb097de03d</ReportGUID>
+  <ReportLayout>
+    <![CDATA[%%control:ReportTable?ContactsInCampaigns.ContactsInCampaignsTable%%]]>
+  </ReportLayout>
+  <ReportName>ContactsInCampaigns</ReportName>
+  <ReportParameters>
+    <form version="2">
+      <field column="CampaignName" columnsize="4000" columntype="text" guid="57c652fa-7972-43d9-b88e-27c03ed624b3" visible="true">
+        <properties>
+          <fieldcaption>{$campaign.codename$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Query>
+<![CDATA[
+SELECT CampaignUTMCode, CampaignDisplayName
+  FROM Analytics_Campaign
+ WHERE CampaignSiteID = {%CMSContext.CurrentSiteID|(identity)GlobalAdministrator|(hash)77c30089933935ec376e8b21d46dad5e41be0df11d1581c07e1c641c859dcdd3%}
+UNION SELECT '', '(none)'
+]]>
+          </Query>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+    </form>
+  </ReportParameters>
+</reporting.report>

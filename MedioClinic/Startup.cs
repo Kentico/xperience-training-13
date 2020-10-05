@@ -15,10 +15,8 @@ using Microsoft.Extensions.Options;
 using Autofac;
 
 using CMS.Helpers;
-using Kentico.Content.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
-using Kentico.Web.Mvc.Internal;
 
 using Business.Configuration;
 using Identity;
@@ -27,6 +25,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
+using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic
 {
@@ -55,7 +54,11 @@ namespace MedioClinic
             services.AddControllersWithViews()
                 .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()));
 
-            services.AddKentico();
+            services.AddKentico(features =>
+            {
+                features.UsePreview();
+            });
+
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
 
             var optionsSection = Configuration.GetSection(nameof(XperienceOptions));
@@ -94,10 +97,7 @@ namespace MedioClinic
                 app.UseHsts();
             }
 
-            app.UseKentico(features =>
-            {
-                features.UsePreview();
-            });
+            app.UseKentico();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -112,7 +112,7 @@ namespace MedioClinic
                 endpoints.MapAreaControllerRoute(
                     name: "identity",
                     areaName: "Identity",
-                    pattern: "{culture}/identity/{controller=Account}/{action=Register}/{id?}");
+                    pattern: "{culture}/identity/{controller}/{action}/{id?}");
 
                 MapCultureSpecificRoutes(endpoints, optionsAccessor);
                 endpoints.MapDefaultControllerRoute();
@@ -176,7 +176,7 @@ namespace MedioClinic
                     name: $"{routeName}_{culture}",
                     pattern: AddCulturePrefix(culture, routePattern!),
                     defaults: routeDefaults,
-                    constraints: new { culture = new SiteCultureConstraint() }
+                    constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
                     );
                 }
             }

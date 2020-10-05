@@ -25,7 +25,7 @@ public partial class CMSAdminControls_UI_ContextHelp : CMSUserControl
             descriptionMenuItemId = description.ClientID
         });
 
-        ScriptHelper.RegisterModule(Page, "CMS/Raptor", new
+        ScriptHelper.RegisterModule(Page, "CMS/Phoenix", new
         {
             labelId = lblVersion.ClientID
         });

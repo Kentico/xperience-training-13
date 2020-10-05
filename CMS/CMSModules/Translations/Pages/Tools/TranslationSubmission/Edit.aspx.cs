@@ -427,7 +427,7 @@ public partial class CMSModules_Translations_Pages_Tools_TranslationSubmission_E
             processAction
         });
 
-        var service = TranslationServiceInfoProvider.GetTranslationServiceInfo(SubmissionInfo.SubmissionServiceID);
+        var service = TranslationServiceInfo.Provider.Get(SubmissionInfo.SubmissionServiceID);
         if (service != null)
         {
             bool serviceSupportsCancel = service.TranslationServiceSupportsCancel;

@@ -5,7 +5,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSAdminControls_ImageEditor_ImageEditorInnerPage : LivePage
+public partial class CMSAdminControls_ImageEditor_ImageEditorInnerPage : CMSPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {

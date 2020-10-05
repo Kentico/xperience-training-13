@@ -4,7 +4,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.Helpers;
 using CMS.PortalEngine.Web.UI;
 using CMS.UIControls;
@@ -284,14 +283,10 @@ public partial class CMSMasterPages_UI_Dialogs_ModalDialogPage : CMSMasterPage, 
 
         bodyElem.Attributes["class"] = mBodyClass;
 
-        var device = DeviceContext.CurrentDevice;
-        if (!device.IsMobile())
-        {
-            // Footer - apply fixed position
-            pnlFooterContent.Style.Add("position", "fixed");
-            pnlFooterContent.Style.Add("width", "100%");
-            pnlFooterContent.Style.Add("bottom", "0px");
-        }
+        // Footer - apply fixed position
+        pnlFooterContent.Style.Add("position", "fixed");
+        pnlFooterContent.Style.Add("width", "100%");
+        pnlFooterContent.Style.Add("bottom", "0px");
 
         StringBuilder resizeScript = new StringBuilder();
         resizeScript.Append(@"
@@ -350,22 +345,6 @@ function ResizeWorkingArea()
                 contentElem.style.height = h;
             }
         }");
-
-        if (device.IsMobile())
-        {
-            resizeScript.Append(@"
-        if ((jIframe == null) || (!jIframe.length)) {
-            jIframe = $cmsj('.EditableTextEdit iframe:first');
-        }
-        if ((jIframeContents == null) || (!jIframeContents.length)) {
-            jIframeContents = jIframe.contents();
-        }
-
-        // Set height of the iframe manually for mobile devices 
-        jIframe.css('height', jIframeContents.height());
-        // WebKit browsers fix - width of the parent element of the iframe needs to be defined
-        jIframe.parent().width(jIframeContents.width());");
-        }
 
 #pragma warning disable CS0618 // Type or member is obsolete
         if (BrowserHelper.IsIE())

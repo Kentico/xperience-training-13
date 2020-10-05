@@ -8,10 +8,6 @@ using CMS.UIControls;
 
 public partial class CMSModules_Membership_Controls_Roles_Role : CMSAdminEditControl
 {
-    private int mGroupID = 0;
-    private Guid mGroupGUID = Guid.Empty;
-
-
     #region "Public properties"
 
     public int SelectedTab
@@ -36,38 +32,6 @@ public partial class CMSModules_Membership_Controls_Roles_Role : CMSAdminEditCon
         set
         {
             ViewState["siteid"] = (object)value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets the community group id.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return mGroupID;
-        }
-        set
-        {
-            mGroupID = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets the community group GUID.
-    /// </summary>
-    public Guid GroupGUID
-    {
-        get
-        {
-            return mGroupGUID;
-        }
-        set
-        {
-            mGroupGUID = value;
         }
     }
 
@@ -125,14 +89,11 @@ public partial class CMSModules_Membership_Controls_Roles_Role : CMSAdminEditCon
     {
         RoleEdit.ItemID = RoleUsers.RoleID = ItemID;
         RoleEdit.SiteID = SiteID;
-        RoleEdit.GroupID = GroupID;
-        RoleEdit.GroupGUID = GroupGUID;
         RoleEdit.DisplayMode = DisplayMode;
         RoleEdit.ReloadData(forceReload);
 
         RoleEdit.Visible = false;
         RoleUsers.Visible = false;
-        RoleUsers.GroupID = GroupID;
 
         tabMenu.SelectedTab = SelectedTab;
 

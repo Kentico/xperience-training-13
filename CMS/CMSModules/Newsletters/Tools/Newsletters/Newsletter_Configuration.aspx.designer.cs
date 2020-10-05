@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configuration {
-    
+public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configuration
+{
+
     /// <summary>
     /// pnlGeneral control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlGeneral;
-    
+
     /// <summary>
     /// pnlNewsletterDisplayName control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterDisplayName;
-    
+
     /// <summary>
     /// lblNewsletterDisplayName control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterDisplayName;
-    
+
     /// <summary>
     /// txtNewsletterDisplayName control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtNewsletterDisplayName;
-    
+
     /// <summary>
     /// rfvNewsletterDisplayName control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvNewsletterDisplayName;
-    
+
     /// <summary>
     /// pnlNewsletterName control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterName;
-    
+
     /// <summary>
     /// lblNewsletterName control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterName;
-    
+
     /// <summary>
     /// txtNewsletterName control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_CodeName txtNewsletterName;
-    
+
     /// <summary>
     /// rfvNewsletterName control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvNewsletterName;
-    
+
     /// <summary>
     /// pnlNewsletterSenderName control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterSenderName;
-    
+
     /// <summary>
     /// lblNewsletterSenderName control.
     /// </summary>
@@ -109,7 +110,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterSenderName;
-    
+
     /// <summary>
     /// txtNewsletterSenderName control.
     /// </summary>
@@ -118,7 +119,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtNewsletterSenderName;
-    
+
     /// <summary>
     /// rfvNewsletterSenderName control.
     /// </summary>
@@ -127,7 +128,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvNewsletterSenderName;
-    
+
     /// <summary>
     /// pnlNewsletterSenderEmail control.
     /// </summary>
@@ -136,7 +137,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterSenderEmail;
-    
+
     /// <summary>
     /// lblNewsletterSenderEmail control.
     /// </summary>
@@ -145,7 +146,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterSenderEmail;
-    
+
     /// <summary>
     /// txtNewsletterSenderEmail control.
     /// </summary>
@@ -154,7 +155,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Inputs_EmailInput txtNewsletterSenderEmail;
-    
+
     /// <summary>
     /// rfvNewsletterSenderEmail control.
     /// </summary>
@@ -163,7 +164,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvNewsletterSenderEmail;
-    
+
     /// <summary>
     /// pnlNewsletterSubscriptionTemplate control.
     /// </summary>
@@ -172,7 +173,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterSubscriptionTemplate;
-    
+
     /// <summary>
     /// lblSubscriptionTemplate control.
     /// </summary>
@@ -181,7 +182,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSubscriptionTemplate;
-    
+
     /// <summary>
     /// subscriptionTemplate control.
     /// </summary>
@@ -190,7 +191,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Newsletters_FormControls_NewsletterTemplateSelector subscriptionTemplate;
-    
+
     /// <summary>
     /// lblScreenReaderSubscriptionTemplate control.
     /// </summary>
@@ -199,7 +200,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderSubscriptionTemplate;
-    
+
     /// <summary>
     /// iconHelpSubscriptionTemplate control.
     /// </summary>
@@ -208,7 +209,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSIcon iconHelpSubscriptionTemplate;
-    
+
     /// <summary>
     /// pnlNewsletterUnsubscriptionTemplate control.
     /// </summary>
@@ -217,7 +218,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterUnsubscriptionTemplate;
-    
+
     /// <summary>
     /// lblUnsubscriptionTemplate control.
     /// </summary>
@@ -226,7 +227,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblUnsubscriptionTemplate;
-    
+
     /// <summary>
     /// unsubscriptionTemplate control.
     /// </summary>
@@ -235,7 +236,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Newsletters_FormControls_NewsletterTemplateSelector unsubscriptionTemplate;
-    
+
     /// <summary>
     /// lblScreenReaderUnsubscriptionTemplate control.
     /// </summary>
@@ -244,7 +245,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderUnsubscriptionTemplate;
-    
+
     /// <summary>
     /// iconHelpUnsubscriptionTemplate control.
     /// </summary>
@@ -253,7 +254,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSIcon iconHelpUnsubscriptionTemplate;
-    
+
     /// <summary>
     /// pnlNewsletterBaseUrl control.
     /// </summary>
@@ -262,7 +263,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterBaseUrl;
-    
+
     /// <summary>
     /// lblNewsletterBaseUrl control.
     /// </summary>
@@ -271,7 +272,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterBaseUrl;
-    
+
     /// <summary>
     /// txtNewsletterBaseUrl control.
     /// </summary>
@@ -280,7 +281,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtNewsletterBaseUrl;
-    
+
     /// <summary>
     /// lblScreenReaderBaseUrl control.
     /// </summary>
@@ -289,7 +290,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderBaseUrl;
-    
+
     /// <summary>
     /// iconHelpBaseUrl control.
     /// </summary>
@@ -298,7 +299,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSIcon iconHelpBaseUrl;
-    
+
     /// <summary>
     /// pnlNewsletterUnsubscriptionUrl control.
     /// </summary>
@@ -307,7 +308,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterUnsubscriptionUrl;
-    
+
     /// <summary>
     /// lblNewsletterUnsubscribeUrl control.
     /// </summary>
@@ -316,7 +317,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterUnsubscribeUrl;
-    
+
     /// <summary>
     /// txtNewsletterUnsubscribeUrl control.
     /// </summary>
@@ -325,7 +326,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtNewsletterUnsubscribeUrl;
-    
+
     /// <summary>
     /// lblScreenReaderUnsubscribeUrl control.
     /// </summary>
@@ -334,7 +335,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderUnsubscribeUrl;
-    
+
     /// <summary>
     /// iconHelpUnsubscribeUrl control.
     /// </summary>
@@ -343,7 +344,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSIcon iconHelpUnsubscribeUrl;
-    
+
     /// <summary>
     /// pnlNewsletterDraftEmails control.
     /// </summary>
@@ -352,7 +353,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterDraftEmails;
-    
+
     /// <summary>
     /// lblDraftEmails control.
     /// </summary>
@@ -361,7 +362,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblDraftEmails;
-    
+
     /// <summary>
     /// txtDraftEmails control.
     /// </summary>
@@ -370,7 +371,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Inputs_EmailInput txtDraftEmails;
-    
+
     /// <summary>
     /// plcTemplates control.
     /// </summary>
@@ -379,7 +380,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcTemplates;
-    
+
     /// <summary>
     /// pnlTemplates control.
     /// </summary>
@@ -388,7 +389,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTemplates;
-    
+
     /// <summary>
     /// pnlUsTemplates control.
     /// </summary>
@@ -397,7 +398,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlUsTemplates;
-    
+
     /// <summary>
     /// lblUsTemplates control.
     /// </summary>
@@ -406,7 +407,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblUsTemplates;
-    
+
     /// <summary>
     /// pnlAvailability control.
     /// </summary>
@@ -415,7 +416,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlAvailability;
-    
+
     /// <summary>
     /// usTemplates control.
     /// </summary>
@@ -424,7 +425,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_UniSelector_UniSelector usTemplates;
-    
+
     /// <summary>
     /// plcDynamic control.
     /// </summary>
@@ -433,7 +434,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcDynamic;
-    
+
     /// <summary>
     /// pnlDynamic control.
     /// </summary>
@@ -442,7 +443,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlDynamic;
-    
+
     /// <summary>
     /// pnlNewsletterDynamicSubject control.
     /// </summary>
@@ -451,7 +452,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterDynamicSubject;
-    
+
     /// <summary>
     /// lblSubject control.
     /// </summary>
@@ -460,7 +461,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSubject;
-    
+
     /// <summary>
     /// pnlUpSubject control.
     /// </summary>
@@ -469,7 +470,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpSubject;
-    
+
     /// <summary>
     /// radPageTitle control.
     /// </summary>
@@ -478,7 +479,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radPageTitle;
-    
+
     /// <summary>
     /// radFollowing control.
     /// </summary>
@@ -487,7 +488,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radFollowing;
-    
+
     /// <summary>
     /// txtSubject control.
     /// </summary>
@@ -496,7 +497,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtSubject;
-    
+
     /// <summary>
     /// pnlNewsletterDynamicUrl control.
     /// </summary>
@@ -505,7 +506,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterDynamicUrl;
-    
+
     /// <summary>
     /// lblNewsletterDynamicURL control.
     /// </summary>
@@ -514,7 +515,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNewsletterDynamicURL;
-    
+
     /// <summary>
     /// txtNewsletterDynamicURL control.
     /// </summary>
@@ -523,7 +524,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_UrlChecker txtNewsletterDynamicURL;
-    
+
     /// <summary>
     /// rfvNewsletterDynamicURL control.
     /// </summary>
@@ -532,7 +533,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvNewsletterDynamicURL;
-    
+
     /// <summary>
     /// pnlNewsletterDynamicScheduler control.
     /// </summary>
@@ -541,7 +542,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterDynamicScheduler;
-    
+
     /// <summary>
     /// lblSchedule control.
     /// </summary>
@@ -550,7 +551,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSchedule;
-    
+
     /// <summary>
     /// chkSchedule control.
     /// </summary>
@@ -559,7 +560,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSchedule;
-    
+
     /// <summary>
     /// pnlUpScheduler control.
     /// </summary>
@@ -568,7 +569,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpScheduler;
-    
+
     /// <summary>
     /// schedulerInterval control.
     /// </summary>
@@ -577,7 +578,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_Selectors_ScheduleInterval schedulerInterval;
-    
+
     /// <summary>
     /// plcTracking control.
     /// </summary>
@@ -586,7 +587,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcTracking;
-    
+
     /// <summary>
     /// pnlOM control.
     /// </summary>
@@ -595,7 +596,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlOM;
-    
+
     /// <summary>
     /// pnlNewsletterTrackOpenedEmails control.
     /// </summary>
@@ -604,7 +605,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterTrackOpenedEmails;
-    
+
     /// <summary>
     /// lblTrackOpenedEmails control.
     /// </summary>
@@ -613,7 +614,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTrackOpenedEmails;
-    
+
     /// <summary>
     /// chkTrackOpenedEmails control.
     /// </summary>
@@ -622,7 +623,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTrackOpenedEmails;
-    
+
     /// <summary>
     /// pnlNewsletterTrackClickedLinks control.
     /// </summary>
@@ -631,7 +632,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterTrackClickedLinks;
-    
+
     /// <summary>
     /// lblTrackClickedLinks control.
     /// </summary>
@@ -640,7 +641,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTrackClickedLinks;
-    
+
     /// <summary>
     /// chkTrackClickedLinks control.
     /// </summary>
@@ -649,7 +650,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTrackClickedLinks;
-    
+
     /// <summary>
     /// plcOM control.
     /// </summary>
@@ -658,7 +659,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcOM;
-    
+
     /// <summary>
     /// pnlNewsletterLogActivities control.
     /// </summary>
@@ -667,7 +668,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterLogActivities;
-    
+
     /// <summary>
     /// lblLogActivity control.
     /// </summary>
@@ -676,7 +677,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblLogActivity;
-    
+
     /// <summary>
     /// chkLogActivity control.
     /// </summary>
@@ -685,7 +686,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkLogActivity;
-    
+
     /// <summary>
     /// hdrDoubleOptIn control.
     /// </summary>
@@ -694,7 +695,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading hdrDoubleOptIn;
-    
+
     /// <summary>
     /// pnlDoubleOptIn control.
     /// </summary>
@@ -703,7 +704,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlDoubleOptIn;
-    
+
     /// <summary>
     /// pnlNewsletterEnableOptIn control.
     /// </summary>
@@ -712,7 +713,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterEnableOptIn;
-    
+
     /// <summary>
     /// lblEnableOptIn control.
     /// </summary>
@@ -721,7 +722,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblEnableOptIn;
-    
+
     /// <summary>
     /// chkEnableOptIn control.
     /// </summary>
@@ -730,7 +731,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkEnableOptIn;
-    
+
     /// <summary>
     /// lblScreenReaderEnableOptIn control.
     /// </summary>
@@ -739,7 +740,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderEnableOptIn;
-    
+
     /// <summary>
     /// iconHelpEnableOptIn control.
     /// </summary>
@@ -748,7 +749,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSIcon iconHelpEnableOptIn;
-    
+
     /// <summary>
     /// pnlUpOptIn control.
     /// </summary>
@@ -757,7 +758,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpOptIn;
-    
+
     /// <summary>
     /// plcOptIn control.
     /// </summary>
@@ -766,7 +767,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcOptIn;
-    
+
     /// <summary>
     /// pnlNewsletterOptInTemplate control.
     /// </summary>
@@ -775,7 +776,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterOptInTemplate;
-    
+
     /// <summary>
     /// lblOptInTemplate control.
     /// </summary>
@@ -784,7 +785,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblOptInTemplate;
-    
+
     /// <summary>
     /// optInSelector control.
     /// </summary>
@@ -793,7 +794,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Newsletters_FormControls_NewsletterTemplateSelector optInSelector;
-    
+
     /// <summary>
     /// pnlNewsletterOptInApprovalUrl control.
     /// </summary>
@@ -802,7 +803,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterOptInApprovalUrl;
-    
+
     /// <summary>
     /// lblOptInURL control.
     /// </summary>
@@ -811,7 +812,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblOptInURL;
-    
+
     /// <summary>
     /// txtOptInURL control.
     /// </summary>
@@ -820,7 +821,25 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtOptInURL;
-    
+
+    /// <summary>
+    /// lblScreenReaderOptInURL control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblScreenReaderOptInURL;
+
+    /// <summary>
+    /// iconHelpOptInURL control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelpOptInURL;
+
     /// <summary>
     /// pnlNewsletterOptInSendConfirmation control.
     /// </summary>
@@ -829,7 +848,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlNewsletterOptInSendConfirmation;
-    
+
     /// <summary>
     /// lblSendOptInConfirmation control.
     /// </summary>
@@ -838,7 +857,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Configu
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSendOptInConfirmation;
-    
+
     /// <summary>
     /// chkSendOptInConfirmation control.
     /// </summary>

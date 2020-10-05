@@ -27,7 +27,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductOptions_SelectOptio
     {
         get
         {
-            return drpTypes.SelectedValue.ToEnum<OptionCategoryTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(drpTypes.SelectedValue);
         }
         set
         {

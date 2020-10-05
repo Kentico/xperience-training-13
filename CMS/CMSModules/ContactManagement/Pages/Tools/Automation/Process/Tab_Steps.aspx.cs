@@ -23,9 +23,10 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
     private const string DESIGNER_VIEW_URL = "AutomationDesignerPage.aspx";
     private const string DESIGNER_VIEW_NAME = "DesignerView";
-    private const string ANALYTICS_VIEW_URL = "Tab_Contacts.aspx";
-    private const string ANALYTICS_VIEW_NAME = "AnalyticsView";
+    private const string CONTACTS_VIEW_URL = "Tab_Contacts.aspx";
+    private const string CONTACTS_VIEW_NAME = "ContactsView";
 
+    private const string SAVE_AS_TEMPLATE_CLIENT_SCRIPT = "SaveAsTemplate(); return false;";
     private const string CHANGE_VIEW_CLIENT_SCRIPT = "ChangeView(this); return false;";
     private const string UNDERLYING_VIEW_ATTR_KEY_NAME = "UnderlyingView";
 
@@ -59,7 +60,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     private Dictionary<string, string> ViewSettings => mViewSettings ?? (mViewSettings = new Dictionary<string, string>
     {
         { DESIGNER_VIEW_NAME, URLHelper.AppendQuery(DESIGNER_VIEW_URL, RequestContext.CurrentQueryString) },
-        { ANALYTICS_VIEW_NAME, URLHelper.AppendQuery(ANALYTICS_VIEW_URL, RequestContext.CurrentQueryString) }
+        { CONTACTS_VIEW_NAME, URLHelper.AppendQuery(CONTACTS_VIEW_URL, RequestContext.CurrentQueryString) }
     });
 
 
@@ -124,6 +125,12 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// </summary>
     private bool CanEditProcessState => Workflow != null && LicenseIsSufficient && AuthorizedToManageAutomation;
 
+
+    /// <summary>
+    /// Checks permissions and license sufficiency for template creation.
+    /// </summary>
+    private bool CanSaveAsTemplate => Workflow != null && LicenseIsSufficient && AuthorizedToManageTemplates;
+
     #endregion
 
 
@@ -136,6 +143,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         CheckLicense();
         RegisterScripts();
         InitializeHeader();
+        InitializeMoreOptionsButton();
 
         ScriptHelper.HideVerticalTabs(this);
     }
@@ -143,8 +151,14 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
     private void RegisterScripts()
     {
-        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "ChangeView", ScriptHelper.GetScript(
-            $@"
+        RegisterNavigationScripts();
+        RegisterSaveAsTemplateScripts();
+    }
+
+
+    private void RegisterNavigationScripts()
+    {
+        var changeViewScript = $@"
 function ChangeView(elem) {{
     var clickedButtonJQ = $cmsj(elem);
 
@@ -182,9 +196,26 @@ function SaveNavigationState(viewName) {{
 
 function LoadView(viewUrl) {{
     $cmsj('#{mainView.ClientID}')[0].src = viewUrl;
-}}
-"
-        ));
+}}";
+
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_ChangeView", ScriptHelper.GetScript(changeViewScript));
+    }
+
+
+    private void RegisterSaveAsTemplateScripts()
+    {
+        if (!CanSaveAsTemplate)
+        {
+            return;
+        }
+
+        var saveAsTemplateScript = $@"
+function SaveAsTemplate() {{
+    modalDialog('{UrlResolver.ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Template_Edit.aspx")}?processId={WorkflowID}', 'MA_Edit_Template', 800, 650);
+}}";
+
+        ScriptHelper.RegisterDialogScript(this);
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_SaveAsTemplate", ScriptHelper.GetScript(saveAsTemplateScript));
     }
 
 
@@ -241,19 +272,19 @@ function LoadView(viewUrl) {{
 
     private void InitializeNavigationButtons()
     {
-        var isAnalyticsButtonEnabled = ProcessHasContacts() || Workflow.WorkflowEnabled;
-        var cookieNeedsUpdate = RequestHelper.IsPostBack() && CurrentViewName.Equals(ANALYTICS_VIEW_NAME, StringComparison.OrdinalIgnoreCase) && !isAnalyticsButtonEnabled && btnAnalytics.Enabled;
+        var isContactsButtonEnabled = ProcessHasContacts() || Workflow.WorkflowEnabled;
+        var cookieNeedsUpdate = RequestHelper.IsPostBack() && CurrentViewName.Equals(CONTACTS_VIEW_NAME, StringComparison.OrdinalIgnoreCase) && !isContactsButtonEnabled && btnContacts.Enabled;
 
-        btnAnalytics.Enabled = isAnalyticsButtonEnabled;
-        btnAnalytics.ToolTip = isAnalyticsButtonEnabled ? String.Empty : GetString("ma.analytics.tooltip.disabled");
+        btnContacts.Enabled = isContactsButtonEnabled;
+        btnContacts.ToolTip = isContactsButtonEnabled ? String.Empty : GetString("ma.contact.contacts.tooltip.disabled");
 
         btnDesigner.Text = GetString("ma.designer");
-        btnAnalytics.Text = GetString("ma.analytics");
+        btnContacts.Text = GetString("ma.contact.contacts");
 
         btnDesigner.Attributes.Add(UNDERLYING_VIEW_ATTR_KEY_NAME, DESIGNER_VIEW_NAME);
-        btnAnalytics.Attributes.Add(UNDERLYING_VIEW_ATTR_KEY_NAME, ANALYTICS_VIEW_NAME);
+        btnContacts.Attributes.Add(UNDERLYING_VIEW_ATTR_KEY_NAME, CONTACTS_VIEW_NAME);
 
-        btnDesigner.OnClientClick = btnAnalytics.OnClientClick = CHANGE_VIEW_CLIENT_SCRIPT;
+        btnDesigner.OnClientClick = btnContacts.OnClientClick = CHANGE_VIEW_CLIENT_SCRIPT;
 
         if (CurrentViewName.Equals(DESIGNER_VIEW_NAME, StringComparison.OrdinalIgnoreCase))
         {
@@ -261,7 +292,7 @@ function LoadView(viewUrl) {{
         }
         else
         {
-            btnAnalytics.AddCssClass("active");
+            btnContacts.AddCssClass("active");
         }
 
         if (cookieNeedsUpdate)
@@ -297,6 +328,24 @@ function LoadView(viewUrl) {{
         }
 
         btnToggleState.Text = Workflow.WorkflowEnabled ? GetString("general.disable") : GetString("general.enable");
+    }
+
+
+    private void InitializeMoreOptionsButton()
+    {
+        if (!CanSaveAsTemplate)
+        {
+            return;
+        }
+
+        btnMoreOptions.Visible = true;
+        btnMoreOptions.ToolTip = GetString("EditMenu.MoreActions");
+        btnMoreOptions.Actions.Add(new CMSButtonAction
+        {
+            Text = GetString("ma.template.create"),
+            ToolTip = GetString("ma.template.create.tooltip"),
+            OnClientClick = SAVE_AS_TEMPLATE_CLIENT_SCRIPT
+        });
     }
 
 

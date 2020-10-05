@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.UIElement</CodeName>
+    <GUID>756292a7-ea43-4b8c-a343-6e88dbc3d38e</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>bbb26638-3b08-4441-8c0d-3c5d7e54be03</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>getPermissionMatrix</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[SELECT ##TOPN## Matrix.##COLUMNS##, CASE WHEN CMS_RoleUIElement.RoleID IS NULL THEN 0 ELSE 1 END AS Allowed, @ElementID AS ElementID, @ElementDisplayName AS ElementDisplayName FROM (SELECT CMS_Role.RoleID, CMS_Role.Rolename, CMS_Role.RoleDisplayName FROM CMS_Role WHERE RoleID IN (SELECT RoleID FROM CMS_Role WHERE ##WHERE## AND ((@SiteID = 0 AND SiteID IS NULL) OR SiteID = @SiteID))) Matrix LEFT JOIN CMS_RoleUIElement ON ( CMS_RoleUIElement.RoleID = Matrix.RoleID AND CMS_RoleUIElement.ElementID = @ElementID) ORDER BY ##ORDERBY##]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

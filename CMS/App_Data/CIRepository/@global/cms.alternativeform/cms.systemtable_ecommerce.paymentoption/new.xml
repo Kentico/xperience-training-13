@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.paymentoption</CodeName>
+    <GUID>f4d1e038-f33e-4ff6-99e8-a075a94a964b</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="PaymentOptionID" guid="0c8db08f-1219-47e6-9ec0-2c7347e6dfb4" />
+      <field column="PaymentOptionDisplayName" guid="c81b117e-07e6-4665-8852-e07ee74e30ee" />
+      <field column="PaymentOptionName" guid="b941eea2-edcd-44af-8370-63df85298d7a" />
+      <field column="PaymentOptionDescription" guid="6acbfb39-4df5-4e81-8104-b5573f04720c" />
+      <field column="PaymentOptionThumbnailGUID" guid="07c7ff5e-a193-491a-b57b-01489b601ddb" />
+      <field column="PaymentOptionClassName" guid="abff12f4-f681-4245-88c3-61b27d1a9794" order="6" />
+      <field column="PaymentOptionSiteID" guid="012bd445-e8a8-4c27-8d04-9e3867e7c3a7" hasdependingfields="true" visible="true" order="7">
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+{%SiteContext.CurrentSiteID|(identity)GlobalAdministrator|(hash)fe8ffed6e34bdb447a3faab6710c14236c01847f76711a8bb5f61e3c8dc99ca8%};{$com.onthissiteonly$}
+;{$com.globally$}
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+          <AutoCompleteEnableCaching />
+          <AutoCompleteFirstRowSelected />
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem />
+          <FilterMode />
+          <Trim />
+        </settings>
+        <properties>
+          <defaultvalue ismacro="true">
+<![CDATA[
+{% if ((QueryString["siteId"] != -4) && (!Settings.CMSStoreAllowGlobalDepartments
+    || !CurrentUser.IsAuthorizedPerResource("CMS.Ecommerce","ConfigurationGlobalModify")
+    || CurrentUser.IsAuthorizedPerResource("CMS.Ecommerce","ConfigurationModify"))) {SiteContext.CurrentSiteID} |(identity)GlobalAdministrator|(hash)3db741fef9cb19ff71dd5b5cb54fbe844e04c9023b75330cf54cd26990d44d5b%}
+]]>
+          </defaultvalue>
+          <fieldcaption>{$com.available$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%QueryString["siteId"] != -4 && Settings.CMSStoreAllowGlobalPaymentMethods && CurrentUser.IsAuthorizedPerResource("CMS.Ecommerce","ConfigurationGlobalModify") && CurrentUser.IsAuthorizedPerResource("CMS.Ecommerce","ConfigurationModify")|(identity)GlobalAdministrator|(hash)bb792b252c9d529bb0af82f76c39b9e441dcfcccf02a457826f8f8bedb3112cb%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="PaymentOptionAllowIfNoShipping" guid="a3b1072d-0f77-4404-b04e-a26456b1e602" order="8" />
+      <field column="PaymentOptionEnabled" guid="6dcaf75a-f970-4cc9-8119-ba5d68b6a41f" order="9" />
+      <category name="paymentoption_edit.payment_gateway" order="10" />
+      <field column="PaymentOptionPaymentGateUrl" guid="e9508d42-44c5-4241-a83f-e74ec498eeb9" order="11" />
+      <field column="PaymentOptionAssemblyName" guid="6c32782d-b052-4ff6-a7ba-0f8936788f8b" order="12" />
+      <field column="PaymentOptionSucceededOrderStatusID" dependsonanotherfield="true" guid="f183ff2d-e653-4d8f-b167-4ea7468efb7c" order="13">
+        <settings>
+          <EnsureSelectedItem>False</EnsureSelectedItem>
+        </settings>
+      </field>
+      <field column="PaymentOptionFailedOrderStatusID" dependsonanotherfield="true" guid="2b6c2060-7184-410e-9c14-60636824d725">
+        <settings>
+          <EnsureSelectedItem>False</EnsureSelectedItem>
+        </settings>
+      </field>
+      <field column="PaymentOptionAuthorizedOrderStatusID" guid="72629b1b-33d6-476c-941e-9d5715cd0b5f" order="15">
+        <settings>
+          <EnsureSelectedItem>False</EnsureSelectedItem>
+        </settings>
+      </field>
+      <field column="PaymentOptionGUID" guid="2683e510-dc55-4bf1-8367-845ec45dbb05" />
+      <field column="PaymentOptionLastModified" guid="4e2fdbb1-b20c-4165-84b3-d1b4e55c90c0" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>New</FormDisplayName>
+  <FormGUID>74d04283-48e7-4131-8c9b-8e88af64ebad</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>New</FormName>
+</cms.alternativeform>

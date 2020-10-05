@@ -46,22 +46,6 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
 
 
     /// <summary>
-    /// ID of the group libraries should belongs to.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return GetValue("GroupID", 0);
-        }
-        set
-        {
-            SetValue("GroupID", value);
-        }
-    }
-
-
-    /// <summary>
     /// Gets or sets WHERE condition used to filter libraries.
     /// </summary>
     public string Where
@@ -378,9 +362,7 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
         uniSelector.OnSelectionChanged += uniSelector_OnSelectionChanged;
         uniSelector.DropDownSingleSelect.AutoPostBack = UseAutoPostBack;
 
-        bool noLibrary = MediaLibraryInfo.Provider.Get()
-            .Where(GetGroupsWhereCondition())
-            .Count == 0;
+        bool noLibrary = MediaLibraryInfo.Provider.Get().Count == 0;
 
         // Empty value '(none)' is allowed when it is allowed from outside (property 'AllowEmpty') or no libraries was found and flag 'NoneWhenEmpty' is set
         uniSelector.AllowEmpty |= (noLibrary && NoneWhenEmpty);
@@ -411,27 +393,11 @@ public partial class CMSModules_MediaLibrary_FormControls_MediaLibrarySelector :
 
 
     /// <summary>
-    /// Builds where condition to filter libraries for group
-    /// </summary>
-    private string GetGroupsWhereCondition()
-    {
-        string where = "LibraryGroupID " + ((GroupID > 0) ? "=" + GroupID : "IS NULL");
-
-        if (Where != "")
-        {
-            where = SqlHelper.AddWhereCondition(where, Where);
-        }
-
-        return where;
-    }
-
-
-    /// <summary>
     /// Builds complete where condition to filter libraries for site and group
     /// </summary>
     private string GetCompleteWhereCondition()
     {
-        string where = GetGroupsWhereCondition();
+        string where = Where;
 
         if (SiteID > 0)
         {

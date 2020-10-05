@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>4c8b41f0-c6a5-4c3e-892b-fca4745c149e</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @totalsum float;
+SET @totalsum = (SELECT ROUND(SUM(OrderGrandTotalInMainCurrency),1) 
+                 FROM 
+                    COM_Order 
+                    LEFT JOIN COM_OrderAddress
+                    ON (OrderID = AddressOrderID AND AddressType = @Address)
+                    LEFT JOIN CMS_Country
+                    ON AddressCountryID = CountryID
+                    LEFT JOIN CMS_State
+                    ON AddressStateID = StateID
+                 WHERE 
+                    (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1) 
+                    AND OrderSiteID = @CMSContextCurrentSiteID 
+                    AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+                    AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL));
+
+SELECT 
+   ISNULL(CountryDisplayName,'-') AS '{$objecttype.cms_country$}',
+   ISNULL(StateDisplayName,'-') AS '{$objecttype.cms_state$}',
+   ISNULL(AddressZip,'-') AS '{$general.zip$}',
+   CAST(ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}',
+   CAST(CAST(ROUND(SUM(OrderGrandTotalInMainCurrency),1)/@totalsum*100 AS DECIMAL(9,1)) AS VARCHAR(20)) + ' %' AS '{$reports_pageviews.percent_header$}'
+FROM 
+   COM_Order
+   LEFT JOIN COM_OrderAddress
+   ON (OrderID = AddressOrderID AND AddressType = @Address)
+   LEFT JOIN CMS_Country
+   ON AddressCountryID = CountryID
+   LEFT JOIN CMS_State
+   ON AddressStateID = StateID
+WHERE 
+   (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+   AND OrderSiteID = @CMSContextCurrentSiteID 
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+   AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+GROUP BY 
+   CountryDisplayName, 
+   StateDisplayName, 
+   AddressZip
+ORDER BY 
+   SUM(OrderGrandTotalInMainCurrency) DESC,
+   AddressZip,
+   StateDisplayName,
+   CountryDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesByZIPCode</CodeName>
+    <GUID>545e0638-3aab-45d2-8958-a4f63b67f450</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

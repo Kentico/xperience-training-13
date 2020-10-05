@@ -64,7 +64,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_SiteSelector :
                 return EnumHelper.GetDefaultValue<SiteSelectorTypeEnum>();
             }
 
-            return value.ToEnum<SiteSelectorTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<SiteSelectorTypeEnum>(value);
         }
         set
         {

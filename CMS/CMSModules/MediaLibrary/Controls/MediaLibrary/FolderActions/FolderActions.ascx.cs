@@ -280,7 +280,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
         if (!string.IsNullOrEmpty(DeleteScript))
         {
             // Register delete script
-            btnDelete.OnClientClick = DeleteScript.Replace("##FOLDERPATH##", Path.EnsureSlashes(FolderPath).Replace("'", "\\'")) + "return false;";
+            btnDelete.OnClientClick = DeleteScript.Replace("##FOLDERPATH##", Path.EnsureForwardSlashes(FolderPath).Replace("'", "\\'")) + "return false;";
         }
 
         // If folder path is set
@@ -350,21 +350,7 @@ function DisableNewFolderBtn() {
 
         const string MEDIA_FORMCONTROLS_FOLDER = MEDIA_LIBRARY_FOLDER + "FormControls/";
 
-        if (IsLiveSite)
-        {
-            if (AuthenticationHelper.IsAuthenticated())
-            {
-                NewFolderDialogUrl = "~/CMS/Dialogs/CMSModules/MediaLibrary/FormControls/LiveSelectors/InsertImageOrMedia/NewMediaFolder.aspx?identifier=" + Identifier;
-            }
-            else
-            {
-                NewFolderDialogUrl = MEDIA_FORMCONTROLS_FOLDER + "LiveSelectors/InsertImageOrMedia/NewMediaFolder.aspx?identifier=" + Identifier;
-            }
-        }
-        else
-        {
-            NewFolderDialogUrl = MEDIA_FORMCONTROLS_FOLDER + "Selectors/InsertImageOrMedia/NewMediaFolder.aspx?identifier=" + Identifier;
-        }
+        NewFolderDialogUrl = MEDIA_FORMCONTROLS_FOLDER + "Selectors/InsertImageOrMedia/NewMediaFolder.aspx?identifier=" + Identifier;
 
         // Add security hash
         NewFolderDialogUrl = URLHelper.AddParameterToUrl(NewFolderDialogUrl, "hash", QueryHelper.GetHash(NewFolderDialogUrl, false));
@@ -389,8 +375,8 @@ function DisableNewFolderBtn() {
 
     protected override void OnPreRender(EventArgs e)
     {
-        string url = 
-            (IsLiveSite) ? 
+        string url =
+            (IsLiveSite) ?
             MEDIA_LIBRARY_FOLDER + "CMSPages/SelectFolder.aspx" :
             MEDIA_LIBRARY_FOLDER + "Tools/FolderActions/SelectFolder.aspx";
 

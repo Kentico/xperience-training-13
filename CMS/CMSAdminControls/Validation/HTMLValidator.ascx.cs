@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
 using System.Text;
 using System.Web;
 using System.Web.UI.WebControls;
@@ -272,7 +271,7 @@ public partial class CMSAdminControls_Validation_HTMLValidator : DocumentValidat
             var dataRow = UniGridFunctions.GetDataRowView(e.Row);
             string messageType = ValidationHelper.GetString(dataRow["type"], String.Empty);
 
-            if (messageType.ToEnum<MessageTypeEnum>() == MessageTypeEnum.Error)
+            if (EnumStringRepresentationExtensions.ToEnum<MessageTypeEnum>(messageType) == MessageTypeEnum.Error)
             {
                 e.Row.CssClass = "error";
             }
@@ -342,7 +341,7 @@ public partial class CMSAdminControls_Validation_HTMLValidator : DocumentValidat
                 var drv = UniGridFunctions.GetDataRowView(sender as DataControlFieldCell);
                 int highlightStartIndex = Convert.ToInt32(drv["highlightStart"]);
                 int highlightLength = Convert.ToInt32(drv["highlightLength"]);
-                var messageType = Convert.ToString(drv["type"]).ToEnum<MessageTypeEnum>();
+                var messageType = EnumStringRepresentationExtensions.ToEnum<MessageTypeEnum>(Convert.ToString(drv["type"]));
 
                 // Get parts to be able to highlight code in the code extract
                 IEnumerable<string> parts = new List<string>(new[]
@@ -368,7 +367,7 @@ public partial class CMSAdminControls_Validation_HTMLValidator : DocumentValidat
                 return HttpUtility.HtmlEncode(parameter);
 
             case "type":
-                var typeEnum = ((string)parameter).ToEnum<MessageTypeEnum>();
+                var typeEnum = EnumStringRepresentationExtensions.ToEnum<MessageTypeEnum>((string)parameter);
                 return typeEnum.ToLocalizedString("validation.html.messagetype");
         }
 
@@ -400,14 +399,7 @@ public partial class CMSAdminControls_Validation_HTMLValidator : DocumentValidat
             byte[] data = Encoding.UTF8.GetBytes(documentHtml);
             req.ContentLength = data.Length;
 
-            if (req.RequestUri.Scheme == Uri.UriSchemeHttps)
-            {
-                req.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) =>
-                {
-                    // Accept certificate if the certificate is valid and signed
-                    return (sslPolicyErrors == SslPolicyErrors.None);
-                };
-            }
+            EnsureCertificateValidation(req);            
 
             using (var requestStream = req.GetRequestStream())
             {
@@ -594,8 +586,10 @@ public partial class CMSAdminControls_Validation_HTMLValidator : DocumentValidat
             {
                 try
                 {
-                    StreamReader reader = StreamReader.New(client.OpenRead(url));
-                    html = reader.ReadToEnd();
+                    using (var reader = StreamReader.New(client.OpenRead(url)))
+                    { 
+                        html = reader.ReadToEnd();
+                    }
                 }
                 catch
                 {

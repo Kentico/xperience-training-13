@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Contacts with score higher than N</TableDisplayName>
+  <TableGUID>741b6c81-1266-43ba-a180-b80b32d069e1</TableGUID>
+  <TableName>ContactsWithScoreHigherThanN</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT
+	SUM(OM_ScoreContactRule.Value) as [{$om.score$}],
+	ContactFirstName as [{$om.contact.firstname$}], 
+	ContactLastName as [{$om.contact.lastname$}], 
+        ContactEmail as [{$general.email$}],
+        ContactStatusName as [{$om.contactstatus$}]
+
+FROM OM_Contact
+LEFT JOIN OM_ContactStatus ON OM_Contact.ContactStatusID = OM_ContactStatus.ContactStatusID
+INNER JOIN OM_ScoreContactRule ON OM_Contact.ContactID = OM_ScoreContactRule.ContactID
+INNER JOIN OM_Score ON OM_ScoreContactRule.ScoreID = OM_Score.ScoreID
+INNER JOIN OM_Rule ON OM_ScoreContactRule.RuleID = OM_Rule.RuleID
+
+WHERE
+  OM_Score.ScoreEnabled = 1
+  AND
+  OM_Score.ScorePersonaID IS NULL
+  AND
+  (@ScoreID = -1 OR OM_Score.ScoreID = @ScoreID)
+
+GROUP BY OM_Contact.ContactID, ContactFirstName, ContactLastName, ContactEmail, ContactStatusName
+HAVING SUM(OM_ScoreContactRule.Value) >= @MinimalScore
+ORDER BY [{$om.score$}] DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>ContactsWithScoreHigherThanN</CodeName>
+    <GUID>e3a2ffb6-1bf2-496e-96f3-abc076dc736c</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

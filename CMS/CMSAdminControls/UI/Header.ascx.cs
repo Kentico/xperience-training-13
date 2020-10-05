@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Web.UI;
 
@@ -6,9 +7,13 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
 using CMS.LicenseProvider;
+using CMS.Localization;
 using CMS.Membership;
+using CMS.Membership.Internal;
+using CMS.Modules;
 using CMS.PortalEngine.Web.UI;
 using CMS.SiteProvider;
 using CMS.Synchronization;
@@ -17,20 +22,42 @@ using CMS.UIControls;
 
 public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEventHandler
 {
-    #region "Constants"
+    #region "Constants and variables"
 
     protected const string SESSION_KEY_TECH_PREVIEW = "WRNShowTechPreview";
     protected const string SESSION_KEY_TRIAL = "WRNShowTrial";
-    private const string KENTICO_LICENSE_ULTIMATE_URL = "https://www.kentico.com/purchase/configure-your-license?edition=ultimate#editions";
+    protected const string SESSION_KEY_SUBSCRIPTION_LICENCES = "WRNShowSubscriptionLicences";
+    private const string VIRTUALCONTEXT_AUTHENTICATION_ROUTE = "/Kentico.VirtualContext/Authenticate?signInToken={0}";
+    private const string SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY = "Kentico.SubscriptionLicense.Closed";
+    private const string GET_MVC_AUTHENTICATION_CALLBACK = "GET_MVC_AUTHENTICATION_CALLBACK";
+
+    private string callbackResult = null;
 
     #endregion
 
 
     #region "Page events"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         ScriptHelper.RegisterModule(this, "CMS/Mole");
+
+        // In case invalid site configuration skip VirtualContextAuhtenticator initialization
+        if (!string.IsNullOrWhiteSpace(SiteContext.CurrentSite?.SitePresentationURL)
+            && !string.IsNullOrWhiteSpace(SiteContext.CurrentSite?.DomainName))
+        {
+            ScriptHelper.RegisterModule(this, "CMS/VirtualContextAuthenticator", new
+            {
+                authenticationFrameUrl = GetMvcAuthenticationFrameUrl(),
+                refreshInterval = Convert.ToInt32(new VirtualContextAuthenticationConfiguration().Validity.TotalSeconds)
+            });
+
+            var loadAuthenticationFrameCallback = Page.ClientScript.GetCallbackEventReference(this, "arg", "window.CMS.VirtualContextAuthenticator.loadAuthenticationFrame", "");
+            var callbackScript = $"function raiseGetAuthenticationFrameUrlCallback() {{  var arg = '{GET_MVC_AUTHENTICATION_CALLBACK}'; {loadAuthenticationFrameCallback}; }}";
+            ScriptHelper.RegisterClientScriptBlock(Page, typeof(string), "loadAuthenticationFrameCallback", callbackScript, true);
+        }
 
         ScriptHelper.RegisterModule(this, "CMS/BreadcrumbsPin", new
         {
@@ -45,6 +72,7 @@ public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEvent
 
         EnsureHideMessageCallback();
 
+        CheckSubscriptionLicences();
         CheckTrial();
         CheckEcommerceLicenseLimitations();
 
@@ -123,7 +151,6 @@ function CheckChanges() {
             splitViewModeText = GetString("SplitMode.Compare")
         });
 
-        EnsureSupportChat();
         EnsureStagingTaskGroupMenu();
 
         lnkDashboard.Attributes.Add("href", "#");
@@ -133,8 +160,10 @@ function CheckChanges() {
     /// <summary>
     /// Handles the PreRender event of the Page control.
     /// </summary>
-    protected void Page_PreRender(object sender, EventArgs e)
+    protected override void OnPreRender(EventArgs e)
     {
+        base.OnPreRender(e);
+
         pnlPwdExp.Visible = pwdExpiration.Visible;
     }
 
@@ -142,6 +171,117 @@ function CheckChanges() {
 
 
     #region "Methods"
+
+    private string GetMvcAuthenticationFrameUrl()
+    {
+        return URLHelper.CombinePath(
+                    string.Format(VIRTUALCONTEXT_AUTHENTICATION_ROUTE, new SecurityTokenManager<VirtualContextSignInConfiguration>().GetToken(CurrentUser)),
+                    '/',
+                    new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteName, LocalizationContext.PreferredCultureCode),
+                    null);
+    }
+
+
+    private void CheckSubscriptionLicences()
+    {
+        // Hide message if requested by user
+        if (!CheckWarningMessage(SESSION_KEY_SUBSCRIPTION_LICENCES))
+        {
+            pnlSubscriptionLicencesWarning.Visible = false;
+            CacheHelper.Add(SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY, true, CacheHelper.GetCacheDependency($"{LicenseKeyInfo.OBJECT_TYPE}|all"), 
+                DateTime.Now.AddDays(1), CacheConstants.NoSlidingExpiration);
+            SessionHelper.Remove(SESSION_KEY_SUBSCRIPTION_LICENCES);
+            return;
+        }
+
+        if (!AreSubscriptionLicensesValid(out int numberOfInvalidLicenses, out bool onlyWarning, out int daysToExpiration))
+        {
+            if (onlyWarning)
+            {
+                // Warning was already closed by someone and will be displayed after 24h again
+                if (!CacheHelper.TryGetItem(SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY, out bool _))
+                {
+                    pnlSubscriptionLicencesWarning.Visible = true;
+                    ltlSubscriptionLicenceWarning.Text = numberOfInvalidLicenses > 1 ?
+                        ResHelper.GetStringFormat("subscriptionlicenses.warning.multiple", UrlResolver.ResolveUrl(ApplicationUrlHelper.GetApplicationUrl("Licenses", "Licenses")), numberOfInvalidLicenses) :
+                        ResHelper.GetStringFormat("subscriptionlicenses.warning.single", daysToExpiration);
+                }
+            }
+            else
+            {
+                pnlSubscriptionLicencesError.Visible = true;
+                ltlSubscriptionLicenceError.Text = numberOfInvalidLicenses > 1 ?
+                    GetMultipleSubscriptionLicensesErrorMessage() :
+                    GetSingleSubscriptionLicenseErrorMessage();
+            }
+        }
+
+        string GetMultipleSubscriptionLicensesErrorMessage()
+        {
+            return daysToExpiration > 0
+                ? ResHelper.GetStringFormat("subscriptionlicenses.error.multiple", UrlResolver.ResolveUrl(ApplicationUrlHelper.GetApplicationUrl("Licenses", "Licenses")), numberOfInvalidLicenses, daysToExpiration)
+                : ResHelper.GetString("subscriptionlicenses.error.graceperiodexpired");
+        }
+
+        string GetSingleSubscriptionLicenseErrorMessage()
+        {
+            return daysToExpiration > 0
+                ? ResHelper.GetStringFormat("subscriptionlicenses.error.single", daysToExpiration)
+                : ResHelper.GetString("subscriptionlicenses.error.graceperiodexpired");
+        }
+    }
+
+
+    private bool AreSubscriptionLicensesValid(out int numberOfInvalidLicenses, out bool onlyWarning, out int daysToExpiration)
+    {
+        numberOfInvalidLicenses = 0;
+        onlyWarning = false;
+        daysToExpiration = 0;
+
+        var subscriptionLicenses = CacheHelper.Cache(cs =>
+        {
+            cs.CacheDependency = CacheHelper.GetCacheDependency($"{LicenseKeyInfo.OBJECT_TYPE}|all");
+
+            return LicenseKeyInfoProvider.GetLicenseKeys()
+                                         .TypedResult
+                                         .Where(l => l.LicenseGuid != null);
+
+        }, new CacheSettings(60, "Header", "AreSubscriptionLicensesValid"));
+
+        var expiredLicenses = subscriptionLicenses.Where(license => DateIsLessThan30Days(license.ExpirationDateReal));
+
+        if (expiredLicenses.Any())
+        {
+            numberOfInvalidLicenses = expiredLicenses.Count();
+            daysToExpiration = expiredLicenses.Min(license => (license.ExpirationDateReal.Date - DateTime.Now.Date).Days);
+            onlyWarning = false;
+            
+            return false;
+        }
+
+
+        // Subscription licenses have grace period of 30 days included in their real expiration date during which error message above is calculated.
+        // From the customers point of view the warning is displayed 30 days before the license expires.
+        // The license has not yet entered the grace period thats why we subtract the 30 day grace period to calculate 
+        // expiration and remaining days for the warning message.
+        var aboutToExpireLicenses = subscriptionLicenses.Where(license => DateIsLessThan30Days(license.ExpirationDateReal.AddDays(-30)));
+
+        if (aboutToExpireLicenses.Any())
+        {
+            numberOfInvalidLicenses = aboutToExpireLicenses.Count();
+            daysToExpiration = aboutToExpireLicenses.Min(license => (license.ExpirationDateReal.Date - DateTime.Now.Date).Days);
+            onlyWarning = true;
+            return false;
+        }
+
+        return true;
+
+        bool DateIsLessThan30Days(DateTime licenseExpirationDate)
+        {
+            return (licenseExpirationDate.Date - DateTime.Now.Date).Days <= 30;
+        }
+    }
+
 
     private void CheckTrial()
     {
@@ -216,7 +356,7 @@ function CheckChanges() {
         {
             bool licenseOK = LicenseHelper.CheckLicenseLimitations(FeatureEnum.Ecommerce, out int skuCount, out int maxSKUCount);
 
-            ltlLicenseLimitations.Text = String.Format(GetString("header.ecommercefeatureexceeded"), skuCount, maxSKUCount, KENTICO_LICENSE_ULTIMATE_URL);
+            ltlLicenseLimitations.Text = String.Format(GetString("header.ecommercefeatureexceeded"), skuCount, maxSKUCount);
             pnlLicenseLimitations.Visible = !licenseOK;
         }
     }
@@ -237,26 +377,9 @@ function CheckChanges() {
     /// </summary>
     private void EnsureHideMessageCallback()
     {
-        String cbReference = Page.ClientScript.GetCallbackEventReference(this, "arg", "ReceiveMessage", "");
-        String callbackScript = "function HideMessage(arg, context) {" + cbReference + "; }";
+        var cbReference = Page.ClientScript.GetCallbackEventReference(this, "arg", "ReceiveMessage", "");
+        var callbackScript = $"function HideMessage(arg, context) {{{cbReference}; }}";
         ScriptHelper.RegisterClientScriptBlock(Page, GetType(), "SetSessionFlag", callbackScript, true);
-    }
-
-
-    /// <summary>
-    /// Ensures that support chat control is inserted correctly into the header if the chat is module is available.
-    /// </summary>
-    private void EnsureSupportChat()
-    {
-        if ((ModuleEntryManager.IsModuleLoaded(ModuleName.CHAT)) && (SiteContext.CurrentSiteID > 0))
-        {
-            CMSUserControl supportChatControl = Page.LoadUserControl("~/CMSModules/Chat/Controls/SupportChatHeader.ascx") as CMSUserControl;
-            if (supportChatControl != null)
-            {
-                plcSupportChat.Controls.Add(supportChatControl);
-                plcSupportChat.Visible = true;
-            }
-        }
     }
 
 
@@ -326,7 +449,7 @@ function CheckChanges() {
             if (SettingsKeyInfoProvider.GetBoolValue("CMSAutomaticallySignInUser"))
             {
                 var user = UserInfo.Provider.Get(MembershipContext.AuthenticatedUser.UserID);
-                url = AuthenticationHelper.GetUserAuthenticationUrl(user, url);
+                url = AuthenticationHelper.GetUserAuthenticationUrl(user, url, si.DomainName);
             }
 
             PortalScriptHelper.RegisterAdminRedirectScript(Page, url);
@@ -343,7 +466,7 @@ function CheckChanges() {
     /// </summary>
     public string GetCallbackResult()
     {
-        return null;
+        return callbackResult;
     }
 
 
@@ -353,7 +476,16 @@ function CheckChanges() {
     /// <param name="eventArgument">Event argument</param>
     public void RaiseCallbackEvent(string eventArgument)
     {
-        SessionHelper.SetValue(eventArgument, false);
+        switch (eventArgument)
+        {
+            case GET_MVC_AUTHENTICATION_CALLBACK:
+                callbackResult = GetMvcAuthenticationFrameUrl();
+                break;
+
+            default:
+                SessionHelper.SetValue(eventArgument, false);
+                break;
+        }
     }
 
     #endregion

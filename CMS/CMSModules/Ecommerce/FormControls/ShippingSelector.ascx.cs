@@ -204,7 +204,7 @@ public partial class CMSModules_Ecommerce_FormControls_ShippingSelector : BaseOb
         var result = Service.Resolve<IShoppingCartAdapterService>().GetCalculationResult(ShoppingCart);
 
         var shippingService = Service.Resolve<IShippingPriceService>();
-        return shippingService.GetShippingPrice(new CalculatorData(request, result), ShoppingCart.TotalItemsPrice).Price;
+        return shippingService.GetShippingPrice(new CalculatorData(request, result), ShoppingCart.TotalItemsPrice - ShoppingCart.OrderDiscount).Price;
     }
 
     #endregion

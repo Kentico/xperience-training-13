@@ -54,18 +54,6 @@
                     </cms:FormField>
                 </LayoutTemplate>
             </cms:UIForm>
-            <cms:UIForm runat="server" ID="EditFormDeviceLayout" ObjectType="cms.templatedevicelayout"
-                DefaultFieldLayout="Default" EnabledByLockState="False">
-                <SecurityCheck Resource="CMS.Design" Permission="Design" />
-                <LayoutTemplate>
-                    <cms:FormField runat="server" ID="fDCode" Field="LayoutCode" UseFFI="false">
-                        <cms:PageLayoutCode runat="server" ID="deviceCode" CodeColumn="LayoutCode" TypeColumn="LayoutType" />
-                    </cms:FormField>
-                    <cms:FormField runat="server" ID="dDCSS" Field="LayoutCSS" UseFFI="false">
-                        <cms:CSSStylesEditor runat="server" ID="cssDeviceEditor" />
-                    </cms:FormField>
-                </LayoutTemplate>
-            </cms:UIForm>
             <cms:UIForm runat="server" ID="EditFormLayout" ObjectType="cms.layout" DefaultFieldLayout="TwoColumns"
                 EnabledByLockState="False">
                 <SecurityCheck Resource="CMS.Design" Permission="Design" />

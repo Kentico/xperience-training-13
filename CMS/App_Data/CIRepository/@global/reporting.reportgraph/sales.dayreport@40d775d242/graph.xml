@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>84db9b2a-3048-4ae6-ad1e-aa1b423be722</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+IF @FromDate <= @ToDate 
+BEGIN
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+
+SELECT 
+   [Date] AS StartTime,  
+   CAST(SUM(ISNULL(OrderGrandTotalInMainCurrency,0)) AS DECIMAL(38,2)) AS 'Income' 
+FROM 
+   {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'day') AS Dates
+   LEFT JOIN COM_Order  
+      ON ([Date] <= OrderDate  AND  DATEADD(DAY,1,[Date]) > OrderDate) 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+GROUP BY [Date]
+ORDER BY [Date]
+END
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Sales.DayReport</CodeName>
+    <GUID>01d7d064-215c-4b47-8f8a-80b145bd173a</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <BarDrawingStyle>Bar</BarDrawingStyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <BorderSkinStyle>None</BorderSkinStyle>
+      <ChartAreaBorderStyle>NotSet</ChartAreaBorderStyle>
+      <ChartAreaGradient>None</ChartAreaGradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <LegendBorderSize>0</LegendBorderSize>
+      <LegendBorderStyle>NotSet</LegendBorderStyle>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <PieDoughnutRadius>70</PieDoughnutRadius>
+      <PieDrawingDesign>Default</PieDrawingDesign>
+      <PieDrawingStyle>Doughnut</PieDrawingStyle>
+      <PieLabelStyle>Outside</PieLabelStyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <PlotAreaBorderSize>0</PlotAreaBorderSize>
+      <PlotAreaBorderStyle>NotSet</PlotAreaBorderStyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <SeriesBorderSize>4</SeriesBorderSize>
+      <SeriesBorderStyle>Solid</SeriesBorderStyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{dddd, MMMM d, yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <SeriesSymbols>Circle</SeriesSymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <StackedBarDrawingStyle>Bar</StackedBarDrawingStyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxisfont>Arial;bold;11;;</yaxisfont>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$ecommerce.report_day$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$com.sales.volumeofsales$}</GraphYAxisTitle>
+</reporting.reportgraph>

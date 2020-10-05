@@ -1,25 +1,18 @@
-﻿<%@ Page Language="C#" Inherits="CMSInstall_install" Theme="Default" EnableEventValidation="false"
-    ValidateRequest="false"  Codebehind="install.aspx.cs" %>
+﻿<%@ Page Language="C#" Inherits="CMSInstall_install" Theme="Default" AutoEventWireup="false" EnableEventValidation="false" ValidateRequest="false" Codebehind="install.aspx.cs" %>
 
-<%@ Register Src="~/CMSInstall/Controls/WizardSteps/LicenseDialog.ascx" TagName="LicenseDialog"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSInstall/Controls/WizardSteps/CollationDialog.ascx" TagName="CollationDialog"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSInstall/Controls/WizardSteps/SiteCreationDialog.ascx" TagName="SiteCreationDialog"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSAdminControls/UI/System/RequireScript.ascx" TagName="RequireScript"
-    TagPrefix="cms" %>
+<%@ Register Src="~/CMSInstall/Controls/WizardSteps/LicenseDialog.ascx" TagName="LicenseDialog" TagPrefix="cms" %>
+<%@ Register Src="~/CMSInstall/Controls/WizardSteps/CollationDialog.ascx" TagName="CollationDialog" TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/System/RequireScript.ascx" TagName="RequireScript" TagPrefix="cms" %>
+<%@ Register Src="~/CMSInstall/Controls/WizardSteps/WagDialog.ascx" TagName="WagDialog" TagPrefix="cms" %>
 
-<%@ Register Src="~/CMSInstall/Controls/WizardSteps/WagDialog.ascx" TagName="WagDialog"
-    TagPrefix="cms" %>
 <%@ Register Src="Controls/LayoutPanels/Error.ascx" TagName="ErrorPanel" TagPrefix="cms" %>
 <%@ Register Src="Controls/LayoutPanels/Log.ascx" TagName="LogPanel" TagPrefix="cms" %>
 <%@ Register Src="Controls/LayoutPanels/Version.ascx" TagName="VersionPanel" TagPrefix="cms" %>
 <%@ Register Src="Controls/LayoutPanels/Warning.ascx" TagName="WarningPanel" TagPrefix="cms" %>
 <%@ Register Src="Controls/StepNavigation.ascx" TagName="StepNavigation" TagPrefix="cms" %>
 <%@ Register Src="Controls/WizardSteps/UserServer.ascx" TagName="UserServer" TagPrefix="cms" %>
-<%@ Register Src="Controls/WizardSteps/DatabaseDialog.ascx" TagName="DatabaseDialog"
-    TagPrefix="cms" %>
+<%@ Register Src="Controls/WizardSteps/DatabaseDialog.ascx" TagName="DatabaseDialog" TagPrefix="cms" %>
+
 <!DOCTYPE html>
 <html>
 <head id="Head1" runat="server">
@@ -100,37 +93,6 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </asp:WizardStep>
-                            <asp:WizardStep ID="stpSiteCreation" runat="server" AllowReturn="false" StepType="Start">
-                                <asp:Panel ID="pnlSiteCreation" runat="server">
-                                    <asp:Label ID="lblSiteCreation" runat="server" CssClass="install-info-title" Visible="False" />
-                                    <div class="install-contentNewSite install-content">
-                                        <table class="install-wizard" border="0" cellpadding="0" cellspacing="0">
-                                            <tr style="vertical-align: top;">
-                                                <td align="left">
-                                                    <cms:SiteCreationDialog ID="ucSiteCreationDialog" runat="server" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </asp:Panel>
-                            </asp:WizardStep>
-                            <asp:WizardStep ID="stpProgress" runat="server" AllowReturn="false" StepType="Step">
-                                <asp:Panel ID="pnlProgress" runat="server">
-                                    <div class="install-progress">
-                                        <table class="install-wizard" border="0" cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <td align="left" style="vertical-align: top">
-                                                    <div class="install-progress-site">
-                                                        <div style="margin: 5px 0px 0px 5px;">
-                                                            <cms:AsyncControl ID="ctlAsyncImport" runat="server" PostbackOnError="false" LogContextNames="Import" ProvideLogContext="True" ContinueOnAnyServer="false" />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </asp:Panel>
                             </asp:WizardStep>
                             <asp:WizardStep ID="stpFinish" runat="server" StepType="Complete">
                                 <div class="install-content">

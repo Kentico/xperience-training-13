@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_System_System_Deployment {
-    
+public partial class CMSModules_System_System_Deployment
+{
+
     /// <summary>
     /// pnlLog control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlLog;
-    
+
     /// <summary>
     /// ctlAsyncLog control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_AsyncLogDialog ctlAsyncLog;
-    
+
     /// <summary>
     /// ltlScript control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlScript;
-    
+
     /// <summary>
     /// headDeployment control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headDeployment;
-    
+
     /// <summary>
     /// lblDeploymentInfo control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblDeploymentInfo;
-    
+
     /// <summary>
     /// btnSaveAll control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnSaveAll;
-    
+
     /// <summary>
     /// headSourceControl control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headSourceControl;
-    
+
     /// <summary>
     /// lblSourceControlInfo control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblSourceControlInfo;
-    
+
     /// <summary>
     /// chkSaveAltFormLayouts control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveAltFormLayouts;
-    
+
     /// <summary>
     /// chkSaveFormLayouts control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveFormLayouts;
-    
+
     /// <summary>
     /// chkSaveLayouts control.
     /// </summary>
@@ -109,7 +110,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveLayouts;
-    
+
     /// <summary>
     /// chkSavePageTemplate control.
     /// </summary>
@@ -118,7 +119,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSavePageTemplate;
-    
+
     /// <summary>
     /// chkSaveTransformation control.
     /// </summary>
@@ -127,7 +128,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveTransformation;
-    
+
     /// <summary>
     /// chkSaveWebpartLayout control.
     /// </summary>
@@ -136,25 +137,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveWebpartLayout;
-    
-    /// <summary>
-    /// chkSaveCSS control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveCSS;
-    
-    /// <summary>
-    /// chkSaveWebpartContainer control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkSaveWebpartContainer;
-    
+
     /// <summary>
     /// lblApplyChanges control.
     /// </summary>
@@ -163,7 +146,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblApplyChanges;
-    
+
     /// <summary>
     /// lblSynchronization control.
     /// </summary>
@@ -172,7 +155,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSynchronization;
-    
+
     /// <summary>
     /// btnSourceControl control.
     /// </summary>
@@ -181,7 +164,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnSourceControl;
-    
+
     /// <summary>
     /// btnSynchronize control.
     /// </summary>
@@ -190,7 +173,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnSynchronize;
-    
+
     /// <summary>
     /// headTest control.
     /// </summary>
@@ -199,7 +182,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headTest;
-    
+
     /// <summary>
     /// lblTest control.
     /// </summary>
@@ -208,7 +191,7 @@ public partial class CMSModules_System_System_Deployment {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTest;
-    
+
     /// <summary>
     /// btnTest control.
     /// </summary>

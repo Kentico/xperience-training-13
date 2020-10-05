@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Content_CMSDesk_Properties_Menu {
-    
+public partial class CMSModules_Content_CMSDesk_Properties_Menu
+{
+
     /// <summary>
     /// menuElem control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Content_Controls_EditMenu menuElem;
-    
+
     /// <summary>
     /// pnlContent control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlContent;
-    
+
     /// <summary>
     /// lblWorkflow control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblWorkflow;
-    
+
     /// <summary>
     /// pnlForm control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlForm;
-    
+
     /// <summary>
     /// pnlUIBasicProperties control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.UIControls.UIPlaceHolder pnlUIBasicProperties;
-    
+
     /// <summary>
     /// pnlBasicProperties control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlBasicProperties;
-    
+
     /// <summary>
     /// headBasicProperties control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headBasicProperties;
-    
+
     /// <summary>
     /// lblShowMenu control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblShowMenu;
-    
+
     /// <summary>
     /// chkShowInMenu control.
     /// </summary>
@@ -91,49 +92,4 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkShowInMenu;
-    
-    /// <summary>
-    /// pnlUISearch control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.UIControls.UIPlaceHolder pnlUISearch;
-    
-    /// <summary>
-    /// pnlSearch control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlSearch;
-    
-    /// <summary>
-    /// headSearch control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedHeading headSearch;
-    
-    /// <summary>
-    /// lblExcludeFromSearch control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblExcludeFromSearch;
-    
-    /// <summary>
-    /// chkExcludeFromSearch control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkExcludeFromSearch;
 }

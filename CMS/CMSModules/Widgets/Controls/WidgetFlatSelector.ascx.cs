@@ -18,16 +18,6 @@ public partial class CMSModules_Widgets_Controls_WidgetFlatSelector : CMSAdminCo
     #endregion
 
 
-    #region "Widget flat selector properties"
-
-    /// <summary>
-    /// Gets or sets the group ID. Should be set with enabled SelectOnlyGroupWidget property.
-    /// </summary>
-    public int GroupID { get; set; } = 0;
-
-    #endregion
-
-
     #region "Flat selector properties"
 
     /// <summary>

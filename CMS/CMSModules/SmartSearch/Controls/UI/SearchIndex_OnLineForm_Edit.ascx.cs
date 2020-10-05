@@ -199,7 +199,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_OnLineForm_E
                 sisi.WhereCondition = txtWhere.TextArea.Text.Trim();
                 sisi.SiteName = selSite.Value.ToString();
 
-                BizFormInfo bfi = BizFormInfoProvider.GetBizFormInfo(formName, sisi.SiteName);
+                BizFormInfo bfi = BizFormInfo.Provider.Get(formName, SiteInfoProvider.GetSiteID(sisi.SiteName));
                 if (bfi != null)
                 {
                     sisi.SetValue("DisplayName", bfi.FormDisplayName);

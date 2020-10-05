@@ -9,6 +9,7 @@ using CMS.CMSImportExport;
 using CMS.ContactManagement.Internal;
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.FormEngine;
 using CMS.Globalization;
 using CMS.Helpers;
@@ -215,7 +216,6 @@ internal static class UpgradeProcedure
             DataClassInfo.OBJECT_TYPE, // Process all data classes just through general object type to avoid duplicities
             PageTemplateInfo.OBJECT_TYPE,
             LayoutInfo.OBJECT_TYPE,
-            CssStylesheetInfo.OBJECT_TYPE,
             WorkflowActionInfo.OBJECT_TYPE,
         };
 
@@ -246,7 +246,7 @@ internal static class UpgradeProcedure
 
 
     /// <summary>
-    /// Deletes the files for separable modules which are not install and therefore not needed.
+    /// Deletes the files for separable modules which are not installed and therefore not needed.
     /// </summary>
     private static void DeleteWebPartsOfUninstalledModules()
     {
@@ -256,20 +256,15 @@ internal static class UpgradeProcedure
         var separableModules = new List<string>
         {
             ModuleName.BIZFORM,
-            ModuleName.BLOGS,
-            ModuleName.COMMUNITY,
+            "CMS.Community",
             ModuleName.ECOMMERCE,
-            ModuleName.EVENTMANAGER,
-            ModuleName.FORUMS,
             ModuleName.MEDIALIBRARY,
-            ModuleName.MESSAGEBOARD,
             ModuleName.NEWSLETTER,
-            ModuleName.NOTIFICATIONS,
+            "CMS.Notifications.Web.UI",
             ModuleName.ONLINEMARKETING,
-            ModuleName.POLLS,
+            "CMS.Polls",
             ModuleName.REPORTING,
-            ModuleName.STRANDSRECOMMENDER,
-            ModuleName.CHAT,
+            "CMS.Chat",
         };
 
         foreach (var separableModule in separableModules)
@@ -333,9 +328,6 @@ internal static class UpgradeProcedure
         {
             case ModuleName.BIZFORM:
                 return "BizForms";
-
-            case ModuleName.BLOGS:
-                return "Blogs";
 
             case ModuleName.NEWSLETTER:
                 return "Newsletters";

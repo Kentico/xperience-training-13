@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_Scheduler_Pages_Task_Edit"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Inherits="CMSModules_Scheduler_Pages_Task_Edit"
     Theme="Default" ValidateRequest="false" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master"
     Title="Scheduled tasks - Task Edit"  Codebehind="Task_Edit.aspx.cs" %>
 
@@ -14,9 +14,26 @@
 <%@ Register Src="~/CMSFormControls/Classes/AssemblyClassSelector.ascx" TagName="AssemblyClassSelector"
     TagPrefix="cms" %>
 <%@ Register Src="~/CMSFormControls/System/CodeName.ascx" TagName="CodeName" TagPrefix="cms" %>
+<%@ Register Src="~/CMSFormControls/System/EnumSelector.ascx" TagName="EnumSelector"
+    TagPrefix="cms" %>
 
 <asp:Content ContentPlaceHolderID="plcContent" runat="server">
     <div class="form-horizontal">
+        <asp:PlaceHolder ID="plcTaskAvailability" runat="server">
+            <cms:CMSUpdatePanel ID="pnlUpdateTaskAvailability" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="form-group">
+                        <div class="editing-form-label-cell">
+                            <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskAvailability" EnableViewState="false" ResourceString="Task_Edit.TaskAvailability"
+                                AssociatedControlID="rbTaskAvailability:radEnum" />
+                        </div>
+                        <div class="editing-form-value-cell">
+                            <cms:EnumSelector runat="server" ID="rbTaskAvailability" AssemblyName="CMS.Scheduler" TypeName="CMS.Scheduler.TaskAvailabilityEnum" DisplayType="RadioButtonsVertical" />
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </cms:CMSUpdatePanel>
+        </asp:PlaceHolder>
         <div class="form-group">
             <div class="editing-form-label-cell">
                 <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskDisplayName" EnableViewState="false" ResourceString="Task_Edit.TaskDisplayNameLabel" AssociatedControlID="txtTaskDisplayName" ShowRequiredMark="true" />
@@ -38,14 +55,21 @@
                     Display="Dynamic"></cms:CMSRequiredFieldValidator>
             </div>
         </div>
-        <div class="form-group">
-            <div class="editing-form-label-cell">
-                <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskAssemblyName" EnableViewState="false" ResourceString="Task_Edit.TaskAssemblyNameLabel" AssociatedControlID="assemblyElem" />
-            </div>
-            <div class="editing-form-value-cell">
-                <cms:AssemblyClassSelector ID="assemblyElem" runat="server" BaseClassNames="ITask;IWorkerTask" />
-            </div>
-        </div>
+        <cms:CMSUpdatePanel ID="pnlUpdateTaskProvider" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
+            <ContentTemplate>
+                <div class="form-group">
+                    <div class="editing-form-label-cell">
+                        <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskAssemblyName" EnableViewState="false" ResourceString="Task_Edit.TaskAssemblyNameLabel" AssociatedControlID="assemblyElem" />
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <cms:AssemblyClassSelector ID="assemblyElem" runat="server" BaseClassNames="ITask;IWorkerTask" />
+                    </div>
+                </div>
+            </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="rbTaskAvailability:radEnum" EventName="SelectedIndexChanged" />
+            </Triggers>
+        </cms:CMSUpdatePanel>
         <cms:ScheduleInterval ID="schedInterval" runat="server" />
         <div class="form-group">
             <div class="editing-form-label-cell">
@@ -89,28 +113,35 @@
                 <cms:CMSCheckBox ID="chkRunTaskInSeparateThread" runat="server" Checked="false" CssClass="CheckBoxMovedLeft" />
             </div>
         </div>
-        <asp:PlaceHolder ID="plcAllowExternalService" runat="server">
-            <div class="form-group">
-                <div class="editing-form-label-cell">
-                    <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskAllowExternalService" ResourceString="ScheduledTask.TaskAllowExternalService"
-                        DisplayColon="true" EnableViewState="false" AssociatedControlID="chkTaskAllowExternalService" />
-                </div>
-                <div class="editing-form-value-cell">
-                    <cms:CMSCheckBox ID="chkTaskAllowExternalService" runat="server" Checked="true" CssClass="CheckBoxMovedLeft" />
-                </div>
-            </div>
-        </asp:PlaceHolder>
-        <asp:PlaceHolder ID="plcUseExternalService" runat="server">
-            <div class="form-group">
-                <div class="editing-form-label-cell">
-                    <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskUseExternalService" ResourceString="ScheduledTask.TaskUseExternalService"
-                        DisplayColon="true" EnableViewState="false" AssociatedControlID="chkTaskUseExternalService" />
-                </div>
-                <div class="editing-form-value-cell">
-                    <cms:CMSCheckBox ID="chkTaskUseExternalService" runat="server" Checked="false" CssClass="CheckBoxMovedLeft" />
-                </div>
-            </div>
-        </asp:PlaceHolder>
+        <cms:CMSUpdatePanel ID="pnlUpdateExternalServices" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
+            <ContentTemplate>
+                <asp:PlaceHolder ID="plcAllowExternalService" runat="server">
+                    <div class="form-group">
+                        <div class="editing-form-label-cell">
+                            <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskAllowExternalService" ResourceString="ScheduledTask.TaskAllowExternalService"
+                                DisplayColon="true" EnableViewState="false" AssociatedControlID="chkTaskAllowExternalService" />
+                        </div>
+                        <div class="editing-form-value-cell">
+                            <cms:CMSCheckBox ID="chkTaskAllowExternalService" runat="server" Checked="true" CssClass="CheckBoxMovedLeft" />
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plcUseExternalService" runat="server">
+                    <div class="form-group">
+                        <div class="editing-form-label-cell">
+                            <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblTaskUseExternalService" ResourceString="ScheduledTask.TaskUseExternalService"
+                                DisplayColon="true" EnableViewState="false" AssociatedControlID="chkTaskUseExternalService" />
+                        </div>
+                        <div class="editing-form-value-cell">
+                            <cms:CMSCheckBox ID="chkTaskUseExternalService" runat="server" Checked="false" CssClass="CheckBoxMovedLeft" />
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+            </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="rbTaskAvailability:radEnum" EventName="SelectedIndexChanged" />
+            </Triggers>
+        </cms:CMSUpdatePanel>
         <asp:PlaceHolder ID="plcRunIndividually" runat="server">
             <div class="form-group">
                 <div class="editing-form-label-cell">
@@ -128,7 +159,6 @@
             </div>
             <div class="editing-form-value-cell">
                 <cms:CMSTextBox ID="txtServerName" runat="server" MaxLength="100" />
-                <cms:CMSCheckBox ID="chkAllServers" runat="server" Visible="false" ResourceString="Task_Edit.TaskAllServers" />
             </div>
         </div>
         <asp:PlaceHolder runat="server" ID="plcDevelopment">

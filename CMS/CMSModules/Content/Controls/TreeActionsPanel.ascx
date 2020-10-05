@@ -37,6 +37,7 @@
         <cms:CMSAccessibleButton runat="server" ID="btnMove" OnClientClick="if(CheckChanges()) { MoveRef(GetSelectedNodeId()); }; return false;" IconCssClass="icon-doc-move" IconOnly="true" />
         <cms:CMSAccessibleButton runat="server" ID="btnUp" OnClientClick="MoveUp();  return false;" IconCssClass="icon-chevron-up" IconOnly="true" />
         <cms:CMSAccessibleButton runat="server" ID="btnDown" OnClientClick="MoveDown();  return false;" IconCssClass="icon-chevron-down" IconOnly="true" />
+        <cms:CMSAccessibleButton runat="server" ID="btnRefresh" OnClientClick="TreeRefresh(); return false;" IconCssClass="icon-rotate-right" IconOnly="true" />
         <cms:CMSAccessibleButton runat="server" ID="btnSearch" OnClientClick="OpenSearch(); return false;" IconCssClass="icon-magnifier" IconOnly="true" />
     </div>
 </div>

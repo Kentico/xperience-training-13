@@ -12,8 +12,6 @@ using CMS.MacroEngine;
 using CMS.Membership;
 using CMS.SiteProvider;
 using CMS.UIControls;
-using CMS.WebAnalytics;
-
 
 public partial class CMSModules_Membership_Pages_Users_General_User_WaitingForApproval : CMSUsersPage
 {
@@ -358,9 +356,6 @@ public partial class CMSModules_Membership_Pages_Users_General_User_WaitingForAp
                 }
             }
         }
-
-        // User is approved and enabled, could be logged into statistics
-        AnalyticsHelper.LogRegisteredUser(SiteContext.CurrentSiteName, user);
     }
 
 

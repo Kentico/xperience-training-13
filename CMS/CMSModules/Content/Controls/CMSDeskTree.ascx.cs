@@ -6,7 +6,6 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine;
 using CMS.EventLog;
 using CMS.Helpers;
@@ -300,8 +299,6 @@ function ProcessRequest(action, param1, param2)
 @"}
 ";
 
-            iconRefresh.OnClientClick = "TreeRefresh(); return false;";
-
             ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "processRequestScript", ScriptHelper.GetScript(script));
             AddScript("var currentNode = document.getElementById('treeSelectedNode');");
         }
@@ -472,10 +469,6 @@ function ProcessRequest(action, param1, param2)
                 // Set the device profile
                 try
                 {
-                    // Set the device name
-                    string deviceName = ValidationHelper.GetString(Param2, string.Empty);
-                    DeviceContext.CurrentDeviceProfileName = deviceName;
-
                     // Refresh the document
                     if (nodeId > 0)
                     {

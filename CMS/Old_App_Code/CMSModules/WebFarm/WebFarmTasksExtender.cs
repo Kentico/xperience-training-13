@@ -59,14 +59,14 @@ public class WebFarmTasksExtender : ControlExtender<UniGrid>
             // Get selected server info if server is not loaded yet
             if (mSelectedServerInfo == null)
             {
-                mSelectedServerInfo = WebFarmServerInfoProvider.GetWebFarmServerInfo(SelectedServerName);
+                mSelectedServerInfo = WebFarmServerInfo.Provider.Get(SelectedServerName);
             }
 
             // Selected server not found - clear cache and try again (server can be created on other instance)
             if (mSelectedServerInfo == null)
             {
                 WebFarmContext.Clear(false);
-                mSelectedServerInfo = WebFarmServerInfoProvider.GetWebFarmServerInfo(SelectedServerName);
+                mSelectedServerInfo = WebFarmServerInfo.Provider.Get(SelectedServerName);
             }
 
             return mSelectedServerInfo;
@@ -151,7 +151,7 @@ public class WebFarmTasksExtender : ControlExtender<UniGrid>
             else
             {
                 // Delete task object
-                WebFarmTaskInfoProvider.DeleteWebFarmTaskInfo(taskId);
+                WebFarmTaskInfo.Provider.Get(taskId)?.Delete();
             }
 
             Control.ReloadData();

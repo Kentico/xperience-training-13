@@ -511,26 +511,6 @@ public partial class CMSModules_Widgets_Controls_WidgetProperties : CMSUserContr
                     return;
                 }
 
-                if ((VariantID > 0) && (mWidgetInstance != null) && (mWidgetInstance.PartInstanceVariants != null))
-                {
-                    // Check OnlineMarketing permissions.
-                    if (CheckPermissions("Read"))
-                    {
-                        mWidgetInstance = CurrentPageInfo.DocumentTemplateInstance.GetWebPart(InstanceGUID, WidgetId);
-                        mWidgetInstance = mWidgetInstance.PartInstanceVariants.Find(v => v.VariantID.Equals(VariantID));
-                        // Set the widget variant mode
-                        if (mWidgetInstance != null)
-                        {
-                            VariantMode = mWidgetInstance.VariantMode;
-                        }
-                    }
-                    else
-                    {
-                        // Not authorized for OnlineMarketing - Manage.
-                        RedirectToInformation(String.Format(GetString("general.permissionresource"), "Read", (VariantMode == VariantModeEnum.ContentPersonalization) ? "CMS.ContentPersonalization" : "CMS.MVTest"));
-                    }
-                }
-
                 // Get widget info by widget name(widget type)
                 mWidgetInfo = WidgetInfoProvider.GetWidgetInfo(mWidgetInstance.WebPartType);
             }
@@ -787,7 +767,7 @@ public partial class CMSModules_Widgets_Controls_WidgetProperties : CMSUserContr
                 UserInfo ui = UserInfo.Provider.Get(pti.Generalized.IsCheckedOutByUserID);
                 if (ui != null)
                 {
-                    userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(IsLiveSite));
+                    userName = HTMLHelper.HTMLEncode(ui.GetFormattedUserName(false));
                 }
 
                 DisplayError(string.Format(GetString("ObjectEditMenu.CheckedOutByAnotherUser"), pti.TypeInfo.ObjectType, pti.DisplayName, userName));
@@ -815,25 +795,6 @@ public partial class CMSModules_Widgets_Controls_WidgetProperties : CMSUserContr
                 UIContext.EditedObject = mWidgetInstance;
 
                 mWidgetInstance.XMLVersion = 1;
-                if (IsNewVariant)
-                {
-                    mWidgetInstance = mWidgetInstance.Clone();
-
-                    // Check whether the editor widgets have been already customized
-                    if (CurrentPageInfo.DocumentTemplateInstance.WebPartZones.Count == 0)
-                    {
-                        // There are no customized editor widgets yet => copy the default editor widgets from the page template under the document (to enable customization)
-
-                        // Save to the document as editor admin changes
-                        TreeNode node = DocumentHelper.GetDocument(CurrentPageInfo.DocumentID, mTreeProvider);
-
-                        // Extract and set the document web parts
-                        node.SetValue("DocumentWebParts", mTemplateInstance.GetZonesXML(WidgetZoneTypeEnum.Editor));
-
-                        // Save the document
-                        DocumentHelper.UpdateDocument(node, mTreeProvider);
-                    }
-                }
 
                 bool isLayoutWidget = ((mWebPartInfo != null) && ((WebPartTypeEnum)mWebPartInfo.WebPartType == WebPartTypeEnum.Layout));
 

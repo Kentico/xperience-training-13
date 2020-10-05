@@ -93,7 +93,7 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_FieldTy
     {
         get
         {
-            return drpFieldType.SelectedItem.Value.ToEnum<FieldTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<FieldTypeEnum>(drpFieldType.SelectedItem.Value);
         }
     }
 

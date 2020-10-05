@@ -27,14 +27,6 @@ cmsdefine(["require", "exports", 'CMS/EventHub'], function(cmsrequire, exports, 
                             $scope.model.visible = welcomeTileDataModel.Visible;
                         });
                     };
-
-                    $scope.model.showApplicationList = function () {
-                        eventHub.publish('ShowApplicationList');
-                    };
-
-                    $scope.model.showContextHelp = function () {
-                        eventHub.publish('ShowContextHelp');
-                    };
                 },
                 templateUrl: 'welcomeTileTemplate.html'
             };

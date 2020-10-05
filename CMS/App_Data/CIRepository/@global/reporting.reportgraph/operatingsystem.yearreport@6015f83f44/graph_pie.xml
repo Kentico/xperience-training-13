@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph pie</GraphDisplayName>
+  <GraphGUID>640d07ac-55ef-4ea7-989b-e1a0444dfa6c</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph_pie</GraphName>
+  <GraphQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'year');
+SELECT StatisticsObjectName , SUM(HitsCount)  FROM
+Analytics_Statistics, Analytics_YearHits WHERE
+ (StatisticsSiteID = @CMSContextCurrentSiteID) AND (StatisticsCode=@CodeName) AND (StatisticsID = HitsStatisticsID)
+ AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>operatingsystem.yearreport</CodeName>
+    <GUID>05ee1bbd-1361-4e23-9cdc-2224fbee093e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <BarDrawingStyle>Bar</BarDrawingStyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <BorderSkinStyle>None</BorderSkinStyle>
+      <ChartAreaBorderStyle>NotSet</ChartAreaBorderStyle>
+      <ChartAreaGradient>None</ChartAreaGradient>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#PERCENT{P1} (#VALY)</itemvalueformat>
+      <LegendBorderSize>0</LegendBorderSize>
+      <LegendBorderStyle>NotSet</LegendBorderStyle>
+      <legendinside>True</legendinside>
+      <legendposition>Right</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <PieDoughnutRadius>70</PieDoughnutRadius>
+      <PieDrawingDesign>Default</PieDrawingDesign>
+      <PieDrawingStyle>Doughnut</PieDrawingStyle>
+      <PieLabelStyle>Outside</PieLabelStyle>
+      <pieothervalue>5</pieothervalue>
+      <pieshowpercentage>False</pieshowpercentage>
+      <PlotAreaBorderSize>0</PlotAreaBorderSize>
+      <PlotAreaBorderStyle>NotSet</PlotAreaBorderStyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <SeriesBorderSize>0</SeriesBorderSize>
+      <SeriesBorderStyle>NotSet</SeriesBorderStyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX  -   #PERCENT{P1}</seriesitemtooltip>
+      <SeriesSymbols>Circle</SeriesSymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <StackedBarDrawingStyle>Bar</StackedBarDrawingStyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titlefontnew>Arial;bold;14;;</titlefontnew>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisfont>Arial;bold;11;;</xaxisfont>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxisfont>Arial;bold;11;;</yaxisfont>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>Screen resolution</GraphXAxisTitle>
+  <GraphYAxisTitle />
+</reporting.reportgraph>

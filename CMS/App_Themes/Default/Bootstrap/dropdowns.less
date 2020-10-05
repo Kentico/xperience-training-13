@@ -53,8 +53,8 @@
     list-style: none;
     font-size: @font-size-base;
     background-color: @dropdown-bg;
-    border-radius: @border-radius-small;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    border-radius: @dropdown-border-radius-small @dropdown-border-radius @dropdown-border-radius @dropdown-border-radius;
+    overflow: hidden;
     background-clip: padding-box;
     // Aligns the dropdown menu to right
     &.pull-right {
@@ -65,6 +65,19 @@
     &.pull-up {
         top: auto;
         bottom: 100%;
+    }
+    // proper borders according to the dropdown direction
+    &.pull-up {
+        border-radius: @dropdown-border-radius @dropdown-border-radius @dropdown-border-radius @dropdown-border-radius-small;
+    }
+
+    &.pull-right,
+    &.dropdown-menu-right {
+        border-radius: @dropdown-border-radius @dropdown-border-radius-small @dropdown-border-radius @dropdown-border-radius;
+    }
+
+    &.pull-up.pull-right {
+        border-radius: @dropdown-border-radius @dropdown-border-radius @dropdown-border-radius-small @dropdown-border-radius;
     }
     // Dividers (basically an hr) within the dropdown
     .divider {
@@ -101,7 +114,7 @@
         &:focus {
             text-decoration: none;
             color: @dropdown-link-hover-color;
-            background-color: @dropdown-link-hover-bg;
+            background-color: @dropdown-hover-bg;
         }
     }
 
@@ -146,7 +159,6 @@
     display: block;
     padding: @padding-small-horizontal @padding-base-horizontal;
     line-height: @line-height-100;
-    color: @dropdown-header-color;
 }
 
 // Backdrop to catch body clicks on mobile, etc.
@@ -194,7 +206,7 @@
 // --------------------------------------------------
 
 .context-menu {
-    background: none repeat scroll 0 0 @color-gray-70 !important;
+    background: none repeat scroll 0 0 @dropdown-bg !important;
     border: medium none !important;
     color: @color-white !important;
     font-family: @font-family-base !important;
@@ -343,7 +355,7 @@
 // Site selector in media library
 .DialogMediaLibraryBlock {
     padding: @base-unit (@base-unit * 0.5) @base-unit @base-unit;
-    background-color: @color-gray-140;
+    background-color: @nav-tabs-container-bg;
 
     .form-horizontal {
         margin-bottom: 0;
@@ -355,7 +367,7 @@
 }
 
 .DialogSiteBlock {
-    background-color: @color-gray-140;
+    background-color: @nav-tabs-container-bg;
     padding: @base-unit / 2;
 
     .SiteSelector {
@@ -453,8 +465,6 @@
 
     .fancy-select {
         position: relative;
-        border-left: 1px solid @color-gray-90;
-        border-right: 1px solid @color-gray-90;
 
         &.disabled {
             opacity: 0.5;
@@ -468,9 +478,10 @@
             white-space: nowrap;
             vertical-align: middle;
             display: inline-block;
+            color: @navbar-inverse-link-color;
 
             &:hover, &.open {
-                background: @color-gray-70;
+                background: @navbar-inverse-hover-color;
             }
 
             &:after {
@@ -488,6 +499,8 @@
             cursor: pointer;
             overflow: auto;
             display: none;
+            background: @navbar-inverse-bg;
+            color: @navbar-inverse-link-color;
 
             &.open {
                 visibility: visible;
@@ -495,7 +508,7 @@
             }
 
             & li:hover {
-                background: @color-gray-80;
+                background: @navbar-inverse-hover-color;
             }
         }
     }

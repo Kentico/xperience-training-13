@@ -199,28 +199,10 @@ public partial class CMSModules_Membership_Controls_Subscriptions : CMSAdminCont
     }
 
 
-    protected void ucBlogs_OnCheckPermissions(string permissionType, CMSAdminControl sender)
-    {
-        RaiseOnCheckPermissions(permissionType, sender);
-    }
-
-
-    protected void ucBoards_OnCheckPermissions(string permissionType, CMSAdminControl sender)
-    {
-        RaiseOnCheckPermissions(permissionType, sender);
-    }
-
-
-    protected void ucForums_OnCheckPermissions(string permissionType, CMSAdminControl sender)
-    {
-        RaiseOnCheckPermissions(permissionType, sender);
-    }
-
     protected void ucReports_OnCheckPermissions(string permissionType, CMSAdminControl sender)
     {
         RaiseOnCheckPermissions(permissionType, sender);
     }
-
 
     #endregion
 

@@ -256,69 +256,6 @@ public partial class CMSInstall_install
     protected global::CMSInstall_Controls_WizardSteps_WagDialog ucWagDialog;
 
     /// <summary>
-    /// stpSiteCreation control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.WizardStep stpSiteCreation;
-
-    /// <summary>
-    /// pnlSiteCreation control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlSiteCreation;
-
-    /// <summary>
-    /// lblSiteCreation control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblSiteCreation;
-
-    /// <summary>
-    /// ucSiteCreationDialog control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSInstall_Controls_WizardSteps_SiteCreationDialog ucSiteCreationDialog;
-
-    /// <summary>
-    /// stpProgress control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.WizardStep stpProgress;
-
-    /// <summary>
-    /// pnlProgress control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlProgress;
-
-    /// <summary>
-    /// ctlAsyncImport control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.UIControls.AsyncControl ctlAsyncImport;
-
-    /// <summary>
     /// stpFinish control.
     /// </summary>
     /// <remarks>

@@ -4,9 +4,7 @@ using System.Collections;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
 using CMS.Helpers;
-using CMS.Membership;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
@@ -30,21 +28,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogFooter : 
     {
         get
         {
-            if (IsLiveSite)
-            {
-                if (AuthenticationHelper.IsAuthenticated())
-                {
-                    return "~/CMS/Dialogs/CMSFormControls/LiveSelectors/InsertImageOrMedia/";
-                }
-                else
-                {
-                    return "~/CMSFormControls/LiveSelectors/InsertImageOrMedia/";
-                }
-            }
-            else
-            {
-                return "~/CMSFormControls/Selectors/InsertImageOrMedia/";
-            }
+            return "~/CMSFormControls/Selectors/InsertImageOrMedia/";
         }
     }
 
@@ -440,7 +424,7 @@ public partial class CMSModules_Content_Controls_Dialogs_General_DialogFooter : 
         else
         {
             SelectMediaDialog(tSelection, null, null);
-        }       
+        }
     }
 
     #endregion

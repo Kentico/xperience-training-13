@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>media.library</CodeName>
+    <GUID>dead7673-d566-4f83-87e3-e9a235b70e4f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>07324780-6813-48e3-8387-9d9a910bed0f</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>isauthorized</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT PermissionName FROM CMS_Permission WHERE PermissionID IN (SELECT Media_LibraryRolePermission.PermissionID 
+FROM Media_LibraryRolePermission WHERE LibraryID = @LibraryID AND RoleID IN (
+SELECT RoleID FROM View_CMS_UserRoleMembershipRole WHERE UserID=@UserID AND (ValidTo > @ValidTo OR ValidTo IS NULL)
+
+)) AND PermissionName = @PermissionName
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

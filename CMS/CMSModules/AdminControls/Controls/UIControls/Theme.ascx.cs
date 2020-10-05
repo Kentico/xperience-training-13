@@ -2,7 +2,6 @@
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.IO;
 using CMS.UIControls;
 
@@ -122,17 +121,8 @@ public partial class CMSModules_AdminControls_Controls_UIControls_Theme : CMSAbs
 
         if (string.IsNullOrEmpty(filePath))
         {
-            IThemeInfo themeObject = UIContext.EditedObject as IThemeInfo;
-            if (themeObject != null)
-            {
-                // Get the specific theme path for the current theme object
-                filePath = themeObject.GetThemePath();
-            }
-            else
-            {
-                // Use the general theme path
-                filePath = "~/App_Themes/";
-            }
+            // Use the general theme path
+            filePath = "~/App_Themes/";
         }
 
         // Setup the file system browser

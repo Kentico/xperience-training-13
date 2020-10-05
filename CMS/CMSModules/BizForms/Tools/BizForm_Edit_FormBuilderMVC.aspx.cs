@@ -2,7 +2,7 @@
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.DocumentEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
 using CMS.OnlineForms;
 using CMS.OnlineForms.Web.UI;
@@ -21,7 +21,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_FormBuilderMVC : CMS
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        var presentationUrl = DocumentURLProvider.GetPresentationUrl(SiteContext.CurrentSiteID);
+        var presentationUrl = new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteName);
         if (String.IsNullOrEmpty(presentationUrl))
         {
             ShowError(ResHelper.GetString("bizform.formBuilderMVC.presentationURLMissing"));
@@ -42,9 +42,11 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_FormBuilderMVC : CMS
         ScriptHelper.RegisterModule(this, "CMS.Builder/FrameSrcAttributeModifier", new
         {
             frameId = formBuilderFrame.ClientID,
-            frameSrc = URLHelper.AddParameterToUrl(presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path, CurrentUser.UserName), BUILDER_MODE_QUERY_STRING_NAME, FORM_BUILDER_MODE),
+            frameSrc = URLHelper.AddParameterToUrl(presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path), BUILDER_MODE_QUERY_STRING_NAME, FORM_BUILDER_MODE),
             mixedContentMessage = GetString("builder.ui.mixedcontenterrormessage"),
             applicationPath = SystemContext.ApplicationPath
         });
+        
+        RegisterCookiePolicyDetection();
     }
 }

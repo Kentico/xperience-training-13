@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString>CMSOMConnectionString</TableConnectionString>
+  <TableDisplayName>Contacts in campaigns table</TableDisplayName>
+  <TableGUID>bde77f87-1182-4fd3-ae1f-d3de53121f46</TableGUID>
+  <TableName>ContactsInCampaignsTable</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT  ContactFirstName AS '{$om.contact.firstname$}' ,
+        ContactLastName AS '{$om.contact.lastname$}' ,
+        ContactCountryID AS '{$om.contact.countryid$}' ,
+        ContactBusinessPhone AS '{$om.contact.businessphone$}' ,
+        ContactEmail AS '{$general.emailaddress$}' ,
+        ContactCreated AS '{$general.created$}' ,
+        ContactCampaign AS '{$analytics.campaign$}' ,
+        ContactCompanyName AS '{$om.contact.companyname$}'
+FROM    OM_Contact
+WHERE   OM_Contact.ContactID IN ( SELECT    ActivityContactID
+                                  FROM      OM_Activity
+                                  WHERE     ActivityCampaign = @CampaignName )
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>ContactsInCampaigns</CodeName>
+    <GUID>a060a819-d782-4e99-9b59-5ccb097de03d</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

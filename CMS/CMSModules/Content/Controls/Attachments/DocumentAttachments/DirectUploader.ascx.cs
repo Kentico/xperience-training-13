@@ -5,7 +5,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
@@ -571,8 +570,8 @@ function Edit_{0}(attachmentGUID, formGUID, versionHistoryID, parentId, hash, im
 }}",
             ClientID,
             (((Node != null) && (Node.DocumentID > 0)) ? "else{form = '&siteid=' + " + Node.NodeSiteID + ";}" : ""),
-            "'" + ResolveUrl((IsLiveSite ? "~/CMSFormControls/LiveSelectors/ImageEditor.aspx" : CONTENT_FOLDER + "CMSDesk/Edit/ImageEditor.aspx") + "?attachmentGUID=' + attachmentGUID + '&refresh=1&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&hash=' + hash"),
-            "'" + ApplicationUrlHelper.ResolveDialogUrl((IsLiveSite ? CONTENT_FOLDER + "Attachments/CMSPages/MetaDataEditor.aspx" : CONTENT_FOLDER + "Attachments/Dialogs/MetaDataEditor.aspx") + "?attachmentGUID=' + attachmentGUID + '&refresh=1&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&hash=' + hash")
+            "'" + ResolveUrl(CONTENT_FOLDER + "CMSDesk/Edit/ImageEditor.aspx" + "?attachmentGUID=' + attachmentGUID + '&refresh=1&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&hash=' + hash"),
+            "'" + ApplicationUrlHelper.ResolveDialogUrl(CONTENT_FOLDER + "Attachments/Dialogs/MetaDataEditor.aspx" + "?attachmentGUID=' + attachmentGUID + '&refresh=1&versionHistoryID=' + versionHistoryID + form + '&clientid=" + ClientID + "&hash=' + hash")
         ));
 
         // Register script for editing attachment

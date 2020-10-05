@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>4959a779-0ec7-46e0-8c11-1a35f10905ff</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @Sum DECIMAL;
+
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'day');
+
+SELECT @Sum = 
+ SUM(HitsCount)  FROM
+Analytics_Statistics, Analytics_DayHits WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+ AND (StatisticsCode=@CodeName) AND (StatisticsID = HitsStatisticsID) AND 
+ (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+
+SELECT TOP 100 StatisticsObjectName AS '{$reports_referrals_day.name_header$}', 
+SUM(HitsCount) AS '{$reports_referrals_day.hits_header$}',
+CAST (CAST ((SUM(HitsCount) / @Sum) *100 AS DECIMAL(10,2)) AS NVARCHAR(8)) +'%' AS '{$reports_referrals_day.percent_header$}'
+  FROM
+ Analytics_Statistics, Analytics_DayHits WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+ AND (StatisticsCode=@CodeName) AND (StatisticsID = HitsStatisticsID) AND 
+ (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) 
+ GROUP BY StatisticsObjectName ORDER BY SUM(HitsCount) DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>fullreferrals.dayreport</CodeName>
+    <GUID>d8e6d0e0-8490-413a-8e5b-04e29cf508d7</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>true</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

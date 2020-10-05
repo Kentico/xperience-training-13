@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>ecommerce.optioncategory</CodeName>
+    <GUID>dda1df37-bc59-4541-a568-c69aec9d93fc</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>b75f55dc-5e1d-4ece-aa18-0ea96ddf87c8</QueryGUID>
+  <QueryIsCustom>True</QueryIsCustom>
+  <QueryIsLocked>True</QueryIsLocked>
+  <QueryName>SelectAllowedOptionsCounts</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT SKUCategory.CategoryID AS OptionCategoryID, 
+ISNULL(SKUCategory.AllowAllOptions, 1) AS AllowAllOptions, 
+COUNT(SelectedOptions.OptionSKUID) AS SelectedOptions, 
+COUNT(AllOptions.SKUID) AS AllOptions 
+FROM 
+  COM_SKU AS AllOptions
+  LEFT JOIN COM_SKUAllowedOption AS SelectedOptions ON SelectedOptions.OptionSKUID = AllOptions.SKUID AND SelectedOptions.SKUID = @SKUID
+  LEFT JOIN COM_SKUOptionCategory AS SKUCategory ON AllOptions.SKUOptionCategoryID = SKUCategory.CategoryID
+WHERE SKUCategory.SKUID = @SKUID AND
+     (SelectedOptions.SKUID = @SKUID OR SelectedOptions.SKUID IS NULL) AND
+      ##WHERE##
+GROUP BY SKUCategory.CategoryID, SKUCategory.AllowAllOptions
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

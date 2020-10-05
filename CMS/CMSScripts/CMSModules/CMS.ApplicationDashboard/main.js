@@ -3,6 +3,7 @@ cmsdefine([
     'angular-route',
     'angular-resource',
     'angular-animate',
+    'angular-sanitize',
     'angularSortable',
     'angular-ellipsis',
     'CMS.ApplicationDashboard/DashboardController',
@@ -13,6 +14,7 @@ cmsdefine([
     angularRoute,
     angularResource,
     angularAnimate,
+    angularSanitize,
     angularSortable,
     angularEllipsis,
     cmsDashboardController,
@@ -28,6 +30,7 @@ cmsdefine([
                 'ngRoute',
                 'ngResource',
                 'ngAnimate',
+                'ngSanitize',
                 'ui.sortable',
                 'dibari.angular-ellipsis'
         ]);

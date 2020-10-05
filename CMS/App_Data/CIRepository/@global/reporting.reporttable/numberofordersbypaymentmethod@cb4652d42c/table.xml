@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>b1bf7924-0d88-4248-9abf-a61005d07895</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Variable determines whether global payment methods should be displayed */
+DECLARE @GlobalOptions bit;
+SET @GlobalOptions = {%Settings.CMSStoreAllowGlobalPaymentMethods?1:0|(identity)GlobalAdministrator|(hash)71bad8ecddebbf8dcb30b5315575beb080d53c49d2886904b8a3b46557c13620%}; 
+
+SELECT
+   PaymentOptionDisplayName  AS '{$paymentoption_edit.itemlistlink$}',
+   ISNULL(COUNT(OrderID),0) AS '{$ecommerce.report_numberoforders$}' 
+FROM
+   COM_PaymentOption AS Options 
+   LEFT JOIN COM_Order AS Orders 
+   ON OrderPaymentOptionID = PaymentOptionID 
+   AND OrderSiteID = @CMSContextCurrentSiteID 
+   AND (@FromDate IS NULL OR (OrderDate >= @FromDate)) 
+   AND (@ToDate IS NULL OR (OrderDate <= DATEADD(day,1,@ToDate))) 
+   AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1) 
+WHERE 
+   (PaymentOptionSiteID = @CMSContextCurrentSiteID OR (@GlobalOptions = 1 AND PaymentOptionSiteID IS NULL)) 
+   AND (PaymentOptionEnabled = 1 OR PaymentOptionID IN (SELECT OrderPaymentOptionID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+GROUP BY PaymentOptionDisplayName
+ORDER BY 
+   COUNT(OrderID) DESC,
+   PaymentOptionDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByPaymentMethod</CodeName>
+    <GUID>981f339b-4e27-4fcd-ad3e-06952ddb3566</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

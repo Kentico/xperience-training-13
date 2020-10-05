@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>OM.Membership</CodeName>
+    <GUID>8d4dc93d-ac34-48f4-8977-90788ef5fd1d</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSOMConnectionString</QueryConnectionString>
+  <QueryGUID>70df014b-2fc8-4c03-99d1-6c803b87f353</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectusers</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## ##COLUMNS## FROM (
+SELECT OM_Contact.ContactID, MembershipID, RelatedID,
+ISNULL(OM_Contact.ContactFirstName, '') + CASE WHEN (NULLIF(OM_Contact.ContactFirstName,'') IS NULL) THEN '' ELSE ' ' END +
+ISNULL(OM_Contact.ContactMiddleName, '') + CASE WHEN (NULLIF(OM_Contact.ContactMiddleName,'') IS NULL) THEN '' ELSE ' ' END +
+ISNULL(OM_Contact.ContactLastName, '') AS ContactFullNameJoined
+FROM OM_Membership
+INNER JOIN OM_Contact ON OM_Membership.ContactID=OM_Contact.ContactID
+WHERE OM_Membership.ContactID=@ContactID AND MemberType=0
+) as tab WHERE ##WHERE## ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

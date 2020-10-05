@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>7408dbd4-d36c-4bdd-ab03-3c6285961810</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @GlobalObjects bit;
+SET @GlobalObjects = {%Settings.CMSStoreUseGlobalOrderStatus?1:0|(identity)GlobalAdministrator|(hash)efb41e29101daa006213bf4f2aaf0390d4d7d92b9b7dc2fd1bb4adf7f604ec65%};
+                      
+SELECT
+   StatusDisplayName AS '{$orderstatuslist.header$}',
+   CAST(ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}'
+FROM 
+   COM_OrderStatus 
+   LEFT JOIN COM_Order 
+      ON OrderStatusID = StatusID 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+ WHERE
+   (StatusEnabled = 1 OR StatusID IN (SELECT OrderStatusID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND ((StatusSiteID = @CMSContextCurrentSiteID AND @GlobalObjects = 0) 
+         OR (StatusSiteID IS NULL AND @GlobalObjects = 1)) 
+GROUP BY 
+   StatusDisplayName, 
+   StatusOrder
+ORDER BY StatusOrder
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>SalesByOrderStatus</CodeName>
+    <GUID>fe8c4b10-93d9-4b0a-93a9-6884f6344bdd</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0.0}</itemvalueformat>
+      <legendbgcolor>#2002E5</legendbgcolor>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <legendtitle>aaa</legendtitle>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>bar</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$com.report.orderstatus$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$com.sales.volumeofsales$}</GraphYAxisTitle>
+</reporting.reportgraph>

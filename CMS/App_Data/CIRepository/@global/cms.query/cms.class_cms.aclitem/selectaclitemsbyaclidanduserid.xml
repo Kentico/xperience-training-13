@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.aclitem</CodeName>
+    <GUID>83fdf79a-9d56-474f-b229-115fccabf042</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>12e0b3bc-a73b-4b76-9307-fcaee609b019</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectaclitemsbyaclidanduserid</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT  DISTINCT X.Allowed,X.Denied,X.ValidTo,X.ACLID
+ FROM (
+ SELECT CMS_ACLItem.Allowed,CMS_ACLItem.Denied, null AS 'ValidTo',CMS_ACL.ACLID
+  FROM CMS_ACL INNER JOIN CMS_ACLItem ON CMS_ACLItem.ACLID = CMS_ACL.ACLID   
+  WHERE
+    --User  
+      (CMS_ACLItem.UserID IN (SELECT CMS_User.UserID FROM CMS_User JOIN CMS_UserSite ON CMS_User.UserID = CMS_UserSite.UserID
+                         WHERE CMS_User.UserID = @UserID AND CMS_UserSite.SiteID = @SiteID )    
+    -- Specific roles        
+        OR CMS_ACLItem.RoleID IN (SELECT RoleID FROM CMS_Role WHERE RoleName IN (##GENERICROLES##))
+       )   
+    -- Membership
+  UNION ALL
+  SELECT  DISTINCT CMS_ACLItem.Allowed,CMS_ACLItem.Denied, UserRole.ValidTo, CMS_ACL.ACLID
+    FROM CMS_ACL INNER JOIN CMS_ACLItem ON CMS_ACLItem.ACLID = CMS_ACL.ACLID  
+    INNER JOIN  [View_CMS_UserRoleMembershipRole] AS UserRole ON UserRole.RoleID = CMS_ACLItem.RoleID        
+      WHERE (UserRole.ValidTo  > @Date OR UserRole.ValidTo IS NULL)
+        AND (UserRole.SiteID = @SiteID OR UserRole.SiteID IS NULL)   
+        AND UserRole.UserID = @UserID      
+   ) AS X
+   WHERE ##WHERE##
+ 
+ 
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

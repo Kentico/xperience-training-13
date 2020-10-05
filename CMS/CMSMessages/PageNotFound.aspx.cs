@@ -5,12 +5,6 @@ using CMS.UIControls;
 
 public partial class CMSMessages_PageNotFound : MessagePage
 {
-    public CMSMessages_PageNotFound()
-    {
-        SetLiveCulture();
-    }
-
-
     protected void Page_Load(object sender, EventArgs e)
     {
         // Try skip IIS http errors

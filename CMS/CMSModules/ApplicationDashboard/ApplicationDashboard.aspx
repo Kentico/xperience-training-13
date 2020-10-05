@@ -11,11 +11,7 @@
                     <i aria-hidden="true" class="icon-modal-close"></i>
                 </a>
                 <h2>{{model.header}}</h2>
-                <p class="lead">{{model.description}}</p>
-                <ul>
-                    <li><i aria-hidden="true" class="icon-kentico"></i><span><a class="js-app-list-link" href="javascript:void(0)" data-ng-click="model.showApplicationList()">{{model.browseApplicationsText}}</a></span></li>
-                    <li><i aria-hidden="true" class="icon-question-circle"></i><span><a class="js-context-help-link" href="javascript:void(0)" data-ng-click="model.showContextHelp()">{{model.openHelpText}}</a></span></li>
-                </ul>
+                <p class="lead" data-ng-bind-html="model.description"></p>
             </div>
         </div>
     </script>

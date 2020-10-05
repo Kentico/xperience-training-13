@@ -1,7 +1,6 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.UIControls;
 
 
@@ -12,7 +11,7 @@ public partial class CMSAdminControls_UI_AdvancedPopupHandler : CMSUserControl
     protected void Page_Load(object sender, EventArgs e)
     {
         // Use classic dialogs for devices with touch screen
-        bool useClassicDialogs = UIHelper.ClassicDialogs || DeviceContext.CurrentDevice.IsMobile();
+        bool useClassicDialogs = UIHelper.ClassicDialogs;
 
         // When this control is not visible, classic dialogs will be used
         Visible &= !useClassicDialogs;

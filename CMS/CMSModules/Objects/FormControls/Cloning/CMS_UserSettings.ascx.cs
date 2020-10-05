@@ -33,7 +33,7 @@ public partial class CMSModules_Objects_FormControls_Cloning_CMS_UserSettings : 
     {
         get
         {
-            return UserSettingsInfo.OBJECT_TYPE + ";" + PersonalizationInfo.OBJECT_TYPE + ";" + PersonalizationInfo.OBJECT_TYPE_DASHBOARD;
+            return UserSettingsInfo.OBJECT_TYPE + ";" + PersonalizationInfo.OBJECT_TYPE_DASHBOARD;
         }
     }
 
@@ -45,7 +45,7 @@ public partial class CMSModules_Objects_FormControls_Cloning_CMS_UserSettings : 
     {
         get
         {
-            return PredefinedObjectType.REPORTSUBSCRIPTION + ";" + UserRoleInfo.OBJECT_TYPE + ";" + PredefinedObjectType.BOARDMODERATOR + ";" + PredefinedObjectType.FORUMMODERATOR + ";" + MembershipUserInfo.OBJECT_TYPE + ";" + WorkflowStepUserInfo.OBJECT_TYPE + ";" + WorkflowUserInfo.OBJECT_TYPE;
+            return PredefinedObjectType.REPORTSUBSCRIPTION + ";" + UserRoleInfo.OBJECT_TYPE + ";" + MembershipUserInfo.OBJECT_TYPE + ";" + WorkflowStepUserInfo.OBJECT_TYPE + ";" + WorkflowUserInfo.OBJECT_TYPE;
         }
     }
 

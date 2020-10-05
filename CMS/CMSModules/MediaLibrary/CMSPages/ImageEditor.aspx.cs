@@ -6,7 +6,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_CMSPages_ImageEditor : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_CMSPages_ImageEditor : CMSPage
 {
     #region "Page methods"
 

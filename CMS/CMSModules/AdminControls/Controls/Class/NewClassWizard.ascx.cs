@@ -1470,7 +1470,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
         {
             ClassSiteInfo.Provider.Add(childClassID, SiteContext.CurrentSiteID);
 
-            if (DataClassInfo.ClassIsCoupledClass)
+            if (DataClassInfo.ClassHasURL)
             {
                 SetSearchSettings();
             }
@@ -1496,6 +1496,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
             PrepareStepSites();
         }
     }
+
 
     private void SetSearchSettings()
     {
@@ -1557,7 +1558,7 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
         }
 
         // Save default search settings
-        if (((Mode == NewClassWizardModeEnum.DocumentType) && (DataClassInfo.ClassIsCoupledClass)) || (Mode == NewClassWizardModeEnum.CustomTable))
+        if (((Mode == NewClassWizardModeEnum.DocumentType) && DataClassInfo.ClassHasURL) || (Mode == NewClassWizardModeEnum.CustomTable))
         {
             SetSearchSettings();
         }

@@ -382,7 +382,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
             string parameter = FullStartingPath;
             if (!String.IsNullOrEmpty(Config.DefaultPath))
             {
-                parameter = Path.Combine(parameter, Path.EnsureBackslashes(Config.DefaultPath));
+                parameter = Path.Combine(parameter, Path.EnsureSlashes(Config.DefaultPath));
             }
 
             // Handle the folder action
@@ -1103,7 +1103,7 @@ function imageEdit_FileSystemRefresh(arg){{{{
         }
 
         // Fix slashes
-        selectedPath = selectedPath.StartsWithCSafe("~") ? Path.EnsureSlashes(selectedPath, true) : Path.EnsureBackslashes(selectedPath, true);
+        selectedPath = selectedPath.StartsWithCSafe("~") ? Path.EnsureForwardSlashes(selectedPath, true) : Path.EnsureSlashes(selectedPath, true);
 
         config.SelectedPath = selectedPath;
 

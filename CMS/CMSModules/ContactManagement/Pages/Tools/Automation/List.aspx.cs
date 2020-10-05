@@ -43,14 +43,6 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
     }
 
 
-    protected override void OnPreRender(EventArgs e)
-    {
-        base.OnPreRender(e);
-
-        RegisterScripts();
-    }
-
-
     /// <summary>
     ///  Initializes master page elements.
     /// </summary>
@@ -71,17 +63,6 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
     }
 
 
-    private void RegisterScripts()
-    {
-        var script = $@"function saveAsTemplate(processId) {{
-    modalDialog('{UrlResolver.ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Template_Edit.aspx")}?processId=' + processId, 'MA_Edit_Template', 800, 650);
-}}";
-
-        ScriptHelper.RegisterDialogScript(Page);
-        ScriptHelper.RegisterClientScriptBlock(Page, typeof(string), "MA_SaveAsTemplate", ScriptHelper.GetScript(script));
-    }
-
-
     protected object gridProcesses_OnExternalDataBound(object sender, string sourceName, object parameter)
     {
         switch (sourceName.ToLowerCSafe())
@@ -96,10 +77,6 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
                     var btn = (CMSGridActionButton)sender;
                     btn.Enabled = false;
                 }
-                break;
-
-            case "savetemplate":
-                ((CMSGridActionButton)sender).Visible = SystemContext.DevelopmentMode && CanManageProcesses;
                 break;
         }
 
@@ -120,8 +97,8 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
         {
             case "edit":
                 var url = UIContextHelper.GetElementUrl(ModuleName.ONLINEMARKETING, "EditProcess");
-                url = URLHelper.AddParameterToUrl(url, "displayTitle", "false");
                 url = URLHelper.AddParameterToUrl(url, "objectId", processId.ToString());
+                url = URLHelper.AddParameterToUrl(url, "tabname", "EditProcessSteps");
                 URLHelper.Redirect(url);
                 break;
 

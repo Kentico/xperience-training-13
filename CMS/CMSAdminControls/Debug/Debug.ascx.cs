@@ -16,22 +16,6 @@ public partial class CMSAdminControls_Debug_Debug : CMSUserControl
     {
         base.OnInit(e);
 
-        foreach (var debug in DebugHelper.RegisteredDebugs)
-        {
-            // Check if the debug is enabled for live pages
-            if (debug.Live && !string.IsNullOrEmpty(debug.LogControl))
-            {
-                // Load the debug control
-                var log = LoadUserControl(debug.LogControl) as LogControl;
-                if (log != null)
-                {
-                    logControls.Add(log);
-
-                    plcDebugs.Append(log);
-                }
-            }
-        }
-      
         ScriptHelper.RegisterModule(this, "CMS/DebugControl", pnlDebugContainer.ClientID);
     }
 

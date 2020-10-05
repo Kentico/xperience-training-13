@@ -4,7 +4,7 @@ using CMS.Base.Web.UI;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Content_CMSPages_Versions_ViewVersion : CMSLiveModalPage
+public partial class CMSModules_Content_CMSPages_Versions_ViewVersion : CMSPage
 {
     #region "Methods"
 

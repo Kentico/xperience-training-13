@@ -9,7 +9,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_NewMediaFolder : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_NewMediaFolder : CMSPage
 {
     #region "Private variables"
 

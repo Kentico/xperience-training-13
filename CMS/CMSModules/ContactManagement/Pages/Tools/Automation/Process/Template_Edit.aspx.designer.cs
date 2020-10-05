@@ -9,26 +9,9 @@
 
 
 
-public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Template_Edit {
-    
-    /// <summary>
-    /// lblSaveAs control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblSaveAs;
-    
-    /// <summary>
-    /// drpSaveAs control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSAdminControls_UI_UniSelector_UniSelector drpSaveAs;
-    
+public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Template_Edit
+{
+
     /// <summary>
     /// pnlUpdate control.
     /// </summary>
@@ -37,7 +20,43 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdate;
-    
+
+    /// <summary>
+    /// pnlMessagePlaceholder control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.MessagesPlaceHolder pnlMessagePlaceholder;
+
+    /// <summary>
+    /// pnlSaveAs control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlSaveAs;
+
+    /// <summary>
+    /// lblSaveAs control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblSaveAs;
+
+    /// <summary>
+    /// drpSaveAs control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_UniSelector_UniSelector drpSaveAs;
+
     /// <summary>
     /// editForm control.
     /// </summary>

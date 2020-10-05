@@ -10,7 +10,6 @@ using System.Web.UI.WebControls;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.CKEditor.Web.UI;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
@@ -907,11 +906,8 @@ public partial class CMSModules_PortalEngine_Controls_Editable_EditableText : CM
                                     // Maximize editor to fill entire dialog
                                     Editor.RemoveButtons.Add("Maximize");
 
-                                    if (!DeviceContext.CurrentDevice.IsMobile())
-                                    {
-                                        // Desktop browsers
-                                        Editor.Config["on"] = "{ 'instanceReady' : function(e) { e.editor.execCommand( 'maximize' ); } }";
-                                    }
+                                    // Desktop browsers
+                                    Editor.Config["on"] = "{ 'instanceReady' : function(e) { e.editor.execCommand( 'maximize' ); } }";
                                 }
 
                                 // Set toolbar location

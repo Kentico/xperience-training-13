@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>dbe760e1-787a-48f7-8adc-82a3e89221b2</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT
+   ShippingOptionDisplayName  AS '{$objecttype.com_shippingoption$}',
+   ISNULL(COUNT(OrderID),0) AS '{$ecommerce.report_numberoforders$}'
+FROM
+   COM_ShippingOption 
+   LEFT JOIN COM_Order 
+      ON OrderShippingOptionID = ShippingOptionID AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (@FromDate IS NULL OR (OrderDate >= @FromDate)) 
+      AND (@ToDate IS NULL OR (OrderDate <= DATEADD(day,1,@ToDate)))   
+      AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+WHERE 
+   (ShippingOptionSiteID = @CMSContextCurrentSiteID) 
+   AND (ShippingOptionEnabled = 1 OR ShippingOptionID IN (SELECT OrderShippingOptionID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+GROUP BY ShippingOptionDisplayName
+ORDER BY 
+   COUNT(OrderID) DESC,
+   ShippingOptionDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>NumberOfOrdersByShippingOption</CodeName>
+    <GUID>4f9edd6b-678f-4f74-9bd6-664c77607552</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

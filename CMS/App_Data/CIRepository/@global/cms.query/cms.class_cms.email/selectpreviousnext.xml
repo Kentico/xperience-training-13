@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.email</CodeName>
+    <GUID>488f275e-7311-4136-a127-4c970cd4060f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>6501ee6c-4456-4e50-8083-faa64caf6c0f</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectpreviousnext</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+ DECLARE @EmailList TABLE (EmailID INT, RN INT);
+ INSERT INTO @EmailList (EmailID, RN) SELECT EmailID, ROW_NUMBER() OVER (ORDER BY ##ORDERBY##) AS RN FROM CMS_Email WHERE ##WHERE##;
+ DECLARE @num INT; SET @num = (SELECT RN FROM @EmailList WHERE EmailID = @EmailID);
+ SELECT EmailID, RN, @num AS BASE_RN FROM @EmailList WHERE RN IN (@num - 1, @num + 1)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

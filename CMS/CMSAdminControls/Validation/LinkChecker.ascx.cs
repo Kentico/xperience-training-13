@@ -16,7 +16,7 @@ using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.EventLog;
 using CMS.Helpers;
 using CMS.IO;
@@ -323,7 +323,7 @@ public partial class CMSAdminControls_Validation_LinkChecker : DocumentValidator
 
         // Get the full domain
         ctlAsyncLog.EnsureLog();
-        var presentationUrl = DocumentURLProvider.GetPresentationUrl(CurrentSite.SiteID, CultureCode);
+        var presentationUrl = new PresentationUrlRetriever().RetrieveForAdministration(CurrentSite.SiteID, CultureCode);
         ctlAsyncLog.Parameter = new Uri(presentationUrl).GetLeftPart(UriPartial.Authority) + ";" + presentationUrl + ";" + RemoveVirtualContextData(URLHelper.RemoveProtocolAndDomain(Url), CultureCode);
         ctlAsyncLog.RunAsync(CheckLinks, WindowsIdentity.GetCurrent());
     }
@@ -459,8 +459,10 @@ public partial class CMSAdminControls_Validation_LinkChecker : DocumentValidator
             {
                 try
                 {
-                    StreamReader reader = StreamReader.New(client.OpenRead(url));
-                    html = reader.ReadToEnd();
+                    using (var reader = StreamReader.New(client.OpenRead(url)))
+                    {
+                        html = reader.ReadToEnd();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -569,10 +571,12 @@ public partial class CMSAdminControls_Validation_LinkChecker : DocumentValidator
                 AddLog(RemoveVirtualContextData(url, CultureCode), false);
 
                 // Create HEAD web request for each URL
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URLHelper.GetAbsoluteUrl(url, urlParams[0], urlParams[1], urlParams[2]));
+                var req = WebRequest.CreateHttp(URLHelper.GetAbsoluteUrl(url, urlParams[0], urlParams[1], urlParams[2]));
                 req.Method = "HEAD";
                 req.UserAgent = "CMS-LinkChecker";
                 req.AllowAutoRedirect = false;
+
+                EnsureCertificateValidation(req);
 
                 // If exception use GET request instead
                 foreach (string exception in exceptions)

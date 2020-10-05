@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Scheduler_Controls_UI_List {
-    
+public partial class CMSModules_Scheduler_Controls_UI_List
+{
+
     /// <summary>
     /// gridElem control.
     /// </summary>

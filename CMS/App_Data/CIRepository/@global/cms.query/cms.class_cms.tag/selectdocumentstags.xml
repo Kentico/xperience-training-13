@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.tag</CodeName>
+    <GUID>335d8316-ecf9-46d6-b8a1-5f5c162becd1</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>88d1f935-648f-4c08-855c-0f85c8dc2cf7</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectDocumentsTags</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[SELECT ##TOPN## CMS_Tag.TagID, TagName, COUNT(DocumentID) AS TagCount FROM CMS_DocumentTag JOIN CMS_Tag ON CMS_DocumentTag.TagID = CMS_Tag.TagID JOIN CMS_TagGroup ON CMS_Tag.TagGroupID = CMS_TagGroup.TagGroupID WHERE (DocumentID IN (SELECT DocumentID FROM View_CMS_Tree_Joined WHERE ##WHERE##)) GROUP BY CMS_Tag.TagID, TagName ORDER BY ##ORDERBY##]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

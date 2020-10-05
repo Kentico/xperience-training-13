@@ -10,11 +10,13 @@ public partial class CMSModules_Reporting_Tools_Report_Print : CMSReportingModal
 {
     protected override void OnPreInit(EventArgs e)
     {
+        UIContext["excludedhashparameters"] = "UILang";
+
         base.OnPreInit(e);
-        
+
         // Get report info
-        int reportId = QueryHelper.GetInteger("reportid", 0);
-        ReportInfo report = ReportInfoProvider.GetReportInfo(reportId);
+        string reportName = QueryHelper.GetString("reportname", String.Empty);
+        ReportInfo report = ReportInfoProvider.GetReportInfo(reportName);
 
         if (report != null)
         {

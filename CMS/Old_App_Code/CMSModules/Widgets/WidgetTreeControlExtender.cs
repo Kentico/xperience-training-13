@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web;
 using System.Data;
 using System.Web.UI;
@@ -17,7 +16,7 @@ using CMS.PortalEngine;
 [assembly: RegisterCustomClass("WidgetTreeControlExtender", typeof(WidgetTreeControlExtender))]
 
 /// <summary>
-/// Bad words list control extender
+/// Widgets list control extender
 /// </summary>
 public class WidgetTreeControlExtender : ControlExtender<UITreeView>
 {

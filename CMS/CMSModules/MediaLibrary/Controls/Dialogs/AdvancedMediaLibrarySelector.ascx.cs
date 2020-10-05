@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.Core;
 using CMS.DataEngine;
-using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.MediaLibrary;
 using CMS.Membership;
@@ -29,27 +25,15 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
 
     #region "Private variables"
 
-    private AvailableGroupsEnum mGroups = AvailableGroupsEnum.None;
-    private AvailableLibrariesEnum mGlobalLibraries = AvailableLibrariesEnum.None;
-    private AvailableLibrariesEnum mGroupLibraries = AvailableLibrariesEnum.None;
+    private AvailableLibrariesEnum mGlobalLibraries = AvailableLibrariesEnum.None; 
     private AvailableSitesEnum mSites = AvailableSitesEnum.All;
-
     private string mGlobalLibraryName = "";
     private int mSelectedLibraryID;
-    private string mGroupName = "";
-    private string mGroupLibraryName = "";
     private string mSiteToSelect = "";
 
     private bool mLibraryDataLoaded;
 
-    // Group selector
-    private const string controlPath = "~/CMSModules/Groups/FormControls/CommunityGroupSelector.ascx";
-    private FormEngineUserControl groupsSelector;
-    private bool disableGroupSelector;
-
     #endregion
-
-
     #region "Public properties"
 
     public override bool IsLiveSite
@@ -68,22 +52,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
 
 
     /// <summary>
-    /// Indicates what groups should be available.
-    /// </summary>
-    public AvailableGroupsEnum Groups
-    {
-        get
-        {
-            return mGroups;
-        }
-        set
-        {
-            mGroups = value;
-        }
-    }
-
-
-    /// <summary>
     /// Indicates what libraries should be available.
     /// </summary>
     public AvailableLibrariesEnum GlobalLibraries
@@ -95,22 +63,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
         set
         {
             mGlobalLibraries = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Indicates what group libraries should be available.
-    /// </summary>
-    public AvailableLibrariesEnum GroupLibraries
-    {
-        get
-        {
-            return mGroupLibraries;
-        }
-        set
-        {
-            mGroupLibraries = value;
         }
     }
 
@@ -147,39 +99,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
     }
 
 
-
-    /// <summary>
-    /// Name of the group.
-    /// </summary>
-    public string GroupName
-    {
-        get
-        {
-            return mGroupName;
-        }
-        set
-        {
-            mGroupName = value;
-        }
-    }
-
-
-    /// <summary>
-    /// ID of the group to select.
-    /// </summary>
-    public int SelectedGroupID
-    {
-        get
-        {
-            return ValidationHelper.GetInteger(ViewState["SelectedGroupID"], 0);
-        }
-        set
-        {
-            ViewState["SelectedGroupID"] = value;
-        }
-    }
-
-
     /// <summary>
     /// ID of the library to select.
     /// </summary>
@@ -193,22 +112,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
         {
             mSelectedLibraryID = value;
             LibraryID = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Name of the group library.
-    /// </summary>
-    public string GroupLibraryName
-    {
-        get
-        {
-            return mGroupLibraryName;
-        }
-        set
-        {
-            mGroupLibraryName = value;
         }
     }
 
@@ -311,8 +214,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
 
         siteSelector.StopProcessing = false;
         siteSelector.UniSelector.AllowEmpty = false;
-
-        InitializeGroupSelector();
     }
 
 
@@ -337,9 +238,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
 
         HandleSiteEmpty();
 
-        HandleGroupEmpty();
-
-        if (librarySelector.MediaLibraryID != 0 || GroupedLibrariesPrepared())
+        if (librarySelector.MediaLibraryID != 0)
         {
             SetLibraries();
         }
@@ -372,25 +271,17 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
             return;
         }
 
-        // Display group selector only when group module is present
-        if (ModuleEntryManager.IsModuleLoaded(ModuleName.COMMUNITY) && (groupsSelector != null))
-        {
-            HandleGroupsSelection();
-        }
-        else
-        {
-            // Reload libraries
-            LoadLibrarySelection();
+        // Reload libraries
+        LoadLibrarySelection();
 
-            // Pre-select library
-            PreselectLibrary();
+        // Pre-select library
+        PreselectLibrary();
 
-            // OnLibraryChanged will be fired only when control wasn't loaded before
-            if (!IsSelectorLoaded)
-            {
-                IsSelectorLoaded = true;
-                RaiseOnLibraryChanged();
-            }
+        // OnLibraryChanged will be fired only when control wasn't loaded before
+        if (!IsSelectorLoaded)
+        {
+            IsSelectorLoaded = true;
+            RaiseOnLibraryChanged();
         }
 
         mLibraryDataLoaded = true;
@@ -407,12 +298,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
 
 
     #region "Private methods"
-
-    private bool GroupedLibrariesPrepared()
-    {
-        return librarySelector.GroupID != 0 && librarySelector.CurrentSelector.HasData;
-    }
-
 
     /// <summary>
     /// Initializes all the inner controls.
@@ -490,19 +375,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
         if (!siteSelector.UniSelector.HasData || siteSelector.SiteID == 0)
         {
             siteSelector.Enabled = false;
-            disableGroupSelector = true;
-        }
-    }
-
-
-    /// <summary>
-    /// Disables groups drop-down list when empty.
-    /// </summary>
-    private void HandleGroupEmpty()
-    {
-        if (disableGroupSelector && ModuleEntryManager.IsModuleLoaded(ModuleName.COMMUNITY) && (groupsSelector != null))
-        {
-            groupsSelector.Enabled = false;
         }
     }
 
@@ -512,141 +384,12 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
     #region "Selection handler methods"
 
     /// <summary>
-    /// Initializes group selector.
-    /// </summary>
-    private void HandleGroupsSelection()
-    {
-        // Display group selector only when group module is present
-        if (ModuleEntryManager.IsModuleLoaded(ModuleName.COMMUNITY) && (groupsSelector != null))
-        {
-            // Global libraries item into group selector
-            if (GlobalLibraries != AvailableLibrariesEnum.None)
-            {
-                // Add special item
-                groupsSelector.SetValue("UseDisplayNames", true);
-                groupsSelector.SetValue("DisplayGlobalValue", true);
-                groupsSelector.SetValue("SiteID", SiteID);
-                groupsSelector.SetValue("GlobalValueText", GetString("dialogs.media.globallibraries"));
-                groupsSelector.IsLiveSite = IsLiveSite;
-            }
-            else
-            {
-                groupsSelector.SetValue("DisplayGlobalValue", false);
-            }
-
-            // If all groups should be displayed
-            switch (Groups)
-            {
-                case AvailableGroupsEnum.All:
-                    // Set condition to load only groups related to the current site
-                    groupsSelector.SetValue("WhereCondition", String.Format("(GroupSiteID={0})", SiteID));
-                    break;
-
-                case AvailableGroupsEnum.OnlyCurrentGroup:
-                    // Load only current group and disable control
-                    int groupId = ModuleCommands.CommunityGetCurrentGroupID();
-                    groupsSelector.SetValue("WhereCondition", String.Format("(GroupID={0})", groupId));
-                    break;
-
-                case AvailableGroupsEnum.OnlySingleGroup:
-                    if (!string.IsNullOrEmpty(GroupName))
-                    {
-                        groupsSelector.SetValue("WhereCondition", String.Format("(GroupName = N'{0}' AND GroupSiteID={1})", SqlHelper.EscapeQuotes(GroupName), SiteID));
-                    }
-                    break;
-
-                case AvailableGroupsEnum.None:
-                    // Just '(none)' displayed in the selection
-                    if (GlobalLibraries == AvailableLibrariesEnum.None)
-                    {
-                        groupsSelector.SetValue("DisplayNoneWhenEmpty", true);
-                        groupsSelector.SetValue("EnabledGroups", false);
-                    }
-                    groupsSelector.SetValue("WhereCondition", String.Format("({0})", SqlHelper.NO_DATA_WHERE));
-                    break;
-            }
-
-            // Reload group selector based on recently passed settings
-            ((IDataUserControl)groupsSelector).ReloadData(true);
-
-            PreselectGroup();
-        }
-        else
-        {
-            plcGroupSelector.Visible = false;
-        }
-    }
-
-
-    /// <summary>
-    /// Initializes group selector.
-    /// </summary>
-    private void InitializeGroupSelector()
-    {
-        if (groupsSelector != null)
-        {
-            return;
-        }
-
-        try
-        {
-            groupsSelector = LoadUserControl(controlPath) as FormEngineUserControl;
-            if (groupsSelector == null)
-            {
-                return;
-            }
-
-            // Set up selector
-            groupsSelector.ID = "dialogsGroupSelector";
-            groupsSelector.SetValue("DisplayCurrentGroup", false);
-            groupsSelector.SetValue("SiteID", 0);
-            groupsSelector.IsLiveSite = IsLiveSite;
-            groupsSelector.Changed += groupSelector_Changed;
-
-            // Get uniselector and set it up
-            UniSelector us = groupsSelector.GetValue("CurrentSelector") as UniSelector;
-            if (us != null)
-            {
-                us.ReturnColumnName = "GroupID";
-            }
-
-            // Get DropDownList and set it up
-            DropDownList drpGroups = groupsSelector.GetValue("CurrentDropDown") as DropDownList;
-            if (drpGroups != null)
-            {
-                drpGroups.AutoPostBack = true;
-            }
-
-            // Add control to panel
-            pnlGroupSelector.Controls.Add(groupsSelector);
-        }
-        catch (HttpException)
-        {
-            // Couldn't load the control
-            plcGroupSelector.Visible = false;
-        }
-    }
-
-
-    /// <summary>
     /// Initializes library selector.
     /// </summary>
     public void LoadLibrarySelection()
     {
-        SelectedGroupID = (groupsSelector != null ? ValidationHelper.GetInteger(groupsSelector.GetValue("GroupID"), -1) : 0);
+        librarySelector.Where = GetDisplayedLibrariesCondition();
 
-        // Decide what type of libraries to display
-        if (SelectedGroupID == -1)
-        {
-            librarySelector.Where = String.Format("({0})", SqlHelper.NO_DATA_WHERE);
-            SetLibrariesEmpty();
-        }
-        else
-        {
-            librarySelector.Where = GetDisplayedLibrariesCondition();
-        }
-
-        librarySelector.GroupID = SelectedGroupID;
         librarySelector.SiteID = SiteID;
         librarySelector.ReloadData();
     }
@@ -658,29 +401,10 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
     private string GetDisplayedLibrariesCondition()
     {
         AvailableLibrariesEnum availableLibrariesEnum;
-        string libraryName = String.Empty;
         
         // Get correct libraries
-        if (SelectedGroupID != 0)
-        {
-            availableLibrariesEnum = GroupLibraries;
-
-            if (groupsSelector != null)
-            {
-                // Get currently selected group ID
-                int groupId = ValidationHelper.GetInteger(groupsSelector.GetValue("GroupID"), 0);
-                if (groupId > 0)
-                {
-                    librarySelector.GroupID = groupId;
-                    libraryName = GroupLibraryName;
-                }
-            }
-        }
-        else
-        {
-            availableLibrariesEnum = GlobalLibraries;
-            libraryName = GlobalLibraryName;
-        }
+        availableLibrariesEnum = GlobalLibraries;
+        string libraryName = GlobalLibraryName;
 
         var condition = new WhereCondition();
 
@@ -715,31 +439,6 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
         }
     }
 
-
-    /// <summary>
-    /// Ensures right group is selected in the list.
-    /// </summary>
-    private void PreselectGroup()
-    {
-        if ((SelectedGroupID < 0) || (groupsSelector == null))
-        {
-            return;
-        }
-
-        // Get DropDownList and set it up
-        DropDownList drpGroups = groupsSelector.GetValue("CurrentDropDown") as DropDownList;
-        if (drpGroups == null)
-        {
-            return;
-        }
-
-        try
-        {
-            drpGroups.SelectedValue = SelectedGroupID.ToString();
-        }
-        catch { }
-    }
-
     #endregion
 
 
@@ -752,39 +451,8 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
     {
         SiteID = (int)siteSelector.Value;
 
-        // Reload groups selector
-        HandleGroupsSelection();
-
-        // Pre-select group
-        PreselectGroup();
-
         // Pre-select library
         PreselectLibrary();
-
-        // Reload libraries
-        LoadLibrarySelection();
-
-        RaiseOnLibraryChanged();
-    }
-
-
-    /// <summary>
-    /// Handler of the event occurring when the group selector has changed.
-    /// </summary>
-    protected void groupSelector_Changed(object sender, EventArgs e)
-    {
-        if (!RequestHelper.IsPostBack())
-        {
-            // Pre-select group
-            PreselectGroup();
-
-            // Pre-select library
-            PreselectLibrary();
-        }
-
-        // Change library selector's object type to correct MediaLibraryObjectType
-        string groupsSelectorValue = ValidationHelper.GetString(groupsSelector.Value, "0");
-        librarySelector.CurrentSelector.ObjectType = groupsSelectorValue == "0" ? MediaLibraryInfo.OBJECT_TYPE : MediaLibraryInfo.OBJECT_TYPE_GROUP;
 
         // Reload libraries
         LoadLibrarySelection();

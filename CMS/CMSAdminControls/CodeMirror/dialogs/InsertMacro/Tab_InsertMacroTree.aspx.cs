@@ -3,7 +3,6 @@
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Helpers;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
 
@@ -38,13 +37,6 @@ public partial class CMSAdminControls_CodeMirror_dialogs_InsertMacro_Tab_InsertM
     protected override void OnPreRender(EventArgs e)
     {
         base.OnPreRender(e);
-
-        if (PortalContext.ViewMode.IsLiveSite())
-        {
-            // Register custom css if exists
-            RegisterDialogCSSLink();
-            SetLiveDialogClass();
-        }
 
         string script = @"
 function InsertMacro(macro) {

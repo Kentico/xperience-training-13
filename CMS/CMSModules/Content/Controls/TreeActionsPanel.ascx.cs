@@ -123,6 +123,7 @@ public partial class CMSModules_Content_Controls_TreeActionsPanel : CMSUserContr
         btnMove.ToolTip = GetString("content.ui.move");
         btnUp.ToolTip = GetString("content.ui.up");
         btnDown.ToolTip = GetString("content.ui.down");
+        btnRefresh.ToolTip = GetString("content.ui.refresh");
 
         // Hide search button in Ecommerce
         if (ShowModeMenu)

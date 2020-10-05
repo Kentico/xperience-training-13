@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Content_Controls_CMSDeskTree {
-    
+public partial class CMSModules_Content_Controls_CMSDeskTree
+{
+
     /// <summary>
     /// menuCont control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Content_Controls_CMSDeskTree {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.ContextMenuContainer menuCont;
-    
+
     /// <summary>
     /// pnlBody control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Content_Controls_CMSDeskTree {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlBody;
-    
+
     /// <summary>
     /// pnlTreeArea control.
     /// </summary>
@@ -37,16 +38,7 @@ public partial class CMSModules_Content_Controls_CMSDeskTree {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTreeArea;
-    
-    /// <summary>
-    /// iconRefresh control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMSModules_Content_Controls_RefreshIcon iconRefresh;
-    
+
     /// <summary>
     /// treeElem control.
     /// </summary>

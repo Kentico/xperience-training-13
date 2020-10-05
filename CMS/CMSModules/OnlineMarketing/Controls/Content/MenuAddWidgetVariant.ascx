@@ -12,10 +12,6 @@
     function ContextAddWebPartMVTVariant(definition) {
         AddMVTVariant(definition.zoneId, definition.webPartId, definition.nodeAliasPath, definition.instanceGuid, definition.templateId, 'widget', '');
     }
-
-    function ContextAddWebPartCPVariant(definition) {
-        AddPersonalizationVariant(definition.zoneId, definition.webPartId, definition.nodeAliasPath, definition.instanceGuid, definition.templateId, 'widget', '');
-    }
     //]]>
 </script>
 

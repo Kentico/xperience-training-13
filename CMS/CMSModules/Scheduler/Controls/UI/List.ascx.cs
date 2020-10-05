@@ -3,7 +3,6 @@ using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
@@ -12,7 +11,6 @@ using CMS.Membership;
 using CMS.Scheduler;
 using CMS.SiteProvider;
 using CMS.UIControls;
-
 
 public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
 {
@@ -50,8 +48,10 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
     #endregion
 
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         gridElem.OnAction += gridElem_OnAction;
         gridElem.OnExternalDataBound += gridElem_OnExternalDataBound;
         gridElem.WhereCondition = GenerateWhereCondition();
@@ -70,6 +70,14 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
     }
 
 
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
+
+        gridElem.NamedColumns["TaskAvailability"].Visible = (SiteID > 0 && !SystemTasks);
+    }
+
+
     /// <summary>
     /// Handles the UniGrid's OnAction event.
     /// </summary>
@@ -77,7 +85,7 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
     /// <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
     protected void gridElem_OnAction(string actionName, object actionArgument)
     {
-        switch (actionName.ToLowerCSafe())
+        switch (actionName.ToLowerInvariant())
         {
             case "edit":
                 if (!String.IsNullOrEmpty(EditURL))
@@ -99,13 +107,13 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
                     {
                         int taskId = Convert.ToInt32(actionArgument);
 
-                        TaskInfo task = TaskInfoProvider.GetTaskInfo(taskId);
+                        TaskInfo task = TaskInfo.Provider.Get(taskId);
                         if (task != null)
                         {
                             task.Generalized.LogSynchronization = SynchronizationTypeEnum.LogSynchronization;
                             task.Generalized.LogIntegration = true;
                             task.Generalized.LogEvents = true;
-                            TaskInfoProvider.DeleteTaskInfo(task);
+                            TaskInfo.Provider.Delete(task);
 
                             if (task.TaskType == ScheduledTaskTypeEnum.System)
                             {
@@ -128,37 +136,20 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
                         RedirectToAccessDenied("CMS.ScheduledTasks", "Modify");
                     }
 
-                    TaskInfo taskInfo = TaskInfoProvider.GetTaskInfo(Convert.ToInt32(actionArgument));
+                    TaskInfo taskInfo = TaskInfo.Provider.Get(Convert.ToInt32(actionArgument));
                     if (taskInfo != null)
                     {
-                        SiteInfo siteInfo = SiteInfo.Provider.Get(SiteID);
-                        if (!taskInfo.TaskEnabled)
+                        if (taskInfo.TaskIsRunning)
                         {
-                            // Task is not enabled (won't be executed at the end of request), run it now
-                            SchedulingExecutor.ExecuteTask(taskInfo, (siteInfo != null) ? siteInfo.SiteName : SiteContext.CurrentSiteName);
+                            ShowWarning(GetString("ScheduledTask.TaskAlreadyrunning"));
+                            return;
                         }
-                        else
-                        {
-                            if (!taskInfo.TaskIsRunning)
-                            {
-                                taskInfo.TaskNextRunTime = DateTime.Now;
 
-                                // Update the task
-                                TaskInfoProvider.SetTaskInfo(taskInfo);
+                        var site = SiteInfo.Provider.Get(SiteID);
+                        var siteId = site?.SiteID ?? SiteContext.CurrentSiteID;
+                        var url = SchedulingUrlFactory.GetSchedulerUrl(siteId, taskInfo.TaskAvailability, taskInfo.TaskID);
 
-                                // Run the task
-                                SchedulingTimer.RunSchedulerImmediately = true;
-                                if (siteInfo != null)
-                                {
-                                    SchedulingTimer.SchedulerRunImmediatelySiteName = siteInfo.SiteName;
-                                }
-                            }
-                            else
-                            {
-                                ShowWarning(GetString("ScheduledTask.TaskAlreadyrunning"));
-                                return;
-                            }
-                        }
+                        SchedulingHelper.RunSchedulerRequest(url);
 
                         ShowConfirmation(GetString("ScheduledTask.WasExecuted"));
                     }
@@ -170,7 +161,7 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
 
     protected object gridElem_OnExternalDataBound(object sender, string sourceName, object parameter)
     {
-        switch (sourceName.ToLowerCSafe())
+        switch (sourceName.ToLowerInvariant())
         {
             case "useexternalservice":
                 // Use external service
@@ -231,7 +222,7 @@ public partial class CMSModules_Scheduler_Controls_UI_List : CMSAdminListControl
 
     /// <summary>
     /// Generates where condition for unigrid.
-    /// </summary>    
+    /// </summary>
     private string GenerateWhereCondition()
     {
         if (SiteID > 0)

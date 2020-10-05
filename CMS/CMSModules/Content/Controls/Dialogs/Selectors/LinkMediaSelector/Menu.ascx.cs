@@ -410,7 +410,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         NewFile.Config = Config;
         NewFile.AllowedExtensions = AllowedExtensions;
 
-        var displayPrepareForImport = StorageHelper.IsExternalStorage(LibraryFolderPath) && !IsCopyMoveLinkDialog && (MediaLibraryDirectoryInfo != null);
+        var displayPrepareForImport = !IsCopyMoveLinkDialog && (MediaLibraryDirectoryInfo != null) && StorageHelper.IsExternalStorage(MediaLibraryDirectoryInfo.FullName);
         btnPrepareForImport.Visible = displayPrepareForImport;
 
         if (displayPrepareForImport)

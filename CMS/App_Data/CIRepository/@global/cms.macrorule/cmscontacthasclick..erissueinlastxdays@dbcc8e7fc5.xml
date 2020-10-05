@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.macrorule>
+  <MacroRuleAvailability>2</MacroRuleAvailability>
+  <MacroRuleCondition>
+    <![CDATA[{_perfectum}Contact.ClickedLinkInNewsletterIssue("{issue}", ToInt({days}))]]>
+  </MacroRuleCondition>
+  <MacroRuleDescription>
+    <![CDATA[{$macrorule.cmscontacthasclickedalinkinnewsletterissueinlastxdays.description$}]]>
+  </MacroRuleDescription>
+  <MacroRuleDisplayName>
+    <![CDATA[Contact has clicked a link in marketing email in the last X days]]>
+  </MacroRuleDisplayName>
+  <MacroRuleEnabled>True</MacroRuleEnabled>
+  <MacroRuleGUID>f15ab50d-c0e2-4e39-a406-4b8493dd0801</MacroRuleGUID>
+  <MacroRuleIsCustom>False</MacroRuleIsCustom>
+  <MacroRuleName>
+    <![CDATA[CMSContactHasClickedALinkInNewsletterIssueInLastXDays]]>
+  </MacroRuleName>
+  <MacroRuleParameters>
+    <form version="2">
+      <field allowempty="true" column="_perfectum" columnsize="100" columntype="text" guid="ee2ca2de-ce3a-4d70-8843-1dcf1f2635a1" visible="true">
+        <properties>
+          <defaultvalue>;has</defaultvalue>
+          <fieldcaption>select operation</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>macronegationoperator</controlname>
+          <Options>
+<![CDATA[
+;has
+!;has not
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+        </settings>
+      </field>
+      <field column="issue" columntype="guid" guid="0474cac0-1c7e-4bf1-8410-0481ad8a48f8" visible="true">
+        <properties>
+          <fieldcaption>{$macro.selector.campaignemail$}</fieldcaption>
+          <validationerrormessage>{$issueselector.noitemsselected$}</validationerrormessage>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <FilterControl>~/CMSFormControls/Filters/ObjectFilter.ascx</FilterControl>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>newsletter.issue</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>newsletterissueselect</ResourcePrefix>
+          <ReturnColumnName>IssueGUID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>0</SelectionMode>
+          <UseAutocomplete>False</UseAutocomplete>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field allowempty="true" column="days" columntype="integer" guid="047afea0-5a59-40a8-a354-4ae5107a03c7" visible="true">
+        <properties>
+          <defaultvalue>0</defaultvalue>
+          <fieldcaption>enter days</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <FilterType>0</FilterType>
+          <Trim>False</Trim>
+        </settings>
+        <rules>
+          <rule errormsg="Please insert value smaller than 5000">
+            <![CDATA[{%Rule("(Value <= 5000)", "<rules><r pos=\"0\" par=\"\" op=\"and\" n=\"MaxValue\" ><p n=\"maxvalue\"><t>5000</t><v>5000</v><r>0</r><d></d><vt>double</vt><tv>0</tv></p></r></rules>")%}]]>
+          </rule>
+        </rules>
+      </field>
+    </form>
+  </MacroRuleParameters>
+  <MacroRuleRequiresContext>False</MacroRuleRequiresContext>
+  <MacroRuleResourceName>cms.onlinemarketing</MacroRuleResourceName>
+  <MacroRuleText>
+    <![CDATA[Contact {_perfectum} clicked a link in marketing email {issue} in the last {days} days.]]>
+  </MacroRuleText>
+</cms.macrorule>

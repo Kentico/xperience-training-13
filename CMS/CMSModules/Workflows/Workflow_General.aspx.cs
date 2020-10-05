@@ -79,7 +79,8 @@ public partial class CMSModules_Workflows_Workflow_General : CMSWorkflowPage
                     {
                     Text = GetString("workflow.convert"),
                     OnClientClick = "return confirm(" + ScriptHelper.GetString(GetString("workflow.confirmconversion"), true) + ");",
-                    EventName = CONVERT_ACTION
+                    EventName = CONVERT_ACTION,
+                    ButtonStyle = ButtonStyle.Default
                 };
 
                 if (editElem.CurrentWorkflow.WorkflowAutoPublishChanges)

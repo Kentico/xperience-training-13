@@ -294,7 +294,7 @@ public partial class CMSModules_Newsletters_Controls_VariantMailout : CMSAdminCo
             if (issue == null) continue;
             var task = NewsletterTasksManager.EnsureMailoutTask(issue, DateTime.Now, false);
             task.TaskNextRunTime = when;
-            TaskInfoProvider.SetTaskInfo(task);
+            TaskInfo.Provider.Set(task);
             if (issue.IssueScheduledTaskID != task.TaskID)
             {
                 using (new CMSActionContext { LogSynchronization = false })
@@ -496,7 +496,7 @@ public partial class CMSModules_Newsletters_Controls_VariantMailout : CMSAdminCo
     private DateTime GetMailoutTimeFromScheduledTask(DataRowView rowView)
     {
         var taskId = ValidationHelper.GetInteger(rowView["IssueScheduledTaskID"], 0);
-        var task = TaskInfoProvider.GetTaskInfo(taskId);
+        var task = TaskInfo.Provider.Get(taskId);
         if (task != null && task.TaskNextRunTime > DateTimeHelper.ZERO_TIME)
         {
             return task.TaskNextRunTime;

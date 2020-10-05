@@ -75,16 +75,6 @@ public partial class CMSModules_PortalEngine_Controls_WebParts_WebPartEditCSS : 
         SaveAction save = new SaveAction();
         headerActions.ActionsList.Add(save);
 
-        // Preview
-        HeaderAction preview = new HeaderAction
-        {
-            Text = GetString("general.preview"),
-            OnClientClick = "performToolbarAction('split');return false;",
-            Visible = false,
-            Tooltip = GetString("preview.tooltip")
-        };
-        headerActions.ActionsList.Add(preview);
-
         headerActions.ActionPerformed += (sender, e) =>
         {
             if (e.CommandName == ComponentEvents.SAVE)

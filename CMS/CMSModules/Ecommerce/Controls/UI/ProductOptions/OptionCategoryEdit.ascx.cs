@@ -120,7 +120,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductOptions_OptionCateg
     {
         get
         {
-            return ValidationHelper.GetString(editOptionCategory.FieldControls["CategoryType"].Value, "").ToEnum<OptionCategoryTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(editOptionCategory.FieldControls["CategoryType"].Value, ""));
         }
     }
 
@@ -132,7 +132,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductOptions_OptionCateg
     {
         get
         {
-            return ValidationHelper.GetString(editOptionCategory.Data.GetValue("CategoryType"), "").ToEnum<OptionCategoryTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(editOptionCategory.Data.GetValue("CategoryType"), ""));
         }
     }
 

@@ -16,17 +16,6 @@
                 StopProcessing="true" UseCodeNameForSelection="false" OnlyRunningSites="true" />
         </div>
     </div>
-    <asp:PlaceHolder ID="plcGroupSelector" runat="server" Visible="true">
-        <div class="form-group">
-            <div class="editing-form-label-cell">
-                <cms:LocalizedLabel CssClass="control-label" ID="lblGroup" runat="server" DisplayColon="true" EnableViewState="false"
-                    ResourceString="general.group"></cms:LocalizedLabel>
-            </div>
-            <div class="editing-form-value-cell">
-                <asp:PlaceHolder ID="pnlGroupSelector" runat="server"></asp:PlaceHolder>
-            </div>
-        </div>
-    </asp:PlaceHolder>
     <div class="form-group">
         <div class="editing-form-label-cell">
             <cms:LocalizedLabel CssClass="control-label" ID="lblLibrary" runat="server" DisplayColon="true" EnableViewState="false"

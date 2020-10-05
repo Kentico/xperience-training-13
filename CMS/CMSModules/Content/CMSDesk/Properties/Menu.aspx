@@ -13,7 +13,7 @@
             Visible="false" />
         <asp:Panel ID="pnlForm" runat="server">
             <cms:UIPlaceHolder ID="pnlUIBasicProperties" runat="server" ModuleName="CMS.Content"
-                ElementName="Menu.BasicProperties">
+                ElementName="Menu.Navigation">
                 <asp:Panel ID="pnlBasicProperties" runat="server">
                     <cms:LocalizedHeading runat="server" ID="headBasicProperties" Level="4" ResourceString="content.menu.basic" EnableViewState="false" />
                     <div class="form-horizontal">
@@ -29,23 +29,6 @@
                 </asp:Panel>
                 <br />
             </cms:UIPlaceHolder>
-            <cms:UIPlaceHolder ID="pnlUISearch" runat="server" ModuleName="CMS.Content" ElementName="Menu.Search">
-                <asp:Panel ID="pnlSearch" runat="server" CssClass="NodePermissions" EnableViewState="false">
-                    <cms:LocalizedHeading runat="server" ID="headSearch" Level="4" ResourceString="GeneralProperties.Search" EnableViewState="false" />
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="editing-form-label-cell">
-                                <cms:LocalizedLabel CssClass="control-label" ID="lblExcludeFromSearch" runat="server" EnableViewState="false"
-                                    ResourceString="GeneralProperties.ExcludeFromSearch" DisplayColon="true" AssociatedControlID="chkExcludeFromSearch" />
-                            </div>
-                            <div class="editing-form-value-cell">
-                                <cms:CMSCheckBox ID="chkExcludeFromSearch" runat="server" />
-                            </div>
-                        </div>
-                    </div>
-                </asp:Panel>
-                <br />
-            </cms:UIPlaceHolder>            
         </asp:Panel>
     </asp:Panel>
     <div class="Clear">

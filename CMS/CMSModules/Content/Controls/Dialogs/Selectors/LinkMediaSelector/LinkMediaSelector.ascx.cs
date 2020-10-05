@@ -876,9 +876,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// </summary>
     private void SetupControls()
     {
-        var currentSite = SiteContext.CurrentSite;
-
-        UsePermanentUrls = (SourceType == MediaSourceEnum.Content) ? false : AttachmentURLProvider.UsePermanentUrls(currentSite.SiteName);
+        UsePermanentUrls = SourceType != MediaSourceEnum.Content;
 
         SetupSiteSelector();
         SetupPropertiesControl();
@@ -2023,13 +2021,7 @@ function RaiseHiddenPostBack(){{
 
             if (ai != null)
             {
-                string nodeAliasPath = "";
-                if (TreeNodeObj != null)
-                {
-                    nodeAliasPath = TreeNodeObj.NodeAliasPath;
-                }
-
-                string url = mediaView.GetAttachmentItemUrl(ai.AttachmentGUID, ai.AttachmentName, nodeAliasPath, ai.AttachmentImageHeight, ai.AttachmentImageWidth, 0);
+                string url = mediaView.GetAttachmentItemUrl(ai.AttachmentGUID, ai.AttachmentName, ai.AttachmentImageHeight, ai.AttachmentImageWidth, 0);
 
                 if (LastAttachmentGuid == attachmentGuid)
                 {
@@ -2068,12 +2060,10 @@ function RaiseHiddenPostBack(){{
             var ai = DocumentHelper.GetAttachment(attachmentGuid, si.SiteName, false);
             if (ai != null)
             {
-                string nodeAliasPath = (TreeNodeObj != null) ? TreeNodeObj.NodeAliasPath : null;
-
                 if (CMSDialogHelper.IsItemSelectable(SelectableContent, ai.AttachmentExtension))
                 {
                     // Get attachment URL
-                    string url = mediaView.GetAttachmentItemUrl(ai.AttachmentGUID, ai.AttachmentName, nodeAliasPath, 0, 0, 0);
+                    string url = mediaView.GetAttachmentItemUrl(ai.AttachmentGUID, ai.AttachmentName, 0, 0, 0);
 
                     // Remember last selected attachment GUID
                     if (SourceType == MediaSourceEnum.DocumentAttachments)

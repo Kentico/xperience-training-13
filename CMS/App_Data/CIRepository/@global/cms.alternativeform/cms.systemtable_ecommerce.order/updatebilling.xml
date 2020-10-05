@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>ecommerce.order</CodeName>
+    <GUID>58eb48fc-83f4-41f7-add2-bc3ce5de8909</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="OrderID" guid="f28fb94f-e177-48e6-aaf6-acfcd856ac3e" />
+      <field column="OrderGUID" guid="cfcbbfde-eda8-4fd8-b94c-7d92bac0b907" order="1" />
+      <field column="OrderPaymentOptionID" guid="d7942b91-97c7-46d0-a4b5-770a006065e1" visible="true" order="2">
+        <settings>
+          <AddAllItemsRecord>False</AddAllItemsRecord>
+          <AddNoneRecord>True</AddNoneRecord>
+          <controlname>paymentselector</controlname>
+          <DisplayOnlyEnabled>True</DisplayOnlyEnabled>
+          <EnsureSelectedItem>True</EnsureSelectedItem>
+          <ShippingOptionIDColumnName>OrderShippingOptionID</ShippingOptionIDColumnName>
+          <UsePaymentNameForSelection>False</UsePaymentNameForSelection>
+        </settings>
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%!EditedObject.OrderIsPaid && !EditedObject.OrderIsAuthorized|(identity)GlobalAdministrator|(hash)56b502002a9a968a22cca6e974b66126e7472212ba6ac63e4bbe4571287f1bc1%}]]>
+          </enabledmacro>
+          <fieldcaption>{$com.orderlist.paymentmethod$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderCurrencyID" guid="efeadf73-e9a5-4283-b015-0702a04163e9" visible="true" order="3">
+        <settings>
+          <controlname>LabelControl</controlname>
+          <OutputFormat>
+            <![CDATA[{%EditedObject.OrderCurrency|(identity)GlobalAdministrator|(hash)b4374befe3ada8fa86c213a2ef896d18fe1511246e3494da0e081e93cb7ff597%}]]>
+          </OutputFormat>
+          <ResolveMacros>True</ResolveMacros>
+        </settings>
+        <properties>
+          <enabledmacro ismacro="true">
+            <![CDATA[{%!EditedObject.OrderIsPaid|(identity)GlobalAdministrator|(hash)c0376a9d171ededf8808fe2748e2d4caa357e614a5344c67899acc97a4546158%}]]>
+          </enabledmacro>
+          <fieldcaption>{$com.orderlist.currency$}</fieldcaption>
+        </properties>
+      </field>
+      <field allowempty="true" column="OrderBillingAddressID" columntype="integer" dummy="altform" guid="746bb6d0-0b62-454c-bc5c-3c431aed5106" system="true" visible="true" order="4">
+        <properties>
+          <controlcssclass>form-control-text</controlcssclass>
+          <fieldcaption>{$com.BillingAddress$}</fieldcaption>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowHeight>200</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>400</DialogWindowWidth>
+          <EditDialogWindowHeight>630</EditDialogWindowHeight>
+          <EditDialogWindowWidth>680</EditDialogWindowWidth>
+          <EditItemElementName>EditAddressPropertiesBilling</EditItemElementName>
+          <EditWindowName>EditWindow</EditWindowName>
+          <ElementResourceName>cms.ecommerce</ElementResourceName>
+          <EncodeOutput>False</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>ecommerce.orderaddress</ObjectType>
+          <RemoveMultipleCommas>True</RemoveMultipleCommas>
+          <ReturnColumnName>AddressID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>6</SelectionMode>
+          <Transformation>
+            <![CDATA[{%EditedObject.OrderBillingAddress.ApplyTransformation("Ecommerce.Transformations.Order_OrderAddressDetail")|(identity)GlobalAdministrator|(hash)1e8d4770c664b5b04e213f3ecfee4c141ac3d42f1364e1bbec51b9507357aa06%}]]>
+          </Transformation>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <WhereCondition>
+<![CDATA[
+AddressOrderID = {%EditedObject.OrderID|(identity)GlobalAdministrator|(hash)508642e77165e37c87633e8cde30f7593577988f442278b82dcf742a0e3f3388%} 
+AND 
+AddressType = 1
+]]>
+          </WhereCondition>
+        </settings>
+      </field>
+      <field column="OrderPaymentResult" guid="59784e17-5d9d-48e0-93a1-ae6d97564121" visible="true" order="5">
+        <settings>
+          <controlname>labelcontrol</controlname>
+          <OutputFormat ismacro="true">
+            <![CDATA[{% EditedObject.OrderPaymentFormattedResult|(identity)GlobalAdministrator|(hash)073da547a62e3d5680f57b242c01bb313f210dcd89be020e821adeb90382a84e%}]]>
+          </OutputFormat>
+        </settings>
+        <properties>
+          <fieldcaption>{$com.orderlist.paymentresult$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[Indicates the result of the payment performed via a payment gateway.]]>
+          </fielddescription>
+        </properties>
+      </field>
+      <field column="OrderIsPaid" guid="4f3c7a42-baa6-44bc-8c52-2f18dc8e20b9" visible="true" order="6">
+        <properties>
+          <fieldcaption>{$com.orderlist.orderispaid$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="OrderShippingOptionID" guid="0eccbbc8-1bb0-4ef9-9c34-6d30c87ea79c" order="7" />
+      <field column="OrderTotalShipping" guid="075b59b9-762d-46f7-8e08-e0008ad055ea" order="8" />
+      <field column="OrderTotalPrice" guid="fef6bb8a-2c7d-4ea3-8335-920498657802" order="9" />
+      <field column="OrderTotalPriceInMainCurrency" guid="a62bd496-944e-4f31-9f2d-530b849cd644" order="10" />
+      <field column="OrderTotalTax" guid="786aede8-95e6-4d3a-a285-1627661b9ca7" order="11" />
+      <field column="OrderDate" guid="fc38316b-50bd-49f2-b469-2a8649440ed8" order="12" />
+      <field column="OrderStatusID" guid="11250533-9320-4950-b72c-f44d48c6903c" order="13" />
+      <field column="OrderCustomerID" guid="ae5f163d-d345-459c-97e2-3adb7150195f" />
+      <field column="OrderCreatedByUserID" guid="1fda4f50-5db3-4803-aeb5-7c1ddfbf85ab" />
+      <field column="OrderNote" guid="ad9e3376-04c8-42b3-b405-d0f36bebb606" />
+      <field column="OrderSiteID" guid="72c87c0f-a61b-4ff4-8c2b-4f6b510e03a1" />
+      <field column="OrderInvoice" guid="da660e03-1666-44e4-b05c-15b52a9e2f44" order="18" />
+      <field column="OrderInvoiceNumber" guid="2e515b8c-5186-488f-8836-84ae1a3a73bb" order="19" />
+      <field column="OrderTrackingNumber" guid="a8e47954-ef84-46cc-a2e7-c8ae6515b4c5" order="20" />
+      <field column="OrderCustomData" guid="0162e231-adda-4951-b014-fde264ec2103" order="21" />
+      <field column="OrderTaxSummary" guid="b8fdab08-5003-4ee7-8520-4525e51715ed" order="22" />
+      <field column="OrderGrandTotal" guid="3cdb8bf9-6568-465a-8b43-a073d4bc125d" order="23" />
+      <field column="OrderDiscounts" guid="d1b49e10-4999-4dcc-9f06-5743bee08980" order="24" />
+      <field column="OrderOtherPayments" guid="5ea8a4cb-4421-4458-835e-8e362c6f20c8" order="25" />
+      <field column="OrderLastModified" guid="0554677d-56cc-4b16-8992-7e02ae6c46f7" order="26" />
+      <field column="OrderGrandTotalInMainCurrency" guid="835d4981-f09e-4f83-922a-c9a8ef81878f" order="27" />
+      <field column="OrderCouponCodes" guid="0c00c13e-47a4-4e9f-92e5-fe64a24505ce" />
+      <field column="OrderExchangeRate" guid="a757801f-d433-4ba1-b48c-ed2a4810afcb" order="29" />
+      <field column="OrderCulture" guid="d4c36d0d-073d-4b64-a99c-5213b120cffc" order="30" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Update billing</FormDisplayName>
+  <FormGUID>4dd2b0c6-895d-43b1-b90a-b1740b655888</FormGUID>
+  <FormHideNewParentFields>False</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>UpdateBilling</FormName>
+</cms.alternativeform>

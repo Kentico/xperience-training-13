@@ -1212,37 +1212,44 @@ function SelectAllItems(checkbox, hash) {
             {
                 Text = GetString("general.new"),
                 CommandName = "New",
+                ButtonStyle = ButtonStyle.Default
             },
             deleteAction = new HeaderAction
             {
                 Text = GetString("general.delete"),
                 CommandName = "Delete",
                 OnClientClick = "return confirm(" + ScriptHelper.GetLocalizedString("General.ConfirmDelete") + ")",
+                ButtonStyle = ButtonStyle.Default
             },
             editAction = new HeaderAction
             {
                 Text = GetString("general.edit"),
                 CommandName = "Edit",
+                ButtonStyle = ButtonStyle.Default
             },
             upAction = new HeaderAction
             {
                 Text = GetString("general.up"),
                 CommandName = "Up",
+                ButtonStyle = ButtonStyle.Default
             },
             downAction = new HeaderAction
             {
                 Text = GetString("general.down"),
                 CommandName = "Down",
+                ButtonStyle = ButtonStyle.Default
             },
             new HeaderAction
             {
                 Text = GetString("general.expandall"),
-                CommandName = "ExpandAll"
+                CommandName = "ExpandAll",
+                ButtonStyle = ButtonStyle.Default
             },
             new HeaderAction
             {
                 Text = GetString("general.collapseall"),
-                CommandName = "CollapseAll"
+                CommandName = "CollapseAll",
+                ButtonStyle = ButtonStyle.Default
             }
         );
     }

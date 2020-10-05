@@ -227,18 +227,12 @@ public partial class CMSModules_Settings_Pages_Keys : CMSDeskPage, IPostBackEven
         SettingsGroupViewer.SaveChanges();
 
         bool containsDebugKey = false;
-        bool containsPerformanceKey = false;
 
-        foreach(var keyItem in SettingsGroupViewer.KeyItems)
+        foreach (var keyItem in SettingsGroupViewer.KeyItems)
         {
             if (keyItem.CategoryName.StartsWithCSafe("cms.debug", true))
             {
                 containsDebugKey = true;
-            }
-
-            if (keyItem.CategoryName.StartsWithCSafe("cms.performance", true))
-            {
-                containsPerformanceKey = true;
             }
         }
 
@@ -246,12 +240,6 @@ public partial class CMSModules_Settings_Pages_Keys : CMSDeskPage, IPostBackEven
         if (containsDebugKey)
         {
             DebugHelper.ResetDebugSettings();
-        }
-
-        // Special case for performance settings - performance settings have to be reloaded to take effect
-        if (containsPerformanceKey)
-        {
-            RequestHelper.ResetPerformanceSettings();
         }
     }
 

@@ -166,7 +166,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_L
         }
 
         // Get submission
-        var submissionInfo = TranslationSubmissionInfoProvider.GetTranslationSubmissionInfo(ValidationHelper.GetInteger(actionArgument, 0));
+        var submissionInfo = TranslationSubmissionInfo.Provider.Get(ValidationHelper.GetInteger(actionArgument, 0));
         if (submissionInfo == null)
         {
             return;
@@ -192,7 +192,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_L
                 break;
 
             case "delete":
-                var serviceInfo = TranslationServiceInfoProvider.GetTranslationServiceInfo(submissionInfo.SubmissionServiceID);
+                var serviceInfo = TranslationServiceInfo.Provider.Get(submissionInfo.SubmissionServiceID);
                 if (serviceInfo.TranslationServiceSupportsCancel)
                 {
                     err = TranslationServiceHelper.CancelSubmission(submissionInfo);
@@ -264,7 +264,7 @@ public partial class CMSModules_Translations_Controls_UI_TranslationSubmission_L
                             break;
 
                         case "cancelaction":
-                            var service = TranslationServiceInfoProvider.GetTranslationServiceInfo(ValidationHelper.GetInteger(drv["SubmissionServiceID"], 0));
+                            var service = TranslationServiceInfo.Provider.Get(ValidationHelper.GetInteger(drv["SubmissionServiceID"], 0));
                             if (service != null)
                             {
                                 bool serviceSupportsCancel = service.TranslationServiceSupportsCancel;

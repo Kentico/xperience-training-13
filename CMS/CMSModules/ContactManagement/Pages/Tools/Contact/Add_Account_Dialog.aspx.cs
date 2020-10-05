@@ -28,7 +28,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_Add_Accoun
             AuthorizationHelper.AuthorizedReadContact(true);
             if (AuthorizationHelper.AuthorizedModifyContact(false))
             {
-                contactRoleSelector.IsLiveSite = ValidationHelper.GetBoolean(parameters["IsLiveSite"], false);
+                contactRoleSelector.IsLiveSite = false;
                 contactRoleSelector.UniSelector.DialogWindowName = "SelectContactRole";
 
                 selectionDialog.LocalizeItems = QueryHelper.GetBoolean("localize", true);

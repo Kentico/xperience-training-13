@@ -7,7 +7,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Content_Attachments_CMSPages_MetaDataEditor : CMSLiveModalPage
+public partial class CMSModules_Content_Attachments_CMSPages_MetaDataEditor : CMSPage
 {
     private string mCurrentSiteName;
 

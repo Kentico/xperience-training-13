@@ -206,11 +206,11 @@ public partial class CMSModules_Content_Controls_Relationships_AddRelatedDocumen
 
         // Initialize dialog scripts
         Config.EditorClientID = txtLeftNode.ClientID + ";" + hdnSelectedNodeId.ClientID;
-        string url = CMSDialogHelper.GetDialogUrl(Config, IsLiveSite, false, null, false);
+        string url = CMSDialogHelper.GetDialogUrl(Config, false, null, false);
         btnLeftNode.OnClientClick = "modalDialog('" + url + "', 'contentselectnode', '90%', '85%'); return false;";
 
         Config.EditorClientID = txtRightNode.ClientID + ";" + hdnSelectedNodeId.ClientID;
-        url = CMSDialogHelper.GetDialogUrl(Config, IsLiveSite, false, null, false);
+        url = CMSDialogHelper.GetDialogUrl(Config, false, null, false);
         btnRightNode.OnClientClick = "modalDialog('" + url + "', 'contentselectnode', '90%', '85%'); return false;";
 
         if (TreeNode != null)

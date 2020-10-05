@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.macrorule>
+  <MacroRuleAvailability>2</MacroRuleAvailability>
+  <MacroRuleCondition>
+<![CDATA[
+selectedDay = DateTime.Now.AddDays(ToInt({days}));
+Contact.ContactBirthday != null && {_is}(Contact.ContactBirthday.Month == selectedDay.Month && Contact.ContactBirthday.Day == selectedDay.Day);
+]]>
+  </MacroRuleCondition>
+  <MacroRuleDescription>{$macrorule.contacthasbirthday.description$}</MacroRuleDescription>
+  <MacroRuleDisplayName>Contact has birthday</MacroRuleDisplayName>
+  <MacroRuleEnabled>True</MacroRuleEnabled>
+  <MacroRuleGUID>6de0ab69-0512-40a7-9a52-d3a0d3cafe75</MacroRuleGUID>
+  <MacroRuleIsCustom>False</MacroRuleIsCustom>
+  <MacroRuleName>CMSContactHasBirthday</MacroRuleName>
+  <MacroRuleParameters>
+    <form version="2">
+      <field column="days" columntype="integer" guid="c5407516-dead-4ae8-ade3-d7e414a6ea9d" visible="true">
+        <properties>
+          <defaultvalue>1</defaultvalue>
+          <fieldcaption>select day</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+-1;yesterday
+0;today
+1;tomorrow
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="_is" columnsize="100" columntype="text" guid="050a2dfc-5040-4064-8bf0-1e5b80c5b93e" visible="true">
+        <properties>
+          <defaultvalue>;is</defaultvalue>
+          <fieldcaption>select operation</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>MacroNegationOperator</controlname>
+          <EditText>false</EditText>
+          <Options>
+<![CDATA[
+;is
+!;is not
+]]>
+          </Options>
+        </settings>
+      </field>
+    </form>
+  </MacroRuleParameters>
+  <MacroRuleRequiresContext>False</MacroRuleRequiresContext>
+  <MacroRuleResourceName>cms.onlinemarketing</MacroRuleResourceName>
+  <MacroRuleText>Contact birthday {_is} {days}</MacroRuleText>
+</cms.macrorule>

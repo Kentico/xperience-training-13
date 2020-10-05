@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>ede7838d-108e-47af-ae7f-5ae9cd134f89</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'day');
+DECLARE @myselection TABLE (
+   NodeAliasPath varchar(400),
+   StatisticsObjectCulture varchar(400),
+   Count float   
+);
+
+DECLARE @countedAll TABLE (
+   Counted float   
+);
+
+INSERT INTO @myselection 
+  SELECT TOP 100 
+  StatisticsObjectName AS '{$reports_pageviews_day.path_header$}',  
+  StatisticsObjectCulture AS '{$general.culture$}', 
+  SUM(HitsCount) AS '{$reports_landingpage_day.hits_header$}' 
+  FROM Analytics_Statistics 
+    INNER JOIN Analytics_DayHits ON Analytics_DayHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+    WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+  AND (StatisticsCode=@CodeName) 
+  AND (HitsStartTime >= @FromDate) 
+  AND (HitsEndTime <= @ToDate) 
+  GROUP BY StatisticsObjectCulture, StatisticsObjectName
+  ORDER BY SUM(HitsCount) DESC
+  
+INSERT INTO @countedAll 
+  SELECT
+  SUM(HitsCount) AS '{$reports_landingpage_day.hits_header$}' 
+  FROM Analytics_Statistics 
+    INNER JOIN Analytics_DayHits ON Analytics_DayHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+    WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) 
+  AND (StatisticsCode=@CodeName) 
+  AND (HitsStartTime >= @FromDate) 
+  AND (HitsEndTime <= @ToDate) 
+
+SELECT NodeAliasPath AS '{$reports_landingpage_day.path_header$}',  
+StatisticsObjectCulture AS '{$general.culture$}', 
+Count AS '{$reports_landingpage_day.hits_header$}',
+CAST (CAST((100*Count)/(SELECT Counted FROM  @countedAll) as decimal(10,2)) AS NVARCHAR(10))+'%' AS '{$reports_landingpage_day.hits_percent_header$}' 
+FROM @myselection
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>landingpage.multilingual.dayreport</CodeName>
+    <GUID>a7607b68-ae7f-400e-898a-d2d039cfa0a5</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

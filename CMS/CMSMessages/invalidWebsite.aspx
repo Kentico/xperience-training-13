@@ -34,7 +34,7 @@
                 <asp:Panel runat="server" ID="pnlLicense" Visible="false">
                     <div  style="padding-top: 25px">
                         <cms:LocalizedLabel runat="server" ID="lblLicenseInfo" ResourceString="Message.LicenseTip" />
-                        <asp:HyperLink runat="server" ID="lnkFreeEdition" NavigateUrl="http://www.kentico.com/download/free-edition.aspx">http://www.kentico.com/download/free-edition.aspx</asp:HyperLink>
+                        <asp:HyperLink runat="server" ID="lnkFreeEdition" NavigateUrl="https://xperience.io/get-started/free-version">https://xperience.io/get-started/free-version</asp:HyperLink>
                     </div>
                 </asp:Panel>
             </asp:Panel>

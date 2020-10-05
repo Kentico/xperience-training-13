@@ -223,11 +223,11 @@
 // Menu position and menu carets
 .navbar-nav > li > .dropdown-menu {
     margin-top: 0;
-    .border-top-radius(0);
+    border-top-left-radius: 2px;
 }
 // Menu position and menu caret support for dropups via extra dropup class
 .navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {
-    .border-bottom-radius(0);
+    border-top-left-radius: 2px;
 }
 
 // Right aligned menus need alt position
@@ -426,33 +426,27 @@
         }
     }
 
-    .dropdown-menu {
-        background-color: @context-menu-bg;
-        border-color: @context-menu-bg;
-
-        > li, > li > span {
-            > a:hover, > a:focus {
-                background-color: @navbar-inverse-hover-color;
-            }
-        }
+    .navbar-right .dropdown-menu {
+        border-top-left-radius: @border-radius;
+        border-top-right-radius: 0;
     }
 
     .dropdown-menu-item-label {
         margin-bottom: @base-unit / 2;
         font-weight: 600;
     }
-    
+
     .dropdown-menu-item-link {
         text-decoration: underline;
         padding: 0;
         margin-top: @base-unit / 2;
         font-weight: 400;
         .navbar-menu-text-shortening;
+
         &:hover {
             background: none !important;
         }
     }
-
     // Context menu item
     .dropdown-menu-item {
         color: @color-white;
@@ -471,18 +465,18 @@
         margin-top: @base-unit / 4;
         margin-bottom: @base-unit / 2;
     }
-    
+
     .dropdown-menu-item-info-message {
         .dropdown-menu-item-message;
         color: @color-gray-100;
     }
-    
-    
+
+
     .dropdown-menu-item-error-message {
         .dropdown-menu-item-message;
         color: @color-red-100;
     }
-    
+
     .navbar-inverse {
         > li > a.accordion-toggle {
             &:hover {
@@ -498,33 +492,46 @@
             }
         }
 
-        a.dropdown-toggle, > .open > a.dropdown-toggle {
+        a.dropdown-toggle,
+        > .open > a.dropdown-toggle {
             &:hover {
-                background-color: @context-menu-bg;
+                background-color: @navbar-inverse-hover-color;
             }
         }
 
         > .open > a.dropdown-toggle {
-            background-color: @context-menu-bg;
+            background-color: @navbar-inverse-hover-color;
+        }
+
+
+        .dropdown-menu {
+            a {
+                background-color: @navbar-inverse-bg;
+                color: @cool-gray-20;
+
+                &:hover {
+                    background-color: @navbar-inverse-hover-color;
+                }
+            }
+
+            .divider {
+                display: none;
+            }
         }
     }
 }
-
-// Reserved for Kentico logo
-.cms-nav-icon-large {
-    .cms-icon-130;
-    color: @navbar-inverse-icon-color;
-}
-
-// All other icons in the main navigation
-.cms-nav-icon-medium {
-    .cms-icon-100;
-    color: @navbar-inverse-icon-color;
-    padding: @base-unit * 0.75;
-}
-
-
-// Search in the main navigation
+    // Reserved for Kentico logo
+    .cms-nav-icon-large {
+        .cms-icon-130;
+        color: @navbar-inverse-icon-color;
+    }
+    // All other icons in the main navigation
+    .cms-nav-icon-medium {
+        .cms-icon-100;
+        color: @navbar-inverse-icon-color;
+        padding: @base-unit * 0.75;
+    }
+    // Search in the main navigation
 .nav-search-container {
     padding: @base-unit;
     // The icon overflows thus it needs this
@@ -536,7 +543,7 @@
         display: inline-block;
         height: @input-height-small; // ~28px
         width: 100%;
-        padding: 0px 4px;
+        padding: @padding-base-vertical @input-padding;
         color: @input-color;
         vertical-align: baseline;
         background-color: @input-bg;
@@ -547,6 +554,10 @@
         transition: ~"border-color ease-in-out .15s, box-shadow ease-in-out .15s";
         .placeholder();
         vertical-align: middle;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     i {
@@ -559,72 +570,71 @@
         box-sizing: content-box;
     }
 }
-
-// Help toolbar in the main CMS navbar
-.cms-navbar-help {
-    min-height: 0;
-    line-height: @cms-navbar-height;
-    color: @dropdown-link-color;
-
-    &, .nav > li > a:focus {
-        background-color: @cms-navbar-help-bg;
-    }
-
-    z-index: @zindex-navbar-help;
-
-    .nav > li > a {
-        color: @dropdown-link-color;
-        padding: 0 @padding-base-horizontal;
+    // Help toolbar in the main CMS navbar
+    .cms-navbar-help {
+        min-height: 0;
         line-height: @cms-navbar-height;
-        height: @cms-navbar-height;
-        text-decoration: underline;
+        color: @dropdown-link-color;
 
-        &:hover {
-            text-decoration: none;
+        &, .nav > li > a:focus {
+            background-color: @cms-navbar-help-bg;
         }
-    }
 
-    ul {
-        border: none;
-        background-color: @cms-navbar-help-bg;
-    }
-
-    .nav .caret, .nav:hover .caret {
-        border-top-color: @dropdown-link-color;
-    }
-
-    .nav > li > .dropdown-toggle {
         z-index: @zindex-navbar-help;
-    }
 
-    .nav > li > a:hover, .nav li.open > a {
-        background-color: @cms-navbar-help-hover-bg;
-    }
+        .nav > li > a {
+            color: @dropdown-link-color;
+            padding: 0 @padding-base-horizontal;
+            line-height: @cms-navbar-height;
+            height: @cms-navbar-height;
+            text-decoration: underline;
 
-    .dropdown-menu {
-        background-color: @cms-navbar-help-hover-bg;
-        z-index: (@zindex-navbar-help - 1); // Makes the box-shadow not visible between the menu and dropdown toggle
-        > li {
-            > a, > span > a {
-                background-color: @cms-navbar-help-hover-bg;
+            &:hover {
+                text-decoration: none;
+            }
+        }
 
-                &:hover {
-                    background-color: @cms-navbar-help-bg;
+        ul {
+            border: none;
+            background-color: @cms-navbar-help-bg;
+        }
+
+        .nav .caret, .nav:hover .caret {
+            border-top-color: @dropdown-link-color;
+        }
+
+        .nav > li > .dropdown-toggle {
+            z-index: @zindex-navbar-help;
+        }
+
+        .nav > li > a:hover, .nav li.open > a {
+            background-color: @cms-navbar-help-hover-bg;
+        }
+
+        .dropdown-menu {
+            background-color: @cms-navbar-help-hover-bg;
+            z-index: (@zindex-navbar-help - 1); // Makes the box-shadow not visible between the menu and dropdown toggle
+            > li {
+                > a, > span > a {
+                    background-color: @cms-navbar-help-hover-bg;
+
+                    &:hover {
+                        background-color: @cms-navbar-help-bg;
+                    }
                 }
             }
         }
-    }
 
-    .nav-search-container {
-        padding: 0 (@base-unit * 0.625);
+        .nav-search-container {
+            padding: 0 (@base-unit * 0.625);
 
-        input[type="search"] {
-            vertical-align: baseline;
+            input[type="search"] {
+                vertical-align: baseline;
+            }
+
+            i {
+                vertical-align: baseline;
+                line-height: @font-size-base;
+            }
         }
-
-        i {
-            vertical-align: baseline;
-            line-height: @font-size-base;
-        }
     }
-}

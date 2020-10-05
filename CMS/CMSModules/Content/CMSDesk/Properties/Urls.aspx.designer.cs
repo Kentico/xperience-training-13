@@ -58,6 +58,15 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls
     protected global::CMS.Base.Web.UI.LocalizedHeading headUrl;
 
     /// <summary>
+    /// pnlPageUrlPath control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlPageUrlPath;
+
+    /// <summary>
     /// lblSlug control.
     /// </summary>
     /// <remarks>
@@ -92,6 +101,96 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Button btnEnterPress;
+
+    /// <summary>
+    /// pnlUrlLinks control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlUrlLinks;
+
+    /// <summary>
+    /// plcLive control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcLive;
+
+    /// <summary>
+    /// lblLiveURLTitle control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblLiveURLTitle;
+
+    /// <summary>
+    /// lnkLiveURL control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkLiveURL;
+
+    /// <summary>
+    /// plcPreview control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcPreview;
+
+    /// <summary>
+    /// lblPreviewURLTitle control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblPreviewURLTitle;
+
+    /// <summary>
+    /// pnlUpdatePreviewUrl control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdatePreviewUrl;
+
+    /// <summary>
+    /// lnkPreviewURL control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkPreviewURL;
+
+    /// <summary>
+    /// btnResetPreviewGuid control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSAccessibleButton btnResetPreviewGuid;
+
+    /// <summary>
+    /// litMissingPattern control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLiteral litMissingPattern;
 
     /// <summary>
     /// pnlAlternativeUrls control.

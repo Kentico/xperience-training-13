@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kentico.Content.Web.Mvc;
+using System;
 
 namespace XperienceAdapter.Models
 {
@@ -14,6 +15,8 @@ namespace XperienceAdapter.Models
         public string? DirectUrl { get; set; }
         
         public string? PermanentUrl { get; set; }
+
+        public IMediaFileUrl? MediaFileUrl { get; set; }
         
         public string? Extension { get; set; }
         

@@ -7,6 +7,7 @@ using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
+using CMS.Localization;
 using CMS.Membership;
 using CMS.SiteProvider;
 using CMS.UIControls;
@@ -34,7 +35,9 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
 
     private void RegisterTemplateSelectionScript()
     {
-        string templatesServiceUrl = GetTemplatesServiceUrl();
+        string culture = QueryHelper.GetString("parentculture", null);
+
+        string templatesServiceUrl = GetTemplatesServiceUrl(culture);
 
         if (String.IsNullOrEmpty(templatesServiceUrl))
         {
@@ -51,7 +54,7 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
             continueButtonId = btnContinue.ClientID,
             serviceUrl = templatesServiceUrl,
             redirectionUrl = GetRedirectionUrl(),
-            sitePresentationUrl = GetSitePresentationUrl(),
+            sitePresentationUrl = GetSitePresentationUrl(culture),
             defaultImageUrlForCustomTemplates = UIHelper.GetImageUrl(null, DEFAULT_IMAGE_FOR_CUSTOM_TEMPLATES)
         });
 
@@ -59,11 +62,10 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
     }
 
 
-    private string GetTemplatesServiceUrl()
+    private string GetTemplatesServiceUrl(string culture)
     {
         var parentNodeId = QueryHelper.GetInteger("parentnodeid", 0);
-        int classId = QueryHelper.GetInteger("classid", 0);
-        string culture = QueryHelper.GetString("parentculture", null);
+        int classId = QueryHelper.GetInteger("classid", 0);        
 
         var parentNode = DocumentHelper.GetDocument(parentNodeId, TreeProvider.ALL_CULTURES, Tree);
         var pageTypeInfo = DataClassInfoProvider.GetDataClassInfo(classId);
@@ -76,14 +78,15 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
             return null;
         }
 
+        // Web service URL (XHR) must carry the user in the URL. Cookies are not being sent in XHR requests to dfferent domains.
         var webServiceUrlProvider = new PageTemplateWebServiceUrlProvider(MembershipContext.AuthenticatedUser);
         return webServiceUrlProvider.GetTemplatesEndpointUrl(parentNode, pageTypeInfo.ClassName, culture);
     }
 
 
-    private string GetSitePresentationUrl()
+    private string GetSitePresentationUrl(string culture)
     {
-        return DocumentURLProvider.GetPresentationUrl(SiteContext.CurrentSiteID);
+        return new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteID, culture);
     }
 
 

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>{$cms.dashboard.defaultdashboard$}</ElementCaption>
+  <ElementCheckModuleReadPermission>True</ElementCheckModuleReadPermission>
+  <ElementDisplayName>Dashboard</ElementDisplayName>
+  <ElementFromVersion>8.0</ElementFromVersion>
+  <ElementGUID>f1cd1c98-338b-4c15-9ba3-72b701b09944</ElementGUID>
+  <ElementIconClass />
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>Roles.Dashboard</ElementName>
+  <ElementOrder>6</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>M_NEdit</CodeName>
+    <GUID>0cee6b71-596b-49c7-bd30-54175f6d7bdb</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>EditRole</CodeName>
+    <GUID>229e2259-b750-49ad-917c-147a916d26b1</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS.Roles</CodeName>
+      <GUID>4dcb3b9b-8bee-4a3e-97dd-610f6e5623a4</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <Data>
+      <AllowLocalizedFilteringInSelectionDialog>True</AllowLocalizedFilteringInSelectionDialog>
+      <BindingObjectType>cms.roleapplication</BindingObjectType>
+      <checkmodifypermission>True</checkmodifypermission>
+      <DialogWhereCondition>
+        <![CDATA[ElementLevel = 3 AND ElementIDPath LIKE (SELECT TOP 1 ElementIDPath FROM CMS_UIElement WHERE ElementName = 'administration' AND ElementResourceID = (SELECT ResourceID FROM CMS_Resource WHERE ResourceName = 'cms')) + '%']]>
+      </DialogWhereCondition>
+      <DisplayBreadcrumbs>False</DisplayBreadcrumbs>
+      <includejquery>False</includejquery>
+      <ListPrefaceText>{$cms_roleapplication.assignedapplications$}</ListPrefaceText>
+      <ResourcePrefix>cms_roleapplication.select</ResourcePrefix>
+      <WhereCondition>
+        <![CDATA[RoleID = {% UIContext.ObjectID |(identity)GlobalAdministrator|(hash)657bc2d4ae370308cea8c77c3da62d2c563c483a5d3673b9c2b3c809d4c56920%}]]>
+      </WhereCondition>
+    </Data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS.Roles</CodeName>
+    <GUID>4dcb3b9b-8bee-4a3e-97dd-610f6e5623a4</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+  <ElementVisibilityCondition>
+<![CDATA[
+{%name = EditedObject.ToBaseInfo().CodeName;
+return !(name == "_everyone_" || name == "_authenticated_" || name == "_notauthenticated_");|(identity)GlobalAdministrator|(hash)b7ef88dd408616739a315f077a987b5f026bea9e0872840f646e5bdcc69f9d96%}
+]]>
+  </ElementVisibilityCondition>
+</cms.uielement>

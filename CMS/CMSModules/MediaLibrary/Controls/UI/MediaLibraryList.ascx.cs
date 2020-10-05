@@ -12,13 +12,6 @@ using CMS.UIControls;
 
 public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSAdminListControl
 {
-    #region "Private variables"
-
-    private int mGroupId = 0;
-
-    #endregion
-
-
     #region "Public properties"
 
     /// <summary>
@@ -49,32 +42,10 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSA
         }
     }
 
-
-    /// <summary>
-    /// Gets or sets group ID.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return mGroupId;
-        }
-        set
-        {
-            mGroupId = value;
-        }
-    }
-
     #endregion
 
 
     #region "Methods"
-
-    protected void Page_Init(object sender, EventArgs e)
-    {
-        gridElem.OnBeforeDataReload += gridElem_OnBeforeDataReload;
-    }
-
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -82,25 +53,7 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSA
         gridElem.IsLiveSite = IsLiveSite;
         gridElem.OnAction += new OnActionEventHandler(gridElem_OnAction);
         gridElem.WhereCondition = GetWhereCondition();
-        gridElem.GroupObject = (GroupID > 0);
         gridElem.ZeroRowsText = GetString("general.nodatafound");
-
-        if (GroupID > 0)
-        {
-            gridElem.GridName = "~/CMSModules/Groups/Tools/MediaLibrary/Library_List.xml";
-        }
-    }
-
-
-    /// <summary>
-    /// Differs loading depending on whether the displayed object belongs to group or not.
-    /// </summary>
-    protected void gridElem_OnBeforeDataReload()
-    {
-        if (GroupID > 0)
-        {
-            gridElem.ObjectType = MediaLibraryInfo.OBJECT_TYPE_GROUP;
-        }
     }
 
 
@@ -150,24 +103,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryList : CMSA
             whereCond = "LibrarySiteID=" + SiteContext.CurrentSite.SiteID;
         }
 
-        // Filter by group id if specified
-        if (GroupID != 0)
-        {
-            if (whereCond != null)
-            {
-                whereCond += " AND ";
-            }
-            else
-            {
-                whereCond = String.Empty;
-            }
-
-            whereCond += "LibraryGroupID=" + GroupID;
-        }
-        else
-        {
-            whereCond += " AND (LibraryGroupID IS NULL OR LibraryGroupID = 0)";
-        }
         return whereCond;
     }
 

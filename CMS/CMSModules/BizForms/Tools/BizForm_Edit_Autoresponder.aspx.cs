@@ -195,7 +195,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_Autoresponder : CMSB
 
                     try
                     {
-                        BizFormInfoProvider.SetBizFormInfo(formInfo);
+                        BizFormInfo.Provider.Set(formInfo);
                         ShowChangesSaved();
                         EnableDisableForm(formInfo.FormConfirmationTemplate);
                     }
@@ -217,7 +217,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_Autoresponder : CMSB
 
                     try
                     {
-                        BizFormInfoProvider.SetBizFormInfo(formInfo);
+                        BizFormInfo.Provider.Set(formInfo);
                         if(IsLayoutSet)
                         {
                             ShowConfirmation(GetString("Bizform_Edit_Autoresponder.LayoutDeleted"));

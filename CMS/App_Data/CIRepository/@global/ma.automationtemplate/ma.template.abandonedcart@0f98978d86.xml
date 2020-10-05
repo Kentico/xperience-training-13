@@ -82,7 +82,7 @@ Use the macros from the template example to add dynamic values, such as the shop
           <Definition>
             <SourcePoints>
               <SourcePoint>
-                <Guid>e813de91-1b54-4cca-bbd3-355b35e915a6</Guid>
+                <Guid>32ebbb68-a95a-42c1-8155-0cf56d1201cc</Guid>
                 <Label>Default</Label>
                 <Type>0</Type>
                 <StepRolesSecurity>0</StepRolesSecurity>
@@ -108,7 +108,7 @@ Use the macros from the template example to add dynamic values, such as the shop
               <d4p1:Key>Body</d4p1:Key>
               <d4p1:Value>
 <![CDATA[
-{% site = System.GetObject("cms.site", ActivitySiteID); cartLink = site.SitePresentationURL + ShoppingCartURL(site.SiteName, ActivityValue); return; |(identity)GlobalAdministrator|(hash)6e786996f0d84f820824eefa35458bbd625cde050462d216b9515376e7d9639e%}
+{% culture = "en-US"; site = System.GetObject("cms.site", ActivitySiteID); cartLink = ShoppingCartAbsoluteUrl(site.SiteName, culture, ActivityValue); return; |(identity)GlobalAdministrator|(hash)d45fa8697d79014ef1b28ea940d1f41a683cd7b348152e01c572731db3b2418f%}
 <style type="text/css">body
 {
   max-width:800px;
@@ -147,12 +147,12 @@ p {
 <p>We&lsquo;ve noticed you&lsquo;ve left an item or two in your shopping cart. In case you are still interested in them, hurry up, your recent selections are in your cart for a limited time.</p>
 
 <div class="wrapper">{% foreach(item in ShoppingCartProducts(ActivityValue)) { %}
-<div id="item"><img src="{%GetAbsoluteUrlBySiteID(IfEmpty(item.SKU.SKUImagePath, item.SKU.Parent.SKUImagePath, item.SKU.SKUImagePath), site.SiteID)%}" width="300px" />
-<p>{% FormatPriceForCart(item.UnitPrice, item.ShoppingCartID)%}</p>
+<div id="item"><img src="{% Url.MakeAbsolute((String.IsNullOrEmpty(item.SKU.SKUImagePath) ? item.SKU.Parent.SKUImagePath : item.SKU.SKUImagePath), site.SiteID, culture) %}" width="300px" />
+<p>{% FormatPriceForCart(item.UnitPrice, item.ShoppingCartID) %}</p>
 
 <p>{% item.SKU.SKUName %}</p>
 </div>
-{% } |(encode)false |(identity)GlobalAdministrator|(hash)3f855f4d710eb0e5f8e6cc707ede1abd761e8bfeb325e80949c782fe25cc75ca%}</div>
+{% } |(encode)false |(identity)GlobalAdministrator|(hash)31ce3062a39cc056b12496dca565ea3f26929faf7609383b80fd219ef8a45f53%}</div>
 <a class="btn" href="{% cartLink %}">CONTINUE SHOPPING</a>
 
 <hr />
@@ -181,7 +181,7 @@ p {
           <Definition>
             <SourcePoints>
               <SourcePoint>
-                <Guid>38a43694-d8c1-4202-b14c-fa3b59b1fb77</Guid>
+                <Guid>1e85f204-e564-4902-a4ee-363413b05270</Guid>
                 <Label>Default</Label>
                 <Type>0</Type>
                 <StepRolesSecurity>0</StepRolesSecurity>
@@ -200,13 +200,13 @@ p {
           <Type>Automatic</Type>
           <StartStepId>5</StartStepId>
           <EndStepId>1</EndStepId>
-          <SourcePointGuid>e813de91-1b54-4cca-bbd3-355b35e915a6</SourcePointGuid>
+          <SourcePointGuid>32ebbb68-a95a-42c1-8155-0cf56d1201cc</SourcePointGuid>
         </Transition>
         <Transition>
           <Type>Automatic</Type>
           <StartStepId>6</StartStepId>
           <EndStepId>5</EndStepId>
-          <SourcePointGuid>38a43694-d8c1-4202-b14c-fa3b59b1fb77</SourcePointGuid>
+          <SourcePointGuid>1e85f204-e564-4902-a4ee-363413b05270</SourcePointGuid>
         </Transition>
       </Transitions>
       <Triggers>

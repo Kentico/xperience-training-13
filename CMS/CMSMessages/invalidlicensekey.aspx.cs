@@ -9,7 +9,7 @@ using CMS.UIControls;
 
 public partial class CMSMessages_invalidlicensekey : MessagePage
 {
-    private const string CLIENT_PORTAL = "http://client.kentico.com/";
+    private const string CLIENT_PORTAL = "https://client.kentico.com/";
 
     protected void Page_Load(object sender, EventArgs e)
     {

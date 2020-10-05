@@ -190,7 +190,7 @@ public partial class CMSModules_Content_Controls_Filters_DocumentCultureFilter :
     public override string GetWhereCondition()
     {
         var where = new WhereCondition();
-        var oper = drpLanguage.SelectedValue.ToEnum<QueryOperator>();
+        var oper = EnumStringRepresentationExtensions.ToEnum<QueryOperator>(drpLanguage.SelectedValue);
         var val = ValidationHelper.GetString(cultureElem.Value, null);
         if (String.IsNullOrEmpty(val))
         {

@@ -604,12 +604,6 @@ public partial class CMSModules_Content_CMSDesk_Delete : CMSContentPage
             return;
         }
 
-        if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Blogs, ObjectActionEnum.Edit))
-        {
-            AddError(GetString("cmsdesk.blogdeletelicenselimitations", currentCulture));
-            return;
-        }
-
         if (!LicenseHelper.LicenseVersionCheck(RequestContext.CurrentDomain, FeatureEnum.Documents, ObjectActionEnum.Edit))
         {
             AddError(GetString("cmsdesk.documentdeletelicenselimitations", currentCulture));

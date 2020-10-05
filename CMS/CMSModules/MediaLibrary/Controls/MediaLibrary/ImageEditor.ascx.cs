@@ -447,7 +447,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_ImageEditor_C
                 {
                     string previewExt = !String.IsNullOrEmpty(extension) && (extension != OldPreviewExt) ? extension : OldPreviewExt;
                     string previewName = Path.GetFileNameWithoutExtension(PreviewPath);
-                    string previewFolder = Path.EnsureSlashes(DirectoryHelper.CombinePath(Path.GetDirectoryName(mfi.FilePath).TrimEnd('/'), MediaLibraryHelper.GetMediaFileHiddenFolder(site.SiteName)));
+                    string previewFolder = Path.EnsureForwardSlashes(DirectoryHelper.CombinePath(Path.GetDirectoryName(mfi.FilePath).TrimEnd('/'), MediaLibraryHelper.GetMediaFileHiddenFolder(site.SiteName)));
 
                     // Delete old preview files with thumbnails
                     MediaFileInfoProvider.DeleteMediaFilePreview(SiteContext.CurrentSiteName, mli.LibraryID, mfi.FilePath);

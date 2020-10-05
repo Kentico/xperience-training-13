@@ -121,12 +121,12 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditParameters
             editElem.OnAfterDefinitionUpdate += new EventHandler(editElem_OnAfterDefinitionUpdate);
             if (DisplayedControls != String.Empty)
             {
-                editElem.DisplayedControls = DisplayedControls.ToEnum<FieldEditorControlsEnum>();
+                editElem.DisplayedControls = EnumStringRepresentationExtensions.ToEnum<FieldEditorControlsEnum>(DisplayedControls);
             }
 
             if (FieldEditorMode != String.Empty)
             {
-                editElem.Mode = FieldEditorMode.ToEnum<FieldEditorModeEnum>();
+                editElem.Mode = EnumStringRepresentationExtensions.ToEnum<FieldEditorModeEnum>(FieldEditorMode);
             }
             editElem.ShowQuickLinks = ShowQuickLinks;
 

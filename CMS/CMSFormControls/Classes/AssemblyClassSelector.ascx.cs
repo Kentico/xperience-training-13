@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -15,7 +14,9 @@ using Newtonsoft.Json;
 
 public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineUserControl, ICallbackEventHandler
 {
-    #region "Private variables"
+    #region "Constants and variables"
+
+    private const string APPCODE_PREFIX = ClassHelper.ASSEMBLY_APPCODE + ".";
 
     private readonly string customClassString = ResHelper.GetString("general.customclasses");
     private readonly string noneValue = ResHelper.GetString("general.empty");
@@ -102,7 +103,7 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
     {
         get
         {
-            string selectedValue = drpAssemblyName.SelectedValue;
+            string selectedValue = (SimpleMode) ? txtAssemblyName.Text : drpAssemblyName.SelectedValue;
             if (AllowEmpty && (selectedValue == noneValue))
             {
                 return String.Empty;
@@ -120,6 +121,8 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
             {
                 drpAssemblyName.SelectedValue = (value == ClassHelper.ASSEMBLY_APPCODE) ? customClassString : value;
             }
+
+            txtAssemblyName.Text = drpAssemblyName.SelectedValue;
         }
     }
 
@@ -131,11 +134,11 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
     {
         get
         {
-            return drpClassName.SelectedValue;
+            return (SimpleMode) ? txtClassName.Text : drpClassName.SelectedValue;
         }
         set
         {
-            drpClassName.SelectedValue = value;
+            drpClassName.SelectedValue = txtClassName.Text = value;
         }
     }
 
@@ -271,6 +274,23 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
         }
     }
 
+
+    /// <summary>
+    /// Indicates if the control is in simple mode in which textboxes are used instead of selectors.
+    /// Default value is <c>false</c>.
+    /// </summary>
+    public bool SimpleMode
+    {
+        get
+        {
+            return GetValue("SimpleMode", false);
+        }
+        set
+        {
+            SetValue("SimpleMode", value);
+        }
+    }
+
     #endregion
 
 
@@ -297,7 +317,7 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
             // Set properties names
             object[,] values = new object[1, 2];
             values[0, 0] = ClassNameColumnName;
-            values[0, 1] = drpClassName.SelectedValue;
+            values[0, 1] = ClassName;
             return values;
         }
         return null;
@@ -310,6 +330,12 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
     public override bool IsValid()
     {
         if (!ValidateAssembly)
+        {
+            return true;
+        }
+
+        // Do not validate values returned via textboxes
+        if (SimpleMode)
         {
             return true;
         }
@@ -354,24 +380,34 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
 
     #region "Page events"
 
-    /// <summary>
-    /// Page_Load event handler.
-    /// </summary>
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
-        if (!StopProcessing && !RequestHelper.IsCallback())
+        base.OnLoad(e);
+
+        if (!StopProcessing && !RequestHelper.IsCallback() && !SimpleMode)
         {
             SetupControl();
         }
     }
 
 
-    /// <summary>
-    /// Render event handler.
-    /// </summary>
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
+
+        txtAssemblyName.Visible = txtClassName.Visible = SimpleMode;
+        drpAssemblyName.Visible = drpClassName.Visible = !SimpleMode;
+    }
+
+
     protected override void Render(HtmlTextWriter writer)
     {
         base.Render(writer);
+
+        if (SimpleMode)
+        {
+            return;
+        }
 
         foreach (ListItem item in drpAssemblyName.DropDownList.Items)
         {
@@ -404,7 +440,7 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
     {
         // Get assembly name
         string assemblyName = value;
-        if ((!AllowEmpty && String.IsNullOrEmpty(assemblyName)) || (assemblyName == customClassString))
+        if (!SimpleMode && ((!AllowEmpty && String.IsNullOrEmpty(assemblyName)) || (assemblyName == customClassString)))
         {
             assemblyName = ClassHelper.ASSEMBLY_APPCODE;
         }
@@ -414,30 +450,12 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
 
 
     /// <summary>
-    /// Ensures Assembly selector drop down.
-    /// </summary>
-    private void EnsureAssemblyData()
-    {
-        FillAssemblySelector();
-    }
-
-
-    /// <summary>
-    /// Ensures Class selector drop down.
-    /// </summary>
-    private void EnsureClassData()
-    {
-        FillClassNameSelector(AssemblyName);
-    }
-
-
-    /// <summary>
     /// Ensures selector data.
     /// </summary>
     private void EnsureData()
     {
-        EnsureAssemblyData();
-        EnsureClassData();
+        FillAssemblySelector();
+        FillClassNameSelector(AssemblyName);
     }
 
 
@@ -450,9 +468,8 @@ public partial class CMSFormControls_Classes_AssemblyClassSelector : FormEngineU
 
         // Register scripts
         ScriptHelper.RegisterJQueryUI(Page);
-        StringBuilder sb = new StringBuilder();
-
-        sb.AppendFormat(@"
+        
+        var script = String.Format(@"
 $cmsj(function() {{
     $cmsj('#{0}_txtCombo').on('autocompleteselect', function(event, ui) {{
         var assemblyName = ui.item.value;
@@ -472,7 +489,7 @@ $cmsj(function() {{
 }});
 ", drpAssemblyName.ClientID, Page.ClientScript.GetCallbackEventReference(this, "assemblyName", "fillClassInput", null), drpClassName.ClientID);
 
-        ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "acsDelayedLoad" + ClientID, ScriptHelper.GetScript(sb.ToString()));
+        ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "acsDelayedLoad" + ClientID, ScriptHelper.GetScript(script));
     }
 
 
@@ -495,7 +512,7 @@ $cmsj(function() {{
         // Get assembly names filtered by given restriction settings
         var assemblies = ClassHelper.GetAssemblyNames(AssembliesFilter, Settings)
             // Web site App_Code assembly are not supported. Custom class must be used instead
-            .Where(assemblyName => !assemblyName.StartsWith("App_Code.", StringComparison.OrdinalIgnoreCase));
+            .Where(assemblyName => !assemblyName.StartsWith(APPCODE_PREFIX, StringComparison.OrdinalIgnoreCase));
 
         // Fill assemblies list
         foreach (string assemblyName in assemblies)

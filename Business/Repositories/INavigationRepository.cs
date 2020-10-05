@@ -30,7 +30,12 @@ namespace Business.Repositories
         /// <returns>Dictionary with navigation hierarchies per each site culture.</returns>
         Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation();
 
-        // TODO: Document.
+        /// <summary>
+        /// Gets URL based on the custom "UrlSlug" field of the "BasicPageWithUrlSlug" page type.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="pageCulture"></param>
+        /// <returns></returns>
         string? GetConventionalRoutingUrl(int nodeId, SiteCulture pageCulture);
     }
 }

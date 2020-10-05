@@ -294,7 +294,7 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_Databas
     {
         get
         {
-            return ValidationHelper.GetString(drpReferenceType.Value, "").ToEnum<ObjectDependencyEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<ObjectDependencyEnum>(ValidationHelper.GetString(drpReferenceType.Value, ""));
         }
     }
 

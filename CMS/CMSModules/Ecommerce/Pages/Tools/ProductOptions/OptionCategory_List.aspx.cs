@@ -83,7 +83,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_ProductOptions_OptionCateg
                 break;
 
             case "categorytype":
-                return ValidationHelper.GetString(parameter, "").ToEnum<OptionCategoryTypeEnum>().ToLocalizedString("com.optioncategorytype");
+                return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(parameter, "")).ToLocalizedString("com.optioncategorytype");
 
             case "categorydisplayname":
                 OptionCategoryInfo category = new OptionCategoryInfo(((DataRowView)parameter).Row);

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>NumberOfPagesInWorkflowSteps</TableDisplayName>
+  <TableGUID>2739d896-23a3-4e08-8da0-09cd2a5f5cae</TableGUID>
+  <TableName>NumberOfDocumentsInWorkflowSteps</TableName>
+  <TableQuery>
+<![CDATA[
+SELECT 
+  StepDisplayName AS 'Step name',
+  [Value] AS 'Number of pages'
+FROM (
+  SELECT
+    COUNT(DocumentID) as 'Value',
+    DocumentWorkflowStepID
+  FROM View_CMS_Tree_Joined
+  WHERE DocumentWorkflowStepID IN (
+    SELECT StepID FROM CMS_WorkflowStep WHERE StepWorkflowID = @WorkflowID
+  ) AND NodeSiteID = @CMSContextCurrentSiteID
+  GROUP BY DocumentWorkflowStepID
+) Groups JOIN CMS_WorkflowStep ON Groups.DocumentWorkflowStepID = StepID
+ORDER BY StepType
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>Number_of_documents_in_workflow_step</CodeName>
+    <GUID>62cf95b5-5935-4968-a4fe-33d2da5f8837</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

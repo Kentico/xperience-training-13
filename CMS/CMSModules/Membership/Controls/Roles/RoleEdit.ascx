@@ -48,17 +48,6 @@
             </div>
         </div>
     </asp:PlaceHolder>
-    <asp:PlaceHolder runat="server" ID="plcIsPublic" Visible="false">
-        <div class="form-group">
-            <div class="editing-form-label-cell">
-                <cms:LocalizedLabel CssClass="control-label" ID="lblIsAdmin" runat="server" EnableViewState="false" ResourceString="groups.role.isgroupadmin"
-                    DisplayColon="true" AssociatedControlID="chkIsAdmin" />
-            </div>
-            <div class="editing-form-value-cell">
-                <cms:CMSCheckBox ID="chkIsAdmin" CssClass="CheckBoxMovedLeft" runat="server" />
-            </div>
-        </div>
-    </asp:PlaceHolder>
     <div class="form-group">
         <div class="editing-form-value-cell editing-form-value-cell-offset">
             <cms:FormSubmitButton ID="btnOk" runat="server" OnClick="btnOK_Click"

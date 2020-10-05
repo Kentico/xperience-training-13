@@ -76,6 +76,16 @@
                         eventHub.publish('HideApplicationList');
                     }
                 }
+
+                var element = angular.element(e.srcElement);
+                var appListLinkClass = 'js-app-list-link';
+                var helpLinkClass = 'js-context-help-link';
+
+                if (element.hasClass(appListLinkClass) || element.parent().hasClass(appListLinkClass)) {
+                    eventHub.publish('ShowApplicationList');
+                } else if (element.hasClass(helpLinkClass) || element.parent().hasClass(helpLinkClass)) {
+                    eventHub.publish('ShowContextHelp');
+                }
             });
 
             eventHub.subscribe('ApplicationListShown', function () {
@@ -98,6 +108,7 @@
                 _this.removeTileById(id);
             });
         }
+
         /**
         * Removes given tile from all tiles inside $scope
         * @type {number} index   Index of tile to be removed

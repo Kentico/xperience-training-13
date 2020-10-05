@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>47408b00-0e31-4f54-a6ec-f19afad8358e</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* @GlobalCredit - the value of CMSStoreUseGlobalCredit setting key */
+DECLARE @GlobalCredit bit;
+SET @GlobalCredit = {%Settings.CMSStoreUseGlobalCredit?1:0|(identity)GlobalAdministrator|(hash)15d2d8412267490ecf5f168ae68ae40bc8eb270c1dd59cead34f89b82f5ee1b4%};
+
+/* Selects customer first name, last name, company, email and available customer credit 
+   in site or global main currency depending on the CMSStoreUseGlobalCredit setting key
+   and filter settings. */
+SELECT TOP (@TopCustomers) 
+   CustomerFirstName AS '{$ecommerce.report_customer_firstname$}',
+   CustomerLastName AS '{$ecommerce.report_customer_lastname$}',
+   CustomerCompany AS '{$ecommerce.report_customer_company$}',
+   CustomerEmail AS '{$unigrid.userlist.columns.email$}',
+   CAST(ISNULL(Sum(EventCreditChange),0) AS DECIMAL(38,1)) AS '{$com.ui.customerscredit$}'
+FROM 
+   COM_Customer
+   LEFT JOIN COM_CustomerCreditHistory
+      ON ((EventCustomerID = CustomerID 
+           AND EventSiteID = @CMSContextCurrentSiteID 
+           AND @GlobalCredit = 0)
+         OR 
+          (EventCustomerID = CustomerID 
+           AND EventSiteID IS NULL 
+           AND @GlobalCredit = 1))
+WHERE 
+   CustomerUserID > 0 
+   AND (@FirstName IS NULL OR @FirstName = '' OR CustomerFirstName LIKE ('%'+@FirstName+'%'))
+   AND (@LastName IS NULL OR @LastName = '' OR CustomerLastName LIKE ('%'+@LastName+'%'))
+   AND (@Company IS NULL OR @Company = '' OR CustomerCompany LIKE ('%'+@Company+'%'))
+   AND (@Email IS NULL OR @Email = '' OR CustomerEmail LIKE ('%' + @Email + '%'))  
+GROUP BY
+   CustomerID,
+   CustomerLastName, 
+   CustomerFirstName, 
+   CustomerCompany, 
+   CustomerEmail
+ORDER BY 
+   ROUND(Sum(EventCreditChange),1) DESC,
+   CustomerLastName,   
+   CustomerFirstName,
+   CustomerCompany
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>TopCustomersByCredit</CodeName>
+    <GUID>f994fe21-b6ba-4e20-ba26-805118a1c27e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

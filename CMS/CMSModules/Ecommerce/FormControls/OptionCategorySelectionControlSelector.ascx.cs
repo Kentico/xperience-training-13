@@ -18,7 +18,7 @@ public partial class CMSModules_Ecommerce_FormControls_OptionCategorySelectionCo
     {
         get
         {
-            return ValidationHelper.GetString(ViewState["OriginalOptionCategoryType"], "").ToEnum<OptionCategoryTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(ViewState["OriginalOptionCategoryType"], ""));
         }
         set
         {
@@ -55,7 +55,7 @@ public partial class CMSModules_Ecommerce_FormControls_OptionCategorySelectionCo
             if (drpSelectionTypeEnum.Items.Count == 0)
             {
                 // Init selection options based on option category type
-                OptionCategoryType = ValidationHelper.GetString(Form.Data.GetValue(OptionCategoryTypeColumn), "").ToEnum<OptionCategoryTypeEnum>();
+                OptionCategoryType = EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(Form.Data.GetValue(OptionCategoryTypeColumn), ""));
                 ConfigureSelectionTypeControl();
 
                 // Remember category type to be able to compare it with currently selected option category type
@@ -94,7 +94,7 @@ public partial class CMSModules_Ecommerce_FormControls_OptionCategorySelectionCo
         if (Form != null)
         {
             // Option category type currently selected in the form
-            OptionCategoryType = ValidationHelper.GetString(Form.FieldControls[OptionCategoryTypeColumn].Value, "").ToEnum<OptionCategoryTypeEnum>();
+            OptionCategoryType = EnumStringRepresentationExtensions.ToEnum<OptionCategoryTypeEnum>(ValidationHelper.GetString(Form.FieldControls[OptionCategoryTypeColumn].Value, ""));
 
             if (OptionCategoryType != OriginalOptionCategoryType)
             {

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>1d339746-8ca6-4ea8-84b4-668868688493</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+-- Changes must by reflected in both final select and @totalsum variable
+DECLARE @AllowGlobal bit;
+SET @AllowGlobal = {%Settings.CMSStoreAllowGlobalManufacturers?1:0|(identity)GlobalAdministrator|(hash)79651229ac58df7d8ca48e71d72fedf78bd6ce37f2648e8013f95ab3e569043a%};
+DECLARE @totalsum float;
+SET @totalsum = (
+SELECT
+   ISNULL(ROUND(SUM(OrderItems.OrderItemTotalPriceInMainCurrency),1),0)
+FROM
+   COM_Manufacturer AS Manufacturers
+   LEFT JOIN 
+   (COM_SKU AS product
+   LEFT JOIN
+   COM_SKU parentProduct
+    ON product.SKUParentSKUID = parentProduct.SKUID)
+	ON (Manufacturers.ManufacturerID = product.SKUManufacturerID OR Manufacturers.ManufacturerID = parentProduct.SKUManufacturerID)
+   LEFT JOIN 
+   (SELECT OrderItemTotalPriceInMainCurrency, OrderItemSKUID 
+   FROM COM_OrderItem, COM_Order 
+   WHERE
+      OrderID = OrderItemOrderID AND @CMSContextCurrentSiteID = OrderSiteID 
+      AND (OrderDate < dateadd(day,1,@ToDate) OR @ToDate IS NULL) 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (ISNULL(OrderIsPaid,0)=1 OR ISNULL(@OrderIsPaid,0) = 0)) AS OrderItems
+       ON product.SKUID = OrderItems.OrderItemSKUID
+WHERE 
+  (Manufacturers.ManufacturerEnabled = 1 OR 
+      (Manufacturers.ManufacturerID IN (SELECT SKUManufacturerID FROM COM_SKU WHERE SKUID IN 
+          (SELECT OrderItemSKUID FROM COM_OrderItem WHERE OrderItemOrderID IN 
+              (SELECT OrderID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID)))))
+  AND product.SKUOptionCategoryID IS NULL
+  AND (Manufacturers.ManufacturerSiteID = @CMSContextCurrentSiteID OR (@AllowGlobal = 1 AND Manufacturers.ManufacturerSiteID IS NULL))
+);
+SELECT
+   Manufacturers.ManufacturerDisplayName AS '{$objecttype.com_manufacturer$}',
+   CAST(ISNULL(ROUND(SUM(OrderItems.OrderItemTotalPriceInMainCurrency),1),0) AS decimal(38,1)) AS '{$com.sales.volumeofsales$}',  
+   CAST(CAST(ISNULL(CASE WHEN @totalsum != 0 THEN ROUND(SUM(OrderItems.OrderItemTotalPriceInMainCurrency),1)/@totalsum*100 ELSE 0 END,0) AS decimal(9,1)) AS VARCHAR(20)) + ' %' AS '{$reports_pageviews.percent_header$}'
+FROM
+   COM_Manufacturer AS Manufacturers
+   LEFT JOIN 
+   (COM_SKU AS product
+   LEFT JOIN
+   COM_SKU parentProduct
+    ON product.SKUParentSKUID = parentProduct.SKUID)
+	ON (Manufacturers.ManufacturerID = product.SKUManufacturerID OR Manufacturers.ManufacturerID = parentProduct.SKUManufacturerID)	
+   LEFT JOIN 
+   (SELECT OrderItemTotalPriceInMainCurrency, OrderItemSKUID 
+    FROM COM_OrderItem, COM_Order 
+    WHERE
+       OrderID = OrderItemOrderID AND @CMSContextCurrentSiteID = OrderSiteID 
+       AND (OrderDate < dateadd(day,1,@ToDate) OR @ToDate IS NULL) 
+       AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+       AND (ISNULL(OrderIsPaid,0)=1 OR ISNULL(@OrderIsPaid,0) = 0)) AS OrderItems
+	ON product.SKUID = OrderItems.OrderItemSKUID
+WHERE 
+  (ManufacturerEnabled = 1 OR 
+      (Manufacturers.ManufacturerID IN (SELECT SKUManufacturerID FROM COM_SKU WHERE SKUID IN 
+          (SELECT OrderItemSKUID FROM COM_OrderItem WHERE OrderItemOrderID IN 
+              (SELECT OrderID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID)))))
+  AND product.SKUOptionCategoryID IS NULL
+  AND (Manufacturers.ManufacturerSiteID = @CMSContextCurrentSiteID OR (@AllowGlobal = 1 AND Manufacturers.ManufacturerSiteID IS NULL))
+GROUP BY Manufacturers.ManufacturerDisplayName  
+ORDER BY SUM(OrderItems.OrderItemTotalPriceInMainCurrency) DESC, ManufacturerDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesByManufacturer</CodeName>
+    <GUID>26644b71-0daa-4614-a4fb-d1e5d305d613</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

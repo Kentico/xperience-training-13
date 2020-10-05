@@ -223,7 +223,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         if (NumberOfAllContacts == 0)
         {
             btnDemographics.Enabled = false;
-            btnDemographics.ToolTip = GetString("ma.analytics.demographics.tooltip.disabled");
+            btnDemographics.ToolTip = GetString("ma.contact.demographics.tooltip.disabled");
         }
         else
         {

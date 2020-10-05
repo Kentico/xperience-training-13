@@ -17,7 +17,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
     #region "Private variables"
 
     private int mMediaLibraryID;
-    private Guid mMediaLibraryGroupGUID = Guid.Empty;
     private bool mEnable = true;
     private MediaLibraryInfo mLibraryInfo;
 
@@ -37,12 +36,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
             {
                 // Get data
                 mLibraryInfo = MediaLibraryInfo.Provider.Get(MediaLibraryID);
-
-                // Check whether library belongs to requested group when entered 
-                if ((mLibraryInfo != null) && (MediaLibraryGroupID > 0) && (mLibraryInfo.LibraryGroupID != MediaLibraryGroupID))
-                {
-                    mLibraryInfo = null;
-                }
 
                 // Check whether library belongs to current site when not global admin
                 if ((mLibraryInfo != null) && (!MembershipContext.AuthenticatedUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin)) && (mLibraryInfo.LibrarySiteID != SiteContext.CurrentSiteID))
@@ -85,32 +78,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
         {
             mMediaLibraryID = value;
             mLibraryInfo = null;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets media library group ID.
-    /// </summary>
-    public int MediaLibraryGroupID
-    {
-        get;
-        set;
-    }
-
-
-    /// <summary>
-    /// Gets or sets media library group GUID.
-    /// </summary>
-    public Guid MediaLibraryGroupGUID
-    {
-        get
-        {
-            return mMediaLibraryGroupGUID;
-        }
-        set
-        {
-            mMediaLibraryGroupGUID = value;
         }
     }
 
@@ -243,11 +210,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
             return;
         }
 
-        if (MediaLibraryGroupID > 0)
-        {
-            editElem.ObjectType = MediaLibraryInfo.OBJECT_TYPE_GROUP;
-        }
-
         // Hide code name edit for simple mode
         if (DisplayMode == ControlDisplayModeEnum.Simple)
         {
@@ -312,10 +274,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
         {
             return true;
         }
-        if ((MediaLibraryGroupID > 0) && (MembershipContext.AuthenticatedUser.IsGroupAdministrator(MediaLibraryGroupID)))
-        {
-            return true;
-        }
 
         return false;
     }
@@ -345,20 +303,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
         if (editElem.RedirectUrlAfterCreate == null)
         {
             editElem.RedirectUrlAfterCreate = String.Empty;
-        }
-
-        // If creating new group library setup default security
-        if ((MediaLibraryGroupID > 0) && (MediaLibraryID == 0))
-        {
-            // Set default group media library security
-            MediaLibraryInfo library = (MediaLibraryInfo)editElem.EditedObject;
-            library.FileCreate = SecurityAccessEnum.GroupMembers;
-            library.FileDelete = SecurityAccessEnum.Nobody;
-            library.FileModify = SecurityAccessEnum.Nobody;
-            library.FolderCreate = SecurityAccessEnum.Nobody;
-            library.FolderDelete = SecurityAccessEnum.Nobody;
-            library.FolderModify = SecurityAccessEnum.Nobody;
-            library.Access = SecurityAccessEnum.GroupMembers;
         }
     }
 
@@ -409,11 +353,6 @@ public partial class CMSModules_MediaLibrary_Controls_UI_MediaLibraryEdit : CMSA
         if ((MediaLibraryID == 0) && (DisplayMode == ControlDisplayModeEnum.Simple))
         {
             editElem.FieldControls["LibraryName"].Text = ValidationHelper.GetCodeName(editElem.FieldControls["LibraryDisplayName"].Text, null, "_group_" + Guid.NewGuid());
-        }
-
-        if (MediaLibraryGroupID > 0)
-        {
-            editElem.Data["LibraryGroupID"] = MediaLibraryGroupID;
         }
     }
 

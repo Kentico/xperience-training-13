@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSFormControls_Layouts_TransformationCode {
-    
+public partial class CMSFormControls_Layouts_TransformationCode
+{
+
     /// <summary>
     /// lblType control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSFormControls_Layouts_TransformationCode {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblType;
-    
+
     /// <summary>
     /// drpType control.
     /// </summary>
@@ -28,25 +29,7 @@ public partial class CMSFormControls_Layouts_TransformationCode {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList drpType;
-    
-    /// <summary>
-    /// pnlDirectives control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Panel pnlDirectives;
-    
-    /// <summary>
-    /// lblDirectives control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblDirectives;
-    
+
     /// <summary>
     /// tbWysiwyg control.
     /// </summary>
@@ -55,7 +38,7 @@ public partial class CMSFormControls_Layouts_TransformationCode {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.DocumentEngine.Web.UI.CMSHtmlEditor tbWysiwyg;
-    
+
     /// <summary>
     /// txtCode control.
     /// </summary>
@@ -64,40 +47,4 @@ public partial class CMSFormControls_Layouts_TransformationCode {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.UIControls.MacroEditor txtCode;
-    
-    /// <summary>
-    /// plcCssLink control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcCssLink;
-    
-    /// <summary>
-    /// btnStyles control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedButton btnStyles;
-    
-    /// <summary>
-    /// lblCSS control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.FormEngine.Web.UI.FormCategoryHeading lblCSS;
-    
-    /// <summary>
-    /// txtCSS control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.ExtendedTextArea txtCSS;
 }

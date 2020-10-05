@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>49302fdb-d747-4715-ac97-ca83ad9e95fa</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the volume of sales from @FromDate to @ToDate */
+SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'week');
+SET @ToDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@ToDate,'week');
+SET @ToDate = DATEADD(DAY, 7, @ToDate); -- Include week in which @ToDate is included
+
+SELECT
+   CAST(ISNULL(SUM(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,1))
+FROM
+   COM_Order
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (@FromDate IS NULL OR @FromDate <= OrderDate)
+   AND (@ToDate IS NULL OR @ToDate > OrderDate)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Sales.WeekReport</CodeName>
+    <GUID>d033dcb6-0646-4e49-a5c0-d14da5102ad3</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

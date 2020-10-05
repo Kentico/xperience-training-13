@@ -4,7 +4,7 @@
 <%@ Register Src="~/CMSModules/Categories/Controls/MultipleCategoriesSelector.ascx"
     TagName="MultipleCategoriesSelector" TagPrefix="cms" %>
 <asp:Content runat="server" ID="content" ContentPlaceHolderID="plcContent">
-    <cms:LocalizedHeading runat="server" ID="headTitle" Level="4" ResourceString="categories.documentassignedto" CssClass="listing-title" EnableViewState="false" DisplayColon="true" />
+    <cms:LocalizedHeading runat="server" ID="headTitle" Level="4" ResourceString="categories.documentassignedto" CssClass="listing-title" EnableViewState="false" DisplayColon="false" />
     <cms:MultipleCategoriesSelector ID="categoriesElem" runat="server" IsLiveSite="false" />
     <asp:Literal runat="server" ID="ltlScript" EnableViewState="false" />
 </asp:Content>

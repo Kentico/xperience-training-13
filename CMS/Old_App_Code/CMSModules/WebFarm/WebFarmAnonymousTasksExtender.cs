@@ -44,7 +44,7 @@ public class WebFarmAnonymousTasksExtender : ControlExtender<UniGrid>
         if (actionName == "delete")
         {
             // Delete task object
-            WebFarmTaskInfoProvider.DeleteWebFarmTaskInfo(Convert.ToInt32(actionArgument));
+            WebFarmTaskInfo.Provider.Get(Convert.ToInt32(actionArgument))?.Delete();
 
             Control.ReloadData();
         }

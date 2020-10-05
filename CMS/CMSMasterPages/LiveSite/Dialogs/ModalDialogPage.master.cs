@@ -7,7 +7,7 @@ using CMS.Base.Web.UI;
 using CMS.Helpers;
 using CMS.UIControls;
 
-public partial class CMSMasterPages_LiveSite_Dialogs_ModalDialogPage : CMSLiveMasterPage
+public partial class CMSMasterPages_LiveSite_Dialogs_ModalDialogPage : AbstractMasterPage
 {
     #region "Properties"
 
@@ -148,9 +148,6 @@ public partial class CMSMasterPages_LiveSite_Dialogs_ModalDialogPage : CMSLiveMa
         base.OnInit(e);
 
         PageStatusContainer = plcStatus;
-
-        // Set dialog CSS class
-        SetDialogClass();
     }
 
 

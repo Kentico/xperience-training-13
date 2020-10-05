@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>{$reporting.reports$}</ElementCaption>
+  <ElementCheckModuleReadPermission>True</ElementCheckModuleReadPermission>
+  <ElementDisplayName>Reports</ElementDisplayName>
+  <ElementFromVersion>8.0</ElementFromVersion>
+  <ElementGUID>f9ea3e3b-c10e-4244-860a-5bc4815409e6</ElementGUID>
+  <ElementIconClass />
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>Reports</ElementName>
+  <ElementOrder>1</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>Listing</CodeName>
+    <GUID>226b13a3-97c2-4895-99e4-39ea6247a399</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>Htabscategory</CodeName>
+    <GUID>19965e98-9b0f-4858-b65e-2dac581bba05</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS.Reporting</CodeName>
+      <GUID>6620e618-9925-4297-bcf7-ed6d9e21ba21</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <data>
+      <editactionurl>javascript:parent.parent.selectTreeItem({0});</editactionurl>
+      <orderby>DisplayName</orderby>
+      <objecttype>reporting.report</objecttype>
+      <displaybreadcrumbs>False</displaybreadcrumbs>
+      <wherecondition>
+        <![CDATA[objectpath LIKE  REPLACE('%'+ (Select CategoryPath from reporting_reportcategory where categoryid={% UIContext.ParentObjectID @%}) +'/%','//','/') AND ObjectType NOT LIKE '%category%']]>
+      </wherecondition>
+      <includejquery>False</includejquery>
+      <afterdeletescript>
+        <![CDATA[parent.parent.selectTreeCategory({% UIContext.ParentObjectID @%});]]>
+      </afterdeletescript>
+    </data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS.Reporting</CodeName>
+    <GUID>6620e618-9925-4297-bcf7-ed6d9e21ba21</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+</cms.uielement>

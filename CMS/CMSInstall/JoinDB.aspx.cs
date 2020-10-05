@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Web.Security;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.Helpers;
-using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WebFarmSync;
 using CMS.WinServiceEngine;
@@ -268,7 +265,6 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
             else
             {
                 EnableTasks();
-                TakeSitesOnline();
                 WebFarmHelper.CreateTask(new RestartApplicationWebFarmTask());
                 ScriptHelper.RegisterStartupScript(this, typeof(string), "Close dialog", ScriptHelper.GetScript("RefreshParent(); CloseDialog();"));
             }
@@ -383,7 +379,7 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
             // Finish step
             case 2:
                 {
-                    lblHeader.Text += ResHelper.GetFileString("Install.Step7");
+                    lblHeader.Text += ResHelper.GetFileString("separationDB.StepFinish");
                     SetSelectedCSSClass("stepPanel2");
                     break;
                 }
@@ -425,7 +421,6 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
     {
         try
         {
-            TakeSitesOffline();
             JoinDB();
         }
         catch (Exception e)
@@ -487,17 +482,13 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
             separationFinished.AzureErrorLabel.Text += GetManualCopyText();
         }
 
-        if (PersistentStorageHelper.GetValue("SeparateDBSites") == null)
+        if (!separationFinished.ErrorLabel.Visible)
         {
-            if (!separationFinished.ErrorLabel.Visible)
-            {
-                separationFinished.ErrorLabel.Text += "<br />";
-            }
-            else
-            {
-                separationFinished.ErrorLabel.Visible = true;
-            }
-            separationFinished.ErrorLabel.Text += ResHelper.GetFileString("separationdb.startsites");
+            separationFinished.ErrorLabel.Text += "<br />";
+        }
+        else
+        {
+            separationFinished.ErrorLabel.Visible = true;
         }
     }
 
@@ -540,47 +531,6 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
             WinServiceHelper.RestartService(WinServiceHelper.HM_SERVICE_BASENAME, false);
         }
         PersistentStorageHelper.RemoveValue("CMSSchedulerTasksEnabled");
-    }
-
-
-    /// <summary>
-    /// Takes all sites offline.
-    /// </summary>
-    private void TakeSitesOffline()
-    {
-        var sites = SiteInfo.Provider.Get()
-            .WhereNull("SiteIsOffline")
-            .Or()
-            .WhereEquals("SiteIsOffline", 0)
-            .ToList();
-
-        var siteIDs = new List<int>(sites.Count);
-        foreach (var site in sites)
-        {
-            site.SiteIsOffline = true;
-            SiteInfo.Provider.Set(site);
-            siteIDs.Add(site.SiteID);
-        }
-        PersistentStorageHelper.SetValue("SeparateDBSites", siteIDs);
-    }
-
-
-    /// <summary>
-    /// Takes sites online.
-    /// </summary>
-    private void TakeSitesOnline()
-    {
-        var siteIDs = (List<int>)PersistentStorageHelper.GetValue("SeparateDBSites");
-        if ((siteIDs != null) && (siteIDs.Count > 0))
-        {
-            foreach (var siteID in siteIDs)
-            {
-                SiteInfo site = SiteInfo.Provider.Get(siteID);
-                site.SiteIsOffline = false;
-                SiteInfo.Provider.Set(site);
-            }
-        }
-        PersistentStorageHelper.RemoveValue("SeparateDBSites");
     }
 
 

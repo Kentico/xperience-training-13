@@ -28,7 +28,7 @@ public partial class CMSModules_MediaLibrary_Tools_FolderActions_SelectFolder_Co
                     // Get query values
                     selectFolder.MediaLibraryID = ValidationHelper.GetInteger(properties["libraryid"], 0);
                     selectFolder.Action = QueryHelper.GetString("action", "");
-                    selectFolder.FolderPath = Path.EnsureBackslashes(ValidationHelper.GetString(properties["path"], ""));
+                    selectFolder.FolderPath = Path.EnsureSlashes(ValidationHelper.GetString(properties["path"], ""));
                     selectFolder.Files = ValidationHelper.GetString(properties["files"], "").Trim('|');
                     selectFolder.AllFiles = ValidationHelper.GetBoolean(properties["allFiles"], false);
                 }

@@ -29,7 +29,7 @@ public partial class CMSModules_Reporting_Tools_Analytics_Print : CMSWebAnalytic
             {
                 // Get report parameters
                 string parameters = QueryHelper.GetString("parameters", String.Empty);
-                DataRow reportParameters = ReportHelper.GetReportParameters(report, parameters, AnalyticsHelper.PARAM_SEMICOLON, CultureHelper.EnglishCulture);
+                DataRow reportParameters = ReportHelper.GetReportParameters(report, parameters, ReportHelper.PARAM_SEMICOLON, CultureHelper.EnglishCulture);
 
                 // Init report
                 if (reportParameters != null)

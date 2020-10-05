@@ -146,11 +146,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderTree : 
             {
                 if (CultureHelper.IsUICultureRTL())
                 {
-                    mImageFolderPath = GetImageUrl("RTL/Design/Controls/Tree", IsLiveSite, true);
+                    mImageFolderPath = GetImageUrl("RTL/Design/Controls/Tree", true);
                 }
                 else
                 {
-                    mImageFolderPath = GetImageUrl("Design/Controls/Tree", IsLiveSite, true);
+                    mImageFolderPath = GetImageUrl("Design/Controls/Tree", true);
                 }
             }
             return mImageFolderPath;

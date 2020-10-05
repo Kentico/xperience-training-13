@@ -136,7 +136,7 @@ public partial class CMSModules_Content_Controls_SearchDialog : CMSUserControl
     private string GetWhere()
     {
         var where = new WhereCondition();
-        var oper = QueryHelper.GetString("searchlanguage", null).ToEnum<QueryOperator>();
+        var oper = EnumStringRepresentationExtensions.ToEnum<QueryOperator>(QueryHelper.GetString("searchlanguage", null));
         var val = QueryHelper.GetString("searchculture", "##ANY##");
         if (String.IsNullOrEmpty(val))
         {

@@ -4,7 +4,6 @@ using System.Web;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
-using CMS.DeviceProfiles;
 using CMS.DocumentEngine;
 using CMS.Ecommerce;
 using CMS.Ecommerce.Web.UI;
@@ -22,7 +21,6 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
 
     private int? mResultNodeID;
     private int? mResultDocumentID;
-    private string mResultDevice;
 
     #endregion
 
@@ -61,15 +59,6 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
         get
         {
             return ValidationHelper.GetString(Request.Params["selectedCulture"], LocalizationContext.PreferredCultureCode);
-        }
-    }
-
-
-    private string SelectedDevice
-    {
-        get
-        {
-            return ValidationHelper.GetString(Request.Params["selectedDevice"], null);
         }
     }
 
@@ -158,26 +147,6 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
         }
     }
 
-
-    /// <summary>
-    /// Resulting device. Prefers user choice over query string setting.
-    /// </summary>
-    protected string ResultDevice
-    {
-        get
-        {
-            if (mResultDevice == null)
-            {
-                mResultDevice = SelectedDevice;
-                if (mResultDevice == null)
-                {
-                    mResultDevice = Device ?? DeviceContext.CurrentDeviceProfileName;
-                }
-            }
-            return mResultDevice;
-        }
-    }
-
     #endregion
 
    
@@ -232,9 +201,9 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
                 string nodeString = rootNode.NodeID.ToString();
                 contentUrl = URLHelper.AddParameterToUrl(contentUrl, "nodeId", nodeString);
 
-                // Set default live site URL in header link
-                string liveURL = DocumentURLProvider.GetAbsoluteUrl(rootNode);
-                liveURL = URLHelper.AddParameterToUrl(liveURL, "viewmode", ((int)ViewModeEnum.LiveSite).ToString());
+                // Set default live site URL
+                string liveURL = DocumentUIHelper.GetAbsolutePageUrl(rootNode, rootNode.DocumentCulture);
+
                 ScriptHelper.RegisterStartupScript(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + HttpUtility.JavaScriptStringEncode(liveURL) + "');"));
             }
         }

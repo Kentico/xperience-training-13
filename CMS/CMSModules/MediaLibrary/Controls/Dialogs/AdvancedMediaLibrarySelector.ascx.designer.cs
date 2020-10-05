@@ -28,34 +28,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_AdvancedMediaLibra
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Sites_SiteSelector siteSelector;
-    
-    /// <summary>
-    /// plcGroupSelector control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcGroupSelector;
-    
-    /// <summary>
-    /// lblGroup control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblGroup;
-    
-    /// <summary>
-    /// pnlGroupSelector control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder pnlGroupSelector;
-    
+        
     /// <summary>
     /// lblLibrary control.
     /// </summary>

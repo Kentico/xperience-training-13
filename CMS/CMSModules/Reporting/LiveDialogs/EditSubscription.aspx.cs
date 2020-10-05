@@ -6,7 +6,7 @@ using CMS.Helpers;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Reporting_LiveDialogs_EditSubscription : CMSLiveModalPage
+public partial class CMSModules_Reporting_LiveDialogs_EditSubscription : CMSPage
 {
     #region "Variables"
 

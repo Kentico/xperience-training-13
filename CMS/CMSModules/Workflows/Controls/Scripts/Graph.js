@@ -753,7 +753,11 @@ var JsPlumbGraph = $class({
     updatePropertiesHeader: function (nodeId) {
         if (this.propertiesHandler) {
             var nodeName = this.nodes[nodeId].name;
-            this.propertiesHandler.updatePropertiesHeader(nodeName);
+
+            // node name is HTML encoded, get the raw value to prevent double encoding
+            var nodeNameText = graphControlHandler.decodeHtmlEntities(nodeName);
+
+            this.propertiesHandler.updatePropertiesHeader(nodeNameText);
         }
     },
 

@@ -3,7 +3,6 @@
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
-using CMS.DeviceProfiles;
 using CMS.Helpers;
 using CMS.Membership;
 using CMS.PortalEngine;
@@ -23,13 +22,9 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
         Template = 1,
     }
 
-    private HeaderAction createDeviceLayout;
-    private HeaderAction removeDeviceLayout;
-
     protected bool startWithFullScreen = false;
     private int previewState;
     private int mTemplateId;
-    private int? mDeviceProfileID;
     private EditedObjectTypeEnum? mEditedObjectType;
     private PageTemplateInfo mPageTemplateInfo;
     private bool enablePreview = true;
@@ -38,11 +33,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
     private bool requiresDialog;
     private bool dialog;
     private int sharedLayoutId;
-
-    private bool allowDeviceButtons = true;
-
-    private DeviceProfileInfo mDeviceProfile;
-    private bool deviceChecked;
 
     #endregion
 
@@ -117,29 +107,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
             }
 
             return mTemplateId;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets the device profile ID.
-    /// </summary>
-    private int DeviceProfileID
-    {
-        get
-        {
-            if (mDeviceProfileID == null)
-            {
-                mDeviceProfileID = 0;
-
-                DeviceProfileInfo deviceProfile = DeviceContext.CurrentDeviceProfile;
-                if (deviceProfile != null)
-                {
-                    mDeviceProfileID = deviceProfile.ProfileID;
-                }
-            }
-
-            return mDeviceProfileID.Value;
         }
     }
 
@@ -240,23 +207,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
         }
     }
 
-
-    /// <summary>
-    /// Gets the current device profile
-    /// </summary>
-    private DeviceProfileInfo CurrentDeviceProfile
-    {
-        get
-        {
-            if (!deviceChecked)
-            {
-                mDeviceProfile = DeviceContext.CurrentDeviceProfile;
-                deviceChecked = true;
-            }
-            return mDeviceProfile;
-        }
-    }
-
     #endregion
 
 
@@ -269,8 +219,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
         // Hide all UIForms
         EditFormTemplate.Visible = false;
         EditFormTemplate.StopProcessing = true;
-        EditFormDeviceLayout.Visible = false;
-        EditFormDeviceLayout.StopProcessing = true;
         EditFormLayout.Visible = false;
         EditFormLayout.StopProcessing = true;
 
@@ -369,35 +317,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
                 }
                 break;
         }
-
-        if (!RequestHelper.IsPostBack() && DialogMode)
-        {
-            SetDeviceWarning();
-        }
-    }
-
-
-    /// <summary>
-    /// Shows warning for not mapped device profiles
-    /// </summary>
-    private void SetDeviceWarning()
-    {
-        if (CurrentDeviceProfile != null)
-        {
-            bool layoutIsMapped = false;
-
-            // Check layout auto mapping
-            if ((TemplateID > 0) && (PageTemplateInfo != null))
-            {
-                layoutIsMapped |= (DeviceProfileLayoutInfoProvider.GetTargetLayoutInfo(CurrentDeviceProfile.ProfileID, PageTemplateInfo.LayoutID) != null);
-            }
-
-            // Device layout not defined
-            if (!layoutIsMapped)
-            {
-                ShowWarning(GetString("devicelayout.notdefined"));
-            }
-        }
     }
 
 
@@ -430,9 +349,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
     {
         DisplayMessage(false);
 
-        // Display the Create/Remove device layout buttons when the device is other than the default device
-        allowDeviceButtons = string.IsNullOrEmpty(QueryHelper.GetString("devicename", null));
-
         base.OnLoad(e);
 
         // Setup Preview mode state
@@ -445,10 +361,8 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
             radShared.Checked = !radCustom.Checked;
         }
 
-        InitializeHeaderActions();
         RegisterScripts();
 
-        editMenuElem.ObjectEditMenu.PreviewMode = true;
         editMenuElem.MenuPanel.CssClass = "PreviewMenu";
         editMenuElem.ObjectManager.OnAfterAction += ObjectManager_OnAfterAction;
         EditForm.OnBeforeSave += EditForm_OnBeforeSave;
@@ -536,19 +450,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
         {
             RegisterWOpenerRefreshScript();
             hdnWOpenerRefreshed.Value = "1";
-        }
-
-        var deviceActions = QueryHelper.GetBoolean("deviceactions", true);
-        if (!deviceActions)
-        {
-            if (createDeviceLayout != null)
-            {
-                createDeviceLayout.Visible = false;
-            }
-            if (removeDeviceLayout != null)
-            {
-                removeDeviceLayout.Visible = false;
-            }
         }
 
         // Try to get page template
@@ -671,53 +572,6 @@ public partial class CMSModules_PortalEngine_Controls_Layout_TemplateLayoutEdit 
         bool hide = (BrowserHelper.IsSafari() || BrowserHelper.IsChrome());
 #pragma warning restore CS0618 // Type or member is obsolete
         pnlBody.Attributes["style"] = (startWithFullScreen && !hide) ? "display: none;" : "display: block;";
-    }
-
-
-    /// <summary>
-    /// Initializes header action control.
-    /// </summary>
-    private void InitializeHeaderActions()
-    {
-        // Add preview action
-        HeaderAction preview = new HeaderAction
-        {
-            Text = GetString("general.preview"),
-            OnClientClick = "performToolbarAction('split');return false;",
-            Visible = ((previewState == 0) && enablePreview),
-            Index = 1,
-            Tooltip = GetString("preview.tooltip")
-        };
-        editMenuElem.ObjectEditMenu.AddExtraAction(preview);
-
-        // Custom device layout
-        if (allowDeviceButtons && (DialogMode || requiresDialog) && (DeviceProfileID > 0))
-        {
-            // "Create device layout" button
-            string dialogUrl = UrlResolver.ResolveUrl("~/CMSModules/PortalEngine/UI/PageLayouts/PageLayout_CustomDeviceLayout.aspx?dialog=1");
-            dialogUrl += "&templateid=" + TemplateID + "&deviceprofileid=" + DeviceProfileID;
-
-            // Create header button
-            createDeviceLayout = new HeaderAction
-            {
-                Text = GetString("devicelayout.create"),
-                Tooltip = GetString("devicelayout.create.tooltip"),
-                OnClientClick = "modalDialog('" + dialogUrl + "', 'createCustomDeviceLayout', 450, 420); return false;",
-                Visible = false
-            };
-            editMenuElem.ObjectEditMenu.AddExtraAction(createDeviceLayout);
-
-            // "Remove device layout" button
-            removeDeviceLayout = new HeaderAction
-            {
-                OnClientClick = "javascript:if (confirm(" + ScriptHelper.GetLocalizedString("devicelayout.remove.confirmation") + ")) { window.refreshPageOnClose = true; return true; } return false;",
-                Text = GetString("devicelayout.remove"),
-                Tooltip = GetString("devicelayout.remove.tooltip"),
-                CommandName = "removelayout",
-                Visible = false
-            };
-            editMenuElem.ObjectEditMenu.AddExtraAction(removeDeviceLayout);
-        }
     }
 
 

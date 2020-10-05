@@ -261,8 +261,6 @@ public partial class CMSModules_ImportExport_Controls_ExportConfiguration : CMSU
             // Additional settings
             Settings.SetSettings(ImportExportHelper.SETTINGS_BIZFORM_DATA, true);
             Settings.SetSettings(ImportExportHelper.SETTINGS_CUSTOMTABLE_DATA, true);
-            Settings.SetSettings(ImportExportHelper.SETTINGS_FORUM_POSTS, true);
-            Settings.SetSettings(ImportExportHelper.SETTINGS_BOARD_MESSAGES, true);
             Settings.SetSettings(ImportExportHelper.SETTINGS_GLOBAL_FOLDERS, true);
             Settings.SetSettings(ImportExportHelper.SETTINGS_SITE_FOLDERS, true);
 

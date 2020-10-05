@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.email</CodeName>
+    <GUID>488f275e-7311-4136-a127-4c970cd4060f</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>c2d60729-91a6-45df-b67c-f7c038459dfc</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>resetstatus</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+DECLARE @LastModified datetime2; SET @LastModified = DATEADD(MINUTE, -30, @CurrentDateTime);
+SET NOCOUNT ON;
+UPDATE CMS_Email SET [EmailStatus] = 1 WHERE [EmailStatus] = 2 AND [EmailLastSendAttempt] <= @LastModified;
+UPDATE CMS_EmailUser SET [Status] = 1 WHERE [Status] = 2 AND [LastSendAttempt] <= @LastModified;
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

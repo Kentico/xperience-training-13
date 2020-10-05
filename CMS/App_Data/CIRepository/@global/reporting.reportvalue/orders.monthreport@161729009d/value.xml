@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>b67a581b-8e55-493c-b662-3b15c3c9925f</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the number of orders from @FromDate to @ToDate */
+SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+SET @ToDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@ToDate,'month');
+SET @ToDate = DATEADD(MONTH, 1, @ToDate); -- Include month in which @ToDate is included
+
+SELECT
+   CAST(ISNULL(COUNT(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,0))
+FROM
+   COM_Order
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (@FromDate IS NULL OR @FromDate <= OrderDate)
+   AND (@ToDate IS NULL OR @ToDate > OrderDate)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Orders.MonthReport</CodeName>
+    <GUID>24943889-23fa-4699-afd5-52bd419a493f</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

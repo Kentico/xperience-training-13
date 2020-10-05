@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.Core;
-using CMS.CustomTables;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
-using CMS.MacroEngine;
-using CMS.Membership;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
-using StreamWriter = CMS.IO.StreamWriter;
-using TreeNode = CMS.DocumentEngine.TreeNode;
 
 public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUserControl, IPostBackEventHandler
 {
@@ -35,9 +27,7 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
 
     #region "Variables"
 
-    private readonly int transformationID = QueryHelper.GetInteger("transformationid", 0);
     private TransformationInfo transformationInfo;
-    private CurrentUserInfo user;
 
     #endregion
 
@@ -100,31 +90,7 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
     /// <summary>
     /// Property returning transformation code (based on transformation type)
     /// </summary>
-    public String TransformationCode
-    {
-        get
-        {
-            if (IsAscx)
-            {
-                // Ignore value from user input to avoid a forgery
-                return transformationInfo.TransformationCode;
-            }
-
-            return (txtCode.Visible) ? txtCode.Text : tbWysiwyg.ResolvedValue;
-        }
-    }
-
-
-    /// <summary>
-    /// Returns true, if transformation type is ASCX
-    /// </summary>
-    public bool IsAscx
-    {
-        get
-        {
-            return (TransformationType == TransformationTypeEnum.Ascx);
-        }
-    }
+    public string TransformationCode => txtCode.Visible ? txtCode.Text : tbWysiwyg.ResolvedValue;
 
 
     /// <summary>
@@ -134,7 +100,7 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
     {
         get
         {
-            return drpType.SelectedValue.ToLowerCSafe().ToEnum<TransformationTypeEnum>();
+            return EnumStringRepresentationExtensions.ToEnum<TransformationTypeEnum>(drpType.SelectedValue.ToLowerCSafe());
         }
     }
 
@@ -190,82 +156,11 @@ public partial class CMSFormControls_Layouts_TransformationCode : FormEngineUser
         values[0, 1] = TransformationCode;
         values[1, 0] = "TransformationType";
 
-        String type = (drpType.SelectedValue == null ? TransformationTypeEnum.Ascx.ToStringRepresentation() : drpType.SelectedValue.ToLowerCSafe());
+        String type = (drpType.SelectedValue == null ? TransformationTypeEnum.Text.ToStringRepresentation() : drpType.SelectedValue.ToLowerCSafe());
 
         values[1, 1] = type;
-        values[2, 0] = "TransformationCSS";
-        values[2, 1] = txtCSS.Text;
+
         return values;
-    }
-
-
-    /// <summary>
-    /// Checks whether XSLT transformation text is valid.
-    /// </summary>
-    /// <param name="xmlText">XML text</param>
-    protected string XMLValidator(string xmlText)
-    {
-        // Creates memory stream from transformation text
-        using (MemoryStream stream = new MemoryStream())
-        using (StreamWriter writer = StreamWriter.New(stream))
-        {
-            writer.Write(xmlText);
-            writer.Flush();
-#pragma warning disable BH1014 // Do not use System.IO
-            stream.Seek(0, SeekOrigin.Begin);
-#pragma warning restore BH1014 // Do not use System.IO
-
-            // New xml text reader from the stream
-            using (XmlTextReader tr = new XmlTextReader(stream))
-            {
-                try
-                {
-                    // Need to read the data to validate
-                    while (tr.Read())
-                    {
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
-
-                return string.Empty;
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// Initializes labels.
-    /// </summary>
-    private void LabelsInit()
-    {
-        // Initializes labels        
-        string lang = DataHelper.GetNotEmpty(Service.Resolve<IAppSettingsService>()["CMSProgrammingLanguage"], "C#");
-        lblDirectives.Text = string.Concat("&lt;%@ Control Language=\"", lang, "\" AutoEventWireup=\"true\" Inherits=\"CMS.DocumentEngine.Web.UI.CMSAbstractTransformation\" %&gt;<br />&lt;%@ Register TagPrefix=\"cc1\" Namespace=\"CMS.DocumentEngine.Web.UI\" Assembly=\"CMS.DocumentEngine.Web.UI\" %&gt;");
-    }
-
-
-    /// <summary>
-    /// Returns true, if all entered values are valid
-    /// </summary>
-    public override bool IsValid()
-    {
-        if (TransformationType != TransformationTypeEnum.Xslt)
-        {
-            return true;
-        }
-
-        // Validates XSLT transformation text
-        String result = XMLValidator(txtCode.Text);
-        if (result != String.Empty)
-        {
-            ShowError(String.Format("{0}'{1}'", ScriptHelper.GetLocalizedString("DocumentType_Edit_Transformation_Edit.XSLTTransformationError"), result));
-            return false;
-        }
-
-        return true;
     }
 
 
@@ -277,7 +172,6 @@ function GenerateDefaultCode(type){
 }";
         ScriptHelper.RegisterStartupScript(this, typeof(string), "TransformationCodeGenerate", ScriptHelper.GetScript(script));
 
-        pnlDirectives.Visible = IsAscx;
         txtCode.ReadOnly = !Enabled;
         tbWysiwyg.Enabled = Enabled;
 
@@ -296,7 +190,6 @@ function GenerateDefaultCode(type){
         base.OnInit(e);
 
         transformationInfo = UIContext.EditedObject as TransformationInfo;
-        user = MembershipContext.AuthenticatedUser;
 
         if (!RequestHelper.IsPostBack())
         {
@@ -306,7 +199,6 @@ function GenerateDefaultCode(type){
             {
                 // Fills form with transformation information
                 drpType.SelectedValue = transformationInfo.TransformationType.ToStringRepresentation();
-                txtCSS.Text = transformationInfo.TransformationCSS;
 
                 if (transformationInfo.TransformationType == TransformationTypeEnum.Html)
                 {
@@ -321,7 +213,7 @@ function GenerateDefaultCode(type){
             }
             else
             {
-                txtCode.Visible = true;
+                tbWysiwyg.Visible = true;
             }
         }
     }
@@ -342,58 +234,28 @@ function GenerateDefaultCode(type){
             throw new Exception("Page using this control must have CMSMasterPage master page.");
         }
 
-        LabelsInit();
-
         txtCode.Editor.Width = new Unit("99%");
         txtCode.Editor.Height = new Unit("300px");
         txtCode.NamespaceUsings = new List<string> { "Transformation" };
 
         // transformation.{classid}.{isascx}
-        string resolverName = "transformation." + ClassID + "." + IsAscx;
+        string resolverName = "transformation." + ClassID + "." + "false";
 
         txtCode.ResolverName = resolverName;
         tbWysiwyg.ResolverName = resolverName;
-
-        if (IsAscx)
-        {
-            DataClassInfo resolverClassInfo = DataClassInfoProvider.GetDataClassInfo(ClassID);
-            if (resolverClassInfo != null)
-            {
-                if (resolverClassInfo.ClassIsCustomTable)
-                {
-                    txtCode.ASCXRootObject = CustomTableItem.New(resolverClassInfo.ClassName);
-                }
-                else if (resolverClassInfo.ClassIsDocumentType)
-                {
-                    txtCode.ASCXRootObject = TreeNode.New(resolverClassInfo.ClassName);
-                }
-                else
-                {
-                    txtCode.ASCXRootObject = ModuleManager.GetReadOnlyObjectByClassName(resolverClassInfo.ClassName);
-                }
-            }
-
-            if (!RequestHelper.IsPostBack() && IsChecked)
-            {
-                ShowMessage();
-            }
-        }
-
-        // Hide/Display CSS section
-        plcCssLink.Visible = String.IsNullOrEmpty(txtCSS.Text.Trim());
 
         SetEditor();
     }
 
 
-    private void GenerateDefaultTransformation(DefaultTransformationTypeEnum transformCode)
+    private void GenerateDefaultTransformation()
     {
         if (String.IsNullOrEmpty(ClassName))
         {
             ClassName = DataClassInfoProvider.GetClassName(ClassID);
         }
 
-        var code = TransformationInfoProvider.GenerateTransformationCode(ClassName, TransformationType, transformCode);
+        var code = TransformationInfoProvider.GenerateTransformationCode(ClassName);
 
         // Writes the result to the text box
         if (TransformationType == TransformationTypeEnum.Html)
@@ -416,27 +278,8 @@ function GenerateDefaultCode(type){
     /// </summary>
     private void SetEditor()
     {
-        if (IsAscx)
-        {
-            txtCode.Editor.Language = LanguageEnum.ASPNET;
-        }
-        else
-        {
-            txtCode.Editor.Enabled = true;
-            txtCode.Editor.Language = LanguageEnum.HTMLMixed;
-        }
-    }
-
-
-    /// <summary>
-    /// Display info message
-    /// </summary>
-    public void ShowMessage()
-    {
-        if (!IsAscx)
-        {
-            return;
-        }
+        txtCode.Editor.Enabled = true;
+        txtCode.Editor.Language = LanguageEnum.HTMLMixed;
     }
 
 
@@ -445,24 +288,7 @@ function GenerateDefaultCode(type){
         // Get the current code
         string code = TransformationCode;
 
-        switch (TransformationType)
-        {
-            case TransformationTypeEnum.Ascx:
-                // Convert to ASCX syntax
-                code = MacroSecurityProcessor.RemoveSecurityParameters(code, false, null);
-                code = code.Replace("{% Register", "<%@ Register").Replace("{%", "<%#").Replace("%}", "%>");
-                ShowMessage();
-                break;
-
-            case TransformationTypeEnum.Xslt:
-                // No transformation
-                break;
-
-            default:
-                // Convert to macro syntax
-                code = code.Replace("<%@", "{%").Replace("<%#", "{%").Replace("<%=", "{%").Replace("<%", "{%").Replace("%>", "%}");
-                break;
-        }
+        code = code.Replace("<%@", "{%").Replace("<%#", "{%").Replace("<%=", "{%").Replace("<%", "{%").Replace("%>", "%}");
 
         // Move the content if necessary
         if (TransformationType == TransformationTypeEnum.Html)
@@ -505,11 +331,8 @@ function GenerateDefaultCode(type){
     /// </summary>
     private void DropDownListInit()
     {
-        drpType.Items.Add(new ListItem(TransformationTypeEnum.Ascx.ToLocalizedString("TransformationType"), TransformationTypeEnum.Ascx.ToStringRepresentation()));
         drpType.Items.Add(new ListItem(TransformationTypeEnum.Text.ToLocalizedString("TransformationType"), TransformationTypeEnum.Text.ToStringRepresentation()));
         drpType.Items.Add(new ListItem(TransformationTypeEnum.Html.ToLocalizedString("TransformationType"), TransformationTypeEnum.Html.ToStringRepresentation()));
-        drpType.Items.Add(new ListItem(TransformationTypeEnum.Xslt.ToLocalizedString("TransformationType"), TransformationTypeEnum.Xslt.ToStringRepresentation()));
-        drpType.Items.Add(new ListItem(TransformationTypeEnum.jQuery.ToLocalizedString("TransformationType"), TransformationTypeEnum.jQuery.ToStringRepresentation()));
     }
 
     #endregion
@@ -522,21 +345,7 @@ function GenerateDefaultCode(type){
     /// </summary>
     void IPostBackEventHandler.RaisePostBackEvent(string eventArgument)
     {
-        switch (eventArgument.ToLowerCSafe())
-        {
-            case "xml":
-                GenerateDefaultTransformation(DefaultTransformationTypeEnum.XML);
-                break;
-            case "atom":
-                GenerateDefaultTransformation(DefaultTransformationTypeEnum.Atom);
-                break;
-            case "rss":
-                GenerateDefaultTransformation(DefaultTransformationTypeEnum.RSS);
-                break;
-            default:
-                GenerateDefaultTransformation(DefaultTransformationTypeEnum.Default);
-                break;
-        }
+        GenerateDefaultTransformation();
     }
 
     #endregion

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
 
+using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
@@ -75,7 +76,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         }
 
         pnlAlternativeUrls.Visible = AlternativeUrlHelper.IsAlternativeUrlUIEnabled(Node.NodeSiteID);
-        pnlUrl.Visible = pnlContainer.Visible = PageRoutingHelper.GetRoutingMode(Node.NodeSiteID) == PageRoutingModeEnum.BasedOnContentTree;
+        pnlPageUrlPath.Visible = pnlContainer.Visible = PageRoutingHelper.GetRoutingMode(Node.NodeSiteID) == PageRoutingModeEnum.BasedOnContentTree;
 
         // Hide option to view all slugs when only one culture is assigned to the site
         btnDisplaySlugs.Visible = Node.Site.HasMultipleCultures;
@@ -91,10 +92,11 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
     {
         base.OnLoad(e);
 
-        if (pnlUrl.Visible)
+        var enabled = MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) == AuthorizationResultEnum.Allowed;
+
+        if (pnlPageUrlPath.Visible)
         {
-            var enabled = MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) == AuthorizationResultEnum.Allowed;
-            menu.Enabled = pnlUrl.Enabled = enabled;
+            menu.Enabled = pnlPageUrlPath.Enabled = enabled;
 
             lblSlug.AssociatedControlClientID = txtSlug.TextBox.ClientID;
 
@@ -131,10 +133,17 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
     {
         base.OnPreRender(e);
 
-        if (!IsPostBack && pnlUrl.Visible)
+        if (!IsPostBack && pnlPageUrlPath.Visible)
         {
             SetUrlTextbox();
         }
+
+        if (!pnlPageUrlPath.Visible)
+        {
+            pnlUrl.DefaultButton = null;
+        }
+
+        SetPreviewLinks();
     }
 
 
@@ -177,7 +186,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
             ShowConfirmation(ResHelper.GetString("General.ChangesSaved"));
             DocumentManager.ClearContentChanged();
             SetUrlTextbox(true);
-            UpdateLiveSiteButtonUrl();
         }
         else
         {
@@ -187,9 +195,45 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
     }
 
 
-    private void UpdateLiveSiteButtonUrl()
+    private void SetPreviewLinks()
     {
-        var url = DocumentURLProvider.GetAbsoluteUrl(Node);
+        string liveUrl = DocumentURLProvider.GetAbsoluteUrl(Node);
+
+        if (string.IsNullOrEmpty(liveUrl) && PageRoutingHelper.GetRoutingMode(Node.NodeSiteID) == PageRoutingModeEnum.Custom)
+        {
+            litMissingPattern.Visible = true;
+        }
+
+        if (!string.IsNullOrEmpty(liveUrl))
+        {
+            plcLive.Visible = true;
+            lnkLiveURL.HRef = liveUrl;
+            lnkLiveURL.InnerText = liveUrl;
+        }
+
+        var previewUrl = Node.GetPreviewLink(CurrentUser.UserGUID, embededInAdministration: false);
+        if (!string.IsNullOrEmpty(previewUrl))
+        {
+            plcPreview.Visible = true;
+            btnResetPreviewGuid.ToolTip = GetString("content.ui.properties.invalidatepreviewurl");
+            btnResetPreviewGuid.Click += btnResetPreviewGuid_Click;
+            btnResetPreviewGuid.OnClientClick = "if(!confirm(" + ScriptHelper.GetLocalizedString("content.ui.properties.generatepreviewurlconf") + ")){return false;}";
+
+            SetPreviewUrl(previewUrl);
+        }
+
+        if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) != AuthorizationResultEnum.Allowed)
+        {
+            btnResetPreviewGuid.Enabled = false;
+            btnResetPreviewGuid.CssClass = "Disabled";
+        }
+
+        UpdateLiveSiteButtonUrl(liveUrl);
+    }
+
+
+    private void UpdateLiveSiteButtonUrl(string url)
+    {
         ScriptHelper.RegisterSetLiveSiteURL(this, url);
     }
 
@@ -327,5 +371,35 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         container.Controls.Add(label);
 
         return container;
+    }
+
+
+    protected void btnResetPreviewGuid_Click(object sender, EventArgs e)
+    {
+        if (Node == null)
+        {
+            return;
+        }
+
+        // Check modify permissions
+        if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.Modify) == AuthorizationResultEnum.Denied)
+        {
+            return;
+        }
+
+        using (new CMSActionContext { LogEvents = false })
+        {
+            Node.DocumentWorkflowCycleGUID = Guid.NewGuid();
+            Node.Update();
+        }
+
+        ShowConfirmation(GetString("content.ui.properties.previewlinkgenerated"));
+        SetPreviewUrl(Node.GetPreviewLink(CurrentUser.UserGUID, embededInAdministration: false));
+    }
+
+
+    private void SetPreviewUrl(string url)
+    {
+        lnkPreviewURL.Attributes.Add("href", url);
     }
 }

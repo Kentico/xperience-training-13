@@ -15,11 +15,11 @@ using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
 using CMS.IO;
 using CMS.Membership;
 using CMS.PortalEngine.Web.UI;
-using CMS.SiteProvider;
 using CMS.UIControls;
 
 
@@ -397,7 +397,8 @@ public partial class CMSAdminControls_Validation_CssValidator : DocumentValidato
 
         // Get the full domain
         ctlAsyncLog.EnsureLog();
-        ctlAsyncLog.Parameter = RequestContext.FullDomain + ";" + URLHelper.GetFullApplicationUrl() + ";" + URLHelper.RemoveProtocolAndDomain(Url);
+        var presentationUrl = new PresentationUrlRetriever().RetrieveForAdministration(CurrentSite.SiteID, CultureCode);
+        ctlAsyncLog.Parameter = new Uri(presentationUrl).GetLeftPart(UriPartial.Authority) + ";" + presentationUrl + ";" + URLHelper.RemoveProtocolAndDomain(Url);
         ctlAsyncLog.RunAsync(CheckCss, WindowsIdentity.GetCurrent());
     }
 
@@ -474,9 +475,12 @@ public partial class CMSAdminControls_Validation_CssValidator : DocumentValidato
                             // Get CSS data from URL
                             string readUrl = DocumentValidationHelper.DisableMinificationOnUrl(URLHelper.GetAbsoluteUrl(url, urlParams[0], urlParams[1], urlParams[2]));
 
-                            using (WebClient client = new WebClient())
+                            var request = WebRequest.CreateHttp(readUrl);
+                            EnsureCertificateValidation(request);
+
+                            using (var stream = request.GetResponse().GetResponseStream())
+                            using (var reader = StreamReader.New(stream))
                             {
-                                StreamReader reader = StreamReader.New(client.OpenRead(readUrl));
                                 string css = reader.ReadToEnd();
                                 if (!String.IsNullOrEmpty(css))
                                 {
@@ -484,8 +488,9 @@ public partial class CMSAdminControls_Validation_CssValidator : DocumentValidato
                                 }
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            Service.Resolve<IEventLogService>().LogException("CSSValidator", "GetValidationRequests", ex);
                         }
                     }
                 }
@@ -510,8 +515,10 @@ public partial class CMSAdminControls_Validation_CssValidator : DocumentValidato
             {
                 try
                 {
-                    StreamReader reader = StreamReader.New(client.OpenRead(url));
-                    html = reader.ReadToEnd();
+                    using (var reader = StreamReader.New(client.OpenRead(url)))
+                    {
+                        html = reader.ReadToEnd();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -610,11 +617,7 @@ public partial class CMSAdminControls_Validation_CssValidator : DocumentValidato
                     string[] currentUrlValues = parameter.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
-                    parameters["sitename"] = SiteContext.CurrentSiteName;
-                    parameters["user"] = mCurrentUser;
-                    parameters["source"] = source;
-                    parameters["domainurl"] = currentUrlValues[0];
-                    parameters["applicationurl"] = currentUrlValues[1];
+                    parameters["source"] = source;                    
 
                     DataTable dtResponse = DocumentValidationHelper.ProcessValidationResult(dsResponse, DocumentValidationEnum.CSS, parameters);
 

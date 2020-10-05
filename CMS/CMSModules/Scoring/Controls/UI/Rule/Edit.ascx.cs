@@ -636,7 +636,7 @@ public partial class CMSModules_Scoring_Controls_UI_Rule_Edit : CMSAdminEditCont
         // Do nothing if recalculation is already scheduled
         if (info.ScoreScheduledTaskID > 0)
         {
-            TaskInfo taskInfo = TaskInfoProvider.GetTaskInfo(info.ScoreScheduledTaskID);
+            TaskInfo taskInfo = TaskInfo.Provider.Get(info.ScoreScheduledTaskID);
             if (taskInfo != null && taskInfo.TaskEnabled)
             {
                 return;
@@ -865,7 +865,7 @@ public partial class CMSModules_Scoring_Controls_UI_Rule_Edit : CMSAdminEditCont
         {
             "activitytype",
             "activitysiteid",
-            "activitycontactid"
+            "activitycontactid",
         };
 
         string[] activitiesWithValue =
@@ -886,7 +886,7 @@ public partial class CMSModules_Scoring_Controls_UI_Rule_Edit : CMSAdminEditCont
         if ((selectedActivity != PredefinedActivityType.PAGE_VISIT) && (selectedActivity != PredefinedActivityType.LANDING_PAGE))
         {
             // Show these fields only for 'Page visit' and 'Landing page'
-            ignoredColumns.AddRange(new[] { "activityabvariantname", "activitymvtcombinationname" });
+            ignoredColumns.AddRange(new[] { "activityabvariantname" });
         }
 
         FormCategoryInfo newCategory = null;

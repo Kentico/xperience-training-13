@@ -255,7 +255,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_NotificationEmail : 
             {
                 try
                 {
-                    BizFormInfoProvider.SetBizFormInfo(formInfo);
+                    BizFormInfo.Provider.Set(formInfo);
                     ShowChangesSaved();
                     EnableDisableForm(formInfo.FormEmailTemplate);
                 }

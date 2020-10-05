@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_New {
-    
+public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_New
+{
+
     /// <summary>
     /// repeaterElement control.
     /// </summary>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.ModuleUsageCounter</CodeName>
+    <GUID>5488a240-eb0b-454e-9543-9f5a0456d38e</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>9ecd2da3-7117-461b-9cc5-b4d9cce4b108</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>clear</QueryName>
+  <QueryRequiresTransaction>True</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+MERGE INTO CMS_ModuleUsageCounter AS T 
+USING (VALUES (@Name))  
+       AS S (CounterName)
+ON T.ModuleUsageCounterName = S.CounterName  
+WHEN MATCHED THEN  
+UPDATE SET ModuleUsageCounterValue = 0  
+WHEN NOT MATCHED THEN  
+INSERT (ModuleUsageCounterName, ModuleUsageCounterValue) VALUES (CounterName, 0);
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

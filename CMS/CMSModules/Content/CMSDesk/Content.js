@@ -58,23 +58,6 @@ function SetSelectedCulture(culture) {
     selCultureElem.value = culture;
 }
 
-function EnsureSelectedDeviceElem() {
-    if (window.selDeviceElem) {
-        return;
-    }
-    window.selDeviceElem = document.getElementById('selectedDevice');
-}
-
-function GetSelectedDevice() {
-    EnsureSelectedDeviceElem();
-    return selDeviceElem.value;
-}
-
-function SetSelectedDevice(device) {
-    EnsureSelectedDeviceElem();
-    selDeviceElem.value = device;
-}
-
 function EnsureSelectedSplitModeCultureElem() {
     if (window.selSplitModeCultureElem) {
         return;
@@ -526,21 +509,6 @@ function ChangeLanguage(language) {
 //#endregion
 
 
-/*#region DEVICE PROFILE SELECTION*/
-
-// Changes the device profile
-function ChangeDevice(device) {
-    if (!CheckChanges()) {
-        return false;
-    }
-    SetSelectedDevice(device);
-    window.ProcessRequest('setdevice', GetSelectedNodeId(), device);
-    return true;
-}
-
-//#endregion
-
-
 /*#region DRAG & DROP HANDLING*/
 
 function DragOperation(nodeId, targetNodeId, operation) {
@@ -620,8 +588,7 @@ function PerformRedirect(mode, action, nodeId, culture, query, originalUrl, tran
         culture = GetSelectedCulture();
     }
 
-    var device = GetSelectedDevice();
-    var arg = URL_PREFIX + (mode || '') + SEP + (action || '') + SEP + nodeId + SEP + (culture || '') + SEP + (device || '') + SEP + (query || '') + SEP + (originalUrl || '') + SEP + (transformToCompare || 'false') + SEP + 'true';
+    var arg = URL_PREFIX + (mode || '') + SEP + (action || '') + SEP + nodeId + SEP + (culture || '') + SEP + (query || '') + SEP + (originalUrl || '') + SEP + (transformToCompare || 'false') + SEP + 'true';
     arg = escape(arg);
     $cmsj.ajax({
         cache: false,

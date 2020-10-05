@@ -1,4 +1,6 @@
-﻿using XperienceAdapter.Models;
+﻿using Kentico.Content.Web.Mvc;
+
+using XperienceAdapter.Models;
 
 namespace Business.Models
 {
@@ -13,8 +15,8 @@ namespace Business.Models
         public string? Url { get; set; }
 
         /// <summary>
-        /// Server path to the social link icon.
+        /// URL of the service icon file.
         /// </summary>
-        public string? IconServerPath { get; set; }
+        public IPageAttachmentUrl? IconUrl { get; set; }
     }
 }

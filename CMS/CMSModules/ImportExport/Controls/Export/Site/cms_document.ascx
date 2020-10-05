@@ -34,8 +34,6 @@
                     <cms:CMSCheckBox ID="chkDocumentsHistory" runat="server" />
                     <cms:CMSCheckBox ID="chkRelationships" runat="server" />
                     <cms:CMSCheckBox ID="chkACLs" runat="server" />
-                    <cms:CMSCheckBox ID="chkBlogComments" runat="server" />
-                    <cms:CMSCheckBox ID="chkEventAttendees" runat="server" />
                 </div>
             </div>
         </div>

@@ -56,7 +56,7 @@ public class WebFarmServerListExtender : ControlExtender<UniGrid>
         else if (actionName == "delete")
         {
             // Delete WebFarmServerInfo object from database
-            WebFarmServerInfoProvider.DeleteWebFarmServerInfo(ValidationHelper.GetInteger(actionArgument, 0));
+            WebFarmServerInfo.Provider.Get(ValidationHelper.GetInteger(actionArgument, 0))?.Delete();
         }
     }
 
@@ -81,7 +81,7 @@ public class WebFarmServerListExtender : ControlExtender<UniGrid>
                 return UniGridFunctions.ColoredSpanYesNo(parameter);
 
             case "serverstatus":
-                var server = WebFarmServerInfoProvider.GetWebFarmServerInfo(ValidationHelper.GetInteger(parameter, 0));
+                var server = WebFarmServerInfo.Provider.Get(ValidationHelper.GetInteger(parameter, 0));
                 switch (server.Status)
                 {
                     case WebFarmServerStatusEnum.Healthy:

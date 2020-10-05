@@ -19,10 +19,10 @@
                 <a href="<%= DocumentationHelper.GetDocumentationRootUrl() %>" target="_blank"><%= GetString("contexthelp.opendocumentation") %></a>
             </li>
             <li>
-                <a href="http://devnet.kentico.com/questions-answers?utm_campaign=helpbar" target="_blank"><%= GetString("contexthelp.askcommunity") %></a>
+                <a href="https://devnet.kentico.com/questions-answers?utm_campaign=helpbar" target="_blank"><%= GetString("contexthelp.askcommunity") %></a>
             </li>
             <li>
-                <a href="http://ideas.kentico.com" target="_blank"><%= GetString("contexthelp.requestfeature") %></a>
+                <a href="https://portal.productboard.com/kenticoxperience/" target="_blank"><%= GetString("contexthelp.requestfeature") %></a>
             </li>
             <li>
                 <a href="<%= ApplicationUIHelper.REPORT_BUG_URL  %>" target="_blank"><%= GetString("contexthelp.submitsupportissue") %></a>

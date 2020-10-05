@@ -313,7 +313,7 @@ public partial class CMSAdminControls_Basic_ThreeStateCheckBox : FormEngineUserC
 
 
     /// <summary>
-    /// Set specified ForumInfo object property according to specified value
+    /// Set specified object property according to specified value
     /// </summary>
     /// <param name="infoObj">Object to update with new value</param>
     /// <param name="propertyName">Property to be set</param>
@@ -332,7 +332,7 @@ public partial class CMSAdminControls_Basic_ThreeStateCheckBox : FormEngineUserC
 
 
     /// <summary>
-    /// Get ForumInfo object value to initialize ThreeStateControl object
+    /// Get object value to initialize ThreeStateControl object
     /// </summary>
     /// <param name="infoObj">Object used to initialize ThreeStateControl</param>
     /// <param name="propertyName">Object property used for initialization</param>

@@ -1,10 +1,12 @@
 ﻿// Styles for current implementation of tree component
 
-// Variables
-@tree-selected-item-color: @color-blue-130;
+// Tree
+// -------------------------
+@tree-selected-item-color: @item-selected-background;
 @tree-item-text-color: @color-gray-50;
-@tree-item-drag-bg: @color-gray-150;
-@tree-panel-bg: @color-gray-140;
+@tree-item-drag-bg: @item-hover-background;
+@tree-item-hover-bg: @item-hover-background;
+@tree-panel-bg: @nav-tabs-container-bg;
 @tree-bg: @color-white;
 
 @tree-margin: @base-unit * 0.5;
@@ -40,6 +42,10 @@
     &.tree-area-menu-empty {
         top: 0;
     }
+}
+
+.DialogTreeArea {
+    background: @tree-bg;
 }
 
 .SelectNodeTree .TreeArea {
@@ -153,13 +159,17 @@
         color: @tree-item-text-color;
         cursor: pointer;
 
+        &:hover {
+            background: @tree-item-hover-bg;
+        }
+
         .RTL & {
             margin-left: auto;
             margin-right: @tree-item-spacing / 2;
         }
 
         & sup {
-            color: @color-blue-70;
+            color: @label-color;
         }
     }
 
@@ -243,33 +253,50 @@
 
 .TreeMenuPadding {
     padding: @tree-margin;
-    background: @color-gray-140;
+    background: @tree-panel-bg;
 }
 
 .tree-buttons-panel {
     padding: @base-unit;
     background: @tree-panel-bg;
+    display: flex;
+    justify-content: space-between;
 }
 
 .tree-actions-panel {
-    padding: 0 @base-unit;
     background: @tree-panel-bg;
     font-size: 0;
+
+    .btn-group > .btn {
+        border-color: @tree-panel-bg !important;
+    }
+
+    .btn.icon-only {
+        padding: 0 5px;
+    }
 }
 
 .tree-actions {
-    display: inline-block;
-    margin: @base-unit * 0.5 0;
+    display: block;
+    background-color: @color-white;
+    margin: @base-unit 0 0 0;
+    padding: @base-unit;
+    padding-top: @base-unit/2;
+    padding-bottom: 0;
+    display: block;
+    border-top-right-radius: @border-radius-round;
+    display: flex;
+    justify-content: space-between;
 }
 
 .tree-bottom-actions-panel {
     position: absolute;
     bottom: 0;
-    background: @tree-panel-bg;
+    background: @tree-bg;
 }
 
 .tree-buttons {
-    padding-top: @base-unit;
+    padding: @base-unit 0 0 @base-unit;
 
     button {
         font-family: @font-family-base !important;

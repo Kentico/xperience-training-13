@@ -350,7 +350,7 @@ public static class Functions
     /// <param name="isLiveSite">Indicates if returned username should be displayed on live site</param>
     public static string GetFormattedUserName(string username, string fullname, string nickname, bool isLiveSite = false)
     {
-        return UserInfoProvider.GetFormattedUserName(username, fullname, nickname, isLiveSite);
+        return UserInfoProvider.GetFormattedUserName(username, fullname, nickname);
     }
 
 

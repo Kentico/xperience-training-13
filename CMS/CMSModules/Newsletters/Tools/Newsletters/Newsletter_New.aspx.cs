@@ -295,7 +295,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_New : C
             var newsletter = TypedEditedObject;
 
             var task = NewsletterTasksManager.CreateOrUpdateDynamicNewsletterTask(newsletter, ScheduleInterval.TaskInterval);
-            TaskInfoProvider.SetTaskInfo(task);
+            TaskInfo.Provider.Set(task);
 
             newsletter.NewsletterDynamicScheduledTaskID = task.TaskID;
             NewsletterInfo.Provider.Set(newsletter);

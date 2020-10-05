@@ -1,7 +1,6 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
-using CMS.CMSImportExport;
 using CMS.Helpers;
 using CMS.PortalEngine.Web.UI;
 using CMS.UIControls;
@@ -12,8 +11,6 @@ public partial class CMSModules_ImportExport_Controls_Global_ObjectAttachmentSel
     protected int mPreviewWidth = 140;
     protected int mPreviewHeight = 108;
     protected int mPanelHeight = 250;
-
-    protected string mObjectType = WebTemplateInfo.OBJECT_TYPE;
 
 
     /// <summary>
@@ -142,22 +139,6 @@ public partial class CMSModules_ImportExport_Controls_Global_ObjectAttachmentSel
         set
         {
             rptItems.DataSource = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Object type.
-    /// </summary>
-    public string ObjectType
-    {
-        get
-        {
-            return mObjectType;
-        }
-        set
-        {
-            mObjectType = value;
         }
     }
 

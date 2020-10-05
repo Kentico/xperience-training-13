@@ -226,13 +226,6 @@ public partial class CMSModules_Content_Controls_NewCultureVersion : CMSUserCont
 
                     DocumentHelper.CopyNodeData(sourceNode, newCulture, new CopyNodeDataSettings(true, excludedColumns) { ResetChanges = true});
 
-                    if (string.Equals(Node.ClassName, "cms.blogpost", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        // Ensure blog post hierarchy if node is blog post
-                        newCulture.DocumentCulture = RequiredCulture;
-                        DocumentHelper.EnsureBlogPostHierarchy(newCulture, DocumentHelper.GetDocument(newCulture.NodeParentID, TreeProvider.ALL_CULTURES, Tree), Tree);
-                    }
-
                     var settings = new NewCultureDocumentSettings(newCulture, RequiredCulture, Tree)
                     {
                         CopyAttachments = true,

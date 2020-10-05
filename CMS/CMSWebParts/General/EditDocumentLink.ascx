@@ -1,2 +1,0 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="CMSWebParts_General_EditDocumentLink"  Codebehind="~/CMSWebParts/General/EditDocumentLink.ascx.cs" %>
-<asp:Literal ID="ltlEditLink" runat="server" EnableViewState="false" />

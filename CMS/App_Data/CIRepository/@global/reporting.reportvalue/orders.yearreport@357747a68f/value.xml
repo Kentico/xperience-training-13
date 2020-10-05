@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportvalue>
+  <ValueConnectionString />
+  <ValueDisplayName>value</ValueDisplayName>
+  <ValueFormatString />
+  <ValueGUID>bee30906-a786-46b4-82eb-9f8324c8b4a1</ValueGUID>
+  <ValueName>value</ValueName>
+  <ValueQuery>
+<![CDATA[
+/* Returns the number of orders from @FromDate to @ToDate */
+SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'year');
+SET @ToDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@ToDate,'year');
+SET @ToDate = DATEADD(YEAR, 1, @ToDate); -- Include year in which @ToDate is included
+
+SELECT
+   CAST(ISNULL(COUNT(OrderGrandTotalInMainCurrency),0) AS DECIMAL(38,0))
+FROM
+   COM_Order
+WHERE
+   OrderSiteID = @CMSContextCurrentSiteID
+   AND (@FromDate IS NULL OR @FromDate <= OrderDate)
+   AND (@ToDate IS NULL OR @ToDate > OrderDate)
+]]>
+  </ValueQuery>
+  <ValueQueryIsStoredProcedure>False</ValueQueryIsStoredProcedure>
+  <ValueReportID>
+    <CodeName>Orders.YearReport</CodeName>
+    <GUID>bdb0ff62-087d-4e2c-a187-e5dfbfe1eeb9</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </ValueReportID>
+  <ValueSettings />
+</reporting.reportvalue>

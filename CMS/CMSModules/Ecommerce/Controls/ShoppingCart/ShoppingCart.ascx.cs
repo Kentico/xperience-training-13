@@ -6,7 +6,6 @@ using CMS.Ecommerce;
 using CMS.Ecommerce.Web.UI;
 using CMS.Helpers;
 using CMS.Membership;
-using CMS.Protection;
 using CMS.SiteProvider;
 
 
@@ -152,18 +151,6 @@ public partial class CMSModules_Ecommerce_Controls_ShoppingCart_ShoppingCart : S
             // Display error
             lblError.Visible = true;
             lblError.Text = GetString("com.shoppingcart.sessiontimedout");
-            return;
-        }
-
-        // Check banned IP
-        if (!BannedIPInfoProvider.IsAllowed(SiteContext.CurrentSiteName, BanControlEnum.AllNonComplete))
-        {
-            // Go to the first step
-            LoadStep(0);
-
-            // Display error
-            lblError.Visible = true;
-            lblError.Text = GetString("General.BannedIP");
             return;
         }
 

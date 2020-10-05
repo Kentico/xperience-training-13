@@ -363,10 +363,6 @@ public partial class CMSAdminControls_MultiFileUploader_MultiFileUploader : CMSU
             {
                 url = $"~/CMSModules/MediaLibrary/CMSPages{authenticatedHandlerPath}/MultiFileUploader.ashx";
             }
-            else if (PostForumID > 0)    
-            {
-                url = "~/CMSModules/Forums/CMSPages/MultiFileUploader.ashx";
-            }
             else
             {
                 url = $"~/CMSModules/Content/CMSPages{authenticatedHandlerPath}/MultiFileUploader.ashx";
@@ -527,30 +523,6 @@ public partial class CMSAdminControls_MultiFileUploader_MultiFileUploader : CMSU
         {
             mNodeSiteName = value;
         }
-    }
-
-    #endregion
-
-
-    #region "Forum Attachment Properties"
-
-    /// <summary>
-    /// ID of the post forum.
-    /// </summary>
-    public int PostForumID
-    {
-        get;
-        set;
-    }
-
-
-    /// <summary>
-    /// ID of the post.
-    /// </summary>
-    public int PostID
-    {
-        get;
-        set;
     }
 
     #endregion
@@ -935,17 +907,6 @@ public partial class CMSAdminControls_MultiFileUploader_MultiFileUploader : CMSU
             return "MetaFileArgs=" + GetArgumentsString(args, UploaderHelper.META_FILE_ARGS_HASHING_PURPOSE);
         }
 
-        if (PostForumID > 0)
-        {
-            // Forum attachment
-            args = new[]
-            {
-                "PostForumID", PostForumID.ToString(),
-                "PostID", PostID.ToString()
-            };
-            return "ForumArgs=" + GetArgumentsString(args, UploaderHelper.FORUM_ARGS_HASHING_PURPOSE);
-        }
-                
         if ((DocumentID > 0) || (FormGUID != Guid.Empty))
         {
             // Attachment mode

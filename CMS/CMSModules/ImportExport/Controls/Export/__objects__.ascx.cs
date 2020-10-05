@@ -41,12 +41,11 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ : Impor
         chkCopyAssemblies.Text = GetString("ExportObjects.CopyAssemblies");
 
         chkCopySiteFiles.Text = GetString("ExportObjects.CopySiteFiles");
-        chkCopyForumCustomLayoutsFolder.Text = GetString("ExportObjects.CopyForumCustomLayuoutsFolder");
         chkExportTasks.Text = GetString("ExportObjects.ExportTasks");
 
         // Javascript
         string script = "var ex_g_parent = document.getElementById('" + chkCopyFiles.ClientID + "'); \n" +
-                        "var ex_g_childIDs = ['" + chkCopyGlobalFiles.ClientID + "', '" + chkCopySiteFiles.ClientID + "', '" + chkCopyForumCustomLayoutsFolder.ClientID + "','" + chkCopyAssemblies.ClientID + "']; \n" +
+                        "var ex_g_childIDs = ['" + chkCopyGlobalFiles.ClientID + "', '" + chkCopySiteFiles.ClientID + "','" + chkCopyAssemblies.ClientID + "']; \n" +
                         "InitCheckboxes(); \n";
 
         ltlScript.Text = ScriptHelper.GetScript(script);
@@ -66,12 +65,10 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ : Impor
         bool copyGlobal = chkCopyFiles.Checked && chkCopyGlobalFiles.Checked;
         bool copyAssemblies = chkCopyFiles.Checked && chkCopyAssemblies.Checked;
         bool copySite = chkCopyFiles.Checked && chkCopySiteFiles.Checked;
-        bool copyForumLayouts = chkCopyFiles.Checked && chkCopyForumCustomLayoutsFolder.Checked;
 
         ExportSettings.SetSettings(ImportExportHelper.SETTINGS_GLOBAL_FOLDERS, copyGlobal);
         ExportSettings.SetSettings(ImportExportHelper.SETTINGS_ASSEMBLIES, copyAssemblies);
         ExportSettings.SetSettings(ImportExportHelper.SETTINGS_SITE_FOLDERS, copySite);
-        ExportSettings.SetSettings(ImportExportHelper.SETTINGS_COPY_FORUM_CUSTOM_LAYOUTS_FOLDER, copyForumLayouts);
         ExportSettings.SetSettings(ImportExportHelper.SETTINGS_TASKS, chkExportTasks.Checked);
     }
 
@@ -91,7 +88,6 @@ public partial class CMSModules_ImportExport_Controls_Export___objects__ : Impor
         chkCopyGlobalFiles.Checked = ValidationHelper.GetBoolean(ExportSettings.GetSettings(ImportExportHelper.SETTINGS_GLOBAL_FOLDERS), true);
         chkCopyAssemblies.Checked = ValidationHelper.GetBoolean(ExportSettings.GetSettings(ImportExportHelper.SETTINGS_ASSEMBLIES), false);
         chkCopySiteFiles.Checked = ValidationHelper.GetBoolean(ExportSettings.GetSettings(ImportExportHelper.SETTINGS_SITE_FOLDERS), true);
-        chkCopyForumCustomLayoutsFolder.Checked = ValidationHelper.GetBoolean(ExportSettings.GetSettings(ImportExportHelper.SETTINGS_COPY_FORUM_CUSTOM_LAYOUTS_FOLDER), true);
         chkExportTasks.Checked = ValidationHelper.GetBoolean(ExportSettings.GetSettings(ImportExportHelper.SETTINGS_TASKS), true);
     }
 

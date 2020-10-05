@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.workflowscope</CodeName>
+    <GUID>8cba8304-c75f-45ce-8f39-7f363cf5892a</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>13ed12da-1ca9-49c3-98e5-4cb93ead99df</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>getnodescope</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT ##TOPN## * 
+FROM CMS_WorkflowScope 
+WHERE (ScopeSiteID = @ScopeSiteID) 
+AND (ScopeWorkflowID IN (SELECT WorkflowID FROM CMS_Workflow WHERE WorkflowEnabled = 1))
+AND (ScopeClassID = @ScopeClassID OR ScopeClassID IS NULL) 
+AND (ScopeCultureID = @ScopeCultureID OR ScopeCultureID IS NULL) 
+AND ((ScopeStartingPath = '/' OR @NodeAliasPath LIKE ScopeStartingPath + '/%' OR @NodeAliasPath LIKE ScopeStartingPath) AND 
+					-- Special case for root				
+     (ScopeStartingPath <> '/%' OR @NodeAliasPath <> '/') AND
+				 -- Do not select scope with excluded children unless it is the node itself
+    (ScopeExcludeChildren <> 1 OR ScopeExcludeChildren IS NULL OR ScopeStartingPath = @NodeAliasPath)) 
+ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

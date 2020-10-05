@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.uielement>
+  <ElementCaption>{$development.pagetemplates$}</ElementCaption>
+  <ElementCheckModuleReadPermission>False</ElementCheckModuleReadPermission>
+  <ElementDisplayName>Page templates</ElementDisplayName>
+  <ElementFromVersion>8.0</ElementFromVersion>
+  <ElementGUID>20384ef0-96bd-41fb-ab9d-91b633cb0981</ElementGUID>
+  <ElementIconClass />
+  <ElementIsCustom>False</ElementIsCustom>
+  <ElementIsGlobalApplication>False</ElementIsGlobalApplication>
+  <ElementIsMenu>False</ElementIsMenu>
+  <ElementName>PageTemplate.PageTemplatesList</ElementName>
+  <ElementOrder>1</ElementOrder>
+  <ElementPageTemplateID>
+    <CodeName>Listing</CodeName>
+    <GUID>226b13a3-97c2-4895-99e4-39ea6247a399</GUID>
+    <ObjectType>cms.pagetemplate</ObjectType>
+  </ElementPageTemplateID>
+  <ElementParentID>
+    <CodeName>PageTemplate.EditCategory</CodeName>
+    <GUID>a210faa4-ef97-4b45-946f-cb4255ba024f</GUID>
+    <ObjectType>cms.uielement</ObjectType>
+    <Parent>
+      <CodeName>CMS.Design</CodeName>
+      <GUID>b755e8fc-a06f-421a-b749-f2d31d1f2570</GUID>
+      <ObjectType>cms.resource</ObjectType>
+    </Parent>
+  </ElementParentID>
+  <ElementProperties>
+    <data>
+      <parentobjecttype>cms.pagetemplatecategory</parentobjecttype>
+      <orderby>DisplayName</orderby>
+      <includejquery>False</includejquery>
+      <editactionurl>javascript:parent.parent.selectTreeItem({0});</editactionurl>
+      <wherecondition>
+        <![CDATA[objectpath LIKE  REPLACE(('%'+ (Select CategoryPath from cms_pagetemplatecategory where categoryid={% ToInt(UIContext.ParentObjectID) @%}) +'/%'),'//','/') AND ObjectType NOT LIKE '%category%']]>
+      </wherecondition>
+      <afterdeletescript>
+        <![CDATA[parent.parent.selectTreeCategory({% UIContext.ParentObjectID @%});]]>
+      </afterdeletescript>
+      <gridname ismacro="True">
+<![CDATA[
+{% 
+return EditedObjectParent.CodeName == "/"? "~/App_Data/CMSModules/Design/UI/Grids/CMS_PageTemplate/PageTemplateRoot.xml" : "" 
+|(identity)GlobalAdministrator|(hash)99fbe13697d2c808c74ff7ec6586204a230ad2678014fd901085128e285937fc%}
+]]>
+      </gridname>
+      <displaybreadcrumbs>False</displaybreadcrumbs>
+      <objecttype>cms.pagetemplate</objecttype>
+    </data>
+  </ElementProperties>
+  <ElementRequiresGlobalAdminPriviligeLevel>False</ElementRequiresGlobalAdminPriviligeLevel>
+  <ElementResourceID>
+    <CodeName>CMS.Design</CodeName>
+    <GUID>b755e8fc-a06f-421a-b749-f2d31d1f2570</GUID>
+    <ObjectType>cms.resource</ObjectType>
+  </ElementResourceID>
+  <ElementSize>0</ElementSize>
+  <ElementType>PageTemplate</ElementType>
+</cms.uielement>

@@ -4,8 +4,8 @@ using System.Data;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.Helpers;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
 
@@ -15,7 +15,6 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassTransformation
 
     private int mClassID = 0;
     private string mEditPageUrl = null;
-    private bool mIsSiteManager = false;
 
     #endregion
 
@@ -93,22 +92,6 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassTransformation
         }
     }
 
-
-    /// <summary>
-    /// Indicate whether is site manager
-    /// </summary>
-    public bool IsSiteManager
-    {
-        get
-        {
-            return mIsSiteManager;
-        }
-        set
-        {
-            mIsSiteManager = value;
-        }
-    }
-
     #endregion
 
 
@@ -166,9 +149,8 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassTransformation
                     var url = EditPageUrl;
 
                     var query = String.Format(
-                            "objectid={0}&parentobjectid={1}&displaytitle=false{2}",
+                            "objectid={0}&displaytitle=false{1}",
                             transID,
-                            ClassID,
                             (ModuleID > 0 ? "&moduleid=" + ModuleID : String.Empty)
                         );
 
@@ -207,28 +189,15 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassTransformation
         {
             case "transformationtype":
                 DataRowView dr = (DataRowView)parameter;
-                bool isHierarchical = ValidationHelper.GetBoolean(dr["TransformationIsHierarchical"], false);
                 string type = ValidationHelper.GetString(dr["TransformationType"], String.Empty);
-                if (isHierarchical)
-                {
-                    return GetString("transformation.hierarchical");
-                }
+
                 switch (type.ToLowerCSafe())
                 {
-                    case "ascx":
-                        return "ASCX";
-
                     case "text":
                         return "Text / XML";
 
-                    case "xslt":
-                        return "XSLT";
-
                     case "html":
                         return "HTML";
-
-                    case "jquery":
-                        return "jQuery";
                 }
                 break;
         }

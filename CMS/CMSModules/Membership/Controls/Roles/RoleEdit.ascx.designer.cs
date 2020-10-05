@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
-    
+public partial class CMSModules_Membership_Controls_Roles_RoleEdit
+{
+
     /// <summary>
     /// plcMess control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.MessagesPlaceHolder plcMess;
-    
+
     /// <summary>
     /// lblRoleDisplayName control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblRoleDisplayName;
-    
+
     /// <summary>
     /// txtRoleDisplayName control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtRoleDisplayName;
-    
+
     /// <summary>
     /// rfvDisplayName control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvDisplayName;
-    
+
     /// <summary>
     /// plcCodeName control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcCodeName;
-    
+
     /// <summary>
     /// lblRoleCodeName control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblRoleCodeName;
-    
+
     /// <summary>
     /// txtRoleCodeName control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_CodeName txtRoleCodeName;
-    
+
     /// <summary>
     /// rfvCodeName control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvCodeName;
-    
+
     /// <summary>
     /// lblDescription control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblDescription;
-    
+
     /// <summary>
     /// txtDescription control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtDescription;
-    
+
     /// <summary>
     /// plcIsDomain control.
     /// </summary>
@@ -109,7 +110,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcIsDomain;
-    
+
     /// <summary>
     /// lblIsDomain control.
     /// </summary>
@@ -118,7 +119,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblIsDomain;
-    
+
     /// <summary>
     /// chkIsDomain control.
     /// </summary>
@@ -127,34 +128,7 @@ public partial class CMSModules_Membership_Controls_Roles_RoleEdit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkIsDomain;
-    
-    /// <summary>
-    /// plcIsPublic control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.PlaceHolder plcIsPublic;
-    
-    /// <summary>
-    /// lblIsAdmin control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblIsAdmin;
-    
-    /// <summary>
-    /// chkIsAdmin control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkIsAdmin;
-    
+
     /// <summary>
     /// btnOk control.
     /// </summary>

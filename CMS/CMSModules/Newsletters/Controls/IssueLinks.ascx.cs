@@ -131,6 +131,7 @@ public partial class CMSModules_Newsletters_Controls_IssueLinks : CMSUserControl
         ugLinks.Pager.ShowPageSize = false;
         ugLinks.FilterLimit = 1;
         ugLinks.OnExternalDataBound += UniGrid_OnExternalDataBound;
+        ugLinks.Columns = "LinkID, LinkIssueID, LinkTarget, LinkDescription";
 
         ugLinks.OnDataReload += GetLinks;
         
@@ -204,6 +205,8 @@ public partial class CMSModules_Newsletters_Controls_IssueLinks : CMSUserControl
 
                      // Get ID of main issue link (grater than variant link ID)
                      new AggregatedColumn(AggregationType.Max, "LinkID").As("LinkID"),
+                     // Get ID of the original issue (the original is the parent of variants so it has the lowest ID)
+                     new AggregatedColumn(AggregationType.Min, "LinkIssueID").As("LinkIssueID"),
 
                      // Get total and unique clicks (sum variants)
                      new AggregatedColumn(AggregationType.Sum, "UniqueClicks").As("UniqueClicks"),

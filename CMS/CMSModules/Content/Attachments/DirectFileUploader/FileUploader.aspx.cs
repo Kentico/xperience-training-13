@@ -9,7 +9,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Content_Attachments_DirectFileUploader_FileUploader : LivePage
+public partial class CMSModules_Content_Attachments_DirectFileUploader_FileUploader : CMSPage
 {
     #region "Private variables"
 
@@ -40,18 +40,6 @@ public partial class CMSModules_Content_Attachments_DirectFileUploader_FileUploa
 
 
     #region "Page events"
-
-    protected override void OnPreInit(EventArgs e)
-    {
-        if (QueryHelper.GetBoolean("islive", true))
-        {
-            Page.MasterPageFile = "~/CMSMasterPages/LiveSite/EmptyPage.master";
-        }
-
-        // Must be called after the master page file is set
-        base.OnPreInit(e);
-    }
-
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -118,7 +106,7 @@ public partial class CMSModules_Content_Attachments_DirectFileUploader_FileUploa
                     fileUploaderElem.OnlyImages = ValidationHelper.GetBoolean(properties["onlyimages"], false);
                     fileUploaderElem.ParentElemID = QueryHelper.GetString("parentelemid", String.Empty);
                     fileUploaderElem.CheckPermissions = ValidationHelper.GetBoolean(properties["checkperm"], true);
-                    fileUploaderElem.IsLiveSite = ValidationHelper.GetBoolean(properties["islive"], true);
+                    fileUploaderElem.IsLiveSite = false;
                     fileUploaderElem.RaiseOnClick = ValidationHelper.GetBoolean(properties["click"], false);
                     fileUploaderElem.NodeSiteName = ValidationHelper.GetString(properties["sitename"], null);
                     fileUploaderElem.SourceType = SourceType;

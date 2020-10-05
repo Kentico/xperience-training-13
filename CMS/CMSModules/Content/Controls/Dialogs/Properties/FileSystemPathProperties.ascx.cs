@@ -327,8 +327,8 @@ public partial class CMSModules_Content_Controls_Dialogs_Properties_FileSystemPa
             startPath = Server.MapPath(startPath);
         }
 
-        startPath = Path.EnsureEndBackslash(startPath.ToLowerCSafe());
-        string folderName = Path.EnsureEndBackslash(folder.ToLowerCSafe());
+        startPath = Path.EnsureEndSlash(startPath.ToLowerCSafe());
+        string folderName = Path.EnsureEndSlash(folder.ToLowerCSafe());
         try
         {
             folderName = Server.MapPath(folderName);

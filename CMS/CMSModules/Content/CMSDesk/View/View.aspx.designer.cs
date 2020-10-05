@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Content_CMSDesk_View_View {
-    
+public partial class CMSModules_Content_CMSDesk_View_View
+{
+
     /// <summary>
     /// editMenu control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Content_CMSDesk_View_View {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Content_Controls_EditMenu editMenu;
-    
+
     /// <summary>
     /// plcMess control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_Content_CMSDesk_View_View {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.MessagesPlaceHolder plcMess;
-    
+
     /// <summary>
     /// alWarning control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_Content_CMSDesk_View_View {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.AlertLabel alWarning;
-    
+
     /// <summary>
     /// ucView control.
     /// </summary>

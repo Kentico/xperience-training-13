@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>5ff23607-9872-493f-8491-ab680a09a0f0</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @globalCurrency bit;
+SET @globalCurrency = {%Settings.CMSStoreUseGlobalCurrencies?1:0|(identity)GlobalAdministrator|(hash)0ab7d8ea8682c49dbd98696beebc1fd5abee5b6cb085bdf3f17253c96532cf2b%};
+
+SELECT 
+   CurrencyCode AS '{$unigrid.currency.columns.currencycode$}',
+   CAST(ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsalesinmaincurrency$}'
+FROM 
+   COM_Order
+   LEFT JOIN COM_Currency
+      ON CurrencyID = OrderCurrencyID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid, 0) = 1)
+WHERE 
+   (CurrencyEnabled = 1 OR CurrencyID IN (SELECT OrderCurrencyID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND CurrencyID IS NOT NULL   
+   AND ((@globalCurrency = 1 AND CurrencySiteID IS NULL)OR(@globalCurrency = 0 AND CurrencySiteID = @CMSContextCurrentSiteID))
+GROUP BY CurrencyCode
+ORDER BY SUM(OrderGrandTotalInMainCurrency) DESC
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>SalesByCurrency</CodeName>
+    <GUID>2c8bee97-1520-4c90-970e-25e615634a83</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <itemvalueformat>#VALY{0.0}</itemvalueformat>
+      <legendinside>False</legendinside>
+      <legendposition>Top</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>pie</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

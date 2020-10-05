@@ -400,7 +400,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_FileSystemSel
     {
         bool isAllowed = false;
         bool isExcluded = false;
-        string startPath = Path.EnsureEndBackslash(FullStartingPath.ToLowerCSafe());
+        string startPath = Path.EnsureEndSlash(FullStartingPath.ToLowerCSafe());
         string folderName = info.FullName.ToLowerCSafe();
 
         // Check if folder is allowed

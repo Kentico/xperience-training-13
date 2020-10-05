@@ -4,7 +4,6 @@ using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
 using CMS.Helpers;
-using CMS.Membership;
 using CMS.Reporting;
 using CMS.Reporting.Web.UI;
 using CMS.UIControls;
@@ -15,7 +14,6 @@ public partial class CMSModules_Reporting_Tools_Report_View : CMSReportingPage
 {
     #region "Variables"
 
-    private int reportId;
     private bool isSaved;
 
     #endregion
@@ -33,7 +31,7 @@ public partial class CMSModules_Reporting_Tools_Report_View : CMSReportingPage
         // Ensure the script manager
         EnsureScriptManager();
 
-        reportId = QueryHelper.GetInteger("ReportId", 0);
+        int reportId = QueryHelper.GetInteger("ReportId", 0);
         ReportInfo ri = ReportInfoProvider.GetReportInfo(reportId);
         if (ri != null)
         {
@@ -42,13 +40,6 @@ public partial class CMSModules_Reporting_Tools_Report_View : CMSReportingPage
             displayReport.ReportName = reportName;
             reportHeader.ReportName = reportName;
         }
-    }
-
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        ScriptHelper.RegisterDialogScript(Page);
-        reportHeader.ActionPerformed += HeaderActions_ActionPerformed;
     }
 
 
@@ -63,6 +54,8 @@ public partial class CMSModules_Reporting_Tools_Report_View : CMSReportingPage
 
         // Disable print option if form parameters aren't valid
         reportHeader.PrintEnabled = displayReport.ParametersForm.ValidateData();
+
+        ScriptHelper.RegisterDialogScript(Page);
     }
 
     #endregion

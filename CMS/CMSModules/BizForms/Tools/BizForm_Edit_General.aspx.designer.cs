@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
-    
+public partial class CMSModules_BizForms_Tools_BizForm_Edit_General
+{
+
     /// <summary>
     /// headGeneral control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headGeneral;
-    
+
     /// <summary>
     /// lblDisplayName control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblDisplayName;
-    
+
     /// <summary>
     /// txtDisplayName control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtDisplayName;
-    
+
     /// <summary>
     /// rfvDisplayName control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvDisplayName;
-    
+
     /// <summary>
     /// lblCodeName control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblCodeName;
-    
+
     /// <summary>
     /// txtCodeName control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_CodeName txtCodeName;
-    
+
     /// <summary>
     /// lblTableName control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTableName;
-    
+
     /// <summary>
     /// txtTableName control.
     /// </summary>
@@ -82,7 +83,25 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtTableName;
-    
+
+    /// <summary>
+    /// lblClassName control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblClassName;
+
+    /// <summary>
+    /// txtClassName control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSTextBox txtClassName;
+
     /// <summary>
     /// headFormSettings control.
     /// </summary>
@@ -91,7 +110,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headFormSettings;
-    
+
     /// <summary>
     /// lblAfterSubmited control.
     /// </summary>
@@ -100,7 +119,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblAfterSubmited;
-    
+
     /// <summary>
     /// radDisplay control.
     /// </summary>
@@ -109,7 +128,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radDisplay;
-    
+
     /// <summary>
     /// txtDisplay control.
     /// </summary>
@@ -118,7 +137,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtDisplay;
-    
+
     /// <summary>
     /// radRedirect control.
     /// </summary>
@@ -127,7 +146,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radRedirect;
-    
+
     /// <summary>
     /// txtRedirect control.
     /// </summary>
@@ -136,7 +155,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtRedirect;
-    
+
     /// <summary>
     /// radClear control.
     /// </summary>
@@ -145,7 +164,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radClear;
-    
+
     /// <summary>
     /// radContinue control.
     /// </summary>
@@ -154,7 +173,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRadioButton radContinue;
-    
+
     /// <summary>
     /// lblButtonText control.
     /// </summary>
@@ -163,7 +182,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblButtonText;
-    
+
     /// <summary>
     /// txtButtonText control.
     /// </summary>
@@ -172,7 +191,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtButtonText;
-    
+
     /// <summary>
     /// lblSubmitButtonImage control.
     /// </summary>
@@ -181,7 +200,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSubmitButtonImage;
-    
+
     /// <summary>
     /// txtSubmitButtonImage control.
     /// </summary>
@@ -190,7 +209,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtSubmitButtonImage;
-    
+
     /// <summary>
     /// btnOk control.
     /// </summary>

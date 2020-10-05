@@ -539,7 +539,7 @@ public partial class CMSModules_Translations_Pages_TranslateDocuments : CMSTrans
             var settings = PrepareTranslationSettings();
 
             // Check selected service
-            var service = TranslationServiceInfoProvider.GetTranslationServiceInfo(translationElem.SelectedService);
+            var service = TranslationServiceInfo.Provider.Get(translationElem.SelectedService);
             if (service == null)
             {
                 return;
@@ -677,7 +677,7 @@ public partial class CMSModules_Translations_Pages_TranslateDocuments : CMSTrans
                             else
                             {
                                 // No documents were submitted to translation delete empty submission
-                                TranslationSubmissionInfoProvider.DeleteTranslationSubmissionInfo(submission);
+                                TranslationSubmissionInfo.Provider.Delete(submission);
                             }
 
                             // Reset submission to create new for next page
@@ -745,7 +745,7 @@ public partial class CMSModules_Translations_Pages_TranslateDocuments : CMSTrans
             }
             else if (oneSubmission)
             {
-                TranslationSubmissionInfoProvider.DeleteTranslationSubmissionInfo(submission);
+                TranslationSubmissionInfo.Provider.Delete(submission);
 
                 // Log error only if the translation was successfully processed
                 if (success)
@@ -823,7 +823,6 @@ public partial class CMSModules_Translations_Pages_TranslateDocuments : CMSTrans
     {
         var settings = new TranslationSettings
         {
-            TranslateWebpartProperties = SettingsKeyInfoProvider.GetBoolValue(CurrentSiteName + ".CMSTranslateWebpartProperties"),
             SourceLanguage = translationElem.FromLanguage,
             Instructions = translationElem.Instructions,
             Priority = translationElem.Priority,

@@ -1326,7 +1326,7 @@
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryHelper.EnsurePhysicalPath(System.String)">
             <summary>
-            Return file path with replaced slash ("/") to back slash ("\").
+            Returns file path with slashes by <see cref="P:CMS.IO.Path.DirectorySeparatorChar"/>.
             </summary>
             <param name="path">File path</param>
         </member>
@@ -1489,13 +1489,6 @@
             </summary>
             <param name="permissionName">Permission name</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetMediaFileUrl(System.Guid,System.String)">
-            <summary>
-            Returns media file URL according to site settings.
-            </summary>
-            <param name="fileGuid">Media file GUID</param>
-            <param name="siteName">Site name</param>
-        </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryHelper.GetDirectUrl(CMS.MediaLibrary.MediaFileInfo)">
             <summary>
             Returns a direct URL to the media file.
@@ -1539,7 +1532,7 @@
             <param name="mediaFile">Media file which the URL will be generated for.</param>
             <exception cref="T:System.ArgumentNullException"><paramref name="mediaFile" /> is null.</exception>
             <remarks>
-            Generates various URL types depending on the media library location and 'Files friendly URL extension' setting in CMS:
+            Generates various URL types depending on the media library location:
             <list type="table">
               <listheader>
                 <term>URL</term>
@@ -1636,29 +1629,14 @@
             Object type
             </summary>
         </member>
-        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.OBJECT_TYPE_GROUP">
-            <summary>
-            Object type for group
-            </summary>
-        </member>
         <member name="F:CMS.MediaLibrary.MediaLibraryInfo.TYPEINFO">
             <summary>
             Type information.
             </summary>
         </member>
-        <member name="F:CMS.MediaLibrary.MediaLibraryInfo.TYPEINFOGROUP">
-            <summary>
-            Type information for group library.
-            </summary>
-        </member>
         <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryFullName">
             <summary>
             Media library full name in format [sitename].[libraryname].
-            </summary>
-        </member>
-        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryGroupID">
-            <summary>
-            Library group ID.
             </summary>
         </member>
         <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryDescription">
@@ -1749,11 +1727,6 @@
         <member name="P:CMS.MediaLibrary.MediaLibraryInfo.LibraryTeaserGuid">
             <summary>
             Library teaser guid.
-            </summary>
-        </member>
-        <member name="P:CMS.MediaLibrary.MediaLibraryInfo.TypeInfo">
-            <summary>
-            Type information.
             </summary>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfo.DeleteObject">
@@ -1863,18 +1836,16 @@
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.String)">
             <summary>
             Returns media library info specified by library name and site name.
-            Do not use for retrieving group MLs (use GetMediaLibraryInfo(string libraryName, int siteId, int groupId) instead). 
             </summary>
             <param name="libraryName">Library name</param>
             <param name="siteName">Site name</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.Int32,System.Int32)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.String,System.Int32)">
             <summary>
             Returns media library info specified by library name, site name and groupId.
             </summary>
             <param name="libraryName">Library name</param>
             <param name="siteId">Site ID</param>
-            <param name="groupId">Group ID</param>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.GetMediaLibraryInfo(System.Int32)">
             <summary>
@@ -1913,12 +1884,6 @@
             <param name="orderBy">Order by statement to use</param>
             <param name="topN">Top N records</param>
             <param name="columns">List of columns to be returned</param>
-        </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibrariesInfos(System.Int32)">
-            <summary>
-            Delete media libraries only from database for selected group.
-            </summary>
-            <param name="groupId">Group ID</param>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolder(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -2004,12 +1969,11 @@
             <param name="synchronization">Indicates if method is running by web farms synchronization</param>
             <param name="logSynchronization">Indicates if staging task should be logged</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereCondition(System.String,System.Int32)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereCondition(System.String)">
             <summary>
             Add security where condition to the existing where condition.
             </summary>
             <param name="where">Existing where condition</param>
-            <param name="communityGroupId">Community group ID</param>
             <returns>Returns where condition</returns>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.IsUserAuthorizedPerLibrary(CMS.MediaLibrary.MediaLibraryInfo,System.String,CMS.Membership.CurrentUserInfo)">
@@ -2056,12 +2020,6 @@
             Inserts or Updates the object to the database.
             </summary>
             <param name="info">Object to insert / update</param>
-        </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryInfosInternal(System.Int32)">
-            <summary>
-            Delete media libraries only from database for selected group.
-            </summary>
-            <param name="groupId">Group ID</param>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.DeleteMediaLibraryFolderInternal(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -2135,12 +2093,11 @@
             <param name="synchronization">Indicates if method is running by web farms synchronization</param>
             <param name="logSynchronization">Indicates if staging task should be logged</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereConditionInternal(System.String,System.Int32)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CombineSecurityWhereConditionInternal(System.String)">
             <summary>
             Add security where condition to the existing where condition.
             </summary>
             <param name="where">Existing where condition</param>
-            <param name="communityGroupId">Community group ID</param>
             <returns>Returns where condition</returns>
         </member>
         <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.IsUserAuthorizedPerLibraryInternal(CMS.MediaLibrary.MediaLibraryInfo,System.String,CMS.Membership.CurrentUserInfo)">
@@ -2159,21 +2116,19 @@
             <param name="libraryFolder">Library folder name</param>
             <param name="webFullPath">Physical path to the root of the web project (e.g. c:\WebProject\), if it is not specified web application physical path is used</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckResourcePermission(System.Int32,System.String,CMS.Membership.CurrentUserInfo,System.String)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckResourcePermission(System.String,CMS.Membership.CurrentUserInfo,System.String)">
             <summary>
             Checks the specified permission for resource (cms.groups if library group id is specified, cms.medialibrary otherwise).
             </summary>
-            <param name="libraryGroupId">ID of the library group</param>
             <param name="permissionName">Name of the permission</param>
             <param name="userInfo">User info to check</param>
             <param name="siteName">Site name</param>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckPermission(System.Int32,System.Int32,System.String,CMS.Helpers.SecurityAccessEnum,CMS.Membership.UserInfo)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryInfoProvider.CheckPermission(System.Int32,System.String,CMS.Helpers.SecurityAccessEnum,CMS.Membership.UserInfo)">
             <summary>
             Checks specified media library permission.
             </summary>
             <param name="libraryId">Media library ID</param>
-            <param name="libraryGroupId">Media library group ID</param>
             <param name="permissionName">Name of the permission which is checked</param>
             <param name="permissionValue">Value of the permission</param>
             <param name="userInfo">User info to check</param>
@@ -2376,30 +2331,68 @@
             <param name="roleIds">List of role IDs.</param>
             <param name="permissionsIds">List of permission IDs.</param>
         </member>
-        <member name="T:CMS.MediaLibrary.CommunityGroupDeletion">
+        <member name="T:CMS.MediaLibrary.MediaLibraryMethods">
             <summary>
-            Community group deletion actions
+            Media library methods - wrapping methods for macro resolver.
             </summary>
         </member>
-        <member name="M:CMS.MediaLibrary.CommunityGroupDeletion.Init">
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileUrl(CMS.MacroEngine.EvaluationContext,System.Object[])">
             <summary>
-            Initializes the actions for deletion
+            Returns the URL to the media file, user permissions are not checked.
             </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
         </member>
-        <member name="M:CMS.MediaLibrary.CommunityGroupDeletion.Delete_Before(System.Object,CMS.DataEngine.ObjectEventArgs)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileUrlWithCheck(CMS.MacroEngine.EvaluationContext,System.Object[])">
             <summary>
-            Event handler for deleting group media libraries.
+            Returns the URL to the media file, user permissions are checked.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileRelativePath(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns the relative URL to the media file, user permissions are checked.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileRelativePath(System.Object,System.Object)">
+            <summary>
+            Returns the relative URL to the media file, user permissions are checked.
+            </summary>
+            <param name="fileGuid">File GUID</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileDirectUrl(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns the direct URL to the media file, user permissions are not checked.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileDirectPath(CMS.MacroEngine.EvaluationContext,System.Object[])">
+            <summary>
+            Returns the direct relative URL to the media file, user permissions are not checked.
+            </summary>
+            <param name="context">Evaluation context with child resolver</param>
+            <param name="parameters">Method parameters</param>
+        </member>
+        <member name="M:CMS.MediaLibrary.MediaLibraryMethods.GetMediaFileDirectPath(System.Object,System.Object)">
+            <summary>
+            Returns the direct relative URL to the media file, user permissions are not checked.
+            </summary>
+            <param name="libraryId">Media library ID</param>
+            <param name="filePath">File path</param>
+        </member>
+        <member name="T:CMS.MediaLibrary.MediaLibraryNamespace">
+            <summary>
+            Wrapper class to provide MediaLibrary namespace in the MacroEngine.
             </summary>
         </member>
         <member name="T:CMS.MediaLibrary.ImportSpecialActions">
             <summary>
             Handles special actions during the import process.
-            </summary>
-        </member>
-        <member name="F:CMS.MediaLibrary.ImportSpecialActions.RemovedSettingsKeysCodeNamesInV11">
-            <summary>
-            List of removed settings keys code names.
-            Settings keys in this list won't be imported.
             </summary>
         </member>
         <member name="M:CMS.MediaLibrary.ImportSpecialActions.Init">
@@ -2417,13 +2410,12 @@
             Initializes export handlers
             </summary>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryExport.ExportMediaFiles(CMS.CMSImportExport.SiteExportSettings,System.Data.DataTable,System.Boolean)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryExport.ExportMediaFiles(CMS.CMSImportExport.SiteExportSettings,System.Data.DataTable)">
             <summary>
             Export media files.
             </summary>
             <param name="settings">Export settings</param>
             <param name="table">Parent data</param>
-            <param name="isGroup">Indicates if group objects are exported</param>
         </member>
         <member name="T:CMS.MediaLibrary.MediaLibraryImport">
             <summary>
@@ -2435,14 +2427,13 @@
             Initializes export handlers
             </summary>
         </member>
-        <member name="M:CMS.MediaLibrary.MediaLibraryImport.ImportMediaFiles(CMS.CMSImportExport.SiteImportSettings,System.Data.DataTable,CMS.DataEngine.TranslationHelper,System.Boolean)">
+        <member name="M:CMS.MediaLibrary.MediaLibraryImport.ImportMediaFiles(CMS.CMSImportExport.SiteImportSettings,System.Data.DataTable,CMS.DataEngine.TranslationHelper)">
             <summary>
             Import media files.
             </summary>
             <param name="settings">Import settings</param>
             <param name="table">Parent data</param>
             <param name="th">Translation helper</param>
-            <param name="isGroup">Indicates if group objects are imported</param>
         </member>
         <member name="T:CMS.MediaLibrary.MediaLibraryContext">
             <summary>

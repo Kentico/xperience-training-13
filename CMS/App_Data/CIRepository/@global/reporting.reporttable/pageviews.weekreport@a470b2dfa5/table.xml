@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>b48a5b0b-b1d4-4756-84a4-9aa09fcf2ab3</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @PaveViews TABLE
+(
+  PagePath NVARCHAR(500),
+  ObjectID INT,
+  Pageviews INT,
+  Percents DECIMAL(10,2),
+  Average INT  
+)
+
+DECLARE @Sum DECIMAL;
+
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'week');
+SET @ToDate ={%DatabaseSchema%}.Func_Analytics_EndDateTrim(@ToDate,'week');
+
+SELECT @Sum =   
+  SUM(HitsCount)
+  FROM Analytics_Statistics
+  INNER JOIN Analytics_WeekHits ON Analytics_WeekHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+  WHERE (StatisticsSiteID = @CMSContextCurrentSiteID)
+  AND (StatisticsCode=@CodeName)
+  AND (HitsStartTime >= @FromDate)
+ AND (HitsEndTime <= @ToDate)
+
+INSERT INTO @PaveViews (PagePath,ObjectID,PageViews,Percents)
+  SELECT TOP 100 StatsWithPath.NodeAliasPath, StatsWithPath.ObjectID, SUM(StatsWithPath.HitsCount) AS PageViews, (SUM(StatsWithPath.HitsCount)/@Sum)*100 AS Percents FROM
+  (
+    SELECT
+     StatisticsObjectName AS NodeAliasPath, StatisticsObjectID AS ObjectID, HitsCount      FROM Analytics_Statistics
+     INNER JOIN Analytics_WeekHits ON Analytics_WeekHits.HitsStatisticsID = Analytics_Statistics.StatisticsID
+     WHERE (StatisticsSiteID = @CMSContextCurrentSiteID) AND (HitsStartTime >= @FromDate) AND (HitsEndTime <= @ToDate) AND (StatisticsCode = @CodeName)
+  ) AS StatsWithPath
+  GROUP BY StatsWithPath.NodeAliasPath, StatsWithPath.ObjectID
+  ORDER BY PageViews DESC
+
+
+ UPDATE @PaveViews SET Average = (SELECT SUM(HitsValue)/SUM(HitsCount) FROM Analytics_WeekHits JOIN
+      Analytics_Statistics ON HitsStatisticsID = StatisticsID
+      WHERE HitsStartTime >= @FromDate AND HitsEndTime <= @ToDate AND StatisticsObjectName = PagePath
+        AND StatisticsCode ='avgtimeonpage' AND StatisticsSiteID = @CMSContextCurrentSiteID
+       )
+ 
+ SELECT PagePath AS '{$reports_pageviews_Week.path_header$}',pageviews AS  '{$reports_pageviews_Week.hits_header$}',
+      CAST (Percents AS NVARCHAR(10))+'%' AS '{$reports_pageviews.percent_header$}', ISNULL(CONVERT(varchar, DATEADD(s, average, 0), 108),'00:00:00') AS '{$reports_pageviews.average$}'
+  
+   FROM @PaveViews ORDER BY PageViews DESC
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>pageviews.weekreport</CodeName>
+    <GUID>d92529c5-7b2b-4293-a17f-bf2a4376c599</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No data found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

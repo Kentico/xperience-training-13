@@ -57,6 +57,6 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="path">Path in the library.</param>
         /// <returns>File DTOs.</returns>
-        Task<IEnumerable<MediaLibraryFile>> GetMediaFileDtosAsync(string path);
+        Task<MediaLibraryFile> GetMediaFileDtoAsync(string path);
     }
 }

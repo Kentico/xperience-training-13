@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>cms.document</CodeName>
+    <GUID>4d58a766-f13b-48fe-950b-63dbc2aeca69</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>a58962ce-8a0e-4285-aa51-5fcc94c9977f</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>Search</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT View_CMS_Tree_Joined.*, SearchResultName = CASE View_CMS_Tree_Joined.DocumentName WHEN '' THEN '/' else View_CMS_Tree_Joined.DocumentName END 
+FROM View_CMS_Tree_Joined
+WHERE 
+(
+[DocumentName] LIKE N'%' + @Expression + N'%'
+OR
+[NodeName] LIKE N'%' + @Expression + N'%'
+OR
+[DocumentPageTitle] LIKE N'%' + @Expression + N'%'
+OR
+[DocumentPageKeyWords] LIKE N'%' + @Expression + N'%'
+OR
+[DocumentPageDescription] LIKE N'%' + @Expression + N'%'
+OR
+[DocumentContent] LIKE N'%' + @Expression + N'%'
+)
+AND (##WHERE##) ORDER BY ##ORDERBY##
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

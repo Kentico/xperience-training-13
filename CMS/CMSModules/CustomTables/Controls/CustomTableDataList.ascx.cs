@@ -374,7 +374,7 @@ public partial class CMSModules_CustomTables_Controls_CustomTableDataList : CMSU
             UserInfo ui = UserInfo.Provider.Get(userId);
             if (ui != null)
             {
-                return ui.GetFormattedUserName(IsLiveSite);
+                return ui.GetFormattedUserName(false);
             }
         }
 

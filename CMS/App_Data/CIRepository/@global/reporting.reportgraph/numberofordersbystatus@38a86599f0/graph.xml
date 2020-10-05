@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>14322649-7f68-4e48-beb2-47829f1579c1</GraphGUID>
+  <GraphHeight>400</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE @GlobalStatus bit;
+SET @GlobalStatus = {%Settings.CMSStoreUseGlobalOrderStatus?1:0|(identity)GlobalAdministrator|(hash)efb41e29101daa006213bf4f2aaf0390d4d7d92b9b7dc2fd1bb4adf7f604ec65%};
+
+SELECT 
+   StatusDisplayName AS '{$orderstatuslist.header$}',
+   COUNT(OrderID) AS '{$ecommerce.report_numberoforders$}'   
+FROM 
+   COM_OrderStatus
+   LEFT JOIN COM_Order 
+      ON OrderStatusID = StatusID 
+      AND OrderSiteID = @CMSContextCurrentSiteID 
+      AND (OrderDate >= @FromDate OR @FromDate IS NULL) 
+      AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL) 
+WHERE 
+   (StatusEnabled = 1 OR StatusID IN (SELECT OrderStatusID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+   AND ((StatusSiteID = @CMSContextCurrentSiteID AND @GlobalStatus = 0)  
+        OR (StatusSiteID IS NULL AND @GlobalStatus = 1))
+GROUP BY 
+   StatusDisplayName, 
+   StatusOrder 
+ORDER BY StatusOrder
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>NumberOfOrdersByStatus</CodeName>
+    <GUID>0733b7d7-077d-49a0-95c7-d58078315327</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbgcolor>#2002E5</legendbgcolor>
+      <legendinside>False</legendinside>
+      <legendposition>None</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <plotareagradient>None</plotareagradient>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesgradient>None</seriesgradient>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisinterval>1</xaxisinterval>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>bar</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle>{$com.report.orderstatus$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$ecommerce.report_numberoforders$}</GraphYAxisTitle>
+</reporting.reportgraph>

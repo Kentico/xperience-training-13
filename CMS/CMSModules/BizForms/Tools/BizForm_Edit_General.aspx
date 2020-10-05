@@ -37,6 +37,15 @@
                     ReadOnly="True" Enabled="False" />
             </div>
         </div>
+        <div class="form-group">
+            <div class="editing-form-label-cell">
+                <cms:LocalizedLabel CssClass="control-label" ID="lblClassName" runat="server" EnableViewState="False" ResourceString="BizFormGeneral.lblClassName" AssociatedControlID="txtClassName" />
+            </div>
+            <div class="editing-form-value-cell">
+                <cms:CMSTextBox ID="txtClassName" runat="server" MaxLength="100"
+                    ReadOnly="True" Enabled="False" />
+            </div>
+        </div>
     </div>
     <cms:LocalizedHeading ID="headFormSettings" runat="server" Level="4" ResourceString="general.formsettings" EnableViewState="False" />
     <div class="form-horizontal">

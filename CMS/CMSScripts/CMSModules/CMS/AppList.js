@@ -1,4 +1,4 @@
-﻿cmsdefine(['CMS/Filter', 'CMS/EventHub', 'CMS/NavigationBlocker', 'jQuery', 'Underscore', 'CMS/UrlHelper', 'jQueryJScrollPane', 'CMS/Loader'], function (Filter, EventHub, NavigationBlocker, $, _, UrlHelper) {
+﻿cmsdefine(['CMS/Filter', 'CMS/EventHub', 'CMS/NavigationBlocker', 'CMS/Application', 'jQuery', 'Underscore', 'CMS/UrlHelper', 'jQueryJScrollPane', 'CMS/Loader'], function (Filter, EventHub, NavigationBlocker, Application, $, _, UrlHelper) {
 
     var AppList,
 
@@ -331,7 +331,7 @@
                 if (redirectToSingleObject) {
                     EventHub.publish("NavigatingToSingleObject", appParams);
                 } else {
-                    EventHub.publish("NavigationToApplication");
+                    EventHub.publish("NavigationToApplication", currentAppId);
                 }
             });
         },
@@ -382,11 +382,17 @@
         },
 
 
+        // Logs the application usage by incrementing its open counter within Module usage tracking
+        logApplicationUsage = function (appId) {
+            $.post(Application.getData('applicationUrl') + 'cmsapi/ApplicationUsage/Log', '=' + appId);
+        },
+
+
         // Opens the given application in the content frame. If no application is specified, default application is chosen
         openApplication = function (appQuery) {
 
             if (SetLiveSiteURL) {
-                // Reset live site URL 
+                // Reset live site URL
                 SetLiveSiteURL();
             }
 
@@ -571,7 +577,7 @@
                 var appId = location.hash.substring(1);
                 openApplication(appId);
             }
-            
+
             ignoreHash = false;
         },
 
@@ -699,7 +705,7 @@
 
 
         /**
-         * Subscribes to changes of applications within the dashboard. If application is removed, removes the pin icon and vice versa. 
+         * Subscribes to changes of applications within the dashboard. If application is removed, removes the pin icon and vice versa.
          * If dashboard has been loaded, re-enables clicking on the pin.
          */
         subscribeToDashboardAppChanges = function () {
@@ -710,7 +716,7 @@
             EventHub.subscribe('cms.applicationdashboard.ApplicationAdded', function (appGuid) {
                 handleDashboardAppToggle(true, appGuid);
             });
-            
+
             EventHub.subscribe('cms.applicationdashboard.DashboardItemLoaded', function (appGuid) {
                 var $app = _.find(applications, function (app) { return app.attr('data-appguid') === appGuid; });
                 $app.removeAttr("data-pending");
@@ -727,7 +733,7 @@
          */
         handleDashboardAppToggle = function (pinned, appGuid) {
             var $app = _.find(applications, function (app) { return app.attr('data-appguid') === appGuid; });
-            
+
             if (!$app) {
                 return;
             }
@@ -963,6 +969,9 @@
             }
             openApplication(appParams.appId + query);
         });
+
+        // Subscribe to the application launch event to log application usage
+        EventHub.subscribe('NavigationToApplication', logApplicationUsage);
     };
 
     AppList.prototype.onShow = function (cb) {

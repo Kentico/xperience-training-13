@@ -160,8 +160,10 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
     #endregion
 
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         if (!StopProcessing)
         {
             if (!RequestHelper.IsCallback())
@@ -172,6 +174,9 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
                 rfvSiteDisplayName.ErrorMessage = GetString("ImportSite.StepSiteDetails.SiteDisplayNameError");
                 rfvSitePresentationUrl.ErrorMessage = GetString("ImportSite.StepSiteDetails.SitePresentationUrlError");
                 rfvDomain.ErrorMessage = GetString("ImportSite.StepSiteDetails.ErrorDomain");
+                rfvSiteDisplayName.AddCssClass("label-full-width");
+                rfvSitePresentationUrl.AddCssClass("label-full-width");
+                rfvDomain.AddCssClass("label-full-width");
 
                 lblSiteDisplayName.Text = GetString("ImportSite.StepSiteDetails.SiteDisplayName");
                 lblSiteName.Text = GetString("ImportSite.StepSiteDetails.SiteName");
@@ -201,11 +206,9 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
                         }
                         else
                         {
-                            plcNewSelection.Visible = false;
-                            plcExisting.Visible = false;
+                            HideSelection();
                         }
                     }
-
 
                     // Single site object is imported
                     if (!SingleObject || (Settings.TemporaryFilesCreated && !Settings.SiteIsIncluded))
@@ -214,6 +217,7 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
                             "function SelectionChanged() { \n" +
                             "   var newSite = document.getElementById('" + radNewSite.ClientID + "').checked; \n" +
                             "   document.getElementById('" + txtDomain.ClientID + "').disabled = !newSite; \n" +
+                            "   document.getElementById('" + txtSitePresentationUrl.ClientID + "').disabled = !newSite; \n" +
                             "   document.getElementById('" + txtSiteDisplayName.ValueElementID + "').disabled = !newSite; \n" +
                             "   document.getElementById('" + txtSiteName.ValueElementID + "').disabled = !newSite; \n" +
                             "   document.getElementById('" + siteSelector.ValueElementID + "').disabled = newSite; \n" +
@@ -226,8 +230,7 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
                 }
                 else
                 {
-                    plcNewSelection.Visible = false;
-                    plcExisting.Visible = false;
+                    HideSelection();
                 }
             }
         }
@@ -258,7 +261,9 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
     /// <param name="refreshSelection">Refresh selection</param>
     public void ReloadData(bool refreshSelection)
     {
-        bool singleSiteObject = SingleObject && Settings.SiteIsIncluded;
+        DataTable table = ImportProvider.GetObjectsData(Settings, SiteInfo.OBJECT_TYPE, true);
+
+        bool singleSiteObject = Settings.SiteIsIncluded && (SingleObject || !SiteIsSupported(table));
 
         // Refresh selection
         if (refreshSelection)
@@ -272,12 +277,12 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         }
 
         txtDomain.Enabled = radNewSite.Checked;
+        txtSitePresentationUrl.Enabled = radNewSite.Checked;
         txtSiteDisplayName.Enabled = radNewSite.Checked;
         txtSiteName.Enabled = radNewSite.Checked;
         cultureElem.Enabled = radNewSite.Checked;
         siteSelector.Enabled = !radNewSite.Checked;
 
-        DataTable table = ImportProvider.GetObjectsData(Settings, SiteInfo.OBJECT_TYPE, true);
         if (!DataHelper.DataSourceIsEmpty(table))
         {
             // Get datarow
@@ -302,8 +307,6 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         // Set additional settings
         Settings.ExistingSite = !radNewSite.Checked;
         Settings.SetSettings(ImportExportHelper.SETTINGS_BIZFORM_DATA, radNewSite.Checked);
-        Settings.SetSettings(ImportExportHelper.SETTINGS_FORUM_POSTS, radNewSite.Checked);
-        Settings.SetSettings(ImportExportHelper.SETTINGS_BOARD_MESSAGES, radNewSite.Checked);
         Settings.SetSettings(ImportExportHelper.SETTINGS_USER_DASHBOARDS, radNewSite.Checked);
         Settings.SetSettings(ImportExportHelper.SETTINGS_USER_SITE_DASHBOARDS, radNewSite.Checked);
         Settings.SetSettings(ImportExportHelper.SETTINGS_CUSTOMTABLE_DATA, radNewSite.Checked);
@@ -311,12 +314,12 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         Settings.SetSettings(ImportExportHelper.SETTINGS_MEDIA_FILES, radNewSite.Checked);
         Settings.SetSettings(ImportExportHelper.SETTINGS_MEDIA_FILES_PHYSICAL, radNewSite.Checked);
 
-        if (!radNewSite.Checked)
+        // Existing site settings
+        if (Settings.ExistingSite)
         {
             Settings.SiteId = ValidationHelper.GetInteger(siteSelector.Value, 0);
 
-            // Get site info
-            SiteInfo si = SiteInfo.Provider.Get(Settings.SiteId);
+            var si = SiteInfo.Provider.Get(Settings.SiteId);
             if (si != null)
             {
                 Settings.SiteDisplayName = si.DisplayName;
@@ -329,34 +332,27 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
             return true;
         }
 
+        // New site settings
         Settings.SiteId = 0;
 
-        // Existing site            
-        bool isValid = rfvSiteDisplayName.IsValid && rfvDomain.IsValid && rfvSitePresentationUrl.IsValid;
-
-        // Get site name
-        var siteName = txtSiteName.Text.Trim();
-        if (siteName != InfoHelper.CODENAME_AUTOMATIC)
+        if (ValidateNewSite(out var siteName))
         {
-            var validator = new Validator().NotEmpty(siteName, GetString("ImportSite.StepSiteDetails.SiteNameError"))
-                                           .IsCodeName(siteName, GetString("ImportSite.StepSiteDetails.SiteNameNotValid"));
-            
-            // Get validation result
-            string codeNameError = validator.Result;
+            Settings.SiteDisplayName = txtSiteDisplayName.Text;
+            Settings.SitePresentationUrl = txtSitePresentationUrl.Text;
+            Settings.SiteDomain = txtDomain.Text = URLHelper.RemoveProtocol(txtDomain.Text);
+            Settings.SiteName = siteName;
 
-            // Check if there is site with specified code name
-            if (string.IsNullOrEmpty(codeNameError) && SiteInfo.Provider.Get(siteName) != null)
-            {
-                codeNameError = GetString("NewSite_SiteDetails.ErrorSiteExists");
-            }
-
-            if (!string.IsNullOrEmpty(codeNameError))
-            {
-                lblErrorSiteName.Text = codeNameError;
-                lblErrorSiteName.Visible = true;
-                isValid = false;
-            }
+            return true;
         }
+
+        return false;
+    }
+
+
+    private bool ValidateNewSite(out string siteName)
+    {
+        var isValid = rfvSiteDisplayName.IsValid && rfvDomain.IsValid && rfvSitePresentationUrl.IsValid;
+        isValid &= ValidateSiteName(out siteName);
 
         if (!Uri.IsWellFormedUriString(txtSitePresentationUrl.Text, UriKind.Absolute))
         {
@@ -364,24 +360,50 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
         }
 
         var presentationUrl = PresentationUrlNormalizer.Normalize(txtSitePresentationUrl.Text);
-        if (string.Equals(presentationUrl.Url, GetDomainInPresentationUrlFormat(txtDomain.Text).Url, StringComparison.InvariantCultureIgnoreCase))
+        if (String.Equals(presentationUrl.Url, GetDomainInPresentationUrlFormat(txtDomain.Text).Url, StringComparison.InvariantCultureIgnoreCase))
         {
             rfvDomain.ErrorMessage = GetString("importsite.stepsitedetailscollisiondomain");
             isValid = rfvDomain.IsValid = false;
         }
 
-        if (isValid)
-        {
-            txtDomain.Text = URLHelper.RemoveProtocol(txtDomain.Text);
+        return isValid;
+    }
 
-            // Set site details
-            Settings.SiteDisplayName = txtSiteDisplayName.Text;
-            Settings.SitePresentationUrl = txtSitePresentationUrl.Text;
-            Settings.SiteDomain = txtDomain.Text;
-            Settings.SiteName = siteName;
+
+    private bool ValidateSiteName(out string siteName)
+    {
+        string codeNameError = String.Empty;
+
+        siteName = txtSiteName.Text.Trim();
+
+        if (siteName == InfoHelper.CODENAME_AUTOMATIC)
+        {
+            siteName = txtSiteName.Text = ValidationHelper.GetCodeName(txtSiteDisplayName.Text);
+        }
+        else
+        {
+            var validator = new Validator()
+                .NotEmpty(siteName, GetString("ImportSite.StepSiteDetails.SiteNameError"))
+                .IsCodeName(siteName, GetString("ImportSite.StepSiteDetails.SiteNameNotValid"));
+
+            codeNameError = validator.Result;
         }
 
-        return isValid;
+        // Check if there is site with specified code name
+        if (String.IsNullOrEmpty(codeNameError) && SiteInfo.Provider.Get(siteName) != null)
+        {
+            codeNameError = GetString("SiteImport.StepSiteDetails.ErrorSiteExists");
+        }
+
+        if (!String.IsNullOrEmpty(codeNameError))
+        {
+            lblErrorSiteName.Text = codeNameError;
+            lblErrorSiteName.Visible = true;
+
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -389,5 +411,23 @@ public partial class CMSModules_ImportExport_Controls_ImportSiteDetails : CMSUse
     {
         // Since the presentation URL is schema agnostic the HTTP schema can be used directly to create a fake presentation URL.
         return PresentationUrlNormalizer.Normalize($"http://{domain}");
+    }
+
+
+    private void HideSelection()
+    {
+        plcNewSelection.Visible = false;
+        plcExisting.Visible = false;
+    }
+
+
+    private bool SiteIsSupported(DataTable table)
+    {
+        if ((table != null) && Settings.IsLowerVersion("13.0"))
+        {
+            return DataHelper.GetBoolValue(table.Rows[0], "SiteIsContentOnly", false);
+        }
+
+        return true;
     }
 }

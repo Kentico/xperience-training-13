@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>139aaef2-b31b-45de-acee-4b86054eb5ea</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+	-- This SQL script is used for getting conversion values.
+	-- Required variables are:
+	-- @FromDate, @ToDate - used for specifying date range
+	-- @GraphType - can be Cumulative or dayWise
+	-- @TestName - ABTestName
+	-- @ABTestID - ABTestID
+	-- @ABTestCulture - ABTestCulture
+	-- @ConversionName - selected conversion or empty for all conversions
+	-- @VariationName - selected variation (GUID) or empty for all variations
+    -- @ConversionType - selected conversion type (abconversion, absessionconversionfirst, absessionconversion%)
+	
+	EXEC Proc_Analytics_RemoveTempTable
+	CREATE TABLE #AnalyticsTempTable (
+	  StartTime DATETIME,
+	  Hits INT,
+	  Name NVARCHAR(300),
+	  RunningHits INT
+	)
+
+	SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month')
+
+	INSERT INTO #AnalyticsTempTable (StartTime, Hits, Name)
+	SELECT [DATE], Hits, ABVariantDisplayName
+	FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'month') AS Dates
+	LEFT JOIN 
+	(
+		SELECT HitsStartTime, SUM(HitsValue) as Hits, ABVariantDisplayName
+		FROM OM_ABVariantData 
+		JOIN Analytics_Statistics ON Analytics_Statistics.StatisticsCode LIKE @ConversionType + ';' + @TestName + ';' + CAST(ABVariantGUID AS char(36))
+		JOIN Analytics_MonthHits ON Analytics_Statistics.StatisticsID = Analytics_MonthHits.HitsStatisticsID
+		WHERE ABVariantTestID = @ABTestID AND StatisticsSiteID = @CMSContextCurrentSiteID
+		AND (@VariationName IS NULL OR @VariationName IN (CAST(ABVariantGUID AS char(36)), ''))
+		AND (@ConversionName IS NULL OR @ConversionName IN ('',StatisticsObjectName) OR ';' + @ConversionName + ';' LIKE '%;' + StatisticsObjectName + ';%')
+		AND (StatisticsObjectCulture IS NULL OR StatisticsObjectCulture = '' OR @ABTestCulture IS NULL OR @ABTestCulture IN (StatisticsObjectCulture, ''))
+		GROUP BY HitsStartTime, ABVariantDisplayName
+	) as X on [DATE] = HitsStartTime
+	
+
+	-- Fill in missing values
+	-- Select dates and names, which are missing in original data to fill gaps that are needed to ensure, that cumulative hits are calculated the right way	
+	INSERT INTO #AnalyticsTempTable
+		SELECT T1.StartTime, 0, T2.Name, 0
+		FROM #AnalyticsTempTable as T1 
+		JOIN #AnalyticsTempTable T2 ON T2.Name IS NOT NULL 
+		WHERE NOT EXISTS 
+			(
+			SELECT T3.StartTime, T3.Name 
+			FROM #AnalyticsTempTable as T3 
+			WHERE T3.Name = T2.Name AND T3.StartTime = T1.StartTime
+			) 
+		GROUP BY T1.StartTime, T2.Name
+
+	-- Delete NULL values
+	DELETE FROM #AnalyticsTempTable WHERE Name IS NULL
+
+	-- Declare variables for calculation of hits
+	DECLARE @RunningHits INT
+	SET @RunningHits = 0
+
+	DECLARE @LastName NVARCHAR(MAX)
+		
+
+	-- Sum running hits using the 'quirky update'
+	-- Uses view to define order
+	;WITH TempView AS 
+	(
+		SELECT TOP (2147483647) *
+		FROM    #AnalyticsTempTable
+		ORDER BY
+				Name, StartTime
+	)            
+	UPDATE  TempView
+	SET    	@RunningHits = RunningHits = ISNULL(Hits,0) + CASE WHEN Name=@LastName THEN ISNULL(@RunningHits,0) ELSE 0 END,
+			@LastName = Name;
+
+	-- Drop columns based on graph type
+	IF @GraphType = 'Cumulative'
+	BEGIN	
+		DECLARE @engineEdition int;
+		SET @engineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
+
+		IF @engineEdition = 5 
+		BEGIN 
+			---------------
+			-- Azure SQL --
+			---------------
+			-- Rename using the update, because Azure do not support rename of columns after CTE
+			UPDATE #AnalyticsTempTable SET Hits = RunningHits WHERE Name = Name AND StartTime = StartTime
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningHits
+		END
+		ELSE BEGIN
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN Hits
+			-- Calling in inner exec, because Azure does not allow to access tempdb using the 'temdb..'	
+			EXEC('exec tempdb..sp_rename ''#AnalyticsTempTable.RunningHits'', ''Hits'', ''COLUMN''')			
+		END
+	END
+	ELSE
+	BEGIN
+		ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningHits
+	END    	
+
+	EXEC Proc_Analytics_Pivot 'month'
+	EXEC Proc_Analytics_RemoveTempTable
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>mvcabtestconversionvalue.monthreport</CodeName>
+    <GUID>9567651c-efe0-4f8a-9a6b-c36a126923dc</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <pieshowpercentage>False</pieshowpercentage>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found.</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{y}  -  #SER: #VALY</seriesitemtooltip>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisangle>0</xaxisangle>
+      <xaxisformat>y</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

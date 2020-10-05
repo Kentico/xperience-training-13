@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.alternativeform>
+  <FormClassID>
+    <CodeName>cms.formusercontrol</CodeName>
+    <GUID>ee83afe0-b6e8-442c-a643-13f670672466</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </FormClassID>
+  <FormCustomizedColumns />
+  <FormDefinition>
+    <form version="2">
+      <field column="UserControlID" guid="12a7dbac-256a-4620-8c83-ebef77554f29" isunique="true" visible="" />
+      <category dummy="true" name="general.general" order="1">
+        <properties>
+          <caption>{$general.general$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field column="UserControlDisplayName" guid="58a7d57f-08b3-4357-bf7c-1681268bf702" order="2">
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>TextBoxControl</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.displayname$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="UserControlCodeName" guid="c78acd92-a019-4830-8b20-56129d0d056f" order="3">
+        <settings>
+          <controlname>CodeName</controlname>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.codename$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="UserControlParentID" guid="6eb0fb69-68ed-411f-a1f5-1483b4445eb9" order="4">
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>Uni_selector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowOpenInFullscreen>False</EditDialogWindowOpenInFullscreen>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>False</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>cms.formusercontrol</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>UserControlID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>6</SelectionMode>
+          <Transformation>
+            <![CDATA[<span class="form-control-text">{%UserControlDisplayName%}</span>]]>
+          </Transformation>
+          <UseAutocomplete>False</UseAutocomplete>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+          <AutoCompleteEnableCaching />
+          <AutoCompleteFirstRowSelected />
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem />
+          <FilterMode />
+          <Trim />
+        </settings>
+        <properties>
+          <enabledmacro ismacro="true">{%false%}</enabledmacro>
+          <fieldcaption>{$developmentwebpartedit.inheritedwebpart$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%UserControlParentID > 0%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="UserControlDescription" guid="62fce0dc-e75a-4d71-b480-f3ff428727d0" order="5">
+        <settings>
+          <controlname>LocalizableTextArea</controlname>
+          <TextMode>MultiLine</TextMode>
+          <ValueIsContent>True</ValueIsContent>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.description$}</fieldcaption>
+        </properties>
+      </field>
+      <field column="UserControlResourceID" guid="f6afb12a-6482-42d5-9452-9a130f7d1d9a" order="6">
+        <settings>
+          <controlname>ModuleSelector</controlname>
+          <DisplayAllModules>True</DisplayAllModules>
+          <DisplayNone>True</DisplayNone>
+          <DisplayOnlyModulesInDevelopmentMode>False</DisplayOnlyModulesInDevelopmentMode>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.module$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%SystemContext.DevelopmentMode|(identity)GlobalAdministrator|(hash)8e576fe5a4f626cc323e080952c49c3a9169ecaf5dc584185ab9251783d2cda0%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field allowempty="true" column="UserControlPriorityBool" columntype="boolean" dummy="altform" guid="085b0dc0-fde9-4174-a469-56b212543e9a" spellcheck="false" system="true" visible="true" order="7">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$formcontrols.highpriority$}</fieldcaption>
+          <fielddescription>{$formcontrols.highpriority.description$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
+        </settings>
+      </field>
+      <field column="UserControlPriority" guid="9c017fad-12e5-4d02-94af-194ed829efcc" order="8" />
+      <category dummy="true" name="ControlSource" order="9">
+        <properties>
+          <caption ismacro="true">
+<![CDATA[
+{% if (UserControlParentID > 0) 
+{
+  return GetResourceString("developmentformcontrolextender");
+  
+}
+return GetResourceString("developmentformcontrolcreation");
+|(identity)GlobalAdministrator|(hash)6bde9bcf231b3c2233dc233862c8136df7cdd8a1ce36fa175d2888e2c7f5819c%}
+]]>
+          </caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="UserControlCreation" columntype="integer" dummy="altform" guid="183ecfad-70a2-453f-a939-0fb518c7d18a" hasdependingfields="true" spellcheck="false" system="true" visible="true" order="10">
+        <properties>
+          <defaultvalue ismacro="true">
+<![CDATA[
+{%
+if (String.IsNullOrEmpty(UserControlFileName))
+{
+return 2;
+}
+
+return; 0;
+|(identity)GlobalAdministrator|(hash)87e44c87b61930783929a3eeb4582d9898e8e165b98b747c0b0b64efcdd2db95%}
+]]>
+          </defaultvalue>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%UserControlParentID <= 0%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <controlname>RadioButtonsControl</controlname>
+          <Options>
+<![CDATA[
+0;{$developmentformcontrolweb$}
+2;{$developmentformcontrolassembly$}
+]]>
+          </Options>
+          <RepeatDirection>horizontal</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="UserControlFileName" guid="6928eca4-3189-4172-b8a5-53d28a4e6966" order="11">
+        <settings>
+          <AllowedExtensions>ascx</AllowedExtensions>
+          <AllowManage>False</AllowManage>
+          <AllowNonApplicationPath>False</AllowNonApplicationPath>
+          <AllowZipFolders>False</AllowZipFolders>
+          <controlname>FileSystemSelector</controlname>
+          <DefaultPath>~/CMSFormControls</DefaultPath>
+          <ShowFolders>False</ShowFolders>
+          <UseRelativeDimensions>True</UseRelativeDimensions>
+        </settings>
+        <properties>
+          <fieldcaption>{$general.filename$}</fieldcaption>
+          <validationerrormessage>{$Development_FormUserControl_Edit.rfvFileName$}</validationerrormessage>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%((UserControlParentID == null) || (UserControlParentID == 0)) && UserControlCreation == 0%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <field column="UserControlAssemblyName" dependsonanotherfield="true" guid="35fe042c-b1a5-48dd-bc4b-e08d6395606b" spellcheck="false" order="12">
+        <settings>
+          <BaseClassName ismacro="true">
+<![CDATA[
+{%
+if (UserControlParentID > 0)
+{
+ return "CMS.Base.Web.UI.ControlExtender, CMS.Base.Web.UI";
+}
+
+ return "CMS.FormEngine.Web.UI.FormEngineUserControl, CMS.FormEngine.Web.UI";
+|(identity)GlobalAdministrator|(hash)0361d5ab47512dc74b42f2f17ae93e1abdba9f8d12f2263cefdffc60d66f97e8%}
+]]>
+          </BaseClassName>
+        </settings>
+        <properties>
+          <fieldcaption ismacro="true">
+<![CDATA[
+{%
+if (UserControlParentID <= 0)
+{
+return GetResourceString("developmentformcontrolclass");
+}
+|(identity)GlobalAdministrator|(hash)145026e93b74b6c617f52bc8229b8c2aaf312909d964863d63dfd32facc9a8b2%}
+]]>
+          </fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%UserControlCreation == 2 || UserControlParentID > 0%}]]>
+          </visiblemacro>
+        </properties>
+      </field>
+      <category dummy="true" name="development.formcontrols.controlscope" order="13">
+        <properties>
+          <caption>{$development.formcontrols.controlscope$}</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="UserControlFor" columnsize="400" columntype="text" dummy="altform" guid="31c0d494-f145-4ab2-9b5c-0d9516976c13" spellcheck="false" system="true" visible="true" order="14">
+        <properties>
+          <fieldcaption>{$development.formcontrols.usefor$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>MultipleChoiceControl</controlname>
+          <Macro>
+            <![CDATA[{%System.GetFieldGroups()|(identity)GlobalAdministrator|(hash)4e0eb830241ebb3696f3d57126b145e297acce804033e65d3cc5b886acad0218%}]]>
+          </Macro>
+          <RepeatDirection>vertical</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+          <Separator>|</Separator>
+          <SortItems>False</SortItems>
+          <TextFormat>
+            <![CDATA[{% GetResourceString("TemplateDesigner.FieldTypes." + Text) |(identity)GlobalAdministrator|(hash)8e15d7a87aaf3ff502195381b492bf8e51067ddb301311c8c17fa7265ffeab80%}]]>
+          </TextFormat>
+        </settings>
+      </field>
+      <field column="UserControlForText" guid="083e22af-aa8e-43ee-ba88-652dc8f24ba8" visible="" order="15">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForLongText" guid="ed4af8dc-0bc5-4628-a3ac-da94198f24d6" visible="" order="16">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForInteger" guid="a3b8e554-24f2-46fd-a547-6d31bf223066" visible="" order="17">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForLongInteger" guid="4de51194-6962-4dcc-8c85-6d20a3b7d063" order="18" />
+      <field column="UserControlForDecimal" guid="58ce5d88-bd20-4c62-be7f-5174c98c20e3" visible="" order="19">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForDateTime" guid="0969400a-4930-4389-b6dd-3e70aa97ee91" visible="" order="20">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForBoolean" guid="d60d1960-04a9-4857-8bdf-6fb82b425a8a" visible="" order="21">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForFile" guid="7b7c90e8-a739-4f82-baf9-6cb912f7fcb1" visible="" order="22">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field column="UserControlForDocAttachments" guid="63c34a62-59b3-44dc-a33b-dbfcf832d3fe" visible="" order="23" />
+      <field column="UserControlForGuid" guid="5145d64a-c176-463a-89bb-19af77bb8e4d" visible="" order="24">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+        </properties>
+      </field>
+      <field allowempty="true" column="UserControlShowIn" columnsize="200" columntype="text" dummy="altform" guid="90a84ed1-9e86-4e94-a354-fcd8de58bce3" hasdependingfields="true" spellcheck="false" system="true" visible="true" order="25">
+        <properties>
+          <fieldcaption>{$development.formcontrols.showin$}</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>MultipleChoiceControl</controlname>
+          <Options>
+            <![CDATA[pagetype;{$Development_FormUserControl_Edit.lblShowInDocumentTypes$}]]>
+          </Options>
+          <RepeatDirection>vertical</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+          <Separator>|</Separator>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="UserControlShowInDocumentTypes" guid="db50df09-ceff-498e-adf5-22f59ae02711" visible="" order="26" />
+      <field allowempty="true" column="UserControlShowIn2" columnsize="200" columntype="text" dummy="altform" guid="30029a9f-4e7a-4957-a170-b8e46e3b1dcd" spellcheck="false" system="true" visible="true" order="27">
+        <settings>
+          <controlname>MultipleChoiceControl</controlname>
+          <Options>
+<![CDATA[
+customtable;{$Development_FormUserControl_Edit.lblShowInCustomTables$}
+systemtable;{$Development_FormUserControl_Edit.lblShowInSystemTables$}
+report;{$Development_FormUserControl_Edit.lblShowInReports$}
+control;{$Development_FormUserControl_Edit.lblShowInControls$}
+]]>
+          </Options>
+          <RepeatDirection>vertical</RepeatDirection>
+          <RepeatLayout>Flow</RepeatLayout>
+          <Separator>|</Separator>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field column="UserControlShowInCustomTables" guid="d3a2ed0b-5b90-48f2-8fe8-6e4aef81f626" visible="" order="28" />
+      <field column="UserControlShowInSystemTables" guid="95dd83fb-ec56-41cb-908b-3ef96d173c98" visible="" order="29" />
+      <field column="UserControlShowInReports" guid="336640d5-2347-45f8-afcb-6b2a97d59dd0" visible="" order="30" />
+      <field column="UserControlShowInWebParts" guid="597a5ea1-9775-4cb1-baa5-ce9c66d21d33" visible="" order="31" />
+      <field column="UserControlGUID" guid="94342765-2117-4427-9fe9-ba8e89c657e4" visible="" order="32" />
+      <field column="UserControlLastModified" columnprecision="7" guid="a74a847c-8357-434e-9096-7666c50bb870" visible="" order="33" />
+      <field column="UserControlParameters" guid="d0857b52-d00b-466f-a48c-fc0842f619d7" visible="" order="34" />
+      <field column="UserControlIsSystem" guid="25a99c37-52f8-4e47-a5b1-40700d6323b6" order="35" />
+      <field column="UserControlForDocRelationships" guid="827740e2-6509-40fb-9779-0ca3ef8a70eb" order="36" />
+      <field column="UserControlForBinary" guid="2be235d4-8863-470c-a2e7-eca1e0e6937d" order="37" />
+      <field column="UserControlClassName" guid="6c76bbf3-9a28-4bbc-8ea8-ad56867e138e" order="38" />
+    </form>
+  </FormDefinition>
+  <FormDisplayName>Update</FormDisplayName>
+  <FormGUID>ff93b33d-305c-4ca6-9a98-f1c204ddbbca</FormGUID>
+  <FormHideNewParentFields>True</FormHideNewParentFields>
+  <FormIsCustom>False</FormIsCustom>
+  <FormName>Update</FormName>
+</cms.alternativeform>

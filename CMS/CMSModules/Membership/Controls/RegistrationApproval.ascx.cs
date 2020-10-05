@@ -5,7 +5,6 @@ using CMS.Activities.Loggers;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
 using CMS.EmailEngine;
 using CMS.Helpers;
 using CMS.MacroEngine;
@@ -13,8 +12,6 @@ using CMS.Membership;
 using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
-using CMS.WebAnalytics;
-
 
 public partial class CMSModules_Membership_Controls_RegistrationApproval : CMSUserControl
 {
@@ -297,9 +294,6 @@ public partial class CMSModules_Membership_Controls_RegistrationApproval : CMSUs
             // Enable user
             RegisteredUser.UserSettings.UserActivationDate = DateTime.Now;
             RegisteredUser.Enabled = true;
-
-            // User is confirmed and enabled, could be logged into statistics
-            AnalyticsHelper.LogRegisteredUser(currentSiteName, RegisteredUser);
         }
         // User must wait for administration approval
         else

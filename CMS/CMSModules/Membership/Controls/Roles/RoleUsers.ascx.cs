@@ -39,22 +39,6 @@ public partial class CMSModules_Membership_Controls_Roles_RoleUsers : CMSAdminEd
 
 
     /// <summary>
-    /// Gets or sets the group user filter.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            return usUsers.GroupID;
-        }
-        set
-        {
-            usUsers.GroupID = value;
-        }
-    }
-
-
-    /// <summary>
     /// Messages placeholder
     /// </summary>
     public override MessagesPlaceHolder MessagesPlaceHolder

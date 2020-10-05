@@ -28,7 +28,6 @@ public partial class CMSModules_Activities_Controls_UI_ActivityDetails_PageVisit
 
         // Loads data to grid
         ucDetails.AddRow("om.activitydetails.abvariant", ai.ActivityABVariantName);
-        ucDetails.AddRow("om.activitydetails.mvtcomb", ai.ActivityMVTCombinationName);
         return ucDetails.IsDataLoaded;
     }
 

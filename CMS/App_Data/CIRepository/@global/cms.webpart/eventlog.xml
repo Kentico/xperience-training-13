@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.webpart>
+  <WebPartCategoryID>
+    <CodeName>DashBoard</CodeName>
+    <GUID>cfb44aae-d20d-4415-9662-afe5d8edb4e5</GUID>
+    <ObjectType>cms.webpartcategory</ObjectType>
+  </WebPartCategoryID>
+  <WebPartDescription>
+    <![CDATA[Displays the system event log. You can filter which events should be included in the log. Detailed information about each of the logged events can also be viewed.]]>
+  </WebPartDescription>
+  <WebPartDisplayName>EventLog</WebPartDisplayName>
+  <WebPartFileName>DashBoard/EventLog.ascx</WebPartFileName>
+  <WebPartGUID>49f8e94b-26d1-4562-80dc-42a4135fd33a</WebPartGUID>
+  <WebPartIconClass>icon-w-eventlog</WebPartIconClass>
+  <WebPartName>EventLog</WebPartName>
+  <WebPartProperties>
+    <form version="2">
+      <category name="Event filter">
+        <properties>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="SiteName" columnsize="200" columntype="text" guid="22a60510-0a9f-4048-b2de-0cd1d19f59f9" spellcheck="false" visible="true">
+        <properties>
+          <fieldcaption>Site name</fieldcaption>
+          <fielddescription>{$documentation.webpartproperties.site$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>siteselectorwithallfieldforglobaladmin</controlname>
+        </settings>
+      </field>
+      <field column="ShowGlobalEventsOnly" columntype="boolean" guid="c5aed8c9-ff8e-471b-9e42-70212c7884a5" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>Show global events only</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$documentation.webpartproperties.showglobaleventsonly$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="EventType" columnsize="200" columntype="text" guid="fa162a76-6eed-44d4-b9a4-2894a8beb202" spellcheck="false" visible="true">
+        <properties>
+          <fieldcaption>Event type</fieldcaption>
+          <fielddescription>{$eventloglist.filtereventtype$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>eventlogtypeselector</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="Source" columnsize="450" columntype="text" guid="240ba985-a260-4204-ad77-fcd15705388c" spellcheck="false" visible="true">
+        <properties>
+          <fieldcaption>Source</fieldcaption>
+          <fielddescription>{$eventloglist.source$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <field allowempty="true" column="EventCode" columnsize="200" columntype="text" guid="59858d0d-ddc2-471f-bb9a-a1f9552bf6ae" spellcheck="false" visible="true">
+        <properties>
+          <fieldcaption>Event code</fieldcaption>
+          <fielddescription>{$eventloglist.eventcode$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textboxcontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <Trim>False</Trim>
+        </settings>
+      </field>
+      <category name="Filter">
+        <properties>
+          <caption>Content filter</caption>
+          <visible>True</visible>
+        </properties>
+      </category>
+      <field allowempty="true" column="OrderBy" columnsize="50" columntype="text" guid="64925520-1488-4e2f-b78b-12d1a70f24a9" resolvedefaultvalue="False" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue>EventTime</defaultvalue>
+          <fieldcaption>Order by</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$documentation.webpartproperties.documentsorderby$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>DropDownListControl</controlname>
+          <DisplayActualValueAsItem>False</DisplayActualValueAsItem>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+EventType;Type
+EventTime;Event time
+Source
+EventCode;Event code
+UserName;User name
+IPAddress;IP address
+DocumentName;Page name
+SiteDisplayName;Site
+EventMachineName;Machine name
+]]>
+          </Options>
+          <SortItems>False</SortItems>
+        </settings>
+      </field>
+      <field allowempty="true" column="Sorting" columnsize="50" columntype="text" guid="c609dde4-4727-4bb4-bafb-71015f9baf14" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue>desc</defaultvalue>
+          <fieldcaption>Sorting</fieldcaption>
+          <fielddescription>{$documentation.webpartproperties.sorting$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>radiobuttonscontrol</controlname>
+          <options>
+            <![CDATA[<item value="asc" text="Ascending" /><item value="desc" text="Descending" />]]>
+          </options>
+          <repeatdirection>vertical</repeatdirection>
+        </settings>
+      </field>
+      <field allowempty="true" column="ItemsPerPage" columnsize="50" columntype="text" guid="26d8e944-43ce-4aa9-8396-5c348748dca6" spellcheck="false" visible="true">
+        <properties>
+          <defaultvalue>25</defaultvalue>
+          <fieldcaption>Items per page</fieldcaption>
+          <fielddescription>{$documentation.webpartproperties.docperpage$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <options>
+            <![CDATA[<item value="10" text="10" /><item value="25" text="25" /><item value="50" text="50" />]]>
+          </options>
+        </settings>
+      </field>
+    </form>
+  </WebPartProperties>
+  <WebPartSkipInsertProperties>False</WebPartSkipInsertProperties>
+  <WebPartType>0</WebPartType>
+</cms.webpart>

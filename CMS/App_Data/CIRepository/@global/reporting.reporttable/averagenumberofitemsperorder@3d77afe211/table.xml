@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>3e93c19f-6811-4d78-b30c-24249d441e4b</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Variables used to calculate median value */
+DECLARE @BottomHalf float
+DECLARE @TopHalf float
+DECLARE @median float
+
+/* Table containing the numbers of items in orders. */
+DECLARE @medianCountTable TABLE(
+   SumOfOrderItemCount float
+)
+
+INSERT INTO @medianCountTable(
+SumOfOrderItemCount)
+   SELECT ISNULL(ROUND(ord.Average_,1),0) AS AVGs 
+   FROM 
+      COM_Order Orders 
+      INNER JOIN (SELECT 
+                     OrdeItem.OrderItemOrderID AS OrderItemOrderID,
+                     Sum(OrderItemUnitCount) AS Average_ 
+                  FROM COM_OrderItem OrdeItem 
+                  GROUP BY OrderItemOrderId) ord 
+      ON Orders.OrderID = ord.OrderItemOrderID 
+   WHERE 
+      Orders.OrderSiteID = @CMSContextCurrentSiteID 
+      AND (Orders.Orderdate >= @FromDate OR @FromDate IS NULL)
+      AND (Orders.OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+      AND (ISNULL(@IsPaid,0) = 0 OR ISNULL(Orders.OrderIsPaid, 0) = 1)
+
+SET @BottomHalf = (SELECT MAX(SumOfOrderItemCount) 
+                   FROM (SELECT TOP 50 PERCENT SumOfOrderItemCount 
+                         FROM @medianCountTable 
+                         ORDER BY SumOfOrderItemCount) AS BottomHalf)
+SET @TopHalf = (SELECT MIN(SumOfOrderItemCount) 
+                FROM (SELECT TOP 50 PERCENT SumOfOrderItemCount 
+                      FROM @medianCountTable 
+                      ORDER BY SumOfOrderItemCount DESC) AS TopHalf)
+SET @median = (@BottomHalf + @TopHalf)/2;   
+        
+/* Selects the average number of items per order and median value of the numbers of items per order */	
+SELECT '{$com.resource.OrderItemCount$}' AS '{$rep.webparrts.parametername$}',
+	CAST(ISNULL(AVG(SumOfOrderItemCount),0) AS DECIMAL(38,1)) AS '{$com.report.averagevalue$}',
+	CAST(ISNULL(@median,0) AS DECIMAL(38,1)) AS '{$com.report.medianvalue$}'
+FROM @medianCountTable
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>AverageNumberOfItemsPerOrder</CodeName>
+    <GUID>630e045e-0147-43c3-99f4-e1b01ce3e6b7</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

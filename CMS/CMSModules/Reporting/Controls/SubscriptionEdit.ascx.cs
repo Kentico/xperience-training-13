@@ -18,7 +18,6 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WebAnalytics;
 
-
 public partial class CMSModules_Reporting_Controls_SubscriptionEdit : CMSAdminControl
 {
     #region "Variables"
@@ -567,7 +566,7 @@ function disableLast(disable) {
 
             // Get report parameters
             string parameters = QueryHelper.GetString("parameters", String.Empty);
-            mParameters = ReportHelper.GetReportParameters(Report, parameters, AnalyticsHelper.PARAM_SEMICOLON, CultureHelper.EnglishCulture);
+            mParameters = ReportHelper.GetReportParameters(Report, parameters, ReportHelper.PARAM_SEMICOLON, CultureHelper.EnglishCulture);
 
             if (!RequestHelper.IsPostBack())
             {

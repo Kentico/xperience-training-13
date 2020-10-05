@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>2618772c-5d51-417b-b9b1-be04f6f8c582</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+DECLARE @totalsum float
+SET @totalsum =(SELECT 
+                   ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0)
+                FROM 
+                   COM_Order
+                   LEFT JOIN COM_OrderAddress
+                      ON (OrderID = AddressOrderID AND AddressType = @Address)
+                   LEFT JOIN CMS_Country
+                      ON AddressCountryID = CountryID
+                   LEFT JOIN CMS_State
+                      ON AddressStateID = StateID
+                WHERE 
+                   (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+                   AND OrderSiteID = @CMSContextCurrentSiteID
+                   AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+                   AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL));
+SELECT 
+   ISNULL(CountryDisplayName,'-') AS '{$objecttype.cms_country$}',
+   ISNULL(StateDisplayName,'-') AS '{$objecttype.cms_state$}',
+   CAST(ISNULL(ROUND(SUM(OrderGrandTotalInMainCurrency),1),0) AS DECIMAL(38,1)) AS '{$com.sales.volumeofsales$}',
+   CAST(CAST(ISNULL(CASE WHEN @totalsum != 0 
+                         THEN ROUND(SUM(OrderGrandTotalInMainCurrency),1)/@totalsum*100 
+                         ELSE 0 END,0) AS DECIMAL(9,1)) AS VARCHAR(20)) + ' %' AS '{$reports_pageviews.percent_header$}'
+FROM 
+   COM_Order
+   LEFT JOIN COM_OrderAddress
+   ON (OrderID = AddressOrderID AND AddressType = @Address)
+   LEFT JOIN CMS_Country
+   ON AddressCountryID = CountryID
+   LEFT JOIN CMS_State
+   ON AddressStateID = StateID
+WHERE 
+   (ISNULL(@OnlyPaid,0) = 0 OR ISNULL(OrderIsPaid,0) = 1)
+   AND OrderSiteID = @CMSContextCurrentSiteID
+   AND (OrderDate >= @FromDate OR @FromDate IS NULL)
+   AND (OrderDate <= DATEADD(day,1,@ToDate) OR @ToDate IS NULL)
+GROUP BY 
+   CountryDisplayName, 
+   StateDisplayName
+ORDER BY 
+   SUM(OrderGrandTotalInMainCurrency) DESC,
+   StateDisplayName,
+   CountryDisplayName
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>SalesByState</CodeName>
+    <GUID>eb2d7383-2dce-45ed-b18c-9db5771534b4</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>True</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>3</pagemode>
+      <pagesize>25</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

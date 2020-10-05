@@ -12,8 +12,6 @@ using CMS.Helpers;
 using CMS.LicenseProvider;
 using CMS.MacroEngine;
 using CMS.Membership;
-using CMS.Protection;
-using CMS.SiteProvider;
 using CMS.UIControls;
 using CMS.WorkflowEngine;
 
@@ -332,7 +330,7 @@ public partial class CMSModules_Content_Controls_UserContributions_ContributionL
         }
         set
         {
-            mAllowDelete = (value && CheckGroupPermission("deletepages"));
+            mAllowDelete = value;
             editDoc.AllowDelete = mAllowDelete;
         }
     }
@@ -782,13 +780,6 @@ public partial class CMSModules_Content_Controls_UserContributions_ContributionL
 
             // Delete document
             case "delete":
-                // Check banned IP
-                if (!BannedIPInfoProvider.IsAllowed(SiteContext.CurrentSiteName, BanControlEnum.AllNonComplete))
-                {
-                    AddAlert(GetString("general.bannedip"));
-                    return;
-                }
-
                 TreeProvider tree = new TreeProvider(MembershipContext.AuthenticatedUser);
 
                 // Delete specified node
@@ -912,14 +903,6 @@ public partial class CMSModules_Content_Controls_UserContributions_ContributionL
     {
         if (CheckGroupPermissions && !MembershipContext.AuthenticatedUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin))
         {
-            // Get current group ID
-            int groupId = ModuleCommands.CommunityGetCurrentGroupID();
-            if (groupId > 0)
-            {
-                // Returns true if current user is authorized for specified action in current group
-                return ModuleCommands.CommunityCheckGroupPermission(permissionName, groupId) || MembershipContext.AuthenticatedUser.IsGroupAdministrator(groupId);
-            }
-
             return false;
         }
 

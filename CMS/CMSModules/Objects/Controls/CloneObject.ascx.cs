@@ -582,7 +582,7 @@ public partial class CMSModules_Objects_Controls_CloneObject : CMSUserControl
 
 
     /// <summary>
-    /// Returns <c>true</c> only for Admin and for controls which have SiteID (and are not under group or any other parent) and are not from E-Commerce/Forums module. Returns <c>false</c> otherwise.
+    /// Returns <c>true</c> only for Admin and for controls which have SiteID (and are not under group or any other parent) and are not from E-Commerce module. Returns <c>false</c> otherwise.
     /// </summary>
     private bool ShowCloneUnderSite()
     {
@@ -590,8 +590,7 @@ public partial class CMSModules_Objects_Controls_CloneObject : CMSUserControl
 
         bool isAdmin = MembershipContext.AuthenticatedUser?.CheckPrivilegeLevel(UserPrivilegeLevelEnum.Admin) ?? false;
 
-        bool isSupportedModule = !ModuleName.ECOMMERCE.Equals(typeInfo.ModuleName, StringComparison.OrdinalIgnoreCase)
-                    && !ModuleName.FORUMS.Equals(typeInfo.ModuleName, StringComparison.OrdinalIgnoreCase);
+        bool isSupportedModule = !ModuleName.ECOMMERCE.Equals(typeInfo.ModuleName, StringComparison.OrdinalIgnoreCase);
 
         bool isSupportedObject = ((typeInfo.SupportsGlobalObjects && (sitesCount > 0)) || (sitesCount > 1))
                     && (typeInfo.SiteIDColumn != ObjectTypeInfo.COLUMN_NAME_UNKNOWN)

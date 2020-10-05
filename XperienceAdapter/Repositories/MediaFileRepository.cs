@@ -9,7 +9,7 @@ using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
-
+using Kentico.Content.Web.Mvc;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
@@ -25,6 +25,8 @@ namespace XperienceAdapter.Repositories
         private readonly IMediaFileInfoProvider _mediaFileInfoProvider;
 
         private readonly ISiteService _siteService;
+
+        private readonly IMediaFileUrlRetriever _mediaFileUrlRetriever;
 
         public int? MediaLibraryId
         {
@@ -62,11 +64,12 @@ namespace XperienceAdapter.Repositories
             }
         }
 
-        public MediaFileRepository(IMediaLibraryInfoProvider mediaLibraryInfoProvider, IMediaFileInfoProvider mediaFileInfoProvider, ISiteService siteService)
+        public MediaFileRepository(IMediaLibraryInfoProvider mediaLibraryInfoProvider, IMediaFileInfoProvider mediaFileInfoProvider, ISiteService siteService, IMediaFileUrlRetriever mediaFileUrlRetriever)
         {
             _mediaLibraryInfoProvider = mediaLibraryInfoProvider ?? throw new ArgumentNullException(nameof(mediaLibraryInfoProvider));
             _mediaFileInfoProvider = mediaFileInfoProvider ?? throw new ArgumentNullException(nameof(mediaFileInfoProvider));
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
+            _mediaFileUrlRetriever = mediaFileUrlRetriever ?? throw new ArgumentNullException(nameof(mediaFileUrlRetriever));
         }
 
         public async Task<Guid> AddMediaFileAsync(string filePath, string? libraryFolderPath = default, bool checkPermissions = default)
@@ -140,12 +143,12 @@ namespace XperienceAdapter.Repositories
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFileDtosAsync(string path)
+        public async Task<MediaLibraryFile> GetMediaFileDtoAsync(string path)
         {
             var results = await GetQueryAsync((baseQuery) => baseQuery
                 .WhereStartsWith("FilePath", path));
 
-            return results.Select(item => MapDtoProperties(item));
+            return results.Select(item => MapDtoProperties(item)).FirstOrDefault();
         }
 
         public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync()
@@ -183,8 +186,9 @@ namespace XperienceAdapter.Repositories
                 Guid = mediaFileInfo.FileGUID,
                 Name = mediaFileInfo.FileTitle,
                 Extension = mediaFileInfo.FileExtension,
-                DirectUrl = MediaLibraryHelper.GetDirectUrl(mediaFileInfo),
-                PermanentUrl = MediaLibraryHelper.GetPermanentUrl(mediaFileInfo),
+                //DirectUrl = MediaLibraryHelper.GetDirectUrl(mediaFileInfo),
+                //PermanentUrl = MediaLibraryHelper.GetPermanentUrl(mediaFileInfo),
+                MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
                 Width = mediaFileInfo.FileImageWidth,
                 Height = mediaFileInfo.FileImageHeight
             };

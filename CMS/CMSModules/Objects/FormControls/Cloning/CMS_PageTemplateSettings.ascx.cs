@@ -48,18 +48,6 @@ public partial class CMSModules_Objects_FormControls_Cloning_CMS_PageTemplateSet
         }
     }
 
-
-    /// <summary>
-    /// Excluded child types.
-    /// </summary>
-    public override string ExcludedChildTypes
-    {
-        get
-        {
-            return PredefinedObjectType.MVTVARIANT + ";" + PredefinedObjectType.MVTCOMBINATION;
-        }
-    }
-
     #endregion
 
 

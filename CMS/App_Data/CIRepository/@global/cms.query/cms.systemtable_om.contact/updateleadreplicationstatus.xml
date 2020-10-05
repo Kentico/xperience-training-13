@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>OM.Contact</CodeName>
+    <GUID>a7ca5324-19a5-4104-9579-ef54c7fca5fa</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSOMConnectionString</QueryConnectionString>
+  <QueryGUID>ce8d5652-5bb5-40c8-9585-7db310a9f976</QueryGUID>
+  <QueryIsCustom>True</QueryIsCustom>
+  <QueryIsLocked>True</QueryIsLocked>
+  <QueryName>updateleadreplicationstatus</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+UPDATE OM_Contact SET
+	[ContactSalesForceLeadID] = @LeadID,
+	[ContactSalesForceLeadReplicationDisabled] = @LeadReplicationDisabled,
+	[ContactSalesForceLeadReplicationDateTime] = @LeadReplicationDateTime,
+	[ContactSalesForceLeadReplicationSuspensionDateTime] = @LeadReplicationSuspensionDateTime,
+	[ContactSalesForceLeadReplicationRequired] = @LeadReplicationRequired
+WHERE
+	[ContactID] = @ContactID AND
+	COALESCE([ContactSalesForceLeadReplicationDateTime], '1900-01-01') = @LastLeadReplicationDateTime
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

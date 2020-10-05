@@ -5,8 +5,9 @@
     'CMS.Builder/PageBuilder/DragAndDropService',
     'CMS.Builder/ModalDialogService',
     'CMS.Builder/MessageTypes',
-    'CMS.Builder/Constants'
-], function (msgService, urlHelper, currentUrlHelper, dndService, ModalDialogService, messageTypes, constants) {
+    'CMS.Builder/Constants',
+    'CMS.Builder/FrameLoader'
+], function (msgService, urlHelper, currentUrlHelper, dndService, ModalDialogService, messageTypes, constants, frameLoader) {
     var DISPLAYED_WIDGET_VARIANTS_SESSION_STORAGE_KEY;
     var targetOrigin;
     var originalScript;
@@ -98,11 +99,11 @@
                     constants.ADMINISTRATION_DOMAIN_PARAMETER_NAME,
                     urlHelper.getHostWithScheme(currentUrlHelper.getCurrentUrl()) + applicationPath);
 
-                frame.setAttribute("src", url);
-            }
+                frameLoader.loadFrame(frame, url);
 
-            if (window.parent.Loader) {
-                window.parent.Loader.show();
+                if (window.parent.Loader) {
+                    window.parent.Loader.show();
+                }
             }
         };
 
@@ -121,6 +122,10 @@
 
     Module.prototype.receiveMessage = function (event) {
         if (event.origin !== targetOrigin) {
+            return;
+        }
+
+        if (!event.data) {
             return;
         }
 

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>ecommerce.orderitem</CodeName>
+    <GUID>201d37f4-8961-45d1-9b34-05303f8df065</GUID>
+    <ObjectType>cms.systemtable</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>323d75ab-5bf1-4f9e-9c37-256417991334</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>selectexpiring</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+SELECT COM_OrderItem.*, COM_OrderItemSKUFile.Token, COM_SKUFile.FileName, COM_SKU.SKUProductType, COM_Order.OrderSiteID, COM_Customer.CustomerID, COM_Customer.CustomerEmail
+FROM COM_OrderItem
+JOIN COM_OrderItemSKUFile ON COM_OrderItemSKUFile.OrderItemID = COM_OrderItem.OrderItemID
+JOIN COM_SKUFile ON COM_SKUFile.FileID = COM_OrderItemSKUFile.FileID
+JOIN COM_SKU ON COM_SKU.SKUID = COM_OrderItem.OrderItemSKUID
+JOIN COM_Order ON COM_Order.OrderID = COM_OrderItem.OrderItemOrderID
+JOIN COM_Customer ON COM_Customer.CustomerID = COM_Order.OrderCustomerID
+WHERE ((DATEDIFF(day, @CurrentDateTime, COM_OrderItem.OrderItemValidTo) BETWEEN 0 AND @Days)
+AND ((@OnlyWithSendNotification = 0) OR (COM_OrderItem.OrderItemSendNotification = 1))
+AND ((@SiteID = 0) OR (COM_Order.OrderSiteID = @SiteID))
+AND (##WHERE##))
+ORDER BY (##ORDERBY##)
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

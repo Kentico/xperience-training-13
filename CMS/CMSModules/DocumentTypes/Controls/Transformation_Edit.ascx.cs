@@ -1,8 +1,8 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
+using CMS.DocumentEngine;
 using CMS.Helpers;
-using CMS.PortalEngine;
 using CMS.UIControls;
 
 
@@ -120,9 +120,6 @@ public partial class CMSModules_DocumentTypes_Controls_Transformation_Edit : CMS
             ShowError(GetString("DocumentType_Edit_Transformation_Edit.UniqueTransformationNameDocType"));
             return;
         }
-
-        //Write info
-        TransInfo.TransformationIsHierarchical = true;
 
         TransformationInfoProvider.SetTransformation(TransInfo);
 

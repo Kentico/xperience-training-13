@@ -6,9 +6,8 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.DataEngine;
+using CMS.DocumentEngine;
 using CMS.Helpers;
-using CMS.Membership;
-using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
@@ -20,7 +19,6 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
     protected bool startWithFullScreen = false;
     private TransformationInfo mTransformationInfo;
     HeaderAction generate;
-    private DataClassInfo mClassInfo;
 
     #endregion
 
@@ -63,22 +61,6 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
         get
         {
             return QueryHelper.GetBoolean("editonlycode", false);
-        }
-    }
-
-
-    /// <summary>
-    /// Parent data class of edited transformation.
-    /// </summary>
-    private DataClassInfo ClassInfo
-    {
-        get
-        {
-            if (mClassInfo == null)
-            {
-                mClassInfo = DataClassInfoProvider.GetDataClassInfo(TransformationInfo.TransformationClassID);
-            }
-            return mClassInfo;
         }
     }
 
@@ -132,19 +114,6 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
 
         ucTransfCode.FullscreenMode = IsInPreview;
 
-        // Add preview action
-        var preview = new HeaderAction
-        {
-            Text = GetString("general.preview"),
-            OnClientClick = "performToolbarAction('split');return false;",
-            Visible = !IsInPreview,
-            Tooltip = GetString("preview.tooltip"),
-            GenerateSeparatorBeforeAction = true,
-            Index = 2
-        };
-
-        editMenuElem.ObjectEditMenu.AddExtraAction(preview);
-        editMenuElem.ObjectEditMenu.PreviewMode = true;
         editMenuElem.MenuPanel.CssClass = "PreviewMenu";
 
         // Show generate action if object can be edited
@@ -160,39 +129,6 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
             };
 
             editMenuElem.ObjectEditMenu.AddExtraAction(generate);
-
-            // Add extra actions for ascx type
-            if (ucTransfCode.IsAscx)
-            {
-                if (TransformationInfo != null)
-                {
-                    // Show RSS and Atom generate button only for custom table or document type class
-                    if ((ClassInfo != null) && ((ClassInfo.ClassIsCustomTable) || (ClassInfo.ClassIsDocumentType && ClassInfo.ClassIsCoupledClass)))
-                    {
-                        generate.AlternativeActions.Add(new HeaderAction
-                        {
-                            Text = GetString("transformationtypecode.atom"),
-                            OnClientClick = "GenerateDefaultCode('atom'); return false;",
-                            Tooltip = GetString("transformationtypecode.atomtooltip")
-                        });
-
-                        generate.AlternativeActions.Add(new HeaderAction
-                        {
-                            Text = GetString("transformationtypecode.rss"),
-                            OnClientClick = "GenerateDefaultCode('rss'); return false;",
-                            Tooltip = GetString("transformationtypecode.rsstooltip")
-                        });
-
-                    }
-                }
-
-                generate.AlternativeActions.Add(new HeaderAction
-                {
-                    Text = GetString("transformationtypecode.xml"),
-                    OnClientClick = "GenerateDefaultCode('xml'); return false;",
-                    Tooltip = GetString("transformationtypecode.xmltooltip")
-                });
-            }
         }
 
         startWithFullScreen = (IsInPreview && editMenuElem.ObjectManager.IsObjectChecked());
@@ -255,11 +191,6 @@ public partial class CMSModules_AdminControls_Controls_Class_TransformationEdit 
                     ScriptHelper.RegisterStartupScript(Page, typeof(string), "wopenerRefresh", ScriptHelper.GetScript("if (wopener && wopener.refresh) { wopener.refresh(); }"));
                     break;
             }
-        }
-
-        if (e.ActionName == ComponentEvents.CHECKOUT)
-        {
-            ucTransfCode.ShowMessage();
         }
     }
 

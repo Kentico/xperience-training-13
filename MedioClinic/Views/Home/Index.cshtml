@@ -1,8 +1,8 @@
 ﻿@model PageViewModel<(Business.Models.HomePage HomePage, IEnumerable<Business.Models.CompanyService> CompanyServices)>
 
 @{
-    var backgroundLeft = Url.Kentico().ImageUrl(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true).ServerPath, SizeConstraint.Empty);
-    var backgroundRight = Url.Kentico().ImageUrl(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true).ServerPath, SizeConstraint.Empty);
+    var backgroundLeft = Url.Content(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true)?.AttachmentUrl?.RelativePath);
+    var backgroundRight = Url.Content(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true)?.AttachmentUrl?.RelativePath);
 }
 
 <header class="row mc-page-fold-left" style="background-image:url(@backgroundLeft)">
@@ -37,7 +37,7 @@
                 <section class="row section">
                     <div class="col xl5 l9 m12 s12">
                         <div class="card-panel white center">
-                            <img src="@Url.Kentico().ImageUrl(service.IconServerPath, SizeConstraint.Empty)" alt="Cardio therapy" />
+                            <img src="@service.IconUrl?.AbsoluteUrl" alt="Cardio therapy" />
                             <h3>@Html.DisplayFor(m => service.Name)</h3>
                             <p>@Html.DisplayFor(m => service.ServiceDescription)</p>
                         </div>

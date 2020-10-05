@@ -27,7 +27,7 @@ public partial class CMSModules_Ecommerce_CMSPages_GetInvoice : CMSPage
                 currentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin) ||
                 order.CheckPermissions(PermissionsEnum.Read, siteName, currentUser))
             {
-                ltlInvoice.Text = URLHelper.MakeLinksAbsolute(order.OrderInvoice);
+                ltlInvoice.Text = order.OrderInvoice;
             }
         }
     }

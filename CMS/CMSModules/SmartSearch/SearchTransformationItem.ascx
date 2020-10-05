@@ -1,4 +1,6 @@
 ﻿<%@ Control Language="C#" Inherits="CMS.DocumentEngine.Web.UI.CMSAbstractTransformation" %>
+<%@ Import Namespace="CMS.DocumentEngine.Web.UI" %>
+
 <table style="margin-bottom: 5px">
     <tr>
         <td>
@@ -11,7 +13,7 @@
             <div style="margin-right: 5px; margin-left: 5px;">
                 <%-- Search result title --%>
                 <div>
-                    <a style="font-weight: bold" <%# IfEmpty(SearchResultUrl(true), "", "target=\"_blank\"") %> href='<%# IfEmpty(SearchResultUrl(true), "#", SearchResultUrl(true)) %>'>
+                    <a style="font-weight: bold" <%# String.IsNullOrEmpty(SearchResultUrl(true)) ? "" : "target=\"_blank\"" %> href='<%# String.IsNullOrEmpty(SearchResultUrl(true)) ? "#" : SearchResultUrl(true) %>'>
                         <%# SearchHighlight(HTMLHelper.HTMLEncode(DataHelper.GetNotEmpty(Eval("Title"), "/")), "<span style=\"font-weight:bold;\">", "</span>") %>
                     </a>
                 </div>
@@ -19,7 +21,7 @@
                 <div style="margin-top: 5px; width: 590px;">
                     <%# SearchHighlight(HTMLHelper.HTMLEncode(TextHelper.LimitLength(HttpUtility.HtmlDecode(HTMLHelper.StripTags(GetSearchedContent(DataHelper.GetNotEmpty(Eval("Content"), "")), false, true, " ", "@", "")), 280, "...")), "<span style=\"background-color: #FEFF8F\">", "</span>") %><br />
                 </div>
-                <%-- Relevance, URL, Creattion --%>
+                <%-- Relevance, URL, Creation --%>
                 <div style="margin-top: 5px;">
                     <%-- Relevance --%>
                     <div title="<%#"Relevance: " + Convert.ToInt32(ValidationHelper.GetDouble(Eval("Score"), 0.0) * 100) + "%" %>"
@@ -34,7 +36,7 @@
                     </span>
                     <%-- Creation --%>
                     <span style="color: #888888; font-size: 9pt">
-                        <%# GetDateTimeString(ValidationHelper.GetDateTime(Eval("Created"), DateTimeHelper.ZERO_TIME), true) %>
+                        <%# TransformationHelper.HelperObject.GetDateTimeString(this, ValidationHelper.GetDateTime(Eval("Created"), DateTimeHelper.ZERO_TIME), true) %>
                     </span>
                 </div>
             </div>

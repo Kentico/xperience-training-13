@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>newsletter.emails</CodeName>
+    <GUID>551d4df2-d429-4a32-906b-c5821a04f7da</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>4d044efe-1c53-4e8d-a5d4-0357b3a1f6ad</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>clearsendingstatus</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+<![CDATA[
+/* Reset issu status from 'Preparing data' to 'Ready for sending' */
+UPDATE Newsletter_NewsletterIssue SET IssueStatus = 1 WHERE IssueStatus = 2;
+/* Reset sending status of emails of issues that have status 'Sending' or 'Test phase' */
+UPDATE Newsletter_Emails SET EmailSending = NULL WHERE EmailSending = 1 AND EmailNewsletterIssueID IN (SELECT IssueID FROM Newsletter_NewsletterIssue WHERE IssueStatus = 4 OR IssueStatus = 3);
+]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

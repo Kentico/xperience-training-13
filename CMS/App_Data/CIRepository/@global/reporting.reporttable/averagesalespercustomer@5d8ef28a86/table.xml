@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>table</TableDisplayName>
+  <TableGUID>58bcae7a-95d4-4865-a936-66ec914b33b1</TableGUID>
+  <TableName>table</TableName>
+  <TableQuery>
+<![CDATA[
+/* Variables used to calculate median value. */
+DECLARE @BottomHalf float
+DECLARE @TopHalf float
+DECLARE @median float
+
+/* Table of sales per customer. */
+DECLARE @medianCustomerTable TABLE(
+   CustomerID int,
+   SumOfOrderTotalPrice float)
+   
+INSERT INTO @medianCustomerTable(
+   CustomerID, 
+   SumOfOrderTotalPrice)
+      SELECT 
+         CustomerID AS ID,
+         SUM(OrderGrandTotalInMainCurrency) AS TotalSum
+      FROM
+         COM_Order
+         LEFT JOIN COM_Customer 
+            ON OrderCustomerID = CustomerID
+      WHERE 
+         OrderSiteID = @CMSContextCurrentSiteID
+         AND (CustomerID IN (SELECT OrderCustomerID FROM COM_Order WHERE OrderSiteID = @CMSContextCurrentSiteID))
+         AND (ISNULL(OrderIsPaid,0) = 1 OR ISNULL(@OnlyPaid,0) = 0)
+         AND (Orderdate >= @FromDate OR @FromDate IS NULL)
+         AND (OrderDate <= DATEADD(day,1,@ToDate)  OR @ToDate IS NULL)
+      GROUP BY CustomerID
+      
+SET @BottomHalf = (SELECT MAX(SumOfOrderTotalPrice) 
+                   FROM (SELECT TOP 50 PERCENT SumOfOrderTotalPrice 
+                         FROM @medianCustomerTable 
+                         ORDER BY SumOfOrderTotalPrice) AS BottomHalf)
+SET @TopHalf = (SELECT MIN(SumOfOrderTotalPrice) 
+                FROM (SELECT TOP 50 PERCENT SumOfOrderTotalPrice 
+                      FROM @medianCustomerTable 
+                      ORDER BY SumOfOrderTotalPrice DESC) AS TopHalf)
+SET @median = (@BottomHalf + @TopHalf)/2    
+	
+SELECT
+   '{$com.report.averagecustomervolumeofsales$}' AS '{$rep.webparrts.parametername$}',
+   CAST(ISNULL(AVG(SumOfOrderTotalPrice),0) AS DECIMAL(38,1)) AS '{$com.report.averagevalue$}',
+   CAST(ISNULL(@median,0) AS DECIMAL(38,1)) AS '{$com.report.medianvalue$}'
+FROM
+   @medianCustomerTable
+]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>AverageSalesPerCustomer</CodeName>
+    <GUID>594e55e4-1a28-452d-9746-f88524b9858e</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>15</pagesize>
+      <querynorecordtext>{$general.nodatafound$}</querynorecordtext>
+      <SkinID>ReportGridAnalytics</SkinID>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

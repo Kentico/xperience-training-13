@@ -4,11 +4,17 @@
 
 // Kentico logo within the breadcrumb
 .cms-navbar {
-    .icon-kentico {
-        background-color: #F05A22;
-        color: white;
-        padding-left: 10px;
-        padding-right: 10px;
+    .icon-kentico.cms-nav-icon-large {
+        background: url('./Images/kx-logo-gray.svg') no-repeat;
+        background-size: cover;
+        margin: 0 (0.75 * @base-unit) 0 (0.75 * @base-unit);
+        width: 1.5 * @base-unit;
+        height: 1.5 * @base-unit;
+        padding: 0;
+
+        &::before {
+            display: none;
+        }
     }
 }
 
@@ -29,10 +35,15 @@
             margin: 0 @base-unit * 0.25;
             text-align: center;
         }
+        // background change for the Home button
+        &:first-of-type:not(.dashboard-breadcrumb-pin):hover {
+            background-color: @navbar-inverse-hover-color;
+        }
     }
 
     a {
         color: @breadcrumb-color;
+        display: inline-block;
     }
 }
 
@@ -40,14 +51,14 @@
 .breadcrumb.cms-nav-breadcrumb {
     padding: 0;
     color: @navbar-inverse-color;
-    background: @color-gray-50;
     font-size: 0;
 
     > li {
         font-size: @font-size-base;
 
-        &:before {
-            color: @dark-bg-icon-color;
+        &.no-ico a:hover,
+        &.dashboard-breadcrumb-pin a:hover {
+            background-color: transparent;
         }
 
         &.no-ico:before {
@@ -55,7 +66,7 @@
         }
 
         &.breadcrumb-last span {
-            color: @color-gray-100;
+            color: @navbar-inverse-link-disabled-color;
         }
     }
 

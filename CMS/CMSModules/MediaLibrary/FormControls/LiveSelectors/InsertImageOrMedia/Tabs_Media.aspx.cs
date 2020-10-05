@@ -10,7 +10,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_Tabs_Media : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_Tabs_Media : CMSPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {

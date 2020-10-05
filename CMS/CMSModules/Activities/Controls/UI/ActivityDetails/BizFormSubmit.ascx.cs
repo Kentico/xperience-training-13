@@ -32,7 +32,7 @@ public partial class CMSModules_Activities_Controls_UI_ActivityDetails_BizFormSu
             return false;
         }
 
-        BizFormInfo bfi = BizFormInfoProvider.GetBizFormInfo(ai.ActivityItemID);
+        BizFormInfo bfi = BizFormInfo.Provider.Get(ai.ActivityItemID);
         if (bfi == null)
         {
             return false;

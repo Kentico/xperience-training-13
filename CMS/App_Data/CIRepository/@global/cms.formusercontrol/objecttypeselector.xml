@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.formusercontrol>
+  <UserControlCodeName>ObjectTypeSelector</UserControlCodeName>
+  <UserControlDescription />
+  <UserControlDisplayName>Object type selector</UserControlDisplayName>
+  <UserControlFileName>inherited</UserControlFileName>
+  <UserControlForBinary>False</UserControlForBinary>
+  <UserControlForBoolean>False</UserControlForBoolean>
+  <UserControlForDateTime>False</UserControlForDateTime>
+  <UserControlForDecimal>False</UserControlForDecimal>
+  <UserControlForDocAttachments>False</UserControlForDocAttachments>
+  <UserControlForDocRelationships>False</UserControlForDocRelationships>
+  <UserControlForFile>False</UserControlForFile>
+  <UserControlForGuid>False</UserControlForGuid>
+  <UserControlForInteger>False</UserControlForInteger>
+  <UserControlForLongText>True</UserControlForLongText>
+  <UserControlForText>True</UserControlForText>
+  <UserControlGUID>dbdd30a3-e530-4fda-935b-945c3e1c56e0</UserControlGUID>
+  <UserControlIsSystem>False</UserControlIsSystem>
+  <UserControlParameters>
+    <form version="2">
+      <field column="Options" guid="55450d22-7dc1-4d0e-886a-3d6255ee2f6b" visible="" />
+      <field column="ObjectTypeList" visible="true" columntype="text" allowempty="true" columnsize="200" guid="b2c3c41c-7f60-485d-be6e-01a9182c4ec6" displayinsimplemode="true" extra="true" order="1">
+        <properties>
+          <fielddescription>
+            <![CDATA[Select the list of object types from which a user will be able to choose.]]>
+          </fielddescription>
+          <defaultvalue>ObjectTypes.MainObjectTypes</defaultvalue>
+          <fieldcaption>Object type list</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>dropdownlistcontrol</controlname>
+          <SortItems>False</SortItems>
+          <EditText>False</EditText>
+          <Options>
+<![CDATA[
+ObjectTypes.MainObjectTypes;Main object types
+ObjectTypes.BindingObjectTypes;Binding object types
+ObjectTypes.AllObjectTypes;All object types
+]]>
+          </Options>
+        </settings>
+      </field>
+      <field column="DisplayAll" visible="true" columntype="boolean" allowempty="true" guid="acb817b1-fb77-4d73-aa50-88f05e7076f8" displayinsimplemode="true" extra="true" order="2">
+        <properties>
+          <fielddescription>
+            <![CDATA[If checked, the (all) option is included in the selector.]]>
+          </fielddescription>
+          <defaultvalue>true</defaultvalue>
+          <fieldcaption>Display all</fieldcaption>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field column="SpecialFields" visible="true" columntype="longtext" allowempty="true" guid="0149443e-a801-4fac-842e-bc2ceae8c0c0" extra="true" order="3">
+        <properties>
+          <fielddescription>List of special fields, one object type per line</fielddescription>
+          <fieldcaption>Special fields</fieldcaption>
+        </properties>
+        <settings>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <Wrap>True</Wrap>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <FilterMode>False</FilterMode>
+          <controlname>textareacontrol</controlname>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+        </settings>
+      </field>
+      <field column="Macro" guid="9680c2e2-7cd0-4568-9d4e-b2ac832f09f0" order="4">
+        <settings>
+          <Dialogs_Email_Hide />
+          <Autoresize_Hashtable />
+          <Dialogs_Libraries_Hide />
+          <Dialogs_Attachments_Hide />
+          <Dialogs_Anchor_Hide />
+          <Dialogs_Content_Hide />
+          <Dialogs_Web_Hide />
+          <controlname />
+        </settings>
+        <properties>
+          <defaultvalue ismacro="true">
+            <![CDATA[Flatten({% ObjectTypeList %}, "{% SpecialFields %}".Split("\r\n", true), {% DisplayAll %} ? ";(all)" : null)]]>
+          </defaultvalue>
+        </properties>
+      </field>
+      <field column="SortItems" guid="c46bd379-1b80-4f74-a130-8292bbb4abdf" order="5">
+        <properties>
+          <defaultvalue>true</defaultvalue>
+        </properties>
+      </field>
+      <field column="Query" guid="d4f7e110-520a-48d6-9f36-7ee41480fdbc" order="6" />
+      <field column="TextFormat" displayinsimplemode="" guid="84a6ee8d-e8b5-48de-9334-50a37e9e8455" visible="" order="7">
+        <properties>
+          <fielddescription>
+            <![CDATA[The field represents Javascript code that is executed when selected item is changed.]]>
+          </fielddescription>
+          <defaultvalue>
+            <![CDATA[{% GetObjectTypeName(Text) + FormatNotEmpty(Value, " ({0})") |(identity)GlobalAdministrator|(hash)e267f2b45a4e4ad7f29dadc09cfb2ffdb6cef62a30de6eb5a204e06fa8ffc4ec%}]]>
+          </defaultvalue>
+          <fieldcaption>OnChange client script</fieldcaption>
+          <visiblemacro />
+        </properties>
+      </field>
+      <field column="ValueFormat" guid="5fa5e843-b1d8-491d-aaeb-c211cef9130f" visible="" order="8" />
+      <field column="EditText" guid="1eae05fb-3f05-4f54-847b-cf66a25d410e" visible="" order="9" />
+      <field column="OnChangeClientScript" guid="f232a54c-e397-43d4-8ba4-b1010392b65c" visible="" order="10" />
+      <field column="DisplayActualValueAsItem" guid="e57015cb-7872-4333-ac30-aa9e7fc29f7b" order="11" />
+    </form>
+  </UserControlParameters>
+  <UserControlParentID>
+    <CodeName>DropDownListControl</CodeName>
+    <GUID>aa0326d6-453c-47c5-a67b-de30b8136d91</GUID>
+    <ObjectType>cms.formusercontrol</ObjectType>
+  </UserControlParentID>
+  <UserControlPriority>0</UserControlPriority>
+  <UserControlShowInCustomTables>True</UserControlShowInCustomTables>
+  <UserControlShowInDocumentTypes>True</UserControlShowInDocumentTypes>
+  <UserControlShowInReports>True</UserControlShowInReports>
+  <UserControlShowInSystemTables>True</UserControlShowInSystemTables>
+  <UserControlShowInWebParts>True</UserControlShowInWebParts>
+</cms.formusercontrol>

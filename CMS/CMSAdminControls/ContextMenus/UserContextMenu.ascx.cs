@@ -4,13 +4,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
-using CMS.Core;
-using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.MacroEngine;
 using CMS.Membership;
 using CMS.Modules;
-using CMS.SiteProvider;
 
 
 public partial class CMSAdminControls_ContextMenus_UserContextMenu : CMSContextMenuControl, IPostBackEventHandler
@@ -20,26 +17,6 @@ public partial class CMSAdminControls_ContextMenus_UserContextMenu : CMSContextM
     private CurrentUserInfo currentUser = null;
     protected int requestedUserId = 0;
 
-    #endregion
-
-
-    #region "Properties"
-
-    /// <summary>
-    /// Indicates if the community module is loaded.
-    /// </summary>
-    public bool CommunityPresent
-    {
-        get
-        {
-            if (!RequestStockHelper.Contains("commPresent"))
-            {
-                RequestStockHelper.Add("commPresent", ModuleManager.IsModuleLoaded(ModuleName.COMMUNITY));
-            }
-            return ValidationHelper.GetBoolean(RequestStockHelper.GetItem("commPresent"), false);
-        }
-    }
-    
     #endregion
 
 
@@ -134,21 +111,6 @@ public partial class CMSAdminControls_ContextMenus_UserContextMenu : CMSContextM
         DataTable table = new DataTable();
         table.Columns.Add("ActionDisplayName");
         table.Columns.Add("ActionScript");
-
-        // Get resource strings prefix
-        string resourcePrefix = ContextMenu.ResourcePrefix;
-
-        // Add only if community is present
-        if (CommunityPresent)
-        {
-            // Group invitation
-            if (requestedUserId != currentUser.UserID)
-            {
-                bool authenticated = AuthenticationHelper.IsAuthenticated();
-
-                table.Rows.Add(new object[] { ResHelper.GetString(resourcePrefix + ".invite|groupinvitation.invite"), authenticated ? "ContextGroupInvitation(GetContextMenuParameter('" + ContextMenu.MenuID + "'))" : "ContextRedirectToSignInUrl()" });
-            }
-        }
 
         // Add count column
         DataColumn countColumn = new DataColumn();

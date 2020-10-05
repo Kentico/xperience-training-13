@@ -638,7 +638,6 @@ public enum DisabledModuleScope
     /// <summary>
     /// Site settings for all sites  are set and global setting is set,
     /// Only one button is shown in disabled module info.
-    /// This is used e.g. in banned IPs, when in dropdownlist is set All.
     /// </summary>
     [EnumStringRepresentation("AllSitesAndGlobal")]
     AllSitesAndGlobal = 4,

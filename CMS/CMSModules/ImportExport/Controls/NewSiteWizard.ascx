@@ -1,24 +1,15 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="CMSModules_ImportExport_Controls_NewSiteWizard"
-     Codebehind="NewSiteWizard.ascx.cs" %>
+﻿<%@ Control Language="C#" AutoEventWireup="false" Inherits="CMSModules_ImportExport_Controls_NewSiteWizard" Codebehind="NewSiteWizard.ascx.cs" %>
 <%@ Register Src="~/CMSAdminControls/Wizard/Header.ascx" TagName="WizardHeader" TagPrefix="cms" %>
-<%@ Register Src="~/CMSModules/ImportExport/Controls/ImportPanel.ascx" TagName="ImportPanel"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSModules/ImportExport/Controls/ImportSiteDetails.ascx" TagName="ImportSiteDetails"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSAdminControls/UI/System/ActivityBar.ascx" TagName="ActivityBar"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSModules/ImportExport/Controls/NewSiteType.ascx" TagName="NewSiteType"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSModules/ImportExport/Controls/SelectWebTemplate.ascx" TagName="SelectWebTemplate"
-    TagPrefix="cms" %>
-<%@ Register Src="~/CMSModules/ImportExport/Controls/NewSiteFinish.ascx" TagName="NewSiteFinish"
-    TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/ImportExport/Controls/ImportPanel.ascx" TagName="ImportPanel" TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/ImportExport/Controls/ImportSiteDetails.ascx" TagName="ImportSiteDetails" TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/System/ActivityBar.ascx" TagName="ActivityBar" TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/ImportExport/Controls/NewSiteFinish.ascx" TagName="NewSiteFinish" TagPrefix="cms" %>
 
 
 <script type="text/javascript">
-    //<![CDATA[      
+    //<![CDATA[
     var timerSelectionId = 0;
-    
+
     // End timer function
     function StopSelectionTimer() {
         if (timerSelectionId) {
@@ -81,21 +72,11 @@
                             </StartNavigationTemplate>
                             <StepNavigationTemplate>
                                 <div class="WizardProgress">
-                                    <% if ((wzdImport.ActiveStepIndex == 4) || (wzdImport.ActiveStepIndex == 1))
+                                    <% if (wzdImport.ActiveStepIndex == 2)
                                        { %>
-                                    <div id="actDiv" <% if (wzdImport.ActiveStepIndex == 1)
-                                                        { %>
-                                        style="display: none;"
-                                        <% } %>>
+                                    <div id="actDiv">
                                         <div class="WizardProgressLabel">
-                                            <% if (wzdImport.ActiveStepIndex == 1)
-                                               { %>
-                                            <cms:LocalizedLabel ID="lblActivityInfo" runat="server" Text="{$Export.SelectionInfo$}" />
-                                            <% }
-                                               else
-                                               { %>
                                             <cms:LocalizedLabel ID="lblActivityImportInfo" runat="server" Text="{$import.progress$}" />
-                                            <% } %>
                                         </div>
                                         <cms:ActivityBar runat="server" ID="barActivity" Visible="true" />
                                     </div>
@@ -105,7 +86,7 @@
                                     <cms:LocalizedButton UseSubmitBehavior="True" ID="StepPreviousButton" runat="server"
                                         CommandName="MovePrevious" Text="{$ExportSiteSettings.PreviousStep$}" ButtonStyle="Primary"
                                         CausesValidation="false" RenderScript="true" />
-                                    <% if (wzdImport.ActiveStepIndex == 4)
+                                    <% if (wzdImport.ActiveStepIndex == 2)
                                        { %>
                                     <cms:LocalizedButton UseSubmitBehavior="True" ID="StepCancelButton" runat="server"
                                         CommandName="Cancel" Text="{$general.cancel$}" ButtonStyle="Primary" CausesValidation="false"
@@ -123,45 +104,24 @@
                                 </div>
                             </FinishNavigationTemplate>
                             <WizardSteps>
-                                <asp:WizardStep ID="wzdStepStart" runat="server" AllowReturn="False" StepType="Start"
-                                    EnableViewState="true">
-                                    <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px">
-                                        <cms:NewSiteType runat="server" ID="siteType" />
-                                    </div>
-                                </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepTemplate" runat="server" AllowReturn="False" StepType="Step"
-                                    EnableViewState="true">
-                                    <div class="GlobalWizardStep website-template-selector" style="height: <%=PanelHeight%>px">
-                                        <cms:SelectWebTemplate runat="server" ID="selectTemplate" />
-                                    </div>
-                                </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepSiteDetails" runat="server" AllowReturn="False" StepType="Step"
-                                    EnableViewState="true">
+                                <asp:WizardStep ID="wzdStepSiteDetails" runat="server" AllowReturn="False" StepType="Start" EnableViewState="true">
                                     <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px">
                                         <cms:ImportSiteDetails ID="siteDetails" runat="server" AllowExisting="false" />
                                     </div>
                                 </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepSelection" runat="server" AllowReturn="False" StepType="Step"
-                                    EnableViewState="true">
+                                <asp:WizardStep ID="wzdStepSelection" runat="server" AllowReturn="False" StepType="Step" EnableViewState="true">
                                     <div class="GlobalWizardStepPanel" style="height: <%=PanelHeight%>px;">
                                         <div class="WizardBorder">
                                             <cms:ImportPanel ID="pnlImport" runat="server" />
                                         </div>
                                     </div>
                                 </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepProgress" runat="server" AllowReturn="False" StepType="Step"
-                                    EnableViewState="true">
+                                <asp:WizardStep ID="wzdStepProgress" runat="server" AllowReturn="False" StepType="Step" EnableViewState="true">
                                     <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px">
                                         <cms:AsyncControl ID="ctlAsyncImport" runat="server" LogContextNames="Import" ProvideLogContext="true" PostbackOnError="false" FinishClientCallback="Finished" />
                                     </div>
                                 </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepMasterTemplate" runat="server" AllowReturn="False" StepType="Step"
-                                    EnableViewState="true">
-                                    <div class="GlobalWizardStep website-masterpage-selector" style="height: <%=PanelHeight%>px">
-                                    </div>
-                                </asp:WizardStep>
-                                <asp:WizardStep ID="wzdStepFinished" runat="server" AllowReturn="False" StepType="Finish"
-                                    EnableViewState="true">
+                                <asp:WizardStep ID="wzdStepFinished" runat="server" AllowReturn="False" StepType="Finish" EnableViewState="true">
                                     <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px">
                                         <cms:NewSiteFinish ID="finishSite" runat="server" />
                                     </div>

@@ -53,12 +53,10 @@ namespace Identity.Models
             //AvatarId = source.UserAvatarID;
         }
 
-        // TODO: Probably not necessary.
         public override void MapToUserInfo(UserInfo target)
         {
             base.MapToUserInfo(target);
 
-            //target.UserAvatarID = AvatarId;
             target.UserSettings.UserDateOfBirth = DateOfBirth;
             target.UserSettings.UserGender = (int)Gender;
             target.UserSettings.UserPhone = Phone;

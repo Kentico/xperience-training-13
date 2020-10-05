@@ -2,51 +2,42 @@
 @using Microsoft.AspNetCore.Authentication
 @using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.PageViewModel<SignInViewModel>
-@inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
 @inject Identity.IMedioClinicSignInManager<Identity.Models.MedioClinicUser> SignInManager
 
 @{
-    var backgroundFile = await MediaFileRepository.GetMediaFileDtoAsync(Guid.Parse("a7234235-b37a-4aeb-8d83-e381fd16ecfa"));
-    var background = Url.Kentico().ImageUrl(backgroundFile?.PermanentUrl, SizeConstraint.Empty);
+    Layout = "~/Areas/Identity/Views/Shared/_IdentityLayout.cshtml";
+    var externalIdentityProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 }
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <main class="row mc-page-fold-right" style="background-image:url(@background)">
-        <div class="container mc-section-4">
-            <h2>@Html.DisplayFor(m => m.Metadata.Title)</h2>
-            <section class="row section col xl5 l9 m12 s12">
-                <div class="card-panel white">
-                    <a href="@Url.Action("Register")">@ResHelper.GetString("Identity.Account.Register.Title")</a>
-                    @Html.ValidationSummary()
-                    @Html.EditorFor(m => m.Data)
-                    <div class="section">
-                        <button class="btn waves-effect waves-light" type="submit">@ResHelper.GetString("Identity.Account.SignIn.Title")</button>
-                    </div>
-                    <a href="@Url.Action("ForgotPassword")">@ResHelper.GetString("Identity.Account.ForgotYourPassword")</a>
+    <div class="container mc-section-4">
+        <h2>@Html.DisplayFor(m => m.Metadata.Title)</h2>
+        <section class="row section col xl5 l9 m12 s12">
+            <div class="card-panel white">
+                <a href="@Url.Action("register")">@ResHelper.GetString("Identity.Account.Register.Title")</a>
+                @Html.ValidationSummary()
+                @Html.EditorFor(m => m.Data)
+                <div class="section">
+                    <button class="btn waves-effect waves-light" type="submit">@ResHelper.GetString("Identity.Account.SignIn.Title")</button>
                 </div>
-            </section>
-        </div>
-    </main>
-}
-@{
-    var externalIdentityProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-    if (externalIdentityProviders?.Count > 0)
-    {
-        //TODO: Use UrlExtensions.
-        @using (Html.BeginForm(nameof(AccountController.RequestExternalSignIn), nameof(AccountController), new { returnUrl = "/en-us/home/" }))
-        {
-            <div>
-                <p>
-                    @foreach (AuthenticationScheme provider in externalIdentityProviders)
-                    {
-                        //TODO: Localize.
-                        <button type="submit" class="btn waves-effect waves-light" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
-                    }
-                </p>
+                <a href="@Url.Action("forgotpassword")">@ResHelper.GetString("Identity.Account.ForgotYourPassword")</a>
             </div>
-        }
-    }
+            @{
+                if (externalIdentityProviders?.Count > 0)
+                {
+                    @using (Html.BeginForm(nameof(AccountController.RequestExternalSignIn), nameof(AccountController), new { returnUrl = Url.UrlInCurrentCulture("home") }))
+                    {
+                        <div class="card-panel white">
+                            @foreach (AuthenticationScheme provider in externalIdentityProviders)
+                            {
+                                <button type="submit" class="btn waves-effect waves-light" name="provider" value="@provider.Name" title="@ResHelper.GetStringFormat("Identity.Account.SignIn.External.Button.Title", provider.DisplayName)">@provider.Name</button>
+                            }
+                        </div>
+                    }
+                }
+            }
+        </section>
+    </div>
 }

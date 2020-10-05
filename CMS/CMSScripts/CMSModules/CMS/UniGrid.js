@@ -118,7 +118,7 @@ cmsdefine(['CMS/WebFormCaller', 'jQuery'], function (webFormCaller, $) {
             }
 
             $selectCheckBoxes.each(function (i, chkBox) {
-                if (chkBox.checked !== isCheck) {
+                if (chkBox.checked !== isCheck && chkBox.disabled !== true) {
                     chkBox.checked = isCheck;
                     select(chkBox, true);
                     callBackArgument += $(chkBox).data('arg') + '#' + $(chkBox).data('arghash') + ':';

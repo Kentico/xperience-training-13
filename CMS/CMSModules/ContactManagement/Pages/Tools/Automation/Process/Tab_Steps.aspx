@@ -10,12 +10,13 @@
                 <div class="btn-actions">
                     <div id="navigation" runat="server" class="btn-group">
                         <cms:CMSButton runat="server" ID="btnDesigner" ButtonStyle="Default" EnableViewState="false" />
-                        <cms:CMSButton runat="server" ID="btnAnalytics" ButtonStyle="Default" EnableViewState="false" />
+                        <cms:CMSButton runat="server" ID="btnContacts" ButtonStyle="Default" EnableViewState="false" />
                     </div>
                 </div>
                 <asp:Panel ID="icnState" runat="server" class="automation-header-icon" />
                 <asp:Label ID="lblState" runat="server" EnableViewState="false" CssClass="bold-label" />
                 <cms:CMSButton ID="btnToggleState" runat="server" ButtonStyle="Default" EnableViewState="false" OnClick="ToggleState" />
+                <cms:CMSMoreOptionsButton ID="btnMoreOptions" runat="server" DropDownItemsAlignment="Right" RenderFirstActionSeparately="false" CssClass="more-actions-button" Visible="false" />
             </ContentTemplate>
         </cms:CMSUpdatePanel>
     </asp:Panel>

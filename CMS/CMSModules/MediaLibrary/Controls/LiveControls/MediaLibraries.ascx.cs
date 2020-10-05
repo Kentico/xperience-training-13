@@ -15,8 +15,6 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
 {
     #region "Private variables"
 
-    protected int mGroupID = 0;
-    protected Guid mGroupGUID = Guid.Empty;
     protected bool mHideWhenGroupIsNotSupplied = false;
     protected bool isNewLibrary = false;
 
@@ -24,46 +22,6 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
 
 
     #region "Public properties"
-
-    /// <summary>
-    /// ID of the group library belongs to.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            if (mGroupID <= 0)
-            {
-                mGroupID = ValidationHelper.GetInteger(GetValue("GroupID"), 0);
-            }
-            return mGroupID;
-        }
-        set
-        {
-            mGroupID = value;
-        }
-    }
-
-
-    /// <summary>
-    /// GUID of the group library belongs to.
-    /// </summary>
-    public Guid GroupGUID
-    {
-        get
-        {
-            if (mGroupGUID == Guid.Empty)
-            {
-                mGroupGUID = ValidationHelper.GetGuid(GetValue("GroupGUID"), Guid.Empty);
-            }
-            return mGroupGUID;
-        }
-        set
-        {
-            mGroupGUID = value;
-        }
-    }
-
 
     /// <summary>
     /// ID of the media library.
@@ -133,16 +91,8 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
         }
         else
         {
-            // Check if the group was supplied and hide control if necessary
-            if ((GroupID == 0) && (HideWhenGroupIsNotSupplied))
-            {
-                Visible = false;
-            }
-            else
-            {
-                // Initialize controls
-                SetupControls();
-            }
+            // Initialize controls
+            SetupControls();
         }
     }
 
@@ -168,12 +118,7 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
         tabElem.OnTabClicked += tabElem_OnTabChanged;
         lnkBackHidden.Click += lnkBackHidden_Click;
 
-        libraryList.GroupID = GroupID;
         libraryList.OnAction += libraryList_OnAction;
-
-
-        libraryEdit.MediaLibraryGroupID = GroupID;
-        libraryEdit.MediaLibraryGroupGUID = GroupGUID;
         libraryEdit.EditingForm.OnAfterSave += EditingForm_OnAfterSave;
 
         if (LibraryID > 0)
@@ -307,8 +252,6 @@ public partial class CMSModules_MediaLibrary_Controls_LiveControls_MediaLibrarie
 
         InitializeBreadcrumbs();
 
-        libraryEdit.MediaLibraryGroupID = GroupID;
-        libraryEdit.MediaLibraryGroupGUID = GroupGUID;
         libraryEdit.MediaLibraryID = LibraryID;
 
         libraryEdit.ReloadData();

@@ -85,7 +85,7 @@ public partial class CMSFormControls_Basic_CalendarControl : FormEngineUserContr
         {
             if (GetValue("timezonetype") != null)
             {
-                timePicker.TimeZone = GetValue("timezonetype", String.Empty).ToEnum<TimeZoneTypeEnum>();
+                timePicker.TimeZone = EnumStringRepresentationExtensions.ToEnum<TimeZoneTypeEnum>(GetValue("timezonetype", String.Empty));
             }
             if (GetValue("timezone") != null)
             {

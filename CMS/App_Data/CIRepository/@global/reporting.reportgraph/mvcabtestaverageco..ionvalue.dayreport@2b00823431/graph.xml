@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>9be0ab2f-a355-4d31-a7c0-85e8136b8847</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>Graph</GraphName>
+  <GraphQuery>
+<![CDATA[
+-- This SQL script is used for getting average conversion value.
+-- Required variables are:
+-- @FromDate, @ToDate - used for specifying date range
+-- @GraphType - can be Cumulative or DayWise
+-- @TestName - ABTestName
+-- @ABTestID - ABTestID
+-- @ABTestCulture - ABTestCulture
+-- @ConversionName - selected conversion or empty for all conversions
+-- @VariationName - selected variation (GUID) or empty for all variations
+-- @ConversionType - selected conversion type (abconversion, absessionconversionfirst, absessionconversion%)
+
+EXEC Proc_Analytics_RemoveTempTable	
+	CREATE TABLE #AnalyticsTempTable (
+		StartTime DATETIME,
+		HitsCount DECIMAL(20,5),
+		HitsValue FLOAT,
+		Name NVARCHAR(300) COLLATE DATABASE_DEFAULT,
+		RunningHitsCount DECIMAL(20,5),
+		RunningHitsValue FLOAT,
+		CumulativeAverage FLOAT,
+		DayWiseAverage FLOAT,
+		Hits FLOAT
+	);
+
+    SET @FromDate = {%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'day');
+ 
+	-- Get conversion value and count
+	INSERT INTO #AnalyticsTempTable (StartTime, HitsCount, HitsValue, Name)
+		SELECT [DATE], HitsCount, HitsValue, ABVariantDisplayName
+		FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'day') AS Dates
+		LEFT JOIN
+			(
+			SELECT HitsStartTime,  Sum(HitsCount) as HitsCount, SUM(HitsValue) as HitsValue, ABVariantDisplayName
+			FROM OM_ABVariantData		
+			INNER JOIN Analytics_Statistics ON Analytics_Statistics.StatisticsCode LIKE @ConversionType + ';' + @TestName + ';' + CAST(ABVariantGUID AS char(36))
+			INNER JOIN Analytics_DayHits ON Analytics_Statistics.StatisticsID = Analytics_DayHits.HitsStatisticsID
+			WHERE StatisticsSiteID = @CMSContextCurrentSiteID
+			AND (ABVariantTestID = @ABTestID)			
+			AND (@ConversionName IS NULL OR @ConversionName IN ('',StatisticsObjectName) OR ';' + @ConversionName + ';' LIKE '%;' + StatisticsObjectName + ';%')
+			AND (@VariationName IS NULL OR @VariationName IN ('', CAST(ABVariantGUID AS char(36))))
+			AND (StatisticsObjectCulture IS NULL OR StatisticsObjectCulture = '' OR StatisticsObjectCulture = @ABTestCulture OR @ABTestCulture IS NULL OR @ABTestCulture = '')
+			GROUP BY HitsStartTime, ABVariantDisplayName
+			) AS T1
+		ON Dates.Date= T1.HitsStartTime	
+
+	-- Select dates and names missing in the original data to fill the gaps
+    -- This is needed to ensure that cumulative average conversion values are calculated correctly	
+	INSERT INTO #AnalyticsTempTable
+		SELECT T1.StartTime, 0, 0, T2.Name, NULL, NULL, NULL, NULL, NULL
+		FROM #AnalyticsTempTable as T1 
+		JOIN #AnalyticsTempTable T2 ON T2.Name IS NOT NULL 
+		WHERE NOT EXISTS 
+			(
+			SELECT T3.StartTime, T3.Name 
+			FROM #AnalyticsTempTable as T3 
+			WHERE T3.Name = T2.Name AND T3.StartTime = T1.StartTime
+			) 
+		GROUP BY T1.StartTime, T2.Name
+
+	-- Delete NULL values
+	DELETE FROM #AnalyticsTempTable WHERE Name IS NULL
+
+	-- Declare variables for calculation of average value
+	DECLARE @RunningHitsCount DECIMAL(20,5)
+	SET @RunningHitsCount = 0
+
+	DECLARE @RunningHitsValue FLOAT
+	SET @RunningHitsValue = 0
+
+	DECLARE @LastName NVARCHAR(MAX)
+		
+	-- Sum running totals and average conversion values using 'quirky update'
+	-- Uses view to define order
+	;WITH TempView AS 
+	(
+		SELECT TOP (2147483647) *
+		FROM    #AnalyticsTempTable
+		ORDER BY
+				Name, StartTime
+	)            
+	UPDATE  TempView
+	SET    	@RunningHitsCount = RunningHitsCount =  ISNULL(HitsCount,0) + CASE WHEN Name=@LastName THEN ISNULL(@RunningHitsCount,0) ELSE 0 END,
+			@RunningHitsValue = RunningHitsValue = ISNULL(HitsValue,0) + CASE WHEN Name=@LastName THEN ISNULL(@RunningHitsValue,0) ELSE 0 END,
+			CumulativeAverage = @RunningHitsValue / NULLIF(@RunningHitsCount, 0),
+			DayWiseAverage = HitsValue / NULLIF(HitsCount,0),
+			@LastName = Name
+
+	-- Prepare for PIVOT - delete all remaining columns
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN HitsValue
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN HitsCount
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningHitsValue
+	ALTER TABLE #AnalyticsTempTable DROP COLUMN RunningHitsCount
+
+	DECLARE @engineEdition int;
+	SET @engineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
+
+	-- Drop columns based on graph type
+	IF @GraphType = 'DayWise'
+	BEGIN
+		IF @engineEdition = 5 
+		BEGIN 
+			---------------
+			-- Azure SQL --
+			---------------
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeAverage			
+			-- Rename using the update, because Azure do not support rename of columns after CTE
+			UPDATE #AnalyticsTempTable SET Hits = DayWiseAverage WHERE Name = Name AND StartTime = StartTime
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseAverage
+		END
+		ELSE BEGIN
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeAverage
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN Hits
+			-- Calling in inner exec, because Azure does not allow to access tempdb using the 'temdb..'	
+			exec('exec tempdb..sp_rename ''#AnalyticsTempTable.DayWiseAverage'', ''Hits'', ''COLUMN''')
+		END
+	END    	
+	ELSE -- GraphType is everything else -> use Cumulative version	
+	BEGIN
+		IF @engineEdition = 5 
+		BEGIN 
+			---------------
+			-- Azure SQL --
+			---------------
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseAverage			
+			-- Rename using the update, because Azure do not support rename of columns after CTE
+			UPDATE #AnalyticsTempTable SET Hits = CumulativeAverage WHERE Name = Name AND StartTime = StartTime
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN CumulativeAverage
+		END
+		ELSE BEGIN
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN DayWiseAverage
+			ALTER TABLE #AnalyticsTempTable DROP COLUMN Hits
+			-- Calling in inner exec, because Azure does not allow to access tempdb using the 'temdb..'	
+			exec('exec tempdb..sp_rename ''#AnalyticsTempTable.CumulativeAverage'', ''Hits'', ''COLUMN''')
+		END
+	END
+
+	EXEC Proc_Analytics_Pivot 'day'
+	EXEC Proc_Analytics_RemoveTempTable
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>mvcabtestaverageconversionvalue.dayreport</CodeName>
+    <GUID>86686015-2bdb-430a-bf26-0adabc4eca68</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>False</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>No data found.</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriesitemtooltip>#VALX{dddd, MMMM d, yyyy}  -  #SER: #VALY</seriesitemtooltip>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisangle>0</xaxisangle>
+      <xaxisformat>d</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle />
+  <GraphType>line</GraphType>
+  <GraphWidth>600</GraphWidth>
+  <GraphXAxisTitle />
+  <GraphYAxisTitle />
+</reporting.reportgraph>

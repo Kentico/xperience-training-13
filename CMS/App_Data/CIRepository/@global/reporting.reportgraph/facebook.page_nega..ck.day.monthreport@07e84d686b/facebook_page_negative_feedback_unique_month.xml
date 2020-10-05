@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reportgraph>
+  <GraphConnectionString />
+  <GraphDisplayName>graph</GraphDisplayName>
+  <GraphGUID>cc80043d-6e3e-405b-91b4-cc4091015b6a</GraphGUID>
+  <GraphHeight>500</GraphHeight>
+  <GraphLegendPosition>100</GraphLegendPosition>
+  <GraphName>Facebook_page_negative_feedback_unique_month</GraphName>
+  <GraphQuery>
+<![CDATA[
+DECLARE
+@CodeName AS NVARCHAR(MAX) = N'Facebook.page_negative_feedback_unique';
+
+SET @FromDate ={%DatabaseSchema%}.Func_Analytics_DateTrim(@FromDate,'month');
+
+IF (@ExternalID IS NOT NULL) AND (@ExternalID != N'') AND 
+  EXISTS(SELECT [InsightHitID] FROM [SM_Insight] 
+    INNER JOIN [SM_InsightHit_Month] ON [SM_InsightHit_Month].[InsightHitInsightID] = [SM_Insight].[InsightID]
+    WHERE ([InsightCodeName] = @CodeName) AND ([InsightPeriodType] = @PeriodType)
+      AND ([InsightExternalID] = @ExternalID) AND ([InsightHitPeriodFrom] BETWEEN @FromDate AND @ToDate)
+  )
+BEGIN
+  SELECT [Date] AS [StartTime], [T1].[Values] AS [Unique]
+    FROM {%DatabaseSchema%}.Func_Analytics_EnsureDates (@FromDate,@ToDate,'month') AS [Dates]   
+    LEFT JOIN
+      (SELECT [InsightHitPeriodFrom] AS [StartTime], [InsightHitValue] AS [Values]
+      FROM [SM_Insight]
+      INNER JOIN [SM_InsightHit_Month] ON [SM_InsightHit_Month].[InsightHitInsightID] = [SM_Insight].[InsightID]
+        WHERE ([InsightCodeName] = @CodeName) AND ([InsightPeriodType] = @PeriodType)
+          AND (InsightExternalID = @ExternalID)
+      ) AS [T1]
+    ON [T1].[StartTime] = [Date]
+END
+
+]]>
+  </GraphQuery>
+  <GraphQueryIsStoredProcedure>False</GraphQueryIsStoredProcedure>
+  <GraphReportID>
+    <CodeName>Facebook.page_negative_feedback.day.monthreport</CodeName>
+    <GUID>2c25ef64-2d72-45bf-89f0-94e04b5762c5</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </GraphReportID>
+  <GraphSettings>
+    <CustomData>
+      <bardrawingstyle>Bar</bardrawingstyle>
+      <barorientation>Vertical</barorientation>
+      <baroverlay>False</baroverlay>
+      <borderskinstyle>None</borderskinstyle>
+      <chartareaborderstyle>NotSet</chartareaborderstyle>
+      <chartareagradient>None</chartareagradient>
+      <displayitemvalue>True</displayitemvalue>
+      <exportenabled>True</exportenabled>
+      <legendbordersize>0</legendbordersize>
+      <legendborderstyle>NotSet</legendborderstyle>
+      <legendinside>False</legendinside>
+      <legendposition>Bottom</legendposition>
+      <linedrawinstyle>Line</linedrawinstyle>
+      <piedoughnutradius>70</piedoughnutradius>
+      <piedrawingdesign>Default</piedrawingdesign>
+      <piedrawingstyle>Doughnut</piedrawingstyle>
+      <pielabelstyle>Outside</pielabelstyle>
+      <plotareabordersize>0</plotareabordersize>
+      <plotareaborderstyle>NotSet</plotareaborderstyle>
+      <plotareagradient>None</plotareagradient>
+      <querynorecordtext>{$sm.ins.nodata$}</querynorecordtext>
+      <reverseyaxis>False</reverseyaxis>
+      <seriesbordersize>4</seriesbordersize>
+      <seriesborderstyle>Solid</seriesborderstyle>
+      <seriesgradient>None</seriesgradient>
+      <seriessymbols>Circle</seriessymbols>
+      <showas3d>False</showas3d>
+      <showmajorgrid>True</showmajorgrid>
+      <stackedbardrawingstyle>Bar</stackedbardrawingstyle>
+      <stackedbarmaxstacked>False</stackedbarmaxstacked>
+      <subscriptionenabled>True</subscriptionenabled>
+      <tenpowers>False</tenpowers>
+      <titleposition>Center</titleposition>
+      <valuesaspercent>False</valuesaspercent>
+      <xaxisformat>y</xaxisformat>
+      <xaxissort>True</xaxissort>
+      <xaxistitleposition>Center</xaxistitleposition>
+      <yaxistitleposition>Center</yaxistitleposition>
+      <yaxisusexaxissettings>True</yaxisusexaxissettings>
+    </CustomData>
+  </GraphSettings>
+  <GraphTitle>{$sm.ins.facebook.page_negative_feedback$}</GraphTitle>
+  <GraphType>line</GraphType>
+  <GraphWidth>700</GraphWidth>
+  <GraphXAxisTitle>{$reports_general.label_months$}</GraphXAxisTitle>
+  <GraphYAxisTitle>{$sm.ins.facebook.page_negative_feedback.value$}</GraphYAxisTitle>
+</reporting.reportgraph>

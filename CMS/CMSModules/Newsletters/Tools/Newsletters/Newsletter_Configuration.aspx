@@ -314,6 +314,10 @@
                             </div>
                             <div class="editing-form-value-cell">
                                 <cms:CMSTextBox ID="txtOptInURL" runat="server" MaxLength="450" />
+                                <span class="info-icon">
+                                    <cms:LocalizedLabel runat="server" ID="lblScreenReaderOptInURL" CssClass="sr-only"></cms:LocalizedLabel>
+                                    <cms:CMSIcon ID="iconHelpOptInURL" runat="server" CssClass="icon-question-circle" EnableViewState="false" aria-hidden="true" />
+                                </span>
                             </div>
                         </asp:Panel>
                         <%-- Send confirmation --%>

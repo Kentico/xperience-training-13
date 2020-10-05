@@ -49,13 +49,13 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     protected global::CMS.Base.Web.UI.CMSButton btnDesigner;
 
     /// <summary>
-    /// btnAnalytics control.
+    /// btnContacts control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSButton btnAnalytics;
+    protected global::CMS.Base.Web.UI.CMSButton btnContacts;
 
     /// <summary>
     /// icnState control.
@@ -83,6 +83,15 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton btnToggleState;
+
+    /// <summary>
+    /// btnMoreOptions control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSMoreOptionsButton btnMoreOptions;
 
     /// <summary>
     /// mainView control.

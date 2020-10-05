@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.workflowaction>
+  <ActionAllowedObjects>;##DOCUMENTS##;</ActionAllowedObjects>
+  <ActionAssemblyName>CMS.TranslationServices</ActionAssemblyName>
+  <ActionClass>CMS.TranslationServices.SendForTranslationAction</ActionClass>
+  <ActionDescription>
+    <![CDATA[Using this step, you can automatically submit a page for translation to a specified translation service. When a page reaches this step, the system creates a new culture version of the page and sets its translation status to Waiting for translation.]]>
+  </ActionDescription>
+  <ActionDisplayName>Send for translation</ActionDisplayName>
+  <ActionEnabled>True</ActionEnabled>
+  <ActionGUID>13d55af6-b724-43b2-9bfc-d897a5cf98e6</ActionGUID>
+  <ActionIconClass> icon-message </ActionIconClass>
+  <ActionName>Send_for_translation</ActionName>
+  <ActionParameters>
+    <form version="2">
+      <field column="ServiceName" columnsize="100" columntype="text" guid="f6cddde0-157c-4dde-8943-758296d1dc2d" visible="true">
+        <properties>
+          <fieldcaption>{$wf.action.sendfortranslation.service$}</fieldcaption>
+          <fielddescription>{$wf.action.sendfortranslation.service.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>True</AllowEmpty>
+          <controlname>translation_service_selector</controlname>
+          <DialogWindowHeight>590</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>668</DialogWindowWidth>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>cms.translationservice</ObjectType>
+          <OrderBy>
+            <![CDATA[TranslationServiceIsMachine, TranslationServiceDisplayName]]>
+          </OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ResourcePrefix>wf.action.sendfortranslation</ResourcePrefix>
+          <ReturnColumnName>TranslationServiceName</ReturnColumnName>
+          <SelectionMode>0</SelectionMode>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field column="TargetLanguage" columnsize="1000" columntype="text" guid="c8a39025-05e8-4778-acb4-98c2aac2513e" visible="true">
+        <properties>
+          <fieldcaption>{$translations.tolanguage$}</fieldcaption>
+          <fielddescription>{$wf.action.sendfortranslation.language.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>True</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>uni_selector</controlname>
+          <DialogWindowHeight>590</DialogWindowHeight>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DialogWindowWidth>668</DialogWindowWidth>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix>(global)</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <ObjectType>cms.culture</ObjectType>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>CultureCode</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>3</SelectionMode>
+          <UseAutocomplete>False</UseAutocomplete>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field allowempty="true" column="ProcessBinary" columntype="boolean" guid="ab79f2ee-e090-4747-9f4c-e924520d2961" visible="true">
+        <properties>
+          <defaultvalue>false</defaultvalue>
+          <fieldcaption>{$wf.action.sendfortranslation.processbinary$}</fieldcaption>
+          <fielddescription>
+            <![CDATA[{$wf.action.sendfortranslation.processbinary.desc$}]]>
+          </fielddescription>
+        </properties>
+        <settings>
+          <controlname>checkboxcontrol</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="Priority" columntype="integer" guid="ed65bf78-c6a8-45f7-9f4b-5d9f4064830f" visible="true">
+        <properties>
+          <defaultvalue>1</defaultvalue>
+          <fieldcaption>{$translationservice.priority$}</fieldcaption>
+          <fielddescription>{$wf.action.sendfortranslation.priority.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <controlname>translationpriorityselector</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="Deadline" columnsize="100" columntype="text" guid="fc7bbd89-8d70-449a-8d84-647f5c0f03c6" visible="true">
+        <properties>
+          <fieldcaption>{$wf.action.sendfortranslation.deadline$}</fieldcaption>
+          <fielddescription>{$wf.action.sendfortranslation.deadline.desc$}</fielddescription>
+          <validationerrormessage>{$translationservice.invaliddeadline$}</validationerrormessage>
+        </properties>
+        <settings>
+          <controlname>due_date_selector</controlname>
+        </settings>
+      </field>
+      <field allowempty="true" column="Instructions" columnsize="1000" columntype="text" guid="f107029f-9b67-4a39-99d1-39e690050129" visible="true">
+        <properties>
+          <fieldcaption>{$wf.action.sendfortranslation.instructions$}</fieldcaption>
+          <fielddescription>{$wf.action.sendfortranslation.instructions.desc$}</fielddescription>
+        </properties>
+        <settings>
+          <AutoCompleteEnableCaching>False</AutoCompleteEnableCaching>
+          <AutoCompleteFirstRowSelected>False</AutoCompleteFirstRowSelected>
+          <AutoCompleteShowOnlyCurrentWordInCompletionListItem>False</AutoCompleteShowOnlyCurrentWordInCompletionListItem>
+          <controlname>textareacontrol</controlname>
+          <FilterMode>False</FilterMode>
+          <IsTextArea>True</IsTextArea>
+          <Wrap>True</Wrap>
+        </settings>
+      </field>
+    </form>
+  </ActionParameters>
+  <ActionThumbnailClass> icon-message</ActionThumbnailClass>
+  <ActionWorkflowType>1</ActionWorkflowType>
+</cms.workflowaction>

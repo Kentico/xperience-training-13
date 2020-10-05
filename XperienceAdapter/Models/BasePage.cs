@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kentico.Content.Web.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace XperienceAdapter.Models
@@ -53,6 +54,8 @@ namespace XperienceAdapter.Models
 
         public string? MimeType { get; set; }
 
-        public string? ServerPath { get; set; }
+        //public string? ServerPath { get; set; }
+
+        public IPageAttachmentUrl? AttachmentUrl { get; set; }
     }
 }

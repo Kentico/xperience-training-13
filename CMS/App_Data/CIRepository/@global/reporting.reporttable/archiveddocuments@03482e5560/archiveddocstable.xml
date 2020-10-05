@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reporting.reporttable>
+  <TableConnectionString />
+  <TableDisplayName>Archived pages table</TableDisplayName>
+  <TableGUID>eaff66b0-76df-4898-98c2-f04f748a4bfe</TableGUID>
+  <TableName>ArchivedDocsTable</TableName>
+  <TableQuery>
+    <![CDATA[Select DocumentName AS 'Page name', NodeAliasPath AS 'Alias path', FirstName + ' '  + LastName + ' (' + UserName +')' AS 'Last modified by', StepDisplayName AS 'Current workflow step' FROM View_CMS_Tree_Joined LEFT JOIN CMS_User ON View_CMS_Tree_Joined.DocumentModifiedByUserID=CMS_User.UserID LEFT JOIN CMS_WorkflowStep ON View_CMS_Tree_Joined.DocumentWorkflowStepID = CMS_WorkflowStep.StepID WHERE (DocumentWorkflowStepID IN (SELECT StepID From CMS_WorkflowStep WHERE StepType=101) AND (NodeSiteID=@CMSContextCurrentSiteID)) ORDER BY NodeAliasPath]]>
+  </TableQuery>
+  <TableQueryIsStoredProcedure>False</TableQueryIsStoredProcedure>
+  <TableReportID>
+    <CodeName>ArchivedDocuments</CodeName>
+    <GUID>22448f8e-589a-4ba2-bc1c-51917f017370</GUID>
+    <ObjectType>reporting.report</ObjectType>
+  </TableReportID>
+  <TableSettings>
+    <CustomData>
+      <enablepaging>False</enablepaging>
+      <exportenabled>True</exportenabled>
+      <pagemode>1</pagemode>
+      <pagesize>10</pagesize>
+      <querynorecordtext>No archived pages found</querynorecordtext>
+      <skinid>ReportGridAnalytics</skinid>
+      <subscriptionenabled>True</subscriptionenabled>
+    </CustomData>
+  </TableSettings>
+</reporting.reporttable>

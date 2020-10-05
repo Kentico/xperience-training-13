@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
+using CMS.Core;
 using CMS.Helpers;
 using CMS.SiteProvider;
 using CMS.WebAnalytics;
@@ -23,7 +24,7 @@ public partial class CMSModules_WebAnalytics_Tools_Disabled : CMSWebAnalyticsPag
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (AnalyticsHelper.AnalyticsEnabled(SiteContext.CurrentSiteName))
+        if (Service.Resolve<IAnalyticsSettingEvaluator>().AnalyticsEnabled(SiteContext.CurrentSiteID))
         {
             URLHelper.Redirect(UrlResolver.ResolveUrl("default.aspx"));
         }

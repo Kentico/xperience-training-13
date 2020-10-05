@@ -279,7 +279,7 @@ public partial class CMSAdminControls_Validation_AccessibilityValidator : Access
             {
                 try
                 {
-                    using (StreamReader reader = StreamReader.New(client.OpenRead(url)))
+                    using (var reader = StreamReader.New(client.OpenRead(url)))
                     {
                         html = reader.ReadToEnd();
                     }

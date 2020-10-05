@@ -750,7 +750,7 @@ public partial class CMSModules_Content_FormControls_Relationships_RelatedDocume
                 Config.ContentStartingPath = StartingPath;
             }
 
-            string url = CMSDialogHelper.GetDialogUrl(Config, IsLiveSite, false, null, false);
+            string url = CMSDialogHelper.GetDialogUrl(Config, false, null, false);
 
             return string.Format("modalDialog('{0}', 'contentselectnode', '90%', '85%');", url);
         }
@@ -774,15 +774,7 @@ public partial class CMSModules_Content_FormControls_Relationships_RelatedDocume
 
             query = URLHelper.AddUrlParameter(query, "hash", QueryHelper.GetHash(query));
 
-            string url;
-            if (IsLiveSite)
-            {
-                url = ResolveUrl("~/CMSFormControls/LiveSelectors/RelatedDocuments.aspx" + query);
-            }
-            else
-            {
-                url = ResolveUrl("~/CMSFormControls/Selectors/RelatedDocuments.aspx" + query);
-            }
+            string url = ResolveUrl("~/CMSFormControls/Selectors/RelatedDocuments.aspx" + query);
 
             return string.Format("modalDialog('{0}', 'AddRelatedDocument', '900', '315');", url);
         }

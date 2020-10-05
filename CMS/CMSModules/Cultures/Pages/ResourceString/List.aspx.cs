@@ -4,11 +4,12 @@ using System.Web.UI.WebControls;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
+using CMS.Core;
 using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Localization;
+using CMS.MacroEngine;
 using CMS.UIControls;
-using CMS.Core;
 
 [Security(ModuleName.LOCALIZATION, "LocalizeStrings", "Development.Cultures.Site")]
 [UIElement(ModuleName.LOCALIZATION, "Development.Cultures.Site")]
@@ -65,6 +66,7 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
     protected void Page_Load(object sender, EventArgs e)
     {
         gridStrings.OnAction += UniGridCultures_OnAction;
+        gridStrings.OnExternalDataBound += gridStrings_OnExternalDataBound;
 
         CurrentMaster.DisplaySiteSelectorPanel = true;
 
@@ -97,7 +99,7 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
             {
                 if (!LocalizationHelper.ResourceFileExistsForCulture(mCultureInfo.CultureCode))
                 {
-                    string url = "http://devnet.kentico.com/download/localization-packs";
+                    string url = "https://devnet.kentico.com/download/localization-packs";
                     string downloadPage = String.Format(@"<a href=""{0}"" target=""_blank"" >{1}</a> ", url, HTMLHelper.HTMLEncode(url));
                     ShowInformation(String.Format(GetString("culture.downloadlocalization"), downloadPage));
                 }
@@ -168,6 +170,28 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
                 ResourceStringInfoProvider.DeleteResourceStringInfo(actionArgument.ToString());
                 break;
         }
+    }
+
+
+    protected object gridStrings_OnExternalDataBound(object sender, string sourceName, object parameter)
+    {
+        switch (sourceName.ToLowerInvariant())
+        {
+            case "culturetext":
+            case "defaulttext":
+                {
+                    var text = ValidationHelper.GetString(parameter, String.Empty);
+
+                    if (text.IndexOf('{') >= 0)
+                    {
+                        text = MacroSecurityProcessor.RemoveSecurityParameters(text, true, null);
+                    }
+
+                    return text;
+                }
+        }
+
+        return parameter;
     }
 
     #endregion

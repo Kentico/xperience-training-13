@@ -9,8 +9,45 @@
 
 
 
-public partial class CMSModules_Scheduler_Pages_Task_Edit {
-    
+public partial class CMSModules_Scheduler_Pages_Task_Edit
+{
+
+    /// <summary>
+    /// plcTaskAvailability control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcTaskAvailability;
+
+    /// <summary>
+    /// pnlUpdateTaskAvailability control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateTaskAvailability;
+
+    /// <summary>
+    /// lblTaskAvailability control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskAvailability;
+
+    /// <summary>
+    /// rbTaskAvailability control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSFormControls_System_EnumSelector rbTaskAvailability;
+
     /// <summary>
     /// lblTaskDisplayName control.
     /// </summary>
@@ -19,7 +56,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskDisplayName;
-    
+
     /// <summary>
     /// txtTaskDisplayName control.
     /// </summary>
@@ -28,7 +65,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_LocalizableTextBox txtTaskDisplayName;
-    
+
     /// <summary>
     /// rfvDisplayName control.
     /// </summary>
@@ -37,7 +74,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvDisplayName;
-    
+
     /// <summary>
     /// lblTaskName control.
     /// </summary>
@@ -46,7 +83,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskName;
-    
+
     /// <summary>
     /// txtTaskName control.
     /// </summary>
@@ -55,7 +92,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_System_CodeName txtTaskName;
-    
+
     /// <summary>
     /// rfvName control.
     /// </summary>
@@ -64,7 +101,16 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvName;
-    
+
+    /// <summary>
+    /// pnlUpdateTaskProvider control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateTaskProvider;
+
     /// <summary>
     /// lblTaskAssemblyName control.
     /// </summary>
@@ -73,7 +119,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskAssemblyName;
-    
+
     /// <summary>
     /// assemblyElem control.
     /// </summary>
@@ -82,7 +128,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Classes_AssemblyClassSelector assemblyElem;
-    
+
     /// <summary>
     /// schedInterval control.
     /// </summary>
@@ -91,7 +137,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_UI_Selectors_ScheduleInterval schedInterval;
-    
+
     /// <summary>
     /// lblTaskData control.
     /// </summary>
@@ -100,7 +146,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskData;
-    
+
     /// <summary>
     /// txtTaskData control.
     /// </summary>
@@ -109,7 +155,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextArea txtTaskData;
-    
+
     /// <summary>
     /// lblTaskCondition control.
     /// </summary>
@@ -118,7 +164,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskCondition;
-    
+
     /// <summary>
     /// ucMacroEditor control.
     /// </summary>
@@ -127,7 +173,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Inputs_LargeTextArea ucMacroEditor;
-    
+
     /// <summary>
     /// lblTaskEnabled control.
     /// </summary>
@@ -136,7 +182,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskEnabled;
-    
+
     /// <summary>
     /// chkTaskEnabled control.
     /// </summary>
@@ -145,7 +191,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTaskEnabled;
-    
+
     /// <summary>
     /// lblTaskDeleteAfterLastRun control.
     /// </summary>
@@ -154,7 +200,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskDeleteAfterLastRun;
-    
+
     /// <summary>
     /// chkTaskDeleteAfterLastRun control.
     /// </summary>
@@ -163,7 +209,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTaskDeleteAfterLastRun;
-    
+
     /// <summary>
     /// lblRunInSeparateThread control.
     /// </summary>
@@ -172,7 +218,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblRunInSeparateThread;
-    
+
     /// <summary>
     /// chkRunTaskInSeparateThread control.
     /// </summary>
@@ -181,7 +227,16 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkRunTaskInSeparateThread;
-    
+
+    /// <summary>
+    /// pnlUpdateExternalServices control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateExternalServices;
+
     /// <summary>
     /// plcAllowExternalService control.
     /// </summary>
@@ -190,7 +245,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcAllowExternalService;
-    
+
     /// <summary>
     /// lblTaskAllowExternalService control.
     /// </summary>
@@ -199,7 +254,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskAllowExternalService;
-    
+
     /// <summary>
     /// chkTaskAllowExternalService control.
     /// </summary>
@@ -208,7 +263,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTaskAllowExternalService;
-    
+
     /// <summary>
     /// plcUseExternalService control.
     /// </summary>
@@ -217,7 +272,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcUseExternalService;
-    
+
     /// <summary>
     /// lblTaskUseExternalService control.
     /// </summary>
@@ -226,7 +281,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTaskUseExternalService;
-    
+
     /// <summary>
     /// chkTaskUseExternalService control.
     /// </summary>
@@ -235,7 +290,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkTaskUseExternalService;
-    
+
     /// <summary>
     /// plcRunIndividually control.
     /// </summary>
@@ -244,7 +299,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcRunIndividually;
-    
+
     /// <summary>
     /// lblRunIndividually control.
     /// </summary>
@@ -253,7 +308,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblRunIndividually;
-    
+
     /// <summary>
     /// chkRunIndividually control.
     /// </summary>
@@ -262,7 +317,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkRunIndividually;
-    
+
     /// <summary>
     /// lblServerName control.
     /// </summary>
@@ -271,7 +326,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblServerName;
-    
+
     /// <summary>
     /// txtServerName control.
     /// </summary>
@@ -280,16 +335,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtServerName;
-    
-    /// <summary>
-    /// chkAllServers control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkAllServers;
-    
+
     /// <summary>
     /// plcDevelopment control.
     /// </summary>
@@ -298,7 +344,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcDevelopment;
-    
+
     /// <summary>
     /// lblModule control.
     /// </summary>
@@ -307,7 +353,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblModule;
-    
+
     /// <summary>
     /// drpModule control.
     /// </summary>
@@ -316,7 +362,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_SelectModule drpModule;
-    
+
     /// <summary>
     /// lblUser control.
     /// </summary>
@@ -325,7 +371,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblUser;
-    
+
     /// <summary>
     /// ucUser control.
     /// </summary>
@@ -334,7 +380,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Membership_FormControls_Users_SelectUser ucUser;
-    
+
     /// <summary>
     /// lblExecutionsInfo control.
     /// </summary>
@@ -343,7 +389,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblExecutionsInfo;
-    
+
     /// <summary>
     /// lblExecutions control.
     /// </summary>
@@ -352,7 +398,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblExecutions;
-    
+
     /// <summary>
     /// plcResetFrom control.
     /// </summary>
@@ -361,7 +407,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcResetFrom;
-    
+
     /// <summary>
     /// lblFrom control.
     /// </summary>
@@ -370,7 +416,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal lblFrom;
-    
+
     /// <summary>
     /// btnReset control.
     /// </summary>
@@ -379,7 +425,7 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLinkButton btnReset;
-    
+
     /// <summary>
     /// btnOk control.
     /// </summary>

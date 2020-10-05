@@ -295,7 +295,7 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
     /// <returns>String representing where condition for the matrix</returns>
     private string GetWhereCondition()
     {
-        string where = "RoleGroupId IS NULL";
+        string where = null;
 
         if (chkUserOnly.Checked && (SelectedUserID > 0))
         {
@@ -319,7 +319,7 @@ public partial class CMSModules_Modules_Pages_Module_Permission_Roles : GlobalAd
             if (!String.IsNullOrEmpty(rolesWhere))
             {
                 rolesWhere = rolesWhere.Remove(0, 1);
-                where = SqlHelper.AddWhereCondition(where, "RoleID IN(" + rolesWhere + ")");
+                where = "RoleID IN (" + rolesWhere + ")";
             }
             else
             {

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms.query>
+  <ClassID>
+    <CodeName>CMS.ObjectVersionHistory</CodeName>
+    <GUID>0abc9b34-986b-4abe-9000-daea24a956cf</GUID>
+    <ObjectType>cms.class</ObjectType>
+  </ClassID>
+  <QueryConnectionString>CMSConnectionString</QueryConnectionString>
+  <QueryGUID>7495bd9c-76ae-42b6-a930-27ae98093240</QueryGUID>
+  <QueryIsCustom>False</QueryIsCustom>
+  <QueryIsLocked>False</QueryIsLocked>
+  <QueryName>deleteoldermajorversions</QueryName>
+  <QueryRequiresTransaction>False</QueryRequiresTransaction>
+  <QueryText>
+    <![CDATA[DELETE FROM CMS_ObjectVersionHistory WHERE VersionModifiedWhen < (SELECT MIN(VersionModifiedWhen) FROM (SELECT ##TOPN## VersionModifiedWhen FROM CMS_ObjectVersionHistory WHERE VersionObjectType LIKE @ObjectType AND VersionObjectID = @ObjectID AND VersionNumber LIKE N'%.0' ORDER BY VersionModifiedWhen DESC) sub) AND VersionObjectType LIKE @ObjectType AND VersionObjectID = @ObjectID]]>
+  </QueryText>
+  <QueryTypeID>0</QueryTypeID>
+</cms.query>

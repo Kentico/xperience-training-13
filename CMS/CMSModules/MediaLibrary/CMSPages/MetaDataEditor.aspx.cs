@@ -7,7 +7,7 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_CMSPages_MetaDataEditor : CMSLiveModalPage
+public partial class CMSModules_MediaLibrary_CMSPages_MetaDataEditor : CMSPage
 {
     private string mCurrentSiteName = null;
 

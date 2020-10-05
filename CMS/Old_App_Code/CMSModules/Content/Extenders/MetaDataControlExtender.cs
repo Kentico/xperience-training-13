@@ -15,7 +15,7 @@ using TreeNode = CMS.DocumentEngine.TreeNode;
 [assembly: RegisterCustomClass("MetaDataControlExtender", typeof(MetaDataControlExtender))]
 
 /// <summary>
-/// Control extender for metadata tab in document properties.
+/// Control extender for metadata and tags tabs in document properties.
 /// </summary>
 public class MetaDataControlExtender : ControlExtender<CMSForm>
 {
@@ -70,7 +70,7 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
     /// <summary>
     /// Gets or sets page settings section name for UI element check.
     /// </summary>
-    public string UIPageElementName
+    public string UIMetadataElementName
     {
         get;
         set;
@@ -115,7 +115,8 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
 
         bool nodeIsRoot = Node.IsRoot();
 
-        pageOptionsVisible = MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement(UIModuleName, UIPageElementName);
+        pageOptionsVisible = !string.IsNullOrEmpty(UIMetadataElementName) && !string.IsNullOrEmpty(UIModuleName)
+            && MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement(UIModuleName, UIMetadataElementName);
         if (pageOptionsVisible && !nodeIsRoot)
         {
             SetupInheritCheckbox("DocumentPageTitle");
@@ -123,13 +124,16 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
             SetupInheritCheckbox("DocumentPageKeyWords");
         }
 
-        tagsVisible = MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement(UIModuleName, UITagsElementName);
+        tagsVisible = !string.IsNullOrEmpty(UITagsElementName) && !string.IsNullOrEmpty(UIModuleName)
+            && MembershipContext.AuthenticatedUser.IsAuthorizedPerUIElement(UIModuleName, UITagsElementName);
         if (tagsVisible)
         {
             if (!nodeIsRoot)
             {
                 SetupInheritCheckbox("DocumentTagGroupID");
             }
+
+            InitializeTagSelector();
         }
 
         if (!pageOptionsVisible && !tagsVisible)
@@ -137,8 +141,6 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
             // Redirect to info message if no UI available
             URLHelper.Redirect(AdministrationUrlHelper.GetInformationUrl("uiprofile.uinotavailable"));
         }
-
-        InitializeTagSelector();
     }
 
 
@@ -171,6 +173,9 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
             Control.FieldsToHide.Add("DocumentTagGroupID");
             Control.FieldsToHide.Add("DocumentTagGroupIDInherit");
             Control.FieldsToHide.Add("DocumentTags");
+
+            var lblNoTags = ControlsHelper.GetChildControl(Control, typeof(LocalizedLabel), "lblNoTags") as LocalizedLabel;
+            lblNoTags.Visible = true;
         }
         else
         {
@@ -224,7 +229,7 @@ public class MetaDataControlExtender : ControlExtender<CMSForm>
         {
             return;
         }
-        
+
         CMSCheckBox checkBox = GetCheckBox("DocumentTagGroupID");
         FormEngineUserControl mainControl = Control.FieldControls["DocumentTagGroupID"];
         if ((checkBox != null) && (mainControl != null))

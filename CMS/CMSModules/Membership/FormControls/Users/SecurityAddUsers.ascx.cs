@@ -14,9 +14,6 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
 
     private int mNodeID = 0;
     private TreeNode mNode = null;
-    private int mBoardID = 0;
-    private int mForumID = 0;
-    private int mGroupID = 0;
     private string mCurrentValues = String.Empty;
     private TreeProvider mTree = null;
 
@@ -68,65 +65,6 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
             if (mNode != null)
             {
                 mNodeID = mNode.NodeID;
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets board id.
-    /// </summary>
-    public int BoardID
-    {
-        get
-        {
-            return mBoardID;
-        }
-        set
-        {
-            mBoardID = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets forum id.
-    /// </summary>
-    public int ForumID
-    {
-        get
-        {
-            return mForumID;
-        }
-        set
-        {
-            mForumID = value;
-        }
-    }
-
-
-    /// <summary>
-    /// Gets or sets group id.
-    /// </summary>
-    public int GroupID
-    {
-        get
-        {
-            if (NodeID > 0)
-            {
-                return mGroupID;
-            }
-            return usUsers.GroupID;
-        }
-        set
-        {
-            if (NodeID > 0)
-            {
-                mGroupID = value;
-            }
-            else
-            {
-                usUsers.GroupID = value;
             }
         }
     }
@@ -264,65 +202,7 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
         // Check node permissions
         if (Node != null)
         {
-            // Set group filter
-            if (GroupID > 0)
-            {
-                usUsers.UniSelector.FilterControl = "~/CMSFormControls/Filters/SiteGroupFilter.ascx";
-                usUsers.UniSelector.SetValue("GroupID", GroupID.ToString());
-            }
-
-            // Allow group administrator edit group document permissions on live site
-            if ((GroupID > 0) && IsLiveSite)
-            {
-                if (MembershipContext.AuthenticatedUser.IsGroupAdministrator(GroupID))
-                {
-                    usUsers.Enabled = true;
-                    return;
-                }
-            }
-
             if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(Node, NodePermissionsEnum.ModifyPermissions) != AuthorizationResultEnum.Allowed)
-            {
-                usUsers.Enabled = false;
-                return;
-            }
-        }
-
-        // Check message board permission
-        if (BoardID > 0)
-        {
-            GeneralizedInfo boardObj = ModuleCommands.MessageBoardGetMessageBoardInfo(BoardID);
-            if (boardObj != null)
-            {
-                int boardGroupId = ValidationHelper.GetInteger(boardObj.GetValue("BoardGroupID"), 0);
-                if (boardGroupId > 0)
-                {
-                    if (!MembershipContext.AuthenticatedUser.IsGroupAdministrator(boardGroupId))
-                    {
-                        usUsers.Enabled = false;
-                        return;
-                    }
-                }
-                else if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("CMS.MessageBoards", "Modify"))
-                {
-                    usUsers.Enabled = false;
-                    return;
-                }
-            }
-        }
-
-        // Check forum permission
-        if (ForumID > 0)
-        {
-            if (GroupID > 0)
-            {
-                if (!MembershipContext.AuthenticatedUser.IsGroupAdministrator(GroupID))
-                {
-                    usUsers.Enabled = false;
-                    return;
-                }
-            }
-            else if (!MembershipContext.AuthenticatedUser.IsAuthorizedPerResource("cms.forums", CMSAdminControl.PERMISSION_MODIFY))
             {
                 usUsers.Enabled = false;
                 return;
@@ -346,12 +226,7 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                 {
                     int userID = ValidationHelper.GetInteger(item, 0);
 
-                    if (BoardID > 0)
-                    {
-                        // Remove message board from board
-                        ModuleCommands.MessageBoardRemoveModeratorFromBoard(userID, BoardID);
-                    }
-                    else if (Node != null)
+                    if (Node != null)
                     {
                         UserInfo ui = UserInfo.Provider.Get(userID);
                         if (ui != null)
@@ -359,11 +234,6 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                             // Remove user from treenode
                             AclItemInfoProvider.RemoveUser(NodeID, ui);
                         }
-                    }
-                    else if (ForumID > 0)
-                    {
-                        // Remove user from forum moderators
-                        ModuleCommands.ForumsRemoveForumModerator(userID, ForumID);
                     }
                 }
             }
@@ -381,12 +251,7 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                 {
                     int userID = ValidationHelper.GetInteger(item, 0);
 
-                    if (BoardID > 0)
-                    {
-                        // Add user to the message board
-                        ModuleCommands.MessageBoardAddModeratorToBoard(userID, BoardID);
-                    }
-                    else if (Node != null)
+                    if (Node != null)
                     {
                         UserInfo ui = UserInfo.Provider.Get(userID);
                         if (ui != null)
@@ -394,11 +259,6 @@ public partial class CMSModules_Membership_FormControls_Users_SecurityAddUsers :
                             // Remove user from treenode
                             AclItemInfoProvider.SetUserPermissions(Node, 0, 0, ui);
                         }
-                    }
-                    else if (ForumID > 0)
-                    {
-                        // Add user to the forum moderators
-                        ModuleCommands.ForumsAddForumModerator(userID, ForumID);
                     }
                 }
             }

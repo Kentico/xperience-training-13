@@ -303,7 +303,7 @@ public partial class CMSModules_Newsletters_EmailBuilder_EmailProperties : CMSAd
             }
 
             // Prevent selecting none value in campaign selector if there is no campaign
-            if (mAreCampaignsAvailable && CampaignInfoProvider.GetCampaigns().OnSite(SiteContext.CurrentSiteID).Count == 0)
+            if (mAreCampaignsAvailable && CampaignInfo.Provider.Get().OnSite(SiteContext.CurrentSiteID).Count == 0)
             {
                 radUTMCampaignExisting.Checked = false;
                 radUTMCampaignExisting.Enabled = false;
