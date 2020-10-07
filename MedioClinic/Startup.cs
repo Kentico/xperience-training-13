@@ -26,6 +26,8 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using Kentico.Content.Web.Mvc;
+using XperienceAdapter.Localization;
+using System.Reflection;
 
 namespace MedioClinic
 {
@@ -51,8 +53,18 @@ namespace MedioClinic
         {
             services.AddResponseCaching();
 
+            services.AddLocalization();
+
             services.AddControllersWithViews()
-                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()));
+                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()))
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName!);
+                        return factory.Create("SharedResource", assemblyName.Name);
+                    };
+                });
 
             services.AddKentico(features =>
             {
