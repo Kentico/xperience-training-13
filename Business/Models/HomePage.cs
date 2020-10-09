@@ -6,19 +6,9 @@ namespace Business.Models
     /// <summary>
     /// A home page.
     /// </summary>
-    public class HomePage : BasicPageWithUrlSlug
+    public class HomePage : NamePerexText
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "DoctorsLinkButtonText", "ServicesLinkButtonText", "DoctorsLink" });
-
-        /// <summary>
-        /// Page perex.
-        /// </summary>
-        public string? Perex { get; set; }
-
-        /// <summary>
-        /// Page text.
-        /// </summary>
-        public string? Text { get; set; }
 
         /// <summary>
         /// Text of a link to a Doctors page.

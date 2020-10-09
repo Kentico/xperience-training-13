@@ -37,6 +37,7 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index()
         {
+            //throw new Exception();
             var homePath = "/Home";
 
             var home = _homePageRepository.GetPages(

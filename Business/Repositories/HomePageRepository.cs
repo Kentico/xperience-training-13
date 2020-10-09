@@ -18,8 +18,6 @@ namespace Business.Repositories
 
         public override Models.HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, Models.HomePage dto)
         {
-            dto.Perex = page.Perex;
-            dto.Text = page.Text;
             dto.DoctorsLinkButtonText = page.DoctorsLinkButtonText;
             dto.ServicesLinkButtonText = page.ServicesLinkButtonText;
 

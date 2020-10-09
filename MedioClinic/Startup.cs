@@ -92,13 +92,37 @@ namespace MedioClinic
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                // TODO: Why the overload with the "errorHandlingPath" parameter causes error controller's views to disappear in the browser?
+                app.UseExceptionHandler(errorApp =>
+                {
+                    errorApp.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500;
+                        context.Response.ContentType = "text/html";
+
+                        await context.Response.WriteAsync("<html lang=\"en\"><body>\r\n");
+                        await context.Response.WriteAsync("An error happened.<br><br>\r\n");
+
+                        var exceptionHandlerPathFeature =
+                            context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+
+                        if (exceptionHandlerPathFeature?.Error is System.IO.FileNotFoundException)
+                        {
+                            await context.Response.WriteAsync("A file error happened.<br><br>\r\n");
+                        }
+
+                        await context.Response.WriteAsync("<a href=\"/\">Home</a><br>\r\n");
+                        await context.Response.WriteAsync("</body></html>\r\n");
+                        await context.Response.WriteAsync(new string(' ', 512)); // IE padding
+                    });
+                });
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
             app.UseKentico();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
@@ -109,6 +133,12 @@ namespace MedioClinic
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "error",
+                    pattern: "{culture}/error/{code}",
+                    defaults: new { controller = "Error", action = "Index" }
+                    );
+
                 endpoints.MapAreaControllerRoute(
                     name: "identity",
                     areaName: "Identity",
@@ -200,7 +230,7 @@ namespace MedioClinic
             ConfigureExternalAuthentication(services, authenticationBuilder, xperienceOptions);
 
             services.AddAuthorization();
-            
+
             services.ConfigureApplicationCookie(cookieOptions =>
             {
                 cookieOptions.LoginPath = new PathString("/Account/Signin");
