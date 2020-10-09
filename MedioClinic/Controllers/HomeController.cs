@@ -14,6 +14,7 @@ using XperienceAdapter.Repositories;
 using Business.Configuration;
 using Business.Models;
 
+
 namespace MedioClinic.Controllers
 {
     public class HomeController : BaseController

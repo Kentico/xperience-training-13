@@ -26,6 +26,7 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using Kentico.Content.Web.Mvc;
+using Kentico.Content.Web.Mvc.Routing;
 
 namespace MedioClinic
 {
@@ -56,7 +57,10 @@ namespace MedioClinic
 
             services.AddKentico(features =>
             {
+                // TODO: Remove in future builds.
                 features.UsePreview();
+
+                features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
             });
 
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
