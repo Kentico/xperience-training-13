@@ -13,7 +13,6 @@ using CMS.DocumentEngine;
 using XperienceAdapter.Repositories;
 using Business.Configuration;
 using Business.Models;
-using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
 {
@@ -37,7 +36,6 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index()
         {
-            //throw new Exception();
             var homePath = "/Home";
 
             var home = _homePageRepository.GetPages(
