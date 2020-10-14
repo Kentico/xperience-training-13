@@ -9,6 +9,8 @@ using Core;
 using XperienceAdapter.Services;
 using XperienceAdapter.Repositories;
 using Business.Repositories;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Configuration
 {
@@ -40,6 +42,9 @@ namespace MedioClinic.Configuration
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<RepositoryServices>().As<IRepositoryServices>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<XperienceStringLocalizerFactory>().As<IStringLocalizerFactory>()
                 .InstancePerLifetimeScope();
         }
     }
