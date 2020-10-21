@@ -137,6 +137,8 @@ namespace MedioClinic
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.Kentico().MapRoutes();
+
                 endpoints.MapControllerRoute(
                     name: "error",
                     pattern: "{culture}/error/{code}",

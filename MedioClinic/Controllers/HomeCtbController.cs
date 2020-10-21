@@ -13,6 +13,7 @@ using Kentico.Content.Web.Mvc.Routing;
 
 using Business.Configuration;
 using MedioClinic.Controllers;
+using XperienceAdapter.Models;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME, typeof(HomeCtbController))]
 namespace MedioClinic.Controllers
@@ -59,10 +60,18 @@ namespace MedioClinic.Controllers
                 ServicesLinkButtonText = homepage.ServicesLinkButtonText
             };
 
+            foreach (var attachment in homepage.Attachments)
+            {
+                homepageDto.Attachments.Add(new PageAttachment
+                {
+                    AttachmentUrl = _pageAttachmentUrlRetriever.Retrieve(attachment),
+                    FileName = attachment.AttachmentName
+                });
+            }
+
             var companyServiceDtos = (await _pageRetriever.RetrieveAsync<CMS.DocumentEngine.Types.MedioClinic.CompanyService>(
                 query => query
                     .Path(homepageContext.Page.NodeAliasPath, CMS.DocumentEngine.PathTypeEnum.Children)
-                    .WithObjectType(CMS.DocumentEngine.Types.MedioClinic.CompanyService.CLASS_NAME)
                     .OrderBy("NodeOrder"),
                 cancellationToken: cancellationToken))
                 .Select(page => new Business.Models.CompanyService
@@ -75,7 +84,7 @@ namespace MedioClinic.Controllers
             var data = (homepageDto, companyServiceDtos);
             var viewModel = GetPageViewModel<(Business.Models.HomePage, IEnumerable<Business.Models.CompanyService>)>(data, homepageDto.Name);
 
-            return View(viewModel);
+            return View("Home/Index", viewModel);
         }
     }
 }

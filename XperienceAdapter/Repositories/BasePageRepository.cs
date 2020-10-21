@@ -55,7 +55,7 @@ namespace XperienceAdapter.Repositories
             },
             buildCacheAction);
 
-            return MapResult(result, additionalMapper, includeAttachments);
+            return MapPages(result, additionalMapper, includeAttachments, culture);
         }
 
         public virtual IEnumerable<TPageDto> GetPagesOfMultitpleTypes(
@@ -77,7 +77,7 @@ namespace XperienceAdapter.Repositories
             },
             buildCacheAction).Select(h => h as TPage);
 
-            return MapResult(result, additionalMapper, includeAttachments);
+            return MapPages(result, additionalMapper, includeAttachments, culture);
         }
 
         public IEnumerable<TPageDto> GetPage(Guid nodeGuid, bool includeAttachments) =>
@@ -191,10 +191,11 @@ namespace XperienceAdapter.Repositories
         /// <param name="additionalMapper">Ad-hoc mapper supplied as a parameter.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTOs.</returns>
-        protected IEnumerable<TPageDto> MapResult(
+        protected IEnumerable<TPageDto> MapPages(
             IEnumerable<TPage?>? pages = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            bool includeAttachments = default)
+            bool includeAttachments = default,
+            SiteCulture? culture = default)
         {
             if (pages != null && pages.Any())
             {
@@ -202,7 +203,7 @@ namespace XperienceAdapter.Repositories
                 {
                     foreach (var page in pages)
                     {
-                        TPageDto dto = ApplyMappers(page!, includeAttachments);
+                        TPageDto dto = ApplyMappers(page!, includeAttachments, culture);
 
                         yield return additionalMapper(page!, dto);
                     }
@@ -211,7 +212,7 @@ namespace XperienceAdapter.Repositories
                 {
                     foreach (var page in pages)
                     {
-                        yield return ApplyMappers(page!, includeAttachments);
+                        yield return ApplyMappers(page!, includeAttachments, culture);
                     }
                 }
             }
@@ -223,9 +224,9 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected TPageDto ApplyMappers(TPage page, bool includeAttachments)
+        protected TPageDto ApplyMappers(TPage page, bool includeAttachments, SiteCulture? culture = default)
         {
-            var dto = MapBasicDtoProperties(page, includeAttachments);
+            var dto = MapBasicDtoProperties(page, includeAttachments, culture);
             dto = MapDtoProperties(page, dto);
 
             return dto;
@@ -237,7 +238,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments)
+        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments, SiteCulture? culture)
         {
             var dto = DefaultDtoFactory();
             dto.Guid = page.DocumentGUID;
@@ -245,7 +246,16 @@ namespace XperienceAdapter.Repositories
             dto.Name = page.DocumentName;
             dto.NodeAliasPath = page.NodeAliasPath;
             dto.ParentId = page.NodeParentID;
-            dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
+
+            if (culture is null == false && page.CultureVersions.Any())
+            {
+                var cultureVersion = page.CultureVersions.FirstOrDefault(version => version.DocumentCulture.Equals(culture.IsoCode, StringComparison.InvariantCulture));
+
+                if (cultureVersion != null)
+                {
+                    dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture); 
+                }
+            }
 
             if (includeAttachments)
             {
@@ -259,7 +269,6 @@ namespace XperienceAdapter.Repositories
                         Guid = attachment.AttachmentGUID,
                         Id = attachment.ID,
                         MimeType = attachment.AttachmentMimeType,
-                        //ServerPath = attachment.GetPath(null),
                         Title = attachment.AttachmentTitle
                     });
                 }
@@ -274,7 +283,6 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="dto">Page DTO.</param>
         /// <returns></returns>
-        public virtual TPageDto MapDtoProperties(TPage page, TPageDto dto)
-            => dto;
+        public virtual TPageDto MapDtoProperties(TPage page, TPageDto dto) => dto;
     }
 }

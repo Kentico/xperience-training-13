@@ -1,0 +1,1 @@
+﻿[assembly: CMS.AssemblyDiscoverable]
