@@ -75,7 +75,8 @@ namespace Business.Repositories
                     var allItems = _basePageRepository.GetPages(
                         query => GetDefaultQuery(query)
                             .MenuItems(),
-                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, RootPath, PathTypeEnum.Children))
+                        culture: culture,
+                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, RootPath, PathTypeEnum.Children, culture))
                             .Select(dto => MapBaseToNavigationDto(dto));
 
                     var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
@@ -100,7 +101,8 @@ namespace Business.Repositories
                     var allItems = _basePageRepository.GetPages(
                         query => GetDefaultQuery(query)
                             .Path(nodeAliasPath, PathTypeEnum.Children),
-                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, nodeAliasPath, PathTypeEnum.Children))
+                        culture: culture,
+                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, nodeAliasPath, PathTypeEnum.Children, culture))
                             .Select(dto => MapBaseToNavigationDto(dto));
 
                     var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
@@ -126,7 +128,7 @@ namespace Business.Repositories
                         query => query
                             .FilterDuplicates()
                             .OrderByAscending(NodeOrdering),
-                        buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}|{culture.IsoCode}", RootPath, PathTypeEnum.Section),
+                        buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}", RootPath, PathTypeEnum.Section, culture),
                         culture: culture)
                             .Select(dto => new NavigationItem
                             {
@@ -197,7 +199,8 @@ namespace Business.Repositories
             Guid = dto.Guid,
             Name = dto.Name,
             NodeAliasPath = dto.NodeAliasPath,
-            ParentId = dto.ParentId
+            ParentId = dto.ParentId,
+            Culture = dto.Culture
         };
 
         /// <summary>
@@ -214,9 +217,10 @@ namespace Business.Repositories
             IPageCacheBuilder<TreeNode> pageCacheBuilder, 
             string cacheKeySuffix, 
             string path, 
-            PathTypeEnum pathType) =>
+            PathTypeEnum pathType,
+            SiteCulture culture) =>
                 pageCacheBuilder
-                    .Key($"{nameof(NavigationRepository)}|{cacheKeySuffix}")
+                    .Key($"{nameof(NavigationRepository)}|{culture.IsoCode}|{cacheKeySuffix}")
                     .Dependencies((_, builder) => builder
                         .PagePath(path, pathType)
                         .ObjectType("cms.documenttype")
@@ -228,7 +232,7 @@ namespace Business.Repositories
         /// <param name="root">Root navigation item.</param>
         /// <param name="defaultCultureItems">A flat sequence of all other items.</param>
         /// <returns></returns>
-        public NavigationItem DecorateItems(NavigationItem root, IEnumerable<NavigationItem> navigationItems, Func<NavigationItem, SiteCulture, string?> urlDecorator)
+        public NavigationItem DecorateItems(NavigationItem root, IEnumerable<NavigationItem> navigationItems, Func<NavigationItem, string?> urlDecorator)
         {
             var connectableItems = GetConnectableItems(navigationItems.Concat(new[] { root })).ToList();
 
@@ -251,7 +255,7 @@ namespace Business.Repositories
         /// <param name="parent">Current parent item.</param>
         /// <param name="allItems">A flat sequence of all items.</param>
         /// <returns>Hierarchical navigation item.</returns>
-        public NavigationItem BuildHierarchyLevel(NavigationItem parent, IEnumerable<NavigationItem> allItems, Func<NavigationItem, SiteCulture, string?> urlDecorator)
+        public NavigationItem BuildHierarchyLevel(NavigationItem parent, IEnumerable<NavigationItem> allItems, Func<NavigationItem, string?> urlDecorator)
         {
             var children = allItems
                 .Where(item => item.ParentId.HasValue && item.ParentId == parent.NodeId);
@@ -265,7 +269,7 @@ namespace Business.Repositories
                     item.Parent = parent;
                     item.AllParents.AddRange(parent.AllParents);
                     item.AllParents.Add(parent);
-                    item.RelativeUrl = urlDecorator(item, item.Culture!);
+                    item.RelativeUrl = urlDecorator(item);
                     BuildHierarchyLevel(item, allItems, urlDecorator);
                 }
             }
@@ -278,23 +282,24 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="item">Item to get the URL for.</param>
         /// <returns>URL.</returns>
-        protected string? GetContentTreeBasedUrl(NavigationItem item, SiteCulture _) => GetPageUrl(item);
+        protected string? GetContentTreeBasedUrl(NavigationItem item) => GetPageUrl(item);
 
         /// <summary>
         /// Gets URL for conventional routing.
         /// </summary>
         /// <param name="item">Item to get the URL for.</param>
         /// <returns>URL.</returns>
-        protected string GetConventionalRoutingUrl(NavigationItem item, SiteCulture? siteCulture = default)
+        protected string GetConventionalRoutingUrl(NavigationItem item)
         {
             var patternBasedUrl = GetPageUrl(item);
 
             if (string.IsNullOrEmpty(patternBasedUrl))
             {
                 var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
-                var culture = siteCulture ?? _cultureRepository.DefaultSiteCulture;
+                var culture = item.Culture ?? _cultureRepository.DefaultSiteCulture;
 
-                return $"~/{siteCulture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
+                // TODO: Why don't we get the culture from the item itself?
+                return $"~/{culture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
             }
 
             return patternBasedUrl;
@@ -302,11 +307,12 @@ namespace Business.Repositories
 
         protected string? GetPageUrl(NavigationItem item)
         {
-            var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+            //var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+            var culture = item?.Culture?.IsoCode;
 
             try
             {
-                var url = _pageUrlRetriever.Retrieve(item.NodeAliasPath, currentCulture)?.RelativePath?.ToLowerInvariant()!;
+                var url = _pageUrlRetriever.Retrieve(item?.NodeAliasPath, culture)?.RelativePath?.ToLowerInvariant()!;
 
                 return url;
             }

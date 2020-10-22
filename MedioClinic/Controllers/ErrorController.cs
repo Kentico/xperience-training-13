@@ -48,7 +48,7 @@ namespace MedioClinic.Controllers
                     includeAttachments: true)
                         .FirstOrDefault();
 
-                var viewModel = GetPageViewModel(notFoundPage, notFoundPage.Name!);
+                var viewModel = GetPageViewModel(notFoundPage, notFoundPage?.Name!);
 
 
                 return View("NotFound", viewModel);

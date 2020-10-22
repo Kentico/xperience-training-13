@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -15,9 +16,12 @@ using Microsoft.Extensions.Options;
 using Autofac;
 
 using CMS.Helpers;
+using Kentico.Content.Web.Mvc;
+using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
+using XperienceAdapter.Localization;
 using Business.Configuration;
 using Identity;
 using Identity.Models;
@@ -25,9 +29,6 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
-using Kentico.Content.Web.Mvc;
-using XperienceAdapter.Localization;
-using System.Reflection;
 
 namespace MedioClinic
 {
@@ -68,7 +69,10 @@ namespace MedioClinic
 
             services.AddKentico(features =>
             {
+                // TODO: Remove in future builds.
                 features.UsePreview();
+
+                features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
             });
 
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
@@ -145,6 +149,8 @@ namespace MedioClinic
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.Kentico().MapRoutes();
+
                 endpoints.MapControllerRoute(
                     name: "error",
                     pattern: "{culture}/error/{code}",

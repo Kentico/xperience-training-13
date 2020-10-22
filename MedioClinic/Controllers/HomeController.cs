@@ -14,6 +14,7 @@ using XperienceAdapter.Repositories;
 using Business.Configuration;
 using Business.Models;
 
+
 namespace MedioClinic.Controllers
 {
     public class HomeController : BaseController
@@ -61,12 +62,7 @@ namespace MedioClinic.Controllers
             var data = (home, companyServices);
             var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, home.Name!);
 
-            return View(viewModel);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return View("Home/Index", viewModel);
         }
     }
 }
