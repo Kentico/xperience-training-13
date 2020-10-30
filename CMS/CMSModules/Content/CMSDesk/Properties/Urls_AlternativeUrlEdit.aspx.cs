@@ -106,7 +106,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls_AlternativeUrlEd
 
         PageBreadcrumbs.Items.Add(new BreadcrumbItem()
         {
-            Text = alternativeUrl.AlternativeUrlID > 0 ? alternativeUrl.AlternativeUrlUrl.ToString() : GetString("content.ui.properties.addalternativeurl")
+            Text = alternativeUrl.AlternativeUrlID > 0 ? TextHelper.LimitLength(alternativeUrl.AlternativeUrlUrl.ToString(), 100, cutLocation: CutTextEnum.Middle) : GetString("content.ui.properties.addalternativeurl")
         });
 
         if (alternativeUrl.AlternativeUrlID == 0)

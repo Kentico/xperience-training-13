@@ -36,7 +36,9 @@ public partial class CMSModules_TagGroups_Pages_Development_Tags_Documents : Glo
             if (ui != null)
             {
                 url = UIContextHelper.GetElementUrl(ui, UIContext);
-                url += String.Format("&parentobjectid={0}&tagid={1}&siteid={2}&displaytitle={3}", groupId, mTagId, siteId, QueryHelper.GetBoolean("displaytitle", false));
+                url = URLHelper.AddParameterToUrl(url, "parentobjectid", groupId.ToString());
+
+                url += String.Format("&tagid={0}&siteid={1}&displaytitle={2}", mTagId, siteId, QueryHelper.GetBoolean("displaytitle", false));
             }
 
             PageBreadcrumbs.Items.Add(new BreadcrumbItem()

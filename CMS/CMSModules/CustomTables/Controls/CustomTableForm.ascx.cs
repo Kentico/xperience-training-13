@@ -134,6 +134,6 @@ public partial class CMSModules_CustomTables_Controls_CustomTableForm : CMSUserC
         param += (QueryHelper.GetString("new", String.Empty) != String.Empty) ? "&new=1" : String.Empty;
 
         // Redirect to edit page with saved parameter and new itemId (new item)
-        customTableForm.RedirectUrlAfterSave = URLHelper.GetAbsoluteUrl(editItemPage) + "?objectid=" + CustomTableId + "&itemid=" + customTableForm.ItemID + param;
+        customTableForm.RedirectUrlAfterSave = URLHelper.ResolveUrl(editItemPage) + "?objectid=" + CustomTableId + "&itemid=" + customTableForm.ItemID + param;
     }
 }

@@ -16,7 +16,7 @@ using CMS.MediaLibrary;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
-public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_CopyMoveFolder : CMSPage
+public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_CopyMoveFolder : CMSModalPage
 {
     #region "Variables"
 

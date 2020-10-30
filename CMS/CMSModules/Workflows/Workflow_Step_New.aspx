@@ -5,5 +5,5 @@
 <%@ Register Src="~/CMSModules/Workflows/Controls/UI/WorkflowStep/Edit.ascx" TagName="StepEdit"
     TagPrefix="cms" %>
 <asp:Content ContentPlaceHolderID="plcContent" ID="content" runat="server">
-    <cms:StepEdit runat="server" ID="editElem" />
+    <cms:StepEdit runat="server" ID="editElem" ShowGeneralProperties="true" ShowAdvancedProperties="true"/>
 </asp:Content>

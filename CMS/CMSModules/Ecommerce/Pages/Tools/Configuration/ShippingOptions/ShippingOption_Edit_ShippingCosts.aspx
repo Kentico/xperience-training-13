@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master"
-    AutoEventWireup="true"  Codebehind="ShippingOption_Edit_ShippingCosts.aspx.cs" Inherits="CMSModules_Ecommerce_Pages_Tools_Configuration_ShippingOptions_ShippingOption_Edit_ShippingCosts"
+    AutoEventWireup="false"  Codebehind="ShippingOption_Edit_ShippingCosts.aspx.cs" Inherits="CMSModules_Ecommerce_Pages_Tools_Configuration_ShippingOptions_ShippingOption_Edit_ShippingCosts"
     Theme="Default" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid" TagPrefix="cms" %>
@@ -7,7 +7,8 @@
 <asp:Content ContentPlaceHolderID="plcContent" ID="content" runat="server">
     <cms:UniGrid runat="server" ID="gridElem" ObjectType="ecommerce.shippingcost" IsLiveSite="false"
         OrderBy="ShippingCostMinWeight" WhereCondition="ShippingCostShippingOptionID = {%EditedObjectParent.ID%}"
-        EditActionUrl="ShippingOption_Edit_ShippingCosts_Edit.aspx?shippingCostID={0}&objectid={%EditedObjectParent.ID%}&siteId={?siteId?}">
+        EditActionUrl="ShippingOption_Edit_ShippingCosts_Edit.aspx?shippingCostID={0}&objectid={%EditedObjectParent.ID%}&siteId={?siteId?}"
+        OnOnExternalDataBound="gridElem_OnExternalDataBound">
         <GridActions>
             <ug:Action Name="edit" ExternalSourceName="Edit" Caption="$General.Edit$" FontIconClass="icon-edit" FontIconStyle="Allow" />
             <ug:Action Name="#delete" Caption="$General.Delete$" FontIconClass="icon-bin" FontIconStyle="Critical"

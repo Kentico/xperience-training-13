@@ -152,7 +152,7 @@ public partial class CMSFormControls_Layouts_PageLayoutCode : FormEngineUserCont
         {
             items.Add(new ListItem(GetString("PageLayout.ConditionalElement"), "cl"));
             items.Add(new ListItem(GetString("PageLayout.ZoneElement"), "wpz"));
-            drpElements.SelectedIndex = 2;
+            drpElements.SelectedIndex = 1;
         }
         // HTML
         else
@@ -231,12 +231,6 @@ function InsertLayoutElement()
         base.OnPreRender(e);
 
         bool isAscx = (drpType.SelectedValue.ToLowerCSafe() == "ascx");
-
-        if (Enabled)
-        {
-            Enabled = !isAscx;
-            drpType.Enabled = true;
-        }
 
         // Setup the information and code type
         if (isAscx)

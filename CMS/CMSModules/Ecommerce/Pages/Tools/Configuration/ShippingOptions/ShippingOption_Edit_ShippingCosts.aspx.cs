@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.UI.WebControls;
 
 using CMS.Core;
 using CMS.Ecommerce;
@@ -15,17 +16,18 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Configuration_ShippingOpti
 {
     #region "Variables"
 
-    protected ShippingOptionInfo shippingOption = null;
-    protected CurrencyInfo currency = null;
+    private CurrencyInfo currency = null;
 
     #endregion
 
 
     #region "Page events"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
-        shippingOption = EditedObjectParent as ShippingOptionInfo;
+        base.OnLoad(e);
+
+        var shippingOption = EditedObjectParent as ShippingOptionInfo;
         if (shippingOption != null)
         {
             CheckEditedObjectSiteID(shippingOption.ShippingOptionSiteID);
@@ -33,8 +35,8 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Configuration_ShippingOpti
         }
 
         // Init unigrid
-        gridElem.OnExternalDataBound += gridElem_OnExternalDataBound;
         gridElem.ZeroRowsText = GetString("com.ui.shippingcost.edit_nodata");
+        gridElem.GridView.RowDataBound += gridElem_RowDataBound;
         gridElem.GridView.AllowSorting = false;
     }
 
@@ -42,6 +44,15 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Configuration_ShippingOpti
 
 
     #region "Event handlers"
+
+    private void gridElem_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.Header)
+        {
+            e.Row.Cells[1].Text += $" ({ECommerceSettings.MassUnit()})";
+        }
+    }
+
 
     /// <summary>
     /// Handles the UniGrid's OnExternalDataBound event.

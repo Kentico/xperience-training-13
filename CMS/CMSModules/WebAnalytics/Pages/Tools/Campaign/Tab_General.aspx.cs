@@ -76,7 +76,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_General : 
             {"CurrentSiteOnly", true}
         });
 
-        var url = URLHelper.GetAbsoluteUrl("~/CMSAdminControls/UI/UniSelector/SelectionDialog.aspx");
+        var url = URLHelper.ResolveUrl("~/CMSAdminControls/UI/UniSelector/SelectionDialog.aspx");
         url = URLHelper.AddParameterToUrl(url, "clientId", cliendId);
         url = URLHelper.AddParameterToUrl(url, "params", guid);
         return URLHelper.AddParameterToUrl(url, "hash", QueryHelper.GetHash(url));

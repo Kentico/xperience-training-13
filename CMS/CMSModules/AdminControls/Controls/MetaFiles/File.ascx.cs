@@ -19,11 +19,6 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_File : ReadOnly
     #region "Variables"
 
     private bool mAlreadyUploadedDontDelete;
-    private string baseUrl = null;
-
-    private int width = 0;
-    private int height = 0;
-
     protected bool columnUpdateVisible = false;
 
     #endregion
@@ -231,15 +226,15 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_File : ReadOnly
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "OpenImageEditor",
                                                ScriptHelper.GetScript(String.Format(@"
 function OpenImageEditor(query) {{ 
-    modalDialog('{0}/CMSModules/Content/CMSDesk/Edit/ImageEditor.aspx' + query, 'EditImage', 905, 670); 
+    modalDialog('{0}' + query, 'EditImage', 905, 670); 
     return false; 
-}}", URLHelper.GetFullApplicationUrl())));
+}}", URLHelper.ResolveUrl("~/CMSModules/Content/CMSDesk/Edit/ImageEditor.aspx"))));
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "OpenEditor",
                                                ScriptHelper.GetScript(String.Format(@"
 function OpenEditor(query) {{ 
-    modalDialog('{0}/CMSModules/AdminControls/Controls/MetaFiles/MetaDataEditor.aspx' + query, 'EditMetadata', 500, 350); 
+    modalDialog('{0}' + query, 'EditMetadata', 500, 350); 
     return false; 
-}} ", URLHelper.GetFullApplicationUrl())));
+}} ", URLHelper.ResolveUrl("~/CMSModules/AdminControls/Controls/MetaFiles/MetaDataEditor.aspx"))));
         // Register javascript 'postback' function
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "PostBack", ScriptHelper.GetScript(String.Format(@"
 function UpdatePage(){{ 
@@ -438,7 +433,7 @@ function ConfirmDelete() {{
                 string fileExt = ValidationHelper.GetString(DataHelper.GetDataRowViewValue(drv, "MetaFileExtension"), string.Empty);
 
                 bool isImage = ImageHelper.IsImage(fileExt);
-                string fileUrl = $"{URLHelper.GetAbsoluteUrl("~/CMSPages/GetMetaFile.aspx")}?fileguid={fileGuid}&chset={Guid.NewGuid()}";
+                string fileUrl = $"{URLHelper.ResolveUrl("~/CMSPages/GetMetaFile.aspx")}?fileguid={fileGuid}&chset={Guid.NewGuid()}";
 
                 // Tooltip
                 string title = ValidationHelper.GetString(DataHelper.GetDataRowViewValue(drv, "MetaFileTitle"), string.Empty);
@@ -590,16 +585,6 @@ function ConfirmDelete() {{
         if (gridFile.NamedColumns.ContainsKey("Update"))
         {
             gridFile.NamedColumns["Update"].Visible = AllowModify;
-        }
-
-        if (!string.IsNullOrEmpty(baseUrl))
-        {
-            ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "OpenEditor",
-                                                   ScriptHelper.GetScript(String.Format(@"
-function OpenEditor(queryString) {{ 
-    modalDialog('{0}{1}' + queryString, 'editorDialog', {2}, {3}); 
-    return false; 
-}}", URLHelper.GetFullApplicationUrl(), baseUrl, width, height)));
         }
 
         if (ObjectID > 0)

@@ -5,6 +5,7 @@ using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
+using CMS.Membership;
 using CMS.OnlineForms;
 using CMS.SiteProvider;
 using CMS.UIControls;
@@ -44,7 +45,7 @@ public partial class CMSModules_Activities_Controls_UI_ActivityDetails_BizFormDe
             ScriptHelper.RegisterModule(this, "CMS.Builder/FrameSrcAttributeModifier", new
             {
                 frameId = mvcFrame.ClientID,
-                frameSrc = url.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path),
+                frameSrc = url.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path, MembershipContext.AuthenticatedUser.UserGUID),
                 mixedContentMessage = GetString("builder.ui.mixedcontenterrormessage"),
                 applicationPath = SystemContext.ApplicationPath
             });

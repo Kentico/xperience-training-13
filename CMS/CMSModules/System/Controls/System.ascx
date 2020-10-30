@@ -262,8 +262,8 @@
         <div class="form-group">
             <div class="editing-form-value-cell editing-form-value-cell-offset">
                 <cms:LocalizedButton ID="btnRestart" ResourceString="Administration-System.btnRestart" runat="server" ButtonStyle="Primary" OnClick="Restart" Visible="false" EnableViewState="false" />
-                <cms:LocalizedButton ID="btnRestartWebfarm" ResourceString="Administration-System.btnRestartWebfarm" runat="server" ButtonStyle="Primary" OnClick="RestartWebfarm" Visible="false" EnableViewState="false" />
-                <cms:LocalizedButton ID="btnRestartServices" ResourceString="Administration-System.btnRestartServices" runat="server" ButtonStyle="Primary" OnClick="RestartServices" Visible="false" EnableViewState="false" />
+                <cms:LocalizedButton ID="btnRestartWebfarm" ResourceString="Administration-System.btnRestartWebfarm" runat="server" ButtonStyle="Default" OnClick="RestartWebfarm" Visible="false" EnableViewState="false" />
+                <cms:LocalizedButton ID="btnRestartServices" ResourceString="Administration-System.btnRestartServices" runat="server" ButtonStyle="Default" OnClick="RestartServices" Visible="false" EnableViewState="false" />
             </div>
         </div>
     </div>

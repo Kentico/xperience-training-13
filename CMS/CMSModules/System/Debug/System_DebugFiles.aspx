@@ -7,7 +7,7 @@
 
 <asp:Content ContentPlaceHolderID="plcActions" runat="server">
     <div class="header-actions-container">
-        <cms:CMSButton runat="server" ID="btnClear" OnClick="btnClear_Click" ButtonStyle="Default"
+        <cms:CMSButton runat="server" ID="btnClear" OnClick="btnClear_Click" ButtonStyle="Primary"
                 EnableViewState="false" />
     </div>
 </asp:Content>

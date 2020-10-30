@@ -400,7 +400,8 @@ public partial class CMSModules_AdminControls_Controls_UIControls_EditItem : CMS
                 {
                     // Append parameters
                     string url = UIContextHelper.GetElementUrl(uiPar.GetEditElement(), UIContext);
-                    url = URLHelper.AppendQuery(url, $"objectid={EditForm.EditedObject.Generalized.ObjectID}&saved=1");
+                    url = URLHelper.AddParameterToUrl(url, "objectid", EditForm.EditedObject.Generalized.ObjectID.ToString());
+                    url = URLHelper.AddParameterToUrl(url, "saved", "1");
 
                     // Ensure that the redirected edit page will behave as a top dialog page (hide breadcrumbs, uses dialog page title...) 
                     url = URLHelper.RemoveParameterFromUrl(url, "rootelementid");

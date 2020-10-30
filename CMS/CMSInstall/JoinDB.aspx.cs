@@ -191,7 +191,7 @@ public partial class CMSInstall_JoinDB : GlobalAdminPage
             CurrentMaster.HeaderContainer.CssClass += " separation-header";
 
             NextButton.Text = GetString("separationDB.return");
-            NextButton.OnClientClick = "window.location =\"" + URLHelper.GetAbsoluteUrl(ReturnUrl) + "\"; return false;";
+            NextButton.OnClientClick = "window.location =\"" + URLHelper.ResolveUrl(ReturnUrl) + "\"; return false;";
             PreviousButton.Visible = false;
 
             // Ensure the refresh script

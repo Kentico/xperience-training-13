@@ -502,6 +502,10 @@ function ChangeLanguage(language) {
         return false;
     }
     SetSelectedCulture(language);
+    cmsrequire(['CMS/EventHub', 'CMS.Builder/Constants'], function (eventHub, constants) {
+        eventHub.publish(constants.ADMIN_FRAME_REQUEST_AUTHENTICATION_EVENT_NAME);
+    });
+
     window.ProcessRequest('setculture', GetSelectedNodeId(), language);
     return true;
 }

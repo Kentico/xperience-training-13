@@ -33,7 +33,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_Tab_Reports : 
                 ScriptHelper.RegisterAngularModule(moduleId, new {
                     Resources = localizationProvider.GetClientLocalization(moduleId),
                     Report = reportViewModelService.GetViewModel(campaign),
-                    DemographicsLink = URLHelper.GetAbsoluteUrl(demographicsLinkBuilder.GetDemographicsLink("campaign")),
+                    DemographicsLink = URLHelper.ResolveUrl(demographicsLinkBuilder.GetDemographicsLink("campaign")),
                     DefaultUTMSourceName = CampaignProcessorConstants.DEFAULT_UTM_SOURCE
                 });
             }

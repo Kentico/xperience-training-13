@@ -1,5 +1,6 @@
 ﻿using System;
 
+using CMS.Core;
 using CMS.EmailEngine;
 using CMS.Helpers;
 using CMS.MacroEngine;
@@ -32,8 +33,9 @@ public partial class CMSModules_Reporting_CMSPages_Unsubscribe : CMSPage
             mReportInfo = ReportInfoProvider.GetReportInfo(mReportSubscriptionInfo.ReportSubscriptionReportID);
             if (mReportInfo != null)
             {
+                var reportDisplayName = Service.Resolve<ILocalizationService>().LocalizeString(mReportInfo.ReportDisplayName);
                 // Set info label based by subscription's report
-                lblInfo.Text = String.Format(GetString("reportsubscription.unsubscription.info"), HTMLHelper.HTMLEncode(mEmail), HTMLHelper.HTMLEncode(mReportInfo.ReportDisplayName));
+                lblInfo.Text = String.Format(GetString("reportsubscription.unsubscription.info"), HTMLHelper.HTMLEncode(mEmail), HTMLHelper.HTMLEncode(reportDisplayName));
             }
         }
         else

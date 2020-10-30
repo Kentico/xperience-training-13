@@ -88,6 +88,8 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     {
         base.OnLoad(e);
 
+        CurrentMaster.PanelContent.CssClass += " automation-sidepanel-content";
+
         if (Process == null)
         {
             RedirectToInformation("editedobject.notexists");

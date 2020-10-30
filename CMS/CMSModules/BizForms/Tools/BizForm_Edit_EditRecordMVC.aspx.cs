@@ -4,6 +4,7 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
+using CMS.Membership;
 using CMS.OnlineForms.Web.UI;
 using CMS.SiteProvider;
 using CMS.UIControls;
@@ -37,7 +38,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_EditRecordMVC : CMSB
         ScriptHelper.RegisterModule(this, "CMS.Builder/FrameSrcAttributeModifier", new
         {
             frameId = formBuilderFrame.ClientID,
-            frameSrc = presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path),
+            frameSrc = presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path, MembershipContext.AuthenticatedUser.UserGUID),
             mixedContentMessage = GetString("builder.ui.mixedcontenterrormessage"),
             applicationPath = SystemContext.ApplicationPath
         });

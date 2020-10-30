@@ -105,7 +105,7 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Design : CMSU
                 plc.ViewMode = ViewModeEnum.DesignDisabled;
             }
 
-            ContextHelper.Add(CookieName.DisplayContentInDesignMode, PortalHelper.DisplayContentInUIElementDesignMode, true, false, false, DateTime.MinValue);
+            RequestStockHelper.Add(CookieName.DisplayContentInDesignMode, PortalHelper.DisplayContentInUIElementDesignMode, true);
 
             ManagersContainer = plcManagers;
             ScriptManagerControl = manScript;

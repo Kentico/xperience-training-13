@@ -108,7 +108,6 @@ public partial class CMSModules_Reporting_Tools_Report_General : CMSReportingPag
         lblHtmlGraphs.Text = GetString("Report_General.HtmlGraphsLabel") + ":";
         lblTables.Text = GetString("Report_General.TablesLabel") + ":";
         lblValues.Text = GetString("Report_General.TablesValues") + ":";
-        lblReportAccess.Text = GetString("Report_General.ReportAccessLabel");
 
         actionsElem.ActionsList.Add(new SaveAction());
         actionsElem.ActionPerformed += actionsElem_ActionPerformed;
@@ -171,7 +170,6 @@ public partial class CMSModules_Reporting_Tools_Report_General : CMSReportingPag
         {
             return;
         }
-        chkReportAccess.Checked = (ri.ReportAccess == ReportAccessEnum.All);
         txtReportDisplayName.Text = ri.ReportDisplayName;
         txtReportName.Text = ri.ReportName;
         htmlTemplateBody.ResolvedValue = ri.ReportLayout;
@@ -210,14 +208,7 @@ public partial class CMSModules_Reporting_Tools_Report_General : CMSReportingPag
         if (String.IsNullOrEmpty(errorMessage) && (!ValidationHelper.IsCodeName(txtReportName.Text.Trim())))
         {
             errorMessage = GetString("general.invalidcodename");
-        }
-
-        ReportAccessEnum reportAccess = ReportAccessEnum.All;
-
-        if (!chkReportAccess.Checked)
-        {
-            reportAccess = ReportAccessEnum.Authenticated;
-        }
+        }        
 
         if (String.IsNullOrEmpty(errorMessage))
         {
@@ -257,7 +248,7 @@ public partial class CMSModules_Reporting_Tools_Report_General : CMSReportingPag
 
                 reportInfo.ReportDisplayName = txtReportDisplayName.Text.Trim();
                 reportInfo.ReportName = txtReportName.Text.Trim();
-                reportInfo.ReportAccess = reportAccess;
+                reportInfo.ReportAccess = ReportAccessEnum.All;
                 reportInfo.ReportCategoryID = categoryID;
                 reportInfo.ReportEnableSubscription = chkEnableSubscription.Checked;
                 reportInfo.ReportConnectionString = ValidationHelper.GetString(ucSelectString.Value, String.Empty);

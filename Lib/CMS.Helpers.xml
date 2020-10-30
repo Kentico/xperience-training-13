@@ -5875,6 +5875,11 @@
             Name of the hash parameter
             </summary>
         </member>
+        <member name="F:CMS.Helpers.VirtualContext.PARAM_READONLY_MODE">
+            <summary>
+            Name of the parameter which indicates that the virtual context is in readonly mode and cannot modify data.
+            </summary>
+        </member>
         <member name="F:CMS.Helpers.VirtualContext.ADMINISTRATION_DOMAIN_PARAMETER">
             <summary>
             Query string parameter that holds administration url (scheme + domain + appPath)
@@ -6037,7 +6042,7 @@
             </summary>
             <exception cref="T:CMS.Helpers.InvalidVirtualContextException">When the given <paramref name="principal"/> does not carry any user or the user is disabled.</exception>
         </member>
-        <member name="M:CMS.Helpers.VirtualContext.GetPreviewPathFromVirtualContext(System.String,System.Boolean,System.String,System.Boolean)">
+        <member name="M:CMS.Helpers.VirtualContext.GetPreviewModePathFromVirtualContext(System.String,System.Boolean,System.String,System.Boolean)">
             <summary>
             Gets preview path based on given path and current initialized context.
             </summary>
@@ -6046,21 +6051,36 @@
             <param name="cultureCode">Defines a culture code for resulting preview path. If not provided, culture code from current initialized context is used.</param>
             <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
         </member>
-        <member name="M:CMS.Helpers.VirtualContext.GetPreviewParameters(System.Nullable{System.Guid},System.String,System.Guid,System.Boolean,System.Boolean)">
+        <member name="M:CMS.Helpers.VirtualContext.GetPreviewModeParameters(System.Guid,System.String,System.Guid,System.Boolean,System.Boolean)">
             <summary>
-            Gets the collection of parameters for preview path.
+            Gets the collection of parameters for preview mode.
             </summary>
-            <param name="userGuid">Context of user for the preview. If left empty, user is not a part of a URL but is passed via a cookie.</param> 
+            <param name="userGuid">Context of user for the preview.</param> 
             <param name="cultureCode">Context of culture for the preview.</param>
             <param name="workflowCycleGuid">Context of workflow cycle GUID.</param>
             <param name="readonlyMode">Indicates if readonly mode should be enabled to disallow modify actions and POST requests.</param>
             <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
+            <remarks>
+            Preview mode is used for the page builder and the preview tab.
+            </remarks>
         </member>
-        <member name="M:CMS.Helpers.VirtualContext.GetFormBuilderPath(System.String)">
+        <member name="M:CMS.Helpers.VirtualContext.GetPreviewLinkParameters(System.Guid,System.String,System.Guid)">
+            <summary>
+            Gets the collection of parameters for preview path.
+            </summary>
+            <param name="userGuid">Context of user for the preview.</param> 
+            <param name="cultureCode">Context of culture for the preview.</param>
+            <param name="workflowCycleGuid">Context of workflow cycle GUID.</param>
+            <remarks>
+            Preview link URL can be used by external users. This URL does not need additional authentization.
+            </remarks>
+        </member>
+        <member name="M:CMS.Helpers.VirtualContext.GetFormBuilderPath(System.String,System.Guid)">
             <summary>
             Returns path containing <see cref="T:CMS.Helpers.VirtualContext"/> data required by Form builder.
             </summary>
             <param name="path">Application absolute path to be converted.</param>
+            <param name="userGuid">Context of user for the form builder.</param> 
         </member>
         <member name="M:CMS.Helpers.VirtualContext.AddAdministrationDomain(System.String)">
             <summary>
@@ -6450,9 +6470,57 @@
             <param name="value">Value</param>
             <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
         </member>
-        <member name="M:CMS.Helpers.SessionHelper.Remove(System.String)">
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.String,System.Boolean)">
             <summary>
             Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.DateTime,System.Boolean)">
+            <summary>
+            Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.Guid,System.Boolean)">
+            <summary>
+            Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.SetValue(System.String,System.Decimal,System.Boolean)">
+            <summary>
+            Sets the session value.
+            </summary>
+            <param name="key">Item key</param>
+            <param name="value">Value</param>
+            <param name="allowVirtualContext">If true, the value is set even when virtual context is initialized</param>
+        </member>
+        <member name="M:CMS.Helpers.SessionHelper.Remove(System.String)">
+            <summary>
+            Removes the given session item.
             </summary>
             <param name="key">Item key</param>
         </member>
@@ -7803,26 +7871,6 @@
             Indicates whether image was resized
             </summary>
         </member>
-        <member name="F:CMS.Helpers.AbstractOutputFile.mUseWatermark">
-            <summary>
-            Indicates whether watermark should be used
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AbstractOutputFile.UseWatermark">
-            <summary>
-            If true, the watermark is allowed to be used.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AbstractOutputFile.Watermark">
-            <summary>
-            If set, watermark image is applied to the image. Name of the watermark image from ~/App_Themes/{theme}/Images/Watermarks
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AbstractOutputFile.WatermarkPosition">
-            <summary>
-            Watermark position.
-            </summary>
-        </member>
         <member name="P:CMS.Helpers.AbstractOutputFile.OutputData">
             <summary>
             Output file data.
@@ -7852,24 +7900,6 @@
             <summary>
             If true, the file is resized version of the file.
             </summary>
-        </member>
-        <member name="M:CMS.Helpers.AbstractOutputFile.ApplyWatermark(System.Byte[]@)">
-            <summary>
-            Applies watermark on the given image data.
-            </summary>
-            <param name="data">Image data</param>
-        </member>
-        <member name="M:CMS.Helpers.AbstractOutputFile.CheckUseWatermark(System.String,System.Int32,System.Int32)">
-            <summary>
-            Checks whether the watermark can be used
-            </summary>
-        </member>
-        <member name="M:CMS.Helpers.AbstractOutputFile.SatisfiesWatermarkDimensions(System.Int32,System.Int32)">
-            <summary>
-            Checks the minimal
-            </summary>
-            <param name="minSize">Minimum size of the image</param>
-            <param name="originalSize">Original size of the image</param>
         </member>
         <member name="T:CMS.Helpers.MimeTypeHelper">
             <summary>
@@ -9876,11 +9906,13 @@
             <summary>
             Returns the user preferred culture (reflects the virtual context).
             </summary>
+            <remarks>On live site, the preferred culture is based on thread culture.</remarks>
         </member>
         <member name="M:CMS.Helpers.CultureHelper.GetOriginalPreferredCulture">
             <summary>
             Returns the user original preferred culture.
             </summary>
+            <remarks>On live site, the preferred culture is based on thread culture.</remarks>
         </member>
         <member name="M:CMS.Helpers.CultureHelper.SetPreferredCulture(System.String)">
             <summary>
@@ -9894,16 +9926,19 @@
             <param name="cultureCode">Culture code to set</param>
             <param name="setCookie">Set the culture to a cookie as well</param>
             <param name="handleLifeTime">If true, the life time support of the culture is allowed</param>
+            <remarks>The method has no effect on live site.</remarks>
         </member>
         <member name="M:CMS.Helpers.CultureHelper.GetPreferredUICultureCode">
             <summary>
             Returns the user preferred UI Culture code.
             </summary>
+            <remarks>Returns null on live site, unless the culture is specified within virtual context.</remarks>
         </member>
         <member name="M:CMS.Helpers.CultureHelper.SetPreferredUICultureCode(System.String)">
             <summary>
             Sets the user preferred UI Culture code.
             </summary>
+            <remarks>The method has no effect on live site.</remarks>
         </member>
         <member name="M:CMS.Helpers.CultureHelper.IsPreferredCultureRTL">
             <summary>
@@ -13656,40 +13691,10 @@
             Domain of SQL Azure service.
             </summary>
         </member>
-        <member name="F:CMS.Helpers.AzureHelper.SEARCH_INIT_SLEEP">
-            <summary>
-            Sleep interval between tries for init of smart search worker role.
-            </summary>
-        </member>
-        <member name="F:CMS.Helpers.AzureHelper.SEARCH_PROCESS_SLEEP">
-            <summary>
-            Sleep interval between starting of task processor.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AzureHelper.CurrentInstanceID">
-            <summary>
-            Gets or sets current instance id.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AzureHelper.CurrentInternalEndpoint">
-            <summary>
-            Gets or sets internal endpoint of current instance.
-            </summary>
-        </member>
         <member name="P:CMS.Helpers.AzureHelper.BlobUrl">
             <summary>
             Gets or sets URL of blob endpoint. 
             </summary>        
-        </member>
-        <member name="P:CMS.Helpers.AzureHelper.DeploymentID">
-            <summary>
-            Deployment id of instance.
-            </summary>
-        </member>
-        <member name="P:CMS.Helpers.AzureHelper.NumberOfInstances">
-            <summary>
-            Number of Azure instances within WebRole.
-            </summary>
         </member>
         <member name="M:CMS.Helpers.AzureHelper.GetDownloadPath(System.String)">
             <summary>
@@ -13711,7 +13716,7 @@
         </member>
         <member name="M:CMS.Helpers.AzureHelper.EnsureUrl(System.String)">
             <summary>
-            Returns URL ending with slash and starting with http:// if no protocol is given.
+            Returns URL ending with slash and starting with https:// if no protocol is given.
             </summary>
             <param name="url">Input URL.</param>
         </member>

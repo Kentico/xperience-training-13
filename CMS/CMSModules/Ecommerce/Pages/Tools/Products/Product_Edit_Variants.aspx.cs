@@ -790,6 +790,11 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Product_Edit_Vari
                 SKUInfo variantInfo = new SKUInfo(productVariants.Tables[0].Rows[0]);
                 variantInfo.Generalized.SetObject();
             }
+            else
+            {
+                // If all variants were deleted, update parent
+                Product?.Generalized.SetObject();
+            }
         }
         catch (Exception ex)
         {

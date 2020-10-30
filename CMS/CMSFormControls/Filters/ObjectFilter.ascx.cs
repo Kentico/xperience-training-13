@@ -134,7 +134,7 @@ public partial class CMSFormControls_Filters_ObjectFilter : CMSAbstractBaseFilte
         if (Parameters["CurrentSiteOnly"] != null)
         {
             siteSelector.Value = SiteContext.CurrentSiteID;
-            plcSite.Visible = !ValidationHelper.GetBoolean(Parameters["CurrentSiteOnly"], false);
+            plcSite.Visible = siteSelector.EnableViewState = !ValidationHelper.GetBoolean(Parameters["CurrentSiteOnly"], false);
         }
     }
 

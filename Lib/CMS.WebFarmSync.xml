@@ -1822,6 +1822,66 @@
             Logs the task to the log file.
             </summary>
         </member>
+        <member name="T:CMS.WebFarmSync.WebFarmLicenseCheckSettings">
+            <summary>
+            Holds data needed to perform web farm license check.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseCheckSettings.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebFarmSync.WebFarmLicenseCheckSettings"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseCheckSettings.#ctor(System.Action{CMS.WebFarmSync.WebFarmLicenseCheckSettings})">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.WebFarmSync.WebFarmLicenseCheckSettings"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.Adapter">
+            <summary>
+            Gets adapter which can modify <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.AdminWebFarmsAllowed"/> or <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.ExternalWebFarmsAllowed"/> property values.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.LicenseKeys">
+            <summary>
+            Gets or sets valid license keys retrieved during license check.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.Sites">
+            <summary>
+            Gets or sets running sites retrieved during license check.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.WebFarmServers">
+            <summary>
+            Gets or sets healthy web farm servers retrieved during license check.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.AdminWebFarmsAllowed">
+            <summary>
+            Gets or sets count of allowed administration web farms.
+            </summary>
+        </member>
+        <member name="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.ExternalWebFarmsAllowed">
+            <summary>
+            Gets or sets count of allowed external web farms.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseCheckSettings.GetActiveAdminWebFarmServers">
+            <summary>
+            Gets amount of active administration web farms, calculated from <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.WebFarmServers"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseCheckSettings.GetActiveExternalWebFarmServers">
+            <summary>
+            Gets amount of active external web farms, calculated from <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.WebFarmServers"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseCheckSettings.AdaptAllowedCounts">
+            <summary>
+            Changes the allowed web farm count in <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.AdminWebFarmsAllowed"/> or <see cref="P:CMS.WebFarmSync.WebFarmLicenseCheckSettings.ExternalWebFarmsAllowed"/> properties.
+            </summary>
+        </member>
         <member name="T:CMS.WebFarmSync.WebFarmLicenseHelper">
             <summary>
             Contains methods related to licensing of web farms. 
@@ -1833,27 +1893,28 @@
             </summary>
             <param name="domainName">Domain to check.</param>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsLicenseValid">
-            <summary>
-            Checks the license policy for web farms.
-            Returns true if current license is valid and does not exceed the license limitations.
-            </summary>
-        </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowed(CMS.Helpers.CacheSettings)">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowed(CMS.Helpers.CacheSettings,CMS.WebFarmSync.WebFarmLicenseCheckSettings)">
             <summary>
             Checks the license policy for web farms.
             Returns true if current license is valid and does not exceed the license limitations.
             </summary>
             <param name="cacheSettings">Cache settings.</param>
+            <param name="settings">Setting for license evaluation.</param>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowedInternal(System.Collections.Generic.Dictionary{System.String,CMS.LicenseProvider.LicenseKeyInfo},System.Collections.Generic.List{CMS.SiteProvider.SiteInfo},System.Collections.Generic.List{CMS.WebFarmSync.WebFarmServerInfo})">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.IsCurrentWebFarmServerCountAllowedInternal(CMS.WebFarmSync.WebFarmLicenseCheckSettings)">
             <summary>
             Checks the license policy for web farms.
             Returns true if current license is valid and does not exceed the license limitations.
             </summary>
             <remarks>The method is used only for testing purposes and should not be used directly.</remarks>
         </member>
-        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetNumberOfWebFarmsForUrl(System.String,System.Collections.Generic.Dictionary{System.String,CMS.LicenseProvider.LicenseKeyInfo})">
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.AddWebFarmCountToTotalCount(System.Int32,System.Int32)">
+            <summary>
+            Function to count web farms so that we do not go over int.MaxValue
+            Add license web farm count value to current aggregate unless it is MaxValue or the aggregate is already maximal
+            </summary>
+        </member>
+        <member name="M:CMS.WebFarmSync.WebFarmLicenseHelper.GetNumberOfWebFarmsForUrl(System.String,System.Collections.Generic.IDictionary{System.String,CMS.LicenseProvider.LicenseKeyInfo})">
             <summary>
             Returns number of web farms that are counted towards the web farm limit.
             If license supports unlimited web farms the <see cref="F:System.Int32.MaxValue"/> is returned.
@@ -1982,7 +2043,6 @@
             <summary>
             Contains methods related to licensing of web farms. For internal use only. 
             </summary>
-            TODO: When extenders relocated, delete this class.
         </member>
         <member name="P:CMS.WebFarmSync.Internal.WebFarmLicenseHelper.LicenseIsValid">
             <summary>

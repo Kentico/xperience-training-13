@@ -18,6 +18,8 @@ public partial class CMSAdminControls_ImageEditor_ImageEditorInnerPage : CMSPage
             ScriptHelper.RegisterJQueryCrop(Page);
             ScriptHelper.RegisterScriptFile(Page, "~/CMSAdminControls/ImageEditor/ImageEditorInnerPage.js");
             CssRegistration.RegisterBootstrap(Page);
+            
+            SetBrowserClass();
 
             string imgUrl = QueryHelper.GetString("imgurl", null);
             if (String.IsNullOrEmpty(imgUrl))

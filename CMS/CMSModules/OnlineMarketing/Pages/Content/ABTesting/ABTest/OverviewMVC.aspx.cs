@@ -956,7 +956,7 @@ public partial class CMSModules_OnlineMarketing_Pages_Content_ABTesting_ABTest_O
             string siteName = SiteInfoProvider.GetSiteName(ABTest.ABTestSiteID);
             int nodeId = TreePathUtils.GetNodeIdByAliasPath(siteName, ABTest.ABTestOriginalPage);
             string editPageLink = ApplicationUrlHelper.GetPageEditLink(nodeId, ABTest.ABTestCulture);
-            var link = URLHelper.GetAbsoluteUrl(editPageLink);
+            var link = URLHelper.ResolveUrl(editPageLink);
 
             message = ResHelper.GetStringFormat("abtesting.finishedtest.promotewinnerpromptmessage.warning", link);
         }

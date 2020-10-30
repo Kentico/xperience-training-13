@@ -9,12 +9,12 @@
     </GridActions>
     <GridColumns>
         <ug:Column Caption="$om.contact.firstname$" Source="StateObjectID" ExternalSourceName="#transform: om.contact : {%contactfirstname%}"  AllowSorting="false" Wrap="false">
-            <Filter Type="text" Format="StateObjectID IN (SELECT ContactID FROM OM_Contact WHERE [ContactFirstName] {1} {2} OR [ContactLastName] {1} {2} OR [ContactEmail] {1} {2})" Source="ContactFirstName" Size="100" />
+            <Filter Type="custom" ControlName="TextBoxControl" Format="StateObjectID IN (SELECT ContactID FROM OM_Contact WHERE [ContactFirstName] LIKE N'%{2}%' OR [ContactLastName] LIKE N'%{2}%' OR [ContactEmail] LIKE N'%{2}%')" Source="ContactFirstName" Size="100" />
         </ug:Column>
         <ug:Column Caption="$om.contact.lastname$" Source="StateObjectID" ExternalSourceName="#transform: om.contact : {%contactlastname%}" AllowSorting="false" Wrap="false" />
         <ug:Column Caption="$general.emailaddress$" Source="StateObjectID" ExternalSourceName="#transform: om.contact : {%contactemail%}" AllowSorting="false" Wrap="false" />
         <ug:Column Caption="$Unigrid.Automation.Columns.StepName$" Source="StateStepID" ExternalSourceName="#transform: cms.workflowstep.stepdisplayname" AllowSorting="false" Wrap="false">
-            <Filter Type="text" Format="StateStepID IN (SELECT StepID FROM CMS_WorkflowStep WHERE {3})" Source="StepDisplayName" Size="100" />
+            <Filter Type="custom" ControlName="TextBoxControl" Format="StateStepID IN (SELECT StepID FROM CMS_WorkflowStep WHERE [StepDisplayName] LIKE N'%{2}%')" Source="StepDisplayName" Size="100" />
         </ug:Column>
         <ug:Column Caption="$Unigrid.Automation.Columns.StateStatus$" Source="StateStatus" ExternalSourceName="StateStatus" Wrap="false">
             <Filter Type="custom" Path="~/CMSModules/Automation/FormControls/ProcessStatusSelector.ascx" />

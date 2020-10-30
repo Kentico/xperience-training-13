@@ -177,7 +177,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_Automation_Automat
     private static string GetPropertiesUrl()
     {
         var url = "~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Properties/ProcessProperties.aspx";
-        return URLHelper.GetAbsoluteUrl(url);
+        return URLHelper.ResolveUrl(url);
     }
 
 

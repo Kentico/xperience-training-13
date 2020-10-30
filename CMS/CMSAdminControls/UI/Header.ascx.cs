@@ -48,6 +48,12 @@ public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEvent
         if (!string.IsNullOrWhiteSpace(SiteContext.CurrentSite?.SitePresentationURL)
             && !string.IsNullOrWhiteSpace(SiteContext.CurrentSite?.DomainName))
         {
+            // In case current user was not properly initialized redirect to the access denied page
+            if (CurrentUser.UserAuthenticationGUID == Guid.Empty)
+            {
+                URLHelper.Redirect(AdministrationUrlHelper.GetAccessDeniedUrl("membership.usersessioninvalid"));
+            }
+
             ScriptHelper.RegisterModule(this, "CMS/VirtualContextAuthenticator", new
             {
                 authenticationFrameUrl = GetMvcAuthenticationFrameUrl(),
@@ -188,7 +194,7 @@ function CheckChanges() {
         if (!CheckWarningMessage(SESSION_KEY_SUBSCRIPTION_LICENCES))
         {
             pnlSubscriptionLicencesWarning.Visible = false;
-            CacheHelper.Add(SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY, true, CacheHelper.GetCacheDependency($"{LicenseKeyInfo.OBJECT_TYPE}|all"), 
+            CacheHelper.Add(SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY, true, CacheHelper.GetCacheDependency($"{LicenseKeyInfo.OBJECT_TYPE}|all"),
                 DateTime.Now.AddDays(1), CacheConstants.NoSlidingExpiration);
             SessionHelper.Remove(SESSION_KEY_SUBSCRIPTION_LICENCES);
             return;
@@ -255,7 +261,7 @@ function CheckChanges() {
             numberOfInvalidLicenses = expiredLicenses.Count();
             daysToExpiration = expiredLicenses.Min(license => (license.ExpirationDateReal.Date - DateTime.Now.Date).Days);
             onlyWarning = false;
-            
+
             return false;
         }
 
@@ -264,12 +270,12 @@ function CheckChanges() {
         // From the customers point of view the warning is displayed 30 days before the license expires.
         // The license has not yet entered the grace period thats why we subtract the 30 day grace period to calculate 
         // expiration and remaining days for the warning message.
-        var aboutToExpireLicenses = subscriptionLicenses.Where(license => DateIsLessThan30Days(license.ExpirationDateReal.AddDays(-30)));
+        var aboutToExpireLicenses = subscriptionLicenses.Where(license => DateIsLessThan30Days(license.ExpirationDateReal.AddDays(-LicenseListControlExtender.SUBSCRIPTION_LICENSE_EXPIRATION_GRACE_DAYS)));
 
         if (aboutToExpireLicenses.Any())
         {
             numberOfInvalidLicenses = aboutToExpireLicenses.Count();
-            daysToExpiration = aboutToExpireLicenses.Min(license => (license.ExpirationDateReal.Date - DateTime.Now.Date).Days);
+            daysToExpiration = aboutToExpireLicenses.Min(license => (license.ExpirationDateReal.AddDays(-LicenseListControlExtender.SUBSCRIPTION_LICENSE_EXPIRATION_GRACE_DAYS).Date - DateTime.Now.Date).Days);
             onlyWarning = true;
             return false;
         }
@@ -388,16 +394,16 @@ function CheckChanges() {
     /// </summary>
     private void EnsureStagingTaskGroupMenu()
     {
-       if (StagingTaskInfoProvider.LoggingOfStagingTasksEnabled(SiteContext.CurrentSiteName))
-       {
-           CMSUserControl stagingTaskGroupMenu = Page.LoadUserControl("~/CMSAdminControls/UI/StagingTaskGroupMenu.ascx") as CMSUserControl;
-           if (stagingTaskGroupMenu != null)
-           {
-               plcStagingTaskGroupContainer.Visible = true;
-               plcStagingTaskGroup.Controls.Add(stagingTaskGroupMenu);
-               plcStagingTaskGroup.Visible = true;
-           }
-       }
+        if (StagingTaskInfoProvider.LoggingOfStagingTasksEnabled(SiteContext.CurrentSiteName))
+        {
+            CMSUserControl stagingTaskGroupMenu = Page.LoadUserControl("~/CMSAdminControls/UI/StagingTaskGroupMenu.ascx") as CMSUserControl;
+            if (stagingTaskGroupMenu != null)
+            {
+                plcStagingTaskGroupContainer.Visible = true;
+                plcStagingTaskGroup.Controls.Add(stagingTaskGroupMenu);
+                plcStagingTaskGroup.Visible = true;
+            }
+        }
     }
 
 

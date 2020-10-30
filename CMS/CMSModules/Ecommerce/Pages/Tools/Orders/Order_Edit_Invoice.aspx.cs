@@ -46,7 +46,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Orders_Order_Edit_Invoice 
         CheckEditedObjectSiteID(order.OrderSiteID);
 
         // Get invoice url
-        var invoiceUrl = URLHelper.GetAbsoluteUrl("~/CMSModules/Ecommerce/CMSPages/GetInvoice.aspx");
+        var invoiceUrl = URLHelper.ResolveUrl("~/CMSModules/Ecommerce/CMSPages/GetInvoice.aspx");
         invoiceUrl = URLHelper.AddParameterToUrl(invoiceUrl, "orderId", orderId.ToString());
 
         if (!RequestHelper.IsPostBack())

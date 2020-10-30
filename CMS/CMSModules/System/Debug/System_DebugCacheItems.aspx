@@ -10,9 +10,13 @@
     </div>
 </asp:Content>
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">
-    <cms:LocalizedHeading runat="server" ID="headItems" Level="4" ResourceString="Debug.DataItems" EnableViewState="false" />
-    <cms:CacheItemsGrid ID="gridItems" ShortID="gi" runat="server" IsLiveSite="false" />
-    <cms:LocalizedHeading runat="server" ID="headDummy" Level="4" ResourceString="Debug.DummyKeys" EnableViewState="false" />
-    <cms:CacheItemsGrid ID="gridDummy" ShortID="gd" runat="server" ShowDummyItems="true" IsLiveSite="false" />
+    <asp:Panel runat="server" style="padding-bottom: 32px">
+        <cms:LocalizedHeading runat="server" ID="headItems" Level="4" ResourceString="Debug.DataItems" EnableViewState="false" />
+        <cms:CacheItemsGrid ID="gridItems" ShortID="gi" runat="server" IsLiveSite="false" />
+    </asp:Panel>
+    <asp:Panel runat="server">
+        <cms:LocalizedHeading runat="server" ID="headDummy" Level="4" ResourceString="Debug.DummyKeys" EnableViewState="false" />
+        <cms:CacheItemsGrid ID="gridDummy" ShortID="gd" runat="server" ShowDummyItems="true" IsLiveSite="false" />
+    </asp:Panel>
 </asp:Content>
 

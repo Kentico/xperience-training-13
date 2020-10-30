@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Globalization;
 using System.Text;
 
 using CMS;
@@ -19,6 +21,15 @@ using CMS.UIControls;
 public class LicenseListControlExtender : ControlExtender<UniGrid>
 {
     #region "Constants"
+
+    /// <summary>
+    /// Grace period added to subscription license expiration.
+    /// </summary>
+    /// <remarks>
+    /// Real expiration date for subscription license includes also grace period.
+    /// </remarks>
+    internal const int SUBSCRIPTION_LICENSE_EXPIRATION_GRACE_DAYS = 30;
+
 
     /// <summary>
     /// Client portal URL
@@ -94,6 +105,7 @@ public class LicenseListControlExtender : ControlExtender<UniGrid>
             {
                 Text = ResHelper.GetString("license.list.export"),
                 RedirectUrl = "~/CMSModules/Licenses/Pages/License_Export_Domains.aspx",
+                ButtonStyle = ButtonStyle.Default,
             };
 
             page.HeaderActions.AddAction(newAction);
@@ -126,7 +138,18 @@ public class LicenseListControlExtender : ControlExtender<UniGrid>
                 }
 
             case "expiration":
-                return ResHelper.GetString(Convert.ToString(parameter));
+                var row = (DataRowView)parameter;
+                LicenseKeyInfo licenseInfo = new LicenseKeyInfo();
+                licenseInfo.LoadLicense(ValidationHelper.GetString(row["LicenseKey"], string.Empty), ValidationHelper.GetString(row["LicenseDomain"], string.Empty));
+                if (licenseInfo.LicenseGuid == null)
+                {
+                    return ResHelper.GetString(Convert.ToString(row["LicenseExpiration"]));
+                }
+                else
+                {
+                    // subtract grace period for subscription license
+                    return licenseInfo.ExpirationDateReal.AddDays(-SUBSCRIPTION_LICENSE_EXPIRATION_GRACE_DAYS).ToString(LicenseKeyInfo.LICENSE_EXPIRATION_DATE_FORMAT, CultureInfo.InvariantCulture);
+                }
 
             case "licenseservers":
                 int count = ValidationHelper.GetInteger(parameter, -1);

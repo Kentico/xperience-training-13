@@ -2,9 +2,12 @@
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
+using CMS.Helpers;
+using CMS.PortalEngine;
+using CMS.PortalEngine.Web.UI;
 using CMS.UIControls;
 
-public partial class CMSMasterPages_LiveSite_SimplePage : AbstractMasterPage
+public partial class CMSMasterPages_LiveSite_SimplePage : AbstractMasterPage, ICMSMasterPage
 {
     #region "Properties"
 
@@ -94,6 +97,9 @@ public partial class CMSMasterPages_LiveSite_SimplePage : AbstractMasterPage
 
     protected void Page_Init(object sender, EventArgs e)
     {
+        SetRTL();
+        SetBrowserClass();
+
         PageStatusContainer = plcStatus;
     }
 
@@ -122,6 +128,54 @@ public partial class CMSMasterPages_LiveSite_SimplePage : AbstractMasterPage
         }
 
         base.Render(writer);
+    }
+
+
+    public void SetBrowserClass()
+    {
+        BodyClass = EnsureBodyClass(BodyClass);
+    }
+
+
+    public void SetRTL()
+    {
+        if (CultureHelper.IsUICultureRTL())
+        {
+            BodyClass += " RTL";
+            BodyClass = BodyClass.Trim();
+        }
+    }
+
+
+    /// <summary>
+    /// Sets the browser class to the body class.
+    /// </summary>
+    /// <param name="bodyClass">The body class.</param>
+    /// <param name="generateCultureClass">if set to true generate culture class.</param>
+    internal static string EnsureBodyClass(string bodyClass, bool generateCultureClass = true)
+    {
+        // Add browser type
+#pragma warning disable CS0618 // Type or member is obsolete
+        string browserClass = BrowserHelper.GetBrowserClass();
+#pragma warning restore CS0618 // Type or member is obsolete
+        if (!String.IsNullOrEmpty(browserClass))
+        {
+            bodyClass = string.Format("{0} {1}", bodyClass, browserClass).Trim();
+        }
+
+        if (generateCultureClass)
+        {
+            // Add culture type
+            string cultureClass = DocumentContext.GetUICultureClass();
+            if (!String.IsNullOrEmpty(cultureClass))
+            {
+                bodyClass = string.Format("{0} {1}", bodyClass, cultureClass).Trim();
+            }
+        }
+        // Add bootstrap
+        PortalUIHelper.EnsureBootstrapBodyClass(ref bodyClass, PortalContext.ViewMode, PageContext.CurrentPage);
+
+        return bodyClass;
     }
 
     #endregion

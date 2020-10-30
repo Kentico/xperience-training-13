@@ -572,15 +572,15 @@ public partial class CMSModules_AdminControls_Controls_MetaFiles_FileList : CMSU
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "OpenImageEditor",
                                                ScriptHelper.GetScript(String.Format(@"
 function OpenImageEditor(query) {{ 
-    modalDialog('{0}/CMSModules/Content/CMSDesk/Edit/ImageEditor.aspx' + query, 'EditImage', 905, 670); 
+    modalDialog('{0}' + query, 'EditImage', 905, 670); 
     return false; 
-}}", URLHelper.GetFullApplicationUrl())));
+}}", URLHelper.ResolveUrl("~/CMSModules/Content/CMSDesk/Edit/ImageEditor.aspx"))));
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "OpenEditor",
                                                ScriptHelper.GetScript(String.Format(@"
 function OpenEditor(query) {{ 
-    modalDialog('{0}/CMSModules/AdminControls/Controls/MetaFiles/MetaDataEditor.aspx' + query, 'EditMetadata', 680, 320); 
+    modalDialog('{0}' + query, 'EditMetadata', 680, 320); 
     return false; 
-}} ", URLHelper.GetFullApplicationUrl())));
+}} ", URLHelper.ResolveUrl("~/CMSModules/AdminControls/Controls/MetaFiles/MetaDataEditor.aspx"))));
 
         // Register javascript 'postback' function
         ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "PostBack", ScriptHelper.GetScript(String.Format(@"
@@ -727,7 +727,7 @@ function ConfirmDelete() {{
                 string fileExt = ValidationHelper.GetString(DataHelper.GetDataRowViewValue(drv, "MetaFileExtension"), string.Empty);
 
                 bool isImage = ImageHelper.IsImage(fileExt);
-                string fileUrl = String.Format("{0}?fileguid={1}&chset={2}", URLHelper.GetAbsoluteUrl("~/CMSPages/GetMetaFile.aspx"), fileGuid, Guid.NewGuid());
+                string fileUrl = String.Format("{0}?fileguid={1}&chset={2}", URLHelper.ResolveUrl("~/CMSPages/GetMetaFile.aspx"), fileGuid, Guid.NewGuid());
 
                 // Tooltip
                 string title = ValidationHelper.GetString(DataHelper.GetDataRowViewValue(drv, "MetaFileTitle"), string.Empty);

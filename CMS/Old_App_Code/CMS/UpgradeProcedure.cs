@@ -445,7 +445,22 @@ internal static class UpgradeProcedure
         new PersonaRuleUpgrade().Upgrade();
         new WorkflowStepsUpgrade().Upgrade();
 
+        SetJWTEncryptionKey();
+
         return true;
+    }
+
+
+    /// <summary>
+    /// Generates a new JWT encryption key and stores it in <see cref="ValidationHelper.CMS_SETTINGS_JWT_TOKEN_ENCRYPTION_KEY"/> settings key.
+    /// </summary>
+    private static void SetJWTEncryptionKey()
+    {
+        if (string.IsNullOrWhiteSpace(SettingsKeyInfoProvider.GetValue(ValidationHelper.CMS_SETTINGS_JWT_TOKEN_ENCRYPTION_KEY)))
+        {
+            var generatedSecret = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 16);
+            SettingsKeyInfoProvider.SetGlobalValue(ValidationHelper.CMS_SETTINGS_JWT_TOKEN_ENCRYPTION_KEY, generatedSecret, false);
+        }
     }
 
     #endregion

@@ -8,9 +8,13 @@ cmsdefine(['CMS/MessageService'], function (MessageService) {
             cookieValue = data.cookieValue,
             targetOrigin = data.targetOrigin,
             messageText = data.message,
+            forceWarningMessage = data.forceWarningMessage,
+            documentationLink = data.documentationLink;
+
             timeoutTimer = null,
             showMessage = function () {
-                MessageService.showWarning(messageText, true);
+                MessageService.showWarning(messageText, false);
+                MessageService.showWarning(documentationLink, true);
             };
 
         var iframeElement = document.createElement('iframe');
@@ -34,7 +38,7 @@ cmsdefine(['CMS/MessageService'], function (MessageService) {
                     timeoutTimer = null;
 
                     // If event.data.value contains a value, the value might not have been set by the iframe, so let's compare that value to the expected one.
-                    if (event.data.value !== cookieValue) {
+                    if ((event.data.value !== cookieValue) && (event.data.cookiesRequired || forceWarningMessage)) {
                         showMessage();
                     }
                 }

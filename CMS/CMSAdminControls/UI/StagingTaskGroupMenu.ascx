@@ -23,10 +23,10 @@
                         <cms:LocalizedLabel AssociatedControlID="btnCreateTaskGroup" runat="server" CssClass="src-only" EnableViewState="false" />
                         <div class="container-fluid">
                             <asp:Panel runat="server" ID="pnlCreateTaskGroup" DefaultButton="btnCreateTaskGroup" CssClass="row">
-                                <div class="col-md-8">
+                                <div class="col-md-7">
                                     <asp:TextBox ID="inputTaskGroup" CssClass="form-control" runat="server" EnableViewState="false" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <asp:Button type="button" ID="btnCreateTaskGroup" class="btn btn-primary pull-right" runat="server" EnableViewState="false" />
                                 </div>
                             </asp:Panel>

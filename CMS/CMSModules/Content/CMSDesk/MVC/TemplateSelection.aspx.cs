@@ -92,7 +92,7 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
 
     private string GetRedirectionUrl()
     {
-        var redirectionUrl = URLHelper.GetAbsoluteUrl("~/CMSModules/Content/CMSDesk/Edit/Edit.aspx");
+        var redirectionUrl = URLHelper.ResolveUrl("~/CMSModules/Content/CMSDesk/Edit/Edit.aspx");
         return URLHelper.AppendQuery(redirectionUrl, RequestContext.CurrentQueryString);
     }
 }

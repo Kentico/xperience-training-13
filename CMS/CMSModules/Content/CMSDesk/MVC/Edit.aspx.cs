@@ -199,7 +199,7 @@ public partial class CMSModules_Content_CMSDesk_MVC_Edit : CMSContentPage
         try
         {
             var queryStringParameters = GetQueryStringParameters();
-            url = PageBuilderHelper.GetPreviewLink(Node, queryStringParameters);
+            url = PageBuilderHelper.GetPreviewModeUrl(Node, MembershipContext.AuthenticatedUser.UserGUID, queryStringParameters);
         }
         catch (InvalidOperationException ex)
         {

@@ -334,8 +334,8 @@
         </member>
         <member name="M:CMS.Search.Azure.SearchTaskEngine.GetIndexesWithSearchableObjectsForDocumentUpdate(System.String,System.Int32)">
             <summary>
-            Returns collection of Azure indexes with all the related <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="objectType"/> and <paramref name="documentId"/>
-            that are necessary for document update.
+            Returns collection of Azure indexes with all the related <see cref="T:CMS.DataEngine.ISearchable"/> objects for given <paramref name="indexerName"/> which
+            is usually represented by the object type and <paramref name="documentId"/> that are necessary for document update.
             </summary>
         </member>
         <member name="M:CMS.Search.Azure.SearchTaskEngine.GetIndexesWithSearchableObjectsForPartialRebuild(System.String,System.String,CMS.Search.Internal.SearchablesRetriever)">
@@ -1200,6 +1200,15 @@
             Object type of the object defined by ID in <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureInitiatorObjectID"/> property.
             </summary>
         </member>
+        <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureIndexerName">
+            <summary>
+            Name of a custom indexer registered to handle this task. Not required when indexer is registered using the object type.         
+            </summary>
+            <remarks>
+            Retrieve the value using <see cref="M:CMS.Search.Azure.SearchTaskAzureInfo.GetSearchIndexerName"/> so it can 
+            fallback to <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureObjectType"/> when custom indexer name is not used.
+            </remarks>
+        </member>
         <member name="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureMetadata">
             <summary>
             Value of this field describes in what form to expect data inside <see cref="P:CMS.Search.Azure.SearchTaskAzureInfo.SearchTaskAzureAdditionalData"/> property.
@@ -1243,7 +1252,7 @@
         </member>
         <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Constructor for de-serialization.
+            Constructor for deserialization.
             </summary>
             <param name="info">Serialization info.</param>
             <param name="context">Streaming context.</param>
@@ -1258,6 +1267,11 @@
             Creates a new instances of the <see cref="T:CMS.Search.Azure.SearchTaskAzureInfo"/> class from the given <see cref="T:System.Data.DataRow"/>.
             </summary>
             <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="M:CMS.Search.Azure.SearchTaskAzureInfo.GetSearchIndexerName">
+            <summary>
+            Gets the name of the <see cref="T:CMS.Search.SearchIndexer"/> registered to handle this search task.
+            </summary>
         </member>
         <member name="T:CMS.Search.Azure.SearchTaskAzureInfoProvider">
             <summary>

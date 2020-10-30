@@ -12,6 +12,9 @@ using CMS.WorkflowEngine;
 
 public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : CMSAutomationPage
 {
+    private const string HOWTO_VIDEO_URL = "https://youtu.be/IIDizgW8xI4";
+    private const string HOWTO_VIDEO_LENGTH = "3:55";
+
     private bool? mCanManageProcesses;
 
 
@@ -34,6 +37,9 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
 
         // Set master page elements
         InitializeMasterPage();
+
+        // Initialize the smart tip
+        InitSmartTip();
 
         // Check manage permission for object menu
         gridProcesses.ShowObjectMenu = CanManageProcesses;
@@ -60,6 +66,20 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List : 
 
             AddHeaderAction(newProcess);
         }
+    }
+
+
+    private void InitSmartTip()
+    {
+        tipHowMAWorks.ExpandedHeader = GetString("ma.process.listing.howto.title");
+        tipHowMAWorks.Content = $@"
+<div class=""smarttip-video"">
+    <a href=""{HOWTO_VIDEO_URL}"" target=""_blank"">
+        <img src=""{UIHelper.GetImageUrl("CMSModules/CMS_Automation/ma_howto_video_thumbnail.png")}"" class=""smarttip-video-thumbnail"">
+        <span class=""smarttip-video-title"">{GetString("ma.process.listing.howto.content")}</span>
+        <span class=""smarttip-video-length"">{HOWTO_VIDEO_LENGTH}</span>
+    </a>
+</div>";
     }
 
 

@@ -272,7 +272,7 @@ public partial class CMSInlineControls_MediaControl : InlineUserControl
         if (Url != null)
         {
             avParams.SiteName = SiteContext.CurrentSiteName;
-            avParams.Url = URLHelper.GetAbsoluteUrl(Url);
+            avParams.Url = URLHelper.ResolveUrl(Url);
             avParams.Extension = Type;
             avParams.Width = Width;
             avParams.Height = Height;
@@ -293,7 +293,7 @@ public partial class CMSInlineControls_MediaControl : InlineUserControl
         ImageParameters imgParams = new ImageParameters();
         if (Url != null)
         {
-            imgParams.Url = URLHelper.GetAbsoluteUrl(Url);
+            imgParams.Url = URLHelper.ResolveUrl(Url);
             imgParams.Extension = Type;
             imgParams.Width = Width;
             imgParams.Height = Height;

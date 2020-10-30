@@ -11,6 +11,8 @@ public partial class CMSModules_Automation_Pages_Automation_Step_Advanced : CMSW
     {
         base.OnInit(e);
 
+        CurrentMaster.PanelContent.CssClass += " automation-sidepanel-content";
+
         if (CurrentWorkflow?.IsAutomation == true)
         {
             editElem.EditForm.AlternativeFormName = "AutomationStep_Advanced";

@@ -4,6 +4,7 @@ using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
+using CMS.Membership;
 using CMS.OnlineForms;
 using CMS.OnlineForms.Web.UI;
 using CMS.SiteProvider;
@@ -42,7 +43,7 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_FormBuilderMVC : CMS
         ScriptHelper.RegisterModule(this, "CMS.Builder/FrameSrcAttributeModifier", new
         {
             frameId = formBuilderFrame.ClientID,
-            frameSrc = URLHelper.AddParameterToUrl(presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path), BUILDER_MODE_QUERY_STRING_NAME, FORM_BUILDER_MODE),
+            frameSrc = URLHelper.AddParameterToUrl(presentationUrl.TrimEnd('/') + VirtualContext.GetFormBuilderPath(path, MembershipContext.AuthenticatedUser.UserGUID), BUILDER_MODE_QUERY_STRING_NAME, FORM_BUILDER_MODE),
             mixedContentMessage = GetString("builder.ui.mixedcontenterrormessage"),
             applicationPath = SystemContext.ApplicationPath
         });

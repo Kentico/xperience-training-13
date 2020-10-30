@@ -88,7 +88,7 @@ public partial class CMSModules_WebAnalytics_Pages_Tools_Campaign_List : CMSCamp
 
     private static string GetCreateCampaignLink()
     {
-        return URLHelper.GetAbsoluteUrl(Service.Resolve<IUILinkProvider>().GetSingleObjectLink(CampaignInfo.TYPEINFO.ModuleName, CAMPAIGN_ELEMENT_CODENAME, new ObjectDetailLinkParameters
+        return URLHelper.ResolveUrl(Service.Resolve<IUILinkProvider>().GetSingleObjectLink(CampaignInfo.TYPEINFO.ModuleName, CAMPAIGN_ELEMENT_CODENAME, new ObjectDetailLinkParameters
         {
             ParentTabName = ANALYTICS_CAMPAIGNS_TABNAME,
             AllowNavigationToListing = true,

@@ -16,7 +16,7 @@
         <asp:Label runat="server" ID="lblDeploymentInfo" EnableViewState="false" />
     </p>
     <div style="padding: 10px 0px 10px 0px;">
-        <cms:LocalizedButton ID="btnSaveAll" ButtonStyle="Primary" runat="server"
+        <cms:LocalizedButton ID="btnSaveAll" ButtonStyle="Default" runat="server"
             OnClick="btnSaveAll_Click" ResourceString="Deployment.SaveAll" EnableViewState="false" />
     </div>
     <cms:LocalizedHeading runat="server" ID="headSourceControl" Level="4" Text="Source control" EnableViewState="false" />
@@ -45,16 +45,16 @@
             Visible="false" /></p>
     </div>
     <div style="padding: 10px 0px 10px 0px;">
-        <cms:LocalizedButton ID="btnSourceControl" ButtonStyle="Primary" runat="server"
+        <cms:LocalizedButton ID="btnSourceControl" ButtonStyle="Default" runat="server"
             OnClick="btnSourceControl_Click" ResourceString="Deployment.SourceControlStore"
             EnableViewState="false" />
         &nbsp;<cms:LocalizedButton runat="server" ID="btnSynchronize" OnClick="btnSynchronize_Click"
-            Visible="false" EnableViewState="false" ButtonStyle="Primary" ResourceString="Deployment.SynchronizeChanges" />
+            Visible="false" EnableViewState="false" ButtonStyle="Default" ResourceString="Deployment.SynchronizeChanges" />
     </div>
     <cms:LocalizedHeading runat="server" ID="headTest" Level="4" Text="Test" EnableViewState="false" />
     <p>
         <cms:LocalizedLabel runat="server" ID="lblTest" EnableViewState="false" ResourceString="Deployment.TestLabel" />
     </p>
-    <cms:LocalizedButton ID="btnTest" ButtonStyle="Primary" runat="server"
+    <cms:LocalizedButton ID="btnTest" ButtonStyle="Default" runat="server"
         OnClick="btnTest_Click" ResourceString="Deployment.Test" EnableViewState="false" />
 </asp:Content>

@@ -9,8 +9,18 @@
 
 
 
-public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List {
-    
+public partial class CMSModules_ContactManagement_Pages_Tools_Automation_List
+{
+
+    /// <summary>
+    /// tipHowMAWorks control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_SmartTip tipHowMAWorks;
+
     /// <summary>
     /// gridProcesses control.
     /// </summary>

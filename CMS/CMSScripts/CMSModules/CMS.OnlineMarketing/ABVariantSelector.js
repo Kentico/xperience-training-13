@@ -31,7 +31,7 @@ cmsdefine(['CMS/MessageService', 'CMS.OnlineMarketing/PopUpWindow', 'CMS/EventHu
         };
 
         if (manageABTestButton) {
-            manageABTestButton.onclick = openManageABtestModalDialog;
+            manageABTestButton.addEventListener('buttonClick', openManageABtestModalDialog);
         }
 
         if (promoteWinnerInfoMessageElem) {
@@ -78,7 +78,7 @@ cmsdefine(['CMS/MessageService', 'CMS.OnlineMarketing/PopUpWindow', 'CMS/EventHu
         }
 
         if (addNewVariantButton) {
-            addNewVariantButton.onclick = addNewVariant;
+            addNewVariantButton.addEventListener('buttonClick', addNewVariant);
         }
 
         window.ABVariantSelectorModule = {

@@ -198,7 +198,7 @@ public partial class CMSModules_Membership_Controls_UnlockUserAccount : CMSUserC
 
         if (forceReload)
         {
-            btnConfirm.Text = DataHelper.GetNotEmpty(UnlockButtonText, GetString("forums.unlock"));
+            btnConfirm.Text = DataHelper.GetNotEmpty(UnlockButtonText, GetString("general.unlock"));
         }
     }
 

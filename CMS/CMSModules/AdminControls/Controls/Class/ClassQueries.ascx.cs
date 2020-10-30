@@ -151,7 +151,10 @@ public partial class CMSModules_AdminControls_Controls_Class_ClassQueries : CMSU
             return;
         }
 
-        string editUrl = URLHelper.AppendQuery(EditPageUrl, String.Format("objectid={0}&parentobjectid={1}&moduleid={2}", actionArg, ClassID, ModuleID));
+        var editUrl = URLHelper.AddParameterToUrl(EditPageUrl, "objectid", actionArg);
+        editUrl = URLHelper.AddParameterToUrl(editUrl, "parentobjectid", ClassID.ToString());
+        editUrl = URLHelper.AddParameterToUrl(editUrl, "moduleid", ModuleID.ToString());
+
         URLHelper.Redirect(UrlResolver.ResolveUrl(editUrl));
     }
 

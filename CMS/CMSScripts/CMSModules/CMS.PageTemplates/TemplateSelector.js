@@ -1,4 +1,4 @@
-﻿cmsdefine(['jQuery', 'Underscore', 'CMS/ClientLocalization', 'CMS/MessageService', 'CMS/UrlHelper'], function ($, _, localization, messaging, urlHelper) {
+﻿cmsdefine(['jQuery', 'Underscore', 'CMS/ClientLocalization', 'CMS/MessageService'], function ($, _, localization, messaging) {
 
     return function (serverData) {
         var headerActionsDiv = document.getElementById(serverData.headerActionsDivId);
@@ -76,10 +76,21 @@
         }
 
         function addTemplateIdentifierAndTypeToQueryString(redirectionUrl, templateIdentifier, type) {
-            return urlHelper.addParameterToUrl(
-                urlHelper.addParameterToUrl(redirectionUrl, 'templateidentifier', templateIdentifier),
-                'templateType',
-                type);
+            var templateParameter = {
+                templateidentifier: templateIdentifier,
+                templateType: type
+            };
+            return addQueryString(redirectionUrl, templateParameter);
+        }
+
+
+        function addQueryString(redirectionUrl, queyStringParamsConfig) {
+            var queryString = $.param(queyStringParamsConfig, true);
+            if (redirectionUrl.indexOf('?') > -1) {
+                return redirectionUrl + '&' + queryString;
+            } else {
+                return redirectionUrl + '?' + queryString;
+            }
         }
 
         function getImageTag(imagePath) {
@@ -137,7 +148,11 @@
 
         function processTemplates(defaultTemplates, customTemplates) {
             if (defaultTemplates.length === 0 && customTemplates.length === 0) {
-                redirectionUrl = urlHelper.addParameterToUrl(redirectionUrl, 'noTemplate', true);
+                var noTemplateParams = {
+                    noTemplate: true
+                };
+
+                redirectionUrl = addQueryString(redirectionUrl, noTemplateParams);
                 redirect(redirectionUrl);
                 return;
             }

@@ -284,7 +284,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
         var parameters = new NameValueCollection();
         parameters.Add("issueid", mIssue.IssueID.ToString());
 
-        return URLHelper.GetAbsoluteUrl(Service.Resolve<IContactDemographicsLinkBuilder>().GetDemographicsLink(retrieverIdentifier, parameters));
+        return URLHelper.ResolveUrl(Service.Resolve<IContactDemographicsLinkBuilder>().GetDemographicsLink(retrieverIdentifier, parameters));
     }
 
 
@@ -318,7 +318,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_Issue_O
                                                                         });
             var hyperLink = new HyperLink
             {
-                NavigateUrl = URLHelper.GetAbsoluteUrl(campaignDetailUrl),
+                NavigateUrl = URLHelper.ResolveUrl(campaignDetailUrl),
                 Text = HTMLHelper.HTMLEncode(campaign.CampaignDisplayName),
                 Target = "_top",
             };

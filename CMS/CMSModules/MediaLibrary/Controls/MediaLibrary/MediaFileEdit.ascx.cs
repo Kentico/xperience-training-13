@@ -402,8 +402,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit
     private static string GetFileLinkHtml(string relativeUrl, SiteInfoIdentifier site)
     {
         var absoluteUrl = DocumentURLProvider.GetAbsoluteUrl(relativeUrl, site);
-        var path = new UriBuilder(absoluteUrl).Path;
-        
+        var path = new Uri(absoluteUrl).PathAndQuery;
         return String.Format("<span class=\"form-control-text\"><a href=\"{0}\" target=\"_blank\">{1}</a></span>", absoluteUrl, path);
     }
 

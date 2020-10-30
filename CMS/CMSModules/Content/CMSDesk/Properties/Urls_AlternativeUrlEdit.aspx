@@ -25,7 +25,7 @@
                     ResourceString="alternativeurl.newurl" DisplayColon="true" />
             </div>
             <div class="editing-form-value-cell-wide">
-                <cms:TextBoxWithPlaceholder ID="txtAltUrl" runat="server" MaxLength="450" />
+                <cms:TextBoxWithPlaceholder ID="txtAltUrl" runat="server" MaxLength="400" />
             </div>
         </div>
     </div>

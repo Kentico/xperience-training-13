@@ -27,6 +27,12 @@ cmsdefine(["CMS/EventHub", "CMS.Builder/Constants"], function (hub, constants) {
         document.body.appendChild(frame);
     }
 
+
+    hub.subscribe(constants.ADMIN_FRAME_REQUEST_AUTHENTICATION_EVENT_NAME, function () {
+        raiseGetAuthenticationFrameUrlCallback();;
+    });
+
+
     window.CMS = window.CMS || {};
     window.CMS.VirtualContextAuthenticator = window.CMS.VirtualContextAuthenticator || {};
     window.CMS.VirtualContextAuthenticator.loadAuthenticationFrame = loadAuthenticationFrame;

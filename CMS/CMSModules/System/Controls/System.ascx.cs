@@ -242,7 +242,7 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
         HeaderActions.AddAction(new HeaderAction
         {
             Text = GetString("Administration-System.btnRestartWebfarm"),
-            ButtonStyle = ButtonStyle.Primary,
+            ButtonStyle = ButtonStyle.Default,
             CommandName = "RestartWebFarm",
             Visible = WebFarmButtonVisible,
         });
@@ -250,7 +250,7 @@ public partial class CMSModules_System_Controls_System : CMSAdminControl
         HeaderActions.AddAction(new HeaderAction
         {
             Text = GetString("Administration-System.btnClearCache"),
-            ButtonStyle = ButtonStyle.Primary,
+            ButtonStyle = ButtonStyle.Default,
             CommandName = "ClearCache",
         });
 

@@ -88,14 +88,6 @@
             </asp:PlaceHolder>
             <div class="form-group">
                 <div class="editing-form-label-cell">
-                    <asp:Label CssClass="control-label" runat="server" ID="lblReportAccess" EnableViewState="false" />
-                </div>
-                <div class="editing-form-value-cell">
-                    <cms:CMSCheckBox CssClass="CheckBoxMovedLeft" ID="chkReportAccess" runat="server" Checked="True" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="editing-form-label-cell">
                     <cms:LocalizedLabel CssClass="control-label" runat="server" ID="lblEnableSubscription" EnableViewState="false"
                         ResourceString="rep.enablesubscription" />
                 </div>

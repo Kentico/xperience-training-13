@@ -66,9 +66,8 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
     // Contains item list for 'Image' field
     private readonly ListItem[] ALLOWED_IMAGE = new[]
     {
-
-        new ListItem("DocumentContent"),
-        new ListItem("SKUImagePath")
+       new ListItem("DocumentContent"),
+       new ListItem("SKUImagePath")
     };
 
     // Contains item list for 'Date' drop-down list.
@@ -351,7 +350,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
         LoadAndPreselectListControl(drpTitleField, ALLOWED_TITLES, false, attributes, ClassInfo.ClassSearchTitleColumn, SearchHelper.DEFAULT_SEARCH_TITLE_COLUMN);
 
         // Load drop-down list 'Content field'
-        LoadAndPreselectListControl(drpContentField, ALLOWED_CONTENT, true, attributes, ClassInfo.ClassSearchContentColumn, SearchHelper.DEFAULT_SEARCH_CONTENT_COLUMN);
+        LoadAndPreselectListControl(drpContentField, PrependNoneOption(ALLOWED_CONTENT), true, attributes, ClassInfo.ClassSearchContentColumn);
 
         // Load drop-down list 'Image field'
         LoadAndPreselectListControl(drpImageField, PrependNoneOption(ALLOWED_IMAGE), true, attributes, ClassInfo.ClassSearchImageColumn);
@@ -471,7 +470,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
             {
                 // Save advanced information only in advanced mode
                 ClassInfo.ClassSearchTitleColumn = drpTitleField.SelectedValue;
-                ClassInfo.ClassSearchContentColumn = drpContentField.SelectedValue;
+                ClassInfo.ClassSearchContentColumn = (drpContentField.SelectedValue != "0") ? drpContentField.SelectedValue : DBNull.Value.ToString();
                 ClassInfo.ClassSearchImageColumn = (drpImageField.SelectedValue != "0") ? drpImageField.SelectedValue : DBNull.Value.ToString();
                 ClassInfo.ClassSearchCreationDateColumn = drpDateField.SelectedValue;
 

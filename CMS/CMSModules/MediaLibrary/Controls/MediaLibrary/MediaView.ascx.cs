@@ -417,7 +417,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         if (data.ContainsColumn("FileURL"))
         {
             // Information comming from FileSystem (FS)
-            return URLHelper.GetAbsoluteUrl(data.GetValue("FileURL").ToString());
+            return URLHelper.ResolveUrl(data.GetValue("FileURL").ToString());
         }
         else
         {

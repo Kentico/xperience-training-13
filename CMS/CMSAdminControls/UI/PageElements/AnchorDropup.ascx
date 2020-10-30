@@ -7,7 +7,7 @@
         </button>        
         <asp:Repeater ID="repNavigationItems" runat="server">
             <HeaderTemplate>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu pull-up pull-left sharp-corner">
             </HeaderTemplate>     
             <ItemTemplate> 
                 <li><a href="#<%# Eval("Value") %>">

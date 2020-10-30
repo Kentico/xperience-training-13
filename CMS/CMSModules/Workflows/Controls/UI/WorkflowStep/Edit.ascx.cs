@@ -115,6 +115,8 @@ public partial class CMSModules_Workflows_Controls_UI_WorkflowStep_Edit : CMSAdm
     {
         base.OnLoad(e);
 
+        pnlContainer.CssClass += " automation-sidepanel-content";
+
         if (StopProcessing)
         {
             // Do nothing!

@@ -1322,11 +1322,6 @@
             Represents <see cref="T:CMS.DocumentEngine.AttachmentInfo"/> object used for response output.
             </summary>
         </member>
-        <member name="P:CMS.DocumentEngine.CMSOutputAttachment.UseWatermark">
-            <summary>
-            If true, the watermark is allowed to be used.
-            </summary>
-        </member>
         <member name="P:CMS.DocumentEngine.CMSOutputAttachment.Attachment">
             <summary>
             Attachment without AttachmentBinary.
@@ -3259,7 +3254,7 @@
             <summary>
             Encapsulates event arguments to generate preview link for a <see cref="T:CMS.DocumentEngine.TreeNode"/>.
             </summary>
-            <seealso cref="T:CMS.DocumentEngine.PreviewLinkGenerator"/>
+            <seealso cref="T:CMS.DocumentEngine.Internal.PreviewLinkGenerator"/>
             <seealso cref="T:CMS.DocumentEngine.Internal.GeneratePreviewLinkHandler"/>
         </member>
         <member name="M:CMS.DocumentEngine.Internal.GeneratePreviewLinkEventArgs.#ctor(CMS.DocumentEngine.TreeNode)">
@@ -3282,7 +3277,7 @@
             <summary>
             Handler for event raised during the preview link generation to be decorated.
             </summary>
-            <seealso cref="T:CMS.DocumentEngine.PreviewLinkGenerator"/>
+            <seealso cref="T:CMS.DocumentEngine.Internal.PreviewLinkGenerator"/>
             <seealso cref="T:CMS.DocumentEngine.Internal.GeneratePreviewLinkEventArgs"/>
         </member>
         <member name="T:CMS.DocumentEngine.Internal.IDefaultPreferredCultureEvaluator">
@@ -3418,6 +3413,47 @@
             respective presentation URL from site domain alias.
             If the <paramref name="cultureCode"/> is not provided site presentation URL is always used.
             </remarks>
+        </member>
+        <member name="T:CMS.DocumentEngine.Internal.PreviewLinkGenerator">
+            <summary>
+            Generates preview link for a page.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.PreviewLinkGenerator.#ctor(CMS.DocumentEngine.TreeNode)">
+            <summary>
+            Creates an instance of <see cref="T:CMS.DocumentEngine.Internal.PreviewLinkGenerator"/> class.
+            </summary>
+            <param name="page">Page for which the preview link should be generated.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.PreviewLinkGenerator.GeneratePreviewModeUrl(System.Guid,System.Boolean,System.Boolean,System.Collections.Specialized.NameValueCollection,System.String)">
+            <summary>
+            Generates preview mode URL for the specified page and user.
+            </summary>
+            <param name="userGuid">User GUID to be stored in the preview link URL. If left empty, the user name is not stored in the generated URL.</param>
+            <param name="readonlyMode">Indicates if read-only mode should be enabled to disallow modify actions and POST requests.</param>
+            <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
+            <param name="queryString">Optional additional query string parameters.</param>
+            <param name="cultureCode">Culture code for which the preview link should be generated.</param>
+            <remarks>
+            Preview mode is used for the page builder and the preview tab.
+            </remarks>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.PreviewLinkGenerator.GeneratePreviewLinkUrl(System.Guid,System.Collections.Specialized.NameValueCollection,System.String)">
+            <summary>
+            Generates preview link URL for specified page and user.
+            </summary>
+            <param name="userGuid">User GUID to be stored in the preview link URL. If left empty, the user name is not stored in the generated URL.</param>
+            <param name="queryString">Optional additional query string parameters.</param>
+            <param name="cultureCode">Culture code for which the preview link should be generated.</param>
+            The <paramref name="cultureCode"/> can differ from the page culture in case of combine with default culture feature.
+            <remarks>
+            Preview link URL can be used by external users. This URL does not need additional authentization.
+            </remarks>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.PreviewLinkGenerator.DecorateUrlWithQueryStringParameters(System.String,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Decorates <paramref name="url"/> with query strings.
+            </summary>
         </member>
         <member name="T:CMS.DocumentEngine.DocumentAttachment">
             <summary>
@@ -7996,15 +8032,15 @@
             Gets the unique string key for the object.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.TreeNode.GetPreviewLink(System.Nullable{System.Guid},System.Boolean,System.Boolean,System.String)">
+        <member name="M:CMS.DocumentEngine.TreeNode.GetPreviewLink(System.Guid,System.String)">
             <summary>
-            Returns the page preview link.
+            Returns the page preview link URL.
             </summary>
-            <param name="userGuid">User GUID to be stored in the preview link URL. If left empty, user is taken from a cookie.</param>
-            <param name="readonlyMode">Indicates if preview link should be in read only mode.</param>
-            <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
+            <param name="userGuid">User GUID to be stored in the preview link URL.</param>
             <param name="cultureCode">Culture code for which the preview link should be generated.</param>
-            <remarks>The <paramref name="cultureCode"/> can differ from the page culture in case of combine with default culture feature.</remarks>
+            <remarks>
+            Preview link URL can be used by external users. This URL does not need additional authentization.
+            </remarks>
         </member>
         <member name="M:CMS.DocumentEngine.TreeNode.GetDocumentName">
             <summary>
@@ -12830,11 +12866,12 @@
             </summary>
             <param name="url">URL to modify.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.PageBuilder.PageBuilderHelper.GetPreviewLink(CMS.DocumentEngine.TreeNode,System.Collections.Specialized.NameValueCollection)">
+        <member name="M:CMS.DocumentEngine.PageBuilder.PageBuilderHelper.GetPreviewModeUrl(CMS.DocumentEngine.TreeNode,System.Guid,System.Collections.Specialized.NameValueCollection)">
             <summary>
             Generates preview link for specified page and user.
             </summary>
             <param name="page">Page for which the preview link should be generated.</param>
+            <param name="userGuid">User GUID to be stored in the preview link URL.</param>
             <param name="queryString">Optional additional query string parameters.</param>
         </member>
         <member name="T:CMS.DocumentEngine.PageBuilder.TemporaryAttachmentsPropagator">
@@ -19793,32 +19830,6 @@
             Deletes all <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> for the given <paramref name="nodeId"/>.
             </summary>
             <param name="nodeId">Node ID.</param>
-        </member>
-        <member name="T:CMS.DocumentEngine.PreviewLinkGenerator">
-            <summary>
-            Generates preview link for a page.
-            </summary>
-        </member>
-        <member name="M:CMS.DocumentEngine.PreviewLinkGenerator.#ctor(CMS.DocumentEngine.TreeNode)">
-            <summary>
-            Creates an instance of <see cref="T:CMS.DocumentEngine.PreviewLinkGenerator"/> class.
-            </summary>
-            <param name="page">Page for which the preview link should be generated.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.PreviewLinkGenerator.Generate(System.Nullable{System.Guid},System.Boolean,System.Boolean,System.Collections.Specialized.NameValueCollection,System.String)">
-            <summary>
-            Generates preview link for specified page and user.
-            </summary>
-            <param name="userGuid">User GUID to be stored in the preview link URL. If left empty, the user name is not stored in the generated URL.</param>
-            <param name="readonlyMode">Indicates if read-only mode should be enabled to disallow modify actions and POST requests.</param>
-            <param name="embededInAdministration">Indicates if page is embedded in administration inside an iframe.</param>
-            <param name="queryString">Optional additional query string parameters.</param>
-            <param name="cultureCode">Culture code for which the preview link should be generated.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.PreviewLinkGenerator.DecorateUrlWithQueryStringParameters(System.String,System.Collections.Specialized.NameValueCollection)">
-            <summary>
-            Decorates <paramref name="url"/> with query strings.
-            </summary>
         </member>
         <member name="T:CMS.DocumentEngine.TreePathUtils">
             <summary>

@@ -1442,15 +1442,15 @@
         </member>
         <member name="M:CMS.Search.SearchIndexers.RegisterIndexer``1(System.String)">
             <summary>
-            Registers the given indexer for the specific object type
+            Registers the given indexer under specified name. Usually an object type that is handled by the indexer.
             </summary>
-            <param name="objectType">Object type</param>
+            <param name="indexerName">Name of the indexer</param>
         </member>
         <member name="M:CMS.Search.SearchIndexers.GetIndexer(System.String)">
             <summary>
-            Gets the indexer by its object type
+            Gets the indexer by its name. Usually an object type.
             </summary>
-            <param name="objectType">Object type</param>
+            <param name="indexerName">Name of the indexer</param>
         </member>
         <member name="T:CMS.Search.ExtractionContext">
             <summary>
@@ -3261,11 +3261,6 @@
             Constant for default class search title column.
             </summary>
         </member>
-        <member name="F:CMS.Search.SearchHelper.DEFAULT_SEARCH_CONTENT_COLUMN">
-            <summary>
-            Constant for default class search content column.
-            </summary>
-        </member>
         <member name="F:CMS.Search.SearchHelper.DEFAULT_SEARCH_CREATION_DATE_COLUMN">
             <summary>
             Constant for default class search creation date column.
@@ -4421,7 +4416,7 @@
         </member>
         <member name="T:CMS.Search.SearchTaskCreationParameters">
             <summary>
-            Wrappes values required to create a new search task.
+            Wraps values required to create a new search task.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchTaskCreationParameters.TaskType">
@@ -4449,6 +4444,16 @@
             ID of the related object. With this ID we can pinpoint the object, which change caused the creation of the search task. 
             </summary>
         </member>
+        <member name="P:CMS.Search.SearchTaskCreationParameters.IndexerName">
+            <summary>
+            Custom search indexer may be registered under specific name. Not required. By default indexers register under <see cref="P:CMS.Search.SearchTaskCreationParameters.ObjectType"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.SearchTaskCreationParameters.TargetServers">
+            <summary>
+            Target WebFarm servers for which the task should be created.
+            </summary>
+        </member>
         <member name="T:CMS.Search.SearchTaskInfo">
             <summary>
             SearchTaskInfo data container class.
@@ -4468,6 +4473,15 @@
             <summary>
             Gets the task creation time.
             </summary>
+        </member>
+        <member name="P:CMS.Search.SearchTaskInfo.SearchTaskIndexerName">
+            <summary>
+            Name of a custom indexer registered to handle this task. Not required when indexer is registered using the object type.         
+            </summary>
+            <remarks>
+            Retrieve the value using <see cref="M:CMS.Search.SearchTaskInfo.GetSearchIndexerName"/> so it can 
+            fallback to <see cref="P:CMS.Search.SearchTaskInfo.SearchTaskObjectType"/> when custom indexer name is not used.
+            </remarks>
         </member>
         <member name="P:CMS.Search.SearchTaskInfo.SearchTaskField">
             <summary>
@@ -4511,7 +4525,7 @@
         </member>
         <member name="P:CMS.Search.SearchTaskInfo.SearchTaskErrorMessage">
             <summary>
-            Contains error message if error occured while processing the task. 
+            Contains error message if error occurred while processing the task. 
             </summary>
         </member>
         <member name="P:CMS.Search.SearchTaskInfo.SearchTaskRelatedObjectID">
@@ -4542,6 +4556,11 @@
         <member name="M:CMS.Search.SearchTaskInfo.#ctor(System.Data.DataRow)">
             <summary>
             Constructor - Creates a new SearchTaskInfo object from the given DataRow.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchTaskInfo.GetSearchIndexerName">
+            <summary>
+            Gets the name of the <see cref="T:CMS.Search.SearchIndexer"/> registered to handle this search task.
             </summary>
         </member>
         <member name="T:CMS.Search.SearchTaskInfoProvider">
@@ -4616,7 +4635,7 @@
             </summary>
             <param name="searchTaskId">SearchTask id</param>
         </member>
-        <member name="M:CMS.Search.SearchTaskInfoProvider.CreateTask(CMS.Search.SearchTaskTypeEnum,System.String,System.String,System.String,System.Int32,System.Nullable{System.Boolean})">
+        <member name="M:CMS.Search.SearchTaskInfoProvider.CreateTask(CMS.Search.SearchTaskTypeEnum,System.String,System.String,System.String,System.Int32,System.Nullable{System.Boolean},System.String)">
             <summary>
             Creates task in the database and start indexer if it is required.
             </summary>
@@ -4626,6 +4645,7 @@
             <param name="objectValue">Object value</param>
             <param name="objectID">ID of an object this task relates to, 0 if there is none</param>
             <param name="runIndexer">Whether indexer starts after creation. If not specified this behavior depends on current settings.</param>
+            <param name="indexerName">Indexer name when the indexer is not register with the <paramref name="objectType"/>.</param>
         </member>
         <member name="M:CMS.Search.SearchTaskInfoProvider.CreateTask(CMS.Search.SearchTaskCreationParameters,System.Nullable{System.Boolean})">
             <summary>

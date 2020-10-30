@@ -100,7 +100,11 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Lis
         UIElementInfo uiChild = UIElementInfoProvider.GetUIElementInfo("CMS.DocumentEngine", "EditDocumentType");
         if (uiChild != null)
         {
-            return URLHelper.AppendQuery(UIContextHelper.GetElementUrl(uiChild, UIContext), "displaytitle=false&objectid=" + documentTypeId);
+            var url = UIContextHelper.GetElementUrl(uiChild, UIContext);
+            url = URLHelper.AddParameterToUrl(url, "objectid", documentTypeId.ToString());
+            url = URLHelper.AddParameterToUrl(url, "displaytitle", "false");
+
+            return url;
         }
 
         return String.Empty;

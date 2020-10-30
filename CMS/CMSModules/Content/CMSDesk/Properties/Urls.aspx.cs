@@ -211,7 +211,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
             lnkLiveURL.InnerText = liveUrl;
         }
 
-        var previewUrl = Node.GetPreviewLink(CurrentUser.UserGUID, embededInAdministration: false);
+        var previewUrl = Node.GetPreviewLink(CurrentUser.UserGUID);
         if (!string.IsNullOrEmpty(previewUrl))
         {
             plcPreview.Visible = true;
@@ -394,7 +394,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         }
 
         ShowConfirmation(GetString("content.ui.properties.previewlinkgenerated"));
-        SetPreviewUrl(Node.GetPreviewLink(CurrentUser.UserGUID, embededInAdministration: false));
+        SetPreviewUrl(Node.GetPreviewLink(CurrentUser.UserGUID));
     }
 
 

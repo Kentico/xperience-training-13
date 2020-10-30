@@ -20,6 +20,8 @@ public partial class CMSModules_Automation_Pages_Automation_Step_General : CMSWo
     {
         base.OnLoad(e);
 
+        CurrentMaster.BodyClass += " automation-sidepanel-content";
+
         if (CurrentWorkflow?.IsAutomation != true)
         {
             editElem.Visible = false;

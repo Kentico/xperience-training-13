@@ -2,8 +2,11 @@
     MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" Theme="Default"  Codebehind="List.aspx.cs" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid" TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/SmartTip.ascx" TagPrefix="cms" TagName="SmartTip" %>
 <%@ Register Namespace="CMS.UIControls.UniGridConfig" TagPrefix="ug" Assembly="CMS.UIControls" %>
+
 <asp:Content ContentPlaceHolderID="plcContent" ID="content" runat="server">
+    <cms:SmartTip runat="server" ID="tipHowMAWorks" Visible="true" />
     <cms:UniGrid ID="gridProcesses" runat="server" ObjectType="ma.automationprocess"
         Columns="WorkflowID, WorkflowDisplayName, WorkflowType, WorkflowRecurrenceType, WorkflowEnabled"
         OrderBy="WorkflowDisplayName, WorkflowID" IsLiveSite="false" OnOnAction="gridProcesses_OnAction" OnOnExternalDataBound="gridProcesses_OnExternalDataBound">

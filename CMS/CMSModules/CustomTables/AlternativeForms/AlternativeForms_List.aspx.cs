@@ -58,7 +58,12 @@ public partial class CMSModules_CustomTables_AlternativeForms_AlternativeForms_L
         UIElementInfo uiChild = UIElementInfoProvider.GetUIElementInfo("CMS.CustomTables", "EditAlternativeForm");
         if (uiChild != null)
         {
-            return URLHelper.AppendQuery(UIContextHelper.GetElementUrl(uiChild, UIContext), "displaytitle=false&objectid=" + formId + "&parentobjectid=" + classId);
+            var url = UIContextHelper.GetElementUrl(uiChild, UIContext);
+            url = URLHelper.AddParameterToUrl(url, "objectid", formId.ToString());
+            url = URLHelper.AddParameterToUrl(url, "parentobjectid", classId.ToString());
+            url = URLHelper.AddParameterToUrl(url, "displaytitle", "false");
+
+            return url;
         }
 
         return String.Empty;

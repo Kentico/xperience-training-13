@@ -206,7 +206,7 @@
     </ajaxToolkit:Accordion>
 </div>
 <div class="image-editor-image-column">
-    <cms:MessagesPlaceHolder ID="plcMess" runat="server" UseRelativePlaceHolder="true" />
+    <cms:MessagesPlaceHolder ID="plcMess" runat="server" UseRelativePlaceHolder="false" ContainerCssClass="alerts-container" />
     <iframe id="frameImg" name="imageFrame" scrolling="auto" runat="server" class="image-editor-frame" />
     <asp:Image ID="imgMain" runat="server" Visible="false" CssClass="editing-image" />
 </div>

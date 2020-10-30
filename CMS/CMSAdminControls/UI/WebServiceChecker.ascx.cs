@@ -153,8 +153,7 @@ public partial class CMSAdminControls_UI_WebServiceChecker : CMSUserControl, IPo
             // This message is hidden by javascript as soon as possible
             ShowWarning(ResHelper.GetString("webservices.checker.initialmessage"));
 
-            // Request javascript proxy directly to avoid logon screen redirection
-            string url = URLHelper.GetAbsoluteUrl(ServiceUrl.EndsWithCSafe("/js") ? ServiceUrl : ServiceUrl.TrimEnd('/') + "/js");
+            string url = URLHelper.ResolveUrl(ServiceUrl.EndsWithCSafe("/js") ? ServiceUrl : ServiceUrl.TrimEnd('/') + "/js");
 
             // Prepare the script
             StringBuilder actionScript = new StringBuilder();

@@ -2,11 +2,9 @@
 
 using CMS.Base;
 using CMS.Base.Web.UI;
-using CMS.DocumentEngine;
 using CMS.DocumentEngine.Internal;
-using CMS.Helpers;
+using CMS.Membership;
 using CMS.PortalEngine;
-using CMS.SiteProvider;
 using CMS.UIControls;
 
 
@@ -80,7 +78,7 @@ public partial class CMSModules_Content_CMSDesk_View_View : CMSContentPage
         // Preview link is not valid after going through workflow because DocumentWorkflowCycleGUID has changed
         if (Node != null)
         {
-            DocumentManager.OnAfterAction += (obj, args) => viewPage = Node.GetPreviewLink(embededInAdministration: true);
+            DocumentManager.OnAfterAction += (obj, args) => viewPage = new PreviewLinkGenerator(Node).GeneratePreviewModeUrl(MembershipContext.AuthenticatedUser.UserGUID, embededInAdministration: true);
         }
     }
 
@@ -101,7 +99,7 @@ public partial class CMSModules_Content_CMSDesk_View_View : CMSContentPage
             applicationPath = SystemContext.ApplicationPath
         });
 
-        RegisterCookiePolicyDetection();
+        RegisterCookiePolicyDetection(forceWarningMessage: true);
     }
 
     #endregion

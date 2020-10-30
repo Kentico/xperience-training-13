@@ -351,7 +351,7 @@ public partial class CMSAdminControls_MultiFileUploader_MultiFileUploader : CMSU
         {
             if (!String.IsNullOrEmpty(mUploadHandlerUrl))
             {
-                return URLHelper.GetAbsoluteUrl(mUploadHandlerUrl);
+                return URLHelper.ResolveUrl(mUploadHandlerUrl);
             }
 
             string url;
@@ -368,7 +368,7 @@ public partial class CMSAdminControls_MultiFileUploader_MultiFileUploader : CMSU
                 url = $"~/CMSModules/Content/CMSPages{authenticatedHandlerPath}/MultiFileUploader.ashx";
             }
             
-            return URLHelper.GetAbsoluteUrl(url);
+            return URLHelper.ResolveUrl(url);
         }
         set
         {

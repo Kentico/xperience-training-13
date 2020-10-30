@@ -1013,6 +1013,24 @@
             <param name="url">Input url.</param>
             <param name="task">Assigned instance of <see cref="T:CMS.Scheduler.TaskInfo"/> when given <paramref name="url"/> contains taskId parameter.</param>
         </member>
+        <member name="T:CMS.Scheduler.ISchedulingTimerService">
+            <summary>
+            Describes service capable of refreshing <see cref="P:CMS.Scheduler.SchedulingTimer.ScheduleURL"/> property based on <see cref="P:CMS.SiteProvider.SiteInfo.SitePresentationURL"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.ISchedulingTimerService.RefreshUrl(CMS.SiteProvider.SiteInfo)">
+            <summary>
+            Refreshes url of already running timer or starts a new one.
+            </summary>
+        </member>
+        <member name="T:CMS.Scheduler.SchedulingTimerService">
+            <summary>
+            Default implementation of <see cref="T:CMS.Scheduler.ISchedulingTimerService"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.SchedulingTimerService.RefreshUrl(CMS.SiteProvider.SiteInfo)">
+            <inheritdoc/>>
+        </member>
         <member name="T:CMS.Scheduler.ClearSchedulingEnabledStatusWebFarmTask">
             <summary>
             Web farm task used to clear enabled status of scheduler.
@@ -1023,6 +1041,29 @@
             Clears the enabled status of the scheduler so it can reload.
             </summary>
         </member>
+        <member name="T:CMS.Scheduler.RefreshUrlWebFarmTask">
+            <summary>
+            Web farm task used to refresh timer url.
+            </summary>
+        </member>
+        <member name="P:CMS.Scheduler.RefreshUrlWebFarmTask.SiteName">
+            <summary>
+            Gets or sets name of the site which presentation URL was changed.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.RefreshUrlWebFarmTask.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.Scheduler.RefreshUrlWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.RefreshUrlWebFarmTask.#ctor(CMS.Scheduler.ISchedulingTimerService)">
+            <summary>
+            Initializes a new instance of <see cref="T:CMS.Scheduler.RefreshUrlWebFarmTask"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.RefreshUrlWebFarmTask.ExecuteTask">
+            <inheritdoc/>>
+        </member>
         <member name="T:CMS.Scheduler.SchedulingSynchronization">
             <summary>
             Synchronization helper class for the scheduler module.
@@ -1030,7 +1071,7 @@
         </member>
         <member name="M:CMS.Scheduler.SchedulingSynchronization.Init">
             <summary>
-            Initializes the tasks for clearing enabled status of scheduling synchronization.
+            Initializes the web farm tasks of the scheduler module.
             </summary>
         </member>
         <member name="T:CMS.Scheduler.ITask">
@@ -1614,6 +1655,35 @@
             </summary>
             <param name="task">Task to process</param>
         </member>
+        <member name="T:CMS.Scheduler.EmailAttachmentCleaner">
+            <summary>
+            Deletes email attachments which don't have bindings to any emails (worker task).
+            </summary>
+        </member>
+        <member name="F:CMS.Scheduler.EmailAttachmentCleaner.DESCRIPTION">
+            <summary>
+            Common description used as a base for task display name.
+            </summary>
+        </member>
+        <member name="M:CMS.Scheduler.EmailAttachmentCleaner.Execute(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Runs the email attachment cleaner.
+            </summary>
+            <param name="task">Task info</param>
+            <returns>A message describing the result of operation</returns>
+        </member>
+        <member name="M:CMS.Scheduler.EmailAttachmentCleaner.Create(System.DateTime)">
+            <summary>
+            Factory method that creates email attachment cleaner task.
+            </summary>
+            <param name="scheduleTime">Task run time</param>
+            <returns>An attachment cleaner wrapped in a task object</returns>
+        </member>
+        <member name="M:CMS.Scheduler.EmailAttachmentCleaner.DeleteAll">
+            <summary>
+            Deletes all existing attachment cleaner tasks.
+            </summary>
+        </member>
         <member name="T:CMS.Scheduler.PartialQueueCleaner">
             <summary>
             Deletes expired archived emails (worker task).
@@ -1650,6 +1720,12 @@
             Returns <c>true</c> if a partial cleaning task exists for given site, otherwise <c>false</c>.
             </summary>
             <param name="siteId">Site ID</param>
+        </member>
+        <member name="M:CMS.Scheduler.PartialQueueCleaner.ScheduleAttachmentCleaner(CMS.Scheduler.TaskInfo)">
+            <summary>
+            Schedules attachment cleaner task.
+            </summary>
+            <param name="parentTask">Parent task info</param>
         </member>
         <member name="T:CMS.Scheduler.QueueCleaner">
             <summary>
