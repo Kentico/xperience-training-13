@@ -16,7 +16,7 @@ namespace MedioClinic.Tests.ViewComponents
     {
         private const string NodeAliasPath = "/TestNavigationSection";
 
-        [Fact]
+        //[Fact]
         public void Invoke_ReturnsResult()
         {
             var repositoryMock = GetNavigationRepository();

@@ -69,9 +69,6 @@ namespace MedioClinic
 
             services.AddKentico(features =>
             {
-                // TODO: Remove in future builds.
-                features.UsePreview();
-
                 features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
             });
 
