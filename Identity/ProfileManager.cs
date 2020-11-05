@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using EnumsNET;
 
-using CMS.Base.UploadExtensions;
+using CMS.Base;
 using CMS.Helpers;
+using CMS.Membership;
 
 using XperienceAdapter.Logging;
+using Business.Configuration;
+using Business.Models;
 using Business.Services;
 using Identity.Extensions;
 using Identity.Models;
-using Identity.Models.Account;
 using Identity.Models.Profile;
 using Identity.Services;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Options;
-using Business.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.ComponentModel.DataAnnotations;
-using CMS.Membership;
-using CMS.Base;
-using Business.Models;
 
 namespace Identity
 {

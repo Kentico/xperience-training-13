@@ -7,7 +7,7 @@ namespace Identity.Models.Account
     {
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Models.Account.Password")]
+        [Display(Name = "Identity.Account.Password")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
         public string? Password { get; set; }
     }

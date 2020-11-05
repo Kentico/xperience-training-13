@@ -3,44 +3,42 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-//using Business.Attributes;
 using Business.Models;
-using Identity.Models.Account;
 
 namespace Identity.Models.Profile
 {
     public class CommonUserViewModel
     {
-        [Display(Name = "Models.Profile.CommonUserViewModel.Id")]
+        [Display(Name = "Identity.Profile.CommonUserViewModel.Id")]
         public int Id { get; set; }
 
         [HiddenInput]
         public string? UserName { get; set; }
 
         [Required]
-        [Display(Name = "Models.Profile.CommonUserViewModel.FirstName")]
+        [Display(Name = "General.FirstName")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
         public string? FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Models.Profile.CommonUserViewModel.LastName")]
+        [Display(Name = "General.LastName")]
         [MaxLength(100, ErrorMessage = "Models.MaxLength")]
         public string? LastName { get; set; }
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.FullName")]
+        [Display(Name = "General.FullName")]
         public string FullName => $"{FirstName} {LastName}";
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.DateOfBirth")]
+        [Display(Name = "Identity.DateOfBirth")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DateOfBirth { get; set; }
 
         public Gender Gender { get; set; }
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.City")]
+        [Display(Name = "General.City")]
         public string? City { get; set; }
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.Street")]
+        [Display(Name = "General.Street")]
         public string? Street { get; set; }
 
         public EmailViewModel EmailViewModel { get; set; } = new EmailViewModel();
@@ -49,10 +47,10 @@ namespace Identity.Models.Profile
         [Phone(ErrorMessage = "Models.PhoneFormat")]
         public string? Phone { get; set; }
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.Nationality")]
+        [Display(Name = "Identity.Nationality")]
         public string? Nationality { get; set; }
 
-        [Display(Name = "Models.Profile.CommonUserViewModel.AvatarFile")]
+        [Display(Name = "Identity.Profile.AvatarFile")]
         public IFormFile? AvatarFile { get; set; }
     }
 }
