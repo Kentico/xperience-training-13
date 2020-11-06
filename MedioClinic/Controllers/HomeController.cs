@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +13,6 @@ using CMS.DocumentEngine;
 using XperienceAdapter.Repositories;
 using Business.Configuration;
 using Business.Models;
-
 
 namespace MedioClinic.Controllers
 {
@@ -35,32 +34,35 @@ namespace MedioClinic.Controllers
             _companyServiceRepository = companyServiceRepository ?? throw new ArgumentNullException(nameof(companyServiceRepository));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var homePath = "/Home";
 
-            var home = _homePageRepository.GetPages(
-                query => query
-                    .Path(homePath),
+            var homePage = (await _homePageRepository.GetPagesAsync(
+                cancellationToken,
+                filter => filter
+                    .Path(homePath, PathTypeEnum.Single)
+                    .TopN(1),
                 buildCacheAction: cache => cache
                     .Key($"{nameof(HomeController)}|HomePage")
                     .Dependencies((_, builder) => builder
-                        .PageType("MedioClinic.HomePage")),
-                includeAttachments: true)
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME)),
+                includeAttachments: true))
                     .FirstOrDefault();
 
-            var companyServices = _companyServiceRepository.GetPages(
-                query => query
+            var companyServices = await _companyServiceRepository.GetPagesAsync(
+                cancellationToken,
+                filter => filter
                     .Path(homePath, PathTypeEnum.Children),
                 buildCacheAction: cache => cache
                     .Key($"{nameof(HomeController)}|CompanyServices")
                     .Dependencies((_, builder) => builder
-                        .PageType("MedioClinic.CompanyService")
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.CompanyService.CLASS_NAME)
                         .PagePath(homePath, PathTypeEnum.Children)
                         .PageOrder()));
 
-            var data = (home, companyServices);
-            var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, home.Name!);
+            var data = (homePage, companyServices);
+            var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, homePage.Name!);
 
             return View("Home/Index", viewModel);
         }

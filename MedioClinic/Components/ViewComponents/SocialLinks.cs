@@ -25,7 +25,7 @@ namespace MedioClinic.ViewComponents
             var path = "/Reused-content/Social-links";
 
             var model = _socialLinkRepository.GetPages(
-                query => query
+                filter => filter
                     .Path(path, CMS.DocumentEngine.PathTypeEnum.Children),
                 buildCacheAction: cache => cache
                     .Key($"{nameof(SocialLinks)}|all")

@@ -23,7 +23,7 @@ namespace MedioClinic.ViewComponents
         public IViewComponentResult Invoke()
         {
             var company = _companyRepository.GetPages(
-                query => query
+                filter => filter
                     .WhereEquals("Email", "medioclinic.local")
                     .TopN(1),
                 buildCacheAction:

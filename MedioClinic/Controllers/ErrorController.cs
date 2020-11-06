@@ -38,7 +38,7 @@ namespace MedioClinic.Controllers
                 _logger.LogError($"Not found: {ExceptionHandlerPathFeature?.Path}");
 
                 var notFoundPage = _pageRepository.GetPages(
-                    query => query
+                    filter => filter
                         .Path("/Reused-content/Error-pages/Not-found")
                         .CombineWithDefaultCulture(),
                     buildCacheAction: cache => cache

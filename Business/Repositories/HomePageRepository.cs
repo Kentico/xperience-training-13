@@ -1,22 +1,21 @@
-﻿using System.Linq;
-
-using XperienceAdapter.Services;
-using XperienceAdapter.Repositories;
-using CMS.DocumentEngine;
-using System;
+﻿using System;
 using System.Threading;
+
 using XperienceAdapter.Extensions;
+using XperienceAdapter.Repositories;
+using XperienceAdapter.Services;
+using Business.Models;
 
 namespace Business.Repositories
 {
     /// <summary>
     /// Stores the home page.
     /// </summary>
-    public class HomePageRepository : BasePageRepository<Models.HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
+    public class HomePageRepository : BasePageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
     {
         private readonly INavigationRepository _navigationRepository;
 
-        public override Models.HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, Models.HomePage dto)
+        public override HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, HomePage dto)
         {
             dto.Perex = page.Perex;
             dto.Text = page.Text;
@@ -35,7 +34,7 @@ namespace Business.Repositories
             return dto;
         }
 
-        public HomePageRepository(IRepositoryServices repositoryDependencies, INavigationRepository navigationRepository) : base(repositoryDependencies)
+        public HomePageRepository(IRepositoryServices repositoryServices, INavigationRepository navigationRepository) : base(repositoryServices)
         {
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }

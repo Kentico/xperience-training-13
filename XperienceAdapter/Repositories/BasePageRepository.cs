@@ -58,6 +58,26 @@ namespace XperienceAdapter.Repositories
             return MapPages(result, additionalMapper, includeAttachments, culture);
         }
 
+        public virtual async Task<IEnumerable<TPageDto>> GetPagesAsync(
+            CancellationToken cancellationToken,
+            Action<DocumentQuery<TPage>>? filter = default,
+            Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
+            Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
+            bool includeAttachments = default,
+            SiteCulture? culture = default)
+        {
+            var result = await _repositoryServices.PageRetriever.RetrieveAsync(query =>
+            {
+                query = FilterForSingleType(query, culture?.IsoCode);
+                query.Columns(DefaultDtoFactory().SourceColumns);
+                filter?.Invoke(query);
+            },
+            buildCacheAction,
+            cancellationToken);
+
+            return MapPages(result, additionalMapper, includeAttachments, culture);
+        }
+
         public virtual IEnumerable<TPageDto> GetPagesOfMultitpleTypes(
             IEnumerable<string> types,
             Action<MultiDocumentQuery>? filter = default,
@@ -80,21 +100,73 @@ namespace XperienceAdapter.Repositories
             return MapPages(result, additionalMapper, includeAttachments, culture);
         }
 
-        public IEnumerable<TPageDto> GetPage(Guid nodeGuid, bool includeAttachments) =>
-            GetPages(
-                query => query
-                    .WhereEquals("NodeGUID", nodeGuid)
-                    .TopN(1),
-                buildCacheAction: cache => GetCacheBuilder(cache, $"{nameof(GetPage)}|{nodeGuid}|{includeAttachments}", nodeGuid.ToString()),
-                includeAttachments: includeAttachments);
+        public virtual async Task<IEnumerable<TPageDto>> GetPagesOfMultitpleTypesAsync(
+            CancellationToken cancellationToken,
+            IEnumerable<string> types,
+            Action<MultiDocumentQuery>? filter = default,
+            Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
+            Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
+            bool includeAttachments = default,
+            SiteCulture? culture = default)
+        {
+            var result = (await _repositoryServices.PageRetriever.RetrieveMultipleAsync(query =>
+            {
+                query = FilterForMultipleTypes(query, culture?.IsoCode);
+                query
+                    .Types(types.ToArray())
+                    .WithCoupledColumns();
+                filter?.Invoke(query);
 
-        public IEnumerable<TPageDto> GetPage(string pageAlias, bool includeAttachments) =>
+            },
+            buildCacheAction,
+            cancellationToken)).Select(h => h as TPage);
+
+            return MapPages(result, additionalMapper, includeAttachments, culture);
+        }
+
+        public TPageDto GetPage(Guid nodeGuid, bool includeAttachments) =>
             GetPages(
-                query => query
-                    .WhereEquals("NodeAlias", pageAlias)
-                    .TopN(1),
-                buildCacheAction: cache => GetCacheBuilder(cache, $"{nameof(GetPage)}|{pageAlias}|{includeAttachments}", pageAlias),
-                includeAttachments: includeAttachments);
+                filter => GetDefaultPageFilter(filter)
+                    .WhereEquals("NodeGUID", nodeGuid),
+                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
+                includeAttachments: includeAttachments)
+                    .FirstOrDefault();
+
+        public async Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken) =>
+            (await GetPagesAsync(
+                cancellationToken,
+                filter => GetDefaultPageFilter(filter)
+                    .WhereEquals("NodeGUID", nodeGuid),
+                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
+                includeAttachments: includeAttachments))
+                    .FirstOrDefault();
+
+        public TPageDto GetPage(string pageAlias, bool includeAttachments) =>
+            GetPages(
+                filter => GetDefaultPageFilter(filter)
+                    .WhereEquals("NodeAlias", pageAlias),
+                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
+                includeAttachments: includeAttachments)
+                    .FirstOrDefault();
+
+        public async Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken) =>
+            (await GetPagesAsync(
+                cancellationToken,
+                filter => GetDefaultPageFilter(filter)
+                    .WhereEquals("NodeAlias", pageAlias),
+                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
+                includeAttachments: includeAttachments))
+                    .FirstOrDefault();
+
+        protected virtual DocumentQuery<TPage> GetDefaultPageFilter(DocumentQuery<TPage> filter) =>
+            filter.TopN(1);
+
+        protected virtual IPageCacheBuilder<TPage> GetDefaultPageCacheBuilder(IPageCacheBuilder<TPage> builder, string identifier, bool includeAttachments)
+        {
+            var attachmentSegment = includeAttachments ? "WithAttachments" : "WithoutAttachments";
+
+            return GetCacheBuilder(builder, $"{nameof(GetPage)}|{identifier}|{attachmentSegment}", identifier);
+        }
 
         /// <summary>
         /// Adds default filters for <see cref="MultiDocumentQuery"/> queries.
@@ -253,7 +325,7 @@ namespace XperienceAdapter.Repositories
 
                 if (cultureVersion != null)
                 {
-                    dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture); 
+                    dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture);
                 }
             }
 

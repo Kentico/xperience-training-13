@@ -8,16 +8,21 @@ namespace Business.Models
     /// <summary>
     /// Information about a doctor
     /// </summary>
-    public class Doctor : BasePage
+    public class Doctor : User
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] 
         { 
-            "Degree" 
+            "Degree",
+            "EmergencyShift",
+            "Biography",
+            "Specialty"
         });
 
         /// <summary>
         /// Academic degree.
         /// </summary>
         public string? Degree { get; set; }
+
+        
     }
 }
