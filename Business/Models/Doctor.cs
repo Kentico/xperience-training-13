@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using XperienceAdapter.Models;
@@ -23,6 +24,19 @@ namespace Business.Models
         /// </summary>
         public string? Degree { get; set; }
 
-        
+        /// <summary>
+        /// Day of the doctor's emergency shift.
+        /// </summary>
+        public DayOfWeek? EmergencyShift { get; set; }
+
+        /// <summary>
+        /// Doctor's biography.
+        /// </summary>
+        public string? Biography { get; set; }
+
+        /// <summary>
+        /// Doctor's specialty.
+        /// </summary>
+        public string? Specialty { get; set; }
     }
 }

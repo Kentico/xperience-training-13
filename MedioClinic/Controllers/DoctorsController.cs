@@ -29,7 +29,6 @@ namespace MedioClinic.Controllers
             ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageRetriever pageRetriever,
-            IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
             : base(logger, siteService, optionsMonitor)
         {

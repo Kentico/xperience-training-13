@@ -1,8 +1,15 @@
 ﻿@model PageViewModel<(Business.Models.HomePage HomePage, IEnumerable<Business.Models.CompanyService> CompanyServices)>
 
 @{
-    var backgroundLeft = Url.Content(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true)?.AttachmentUrl?.RelativePath);
-    var backgroundRight = Url.Content(Model?.Data.HomePage.Attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true)?.AttachmentUrl?.RelativePath);
+    string? backgroundLeft, backgroundRight;
+    backgroundLeft = backgroundRight = default;
+    var attachments = Model?.Data.HomePage.Attachments;
+
+    if (attachments?.Any() == true)
+    {
+        backgroundLeft = Url.Content(attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true)?.AttachmentUrl?.RelativePath);
+        backgroundRight = Url.Content(attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true)?.AttachmentUrl?.RelativePath);
+    }
 }
 
 <header class="row mc-page-fold-left" style="background-image:url(@backgroundLeft)">
