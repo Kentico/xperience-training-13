@@ -26,10 +26,7 @@ namespace Business.Repositories
             dto.UrlSlug = page.UrlSlug;
             dto.UserId = page.UserAccount;
             dto.UserName = _userInfoProvider.Get(page.UserAccount).UserName;
-
-            // TODO: File a potential bug.
-            dto.EmergencyShift = DayOfWeek.Monday; //GetShiftDayOfWeek(page.Fields.EmergencyShift);
-            
+            dto.EmergencyShift = GetShiftDayOfWeek(page.Fields.EmergencyShift);
             dto.Degree = page.Degree;
             dto.Biography = page.Fields.Biography;
             dto.Specialty = page.Specialty;

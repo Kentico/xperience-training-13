@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 
 using XperienceAdapter.Extensions;
@@ -21,9 +22,7 @@ namespace Business.Repositories
             dto.Text = page.Text;
             dto.DoctorsLinkButtonText = page.DoctorsLinkButtonText;
             dto.ServicesLinkButtonText = page.ServicesLinkButtonText;
-
-            // TODO: File a potential bug.
-            var doctorsNodeId = (int?)7; //page.Fields.DoctorsLink?.FirstOrDefault()?.NodeID;
+            var doctorsNodeId = page.Fields.DoctorsLink?.FirstOrDefault()?.NodeID;
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
 
             if (doctorsNodeId.HasValue && currentCulture != null)

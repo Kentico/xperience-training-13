@@ -14,9 +14,14 @@ namespace XperienceAdapter.Models
             "DocumentID",
             "DocumentGUID",
             "DocumentName",
+            "DocumentCulture",
             "NodeID",
+            "NodeGUID",
             "NodeAliasPath",
-            "NodeParentID"
+            "NodeParentID",
+            "NodeSiteID",
+            "NodeLevel",
+            "NodeOrder"
         };
 
         public int NodeId { get; set; }
