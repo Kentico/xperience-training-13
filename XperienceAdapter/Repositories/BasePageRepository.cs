@@ -275,16 +275,24 @@ namespace XperienceAdapter.Repositories
                 {
                     foreach (var page in pages)
                     {
-                        TPageDto dto = ApplyMappers(page!, includeAttachments, culture);
+                        var dto = ApplyMappers(page!, includeAttachments, culture);
 
-                        yield return additionalMapper(page!, dto);
+                        if (dto != null)
+                        {
+                            yield return additionalMapper(page!, dto);
+                        }
                     }
                 }
                 else
                 {
                     foreach (var page in pages)
                     {
-                        yield return ApplyMappers(page!, includeAttachments, culture);
+                        var dto = ApplyMappers(page!, includeAttachments, culture);
+
+                        if (dto != null)
+                        {
+                            yield return dto;
+                        }
                     }
                 }
             }
@@ -296,10 +304,14 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected TPageDto ApplyMappers(TPage page, bool includeAttachments, SiteCulture? culture = default)
+        protected TPageDto? ApplyMappers(TPage page, bool includeAttachments, SiteCulture? culture = default)
         {
             var dto = MapBasicDtoProperties(page, includeAttachments, culture);
-            dto = MapDtoProperties(page, dto);
+
+            if (dto != null)
+            {
+                dto = MapDtoProperties(page, dto);
+            }
 
             return dto;
         }
@@ -310,44 +322,48 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments, SiteCulture? culture)
+        protected virtual TPageDto? MapBasicDtoProperties(TPage page, bool includeAttachments, SiteCulture? culture = default)
         {
-            var dto = DefaultDtoFactory();
-            dto.Guid = page.DocumentGUID;
-            dto.NodeId = page.NodeID;
-            dto.Name = page.DocumentName;
-            dto.NodeAliasPath = page.NodeAliasPath;
-            dto.ParentId = page.NodeParentID;
-
-            if (culture is null == false && page.CultureVersions.Any())
+            if (culture != null && page.CultureVersions.Any())
             {
-                var cultureVersion = page.CultureVersions.FirstOrDefault(version => version.DocumentCulture.Equals(culture.IsoCode, StringComparison.InvariantCulture));
+                var desiredCulture = EnsureCulture(culture?.IsoCode);
+                var cultureVersion = page.CultureVersions.FirstOrDefault(version => version.DocumentCulture.Equals(desiredCulture, StringComparison.InvariantCulture));
 
                 if (cultureVersion != null)
                 {
+                    var dto = DefaultDtoFactory();
+                    dto.Guid = page.DocumentGUID;
+                    dto.NodeId = page.NodeID;
+                    dto.Name = page.DocumentName;
+                    dto.NodeAliasPath = page.NodeAliasPath;
+                    dto.ParentId = page.NodeParentID;
                     dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture);
-                }
-            }
 
-            if (includeAttachments)
-            {
-                foreach (var attachment in page.Attachments)
-                {
-                    dto.Attachments.Add(new PageAttachment
+                    if (includeAttachments)
                     {
-                        AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
-                        Extension = attachment.AttachmentExtension,
-                        FileName = attachment.AttachmentName,
-                        Guid = attachment.AttachmentGUID,
-                        Id = attachment.ID,
-                        MimeType = attachment.AttachmentMimeType,
-                        Title = attachment.AttachmentTitle
-                    });
+                        foreach (var attachment in page.Attachments)
+                        {
+                            dto.Attachments.Add(new PageAttachment
+                            {
+                                AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
+                                Extension = attachment.AttachmentExtension,
+                                FileName = attachment.AttachmentName,
+                                Guid = attachment.AttachmentGUID,
+                                Id = attachment.ID,
+                                MimeType = attachment.AttachmentMimeType,
+                                Title = attachment.AttachmentTitle
+                            });
+                        }
+                    }
+
+                    return dto;
                 }
             }
 
-            return dto;
+            return null;
         }
+
+
 
         /// <summary>
         /// Default DTO mapping method.
