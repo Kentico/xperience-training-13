@@ -27,7 +27,7 @@ namespace Business.Repositories
 
             if (doctorsNodeId.HasValue && currentCulture != null)
             {
-                dto.DoctorsUrl = _navigationRepository.GetConventionalRoutingUrl(doctorsNodeId.Value, currentCulture);
+                dto.DoctorsUrl = _navigationRepository.GetUrlByNodeId(doctorsNodeId.Value, currentCulture);
             }
 
             return dto;

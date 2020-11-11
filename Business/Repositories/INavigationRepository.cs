@@ -36,6 +36,14 @@ namespace Business.Repositories
         /// <param name="nodeId"></param>
         /// <param name="pageCulture"></param>
         /// <returns></returns>
-        string? GetConventionalRoutingUrl(int nodeId, SiteCulture pageCulture);
+        string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture);
+
+        /// <summary>
+        /// Traverses the hierarchy to find a navigation item by node ID.
+        /// </summary>
+        /// <param name="nodeId">Node ID.</param>
+        /// <param name="startPointItem">Starting point navigation item.</param>
+        /// <returns>Navigation item.</returns>
+        NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem);
     }
 }

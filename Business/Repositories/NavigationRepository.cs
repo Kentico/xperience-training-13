@@ -9,6 +9,9 @@ using Kentico.Content.Web.Mvc;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using Business.Models;
+using CMS.DataEngine;
+using CMS.SiteProvider;
+using CMS.DocumentEngine.Routing;
 
 namespace Business.Repositories
 {
@@ -25,6 +28,10 @@ namespace Business.Repositories
         protected readonly IPageRepository<BasicPageWithUrlSlug, TreeNode> _urlSlugPageRepository;
 
         protected readonly ISiteCultureRepository _cultureRepository;
+
+        protected readonly SiteInfoIdentifier _siteInfoIdentifier = new SiteInfoIdentifier(SiteContext.CurrentSiteID);
+
+        protected PageRoutingModeEnum RoutingMode => PageRoutingHelper.GetRoutingMode(_siteInfoIdentifier);
 
         protected readonly string[] _slugEnabledPageTypes = new string[]
         {
@@ -150,32 +157,19 @@ namespace Business.Repositories
             return cultureSpecificNavigations;
         }
 
-        public string? GetConventionalRoutingUrl(int nodeId, SiteCulture pageCulture)
+        public string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture)
         {
-            var navigation = GetConventionalRoutingNavigation()[pageCulture];
+            var navigation = RoutingMode == PageRoutingModeEnum.BasedOnContentTree
+                ? GetContentTreeNavigation()[pageCulture]
+                : GetConventionalRoutingNavigation()[pageCulture];
 
-            return GetUrlByNodeId(nodeId, navigation);
+            return GetNavigationItemByNodeId(nodeId, navigation)?.RelativeUrl;
         }
 
-        private string? GetUrlByNodeId(int nodeId, NavigationItem item)
-        {
-            if (item.NodeId == nodeId)
-            {
-                return item.RelativeUrl;
-            }
-
-            foreach (var childItem in item.ChildItems)
-            {
-                var childResult = GetUrlByNodeId(nodeId, childItem);
-
-                if (childResult != null)
-                {
-                    return childResult;
-                }
-            }
-
-            return null;
-        }
+        public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem) =>
+            startPointItem.NodeId == nodeId
+                ? startPointItem
+                : startPointItem.ChildItems.FirstOrDefault(child => GetNavigationItemByNodeId(nodeId, child) != null);
 
         /// <summary>
         /// Prepares cultures and a new dictionary for navigation sets.
@@ -298,7 +292,6 @@ namespace Business.Repositories
                 var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
                 var culture = item.Culture ?? _cultureRepository.DefaultSiteCulture;
 
-                // TODO: Why don't we get the culture from the item itself?
                 return $"~/{culture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
             }
 
