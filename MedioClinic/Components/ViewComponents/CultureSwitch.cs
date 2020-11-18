@@ -17,13 +17,13 @@ using CMS.DocumentEngine.Routing;
 
 namespace MedioClinic.ViewComponents
 {
-    public class Language : ViewComponent
+    public class CultureSwitch : ViewComponent
     {
         private readonly INavigationRepository _navigationRepository;
 
         private readonly ISiteCultureRepository _siteCultureRepository;
 
-        public Language(ISiteCultureRepository siteCultureRepository, INavigationRepository navigationRepository)
+        public CultureSwitch(ISiteCultureRepository siteCultureRepository, INavigationRepository navigationRepository)
         {
             _siteCultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));

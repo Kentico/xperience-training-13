@@ -30,7 +30,7 @@ namespace MedioClinic.Tests.ViewComponents
         {
             var cultureRepositoryMock = GetCultureRepository();
             var navigationRepositoryMock = GetNavigationRepository();
-            var component = new Language(cultureRepositoryMock.Object, navigationRepositoryMock.Object);
+            var component = new CultureSwitch(cultureRepositoryMock.Object, navigationRepositoryMock.Object);
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Path = "/";
             component.ViewComponentContext.ViewContext.HttpContext = httpContext;
