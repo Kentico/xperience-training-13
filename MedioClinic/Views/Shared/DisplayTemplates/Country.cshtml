@@ -1,0 +1,20 @@
+﻿@using System.Text.RegularExpressions
+@model string
+
+@{
+    if (!string.IsNullOrEmpty(Model))
+    {
+        var matches = Regex.Matches(Model, @"([^;]+)(;*)([^;]*)");
+
+        if (matches?.Any() == true && matches[0].Groups.Count > 0)
+        {
+            <span>@Html.DisplayFor(m => matches[0].Groups[3])</span>
+
+            if (matches[0].Groups.Count > 1)
+            {
+                <span>, </span>
+                <span>@Html.DisplayFor(m => matches[0].Groups[1])</span>
+            }
+        }
+    }
+}

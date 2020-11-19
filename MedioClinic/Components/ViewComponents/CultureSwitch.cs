@@ -6,14 +6,11 @@ using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 
+using XperienceAdapter.Extensions;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using Business.Models;
 using Business.Repositories;
-using XperienceAdapter.Extensions;
-using CMS.DataEngine;
-using CMS.SiteProvider;
-using CMS.DocumentEngine.Routing;
 
 namespace MedioClinic.ViewComponents
 {
@@ -53,19 +50,7 @@ namespace MedioClinic.ViewComponents
 
         private IEnumerable<KeyValuePair<SiteCulture, string>>? GetDatabaseUrlVariants(string searchPath, SiteCulture currentCulture)
         {
-            var siteInfoIdentifier = new SiteInfoIdentifier(SiteContext.CurrentSiteID);
-            var routingMode = PageRoutingHelper.GetRoutingMode(siteInfoIdentifier);
-            Dictionary<SiteCulture, NavigationItem> navigation;
-
-            if (routingMode == PageRoutingModeEnum.BasedOnContentTree)
-            {
-                navigation = _navigationRepository.GetContentTreeNavigation();
-            }
-            else
-            {
-                navigation = _navigationRepository.GetConventionalRoutingNavigation();
-            }
-
+            var navigation = _navigationRepository.GetNavigation();
             var currentPageNavigationItem = GetNavigationItemByRelativeUrl(searchPath, navigation[currentCulture]);
 
             if (currentPageNavigationItem != null)

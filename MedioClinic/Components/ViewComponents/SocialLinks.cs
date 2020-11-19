@@ -13,6 +13,8 @@ namespace MedioClinic.ViewComponents
 {
     public class SocialLinks : ViewComponent
     {
+        private const string PagePath = "/Reused-content/Social-links";
+
         private readonly IPageRepository<SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink> _socialLinkRepository;
 
         public SocialLinks(IPageRepository<SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink> socialLinkRepository)
@@ -22,16 +24,14 @@ namespace MedioClinic.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var path = "/Reused-content/Social-links";
-
             var model = _socialLinkRepository.GetPages(
                 filter => filter
-                    .Path(path, CMS.DocumentEngine.PathTypeEnum.Children),
+                    .Path(PagePath, CMS.DocumentEngine.PathTypeEnum.Children),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(SocialLinks)}|all")
+                    .Key($"{nameof(SocialLinks)}|{nameof(Invoke)}")
                     .Dependencies((_, builder) => builder
-                        .PageType("MedioClinic.SocialLink")
-                        .PagePath(path, CMS.DocumentEngine.PathTypeEnum.Children)
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.SocialLink.CLASS_NAME)
+                        .PagePath(PagePath, CMS.DocumentEngine.PathTypeEnum.Children)
                         .PageOrder()));
 
             return View(model);

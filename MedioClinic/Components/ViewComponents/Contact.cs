@@ -1,9 +1,7 @@
 ﻿#define no_suffix
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using XperienceAdapter.Repositories;
@@ -13,6 +11,8 @@ namespace MedioClinic.ViewComponents
 {
     public class Contact : ViewComponent
     {
+        private const string PagePath = "/Contact-us/Medio-Clinic";
+
         private readonly IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> _companyRepository;
 
         public Contact(IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository)
@@ -22,16 +22,19 @@ namespace MedioClinic.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var company = _companyRepository.GetPages(
+            var model = _companyRepository.GetPages(
                 filter => filter
-                    .WhereEquals("Email", "medioclinic.local")
+                    .Path(PagePath)
                     .TopN(1),
                 buildCacheAction:
                     cache => cache
-                        .Key($"{nameof(Contact)}|{nameof(Invoke)}"))
+                        .Key($"{nameof(Contact)}|{nameof(Invoke)}")
+                        .Dependencies((_, builder) => builder
+                            .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)
+                            .PagePath(PagePath, CMS.DocumentEngine.PathTypeEnum.Single)))
                 .FirstOrDefault();
                 
-            return View(company);
+            return View(model);
         }
     }
 }

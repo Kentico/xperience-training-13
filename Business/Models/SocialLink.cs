@@ -1,4 +1,7 @@
-﻿using Kentico.Content.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Models;
 
@@ -9,6 +12,12 @@ namespace Business.Models
     /// </summary>
     public class SocialLink : BasePage
     {
+        public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[]
+        {
+            "Url",
+            "Icon"
+        });
+
         /// <summary>
         /// URL to social media.
         /// </summary>
