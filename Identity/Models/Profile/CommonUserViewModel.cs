@@ -43,11 +43,13 @@ namespace Identity.Models.Profile
 
         public EmailViewModel EmailViewModel { get; set; } = new EmailViewModel();
 
+        [Display(Name = "General.Phone")]
         [DataType(DataType.PhoneNumber)]
         [Phone(ErrorMessage = "Models.PhoneFormat")]
         public string? Phone { get; set; }
 
         [Display(Name = "Identity.Nationality")]
+        [UIHint("Country")]
         public string? Nationality { get; set; }
 
         [Display(Name = "Identity.Profile.AvatarFile")]

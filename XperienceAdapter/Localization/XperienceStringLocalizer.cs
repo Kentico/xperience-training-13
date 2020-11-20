@@ -11,7 +11,7 @@ namespace XperienceAdapter.Localization
     {
         private string _cultureName;
 
-        public XperienceStringLocalizer() : this(Thread.CurrentThread.CurrentCulture) { }
+        public XperienceStringLocalizer() : this(Thread.CurrentThread.CurrentUICulture) { }
 
         public XperienceStringLocalizer(CultureInfo culture)
         {

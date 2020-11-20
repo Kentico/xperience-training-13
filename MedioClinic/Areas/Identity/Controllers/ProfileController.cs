@@ -39,7 +39,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(PageViewModel<IUserViewModel> uploadModel)
         {
-            var message = ConcatenateContactAdmin("Error.Message");
+            var message = ConcatenateContactAdmin("General.Error");
 
             if (ModelState.IsValid)
             {
@@ -48,14 +48,14 @@ namespace MedioClinic.Areas.Identity.Controllers
                 switch (profileResult.ResultState)
                 {
                     case PostProfileResultState.UserNotFound:
-                        message = ConcatenateContactAdmin("Controllers.Profile.Index.UserNotFound.Message");
+                        message = ConcatenateContactAdmin("Identity.UserNotFound");
                         break;
                     case PostProfileResultState.UserNotMapped:
                     case PostProfileResultState.UserNotUpdated:
-                        message = ConcatenateContactAdmin("Controllers.Profile.Index.UserNotUpdated.Message");
+                        message = ConcatenateContactAdmin("Identity.Profile.UserNotUpdated");
                         break;
                     case PostProfileResultState.UserUpdated:
-                        message = Localize("Controllers.Profile.Index.UserUpdated.Message");
+                        message = Localize("Identity.Profile.UserUpdated");
                         break;
                 }
 
@@ -96,7 +96,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// <returns>A not-found page.</returns>
         private ActionResult UserNotFound()
         {
-            var message = Localize("General.UserNotFound");
+            var message = Localize("Identity.UserNotFound");
 
             return View("UserMessage", GetPageViewModel(title: ErrorTitle, message, messageType: MessageType.Error));
         }

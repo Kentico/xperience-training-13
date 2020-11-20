@@ -92,7 +92,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         public async Task<ActionResult> ConfirmUser(int? userId, string token)
         {
             var title = ErrorTitle;
-            var message = ConcatenateContactAdmin("General.Error.Message");
+            var message = ConcatenateContactAdmin("General.Error");
             var displayAsRaw = false;
             var messageType = MessageType.Error;
 
@@ -220,7 +220,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(PageViewModel<ResetPasswordViewModel> uploadModel)
         {
-            var message = ConcatenateContactAdmin("General.Error.Message");
+            var message = ConcatenateContactAdmin("General.Error");
             var messageType = MessageType.Error;
 
             if (ModelState.IsValid)

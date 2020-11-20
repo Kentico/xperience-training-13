@@ -236,6 +236,7 @@ namespace MedioClinic
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
 
             services.AddApplicationIdentity<MedioClinicUser, ApplicationRole>()
+                .AddApplicationDefaultTokenProviders()
                 .AddUserStore<ApplicationUserStore<MedioClinicUser>>()
                 .AddRoleStore<ApplicationRoleStore<ApplicationRole>>()
                 .AddUserManager<MedioClinicUserManager>()
