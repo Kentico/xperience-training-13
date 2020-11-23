@@ -8,11 +8,11 @@ using Microsoft.Extensions.Options;
 
 using CMS.Base;
 using CMS.DocumentEngine;
-using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Repositories;
 using Business.Configuration;
 using Business.Models;
+using XperienceAdapter.Models;
 
 namespace MedioClinic.Controllers
 {
@@ -20,35 +20,36 @@ namespace MedioClinic.Controllers
     {
         private const string DoctorsPath = "/Doctors";
 
-        private readonly IPageRetriever _pageRetriever;
+        private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
 
         private readonly IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> _doctorRepository;
 
         public DoctorsController(
-            ILogger<HomeController> logger,
+            ILogger<DoctorsController> logger,
             ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
-            IPageRetriever pageRetriever,
+            IPageRepository<BasePage, TreeNode> basePageRepository,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
             : base(logger, siteService, optionsMonitor)
         {
-            _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
+            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var title = (await _pageRetriever.RetrieveAsync<TreeNode>(
+            var doctorsSection = (await _basePageRepository.GetPagesAsync(
+                cancellationToken,
                 filter => filter
                     .Path(DoctorsPath, PathTypeEnum.Single)
                     .TopN(1),
-                cache => cache
+                buildCacheAction: cache => cache
                     .Key($"{nameof(DoctorsController)}|DoctorsSection")
                     .Dependencies((_, builder) => builder
-                        .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME)),
-                cancellationToken))
-                    .FirstOrDefault()?
-                    .DocumentName ?? string.Empty;
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME))))
+                            .FirstOrDefault();
+
+            var title = doctorsSection?.Name ?? string.Empty;
 
             var doctorPages = await _doctorRepository.GetPagesAsync(
                 cancellationToken,
@@ -60,9 +61,17 @@ namespace MedioClinic.Controllers
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
                         .PageOrder()));
 
-            var viewModel = GetPageViewModel(doctorPages, title);
+            var data = (doctorsSection, doctorPages);
+            var viewModel = GetPageViewModel(data, title);
 
-            return View("Doctors/Index", viewModel);
+            if (doctorsSection != null && doctorPages?.Any() == true)
+            {
+                return View("Doctors/Index", viewModel);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         public async Task<IActionResult> Detail(string? urlSlug, CancellationToken cancellationToken)

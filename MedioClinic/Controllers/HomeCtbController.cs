@@ -58,7 +58,7 @@ namespace MedioClinic.Controllers
                         .Path(homePath, PathTypeEnum.Single)
                         .TopN(1),
                     buildCacheAction: cache => cache
-                        .Key($"{nameof(HomeController)}|HomePage")
+                        .Key($"{nameof(HomeCtbController)}|HomePage")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME)),
                     includeAttachments: true))
@@ -69,7 +69,7 @@ namespace MedioClinic.Controllers
                     filter => filter
                         .Path(homePath, PathTypeEnum.Children),
                     buildCacheAction: cache => cache
-                        .Key($"{nameof(HomeController)}|CompanyServices")
+                        .Key($"{nameof(HomeCtbController)}|CompanyServices")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.CompanyService.CLASS_NAME)
                             .PagePath(homePath, PathTypeEnum.Children)

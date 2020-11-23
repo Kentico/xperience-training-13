@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Kentico.Content.Web.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using XperienceAdapter.Models;
 
 namespace Business.Models
 {
@@ -16,7 +15,8 @@ namespace Business.Models
             "Degree",
             "EmergencyShift",
             "Biography",
-            "Specialty"
+            "Specialty",
+            "BackdropPicture"
         });
 
         /// <summary>
@@ -38,5 +38,15 @@ namespace Business.Models
         /// Doctor's specialty.
         /// </summary>
         public string? Specialty { get; set; }
+
+        /// <summary>
+        /// Backdrop picture URL.
+        /// </summary>
+        public IPageAttachmentUrl? BackdropPictureUrl { get; set; }
+
+        /// <summary>
+        /// Doctor detail page URL.
+        /// </summary>
+        public string? DoctorDetailUrl { get; set; }
     }
 }

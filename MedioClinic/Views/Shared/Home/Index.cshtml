@@ -4,7 +4,7 @@
 @{
     string? backgroundLeft, backgroundRight;
     backgroundLeft = backgroundRight = default;
-    var attachments = Model?.Data.HomePage.Attachments;
+    var attachments = Model?.Data.HomePage?.Attachments;
 
     if (attachments?.Any() == true)
     {
@@ -14,7 +14,6 @@
 }
 
 <header class="row mc-page-fold-left" style="background-image:url(@backgroundLeft)">
-    <div></div>
     <div class="container mc-section-3">
         <div class="col xl4 offset-xl8 l7 offset-l5 m9 offset-m3 s12">
             <h1>@Html.DisplayFor(m => m.Data.HomePage.Perex)</h1>
@@ -23,7 +22,7 @@
             </p>
             <div class="section">
                 <p>
-                    <a class="waves-effect waves-light btn" href="@Url.Content(Model?.Data.HomePage.DoctorsUrl)">@Html.DisplayFor(m => m.Data.HomePage.DoctorsLinkButtonText)</a>
+                    <a class="waves-effect waves-light btn" href="@Url.Content(Model?.Data.HomePage?.DoctorsUrl)">@Html.DisplayFor(m => m.Data.HomePage.DoctorsLinkButtonText)</a>
                 </p>
                 <p>
                     <a class="waves-effect waves-light btn" href="#services">
@@ -45,7 +44,7 @@
                 <section class="row section">
                     <div class="col xl5 l9 m12 s12">
                         <div class="card-panel white center">
-                            <img src="@service.IconUrl?.AbsoluteUrl" alt="Cardio therapy" />
+                            <img src="@service.IconUrl?.AbsoluteUrl" alt="@Html.DisplayFor(m => service.Name)" />
                             <h3>@Html.DisplayFor(m => service.Name)</h3>
                             <p>@Html.DisplayFor(m => service.ServiceDescription)</p>
                         </div>

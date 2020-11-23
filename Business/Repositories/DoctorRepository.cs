@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
+using CMS.DocumentEngine;
 using CMS.Membership;
 
+using XperienceAdapter.Extensions;
 using XperienceAdapter.Repositories;
 using XperienceAdapter.Services;
-using Business.Models;
-using CMS.DocumentEngine;
 using Business.Extensions;
-using System.Linq;
+using Business.Models;
 
 namespace Business.Repositories
 {
@@ -16,9 +18,12 @@ namespace Business.Repositories
     {
         private readonly IUserInfoProvider _userInfoProvider;
 
-        public DoctorRepository(IRepositoryServices repositoryServices, IUserInfoProvider userInfoProvider) : base(repositoryServices)
+        private readonly INavigationRepository _navigationRepository;
+
+        public DoctorRepository(IRepositoryServices repositoryServices, IUserInfoProvider userInfoProvider, INavigationRepository navigationRepository) : base(repositoryServices)
         {
             _userInfoProvider = userInfoProvider ?? throw new ArgumentNullException(nameof(userInfoProvider));
+            _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
         public override Doctor MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Doctor page, Doctor dto)
@@ -30,6 +35,18 @@ namespace Business.Repositories
             dto.Degree = page.Degree;
             dto.Biography = page.Fields.Biography;
             dto.Specialty = page.Specialty;
+ 
+            if (page.Fields.BackdropPicture != null)
+            {
+                dto.BackdropPictureUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(page.Fields.BackdropPicture); 
+            }
+            
+            var culture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
+
+            if (culture != null)
+            {
+                dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
+            }
 
             return dto;
         }

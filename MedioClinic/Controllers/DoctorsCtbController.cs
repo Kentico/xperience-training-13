@@ -16,77 +16,78 @@ using Business.Models;
 using MedioClinic.Models;
 using Kentico.Content.Web.Mvc.Routing;
 using MedioClinic.Controllers;
+using XperienceAdapter.Models;
 
-[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME, typeof(DoctorsCtbController))]
+[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Index), Path = "/Doctors")]
+[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Detail))]
 namespace MedioClinic.Controllers
 {
     public class DoctorsCtbController : BaseController
     {
-
-        private readonly IPageRetriever _pageRetriever;
-
         private readonly IPageDataContextRetriever _pageDataContextRetriever;
 
         private readonly IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> _doctorRepository;
 
-        
+        private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
 
         public DoctorsCtbController(
-            ILogger<HomeController> logger,
+            ILogger<DoctorsCtbController> logger,
             ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageDataContextRetriever pageDataContextRetriever,
-            IPageRetriever pageRetriever,
+            IPageRepository<BasePage, TreeNode> basePageRepository,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
             : base(logger, siteService, optionsMonitor)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
-            _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
+            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-
-            PageViewModel? viewModel = default;
-
-            if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.Doctor>(out var pageDataContext)
+            if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.SiteSection>(out var pageDataContext)
                 && pageDataContext.Page != null)
             {
-
                var doctorsPath = pageDataContext.Page.NodeAliasPath;
 
-                var title = (await _pageRetriever.RetrieveAsync<TreeNode>(
-                filter => filter
-                    .Path(doctorsPath, PathTypeEnum.Single)
-                    .TopN(1),
-                cache => cache
-                    .Key($"{nameof(DoctorsController)}|DoctorsSection")
-                    .Dependencies((_, builder) => builder
-                        .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME)),
-                cancellationToken))
-                    .FirstOrDefault()?
-                    .DocumentName ?? string.Empty;
+                var doctorsSection = (await _basePageRepository.GetPagesAsync(
+                    cancellationToken,
+                    filter => filter
+                        .Path(doctorsPath, PathTypeEnum.Single)
+                        .TopN(1),
+                    buildCacheAction: cache => cache
+                        .Key($"{nameof(DoctorsCtbController)}|DoctorsSection")
+                        .Dependencies((_, builder) => builder
+                            .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME))))
+                                .FirstOrDefault();
+
+                var title = doctorsSection?.Name ?? string.Empty;
 
                 var doctorPages = await _doctorRepository.GetPagesAsync(
                     cancellationToken,
                     filter => filter
                         .Path(doctorsPath, PathTypeEnum.Children),
                     buildCacheAction: cache => cache
-                        .Key($"{nameof(DoctorsController)}|Doctors")
+                        .Key($"{nameof(DoctorsCtbController)}|Doctors")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
                             .PageOrder()));
 
-                viewModel = GetPageViewModel(doctorPages, title);
+                var data = (doctorsSection, doctorPages);
+                var viewModel = GetPageViewModel(data, title);
+
+                if (doctorsSection != null && doctorPages?.Any() == true)
+                {
+                    return View("Doctors/Index", viewModel);
+                }
             }
 
-            return View("Doctors/Index", viewModel);
+            return NotFound();
         }
 
         public async Task<IActionResult> Detail(string? urlSlug, CancellationToken cancellationToken)
         {
-
             PageViewModel? viewModel = default;
 
             if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.Doctor>(out var pageDataContext)
@@ -104,7 +105,7 @@ namespace MedioClinic.Controllers
                             .WhereEquals(nameof(CMS.DocumentEngine.Types.MedioClinic.Doctor.DoctorFields.UrlSlug), urlSlug)
                             .TopN(1),
                         buildCacheAction: cache => cache
-                            .Key($"{nameof(DoctorsController)}|Doctor|{urlSlug}")
+                            .Key($"{nameof(DoctorsCtbController)}|Doctor|{urlSlug}")
                             .Dependencies((_, builder) => builder
                                 .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME))))
                                 .FirstOrDefault();

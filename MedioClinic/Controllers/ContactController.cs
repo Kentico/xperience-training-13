@@ -49,8 +49,7 @@ namespace MedioClinic.Controllers
                 buildCacheAction: cache => cache
                     .Key($"{nameof(ContactController)}|Company")
                     .Dependencies((_, builder) => builder
-                        .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)),
-                includeAttachments: true))
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME))))
                     .FirstOrDefault();
 
             var mapLocations = (await _mapLocationRepository.GetPagesAsync(
@@ -60,8 +59,7 @@ namespace MedioClinic.Controllers
                 buildCacheAction: cache => cache
                     .Key($"{nameof(ContactController)}|MapLocation")
                     .Dependencies((_, builder) => builder
-                        .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME)),
-                includeAttachments: true));
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME))));
                     
 
             var namePerexText = (await _namePerexTextRepository.GetPagesAsync(

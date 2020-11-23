@@ -145,10 +145,25 @@ namespace Business.Repositories
             return GetNavigationItemByNodeId(nodeId, navigation)?.RelativeUrl;
         }
 
-        public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem) =>
-            startPointItem.NodeId == nodeId
-                ? startPointItem
-                : startPointItem.ChildItems.FirstOrDefault(child => GetNavigationItemByNodeId(nodeId, child) != null);
+        public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
+        {
+            if (startPointItem.NodeId == nodeId)
+            {
+                return startPointItem;
+            }
+            else
+            {
+                var matches = new List<NavigationItem>();
+
+                foreach (var child in startPointItem.ChildItems)
+                {
+                    var childMatch = GetNavigationItemByNodeId(nodeId, child);
+                    matches.Add(childMatch!);
+                }
+
+                return matches.FirstOrDefault(match => match != null);
+            }
+        }
 
         /// <summary>
         /// Prepares cultures and a new dictionary for navigation sets.
@@ -187,9 +202,9 @@ namespace Business.Repositories
                 .OrderByAscending(NodeOrdering);
 
         private static IPageCacheBuilder<TreeNode> GetCacheBuilder(
-            IPageCacheBuilder<TreeNode> pageCacheBuilder, 
-            string cacheKeySuffix, 
-            string path, 
+            IPageCacheBuilder<TreeNode> pageCacheBuilder,
+            string cacheKeySuffix,
+            string path,
             PathTypeEnum pathType,
             SiteCulture culture) =>
                 pageCacheBuilder

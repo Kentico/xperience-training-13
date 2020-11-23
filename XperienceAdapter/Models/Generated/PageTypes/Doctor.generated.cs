@@ -148,6 +148,23 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
+		/// Picture used as background in doctor profile pages.
+		/// </summary>
+		[DatabaseField]
+		public Guid BackdropPicture
+		{
+			get
+			{
+				return ValidationHelper.GetGuid(GetValue("BackdropPicture"), Guid.Empty);
+			}
+			set
+			{
+				SetValue("BackdropPicture", value);
+			}
+		}
+
+
+		/// <summary>
 		/// Gets an object that provides extended API for working with Doctor fields.
 		/// </summary>
 		[RegisterProperty]
@@ -286,6 +303,18 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 				set
 				{
 					mInstance.UrlSlug = value;
+				}
+			}
+
+
+			/// <summary>
+			/// Picture used as background in doctor profile pages.
+			/// </summary>
+			public DocumentAttachment BackdropPicture
+			{
+				get
+				{
+					return mInstance.GetFieldDocumentAttachment("BackdropPicture");
 				}
 			}
 		}
