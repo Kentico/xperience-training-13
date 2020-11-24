@@ -1,4 +1,35 @@
 ﻿@model PageViewModel<Business.Models.Doctor>
 
+@{
+    var backdropUrl = Url.Content(Model?.Data?.BackdropPictureUrl?.RelativePath);
+}
 
-
+<main class="row mc-page-fold-left mc-extra-large-and-up" style="background-image:url(@backdropUrl)">
+    <div class="container mc-section-3">
+        <div class="col xl5 l7">
+            <h1>@Html.DisplayFor(m => m.Data.Name), @Html.DisplayFor(m => m.Data.Degree)</h1>
+            <section class="section flow-text">@Html.DisplayFor(m => m.Data.Specialty)</section>
+            <section class="mc-section-4 flow-text">@Html.Raw(Model?.Data?.Biography)</section>
+            <section class="mc-section-4"><strong>@ResHelper.GetString("General.EmergencyShift"):</strong> @Html.DisplayFor(m => m.Data.EmergencyShift)</section>
+        </div>
+    </div>
+</main>
+<div class="row mc-extra-large-and-down">
+    <div class="container mc-section-3">
+        <div class="card">
+            <div class="card-image">
+                <img src="@backdropUrl" alt="@Html.DisplayFor(m => m.Data.Name)" />
+                <p class="card-title black-text">@Html.DisplayFor(m => m.Data.Name), @Html.DisplayFor(m => m.Data.Degree)</p>
+            </div>
+            <div class="card-content">
+                <p>@Html.DisplayFor(m => m.Data.Specialty)</p>
+            </div>
+            <div class="card-content">
+                <p>@Html.Raw(Model?.Data?.Biography)</p>
+            </div>
+            <div class="card-action">
+                <p><strong>@ResHelper.GetString("General.EmergencyShift"):</strong> @Html.DisplayFor(m => m.Data.EmergencyShift)</p>
+            </div>
+        </div>
+    </div>
+</div>

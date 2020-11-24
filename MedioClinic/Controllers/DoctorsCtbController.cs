@@ -86,7 +86,7 @@ namespace MedioClinic.Controllers
             return NotFound();
         }
 
-        public async Task<IActionResult> Detail(string? urlSlug, CancellationToken cancellationToken)
+        public async Task<IActionResult> Detail(CancellationToken cancellationToken)
         {
             PageViewModel? viewModel = default;
 
@@ -96,16 +96,14 @@ namespace MedioClinic.Controllers
 
                 var doctorsPath = pageDataContext.Page.NodeAliasPath;
 
-                if (!string.IsNullOrEmpty(urlSlug))
+                if (!string.IsNullOrEmpty(doctorsPath))
                 {
                     var doctor = (await _doctorRepository.GetPagesAsync(
                         cancellationToken,
                         filter => filter
-                            .Path(doctorsPath, PathTypeEnum.Children)
-                            .WhereEquals(nameof(CMS.DocumentEngine.Types.MedioClinic.Doctor.DoctorFields.UrlSlug), urlSlug)
-                            .TopN(1),
+                            .Path(doctorsPath, PathTypeEnum.Single),
                         buildCacheAction: cache => cache
-                            .Key($"{nameof(DoctorsCtbController)}|Doctor|{urlSlug}")
+                            .Key($"{nameof(DoctorsCtbController)}|Doctor|{doctorsPath}")
                             .Dependencies((_, builder) => builder
                                 .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME))))
                                 .FirstOrDefault();
