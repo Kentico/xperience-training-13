@@ -12,9 +12,9 @@ namespace Business.Repositories
         {
             dto.City = page.City;
             dto.Country = page.Country;
-            dto.EmailAddress = page.Email;
+            dto.EmailAddress = page.EmailAddress;
             dto.PhoneNumber = page.PhoneNumber;
-            dto.PostalCode = page.ZipCode;
+            dto.PostalCode = page.PostalCode;
             dto.Street = page.Street;
 
             return dto;

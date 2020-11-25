@@ -194,7 +194,7 @@ namespace MedioClinic
 
                 new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
                 {
-                    (defaultCulture, "contact"),
+                    (defaultCulture, "contact-us"),
                     (spanishCulture, "contactenos"),
                 }),
             };

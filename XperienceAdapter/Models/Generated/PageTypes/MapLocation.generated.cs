@@ -97,23 +97,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// Tooltip text.
-		/// </summary>
-		[DatabaseField]
-		public string Tooltip
-		{
-			get
-			{
-				return ValidationHelper.GetString(GetValue("Tooltip"), @"");
-			}
-			set
-			{
-				SetValue("Tooltip", value);
-			}
-		}
-
-
-		/// <summary>
 		/// Gets an object that provides extended API for working with MapLocation fields.
 		/// </summary>
 		[RegisterProperty]
@@ -192,22 +175,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 				set
 				{
 					mInstance.Longitude = value;
-				}
-			}
-
-
-			/// <summary>
-			/// Tooltip text.
-			/// </summary>
-			public string Tooltip
-			{
-				get
-				{
-					return mInstance.Tooltip;
-				}
-				set
-				{
-					mInstance.Tooltip = value;
 				}
 			}
 		}

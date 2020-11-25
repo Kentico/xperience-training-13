@@ -47,7 +47,7 @@ namespace MedioClinic.Controllers
         {
             PageViewModel<(HomePage, IEnumerable<CompanyService>)>? viewModel = default;
 
-            if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.HomePage>(out var pageDataContext) 
+            if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.HomePage>(out var pageDataContext)
                 && pageDataContext.Page != null)
             {
                 var homePath = pageDataContext.Page.NodeAliasPath;
@@ -75,11 +75,16 @@ namespace MedioClinic.Controllers
                             .PagePath(homePath, PathTypeEnum.Children)
                             .PageOrder()));
 
-                var data = (homePage, companyServices);
-                viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, title: homePage.Name!);
+                if (homePage != null && companyServices?.Any() == true)
+                {
+                    var data = (homePage, companyServices);
+                    viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, title: homePage.Name!);
+
+                    return View("Home/Index", viewModel); 
+                }
             }
 
-            return View("Home/Index", viewModel);
+            return NotFound();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace MedioClinic.Controllers
             if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.SiteSection>(out var pageDataContext)
                 && pageDataContext.Page != null)
             {
-               var doctorsPath = pageDataContext.Page.NodeAliasPath;
+                var doctorsPath = pageDataContext.Page.NodeAliasPath;
 
                 var doctorsSection = (await _basePageRepository.GetPagesAsync(
                     cancellationToken,
@@ -74,11 +74,11 @@ namespace MedioClinic.Controllers
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
                             .PageOrder()));
 
-                var data = (doctorsSection, doctorPages);
-                var viewModel = GetPageViewModel(data, title);
-
                 if (doctorsSection != null && doctorPages?.Any() == true)
                 {
+                    var data = (doctorsSection, doctorPages);
+                    var viewModel = GetPageViewModel(data, title);
+
                     return View("Doctors/Index", viewModel);
                 }
             }
@@ -108,9 +108,12 @@ namespace MedioClinic.Controllers
                                 .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME))))
                                 .FirstOrDefault();
 
-                    viewModel = GetPageViewModel(doctor, doctor?.Name!);
+                    if (doctor != null)
+                    {
+                        viewModel = GetPageViewModel(doctor, doctor?.Name!);
 
-                    return View("Doctors/Detail", viewModel);
+                        return View("Doctors/Detail", viewModel); 
+                    }
                 }
             }
 

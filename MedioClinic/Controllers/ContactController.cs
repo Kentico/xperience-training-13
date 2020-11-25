@@ -7,6 +7,7 @@ using Business.Configuration;
 using Business.Models;
 using CMS.Base;
 using CMS.DocumentEngine;
+using MedioClinic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,31 +17,31 @@ namespace MedioClinic.Controllers
 {
     public class ContactController : BaseController
     {
-
         private readonly IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> _mapLocationRepository;
 
         private readonly IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> _namePerexTextRepository;
 
         private readonly IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> _companyRepository;
 
+        private readonly IMediaFileRepository _mediaFileRepository;
 
-
-    public ContactController(
-            ILogger<ContactController> logger,
-            ISiteService siteService,
-            IOptionsMonitor<XperienceOptions> optionsMonitor,
-            IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
-            IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
-            IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository)
-            : base(logger, siteService, optionsMonitor)
+        public ContactController(
+                ILogger<ContactController> logger,
+                ISiteService siteService,
+                IOptionsMonitor<XperienceOptions> optionsMonitor,
+                IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
+                IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
+                IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
+                IMediaFileRepository mediaFileRepository)
+                : base(logger, siteService, optionsMonitor)
         {
             _mapLocationRepository = mapLocationRepository ?? throw new ArgumentNullException(nameof(mapLocationRepository));
             _namePerexTextRepository = namePerexTextRepository ?? throw new ArgumentNullException(nameof(namePerexTextRepository));
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+            _mediaFileRepository = mediaFileRepository ?? throw new ArgumentNullException(nameof(mediaFileRepository));
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-
             var company = (await _companyRepository.GetPagesAsync(
                 cancellationToken,
                 filter => filter
@@ -52,34 +53,46 @@ namespace MedioClinic.Controllers
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME))))
                     .FirstOrDefault();
 
-            var mapLocations = (await _mapLocationRepository.GetPagesAsync(
+            var officeLocations = (await _mapLocationRepository.GetPagesAsync(
                 cancellationToken,
                 filter => filter
                     .Path("/Contact-us/Office-locations", PathTypeEnum.Children),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(ContactController)}|MapLocation")
+                    .Key($"{nameof(ContactController)}|OfficeLocations")
                     .Dependencies((_, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME))));
-                    
 
-            var namePerexText = (await _namePerexTextRepository.GetPagesAsync(
+            var contactPage = (await _namePerexTextRepository.GetPagesAsync(
                cancellationToken,
                filter => filter
                    .Path("/Contact-us", PathTypeEnum.Single)
                    .TopN(1),
                buildCacheAction: cache => cache
-                   .Key($"{nameof(ContactController)}|NamePerexText")
+                   .Key($"{nameof(ContactController)}|ContactPage")
                    .Dependencies((_, builder) => builder
                        .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME)),
                includeAttachments: true))
                    .FirstOrDefault();
-            
 
-            var data = (company, mapLocations, namePerexText);
-            var viewModel = GetPageViewModel(data, namePerexText.Name!); 
+            _mediaFileRepository.MediaLibraryName = "CommonImages";
+            var medicalServicePictures = await _mediaFileRepository.GetMediaFilesAsync("MedicalServices");
 
-            return View("Contact/Index" ,viewModel);
+            if (company != null && officeLocations?.Any() == true && contactPage != null && medicalServicePictures?.Any() == true)
+            {
+                var data = new ContactViewModel
+                {
+                    Company = company,
+                    ContactPage = contactPage,
+                    MedicalServices = medicalServicePictures,
+                    OfficeLocations = officeLocations
+                };
+
+                var viewModel = GetPageViewModel(data, title: contactPage.Name!);
+
+                return View("Contact/Index", viewModel);
+            }
+
+            return NotFound();
         }
     }
 }
- 

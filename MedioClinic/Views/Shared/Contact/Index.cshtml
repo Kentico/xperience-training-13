@@ -1,9 +1,81 @@
-﻿@model PageViewModel<(Business.Models.Company Company, IEnumerable<Business.Models.MapLocation> MapLocations, Business.Models.NamePerexText Contact)>
+﻿@using System.Globalization
+@using MedioClinic.Models
+@model PageViewModel<ContactViewModel>
 
+@section Scripts {
 
-<h1>
-    @Model.Data.MapLocations.Count()
-    @Model.Data.MapLocations.First().Latitude
-</h1>
+    <script type="text/javascript">
+        /* Google map callback */
+        function initMap() {
 
+            var mapOptions = {
+                zoom: 3,
+                center: { lat: 0, lng: 0 },
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
 
+            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            @if (Model?.Data.OfficeLocations?.Any() == true)
+            {
+                /* Loops through OfficeLocations collection and generates a map marker per each location */
+                foreach (var location in Model?.Data.OfficeLocations!)
+                {
+                    <text>
+                        var marker = new google.maps.Marker({
+                            position: {
+                                /* Defines map marker location using location values stored in Kentico */
+                                lat: @location.Latitude?.ToString(CultureInfo.InvariantCulture),
+                                lng: @location.Longitude?.ToString(CultureInfo.InvariantCulture)
+                            },
+                            map: map
+                        });
+
+                        marker.setMap(map);
+
+                        /* Passes the value of the Tooltip property into the map's InfoWindow overlay */
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: "@location.Name"
+                        });
+
+                        infoWindow.open(map, marker);
+                    </text>
+                }
+            }
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqj371OzjrUb_iYNf4N-sUF_Y1JG8ePGc&callback=initMap"></script>
+}
+
+<main class="row mc-page-fixed">
+    <div class="container">
+        <h1>@Html.DisplayFor(m => m.Data.ContactPage!.Name)</h1>
+        <div class="row mc-section-3">
+            <section class="col s7">
+                <p class="flow-text">@Html.DisplayFor(m => m.Data.ContactPage!.Perex)</p>
+                <p>@Html.DisplayFor(m => m.Data.ContactPage!.Text)</p>
+            </section>
+            <div class="col s1"></div>
+            <section class="col s4 card-panel">
+                <address>@Html.DisplayFor(m => m.Data.Company)</address>
+            </section>
+        </div>
+        <section class="row mc-section-1">
+            <div id="map" class="mc-map"></div>
+        </section>
+        <section class="row mc-section-4 mc-flex-container">
+            @if (Model.Data.MedicalServices?.Any() == true)
+            {
+                foreach (var service in Model.Data.MedicalServices)
+                {
+                    <div class="mc-flex-item-360px">
+                        <div class="mc-margin-1rem">
+                            <img src="@Url.Content(service.MediaFileUrl?.WithSizeConstraint(SizeConstraint.MaxWidthOrHeight(360)).RelativePath)" alt="@Html.DisplayFor(m => service.Name)" />
+                        </div>
+                    </div>
+                }
+            }
+        </section>
+    </div>
+</main>

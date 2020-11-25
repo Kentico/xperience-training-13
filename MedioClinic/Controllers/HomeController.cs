@@ -61,10 +61,15 @@ namespace MedioClinic.Controllers
                         .PagePath(homePath, PathTypeEnum.Children)
                         .PageOrder()));
 
-            var data = (homePage, companyServices);
-            var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, homePage.Name!);
+            if (homePage != null && companyServices?.Any() == true)
+            {
+                var data = (homePage, companyServices);
+                var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, homePage.Name!);
 
-            return View("Home/Index", viewModel);
+                return View("Home/Index", viewModel); 
+            }
+
+            return NotFound();
         }
     }
 }

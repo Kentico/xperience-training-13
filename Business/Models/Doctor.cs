@@ -29,6 +29,8 @@ namespace Business.Models
         /// </summary>
         public DayOfWeek? EmergencyShift { get; set; }
 
+        public string? EmergencyShiftString { get; set; }
+
         /// <summary>
         /// Doctor's biography.
         /// </summary>

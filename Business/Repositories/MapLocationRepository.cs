@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using XperienceAdapter.Repositories;
 using XperienceAdapter.Services;
 
@@ -16,11 +17,6 @@ namespace Business.Repositories
         {
             dto.Latitude = page.Latitude;
             dto.Longitude = page.Longitude;
-            dto.Tooltip = page.Tooltip;
-
-
-
-
 
             return dto;
         }

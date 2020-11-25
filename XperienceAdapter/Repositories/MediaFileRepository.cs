@@ -120,32 +120,40 @@ namespace XperienceAdapter.Repositories
             }
         }
 
-        public async Task<MediaLibraryFile?> GetMediaFileDtoAsync(Guid fileGuid)
+        public async Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid)
         {
             var mediaFileInfo = await _mediaFileInfoProvider.GetAsync(fileGuid, _siteService.CurrentSite.SiteID);
 
             return mediaFileInfo != null ? MapDtoProperties(mediaFileInfo) : null;
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFileDtosAsync(params Guid[] fileGuids)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params Guid[] fileGuids)
         {
-            var results = await GetQueryAsync((baseQuery) => baseQuery
+            var results = await GetQueryAsync(baseQuery => baseQuery
                 .WhereIn("FileGUID", fileGuids));
 
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFileDtosAsync(params string[] extensions)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params string[] extensions)
         {
-            var results = await GetQueryAsync((baseQuery) => baseQuery
+            var results = await GetQueryAsync(baseQuery => baseQuery
                 .WhereIn("FileExtension", extensions));
 
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<MediaLibraryFile> GetMediaFileDtoAsync(string path)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path)
         {
-            var results = await GetQueryAsync((baseQuery) => baseQuery
+            var results = await GetQueryAsync(baseQuery => baseQuery
+                .WhereStartsWith("FilePath", path));
+
+            return results.Select(item => MapDtoProperties(item));
+        }
+
+        public async Task<MediaLibraryFile> GetMediaFileAsync(string path)
+        {
+            var results = await GetQueryAsync(baseQuery => baseQuery
                 .WhereStartsWith("FilePath", path));
 
             return results.Select(item => MapDtoProperties(item)).FirstOrDefault();

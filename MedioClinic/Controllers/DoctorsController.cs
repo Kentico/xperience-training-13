@@ -61,17 +61,15 @@ namespace MedioClinic.Controllers
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
                         .PageOrder()));
 
-            var data = (doctorsSection, doctorPages);
-            var viewModel = GetPageViewModel(data, title);
-
             if (doctorsSection != null && doctorPages?.Any() == true)
             {
+                var data = (doctorsSection, doctorPages);
+                var viewModel = GetPageViewModel(data, title);
+
                 return View("Doctors/Index", viewModel);
             }
-            else
-            {
-                return NotFound();
-            }
+
+            return NotFound();
         }
 
         public async Task<IActionResult> Detail(string? urlSlug, CancellationToken cancellationToken)
@@ -90,9 +88,12 @@ namespace MedioClinic.Controllers
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME))))
                             .FirstOrDefault();
 
-                var viewModel = GetPageViewModel(doctor, doctor?.Name!);
+                if (doctor != null)
+                {
+                    var viewModel = GetPageViewModel(doctor, doctor?.Name!);
 
-                return View("Doctors/Detail", viewModel);
+                    return View("Doctors/Detail", viewModel); 
+                }
             }
 
             return NotFound();
