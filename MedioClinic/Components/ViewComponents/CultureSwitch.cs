@@ -60,7 +60,7 @@ namespace MedioClinic.ViewComponents
 
                 foreach (var cultureVariant in navigation.Where(cultureVariant => !cultureVariant.Key.Equals(currentCulture)))
                 {
-                    var otherCultureNavigationItem = GetNavigationItemByNodeId(currentPageNavigationItem.NodeId, cultureVariant.Value);
+                    var otherCultureNavigationItem = _navigationRepository.GetNavigationItemByNodeId(currentPageNavigationItem.NodeId, cultureVariant.Value);
 
                     if (otherCultureNavigationItem != null)
                     {
@@ -100,11 +100,6 @@ namespace MedioClinic.ViewComponents
 
             return null;
         }
-
-        private NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem) =>
-            startPointItem.NodeId == nodeId
-                ? startPointItem
-                : startPointItem.ChildItems.FirstOrDefault(child => GetNavigationItemByNodeId(nodeId, child) != null);
 
         private IEnumerable<KeyValuePair<SiteCulture, string>>? GetNonDatabaseUrlVariants(string searchPath)
         {
