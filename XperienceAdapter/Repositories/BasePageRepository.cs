@@ -124,38 +124,42 @@ namespace XperienceAdapter.Repositories
             return MapPages(result, additionalMapper, includeAttachments, culture);
         }
 
-        public TPageDto GetPage(Guid nodeGuid, bool includeAttachments) =>
+        public TPageDto GetPage(Guid nodeGuid, bool includeAttachments, SiteCulture? culture = default) =>
             GetPages(
                 filter => GetDefaultPageFilter(filter)
                     .WhereEquals("NodeGUID", nodeGuid),
                 buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
-                includeAttachments: includeAttachments)
+                includeAttachments: includeAttachments,
+                culture: culture)
                     .FirstOrDefault();
 
-        public async Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken) =>
+        public async Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default) =>
             (await GetPagesAsync(
                 cancellationToken,
                 filter => GetDefaultPageFilter(filter)
                     .WhereEquals("NodeGUID", nodeGuid),
                 buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
-                includeAttachments: includeAttachments))
+                includeAttachments: includeAttachments,
+                culture: culture))
                     .FirstOrDefault();
 
-        public TPageDto GetPage(string pageAlias, bool includeAttachments) =>
+        public TPageDto GetPage(string pageAlias, bool includeAttachments, SiteCulture? culture = default) =>
             GetPages(
                 filter => GetDefaultPageFilter(filter)
                     .WhereEquals("NodeAlias", pageAlias),
                 buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
-                includeAttachments: includeAttachments)
+                includeAttachments: includeAttachments,
+                culture: culture)
                     .FirstOrDefault();
 
-        public async Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken) =>
+        public async Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default) =>
             (await GetPagesAsync(
                 cancellationToken,
                 filter => GetDefaultPageFilter(filter)
                     .WhereEquals("NodeAlias", pageAlias),
                 buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
-                includeAttachments: includeAttachments))
+                includeAttachments: includeAttachments,
+                culture: culture))
                     .FirstOrDefault();
 
         protected virtual DocumentQuery<TPage> GetDefaultPageFilter(DocumentQuery<TPage> filter) =>
@@ -331,36 +335,45 @@ namespace XperienceAdapter.Repositories
 
                 if (cultureVersion != null)
                 {
-                    var dto = DefaultDtoFactory();
-                    dto.Guid = cultureVersion.DocumentGUID;
-                    dto.NodeId = cultureVersion.NodeID;
-                    dto.Name = cultureVersion.DocumentName;
-                    dto.NodeAliasPath = cultureVersion.NodeAliasPath;
-                    dto.ParentId = cultureVersion.NodeParentID;
-                    dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture);
-
-                    if (includeAttachments)
-                    {
-                        foreach (var attachment in cultureVersion.Attachments)
-                        {
-                            dto.Attachments.Add(new PageAttachment
-                            {
-                                AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
-                                Extension = attachment.AttachmentExtension,
-                                FileName = attachment.AttachmentName,
-                                Guid = attachment.AttachmentGUID,
-                                Id = attachment.ID,
-                                MimeType = attachment.AttachmentMimeType,
-                                Title = attachment.AttachmentTitle
-                            });
-                        }
-                    }
-
-                    return dto;
+                    return MapBasicDtoPropertiesInternal(includeAttachments, cultureVersion);
                 }
+            }
+            else
+            {
+                return MapBasicDtoPropertiesInternal(includeAttachments, page);
             }
 
             return null;
+        }
+
+        private TPageDto MapBasicDtoPropertiesInternal(bool includeAttachments, TreeNode page)
+        {
+            var dto = DefaultDtoFactory();
+            dto.Guid = page.DocumentGUID;
+            dto.NodeId = page.NodeID;
+            dto.Name = page.DocumentName;
+            dto.NodeAliasPath = page.NodeAliasPath;
+            dto.ParentId = page.NodeParentID;
+            dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
+
+            if (includeAttachments)
+            {
+                foreach (var attachment in page.Attachments)
+                {
+                    dto.Attachments.Add(new PageAttachment
+                    {
+                        AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
+                        Extension = attachment.AttachmentExtension,
+                        FileName = attachment.AttachmentName,
+                        Guid = attachment.AttachmentGUID,
+                        Id = attachment.ID,
+                        MimeType = attachment.AttachmentMimeType,
+                        Title = attachment.AttachmentTitle
+                    });
+                }
+            }
+
+            return dto;
         }
 
 

@@ -98,7 +98,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="nodeGuid">Page GUID.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        TPageDto GetPage(Guid nodeGuid, bool includeAttachments);
+        TPageDto GetPage(Guid nodeGuid, bool includeAttachments, SiteCulture? culture = default);
 
         /// <summary>
         /// Gets a specific page.
@@ -106,7 +106,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="nodeGuid">Page GUID.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken);
+        Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default);
 
         /// <summary>
         /// Gets a specific page.
@@ -114,7 +114,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="pageAlias">Page NodeAlias.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        TPageDto GetPage(string pageAlias, bool includeAttachments);
+        TPageDto GetPage(string pageAlias, bool includeAttachments, SiteCulture? culture = default);
 
         /// <summary>
         /// Gets a specific page.
@@ -122,7 +122,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="pageAlias">Page NodeAlias.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken);
+        Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default);
 
         /// <summary>
         /// Maps page onto a DTO.
