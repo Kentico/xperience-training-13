@@ -86,10 +86,15 @@ namespace MedioClinic.ViewComponents
                 }
                 else if (startPointItem.ChildItems?.Any() == true)
                 {
+                    var matches = new List<NavigationItem>();
+
                     foreach (var child in startPointItem.ChildItems)
                     {
-                        return GetNavigationItemByRelativeUrl(searchPath, child);
+                        var childMatch = GetNavigationItemByRelativeUrl(searchPath, child);
+                        matches.Add(childMatch!);
                     }
+
+                    return matches.FirstOrDefault(match => match != null);
                 }
             }
 

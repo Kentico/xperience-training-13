@@ -332,16 +332,16 @@ namespace XperienceAdapter.Repositories
                 if (cultureVersion != null)
                 {
                     var dto = DefaultDtoFactory();
-                    dto.Guid = page.DocumentGUID;
-                    dto.NodeId = page.NodeID;
-                    dto.Name = page.DocumentName;
-                    dto.NodeAliasPath = page.NodeAliasPath;
-                    dto.ParentId = page.NodeParentID;
+                    dto.Guid = cultureVersion.DocumentGUID;
+                    dto.NodeId = cultureVersion.NodeID;
+                    dto.Name = cultureVersion.DocumentName;
+                    dto.NodeAliasPath = cultureVersion.NodeAliasPath;
+                    dto.ParentId = cultureVersion.NodeParentID;
                     dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(cultureVersion.DocumentCulture);
 
                     if (includeAttachments)
                     {
-                        foreach (var attachment in page.Attachments)
+                        foreach (var attachment in cultureVersion.Attachments)
                         {
                             dto.Attachments.Add(new PageAttachment
                             {

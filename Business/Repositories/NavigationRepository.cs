@@ -86,6 +86,7 @@ namespace Business.Repositories
                     // We need to fetch across different page types, without the need for coupled data.
                     var allItems = _basePageRepository.GetPages(
                         query => GetDefaultQuery(query)
+                            .FilterDuplicates()
                             .MenuItems(),
                         culture: culture,
                         buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, RootPath, PathTypeEnum.Children, culture))
@@ -147,22 +148,27 @@ namespace Business.Repositories
 
         public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
         {
-            if (startPointItem.NodeId == nodeId)
+            if (startPointItem != null)
             {
-                return startPointItem;
-            }
-            else
-            {
-                var matches = new List<NavigationItem>();
-
-                foreach (var child in startPointItem.ChildItems)
+                if (startPointItem.NodeId == nodeId)
                 {
-                    var childMatch = GetNavigationItemByNodeId(nodeId, child);
-                    matches.Add(childMatch!);
+                    return startPointItem;
                 }
+                else
+                {
+                    var matches = new List<NavigationItem>();
 
-                return matches.FirstOrDefault(match => match != null);
+                    foreach (var child in startPointItem.ChildItems)
+                    {
+                        var childMatch = GetNavigationItemByNodeId(nodeId, child);
+                        matches.Add(childMatch!);
+                    }
+
+                    return matches.FirstOrDefault(match => match != null);
+                } 
             }
+
+            return null;
         }
 
         /// <summary>
