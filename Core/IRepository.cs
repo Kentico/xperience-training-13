@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core
@@ -19,6 +20,6 @@ namespace Core
         /// Gets all items from the source asynchronously.
         /// </summary>
         /// <returns>All items.</returns>
-        Task<IEnumerable<TDto>> GetAllAsync();
+        Task<IEnumerable<TDto>> GetAllAsync(CancellationToken? cancellationToken = default);
     }
 }

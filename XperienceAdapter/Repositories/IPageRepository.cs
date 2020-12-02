@@ -27,14 +27,12 @@ namespace XperienceAdapter.Repositories
         /// <param name="additionalMapper">Optional ad-hoc mapper.</param>
         /// <param name="buildCacheAction">Cache settings factory.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Page DTOs.</returns>
-        IEnumerable<TPageDto> GetPages(
+        IEnumerable<TPageDto> GetPagesInCurrentCulture(
             Action<DocumentQuery<TPage>>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
-            bool includeAttachments = default,
-            SiteCulture? culture = default);
+            bool includeAttachments = default);
 
         /// <summary>
         /// Gets pages and optionally caches them.
@@ -44,85 +42,53 @@ namespace XperienceAdapter.Repositories
         /// <param name="additionalMapper">Optional ad-hoc mapper.</param>
         /// <param name="buildCacheAction">Cache settings factory.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Page DTOs.</returns>
-        Task<IEnumerable<TPageDto>> GetPagesAsync(
-            CancellationToken cancellationToken,
+        Task<IEnumerable<TPageDto>> GetPagesInCurrentCultureAsync(
+            CancellationToken? cancellationToken = default,
             Action<DocumentQuery<TPage>>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
-            bool includeAttachments = default,
-            SiteCulture? culture = default);
+            bool includeAttachments = default);
 
         /// <summary>
         /// Gets pages of multiple types and optionally caches them.
         /// </summary>
         /// <param name="types">Xperience page types.</param>
+        /// <param name="culture">Explicitly-stated culture.</param>
         /// <param name="filter">Optional ad-hoc filter.</param>
         /// <param name="additionalMapper">Optional ad-hoc mapper.</param>
         /// <param name="buildCacheAction">Cache settings factory.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Page DTOs.</returns>
-        IEnumerable<TPageDto> GetPagesOfMultitpleTypes(
+        IEnumerable<TPageDto> GetPagesByTypeAndCulture(
             IEnumerable<string> types,
+            SiteCulture culture,
+            string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            SiteCulture? culture = default);
+            params string[] cacheDependencies);
 
         /// <summary>
         /// Gets pages of multiple types and optionally caches them.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <param name="types">Xperience page types.</param>
+        /// <param name="culture">Explicitly-stated culture.</param>
         /// <param name="filter">Optional ad-hoc filter.</param>
         /// <param name="additionalMapper">Optional ad-hoc mapper.</param>
         /// <param name="buildCacheAction">Cache settings factory.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Page DTOs.</returns>
-        Task<IEnumerable<TPageDto>> GetPagesOfMultitpleTypesAsync(
+        Task<IEnumerable<TPageDto>> GetPagesByTypeAndCultureAsync(
             CancellationToken cancellationToken,
             IEnumerable<string> types,
+            SiteCulture culture,
+            string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            SiteCulture? culture = default);
-
-        /// <summary>
-        /// Gets a specific page.
-        /// </summary>
-        /// <param name="nodeGuid">Page GUID.</param>
-        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <returns>Page DTO.</returns>
-        TPageDto GetPage(Guid nodeGuid, bool includeAttachments, SiteCulture? culture = default);
-
-        /// <summary>
-        /// Gets a specific page.
-        /// </summary>
-        /// <param name="nodeGuid">Page GUID.</param>
-        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <returns>Page DTO.</returns>
-        Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default);
-
-        /// <summary>
-        /// Gets a specific page.
-        /// </summary>
-        /// <param name="pageAlias">Page NodeAlias.</param>
-        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <returns>Page DTO.</returns>
-        TPageDto GetPage(string pageAlias, bool includeAttachments, SiteCulture? culture = default);
-
-        /// <summary>
-        /// Gets a specific page.
-        /// </summary>
-        /// <param name="pageAlias">Page NodeAlias.</param>
-        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
-        /// <returns>Page DTO.</returns>
-        Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default);
+            params string[] cacheDependencies);
 
         /// <summary>
         /// Maps page onto a DTO.

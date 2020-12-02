@@ -43,7 +43,8 @@ namespace Business.Repositories
 
         private PageRoutingModeEnum RoutingMode => PageRoutingHelper.GetRoutingMode(_siteInfoIdentifier);
 
-        private NavigationItem RootDto => _basePageRepository.GetPages(query =>
+        // TODO: Call the -byculture sibling method instead.
+        private NavigationItem RootDto => _basePageRepository.GetPagesInCurrentCulture(query =>
             query
                 .Path(RootPath, PathTypeEnum.Single)
                 .CombineWithDefaultCulture()
@@ -83,14 +84,15 @@ namespace Business.Repositories
             {
                 foreach (var culture in cultures)
                 {
-                    // We need to fetch across different page types, without the need for coupled data.
-                    var allItems = _basePageRepository.GetPages(
-                        query => GetDefaultQuery(query)
+                    var allItems = _basePageRepository.GetPagesByTypeAndCulture(
+                        _slugEnabledPageTypes,
+                        culture,
+                        $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigation)}|{culture.IsoCode}",
+                        filter => GetDefaultQuery(filter)
                             .FilterDuplicates()
-                            .MenuItems(),
-                        culture: culture,
-                        buildCacheAction: cache => GetCacheBuilder(cache, cacheKeySuffix, RootPath, PathTypeEnum.Children, culture))
-                            .Select(dto => MapBaseToNavigationDto(dto));
+                            .OrderByAscending(NodeOrdering)
+                            .MenuItems())
+                            .Select(basePage => MapBaseToNavigationDto(basePage));
 
                     var decorated = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
 
@@ -103,38 +105,39 @@ namespace Business.Repositories
 
         private Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation()
         {
-            string cacheKeySuffix = $"{nameof(GetConventionalRoutingNavigation)}";
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
+            throw new NotImplementedException();
+            //string cacheKeySuffix = $"{nameof(GetConventionalRoutingNavigation)}";
+            //GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
 
-            if (cultures.Any())
-            {
-                foreach (var culture in cultures)
-                {
-                    var allItems = _urlSlugPageRepository.GetPagesOfMultitpleTypes(
-                        _slugEnabledPageTypes,
-                        query => query
-                            .FilterDuplicates()
-                            .OrderByAscending(NodeOrdering),
-                        buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}", RootPath, PathTypeEnum.Section, culture),
-                        culture: culture)
-                            .Select(dto => new NavigationItem
-                            {
-                                NodeId = dto.NodeId,
-                                Guid = dto.Guid,
-                                ParentId = dto.ParentId,
-                                Name = dto.Name,
-                                NodeAliasPath = dto.NodeAliasPath,
-                                Culture = dto.Culture,
-                                UrlSlug = dto.UrlSlug
-                            });
+            //if (cultures.Any())
+            //{
+            //    foreach (var culture in cultures)
+            //    {
+            //        var allItems = _urlSlugPageRepository.GetPagesByTypeAndCulture(
+            //            _slugEnabledPageTypes,
+            //            culture: culture,
+            //            filter: query => query
+            //                .FilterDuplicates()
+            //                .OrderByAscending(NodeOrdering),
+            //            buildCacheAction: cache => GetCacheBuilder(cache, $"{cacheKeySuffix}", RootPath, PathTypeEnum.Section, culture))
+            //                .Select(dto => new NavigationItem
+            //                {
+            //                    NodeId = dto.NodeId,
+            //                    Guid = dto.Guid,
+            //                    ParentId = dto.ParentId,
+            //                    Name = dto.Name,
+            //                    NodeAliasPath = dto.NodeAliasPath,
+            //                    Culture = dto.Culture,
+            //                    UrlSlug = dto.UrlSlug
+            //                });
 
-                    var decorated = DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
+            //        var decorated = DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
 
-                    cultureSpecificNavigations.Add(culture, decorated);
-                }
-            }
+            //        cultureSpecificNavigations.Add(culture, decorated);
+            //    }
+            //}
 
-            return cultureSpecificNavigations;
+            //return cultureSpecificNavigations;
         }
 
         public string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture)
@@ -165,7 +168,7 @@ namespace Business.Repositories
                     }
 
                     return matches.FirstOrDefault(match => match != null);
-                } 
+                }
             }
 
             return null;
@@ -202,23 +205,10 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="query">The query.</param>
         /// <returns>The modified query.</returns>
-        private static DocumentQuery<TreeNode> GetDefaultQuery(DocumentQuery<TreeNode> query) =>
+        private static MultiDocumentQuery GetDefaultQuery(MultiDocumentQuery query) =>
             query
                 .FilterDuplicates()
                 .OrderByAscending(NodeOrdering);
-
-        private static IPageCacheBuilder<TreeNode> GetCacheBuilder(
-            IPageCacheBuilder<TreeNode> pageCacheBuilder,
-            string cacheKeySuffix,
-            string path,
-            PathTypeEnum pathType,
-            SiteCulture culture) =>
-                pageCacheBuilder
-                    .Key($"{nameof(NavigationRepository)}|{culture.IsoCode}|{cacheKeySuffix}")
-                    .Dependencies((_, builder) => builder
-                        .PagePath(path, pathType)
-                        .ObjectType("cms.documenttype")
-                        .PageOrder());
 
         /// <summary>
         /// Decorates items with references and URLs.

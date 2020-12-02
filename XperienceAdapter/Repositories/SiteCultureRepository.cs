@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using CMS.Base;
@@ -46,7 +47,7 @@ namespace XperienceAdapter.Repositories
                 .Select(culture => MapDtoProperties(culture, siteName));
         }
 
-        public Task<IEnumerable<SiteCulture>> GetAllAsync() => Task.FromResult(GetAll());
+        public Task<IEnumerable<SiteCulture>> GetAllAsync(CancellationToken? cancellationToken = default) => Task.FromResult(GetAll());
 
         public SiteCulture GetByExactIsoCode(string isoCode) =>
             GetAll().FirstOrDefault(culture => culture.IsoCode?.Equals(isoCode, StringComparison.OrdinalIgnoreCase) == true);

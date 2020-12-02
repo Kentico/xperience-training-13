@@ -42,7 +42,7 @@ namespace MedioClinic.Controllers
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var company = (await _companyRepository.GetPagesAsync(
+            var company = (await _companyRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
                     .Path("/Contact-us/Medio-Clinic", PathTypeEnum.Single)
@@ -53,7 +53,7 @@ namespace MedioClinic.Controllers
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME))))
                     .FirstOrDefault();
 
-            var officeLocations = (await _mapLocationRepository.GetPagesAsync(
+            var officeLocations = (await _mapLocationRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
                     .Path("/Contact-us/Office-locations", PathTypeEnum.Children),
@@ -62,7 +62,7 @@ namespace MedioClinic.Controllers
                     .Dependencies((_, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME))));
 
-            var contactPage = (await _namePerexTextRepository.GetPagesAsync(
+            var contactPage = (await _namePerexTextRepository.GetPagesInCurrentCultureAsync(
                cancellationToken,
                filter => filter
                    .Path("/Contact-us", PathTypeEnum.Single)

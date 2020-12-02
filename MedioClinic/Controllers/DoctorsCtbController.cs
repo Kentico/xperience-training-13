@@ -51,7 +51,7 @@ namespace MedioClinic.Controllers
             {
                 var doctorsPath = pageDataContext.Page.NodeAliasPath;
 
-                var doctorsSection = (await _basePageRepository.GetPagesAsync(
+                var doctorsSection = (await _basePageRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
                     filter => filter
                         .Path(doctorsPath, PathTypeEnum.Single)
@@ -64,7 +64,7 @@ namespace MedioClinic.Controllers
 
                 var title = doctorsSection?.Name ?? string.Empty;
 
-                var doctorPages = await _doctorRepository.GetPagesAsync(
+                var doctorPages = await _doctorRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
                     filter => filter
                         .Path(doctorsPath, PathTypeEnum.Children),
@@ -98,7 +98,7 @@ namespace MedioClinic.Controllers
 
                 if (!string.IsNullOrEmpty(doctorsPath))
                 {
-                    var doctor = (await _doctorRepository.GetPagesAsync(
+                    var doctor = (await _doctorRepository.GetPagesInCurrentCultureAsync(
                         cancellationToken,
                         filter => filter
                             .Path(doctorsPath, PathTypeEnum.Single),

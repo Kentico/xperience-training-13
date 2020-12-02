@@ -56,7 +56,7 @@ namespace MedioClinic.Controllers
             {
                 var contactPath = pageDataContext.Page.NodeAliasPath;
 
-                var company = (await _companyRepository.GetPagesAsync(
+                var company = (await _companyRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
                     filter => filter
                         .Path(contactPath, PathTypeEnum.Children)
@@ -68,7 +68,7 @@ namespace MedioClinic.Controllers
                     includeAttachments: true))
                         .FirstOrDefault();
 
-                var officeLocations = (await _mapLocationRepository.GetPagesAsync(
+                var officeLocations = (await _mapLocationRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
                     filter => filter
                         .Path(contactPath, PathTypeEnum.Children),
@@ -78,7 +78,7 @@ namespace MedioClinic.Controllers
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME)),
                     includeAttachments: true));
 
-                var contactPage = (await _namePerexTextRepository.GetPagesAsync(
+                var contactPage = (await _namePerexTextRepository.GetPagesInCurrentCultureAsync(
                    cancellationToken,
                    filter => filter
                        .Path(contactPath, PathTypeEnum.Single)

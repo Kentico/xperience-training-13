@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using CMS.DocumentEngine;
+using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Models;
@@ -23,6 +24,7 @@ namespace XperienceAdapter.Repositories
     {
         protected readonly IRepositoryServices _repositoryServices;
 
+
         /// <summary>
         /// Default DTO factory method.
         /// </summary>
@@ -34,143 +36,92 @@ namespace XperienceAdapter.Repositories
         }
 
         // TODO: How to access CLASS_NAME to set .PageType()?
-        public virtual IEnumerable<TPageDto> GetAll() => GetPages(
+        public virtual IEnumerable<TPageDto> GetAll() => GetPagesInCurrentCulture(
             buildCacheAction: cache => cache
-                .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{typeof(TPage).Name}"));
+                .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{typeof(TPage).Name}")
+                .Expiration(TimeSpan.FromSeconds(30)));
 
-        public virtual Task<IEnumerable<TPageDto>> GetAllAsync() => Task.FromResult(GetAll());
+        // TODO: Use async sibling method.
+        public virtual async Task<IEnumerable<TPageDto>> GetAllAsync(CancellationToken? cancellationToken = default) =>
+            await GetPagesInCurrentCultureAsync(
+                cancellationToken,
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{typeof(TPage).Name}")
+                    .Expiration(TimeSpan.FromSeconds(30)));
 
-        public virtual IEnumerable<TPageDto> GetPages(
+        public virtual IEnumerable<TPageDto> GetPagesInCurrentCulture(
             Action<DocumentQuery<TPage>>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
-            bool includeAttachments = default,
-            SiteCulture? culture = default)
+            bool includeAttachments = default)
         {
             var result = _repositoryServices.PageRetriever.Retrieve(query =>
             {
-                query = FilterForSingleType(query, culture?.IsoCode);
+                query = FilterForSingleType(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
             buildCacheAction);
 
-            return MapPages(result, additionalMapper, includeAttachments, culture);
+            return MapPages(result, additionalMapper, includeAttachments);
         }
 
-        public virtual async Task<IEnumerable<TPageDto>> GetPagesAsync(
-            CancellationToken cancellationToken,
+        public virtual async Task<IEnumerable<TPageDto>> GetPagesInCurrentCultureAsync(
+            CancellationToken? cancellationToken = default,
             Action<DocumentQuery<TPage>>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             Action<IPageCacheBuilder<TPage>>? buildCacheAction = default,
-            bool includeAttachments = default,
-            SiteCulture? culture = default)
+            bool includeAttachments = default)
         {
             var result = await _repositoryServices.PageRetriever.RetrieveAsync(query =>
             {
-                query = FilterForSingleType(query, culture?.IsoCode);
+                query = FilterForSingleType(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
             buildCacheAction,
             cancellationToken);
 
-            return MapPages(result, additionalMapper, includeAttachments, culture);
+            return MapPages(result, additionalMapper, includeAttachments);
         }
 
-        public virtual IEnumerable<TPageDto> GetPagesOfMultitpleTypes(
+        public virtual IEnumerable<TPageDto> GetPagesByTypeAndCulture(
             IEnumerable<string> types,
+            SiteCulture culture,
+            string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            SiteCulture? culture = default)
+            params string[] cacheDependencies)
         {
-            var result = _repositoryServices.PageRetriever.RetrieveMultiple(query =>
-            {
-                query = FilterForMultipleTypes(query, culture?.IsoCode);
-                query
-                    .Types(types.ToArray())
-                    .WithCoupledColumns();
-                filter?.Invoke(query);
+            var cacheSettings = GetCacheSettings(cacheKey);
 
-            },
-            buildCacheAction).Select(h => h as TPage);
+            var result = _repositoryServices.ProgressiveCache.Load(cacheSettings =>
+                GetPagesOfMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies),
+                cacheSettings);
 
-            return MapPages(result, additionalMapper, includeAttachments, culture);
+            return MapPages(result, additionalMapper, includeAttachments);
         }
 
-        public virtual async Task<IEnumerable<TPageDto>> GetPagesOfMultitpleTypesAsync(
+        public virtual async Task<IEnumerable<TPageDto>> GetPagesByTypeAndCultureAsync(
             CancellationToken cancellationToken,
             IEnumerable<string> types,
+            SiteCulture culture,
+            string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            Action<IPageCacheBuilder<TreeNode>>? buildCacheAction = default,
             bool includeAttachments = default,
-            SiteCulture? culture = default)
+            params string[] cacheDependencies)
         {
-            var result = (await _repositoryServices.PageRetriever.RetrieveMultipleAsync(query =>
-            {
-                query = FilterForMultipleTypes(query, culture?.IsoCode);
-                query
-                    .Types(types.ToArray())
-                    .WithCoupledColumns();
-                filter?.Invoke(query);
+            var cacheSettings = GetCacheSettings(cacheKey);
 
-            },
-            buildCacheAction,
-            cancellationToken)).Select(h => h as TPage);
+            var result = await _repositoryServices.ProgressiveCache.LoadAsync(async cacheSettings =>
+                await GetPagesOfMultipleTypesAsync(cacheSettings, types, culture, filter, cacheDependencies),
+                cacheSettings);
 
-            return MapPages(result, additionalMapper, includeAttachments, culture);
+            return MapPages(result, additionalMapper, includeAttachments);
         }
 
-        public TPageDto GetPage(Guid nodeGuid, bool includeAttachments, SiteCulture? culture = default) =>
-            GetPages(
-                filter => GetDefaultPageFilter(filter)
-                    .WhereEquals("NodeGUID", nodeGuid),
-                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
-                includeAttachments: includeAttachments,
-                culture: culture)
-                    .FirstOrDefault();
-
-        public async Task<TPageDto> GetPageAsync(Guid nodeGuid, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default) =>
-            (await GetPagesAsync(
-                cancellationToken,
-                filter => GetDefaultPageFilter(filter)
-                    .WhereEquals("NodeGUID", nodeGuid),
-                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, nodeGuid.ToString(), includeAttachments),
-                includeAttachments: includeAttachments,
-                culture: culture))
-                    .FirstOrDefault();
-
-        public TPageDto GetPage(string pageAlias, bool includeAttachments, SiteCulture? culture = default) =>
-            GetPages(
-                filter => GetDefaultPageFilter(filter)
-                    .WhereEquals("NodeAlias", pageAlias),
-                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
-                includeAttachments: includeAttachments,
-                culture: culture)
-                    .FirstOrDefault();
-
-        public async Task<TPageDto> GetPageAsync(string pageAlias, bool includeAttachments, CancellationToken cancellationToken, SiteCulture? culture = default) =>
-            (await GetPagesAsync(
-                cancellationToken,
-                filter => GetDefaultPageFilter(filter)
-                    .WhereEquals("NodeAlias", pageAlias),
-                buildCacheAction: cache => GetDefaultPageCacheBuilder(cache, pageAlias, includeAttachments),
-                includeAttachments: includeAttachments,
-                culture: culture))
-                    .FirstOrDefault();
-
-        protected virtual DocumentQuery<TPage> GetDefaultPageFilter(DocumentQuery<TPage> filter) =>
-            filter.TopN(1);
-
-        protected virtual IPageCacheBuilder<TPage> GetDefaultPageCacheBuilder(IPageCacheBuilder<TPage> builder, string identifier, bool includeAttachments)
-        {
-            var attachmentSegment = includeAttachments ? "WithAttachments" : "WithoutAttachments";
-
-            return GetCacheBuilder(builder, $"{nameof(GetPage)}|{identifier}|{attachmentSegment}", identifier);
-        }
 
         /// <summary>
         /// Adds default filters for <see cref="MultiDocumentQuery"/> queries.
@@ -178,13 +129,15 @@ namespace XperienceAdapter.Repositories
         /// <param name="query">Basic query.</param>
         /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Modified query.</returns>
-        protected virtual MultiDocumentQuery FilterForMultipleTypes(MultiDocumentQuery query, string? culture)
+        protected virtual MultiDocumentQuery FilterForMultipleTypes(MultiDocumentQuery query, SiteCulture? siteCulture = default)
         {
-            culture = EnsureCulture(culture);
-
             query
-                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName)
-                .Culture(culture);
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
+
+            if (siteCulture != null)
+            {
+                query.Culture(siteCulture.IsoCode);
+            }
 
             if (_repositoryServices.SiteContextService.IsPreviewEnabled)
             {
@@ -201,15 +154,6 @@ namespace XperienceAdapter.Repositories
 
             return query;
         }
-
-        protected static IPageCacheBuilder<TPage> GetCacheBuilder(
-            IPageCacheBuilder<TPage> pageCacheBuilder,
-            string cacheKeySuffix,
-            string identifier) =>
-                pageCacheBuilder
-                    .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{cacheKeySuffix}")
-                    .Dependencies((_, builder) => builder
-                        .Custom(identifier));
 
         /// <summary>
         /// Adds default filters for <see cref="DocumentQuery{TDocument}"/> queries.
@@ -217,13 +161,10 @@ namespace XperienceAdapter.Repositories
         /// <param name="query">Basic query.</param>
         /// <param name="culture">Explicitly-stated culture.</param>
         /// <returns>Modified query.</returns>
-        protected virtual DocumentQuery<TPage> FilterForSingleType(DocumentQuery<TPage> query, string? culture)
+        protected virtual DocumentQuery<TPage> FilterForSingleType(DocumentQuery<TPage> query)
         {
-            culture = EnsureCulture(culture);
-
             query
-                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName)
-                .Culture(culture);
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
 
             if (_repositoryServices.SiteContextService.IsPreviewEnabled)
             {
@@ -239,25 +180,6 @@ namespace XperienceAdapter.Repositories
             }
 
             return query;
-        }
-
-        /// <summary>
-        /// Gets culture from site context, if not specified explicitly.
-        /// </summary>
-        /// <param name="culture">Explicitly-stated culture.</param>
-        /// <returns>Context-dependent culture.</returns>
-        protected string EnsureCulture(string? culture)
-        {
-            var contextService = _repositoryServices.SiteContextService;
-
-            if (string.IsNullOrEmpty(culture))
-            {
-                culture = contextService.IsPreviewEnabled
-                    ? contextService.PreviewCulture
-                    : Thread.CurrentThread.CurrentUICulture.Name;
-            }
-
-            return culture;
         }
 
         /// <summary>
@@ -279,7 +201,7 @@ namespace XperienceAdapter.Repositories
                 {
                     foreach (var page in pages)
                     {
-                        var dto = ApplyMappers(page!, includeAttachments, culture);
+                        var dto = ApplyMappers(page!, includeAttachments);
 
                         if (dto != null)
                         {
@@ -291,7 +213,7 @@ namespace XperienceAdapter.Repositories
                 {
                     foreach (var page in pages)
                     {
-                        var dto = ApplyMappers(page!, includeAttachments, culture);
+                        var dto = ApplyMappers(page!, includeAttachments);
 
                         if (dto != null)
                         {
@@ -308,9 +230,9 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected TPageDto? ApplyMappers(TPage page, bool includeAttachments, SiteCulture? culture = default)
+        protected TPageDto? ApplyMappers(TPage page, bool includeAttachments)
         {
-            var dto = MapBasicDtoProperties(page, includeAttachments, culture);
+            var dto = MapBasicDtoProperties(page, includeAttachments);
 
             if (dto != null)
             {
@@ -326,27 +248,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected virtual TPageDto? MapBasicDtoProperties(TPage page, bool includeAttachments, SiteCulture? culture = default)
-        {
-            if (culture != null && page.CultureVersions.Any())
-            {
-                var desiredCulture = EnsureCulture(culture?.IsoCode);
-                var cultureVersion = page.CultureVersions.FirstOrDefault(version => version.DocumentCulture.Equals(desiredCulture, StringComparison.InvariantCulture));
-
-                if (cultureVersion != null)
-                {
-                    return MapBasicDtoPropertiesInternal(includeAttachments, cultureVersion);
-                }
-            }
-            else
-            {
-                return MapBasicDtoPropertiesInternal(includeAttachments, page);
-            }
-
-            return null;
-        }
-
-        private TPageDto MapBasicDtoPropertiesInternal(bool includeAttachments, TreeNode page)
+        protected virtual TPageDto? MapBasicDtoProperties(TPage page, bool includeAttachments)
         {
             var dto = DefaultDtoFactory();
             dto.Guid = page.DocumentGUID;
@@ -376,8 +278,6 @@ namespace XperienceAdapter.Repositories
             return dto;
         }
 
-
-
         /// <summary>
         /// Default DTO mapping method.
         /// </summary>
@@ -385,5 +285,54 @@ namespace XperienceAdapter.Repositories
         /// <param name="dto">Page DTO.</param>
         /// <returns></returns>
         public virtual TPageDto MapDtoProperties(TPage page, TPageDto dto) => dto;
+
+        protected IEnumerable<TPage> GetPagesOfMultipleTypes(
+            CacheSettings cacheSettings,
+            IEnumerable<string> types,
+            SiteCulture culture,
+            Action<MultiDocumentQuery>? filter = default,
+            params string[] cacheDependencies)
+        {
+            MultiDocumentQuery query = GetQueryForMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies);
+
+            return query
+                .GetEnumerableTypedResult()
+                .Select(page => page as TPage)
+                .Where(page => page != null)!;
+        }
+        protected async Task<IEnumerable<TPage>> GetPagesOfMultipleTypesAsync(
+            CacheSettings cacheSettings,
+            IEnumerable<string> types,
+            SiteCulture culture,
+            Action<MultiDocumentQuery>? filter = default,
+            params string[] cacheDependencies)
+        {
+            MultiDocumentQuery query = GetQueryForMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies);
+
+            return (await query
+                .GetEnumerableTypedResultAsync())
+                .Select(page => page as TPage)
+                .Where(page => page != null)!;
+        }
+
+        protected MultiDocumentQuery GetQueryForMultipleTypes(CacheSettings cacheSettings, IEnumerable<string> types, SiteCulture culture, Action<MultiDocumentQuery>? filter, string[] cacheDependencies)
+        {
+            var query = new MultiDocumentQuery();
+
+            query = FilterForMultipleTypes(query, culture)
+                .Types(types.ToArray())
+                .WithCoupledColumns();
+
+            filter?.Invoke(query);
+
+            if (cacheDependencies?.Any() == true)
+            {
+                cacheSettings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+            }
+
+            return query;
+        }
+
+        protected static CacheSettings GetCacheSettings(string cacheKey) => new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
     }
 }

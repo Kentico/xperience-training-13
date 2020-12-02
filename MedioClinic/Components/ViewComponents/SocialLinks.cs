@@ -24,7 +24,7 @@ namespace MedioClinic.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var model = _socialLinkRepository.GetPages(
+            var model = _socialLinkRepository.GetPagesInCurrentCulture(
                 filter => filter
                     .Path(PagePath, CMS.DocumentEngine.PathTypeEnum.Children),
                 buildCacheAction: cache => cache

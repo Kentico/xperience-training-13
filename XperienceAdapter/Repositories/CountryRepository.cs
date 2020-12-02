@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using XperienceAdapter.Models;
 
@@ -39,6 +40,6 @@ namespace XperienceAdapter.Repositories
             return test03;
         }
 
-        public Task<IEnumerable<Country>> GetAllAsync() => Task.FromResult(GetAll());
+        public Task<IEnumerable<Country>> GetAllAsync(CancellationToken? cancellationToken = default) => Task.FromResult(GetAll());
     }
 }

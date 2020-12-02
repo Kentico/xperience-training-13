@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Core;
@@ -36,34 +37,34 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="fileGuid">File GUID.</param>
         /// <returns>Media file DTO.</returns>
-        Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid);
+        Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid, CancellationToken? cancellationToken = default);
 
         /// <summary>
         /// Gets media files.
         /// </summary>
         /// <param name="fileGuids">File GUIDs.</param>
         /// <returns>File DTOs.</returns>
-        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params Guid[] fileGuids);
+        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params Guid[] fileGuids);
 
         /// <summary>
         /// Gets media files.
         /// </summary>
         /// <param name="extensions">File name extensions.</param>
         /// <returns>File DTOs.</returns>
-        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params string[] extensions);
+        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params string[] extensions);
 
         /// <summary>
         /// Gets media files.
         /// </summary>
         /// <param name="path">Folder path.</param>
         /// <returns>File DTOs.</returns>
-        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path);
+        Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path, CancellationToken? cancellationToken = default);
 
         /// <summary>
         /// Gets media files.
         /// </summary>
         /// <param name="path">Path in the library.</param>
         /// <returns>File DTOs.</returns>
-        Task<MediaLibraryFile> GetMediaFileAsync(string path);
+        Task<MediaLibraryFile> GetMediaFileAsync(string path, CancellationToken? cancellationToken = default);
     }
 }

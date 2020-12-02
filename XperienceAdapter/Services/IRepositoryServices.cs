@@ -1,4 +1,5 @@
 ﻿using CMS.Base;
+using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 using XperienceAdapter.Repositories;
 
@@ -18,5 +19,7 @@ namespace XperienceAdapter.Services
         IPageAttachmentUrlRetriever PageAttachmentUrlRetriever { get; }
 
         ISiteCultureRepository SiteCultureRepository { get; }
+
+        IProgressiveCache ProgressiveCache { get; }
     }
 }

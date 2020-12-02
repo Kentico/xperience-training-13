@@ -22,7 +22,7 @@ namespace MedioClinic.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var model = _companyRepository.GetPages(
+            var model = _companyRepository.GetPagesInCurrentCulture(
                 filter => filter
                     .Path(PagePath)
                     .TopN(1),

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using CMS.Base;
@@ -120,48 +121,48 @@ namespace XperienceAdapter.Repositories
             }
         }
 
-        public async Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid)
+        public async Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid, CancellationToken? cancellationToken = default)
         {
-            var mediaFileInfo = await _mediaFileInfoProvider.GetAsync(fileGuid, _siteService.CurrentSite.SiteID);
+            var mediaFileInfo = await _mediaFileInfoProvider.GetAsync(fileGuid, _siteService.CurrentSite.SiteID, cancellationToken);
 
             return mediaFileInfo != null ? MapDtoProperties(mediaFileInfo) : null;
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params Guid[] fileGuids)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params Guid[] fileGuids)
         {
             var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereIn("FileGUID", fileGuids));
+                .WhereIn("FileGUID", fileGuids), cancellationToken);
 
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(params string[] extensions)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params string[] extensions)
         {
             var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereIn("FileExtension", extensions));
+                .WhereIn("FileExtension", extensions), cancellationToken);
 
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path, CancellationToken? cancellationToken = default)
         {
             var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereStartsWith("FilePath", path));
+                .WhereStartsWith("FilePath", path), cancellationToken);
 
             return results.Select(item => MapDtoProperties(item));
         }
 
-        public async Task<MediaLibraryFile> GetMediaFileAsync(string path)
+        public async Task<MediaLibraryFile> GetMediaFileAsync(string path, CancellationToken? cancellationToken = default)
         {
             var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereStartsWith("FilePath", path));
+                .WhereStartsWith("FilePath", path), cancellationToken);
 
             return results.Select(item => MapDtoProperties(item)).FirstOrDefault();
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync()
+        public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default)
         {
-            var results = await GetQueryAsync();
+            var results = await GetQueryAsync(cancellationToken: cancellationToken);
 
             return results.Select(item => MapDtoProperties(item));
         }
@@ -173,14 +174,14 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="filter">Optional filter.</param>
         /// <returns></returns>
-        protected async Task<IEnumerable<MediaFileInfo>> GetQueryAsync(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter = default)
+        protected async Task<IEnumerable<MediaFileInfo>> GetQueryAsync(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter = default, CancellationToken? cancellationToken = default)
         {
             var baseQuery = _mediaFileInfoProvider.Get()
                 .WhereEquals("FileLibraryID", MediaLibraryId);
 
             return filter != null
-                ? await filter(baseQuery).GetEnumerableTypedResultAsync()
-                : await baseQuery.GetEnumerableTypedResultAsync();
+                ? await filter(baseQuery).GetEnumerableTypedResultAsync(cancellationToken: cancellationToken)
+                : await baseQuery.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -194,8 +195,6 @@ namespace XperienceAdapter.Repositories
                 Guid = mediaFileInfo.FileGUID,
                 Name = mediaFileInfo.FileTitle,
                 Extension = mediaFileInfo.FileExtension,
-                //DirectUrl = MediaLibraryHelper.GetDirectUrl(mediaFileInfo),
-                //PermanentUrl = MediaLibraryHelper.GetPermanentUrl(mediaFileInfo),
                 MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
                 Width = mediaFileInfo.FileImageWidth,
                 Height = mediaFileInfo.FileImageHeight

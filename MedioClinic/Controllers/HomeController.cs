@@ -38,7 +38,7 @@ namespace MedioClinic.Controllers
         {
             var homePath = "/Home";
 
-            var homePage = (await _homePageRepository.GetPagesAsync(
+            var homePage = (await _homePageRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
                     .Path(homePath, PathTypeEnum.Single)
@@ -50,7 +50,7 @@ namespace MedioClinic.Controllers
                 includeAttachments: true))
                     .FirstOrDefault();
 
-            var companyServices = await _companyServiceRepository.GetPagesAsync(
+            var companyServices = await _companyServiceRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
                     .Path(homePath, PathTypeEnum.Children),
