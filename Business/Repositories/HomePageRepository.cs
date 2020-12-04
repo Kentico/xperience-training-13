@@ -14,28 +14,25 @@ namespace Business.Repositories
     /// </summary>
     public class HomePageRepository : BasePageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
     {
-        private readonly INavigationRepository _navigationRepository;
-
         public override HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, HomePage dto)
         {
             dto.Perex = page.Perex;
             dto.Text = page.Text;
             dto.DoctorsLinkButtonText = page.DoctorsLinkButtonText;
             dto.ServicesLinkButtonText = page.ServicesLinkButtonText;
-            var doctorsNodeId = page.Fields.DoctorsLink?.FirstOrDefault()?.NodeID;
+            var doctorsNode = page.Fields.DoctorsLink?.FirstOrDefault();
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
 
-            if (doctorsNodeId.HasValue && currentCulture != null)
+            if (doctorsNode != null && currentCulture != null)
             {
-                dto.DoctorsUrl = _navigationRepository.GetUrlByNodeId(doctorsNodeId.Value, currentCulture);
+                dto.DoctorsUrl = _repositoryServices.PageUrlRetriever.Retrieve(doctorsNode, currentCulture.IsoCode).RelativePath;
             }
 
             return dto;
         }
 
-        public HomePageRepository(IRepositoryServices repositoryServices, INavigationRepository navigationRepository) : base(repositoryServices)
+        public HomePageRepository(IRepositoryServices repositoryServices) : base(repositoryServices)
         {
-            _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
     }
 }

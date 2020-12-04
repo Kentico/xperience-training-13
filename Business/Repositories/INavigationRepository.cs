@@ -22,6 +22,7 @@ namespace Business.Repositories
         /// <param name="nodeId"></param>
         /// <param name="pageCulture"></param>
         /// <returns></returns>
+        //TODO: IMO should not be resposible for the URL - magic with conventional?
         string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture);
 
         /// <summary>

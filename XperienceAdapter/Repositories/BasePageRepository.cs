@@ -57,7 +57,8 @@ namespace XperienceAdapter.Repositories
         {
             var result = _repositoryServices.PageRetriever.Retrieve(query =>
             {
-                query = FilterForSingleType(query);
+                //TODO: Not needed here?
+                //query = FilterFor(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
@@ -75,7 +76,8 @@ namespace XperienceAdapter.Repositories
         {
             var result = await _repositoryServices.PageRetriever.RetrieveAsync(query =>
             {
-                query = FilterForSingleType(query);
+                //TODO: Not needed here?
+                //query = FilterFor(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
@@ -122,64 +124,34 @@ namespace XperienceAdapter.Repositories
             return MapPages(result, additionalMapper, includeAttachments);
         }
 
-
-        /// <summary>
-        /// Adds default filters for <see cref="MultiDocumentQuery"/> queries.
-        /// </summary>
-        /// <param name="query">Basic query.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
-        /// <returns>Modified query.</returns>
-        protected virtual MultiDocumentQuery FilterForMultipleTypes(MultiDocumentQuery query, SiteCulture? siteCulture = default)
+        protected virtual TQuery FilterFor<TQuery, TObject>(IDocumentQuery<TQuery, TObject> query, SiteCulture? siteCulture = default)
+            where TQuery : IDocumentQuery<TQuery, TObject>
+            where TObject : TreeNode, new()
         {
-            query
+            var typedQuery = query.GetTypedQuery();
+
+            typedQuery
                 .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
 
             if (siteCulture != null)
             {
-                query.Culture(siteCulture.IsoCode);
+                typedQuery.Culture(siteCulture.IsoCode);
             }
 
             if (_repositoryServices.SiteContextService.IsPreviewEnabled)
             {
-                query
+                typedQuery
                     .LatestVersion()
                     .Published(false);
             }
             else
             {
-                query
+                typedQuery
                     .Published()
                     .PublishedVersion();
             }
 
-            return query;
-        }
-
-        /// <summary>
-        /// Adds default filters for <see cref="DocumentQuery{TDocument}"/> queries.
-        /// </summary>
-        /// <param name="query">Basic query.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
-        /// <returns>Modified query.</returns>
-        protected virtual DocumentQuery<TPage> FilterForSingleType(DocumentQuery<TPage> query)
-        {
-            query
-                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
-
-            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
-            {
-                query
-                    .LatestVersion()
-                    .Published(false);
-            }
-            else
-            {
-                query
-                    .Published()
-                    .PublishedVersion();
-            }
-
-            return query;
+            return typedQuery;
         }
 
         /// <summary>
@@ -233,11 +205,7 @@ namespace XperienceAdapter.Repositories
         protected TPageDto? ApplyMappers(TPage page, bool includeAttachments)
         {
             var dto = MapBasicDtoProperties(page, includeAttachments);
-
-            if (dto != null)
-            {
-                dto = MapDtoProperties(page, dto);
-            }
+            dto = MapDtoProperties(page, dto);
 
             return dto;
         }
@@ -248,8 +216,9 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected virtual TPageDto? MapBasicDtoProperties(TPage page, bool includeAttachments)
+        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments)
         {
+            //TODO: Why return type nullable?
             var dto = DefaultDtoFactory();
             dto.Guid = page.DocumentGUID;
             dto.NodeId = page.NodeID;
@@ -284,8 +253,10 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="dto">Page DTO.</param>
         /// <returns></returns>
-        public virtual TPageDto MapDtoProperties(TPage page, TPageDto dto) => dto;
+        //TODO: Why rturn type? Expects instance -> reference type, can be initialized directly without need of return
+        public virtual void MapDtoProperties(TPage page, TPageDto dto) { }
 
+        //TODO: IMO doesn't make sense separate cache settings and dependencies + clash types VS TPage?
         protected IEnumerable<TPage> GetPagesOfMultipleTypes(
             CacheSettings cacheSettings,
             IEnumerable<string> types,
@@ -300,6 +271,8 @@ namespace XperienceAdapter.Repositories
                 .Select(page => page as TPage)
                 .Where(page => page != null)!;
         }
+
+        //TODO: IMO doesn't make sense separate cache settings and dependencies + clash types VS TPage?
         protected async Task<IEnumerable<TPage>> GetPagesOfMultipleTypesAsync(
             CacheSettings cacheSettings,
             IEnumerable<string> types,
@@ -319,7 +292,7 @@ namespace XperienceAdapter.Repositories
         {
             var query = new MultiDocumentQuery();
 
-            query = FilterForMultipleTypes(query, culture)
+            query = FilterFor(query, culture)
                 .Types(types.ToArray())
                 .WithCoupledColumns();
 

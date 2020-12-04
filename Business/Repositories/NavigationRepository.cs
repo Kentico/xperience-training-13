@@ -70,6 +70,7 @@ namespace Business.Repositories
             _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
+        //TODO: Why the dictionary with cultureCode key?
         public Dictionary<SiteCulture, NavigationItem> GetNavigation() =>
             RoutingMode == PageRoutingModeEnum.BasedOnContentTree
                 ? GetContentTreeNavigation()

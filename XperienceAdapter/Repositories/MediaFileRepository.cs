@@ -29,6 +29,7 @@ namespace XperienceAdapter.Repositories
 
         private readonly IMediaFileUrlRetriever _mediaFileUrlRetriever;
 
+        //TODO: I don't like the concept - property of repo used only for one method -> parameter of that method + DB call per getter
         public int? MediaLibraryId
         {
             get => _mediaLibraryId == null && !string.IsNullOrEmpty(_mediaLibraryName)
@@ -46,6 +47,7 @@ namespace XperienceAdapter.Repositories
             }
         }
 
+        //TODO: I don't like the concept - property of repo used only for one method -> parameter of that method + DB call per getter
         public string? MediaLibraryName
         {
 #pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).

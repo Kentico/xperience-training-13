@@ -10,6 +10,7 @@ using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {
+    //TODO: Not needed anymore?
     public class CountryRepository : IRepository<Country>
     {
         protected readonly ICountryInfoProvider _countryInfoProvider;

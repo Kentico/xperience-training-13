@@ -24,6 +24,7 @@ namespace Business.Extensions
         /// <param name="page">The page.</param>
         /// <returns>The relative URL.</returns>
         public static string? RelativeUrl(this TreeNode page) =>
+            //TODO: I would not show this par of API since it uses PageUrlPath class from Internal namespace. Rather use IPageUrlretriever... 
             page.GetPageUrlPath(Thread.CurrentThread.CurrentUICulture.Name).FullPath;
 
         /// <summary>

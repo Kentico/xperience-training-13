@@ -81,6 +81,7 @@ namespace MedioClinic
             ConfigureIdentityServices(services, xperienceOptions);
         }
 
+        //TODO: Why using AutoFac? Is it really needed?
         public void ConfigureContainer(ContainerBuilder builder)
         {
             try
@@ -136,11 +137,16 @@ namespace MedioClinic
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
             app.UseKentico();
+            
+            //TODO: Call it after UseKentico()? Not sure...
             app.UseHttpsRedirection();
+
+            //TODO: I would rather call this before UseKentico() the same way as in DG sample
             app.UseStaticFiles();
             app.UseRouting();
             app.UseResponseCaching();
             app.UseRequestCulture();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -169,6 +175,7 @@ namespace MedioClinic
 
         private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
         {
+            //TODO: That's something we wanted to get rid of in XP13 - we use site setings wihout need to duplicate the culture config programatically
             var defaultCulture = optionsAccessor.Value.DefaultCulture ?? DefaultCultureFallback;
             var spanishCulture = "es-ES";
 

@@ -46,7 +46,7 @@ namespace Business.Repositories
 
             if (culture != null)
             {
-                dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
+                dto.DoctorDetailUrl = _repositoryServices.PageUrlRetriever.Retrieve(page, culture.IsoCode).RelativePath;
             }
 
             return dto;

@@ -8,6 +8,7 @@
         /// <summary>
         /// Code name of the site.
         /// </summary>
+        //TODO: Don't like
         public string? SiteName { get; set; }
 
         /// <summary>
@@ -18,6 +19,7 @@
         /// <summary>
         /// Default site culture, as in RFC 5646 (e.g. "en-US").
         /// </summary>
+        //TODO: Don't like
         public string? DefaultCulture { get; set; }
 
         /// <summary>
