@@ -62,8 +62,8 @@ namespace MedioClinic
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName!);
-                        return factory.Create("SharedResource", assemblyName.Name);
+                        var assemblyName = typeof(SharedResource).GetTypeInfo().Assembly.GetName().Name;
+                        return factory.Create("SharedResource", assemblyName);
                     };
                 });
 
@@ -106,6 +106,7 @@ namespace MedioClinic
             else
             {
                 // TODO: Why the overload with the "errorHandlingPath" parameter causes error controller's views to disappear in the browser?
+                // show me
                 app.UseExceptionHandler(errorApp =>
                 {
                     errorApp.Run(async context =>

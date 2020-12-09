@@ -28,7 +28,7 @@ namespace Identity
 
         protected readonly IMedioClinicSignInManager<MedioClinicUser> _signInManager;
 
-        //public IAvatarRepository AvatarRepository { get; set; }
+        //public IAvatarRepository AvatarRepository { get; set; } //??
 
 
         public AccountManager(
@@ -161,7 +161,7 @@ namespace Identity
                 try
                 {
                     //var user = await UserManager.FindByIdAsync(userId);
-                    //await CreateNewAvatarAsync(user, requestContext.HttpContext.Server);
+                    //await CreateNewAvatarAsync(user, requestContext.HttpContext.Server); //commented out code
                     accountResult.Success = true;
                     accountResult.ResultState = ConfirmUserResultState.UserConfirmed;
                 }
@@ -181,7 +181,7 @@ namespace Identity
 
         public async Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(ExternalLoginInfo loginInfo)
         {
-            var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>();
+            var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>(); //Data is not used, IMR<TResultState> shoudl be enough
             SignInResult signInResult;
 
             try
@@ -257,7 +257,7 @@ namespace Identity
             }
             // Registration: Confirmed registration (end)
 
-            Microsoft.AspNetCore.Identity.SignInResult signInResult;
+            Microsoft.AspNetCore.Identity.SignInResult signInResult; //need fully qualified name?
 
             try
             {
@@ -340,7 +340,7 @@ namespace Identity
                 return accountResult;
             }
 
-            // TODO: Use nameof.
+            // TODO: Use nameof. //TODO?
             var resetUrl = _urlHelperFactory
                 .GetUrlHelper(_actionContextAccessor.ActionContext)
                 .AbsoluteUrl(request, "ResetPassword", "Account", new { userId = user.Id, token });

@@ -51,6 +51,7 @@ namespace Identity.Models
             Phone = source.UserSettings.UserPhone;
             Nationality = source.GetStringValue("Nationality", string.Empty);
             //AvatarId = source.UserAvatarID;
+            //commented out?
         }
 
         public override void MapToUserInfo(UserInfo target)
