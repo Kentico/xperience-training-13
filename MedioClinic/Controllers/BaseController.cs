@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using CMS.Base;
 using CMS.Helpers;
 
-using Business.Configuration;
+using Core.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
 

@@ -11,7 +11,7 @@ using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Repositories;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 using MedioClinic.Models;
 using Kentico.Content.Web.Mvc.Routing;

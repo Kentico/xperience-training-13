@@ -13,14 +13,10 @@ namespace Business.Repositories
         {
         }
 
-        public override Models.MapLocation MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.MapLocation page, Models.MapLocation dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.MapLocation page, Models.MapLocation dto)
         {
             dto.Latitude = page.Latitude;
             dto.Longitude = page.Longitude;
-
-            return dto;
         }
-
-        
     }
 }

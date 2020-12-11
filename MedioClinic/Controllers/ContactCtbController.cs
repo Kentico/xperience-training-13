@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 using CMS.Base;
 using CMS.DocumentEngine;
@@ -90,8 +90,7 @@ namespace MedioClinic.Controllers
                    includeAttachments: true))
                        .FirstOrDefault();
 
-                _mediaFileRepository.MediaLibraryName = "CommonImages";
-                var medicalServicePictures = await _mediaFileRepository.GetMediaFilesAsync("MedicalServices");
+                var medicalServicePictures = await _mediaFileRepository.GetMediaFilesAsync("CommonImages", "MedicalServices");
 
                 if (company != null && officeLocations?.Any() == true && contactPage != null && medicalServicePictures?.Any() == true)
                 {

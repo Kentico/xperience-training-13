@@ -43,9 +43,13 @@ namespace Identity.Models.Profile
 
         public EmailViewModel EmailViewModel { get; set; } = new EmailViewModel();
 
+        /// <summary>
+        /// Use the <see cref="DataTypeAttribute"/> and <see cref="PhoneAttribute"/> attributes
+        /// if you don't plan on using the placeholder in the HTML input fields.
+        /// </summary>
         [Display(Name = "General.Phone")]
-        [DataType(DataType.PhoneNumber)]
-        [Phone(ErrorMessage = "Models.PhoneFormat")]
+        //[DataType(DataType.PhoneNumber)]
+        //[Phone(ErrorMessage = "Models.PhoneFormat")]
         public string? Phone { get; set; }
 
         [Display(Name = "Identity.Nationality")]

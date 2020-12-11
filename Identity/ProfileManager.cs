@@ -14,7 +14,7 @@ using CMS.Helpers;
 using CMS.Membership;
 
 using XperienceAdapter.Logging;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 using Business.Services;
 using Identity.Extensions;

@@ -1,4 +1,4 @@
-﻿namespace Business.Configuration
+﻿namespace Core.Configuration
 {
     /// <summary>
     /// Xperience-related configuration options.
@@ -6,26 +6,14 @@
     public class XperienceOptions
     {
         /// <summary>
-        /// Code name of the site.
-        /// </summary>
-        //TODO: Don't like
-        public string? SiteName { get; set; }
-
-        /// <summary>
         /// Friendly name of the company.
         /// </summary>
         public string? CompanyName { get; set; }
 
         /// <summary>
-        /// Default site culture, as in RFC 5646 (e.g. "en-US").
+        /// Site code name.
         /// </summary>
-        //TODO: Don't like
-        public string? DefaultCulture { get; set; }
-
-        /// <summary>
-        /// Indicates if content tree-based routing is used in the site.
-        /// </summary>
-        public bool? UseContentTreeBasedRouting { get; set; }
+        public string? SiteCodeName { get; set; }
 
         public MediaLibraryOptions? MediaLibraryOptions { get; set; }
 
@@ -43,11 +31,6 @@
         /// Image formats allowed in the site.
         /// </summary>
         public string[]? AllowedImageExtensions { get; set; }
-
-        /// <summary>
-        /// Code name of the medical centers library.
-        /// </summary>
-        public string? MedicalCentersLibrary { get; set; }
 
         /// <summary>
         /// File size limit.

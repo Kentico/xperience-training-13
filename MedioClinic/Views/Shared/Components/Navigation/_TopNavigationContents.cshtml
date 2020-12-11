@@ -1,16 +1,8 @@
 ﻿@using System.Threading;
-@using XperienceAdapter.Extensions;
-@using MedioClinic.ViewComponents
 @model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
 
 @{
-    var culture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
-    List<Business.Models.NavigationItem>? navigationItems = default;
-
-    if (culture != null)
-    {
-        navigationItems = Model?.Navigation?[culture]?.ChildItems;
-    }
+    var navigationItems = Model?.Navigation?.ChildItems;
 
     (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
         (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), ResHelper.GetString(resourceKey));

@@ -1,17 +1,15 @@
-﻿using CMS.DataEngine;
-using CMS.SiteProvider;
-using Kentico.Web.Mvc;
-using MedioClinic.Middleware;
+﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
+using CMS.DataEngine;
+using CMS.SiteProvider;
+
+using MedioClinic.Middleware;
 
 namespace MedioClinic.Extensions
 {
@@ -48,9 +46,9 @@ namespace MedioClinic.Extensions
 
             return app.UseStatusCodePages(async context =>
             {
-
                 var originalPath = context.HttpContext.Request.Path;
                 var originalQueryString = context.HttpContext.Request.QueryString;
+                
                 // Store the original paths so the app can check it.
                 context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(new StatusCodeReExecuteFeature()
                 {
@@ -92,6 +90,7 @@ namespace MedioClinic.Extensions
 
                 context.HttpContext.Request.Path = newPath;
                 context.HttpContext.Request.QueryString = newQueryString;
+
                 try
                 {
                     await context.Next(context.HttpContext);

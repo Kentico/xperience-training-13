@@ -10,7 +10,7 @@ namespace Business.Repositories
     /// </summary>
     public class CompanyServiceRepository : BasePageRepository<Models.CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService>
     {
-        public override Models.CompanyService MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Models.CompanyService dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.CompanyService page, Models.CompanyService dto)
         {
             dto.ServiceDescription = page?.ServiceDescription;
 
@@ -18,8 +18,6 @@ namespace Business.Repositories
             {
                 dto.IconUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(page?.Fields?.Icon); 
             }
-
-            return dto;
         }
 
         public CompanyServiceRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)

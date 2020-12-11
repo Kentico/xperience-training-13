@@ -6,7 +6,6 @@ namespace XperienceAdapter.Models
     /// <summary>
     /// Media library file.
     /// </summary>
-    //TODO: IsImage property?
     public class MediaLibraryFile
     {
         public Guid Guid { get; set; }
@@ -16,7 +15,9 @@ namespace XperienceAdapter.Models
         public IMediaFileUrl? MediaFileUrl { get; set; }
         
         public string? Extension { get; set; }
-        
+
+        public bool IsImage { get; set; }
+
         public int Width { get; set; }
         
         public int Height { get; set; }

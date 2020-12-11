@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 
-//TODO: I would expect this is something dev doesn't need to do? Why not use the approach from our sample site?
 namespace XperienceAdapter.Localization
 {
     public class XperienceStringLocalizer : IStringLocalizer

@@ -13,12 +13,10 @@ namespace Business.Repositories
         {
         }
 
-        public override Models.NamePerexText MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.NamePerexText page, Models.NamePerexText dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.NamePerexText page, Models.NamePerexText dto)
         {
             dto.Perex = page.Perex;
             dto.Text = page.Text;
-
-            return dto;
         }
     }
 }

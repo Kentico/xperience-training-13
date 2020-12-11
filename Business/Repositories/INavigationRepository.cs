@@ -11,19 +11,18 @@ namespace Business.Repositories
     public interface INavigationRepository
     {
         /// <summary>
-        /// Gets all navigation items, based on page types with the "Navigation item" feature.
+        /// Gets navigation hierarchies of all site cultures.
         /// </summary>
         /// <returns>Dictionary with navigation hierarchies per each site culture.</returns>
-        Dictionary<SiteCulture, NavigationItem> GetNavigation();
+        Dictionary<SiteCulture, NavigationItem> GetWholeNavigation();
 
         /// <summary>
-        /// Gets URL based on the custom "UrlSlug" field of the "BasicPageWithUrlSlug" page type.
+        /// Gets a navigation hierarchy for a specified or actual site culture, further constrained by the starting node alias path.
         /// </summary>
-        /// <param name="nodeId"></param>
-        /// <param name="pageCulture"></param>
+        /// <param name="siteCulture">Site culture.</param>
+        /// <param name="nodeAliasPath">Starting node alias path.</param>
         /// <returns></returns>
-        //TODO: IMO should not be resposible for the URL - magic with conventional?
-        string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture);
+        NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default);
 
         /// <summary>
         /// Traverses the hierarchy to find a navigation item by node ID.

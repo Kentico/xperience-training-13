@@ -93,10 +93,9 @@ namespace Identity
 
                     if (!string.IsNullOrEmpty(token))
                     {
-                        // TODO: use nameof (via input params).
                         var confirmationUrl = _urlHelperFactory
                             .GetUrlHelper(_actionContextAccessor.ActionContext)
-                            .AbsoluteUrl(request, "ConfirmUser", routeValues: new { userId = user.Id, token });
+                            .AbsoluteUrl(request, uploadModel.PasswordConfirmationViewModel.ConfirmationAction!, routeValues: new { userId = user.Id, token });
 
                         var subject = ResHelper.GetString("Identity.Account.Register.Email.Confirm.Subject");
                         var body = ResHelper.GetStringFormat("Identity.Account.Register.Email.Confirm.Body", confirmationUrl);
@@ -300,14 +299,14 @@ namespace Identity
             return accountResult;
         }
 
-        public async Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(EmailViewModel uploadModel, HttpRequest request)
+        public async Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(ForgotPasswordViewModel uploadModel, HttpRequest request)
         {
             var accountResult = new IdentityManagerResult<ForgotPasswordResultState>();
             MedioClinicUser? user = default;
 
             try
             {
-                user = await _userManager.FindByEmailAsync(uploadModel.Email!);
+                user = await _userManager.FindByEmailAsync(uploadModel.EmailViewModel.Email!);
             }
             catch (Exception ex)
             {
@@ -340,10 +339,9 @@ namespace Identity
                 return accountResult;
             }
 
-            // TODO: Use nameof.
             var resetUrl = _urlHelperFactory
                 .GetUrlHelper(_actionContextAccessor.ActionContext)
-                .AbsoluteUrl(request, "ResetPassword", "Account", new { userId = user.Id, token });
+                .AbsoluteUrl(request, uploadModel.ResetPasswordAction!, uploadModel.ResetPasswordController!, new { userId = user.Id, token });
 
             var subject = ResHelper.GetString("Identity.Account.ResetPassword.Title");
             var body = ResHelper.GetStringFormat("Identity.Account.ForgotPassword.Email.Body", resetUrl);

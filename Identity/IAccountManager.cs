@@ -53,7 +53,7 @@ namespace Identity
         /// <param name="uploadModel">Email address taken from the user.</param>
         /// <param name="requestContext">Request context.</param>
         /// <returns>An operation result.</returns>
-        Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(EmailViewModel uploadModel, HttpRequest request);
+        Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(ForgotPasswordViewModel uploadModel, HttpRequest request);
 
         /// <summary>
         /// Verifies the token sent via <see cref="ForgotPasswordAsync(EmailViewModel, RequestContext)"/>.

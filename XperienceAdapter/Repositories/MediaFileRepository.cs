@@ -10,17 +10,15 @@ using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
+using Core.Configuration;
 using Kentico.Content.Web.Mvc;
+using Microsoft.Extensions.Options;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {
     public class MediaFileRepository : IMediaFileRepository
     {
-        private int? _mediaLibraryId;
-
-        private string? _mediaLibraryName;
-
         private readonly IMediaLibraryInfoProvider _mediaLibraryInfoProvider;
 
         private readonly IMediaFileInfoProvider _mediaFileInfoProvider;
@@ -29,53 +27,23 @@ namespace XperienceAdapter.Repositories
 
         private readonly IMediaFileUrlRetriever _mediaFileUrlRetriever;
 
-        //TODO: I don't like the concept - property of repo used only for one method -> parameter of that method + DB call per getter
-        public int? MediaLibraryId
-        {
-            get => _mediaLibraryId == null && !string.IsNullOrEmpty(_mediaLibraryName)
-                ? _mediaLibraryInfoProvider
-                    .Get(_mediaLibraryName, _siteService.CurrentSite.SiteID)?
-                    .LibraryID
-                : _mediaLibraryId;
+        private readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
-            set
-            {
-                if (value != null)
-                {
-                    _mediaLibraryId = value.Value;
-                }
-            }
-        }
-
-        //TODO: I don't like the concept - property of repo used only for one method -> parameter of that method + DB call per getter
-        public string? MediaLibraryName
-        {
-#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-            get => string.IsNullOrEmpty(_mediaLibraryName) && _mediaLibraryId.HasValue
-#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-                ? _mediaLibraryInfoProvider
-                    .Get(_mediaLibraryId.Value)
-                    .LibraryName
-                : _mediaLibraryName;
-
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    _mediaLibraryName = value;
-                }
-            }
-        }
-
-        public MediaFileRepository(IMediaLibraryInfoProvider mediaLibraryInfoProvider, IMediaFileInfoProvider mediaFileInfoProvider, ISiteService siteService, IMediaFileUrlRetriever mediaFileUrlRetriever)
+        public MediaFileRepository(
+            IMediaLibraryInfoProvider mediaLibraryInfoProvider, 
+            IMediaFileInfoProvider mediaFileInfoProvider, 
+            ISiteService siteService, 
+            IMediaFileUrlRetriever mediaFileUrlRetriever,
+            IOptionsMonitor<XperienceOptions> optionsMonitor)
         {
             _mediaLibraryInfoProvider = mediaLibraryInfoProvider ?? throw new ArgumentNullException(nameof(mediaLibraryInfoProvider));
             _mediaFileInfoProvider = mediaFileInfoProvider ?? throw new ArgumentNullException(nameof(mediaFileInfoProvider));
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
             _mediaFileUrlRetriever = mediaFileUrlRetriever ?? throw new ArgumentNullException(nameof(mediaFileUrlRetriever));
+            _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         }
 
-        public async Task<Guid> AddMediaFileAsync(string filePath, string? libraryFolderPath = default, bool checkPermissions = default)
+        public async Task<Guid> AddMediaFileAsync(string filePath, string mediaLibraryName, string? libraryFolderPath = default, bool checkPermissions = default)
         {
             if (string.IsNullOrEmpty(filePath))
             {
@@ -92,18 +60,17 @@ namespace XperienceAdapter.Repositories
 
                 try
                 {
-                    mediaLibraryInfo = await _mediaLibraryInfoProvider.GetAsync(MediaLibraryName, siteId)
-                            ?? await _mediaLibraryInfoProvider.GetAsync(MediaLibraryId!.Value);
+                    mediaLibraryInfo = await _mediaLibraryInfoProvider.GetAsync(mediaLibraryName, siteId);
                 }
                 catch (Exception)
                 {
-                    throw new Exception($"The {MediaLibraryName} library was not found on the {siteName} site.");
+                    throw new Exception($"The {mediaLibraryName} library was not found on the {siteName} site.");
                 }
 
                 if (checkPermissions && !mediaLibraryInfo.CheckPermissions(PermissionsEnum.Create, siteName, MembershipContext.AuthenticatedUser))
                 {
                     throw new PermissionException(
-                        $"The user {MembershipContext.AuthenticatedUser.FullName} lacks permissions to the {MediaLibraryName} library.");
+                        $"The user {MembershipContext.AuthenticatedUser.FullName} lacks permissions to the {mediaLibraryName} library.");
                 }
 
                 MediaFileInfo mediaFile = !string.IsNullOrEmpty(libraryFolderPath)
@@ -130,60 +97,84 @@ namespace XperienceAdapter.Repositories
             return mediaFileInfo != null ? MapDtoProperties(mediaFileInfo) : null;
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params Guid[] fileGuids)
+        public async Task<MediaLibraryFile> GetMediaFileAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default)
         {
-            var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereIn("FileGUID", fileGuids), cancellationToken);
+            var libraryId = GetLibraryId(mediaLibraryName);
 
-            return results.Select(item => MapDtoProperties(item));
+            return (await GetResultAsync(baseQuery => 
+                baseQuery
+                    .WhereEquals("FileLibraryID", libraryId)
+                    .WhereStartsWith("FilePath", path), 
+                cancellationToken))
+                .FirstOrDefault();
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params string[] extensions)
-        {
-            var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereIn("FileExtension", extensions), cancellationToken);
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params Guid[] fileGuids) =>
+            await GetResultAsync(baseQuery =>
+                    baseQuery
+                    .WhereIn("FileGUID", fileGuids),
+                cancellationToken);
 
-            return results.Select(item => MapDtoProperties(item));
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, CancellationToken? cancellationToken = default, params string[] extensions)
+        {
+            var libraryId = GetLibraryId(mediaLibraryName);
+
+            return await GetResultAsync(baseQuery =>
+                baseQuery
+                    .WhereIn("FileExtension", extensions),
+                cancellationToken);
         }
 
-        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string path, CancellationToken? cancellationToken = default)
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default)
         {
-            var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereStartsWith("FilePath", path), cancellationToken);
+            var libraryId = GetLibraryId(mediaLibraryName);
 
-            return results.Select(item => MapDtoProperties(item));
+            return await GetResultAsync(baseQuery =>
+                baseQuery
+                    .WhereStartsWith("FilePath", path),
+                cancellationToken);
         }
 
-        public async Task<MediaLibraryFile> GetMediaFileAsync(string path, CancellationToken? cancellationToken = default)
-        {
-            var results = await GetQueryAsync(baseQuery => baseQuery
-                .WhereStartsWith("FilePath", path), cancellationToken);
-
-            return results.Select(item => MapDtoProperties(item)).FirstOrDefault();
-        }
-
-        public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default)
-        {
-            var results = await GetQueryAsync(cancellationToken: cancellationToken);
-
-            return results.Select(item => MapDtoProperties(item));
-        }
+        public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default) =>
+            await GetResultAsync(cancellationToken: cancellationToken);
 
         public IEnumerable<MediaLibraryFile> GetAll() => GetAllAsync().GetAwaiter().GetResult();
+
+        /// <summary>
+        /// Gets a media library ID by its code name.
+        /// </summary>
+        /// <param name="mediaLibraryName">Code name.</param>
+        /// <returns>Library ID.</returns>
+        private int GetLibraryId(string mediaLibraryName)
+        {
+            if (string.IsNullOrEmpty(mediaLibraryName))
+            {
+                throw new ArgumentException($"The {nameof(mediaLibraryName)} parameter must a non-empty string.");
+            }
+
+            return _mediaLibraryInfoProvider
+                .Get(mediaLibraryName, _siteService.CurrentSite.SiteID)
+                .LibraryID;
+        }
 
         /// <summary>
         /// Gets a query with an optional filter.
         /// </summary>
         /// <param name="filter">Optional filter.</param>
         /// <returns></returns>
-        protected async Task<IEnumerable<MediaFileInfo>> GetQueryAsync(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter = default, CancellationToken? cancellationToken = default)
+        private async Task<IEnumerable<MediaLibraryFile>> GetResultAsync(
+            Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter = default,
+            CancellationToken? cancellationToken = default)
         {
-            var baseQuery = _mediaFileInfoProvider.Get()
-                .WhereEquals("FileLibraryID", MediaLibraryId);
+            var query = _mediaFileInfoProvider.Get();
 
-            return filter != null
-                ? await filter(baseQuery).GetEnumerableTypedResultAsync(cancellationToken: cancellationToken)
-                : await baseQuery.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
+            if (filter != null)
+            {
+                query = filter(query);
+            }
+
+            return (await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
+                .Select(item => MapDtoProperties(item));
         }
 
         /// <summary>
@@ -191,13 +182,14 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="mediaFileInfo">Xperience media file.</param>
         /// <returns>Media file DTO.</returns>
-        protected MediaLibraryFile MapDtoProperties(MediaFileInfo mediaFileInfo) =>
+        private MediaLibraryFile MapDtoProperties(MediaFileInfo mediaFileInfo) =>
             new MediaLibraryFile()
             {
                 Guid = mediaFileInfo.FileGUID,
                 Name = mediaFileInfo.FileTitle,
                 Extension = mediaFileInfo.FileExtension,
                 MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
+                IsImage = _optionsMonitor.CurrentValue?.MediaLibraryOptions?.AllowedImageExtensions?.Contains(mediaFileInfo.FileExtension) == true,
                 Width = mediaFileInfo.FileImageWidth,
                 Height = mediaFileInfo.FileImageHeight
             };

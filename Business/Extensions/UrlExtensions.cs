@@ -5,11 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-using CMS.DocumentEngine;
-using CMS.DocumentEngine.Routing;
 using Kentico.Web.Mvc;
-
-using XperienceAdapter.Models;
 
 namespace Business.Extensions
 {
@@ -18,25 +14,6 @@ namespace Business.Extensions
     /// </summary>
     public static class UrlExtensions
     {
-        /// <summary>
-        /// Gets a relative URL of a page.
-        /// </summary>
-        /// <param name="page">The page.</param>
-        /// <returns>The relative URL.</returns>
-        public static string? RelativeUrl(this TreeNode page) =>
-            //TODO: I would not show this par of API since it uses PageUrlPath class from Internal namespace. Rather use IPageUrlretriever... 
-            page.GetPageUrlPath(Thread.CurrentThread.CurrentUICulture.Name).FullPath;
-
-        /// <summary>
-        /// Custom extension method for retrieving image urls based on their path
-        /// </summary>
-        /// <param name="helper">Html helper</param>
-        /// <param name="path">Path to file</param>
-        /// <param name="size">Size constraints</param>
-        /// <returns></returns>
-        //public static string KenticoImageUrl(this IUrlHelper helper, string path, IImageSizeConstraint? size = default) =>
-        //    helper.Kentico().ImageUrl(path, size?.GetSizeConstraint() ?? SizeConstraint.Empty);
-
         /// <summary>
         /// Builds an absolute URL out of context information.
         /// </summary>

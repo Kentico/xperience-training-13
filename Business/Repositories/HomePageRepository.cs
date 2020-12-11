@@ -14,7 +14,7 @@ namespace Business.Repositories
     /// </summary>
     public class HomePageRepository : BasePageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage>
     {
-        public override HomePage MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, HomePage dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.HomePage page, HomePage dto)
         {
             dto.Perex = page.Perex;
             dto.Text = page.Text;
@@ -27,8 +27,6 @@ namespace Business.Repositories
             {
                 dto.DoctorsUrl = _repositoryServices.PageUrlRetriever.Retrieve(doctorsNode, currentCulture.IsoCode).RelativePath;
             }
-
-            return dto;
         }
 
         public HomePageRepository(IRepositoryServices repositoryServices) : base(repositoryServices)

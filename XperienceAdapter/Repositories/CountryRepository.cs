@@ -1,19 +1,19 @@
-﻿using CMS.Globalization;
-using Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+using CMS.Globalization;
+
+using Core;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
 {
-    //TODO: Not needed anymore?
     public class CountryRepository : IRepository<Country>
     {
-        protected readonly ICountryInfoProvider _countryInfoProvider;
+        private readonly ICountryInfoProvider _countryInfoProvider;
 
         public CountryRepository(ICountryInfoProvider countryInfoProvider)
         {
@@ -27,19 +27,10 @@ namespace XperienceAdapter.Repositories
             Name = countryInfo.CountryDisplayName
         };
 
-        public IEnumerable<Country> GetAll()
-        {
-            var test01 = _countryInfoProvider
-            .Get();
-
-            var test02 = test01
-            .AsEnumerable();
-
-            var test03 = test02
-            .Select(countryInfo => MapDtoProperties(countryInfo));
-
-            return test03;
-        }
+        public IEnumerable<Country> GetAll() => _countryInfoProvider
+                .Get()
+                .AsEnumerable()
+                .Select(countryInfo => MapDtoProperties(countryInfo));
 
         public Task<IEnumerable<Country>> GetAllAsync(CancellationToken? cancellationToken = default) => Task.FromResult(GetAll());
     }

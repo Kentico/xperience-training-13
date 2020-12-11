@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using CMS.Core;
 using CMS.Base;
 
-//TODO: Is it good approach to show? - logger can be called even if the DB is not ready yet etc.
 namespace XperienceAdapter.Logging
 {
     /// <summary>

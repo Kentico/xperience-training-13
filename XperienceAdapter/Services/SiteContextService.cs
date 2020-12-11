@@ -10,9 +10,6 @@ namespace XperienceAdapter.Services
     {
         public bool IsPreviewEnabled => HttpContextAccessor.HttpContext.Kentico().Preview().Enabled;
 
-        // TODO: You should not need this
-        public string PreviewCulture => HttpContextAccessor.HttpContext.Kentico().Preview().CultureName;
-
         protected IHttpContextAccessor HttpContextAccessor { get; }
 
         public SiteContextService(IHttpContextAccessor httpContextAccessor)

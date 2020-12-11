@@ -8,7 +8,6 @@ namespace XperienceAdapter.Services
     /// <summary>
     /// Common repository dependencies.
     /// </summary>
-    //TODO: What is this good for? Hidden depndencies? Better testability?
     public interface IRepositoryServices
     {
         ISiteService SiteService { get; }
