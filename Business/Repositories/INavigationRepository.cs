@@ -25,6 +25,14 @@ namespace Business.Repositories
         NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default);
 
         /// <summary>
+        /// Gets a navigation item's URL based on the "UrlSlug" field of the "BasicPageWithUrlSlug" page type.
+        /// </summary>
+        /// <param name="nodeId">Node ID.</param>
+        /// <param name="pageCulture">Page culture.</param>
+        /// <returns></returns>
+        string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture);
+
+        /// <summary>
         /// Traverses the hierarchy to find a navigation item by node ID.
         /// </summary>
         /// <param name="nodeId">Node ID.</param>

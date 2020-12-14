@@ -46,7 +46,13 @@ namespace Business.Repositories
 
             if (culture != null)
             {
+                /* CTB routring: Start */
                 dto.DoctorDetailUrl = _repositoryServices.PageUrlRetriever.Retrieve(page, culture.IsoCode).RelativePath;
+                /* CTB routing: End */
+
+                /* Conventional routing: Start */
+                //dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
+                /* Conventional routing: End */
             }
         }
 
