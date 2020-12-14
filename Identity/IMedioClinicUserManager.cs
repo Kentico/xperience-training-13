@@ -985,6 +985,11 @@ namespace Identity
         /// <returns>The security token bytes.</returns>
         Task<byte[]> CreateSecurityTokenAsync(TUser user);
 
+        /// <summary>
+        /// Creates an external user in the data store.
+        /// </summary>
+        /// <param name="loginInfo">Login info.</param>
+        /// <returns>The identity result.</returns>
         Task<IdentityResult> CreateExternalUser(ExternalLoginInfo loginInfo);
     }
 }

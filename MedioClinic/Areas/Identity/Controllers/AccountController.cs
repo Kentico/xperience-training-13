@@ -274,12 +274,6 @@ namespace MedioClinic.Areas.Identity.Controllers
         }
 
         /// <summary>
-        /// Gets the home page URL.
-        /// </summary>
-        /// <returns>Home page URL.</returns>
-        protected string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
-
-        /// <summary>
         /// Redirects authentication requests to an external service.
         /// </summary>
         /// <param name="provider">Name of the authentication middleware.</param>
@@ -325,7 +319,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                 return View(nameof(SignIn));
             }
 
-            IdentityManagerResult<SignInResultState, SignInViewModel> result = await _accountManager.SignInExternalAsync(loginInfo);
+            IdentityManagerResult<SignInResultState> result = await _accountManager.SignInExternalAsync(loginInfo);
 
             if (result.Success)
             {
@@ -336,5 +330,11 @@ namespace MedioClinic.Areas.Identity.Controllers
                 return InvalidAttempt(new PageViewModel<SignInViewModel>());
             }
         }
+
+        /// <summary>
+        /// Gets the home page URL.
+        /// </summary>
+        /// <returns>Home page URL.</returns>
+        private string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
     }
 }

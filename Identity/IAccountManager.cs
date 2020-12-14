@@ -1,13 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
 using Core;
 using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
-using Microsoft.AspNetCore.Authentication;
-using CMS.Membership;
-using Microsoft.AspNetCore.Identity;
 
 namespace Identity
 {
@@ -74,6 +72,6 @@ namespace Identity
 
         Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync();
 
-        Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
+        Task<IdentityManagerResult<SignInResultState>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
     }
 }

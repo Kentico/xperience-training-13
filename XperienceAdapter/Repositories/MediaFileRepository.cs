@@ -136,7 +136,7 @@ namespace XperienceAdapter.Repositories
         }
 
         public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default) =>
-            await GetResultAsync(cancellationToken: cancellationToken);
+            await GetResultAsync(null, cancellationToken: cancellationToken);
 
         public IEnumerable<MediaLibraryFile> GetAll() => GetAllAsync().GetAwaiter().GetResult();
 
@@ -163,8 +163,8 @@ namespace XperienceAdapter.Repositories
         /// <param name="filter">Optional filter.</param>
         /// <returns></returns>
         private async Task<IEnumerable<MediaLibraryFile>> GetResultAsync(
-            Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter = default,
-            CancellationToken? cancellationToken = default)
+            Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter,
+            CancellationToken? cancellationToken)
         {
             var query = _mediaFileInfoProvider.Get();
 

@@ -9,7 +9,7 @@ namespace MedioClinic.ViewComponents
 {
     public class Navigation : ViewComponent
     {
-        protected readonly INavigationRepository _navigationRepository;
+        private readonly INavigationRepository _navigationRepository;
 
         public Navigation(INavigationRepository navigationRepository)
         {

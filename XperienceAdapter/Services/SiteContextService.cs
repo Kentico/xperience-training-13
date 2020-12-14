@@ -10,7 +10,7 @@ namespace XperienceAdapter.Services
     {
         public bool IsPreviewEnabled => HttpContextAccessor.HttpContext.Kentico().Preview().Enabled;
 
-        protected IHttpContextAccessor HttpContextAccessor { get; }
+        private IHttpContextAccessor HttpContextAccessor { get; }
 
         public SiteContextService(IHttpContextAccessor httpContextAccessor)
         {

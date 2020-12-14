@@ -26,15 +26,15 @@ namespace Identity
 {
     public class ProfileManager : BaseIdentityManager, IProfileManager
     {
-        protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
+        private readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
-        protected readonly IFileService _fileService;
+        private readonly IFileService _fileService;
 
-        protected readonly IUserModelService _userModelService;
+        private readonly IUserModelService _userModelService;
 
-        protected readonly IAvatarService _avatarService;
+        private readonly IAvatarService _avatarService;
 
-        protected readonly ISiteService _siteService;
+        private readonly ISiteService _siteService;
 
         public ProfileManager(
             ILogger<ProfileManager> logger,
@@ -179,7 +179,7 @@ namespace Identity
         /// <param name="requestContext">Request context.</param>
         /// <param name="forceAvatarFileOverwrite">Flag that signals the need to update the app-local physical avatar file.</param>
         /// <returns>The view model and a page title.</returns>
-        protected (IUserViewModel? UserViewModel, string? PageTitle) GetViewModelByUserRoles(MedioClinicUser user)
+        private (IUserViewModel? UserViewModel, string? PageTitle) GetViewModelByUserRoles(MedioClinicUser user)
         {
             if (user != null)
             {
@@ -226,7 +226,7 @@ namespace Identity
         /// </summary>
         /// <param name="roles">Role of the user.</param>
         /// <returns>A friendly name of the role.</returns>
-        protected string GetRoleTitle(Roles roles) =>
+        private string GetRoleTitle(Roles roles) =>
             FlagEnums.HasAnyFlags(roles, Roles.Doctor)
                 ? ResHelper.GetString("Identity.Profile.Doctor")
                 : ResHelper.GetString("Identity.Profile.Patient");
@@ -237,7 +237,7 @@ namespace Identity
         /// <param name="profileResult">The profile manager result.</param>
         /// <param name="ex">The exception.</param>
         /// <param name="resultState">The result state.</param>
-        protected void HandlePostProfileException(ref IdentityManagerResult<PostProfileResultState, (IUserViewModel, string)> profileResult, Exception ex, PostProfileResultState resultState)
+        private void HandlePostProfileException(ref IdentityManagerResult<PostProfileResultState, (IUserViewModel, string)> profileResult, Exception ex, PostProfileResultState resultState)
         {
             var pr = profileResult as IdentityManagerResult<PostProfileResultState>;
             HandleException(nameof(PostProfileAsync), ex, ref pr);

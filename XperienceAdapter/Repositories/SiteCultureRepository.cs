@@ -15,7 +15,7 @@ namespace XperienceAdapter.Repositories
 {
     public class SiteCultureRepository : ISiteCultureRepository
     {
-        protected readonly ISiteService _siteService;
+        private readonly ISiteService _siteService;
 
         public SiteCulture DefaultSiteCulture =>
             GetAll().FirstOrDefault(culture => culture.IsDefault);

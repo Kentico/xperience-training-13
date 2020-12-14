@@ -69,8 +69,8 @@ namespace MedioClinic
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName!);
-                        return factory.Create("SharedResource", assemblyName.Name);
+                        var assemblyName = typeof(SharedResource).GetTypeInfo().Assembly.GetName().Name;
+                        return factory.Create("SharedResource", assemblyName);
                     };
                 });
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -11,25 +12,20 @@ using CMS.Helpers;
 using Kentico.Membership;
 
 using Business.Extensions;
-using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Identity
 {
     public class AccountManager : BaseIdentityManager, IAccountManager
     {
-        protected readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IUrlHelperFactory _urlHelperFactory;
 
-        protected readonly IActionContextAccessor _actionContextAccessor;
+        private readonly IActionContextAccessor _actionContextAccessor;
 
-        protected readonly IMessageService _messageService;
+        private readonly IMessageService _messageService;
 
-        protected readonly IMedioClinicSignInManager<MedioClinicUser> _signInManager;
-
-        //public IAvatarRepository AvatarRepository { get; set; }
-
+        private readonly IMedioClinicSignInManager<MedioClinicUser> _signInManager;
 
         public AccountManager(
             ILogger<AccountManager> logger,
@@ -115,7 +111,6 @@ namespace Identity
 
                     try
                     {
-                        //await CreateNewAvatarAsync(user, requestContext.HttpContext.Server);
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         accountResult.ResultState = RegisterResultState.SignedIn;
                         accountResult.Success = true;
@@ -178,9 +173,9 @@ namespace Identity
             return accountResult;
         }
 
-        public async Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(ExternalLoginInfo loginInfo)
+        public async Task<IdentityManagerResult<SignInResultState>> SignInExternalAsync(ExternalLoginInfo loginInfo)
         {
-            var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>();
+            var accountResult = new IdentityManagerResult<SignInResultState>();
             SignInResult signInResult;
 
             try
@@ -189,9 +184,8 @@ namespace Identity
             }
             catch (Exception ex)
             {
-                var ar = accountResult as IdentityManagerResult<SignInResultState>;
                 accountResult.ResultState = SignInResultState.NotSignedIn;
-                HandleException(nameof(SignInAsync), ex, ref ar);
+                HandleException(nameof(SignInAsync), ex, ref accountResult);
 
                 return accountResult;
             }
@@ -256,7 +250,7 @@ namespace Identity
             }
             // Registration: Confirmed registration (end)
 
-            Microsoft.AspNetCore.Identity.SignInResult signInResult;
+            SignInResult signInResult;
 
             try
             {
@@ -428,22 +422,22 @@ namespace Identity
             return accountResult;
         }
 
+        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl) =>
+            _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
+
+        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
+
         /// <summary>
         /// Adds a user to the patient role.
         /// </summary>
         /// <param name="userId">User ID.</param>
         /// <returns>An identity result.</returns>
-        protected async Task<IdentityResult> AddToPatientRoleAsync(int userId)
+        private async Task<IdentityResult> AddToPatientRoleAsync(int userId)
         {
             var patientRole = Roles.Patient.ToString();
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             return await _userManager.AddToRolesAsync(user, new[] { patientRole });
         }
-
-        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl) =>
-            _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
-
-        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
     }
 }
