@@ -13,7 +13,7 @@ using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 
 using XperienceAdapter.Repositories;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 using MedioClinic.Controllers;
 using MedioClinic.Models;

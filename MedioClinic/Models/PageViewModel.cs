@@ -44,7 +44,7 @@ namespace MedioClinic.Models
         }
     }
 
-    public class PageViewModel<TViewModel> : PageViewModel// where TViewModel : class, new()
+    public class PageViewModel<TViewModel> : PageViewModel
     {
         public TViewModel Data { get; set; } = default!;
 

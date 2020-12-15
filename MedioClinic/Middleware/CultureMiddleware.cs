@@ -25,21 +25,25 @@ namespace MedioClinic.Middleware
                 throw new ArgumentNullException(nameof(httpContext));
             }
 
-            // TODO: Nested function.
-            var cultureParameterValue = httpContext
-                .Request
-                .RouteValues?
-                .FirstOrDefault(value => value.Key.Equals(CultureParameterName, StringComparison.OrdinalIgnoreCase))
-                .Value as string;
+            await invokeImplementation();
 
-            if (!string.IsNullOrEmpty(cultureParameterValue))
+            async Task invokeImplementation()
             {
-                var cultureInfo = new CultureInfo(cultureParameterValue);
-                Thread.CurrentThread.CurrentCulture = cultureInfo;
-                Thread.CurrentThread.CurrentUICulture = cultureInfo;
-            }
+                var cultureParameterValue = httpContext
+                    .Request
+                    .RouteValues?
+                    .FirstOrDefault(value => value.Key.Equals(CultureParameterName, StringComparison.OrdinalIgnoreCase))
+                    .Value as string;
 
-            await _next(httpContext);
+                if (!string.IsNullOrEmpty(cultureParameterValue))
+                {
+                    var cultureInfo = new CultureInfo(cultureParameterValue);
+                    Thread.CurrentThread.CurrentCulture = cultureInfo;
+                    Thread.CurrentThread.CurrentUICulture = cultureInfo;
+                }
+
+                await _next(httpContext);
+            }
         }
     }
 }

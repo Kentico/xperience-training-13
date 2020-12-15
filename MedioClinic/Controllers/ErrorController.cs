@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using CMS.Base;
 
 using XperienceAdapter.Repositories;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 
 namespace MedioClinic.Controllers

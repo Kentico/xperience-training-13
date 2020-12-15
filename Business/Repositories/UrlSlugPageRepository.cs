@@ -12,11 +12,9 @@ namespace Business.Repositories
         {
         }
 
-        public override BasicPageWithUrlSlug MapDtoProperties(TreeNode page, BasicPageWithUrlSlug dto)
+        public override void MapDtoProperties(TreeNode page, BasicPageWithUrlSlug dto)
         {
             dto.UrlSlug = page.GetStringValue("UrlSlug", default);
-
-            return dto;
         }
     }
 }

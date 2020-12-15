@@ -26,7 +26,7 @@ namespace Business.Repositories
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
-        public override Doctor MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Doctor page, Doctor dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Doctor page, Doctor dto)
         {
             dto.UrlSlug = page.UrlSlug;
             dto.UserId = page.UserAccount;
@@ -46,10 +46,14 @@ namespace Business.Repositories
 
             if (culture != null)
             {
-                dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
-            }
+                /* CTB routring: Start */
+                dto.DoctorDetailUrl = _repositoryServices.PageUrlRetriever.Retrieve(page, culture.IsoCode).RelativePath;
+                /* CTB routing: End */
 
-            return dto;
+                /* Conventional routing: Start */
+                //dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
+                /* Conventional routing: End */
+            }
         }
 
         private static DayOfWeek? GetShiftDayOfWeek(IEnumerable<TreeNode> dayOfWeekPage) =>

@@ -50,7 +50,7 @@ namespace MedioClinic.ViewComponents
 
         private IEnumerable<KeyValuePair<SiteCulture, string>>? GetDatabaseUrlVariants(string searchPath, SiteCulture currentCulture)
         {
-            var navigation = _navigationRepository.GetNavigation();
+            var navigation = _navigationRepository.GetWholeNavigation();
             var currentPageNavigationItem = GetNavigationItemByRelativeUrl(searchPath, navigation[currentCulture]);
 
             if (currentPageNavigationItem != null)

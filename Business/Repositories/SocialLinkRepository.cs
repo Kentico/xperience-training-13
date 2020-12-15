@@ -10,7 +10,7 @@ namespace Business.Repositories
     /// </summary>
     public class SocialLinkRepository : BasePageRepository<Models.SocialLink, CMS.DocumentEngine.Types.MedioClinic.SocialLink>
     {
-        public override Models.SocialLink MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Models.SocialLink dto)
+        public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.SocialLink page, Models.SocialLink dto)
         {
             dto.Url = page?.Url;
 
@@ -18,8 +18,6 @@ namespace Business.Repositories
             {
                 dto.IconUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(page?.Fields?.Icon);
             }
-
-            return dto;
         }
 
         public SocialLinkRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)

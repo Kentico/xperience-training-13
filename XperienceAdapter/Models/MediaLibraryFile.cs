@@ -15,7 +15,9 @@ namespace XperienceAdapter.Models
         public IMediaFileUrl? MediaFileUrl { get; set; }
         
         public string? Extension { get; set; }
-        
+
+        public bool IsImage { get; set; }
+
         public int Width { get; set; }
         
         public int Height { get; set; }

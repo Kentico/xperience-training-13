@@ -11,7 +11,7 @@ using CMS.Base;
 using CMS.DocumentEngine;
 
 using XperienceAdapter.Repositories;
-using Business.Configuration;
+using Core.Configuration;
 using Business.Models;
 
 namespace MedioClinic.Controllers

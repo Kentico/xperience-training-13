@@ -10,8 +10,6 @@ namespace MedioClinic.Areas.Identity.ModelBinders
 {
     public class UserModelBinderProvider : IModelBinderProvider
     {
-        //TODO??
-        // TODO: Nullable return value?
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
             if (context is null)

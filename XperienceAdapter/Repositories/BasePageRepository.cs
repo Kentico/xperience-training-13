@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +25,6 @@ namespace XperienceAdapter.Repositories
     {
         protected readonly IRepositoryServices _repositoryServices;
 
-
         /// <summary>
         /// Default DTO factory method.
         /// </summary>
@@ -35,13 +35,11 @@ namespace XperienceAdapter.Repositories
             _repositoryServices = repositoryDependencies ?? throw new ArgumentNullException(nameof(repositoryDependencies));
         }
 
-        // TODO: How to access CLASS_NAME to set .PageType()?
         public virtual IEnumerable<TPageDto> GetAll() => GetPagesInCurrentCulture(
             buildCacheAction: cache => cache
                 .Key($"{nameof(BasePageRepository<TPageDto, TPage>)}|{typeof(TPage).Name}")
                 .Expiration(TimeSpan.FromSeconds(30)));
 
-        // TODO: Use async sibling method.
         public virtual async Task<IEnumerable<TPageDto>> GetAllAsync(CancellationToken? cancellationToken = default) =>
             await GetPagesInCurrentCultureAsync(
                 cancellationToken,
@@ -57,7 +55,6 @@ namespace XperienceAdapter.Repositories
         {
             var result = _repositoryServices.PageRetriever.Retrieve(query =>
             {
-                query = FilterForSingleType(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
@@ -75,7 +72,6 @@ namespace XperienceAdapter.Repositories
         {
             var result = await _repositoryServices.PageRetriever.RetrieveAsync(query =>
             {
-                query = FilterForSingleType(query);
                 query.Columns(DefaultDtoFactory().SourceColumns);
                 filter?.Invoke(query);
             },
@@ -94,10 +90,10 @@ namespace XperienceAdapter.Repositories
             bool includeAttachments = default,
             params string[] cacheDependencies)
         {
-            var cacheSettings = GetCacheSettings(cacheKey);
+            var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
 
             var result = _repositoryServices.ProgressiveCache.Load(cacheSettings =>
-                GetPagesOfMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies),
+                GetPagesOfMultipleTypes(types, culture, filter),
                 cacheSettings);
 
             return MapPages(result, additionalMapper, includeAttachments);
@@ -113,74 +109,16 @@ namespace XperienceAdapter.Repositories
             bool includeAttachments = default,
             params string[] cacheDependencies)
         {
-            var cacheSettings = GetCacheSettings(cacheKey);
+            var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
 
             var result = await _repositoryServices.ProgressiveCache.LoadAsync(async cacheSettings =>
-                await GetPagesOfMultipleTypesAsync(cacheSettings, types, culture, filter, cacheDependencies),
+                await GetPagesOfMultipleTypesAsync(types, culture, filter),
                 cacheSettings);
 
             return MapPages(result, additionalMapper, includeAttachments);
         }
 
 
-        /// <summary>
-        /// Adds default filters for <see cref="MultiDocumentQuery"/> queries.
-        /// </summary>
-        /// <param name="query">Basic query.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
-        /// <returns>Modified query.</returns>
-        protected virtual MultiDocumentQuery FilterForMultipleTypes(MultiDocumentQuery query, SiteCulture? siteCulture = default)
-        {
-            query
-                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
-
-            if (siteCulture != null)
-            {
-                query.Culture(siteCulture.IsoCode);
-            }
-
-            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
-            {
-                query
-                    .LatestVersion()
-                    .Published(false);
-            }
-            else
-            {
-                query
-                    .Published()
-                    .PublishedVersion();
-            }
-
-            return query;
-        }
-
-        /// <summary>
-        /// Adds default filters for <see cref="DocumentQuery{TDocument}"/> queries.
-        /// </summary>
-        /// <param name="query">Basic query.</param>
-        /// <param name="culture">Explicitly-stated culture.</param>
-        /// <returns>Modified query.</returns>
-        protected virtual DocumentQuery<TPage> FilterForSingleType(DocumentQuery<TPage> query)
-        {
-            query
-                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
-
-            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
-            {
-                query
-                    .LatestVersion()
-                    .Published(false);
-            }
-            else
-            {
-                query
-                    .Published()
-                    .PublishedVersion();
-            }
-
-            return query;
-        }
 
         /// <summary>
         /// Maps query results onto DTOs.
@@ -230,14 +168,10 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected TPageDto? ApplyMappers(TPage page, bool includeAttachments)
+        protected TPageDto ApplyMappers(TPage page, bool includeAttachments)
         {
             var dto = MapBasicDtoProperties(page, includeAttachments);
-
-            if (dto != null)
-            {
-                dto = MapDtoProperties(page, dto);
-            }
+            MapDtoProperties(page, dto);
 
             return dto;
         }
@@ -248,7 +182,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="page">Xperience page.</param>
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTO.</returns>
-        protected virtual TPageDto? MapBasicDtoProperties(TPage page, bool includeAttachments)
+        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments)
         {
             var dto = DefaultDtoFactory();
             dto.Guid = page.DocumentGUID;
@@ -283,31 +217,27 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="page">Xperience page.</param>
         /// <param name="dto">Page DTO.</param>
-        /// <returns></returns>
-        public virtual TPageDto MapDtoProperties(TPage page, TPageDto dto) => dto;
+        public virtual void MapDtoProperties(TPage page, TPageDto dto) { }
 
         protected IEnumerable<TPage> GetPagesOfMultipleTypes(
-            CacheSettings cacheSettings,
             IEnumerable<string> types,
             SiteCulture culture,
-            Action<MultiDocumentQuery>? filter = default,
-            params string[] cacheDependencies)
+            Action<MultiDocumentQuery>? filter = default)
         {
-            MultiDocumentQuery query = GetQueryForMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies);
+            MultiDocumentQuery query = GetQueryForMultipleTypes(types, culture, filter);
 
             return query
                 .GetEnumerableTypedResult()
                 .Select(page => page as TPage)
                 .Where(page => page != null)!;
         }
+
         protected async Task<IEnumerable<TPage>> GetPagesOfMultipleTypesAsync(
-            CacheSettings cacheSettings,
             IEnumerable<string> types,
             SiteCulture culture,
-            Action<MultiDocumentQuery>? filter = default,
-            params string[] cacheDependencies)
+            Action<MultiDocumentQuery>? filter = default)
         {
-            MultiDocumentQuery query = GetQueryForMultipleTypes(cacheSettings, types, culture, filter, cacheDependencies);
+            MultiDocumentQuery query = GetQueryForMultipleTypes(types, culture, filter);
 
             return (await query
                 .GetEnumerableTypedResultAsync())
@@ -315,24 +245,55 @@ namespace XperienceAdapter.Repositories
                 .Where(page => page != null)!;
         }
 
-        protected MultiDocumentQuery GetQueryForMultipleTypes(CacheSettings cacheSettings, IEnumerable<string> types, SiteCulture culture, Action<MultiDocumentQuery>? filter, string[] cacheDependencies)
+        protected MultiDocumentQuery GetQueryForMultipleTypes(IEnumerable<string> types, SiteCulture? culture, Action<MultiDocumentQuery>? filter)
         {
             var query = new MultiDocumentQuery();
 
-            query = FilterForMultipleTypes(query, culture)
+            query = FilterFor(query, culture)
                 .Types(types.ToArray())
                 .WithCoupledColumns();
 
             filter?.Invoke(query);
 
-            if (cacheDependencies?.Any() == true)
-            {
-                cacheSettings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
-            }
-
             return query;
         }
 
-        protected static CacheSettings GetCacheSettings(string cacheKey) => new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
+        protected virtual TQuery FilterFor<TQuery, TObject>(IDocumentQuery<TQuery, TObject> query, SiteCulture? siteCulture = default)
+            where TQuery : IDocumentQuery<TQuery, TObject>
+            where TObject : TreeNode, new()
+        {
+            var typedQuery = query.GetTypedQuery();
+
+            typedQuery
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
+
+            if (siteCulture != null)
+            {
+                typedQuery.Culture(siteCulture.IsoCode);
+            }
+
+            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
+            {
+                typedQuery
+                    .LatestVersion()
+                    .Published(false);
+            }
+            else
+            {
+                typedQuery
+                    .Published()
+                    .PublishedVersion();
+            }
+
+            return typedQuery;
+        }
+
+        protected static CacheSettings GetCacheSettings(string cacheKey, params string[] cacheDependencies)
+        {
+            var settings = new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
+            settings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+
+            return settings;
+        }
     }
 }

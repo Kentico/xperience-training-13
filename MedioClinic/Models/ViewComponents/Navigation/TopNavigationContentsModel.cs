@@ -13,7 +13,7 @@ namespace MedioClinic.Models.ViewComponents.Navigation
 
         public string? ListClass { get; set; }
 
-        public Dictionary<SiteCulture, NavigationItem>? Navigation { get; set; }
+        public NavigationItem? Navigation { get; set; }
 
         public bool DisplaySecondLevel { get; set; }
     }

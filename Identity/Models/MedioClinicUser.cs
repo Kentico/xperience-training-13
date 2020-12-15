@@ -23,8 +23,6 @@ namespace Identity.Models
 
         public string? Nationality { get; set; }
 
-        public int AvatarId { get; set; }
-
         /// <summary>
         /// Explicit default constructor to satisfy requirements of <see cref="ApplicationUserStore{TUser}"/>.
         /// </summary>
@@ -50,8 +48,6 @@ namespace Identity.Models
             Street = source.GetStringValue("Street", string.Empty);
             Phone = source.UserSettings.UserPhone;
             Nationality = source.GetStringValue("Nationality", string.Empty);
-            //AvatarId = source.UserAvatarID;
-            //commented out?
         }
 
         public override void MapToUserInfo(UserInfo target)

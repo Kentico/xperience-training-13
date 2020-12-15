@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Identity.Models.Account
 {
@@ -8,5 +9,8 @@ namespace Identity.Models.Account
         [Display(Name = "Identity.Account.ConfirmPassword")]
         [Compare(nameof(Password), ErrorMessage = "Identity.Account.Password.DoesntMatch")]
         public string? ConfirmPassword { get; set; }
+
+        [HiddenInput]
+        public string? ConfirmationAction { get; set; }
     }
 }

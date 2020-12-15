@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 using CMS.Base;
 
-using Business.Configuration;
+using Core.Configuration;
 using Identity;
 using Identity.Attributes;
 using Identity.Models;
@@ -17,7 +17,6 @@ using MedioClinic.Models;
 namespace MedioClinic.Areas.Identity.Controllers
 {
     // In production, use [RequireHttps].
-    [ResponseCache(VaryByQueryKeys = new[] { "*" }, Duration = 0, Location = ResponseCacheLocation.None)]
     public class ProfileController : BaseController
     {
         private readonly IProfileManager _profileManager;

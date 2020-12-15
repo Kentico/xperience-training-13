@@ -11,8 +11,7 @@ using Microsoft.Extensions.Options;
 using CMS.Base;
 using CMS.Helpers;
 
-using Business.Configuration;
-using Business.Models;
+using Core.Configuration;
 using Identity;
 using Identity.Models;
 using Identity.Models.Account;
@@ -22,12 +21,11 @@ using MedioClinic.Models;
 namespace MedioClinic.Areas.Identity.Controllers
 {
     // In production, use [RequireHttps].
-    [ResponseCache(VaryByQueryKeys = new[] { "*" }, Duration = 0, Location = ResponseCacheLocation.None)]
     public class AccountController : BaseController
     {
         private readonly IAccountManager _accountManager;
 
-        private Business.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
+        private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
         public AccountController(ILogger<AccountController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor, IAccountManager accountManager) 
             : base(logger, siteService, optionsMonitor)
@@ -38,9 +36,11 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/Register
         public ActionResult Register()
         {
-            var model = GetPageViewModel(new RegisterViewModel(), Localize("Identity.Account.Register.Title"));
+            var model = new RegisterViewModel();
+            model.PasswordConfirmationViewModel.ConfirmationAction = nameof(ConfirmUser);
+            var viewModel = GetPageViewModel(model, Localize("Identity.Account.Register.Title"));
 
-            return View(model);
+            return View(viewModel);
         }
 
         // POST: /Account/Register
@@ -151,7 +151,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         }
 
         // GET: /Account/Signout
-        //[Authorize] // TODO: Why the user is not considered signed-in?
+        [Authorize]
         public async Task<ActionResult> SignOut()
         {
             var accountResult = await _accountManager.SignOutAsync();
@@ -169,7 +169,9 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/ForgotPassword
         public ActionResult ForgotPassword()
         {
-            var model = new EmailViewModel();
+            var model = new ForgotPasswordViewModel();
+            model.ResetPasswordController = "Account";
+            model.ResetPasswordAction = nameof(ResetPassword);
 
             return View(GetPageViewModel(model, Localize("Identity.Account.ResetPassword.Title")));
         }
@@ -177,7 +179,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         // POST: /Account/ForgotPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(PageViewModel<EmailViewModel> uploadModel)
+        public async Task<ActionResult> ForgotPassword(PageViewModel<ForgotPasswordViewModel> uploadModel)
         {
             if (ModelState.IsValid)
             {
@@ -271,12 +273,6 @@ namespace MedioClinic.Areas.Identity.Controllers
         }
 
         /// <summary>
-        /// Gets the home page URL.
-        /// </summary>
-        /// <returns>Home page URL.</returns>
-        protected string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
-
-        /// <summary>
         /// Redirects authentication requests to an external service.
         /// </summary>
         /// <param name="provider">Name of the authentication middleware.</param>
@@ -322,7 +318,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                 return View(nameof(SignIn));
             }
 
-            IdentityManagerResult<SignInResultState, SignInViewModel> result = await _accountManager.SignInExternalAsync(loginInfo);
+            IdentityManagerResult<SignInResultState> result = await _accountManager.SignInExternalAsync(loginInfo);
 
             if (result.Success)
             {
@@ -333,5 +329,11 @@ namespace MedioClinic.Areas.Identity.Controllers
                 return InvalidAttempt(new PageViewModel<SignInViewModel>());
             }
         }
+
+        /// <summary>
+        /// Gets the home page URL.
+        /// </summary>
+        /// <returns>Home page URL.</returns>
+        private string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
     }
 }

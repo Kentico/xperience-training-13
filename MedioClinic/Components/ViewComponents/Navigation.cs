@@ -9,7 +9,7 @@ namespace MedioClinic.ViewComponents
 {
     public class Navigation : ViewComponent
     {
-        protected readonly INavigationRepository _navigationRepository;
+        private readonly INavigationRepository _navigationRepository;
 
         public Navigation(INavigationRepository navigationRepository)
         {
@@ -18,7 +18,7 @@ namespace MedioClinic.ViewComponents
 
         public IViewComponentResult Invoke(string placement, string? nodeAliasPath = default)
         {
-            var navigation = _navigationRepository.GetNavigation();
+            var navigation = _navigationRepository.GetNavigation(nodeAliasPath: nodeAliasPath);
 
             return View(placement, navigation);
         }

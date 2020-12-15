@@ -1,13 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
 using Core;
 using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;
-using Microsoft.AspNetCore.Authentication;
-using CMS.Membership; //unused using
-using Microsoft.AspNetCore.Identity; //unused using
 
 namespace Identity
 {
@@ -53,7 +51,7 @@ namespace Identity
         /// <param name="uploadModel">Email address taken from the user.</param>
         /// <param name="requestContext">Request context.</param>
         /// <returns>An operation result.</returns>
-        Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(EmailViewModel uploadModel, HttpRequest request);
+        Task<IdentityManagerResult<ForgotPasswordResultState>> ForgotPasswordAsync(ForgotPasswordViewModel uploadModel, HttpRequest request);
 
         /// <summary>
         /// Verifies the token sent via <see cref="ForgotPasswordAsync(EmailViewModel, RequestContext)"/>.
@@ -69,11 +67,26 @@ namespace Identity
         /// <param name="uploadModel">New passwords taken from the user.</param>
         /// <returns>An operation result.</returns>
         Task<IdentityManagerResult<ResetPasswordResultState>> ResetPasswordAsync(ResetPasswordViewModel uploadModel);
-        //why stop with comments here?
+
+        /// <summary>
+        /// Configures authentication properties of 3rd party providers.
+        /// </summary>
+        /// <param name="provider">Identity provider.</param>
+        /// <param name="returnUrl">Return URL.</param>
+        /// <returns></returns>
         AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string returnUrl);
 
+        /// <summary>
+        /// Gets an external login info.
+        /// </summary>
+        /// <returns>External login info.</returns>
         Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync();
 
-        Task<IdentityManagerResult<SignInResultState, SignInViewModel>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
+        /// <summary>
+        /// Signs the external user into the live site.
+        /// </summary>
+        /// <param name="loginInfo">Login info.</param>
+        /// <returns>Result state.</returns>
+        Task<IdentityManagerResult<SignInResultState>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
     }
 }

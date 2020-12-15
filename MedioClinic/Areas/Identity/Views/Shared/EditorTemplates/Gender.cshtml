@@ -1,3 +1,13 @@
-﻿@model Identity.Models.Gender
+﻿@using Identity.Models
+@model Gender
 
-@Html.DropDownListFor(m => m, Html.GetEnumSelectList(Model.GetType()))
+@{ 
+    var list = new List<SelectListItem>();
+
+    foreach (var item in (Gender[])Enum.GetValues(typeof(Gender)))
+    {
+        list.Add(new SelectListItem(item.ToLocalizedString("General.Gender"), item.ToString(), item == Model));
+    }
+}
+
+@Html.DropDownListFor(m => m, list)

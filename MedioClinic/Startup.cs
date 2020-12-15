@@ -22,30 +22,37 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 
 using XperienceAdapter.Localization;
-using Business.Configuration;
+using Core.Configuration;
 using Identity;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
+using CMS.Core;
+using CMS.DataEngine;
+using CMS.SiteProvider;
 
 namespace MedioClinic
 {
     public class Startup
     {
-        private const string DefaultCultureFallback = "en-US";
         private const string AuthCookieName = "MedioClinic.Authentication";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
             WebHostEnvironment = webHostEnvironment;
+            Options = configuration.GetSection(nameof(XperienceOptions));
         }
 
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment WebHostEnvironment { get; }
+
+        private IConfigurationSection? Options { get; }
+
+        private string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
 
         public AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
@@ -74,9 +81,8 @@ namespace MedioClinic
 
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
 
-            var optionsSection = Configuration.GetSection(nameof(XperienceOptions));
-            services.Configure<XperienceOptions>(optionsSection);
-            var xperienceOptions = optionsSection.Get<XperienceOptions>();
+            services.Configure<XperienceOptions>(Options);
+            var xperienceOptions = Options.Get<XperienceOptions>();
 
             ConfigureIdentityServices(services, xperienceOptions);
         }
@@ -105,8 +111,6 @@ namespace MedioClinic
             }
             else
             {
-                // TODO: Why the overload with the "errorHandlingPath" parameter causes error controller's views to disappear in the browser?
-                // show me
                 app.UseExceptionHandler(errorApp =>
                 {
                     errorApp.Run(async context =>
@@ -136,11 +140,10 @@ namespace MedioClinic
             }
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
-            app.UseKentico();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseKentico();
             app.UseRouting();
-            app.UseResponseCaching();
             app.UseRequestCulture();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -170,60 +173,72 @@ namespace MedioClinic
 
         private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
         {
-            var defaultCulture = optionsAccessor.Value.DefaultCulture ?? DefaultCultureFallback;
-            var spanishCulture = "es-ES";
-
-            var routeOptions = new List<RouteBuilderOptions>
+            if (AppCore.Initialized)
             {
-                new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
-                {
-                    (defaultCulture, "home"),
-                    (spanishCulture, "inicio"),
-                }),
+                var currentSiteName = optionsAccessor.Value.SiteCodeName;
+                string? spanishCulture = default;
 
-                new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
+                if (!string.IsNullOrEmpty(currentSiteName))
                 {
-                    (defaultCulture, "doctors"),
-                    (spanishCulture, "medicos"),
-                }),
-
-                new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
-                {
-                    (defaultCulture, "doctors/{urlSlug?}"),
-                    (spanishCulture, "medicos/{urlSlug?}"),
-                }),
-
-                new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
-                {
-                    (defaultCulture, "contact-us"),
-                    (spanishCulture, "contactenos"),
-                }),
-            };
-
-            foreach (var options in routeOptions)
-            {
-                foreach (var culture in options.CulturePatterns)
-                {
-                    mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
+                    var cultures = CultureSiteInfoProvider.GetSiteCultures(currentSiteName);
+                    spanishCulture = cultures.FirstOrDefault(culture => culture.CultureCode.Equals("es-ES")).CultureCode; 
                 }
-            }
 
-            void mapRouteCultureVariantsImplementation(
-                string culture,
-                string routeName,
-                string routePattern,
-                object routeDefaults)
-            {
-                var stringParameters = new string[] { culture, routeName, routePattern };
-
-                if (stringParameters.All(parameter => !string.IsNullOrEmpty(parameter)) && routeDefaults != null)
+                if (!string.IsNullOrEmpty(DefaultCulture) && !string.IsNullOrEmpty(spanishCulture))
                 {
-                    builder.MapControllerRoute(
-                    name: $"{routeName}_{culture}",
-                    pattern: AddCulturePrefix(culture, routePattern!),
-                    defaults: routeDefaults,
-                    constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
-                    );
+                    var routeOptions = new List<RouteBuilderOptions>
+                    {
+                        new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
+                        {
+                            (DefaultCulture, "home"),
+                            (spanishCulture, "inicio"),
+                        }),
+
+                        new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
+                        {
+                            (DefaultCulture, "doctors"),
+                            (spanishCulture, "medicos"),
+                        }),
+
+                        new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
+                        {
+                            (DefaultCulture, "doctors/{urlSlug?}"),
+                            (spanishCulture, "medicos/{urlSlug?}"),
+                        }),
+
+                        new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
+                        {
+                            (DefaultCulture, "contact-us"),
+                            (spanishCulture, "contacta-con-nosotros"),
+                        }),
+                    };
+
+                    foreach (var options in routeOptions)
+                    {
+                        foreach (var culture in options.CulturePatterns)
+                        {
+                            mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
+                        }
+                    }
+
+                    void mapRouteCultureVariantsImplementation(
+                        string culture,
+                        string routeName,
+                        string routePattern,
+                        object routeDefaults)
+                    {
+                        var stringParameters = new string[] { culture, routeName, routePattern };
+
+                        if (stringParameters.All(parameter => !string.IsNullOrEmpty(parameter)) && routeDefaults != null)
+                        {
+                            builder.MapControllerRoute(
+                            name: $"{routeName}_{culture}",
+                            pattern: AddCulturePrefix(culture, routePattern!),
+                            defaults: routeDefaults,
+                            constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
+                            );
+                        }
+                    }
                 }
             }
         }
@@ -231,7 +246,7 @@ namespace MedioClinic
         private static string AddCulturePrefix(string culture, string pattern) =>
             $"{{culture={culture.ToLowerInvariant()}}}/{pattern}";
 
-        private static void ConfigureIdentityServices(IServiceCollection services, XperienceOptions? xperienceOptions)
+        private void ConfigureIdentityServices(IServiceCollection services, XperienceOptions? xperienceOptions)
         {
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IPasswordHasher<MedioClinicUser>, Kentico.Membership.PasswordHasher<MedioClinicUser>>();
@@ -258,7 +273,7 @@ namespace MedioClinic
 
                     if (string.IsNullOrEmpty(culture))
                     {
-                        culture = xperienceOptions?.DefaultCulture ?? DefaultCultureFallback;
+                        culture = DefaultCulture;
                     }
 
                     var redirectUrl = redirectContext.RedirectUri.Replace("/Account/Signin", $"/{culture}/Account/Signin");

@@ -95,7 +95,6 @@ namespace XperienceAdapter.Repositories
         /// </summary>
         /// <param name="page">Xperience page.</param>
         /// <param name="dto">Page DTO.</param>
-        /// <returns>Page DTO.</returns>
-        TPageDto MapDtoProperties(TPage page, TPageDto dto);
+        void MapDtoProperties(TPage page, TPageDto dto);
     }
 }
