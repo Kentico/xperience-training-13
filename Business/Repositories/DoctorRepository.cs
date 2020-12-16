@@ -18,13 +18,22 @@ namespace Business.Repositories
     {
         private readonly IUserInfoProvider _userInfoProvider;
 
-        private readonly INavigationRepository _navigationRepository;
+        /* Conventional routing: Begin */
+        //private readonly INavigationRepository _navigationRepository;
 
-        public DoctorRepository(IRepositoryServices repositoryServices, IUserInfoProvider userInfoProvider, INavigationRepository navigationRepository) : base(repositoryServices)
+        //public DoctorRepository(IRepositoryServices repositoryServices, IUserInfoProvider userInfoProvider, INavigationRepository navigationRepository) : base(repositoryServices)
+        //{
+        //    _userInfoProvider = userInfoProvider ?? throw new ArgumentNullException(nameof(userInfoProvider));
+        //    _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
+        //}
+        /* Conventional routing: End */
+
+        /* CTB routring: Begin */
+        public DoctorRepository(IRepositoryServices repositoryServices, IUserInfoProvider userInfoProvider) : base(repositoryServices)
         {
             _userInfoProvider = userInfoProvider ?? throw new ArgumentNullException(nameof(userInfoProvider));
-            _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
+        /* CTB routring: End */
 
         public override void MapDtoProperties(CMS.DocumentEngine.Types.MedioClinic.Doctor page, Doctor dto)
         {
@@ -46,11 +55,11 @@ namespace Business.Repositories
 
             if (culture != null)
             {
-                /* CTB routring: Start */
+                /* CTB routring: Begin */
                 dto.DoctorDetailUrl = _repositoryServices.PageUrlRetriever.Retrieve(page, culture.IsoCode).RelativePath;
                 /* CTB routing: End */
 
-                /* Conventional routing: Start */
+                /* Conventional routing: Begin */
                 //dto.DoctorDetailUrl = _navigationRepository.GetUrlByNodeId(page.NodeID, culture);
                 /* Conventional routing: End */
             }

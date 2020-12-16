@@ -15,8 +15,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Autofac;
 
+using CMS.Core;
+using CMS.DataEngine;
 using CMS.Helpers;
-using Kentico.Content.Web.Mvc;
+using CMS.SiteProvider;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
@@ -29,9 +31,6 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
-using CMS.Core;
-using CMS.DataEngine;
-using CMS.SiteProvider;
 
 namespace MedioClinic
 {
@@ -163,89 +162,116 @@ namespace MedioClinic
                     areaName: "Identity",
                     pattern: "{culture}/identity/{controller}/{action}/{id?}");
 
-                MapCultureSpecificRoutes(endpoints, optionsAccessor);
+                /* Conventional routing: Begin */
+                //MapCultureSpecificRoutes(endpoints, optionsAccessor);
+                /* Conventional routing: End */
+
                 endpoints.MapDefaultControllerRoute();
             });
         }
 
+        /// <summary>
+        /// Registers a handler in case Xperience is not initialized yet.
+        /// </summary>
+        /// <param name="builder">Container builder.</param>
         private void RegisterInitializationHandler(ContainerBuilder builder) =>
             CMS.Base.ApplicationEvents.Initialized.Execute += (sender, eventArgs) => AutoFacConfig.ConfigureContainer(builder);
 
-        private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
-        {
-            if (AppCore.Initialized)
-            {
-                var currentSiteName = optionsAccessor.Value.SiteCodeName;
-                string? spanishCulture = default;
+        /* Conventional routing: Begin */
 
-                if (!string.IsNullOrEmpty(currentSiteName))
-                {
-                    var cultures = CultureSiteInfoProvider.GetSiteCultures(currentSiteName);
-                    spanishCulture = cultures.FirstOrDefault(culture => culture.CultureCode.Equals("es-ES")).CultureCode; 
-                }
+        /// <summary>
+        /// Registers culture-specific routes using the conventional ASP.NET routing.
+        /// </summary>
+        /// <param name="builder">Route builder.</param>
+        /// <param name="optionsAccessor">Options accessor.</param>
+        //private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
+        //{
+        //    if (AppCore.Initialized)
+        //    {
+        //        var currentSiteName = optionsAccessor.Value.SiteCodeName;
+        //        string? spanishCulture = default;
 
-                if (!string.IsNullOrEmpty(DefaultCulture) && !string.IsNullOrEmpty(spanishCulture))
-                {
-                    var routeOptions = new List<RouteBuilderOptions>
-                    {
-                        new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
-                        {
-                            (DefaultCulture, "home"),
-                            (spanishCulture, "inicio"),
-                        }),
+        //        if (!string.IsNullOrEmpty(currentSiteName))
+        //        {
+        //            var cultures = CultureSiteInfoProvider.GetSiteCultures(currentSiteName);
+        //            spanishCulture = cultures.FirstOrDefault(culture => culture.CultureCode.Equals("es-ES")).CultureCode;
+        //        }
 
-                        new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
-                        {
-                            (DefaultCulture, "doctors"),
-                            (spanishCulture, "medicos"),
-                        }),
+        //        if (!string.IsNullOrEmpty(DefaultCulture) && !string.IsNullOrEmpty(spanishCulture))
+        //        {
+        //            var routeOptions = new List<RouteBuilderOptions>
+        //            {
+        //                new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
+        //                {
+        //                    (DefaultCulture, "home"),
+        //                    (spanishCulture, "inicio"),
+        //                }),
 
-                        new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
-                        {
-                            (DefaultCulture, "doctors/{urlSlug?}"),
-                            (spanishCulture, "medicos/{urlSlug?}"),
-                        }),
+        //                new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
+        //                {
+        //                    (DefaultCulture, "doctors"),
+        //                    (spanishCulture, "medicos"),
+        //                }),
 
-                        new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
-                        {
-                            (DefaultCulture, "contact-us"),
-                            (spanishCulture, "contacta-con-nosotros"),
-                        }),
-                    };
+        //                new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
+        //                {
+        //                    (DefaultCulture, "doctors/{urlSlug?}"),
+        //                    (spanishCulture, "medicos/{urlSlug?}"),
+        //                }),
 
-                    foreach (var options in routeOptions)
-                    {
-                        foreach (var culture in options.CulturePatterns)
-                        {
-                            mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
-                        }
-                    }
+        //                new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
+        //                {
+        //                    (DefaultCulture, "contact-us"),
+        //                    (spanishCulture, "contacta-con-nosotros"),
+        //                }),
+        //            };
 
-                    void mapRouteCultureVariantsImplementation(
-                        string culture,
-                        string routeName,
-                        string routePattern,
-                        object routeDefaults)
-                    {
-                        var stringParameters = new string[] { culture, routeName, routePattern };
+        //            foreach (var options in routeOptions)
+        //            {
+        //                foreach (var culture in options.CulturePatterns)
+        //                {
+        //                    mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
+        //                }
+        //            }
 
-                        if (stringParameters.All(parameter => !string.IsNullOrEmpty(parameter)) && routeDefaults != null)
-                        {
-                            builder.MapControllerRoute(
-                            name: $"{routeName}_{culture}",
-                            pattern: AddCulturePrefix(culture, routePattern!),
-                            defaults: routeDefaults,
-                            constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
-                            );
-                        }
-                    }
-                }
-            }
-        }
+        //            void mapRouteCultureVariantsImplementation(
+        //                string culture,
+        //                string routeName,
+        //                string routePattern,
+        //                object routeDefaults)
+        //            {
+        //                var stringParameters = new string[] { culture, routeName, routePattern };
 
-        private static string AddCulturePrefix(string culture, string pattern) =>
-            $"{{culture={culture.ToLowerInvariant()}}}/{pattern}";
+        //                if (stringParameters.All(parameter => !string.IsNullOrEmpty(parameter)) && routeDefaults != null)
+        //                {
+        //                    builder.MapControllerRoute(
+        //                    name: $"{routeName}_{culture}",
+        //                    pattern: AddCulturePrefix(culture, routePattern!),
+        //                    defaults: routeDefaults,
+        //                    constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
+        //                    );
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
+        ///// <summary>
+        ///// Decorates route patterns with a well-known culture prefix.
+        ///// </summary>
+        ///// <param name="culture">Culture prefix.</param>
+        ///// <param name="pattern">Route pattern.</param>
+        ///// <returns></returns>
+        //private static string AddCulturePrefix(string culture, string pattern) =>
+        //    $"{{culture={culture.ToLowerInvariant()}}}/{pattern}";
+
+        /* Conventional routing: End */
+
+        /// <summary>
+        /// Configures ASP.NET Identity services of Xperience.
+        /// </summary>
+        /// <param name="services">Service collection.</param>
+        /// <param name="xperienceOptions">Options.</param>
         private void ConfigureIdentityServices(IServiceCollection services, XperienceOptions? xperienceOptions)
         {
             services.AddScoped<IMessageService, MessageService>();
@@ -259,7 +285,7 @@ namespace MedioClinic
                 .AddSignInManager<MedioClinicSignInManager>();
 
             var authenticationBuilder = services.AddAuthentication();
-            ConfigureExternalAuthentication(services, authenticationBuilder, xperienceOptions);
+            ConfigureExternalAuthentication(authenticationBuilder, xperienceOptions);
 
             services.AddAuthorization();
 
@@ -289,7 +315,13 @@ namespace MedioClinic
             CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
         }
 
-        private static void ConfigureExternalAuthentication(IServiceCollection services, AuthenticationBuilder builder, XperienceOptions? xperienceOptions)
+        /// <summary>
+        /// Configures ASP.NET Identity and Xperience to use 3rd party identity providers.
+        /// </summary>
+        /// <param name="builder">Authentication builder.</param>
+        /// <param name="xperienceOptions">Options.</param>
+        /// 
+        private static void ConfigureExternalAuthentication(AuthenticationBuilder builder, XperienceOptions? xperienceOptions)
         {
             var identityOptions = xperienceOptions?.IdentityOptions;
 
