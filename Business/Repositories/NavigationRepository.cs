@@ -154,14 +154,16 @@ namespace Business.Repositories
             ?? Thread.CurrentThread.CurrentUICulture.ToSiteCulture() 
             ?? throw new Exception($"The {nameof(siteCulture)} parameter is either null or not a valid site culture.");
 
-        public string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture)
-        {
-            var navigation = RoutingMode == PageRoutingModeEnum.BasedOnContentTree
-                ? GetContentTreeNavigation(pageCulture, RootPath)
-                : GetConventionalRoutingNavigation(pageCulture, RootPath);
+        /* Conventional routing: Begin */
+        //public string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture)
+        //{
+        //    var navigation = RoutingMode == PageRoutingModeEnum.BasedOnContentTree
+        //        ? GetContentTreeNavigation(pageCulture, RootPath)
+        //        : GetConventionalRoutingNavigation(pageCulture, RootPath);
 
-            return GetNavigationItemByNodeId(nodeId, navigation)?.RelativeUrl;
-        }
+        //    return GetNavigationItemByNodeId(nodeId, navigation)?.RelativeUrl;
+        //}
+        /* Conventional routing: End */
 
         public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
         {
