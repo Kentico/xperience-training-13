@@ -59,8 +59,6 @@ namespace XperienceAdapter.Models
 
         public string? MimeType { get; set; }
 
-        //public string? ServerPath { get; set; }
-
         public IPageAttachmentUrl? AttachmentUrl { get; set; }
     }
 }

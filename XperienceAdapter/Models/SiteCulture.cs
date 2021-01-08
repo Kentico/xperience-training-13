@@ -21,7 +21,6 @@ namespace XperienceAdapter.Models
         {
             if (ReferenceEquals(a, null))
             {
-                // ???
                 return !ReferenceEquals(b, null);
             }
 

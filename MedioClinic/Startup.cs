@@ -31,6 +31,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
+using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic
 {
@@ -41,24 +42,50 @@ namespace MedioClinic
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
-            WebHostEnvironment = webHostEnvironment;
+            Environment = webHostEnvironment;
             Options = configuration.GetSection(nameof(XperienceOptions));
         }
 
         public IConfiguration Configuration { get; }
 
-        public IWebHostEnvironment WebHostEnvironment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         private IConfigurationSection? Options { get; }
 
         private string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
 
-        public AutoFacConfig AutoFacConfig => new AutoFacConfig();
+        private AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResponseCaching();
+            // Enable desired Kentico Xperience features
+            var kenticoServiceCollection = services.AddKentico(features =>
+            {
+                // features.UsePageBuilder();
+                // features.UseActivityTracking();
+                // features.UseABTesting();
+                // features.UseWebAnalytics();
+                // features.UseEmailTracking();
+                // features.UseCampaignLogger();
+                // features.UseScheduler();
+                features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
+            });
+
+            if (Environment.IsDevelopment())
+            {
+                // By default, Xperience sends cookies using SameSite=Lax. If the administration and live site applications
+                // are hosted on separate domains, this ensures cookies are set with SameSite=None and Secure. The configuration
+                // only applies when communicating with the Xperience administration via preview links. Both applications also need 
+                // to use a secure connection (HTTPS) to ensure cookies are not rejected by the client.
+                kenticoServiceCollection.SetAdminCookiesSameSiteNone();
+
+                // By default, Xperience requires a secure connection (HTTPS) if administration and live site applications
+                // are hosted on separate domains. This configuration simplifies the initial setup of the development
+                // or evaluation environment without a the need for secure connection. The system ignores authentication
+                // cookies and this information is taken from the URL.
+                kenticoServiceCollection.DisableVirtualContextSecurityForLocalhost();
+            }
 
             services.AddLocalization();
 
@@ -69,14 +96,10 @@ namespace MedioClinic
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
                         var assemblyName = typeof(SharedResource).GetTypeInfo().Assembly.GetName().Name;
+
                         return factory.Create("SharedResource", assemblyName);
                     };
                 });
-
-            services.AddKentico(features =>
-            {
-                features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
-            });
 
             services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
 
@@ -103,7 +126,7 @@ namespace MedioClinic
             IApplicationBuilder app,
             IOptions<XperienceOptions> optionsAccessor)
         {
-            if (WebHostEnvironment.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();

@@ -26,7 +26,7 @@ namespace XperienceAdapter.Logging
         /// <param name="categoryName">Logging category.</param>
         /// <returns>The logger.</returns>
         public ILogger CreateLogger(string categoryName) =>
-            _loggers.GetOrAdd(categoryName, name => new XperienceLogger(name, _eventLogService/*, _siteService*/));
+            _loggers.GetOrAdd(categoryName, name => new XperienceLogger(name, _eventLogService));
 
         public void Dispose() => _loggers.Clear();
     }

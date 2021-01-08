@@ -5,9 +5,6 @@
     /// The IStringLocalizerFactory and/or IStringLocalizer class could also be implemented instead of this.
     /// https://github.com/aspnet/Localization/issues/150
     /// 
-    /// Thanks to Joe Audette for this solution.
-    /// https://github.com/joeaudette/experiments/tree/master/LocalizationWebSite/Resources
-    /// 
     /// Resource files must be named with namespace...
     /// </summary>
     public class SharedResource
