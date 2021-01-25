@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using CMS.Helpers;
 using Kentico.Membership;
 
+using Core.Extensions;
 using Business.Extensions;
 using Identity.Models;
 using Identity.Models.Account;

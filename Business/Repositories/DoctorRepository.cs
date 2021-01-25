@@ -39,7 +39,7 @@ namespace Business.Repositories
         {
             dto.UrlSlug = page.UrlSlug;
             dto.UserId = page.UserAccount;
-            dto.UserName = _userInfoProvider.Get(page.UserAccount).UserName;
+            dto.UserName = _userInfoProvider.Get(page.UserAccount)?.UserName;
             dto.EmergencyShift = GetShiftDayOfWeek(page.Fields.EmergencyShift);
             dto.EmergencyShiftString = page.Fields.EmergencyShift.FirstOrDefault().DocumentName;
             dto.Degree = page.Degree;

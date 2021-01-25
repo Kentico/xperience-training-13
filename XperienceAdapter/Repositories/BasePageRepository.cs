@@ -245,7 +245,10 @@ namespace XperienceAdapter.Repositories
                 .Where(page => page != null)!;
         }
 
-        protected MultiDocumentQuery GetQueryForMultipleTypes(IEnumerable<string> types, SiteCulture? culture, Action<MultiDocumentQuery>? filter)
+        protected MultiDocumentQuery GetQueryForMultipleTypes(
+            IEnumerable<string> types, 
+            SiteCulture? culture, 
+            Action<MultiDocumentQuery>? filter)
         {
             var query = new MultiDocumentQuery();
 

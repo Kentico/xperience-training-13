@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+using CMS.DataEngine;
 using CMS.DocumentEngine;
+using CMS.DocumentEngine.Routing;
+using CMS.SiteProvider;
 using Kentico.Content.Web.Mvc;
 
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
-using Business.Models;
-using CMS.DataEngine;
-using CMS.SiteProvider;
-using CMS.DocumentEngine.Routing;
 using XperienceAdapter.Extensions;
+using Business.Models;
 
 namespace Business.Repositories
 {
@@ -26,11 +26,11 @@ namespace Business.Repositories
 
         private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
 
-        private readonly IPageRepository<BasicPageWithUrlSlug, TreeNode> _urlSlugPageRepository;
+        /* Conventional routing: Begin */
+        //private readonly IPageRepository<BasicPageWithUrlSlug, TreeNode> _urlSlugPageRepository;
+        /* Conventional routing: End */
 
         private readonly ISiteCultureRepository _cultureRepository;
-
-        private readonly SiteInfoIdentifier _siteInfoIdentifier = new SiteInfoIdentifier(SiteContext.CurrentSiteID);
 
         private readonly string[] _slugEnabledPageTypes = new string[]
         {
@@ -42,8 +42,6 @@ namespace Business.Repositories
             CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME
         };
 
-        private PageRoutingModeEnum RoutingMode => PageRoutingHelper.GetRoutingMode(_siteInfoIdentifier);
-        
         private IEnumerable<string> SlugEnabledTypeDependencies => _slugEnabledPageTypes
             .Select(pageType => $"nodes|{SiteContext.CurrentSiteName}|{pageType}|all");
 
@@ -69,21 +67,23 @@ namespace Business.Repositories
         {
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
             _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
-            _urlSlugPageRepository = urlSlugPageRepository ?? throw new ArgumentNullException(nameof(urlSlugPageRepository));
+            /* Conventional routing: Begin */
+            //_urlSlugPageRepository = urlSlugPageRepository ?? throw new ArgumentNullException(nameof(urlSlugPageRepository));
+            /* Conventional routing: End */
             _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
-        public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() =>
-            RoutingMode == PageRoutingModeEnum.BasedOnContentTree
-                ? GetContentTreeNavigation()
-                : GetConventionalRoutingNavigation();
+        /* Conventional routing: Begin */
+        //public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetConventionalRoutingNavigation();
 
-        public NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default)
-        {
-            return RoutingMode == PageRoutingModeEnum.BasedOnContentTree
-                ? GetContentTreeNavigation(siteCulture, nodeAliasPath)
-                : GetConventionalRoutingNavigation(siteCulture, nodeAliasPath);
-        }
+        //public NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default) =>
+        //    GetConventionalRoutingNavigation(siteCulture, nodeAliasPath);
+        /* Conventional routing: End */
+
+        public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetContentTreeNavigation();
+
+        public NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default) =>
+            GetContentTreeNavigation(siteCulture, nodeAliasPath);
 
         private Dictionary<SiteCulture, NavigationItem> GetContentTreeNavigation()
         {
@@ -106,7 +106,7 @@ namespace Business.Repositories
             var checkedCulture = GetSiteCulture(siteCulture);
 
             var allItems = _basePageRepository.GetPagesByTypeAndCulture(
-                _slugEnabledPageTypes,
+                _slugEnabledPageTypes, // TODO: Jen kvuli kompatibilite kodu s konvencnim routingem.
                 checkedCulture,
                 $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigation)}|{checkedCulture.IsoCode}",
                 filter => GetDefaultFilter(filter, nodeAliasPath)
@@ -117,37 +117,39 @@ namespace Business.Repositories
             return DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
         }
 
-        private Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation()
-        {
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
+        /* Conventional routing: Begin */
+        //private Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation()
+        //{
+        //    GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
 
-            if (cultures.Any())
-            {
-                foreach (var culture in cultures)
-                {
-                    NavigationItem decorated = GetConventionalRoutingNavigation(culture, null);
+        //    if (cultures.Any())
+        //    {
+        //        foreach (var culture in cultures)
+        //        {
+        //            NavigationItem decorated = GetConventionalRoutingNavigation(culture, null);
 
-                    cultureSpecificNavigations.Add(culture, decorated);
-                }
-            }
+        //            cultureSpecificNavigations.Add(culture, decorated);
+        //        }
+        //    }
 
-            return cultureSpecificNavigations;
-        }
+        //    return cultureSpecificNavigations;
+        //}
 
-        private NavigationItem GetConventionalRoutingNavigation(SiteCulture? siteCulture, string? nodeAliasPath)
-        {
-            var checkedCulture = GetSiteCulture(siteCulture);
+        //private NavigationItem GetConventionalRoutingNavigation(SiteCulture? siteCulture, string? nodeAliasPath)
+        //{
+        //    var checkedCulture = GetSiteCulture(siteCulture);
 
-            var allItems = _urlSlugPageRepository.GetPagesByTypeAndCulture(
-                _slugEnabledPageTypes,
-                checkedCulture,
-                $"{nameof(NavigationRepository)}|{nameof(GetConventionalRoutingNavigation)}|{checkedCulture.IsoCode}",
-                filter => GetDefaultFilter(filter, nodeAliasPath),
-                cacheDependencies: SlugEnabledTypeDependencies.ToArray())
-                    .Select(basicPage => MapBasicPageWithSlugToNavigation(basicPage));
+        //    var allItems = _urlSlugPageRepository.GetPagesByTypeAndCulture(
+        //        _slugEnabledPageTypes,
+        //        checkedCulture,
+        //        $"{nameof(NavigationRepository)}|{nameof(GetConventionalRoutingNavigation)}|{checkedCulture.IsoCode}",
+        //        filter => GetDefaultFilter(filter, nodeAliasPath),
+        //        cacheDependencies: SlugEnabledTypeDependencies.ToArray())
+        //            .Select(basicPage => MapBasicPageWithSlugToNavigation(basicPage));
 
-            return DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
-        }
+        //    return DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
+        //}
+        /* Conventional routing: End */
 
         private SiteCulture GetSiteCulture(SiteCulture? siteCulture) =>
             siteCulture 
@@ -216,18 +218,20 @@ namespace Business.Repositories
             Culture = basePage.Culture
         };
 
-        /// <summary>
-        /// Maps the <see cref="BasicPageWithUrlSlug"/> onto a new <see cref="NavigationItem"/>.
-        /// </summary>
-        /// <param name="basicPage">The basic page with URL slug.</param>
-        /// <returns>The navigation item.</returns>
-        private static NavigationItem MapBasicPageWithSlugToNavigation(BasicPageWithUrlSlug basicPage)
-        {
-            var navigationItem = MapBaseToNavigationDto(basicPage);
-            navigationItem.UrlSlug = basicPage.UrlSlug;
+        /* Conventional routing: Begin */
+        ///// <summary>
+        ///// Maps the <see cref="BasicPageWithUrlSlug"/> onto a new <see cref="NavigationItem"/>.
+        ///// </summary>
+        ///// <param name="basicPage">The basic page with URL slug.</param>
+        ///// <returns>The navigation item.</returns>
+        //private static NavigationItem MapBasicPageWithSlugToNavigation(BasicPageWithUrlSlug basicPage)
+        //{
+        //    var navigationItem = MapBaseToNavigationDto(basicPage);
+        //    navigationItem.UrlSlug = basicPage.UrlSlug;
 
-            return navigationItem;
-        }
+        //    return navigationItem;
+        //}
+        /* Conventional routing: End */
 
         /// <summary>
         /// Gets default <see cref="DocumentQuery{TDocument}"/> configuration.
@@ -307,25 +311,27 @@ namespace Business.Repositories
         /// <returns>URL.</returns>
         private string? GetContentTreeBasedUrl(NavigationItem item) => GetPageUrl(item);
 
-        /// <summary>
-        /// Gets a URL for conventional routing.
-        /// </summary>
-        /// <param name="item">Item to get the URL for.</param>
-        /// <returns>URL.</returns>
-        private string GetConventionalRoutingUrl(NavigationItem item)
-        {
-            var patternBasedUrl = GetPageUrl(item);
+        /* Conventional routing: Begin */
+        ///// <summary>
+        ///// Gets a URL for conventional routing.
+        ///// </summary>
+        ///// <param name="item">Item to get the URL for.</param>
+        ///// <returns>URL.</returns>
+        //private string GetConventionalRoutingUrl(NavigationItem item)
+        //{
+        //    var patternBasedUrl = GetPageUrl(item);
 
-            if (string.IsNullOrEmpty(patternBasedUrl))
-            {
-                var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
-                var culture = item.Culture ?? _cultureRepository.DefaultSiteCulture;
+        //    if (string.IsNullOrEmpty(patternBasedUrl))
+        //    {
+        //        var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
+        //        var culture = item.Culture ?? _cultureRepository.DefaultSiteCulture;
 
-                return $"~/{culture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
-            }
+        //        return $"~/{culture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
+        //    }
 
-            return patternBasedUrl;
-        }
+        //    return patternBasedUrl;
+        //}
+        /* Conventional routing: End */
 
         private string? GetPageUrl(NavigationItem item)
         {
