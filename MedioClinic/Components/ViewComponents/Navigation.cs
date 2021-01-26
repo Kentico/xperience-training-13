@@ -16,9 +16,9 @@ namespace MedioClinic.ViewComponents
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
-        public IViewComponentResult Invoke(string placement, string? nodeAliasPath = default)
+        public IViewComponentResult Invoke(string placement)
         {
-            var navigation = _navigationRepository.GetNavigation(nodeAliasPath: nodeAliasPath);
+            var navigation = _navigationRepository.GetNavigation();
 
             return View(placement, navigation);
         }

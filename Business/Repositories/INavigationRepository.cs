@@ -20,9 +20,8 @@ namespace Business.Repositories
         /// Gets a navigation hierarchy for a specified or actual site culture, further constrained by the starting node alias path.
         /// </summary>
         /// <param name="siteCulture">Site culture.</param>
-        /// <param name="nodeAliasPath">Starting node alias path.</param>
-        /// <returns></returns>
-        NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default);
+        /// <returns>Navigation item in a given culture.</returns>
+        NavigationItem GetNavigation(SiteCulture? siteCulture = default);
 
         /* Conventional routing: Begin */
         ///// <summary>

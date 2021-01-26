@@ -17,8 +17,6 @@
 
         public MediaLibraryOptions? MediaLibraryOptions { get; set; }
 
-        public ContentTreeLocationOptions? ContentTreeLocationOptions { get; set; }
-
         public IdentityOptions? IdentityOptions { get; set; }
     }
 
@@ -36,17 +34,6 @@
         /// File size limit.
         /// </summary>
         public long FileSizeLimit { get; set; }
-    }
-
-    /// <summary>
-    /// Locations of specific data in the content tree.
-    /// </summary>
-    public class ContentTreeLocationOptions
-    {
-        /// <summary>
-        /// Start location of the bottom navigation.
-        /// </summary>
-        public string? BottomNavigationAliasPath { get; set; }
     }
 
     /// <summary>

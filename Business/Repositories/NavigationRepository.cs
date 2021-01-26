@@ -48,7 +48,6 @@ namespace Business.Repositories
         private NavigationItem RootDto => _basePageRepository.GetPagesInCurrentCulture(query =>
             query
                 .Path(RootPath, PathTypeEnum.Single)
-                .CombineWithDefaultCulture()
                 .TopN(1),
             buildCacheAction: cache => cache
                 .Key($"{nameof(NavigationRepository)}|{nameof(RootDto)}"))
@@ -82,34 +81,35 @@ namespace Business.Repositories
 
         public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetContentTreeNavigation();
 
-        public NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default) =>
-            GetContentTreeNavigation(siteCulture, nodeAliasPath);
+        public NavigationItem GetNavigation(SiteCulture? siteCulture = default) =>
+            GetContentTreeNavigation(siteCulture);
 
         private Dictionary<SiteCulture, NavigationItem> GetContentTreeNavigation()
         {
             var cacheKeySuffix = $"{nameof(GetContentTreeNavigation)}";
-            GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
+            var cultures = _cultureRepository.GetAll();
+            var cultureSpecificNavigations = new Dictionary<SiteCulture, NavigationItem>();
 
             if (cultures != null && cultures.Any())
             {
                 foreach (var culture in cultures)
                 {
-                    cultureSpecificNavigations.Add(culture, GetContentTreeNavigation(culture, null));
+                    cultureSpecificNavigations.Add(culture, GetContentTreeNavigation(culture));
                 }
             }
 
             return cultureSpecificNavigations;
         }
 
-        private NavigationItem GetContentTreeNavigation(SiteCulture? siteCulture, string? nodeAliasPath)
+        private NavigationItem GetContentTreeNavigation(SiteCulture? siteCulture)
         {
             var checkedCulture = GetSiteCulture(siteCulture);
 
             var allItems = _basePageRepository.GetPagesByTypeAndCulture(
-                _slugEnabledPageTypes, // TODO: Jen kvuli kompatibilite kodu s konvencnim routingem.
+                _slugEnabledPageTypes,
                 checkedCulture,
                 $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigation)}|{checkedCulture.IsoCode}",
-                filter => GetDefaultFilter(filter, nodeAliasPath)
+                filter => GetDefaultFilter(filter)
                     .MenuItems(),
                 cacheDependencies: SlugEnabledTypeDependencies.ToArray())
                     .Select(basePage => MapBaseToNavigationDto(basePage));
@@ -193,17 +193,6 @@ namespace Business.Repositories
         }
 
         /// <summary>
-        /// Prepares cultures and a new dictionary for navigation sets.
-        /// </summary>
-        /// <param name="cultures">All site cultures.</param>
-        /// <param name="cultureSpecificNavigations">Empty dictionary with navigation sets for each culture.</param>
-        private void GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations)
-        {
-            cultures = _cultureRepository.GetAll();
-            cultureSpecificNavigations = new Dictionary<SiteCulture, NavigationItem>();
-        }
-
-        /// <summary>
         /// Maps the <see cref="BasePage"/> onto a new <see cref="NavigationItem"/>.
         /// </summary>
         /// <param name="basePage">The base page.</param>
@@ -238,17 +227,11 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="query">The query.</param>
         /// <returns>The modified query.</returns>
-        private static MultiDocumentQuery GetDefaultFilter(MultiDocumentQuery query, string? nodeAliasPath)
+        private static MultiDocumentQuery GetDefaultFilter(MultiDocumentQuery query)
         {
             query
                 .FilterDuplicates()
                 .OrderByAscending(NodeOrdering);
-
-            if (!string.IsNullOrEmpty(nodeAliasPath))
-            {
-                query
-                    .Path(nodeAliasPath);
-            }
 
             return query;
         }
