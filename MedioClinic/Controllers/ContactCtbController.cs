@@ -17,7 +17,7 @@ using Microsoft.Extensions.Options;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
-[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME, typeof(ContactCtbController))]
+[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME, typeof(ContactCtbController), Path = "/Contact-us")]
 namespace MedioClinic.Controllers
 {
     public class ContactCtbController : BaseController
@@ -49,47 +49,14 @@ namespace MedioClinic.Controllers
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
             _mediaFileRepository = mediaFileRepository ?? throw new ArgumentNullException(nameof(mediaFileRepository));
         }
+
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.NamePerexText>(out var pageDataContext)
                 && pageDataContext.Page != null)
             {
                 var contactPath = pageDataContext.Page.NodeAliasPath;
-
-                var company = (await _companyRepository.GetPagesInCurrentCultureAsync(
-                    cancellationToken,
-                    filter => filter
-                        .Path(contactPath, PathTypeEnum.Children)
-                        .TopN(1),
-                    buildCacheAction: cache => cache
-                        .Key($"{nameof(ContactController)}|Company")
-                        .Dependencies((_, builder) => builder
-                            .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)),
-                    includeAttachments: true))
-                        .FirstOrDefault();
-
-                var officeLocations = (await _mapLocationRepository.GetPagesInCurrentCultureAsync(
-                    cancellationToken,
-                    filter => filter
-                        .Path(contactPath, PathTypeEnum.Children),
-                    buildCacheAction: cache => cache
-                        .Key($"{nameof(ContactController)}|OfficeLocations")
-                        .Dependencies((_, builder) => builder
-                            .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME)),
-                    includeAttachments: true));
-
-                var contactPage = (await _namePerexTextRepository.GetPagesInCurrentCultureAsync(
-                   cancellationToken,
-                   filter => filter
-                       .Path(contactPath, PathTypeEnum.Single)
-                       .TopN(1),
-                   buildCacheAction: cache => cache
-                       .Key($"{nameof(ContactController)}|ContactPage")
-                       .Dependencies((_, builder) => builder
-                           .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME)),
-                   includeAttachments: true))
-                       .FirstOrDefault();
-
+                var (company, officeLocations, contactPage) = await GetPageData(contactPath, cancellationToken);
                 var medicalServicePictures = await _mediaFileRepository.GetMediaFilesAsync("CommonImages", "MedicalServices");
 
                 if (company != null && officeLocations?.Any() == true && contactPage != null && medicalServicePictures?.Any() == true)
@@ -109,6 +76,45 @@ namespace MedioClinic.Controllers
             }
 
             return NotFound();
+        }
+
+        private async Task<(Company, IEnumerable<MapLocation>, NamePerexText)> GetPageData(string contactPath, CancellationToken cancellationToken)
+        {
+            var contactPage = (await _namePerexTextRepository.GetPagesInCurrentCultureAsync(
+                cancellationToken,
+                filter => filter
+                    .Path(contactPath, PathTypeEnum.Single)
+                    .TopN(1),
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(ContactController)}|ContactPage")
+                    .Dependencies((_, builder) => builder
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME)
+                        .PagePath(contactPath, PathTypeEnum.Single))))
+                    .FirstOrDefault();
+
+            var company = (await _companyRepository.GetPagesInCurrentCultureAsync(
+                cancellationToken,
+                filter => filter
+                    .Path(contactPath, PathTypeEnum.Children)
+                    .TopN(1),
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(ContactController)}|Company")
+                    .Dependencies((pages, builder) => builder
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)
+                        .Pages(pages))))
+                    .FirstOrDefault();
+
+            var officeLocations = (await _mapLocationRepository.GetPagesInCurrentCultureAsync(
+                cancellationToken,
+                filter => filter
+                    .Path(contactPath, PathTypeEnum.Children),
+                buildCacheAction: cache => cache
+                    .Key($"{nameof(ContactController)}|OfficeLocations")
+                    .Dependencies((pages, builder) => builder
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME)
+                        .Pages(pages))));
+
+            return (company, officeLocations, contactPage);
         }
     }
 }

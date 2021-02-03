@@ -10,11 +10,17 @@ using CMS.DataEngine;
 using CMS.SiteProvider;
 
 using MedioClinic.Middleware;
+using System.Threading.Tasks;
 
 namespace MedioClinic.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// Attaches the culture recognition middleware to the request pipeline.
+        /// </summary>
+        /// <param name="builder">Application builder.</param>
+        /// <returns>Modified application builder.</returns>
         public static IApplicationBuilder UseRequestCulture(this IApplicationBuilder builder)
         {
             if (builder is null)
@@ -48,7 +54,7 @@ namespace MedioClinic.Extensions
             {
                 var originalPath = context.HttpContext.Request.Path;
                 var originalQueryString = context.HttpContext.Request.QueryString;
-                
+
                 // Store the original paths so the app can check it.
                 context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(new StatusCodeReExecuteFeature()
                 {
@@ -68,7 +74,7 @@ namespace MedioClinic.Extensions
                     var defaultCulture = SettingsKeyInfoProvider.GetSettingsKeyInfo("CMSDefaultCultureCode", siteInfoIdentifier)?.KeyValue;
 
                     culture = CultureSiteInfoProvider.IsCultureOnSite(segmentValue, currentSiteName)
-                        ? firstSegment.Groups[1].Value
+                        ? segmentValue
                         : defaultCulture?.ToLowerInvariant();
                 }
 
@@ -82,26 +88,40 @@ namespace MedioClinic.Extensions
 
                 var newQueryString = queryFormat == null ? QueryString.Empty : new QueryString(formatedQueryString);
 
-                // An endpoint may have already been set. Since we're going to re-invoke the middleware pipeline we need to reset
-                // the endpoint and route values to ensure things are re-calculated.
-                context.HttpContext.SetEndpoint(endpoint: null);
-                var routeValuesFeature = context.HttpContext.Features.Get<IRouteValuesFeature>();
-                routeValuesFeature?.RouteValues?.Clear();
-
-                context.HttpContext.Request.Path = newPath;
-                context.HttpContext.Request.QueryString = newQueryString;
-
-                try
-                {
-                    await context.Next(context.HttpContext);
-                }
-                finally
-                {
-                    context.HttpContext.Request.QueryString = originalQueryString;
-                    context.HttpContext.Request.Path = originalPath;
-                    context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(null!);
-                }
+                await ReExecuteRequest(context, originalPath, originalQueryString, newPath, newQueryString);
             });
+        }
+
+        /// <summary>
+        /// Re-executes the HTTP request with new values.
+        /// </summary>
+        /// <param name="context">Status code context.</param>
+        /// <param name="originalPath">Original path.</param>
+        /// <param name="originalQueryString">Original query string value.</param>
+        /// <param name="newPath">New path.</param>
+        /// <param name="newQueryString">New query string value.</param>
+        /// <returns></returns>
+        private static async Task ReExecuteRequest(StatusCodeContext context, PathString originalPath, QueryString originalQueryString, PathString newPath, QueryString newQueryString)
+        {
+            // An endpoint may have already been set. Since we're going to re-invoke the middleware pipeline we need to reset
+            // the endpoint and route values to ensure things are re-calculated.
+            context.HttpContext.SetEndpoint(endpoint: null);
+            var routeValuesFeature = context.HttpContext.Features.Get<IRouteValuesFeature>();
+            routeValuesFeature?.RouteValues?.Clear();
+
+            context.HttpContext.Request.Path = newPath;
+            context.HttpContext.Request.QueryString = newQueryString;
+
+            try
+            {
+                await context.Next(context.HttpContext);
+            }
+            finally
+            {
+                context.HttpContext.Request.QueryString = originalQueryString;
+                context.HttpContext.Request.Path = originalPath;
+                context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(null!);
+            }
         }
     }
 }

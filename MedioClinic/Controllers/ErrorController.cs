@@ -45,11 +45,10 @@ namespace MedioClinic.Controllers
                         .Key($"{nameof(ErrorController)}|NotFoundPage")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME)),
-                    includeAttachments: true)
+                    includeAttachments: false)
                         .FirstOrDefault();
 
                 var viewModel = GetPageViewModel(notFoundPage, notFoundPage?.Name!);
-
 
                 return View("NotFound", viewModel);
             }

@@ -74,21 +74,21 @@ namespace MedioClinic.ViewComponents
             return null;
         }
 
-        private NavigationItem? GetNavigationItemByRelativeUrl(string searchPath, NavigationItem startPointItem)
+        private NavigationItem? GetNavigationItemByRelativeUrl(string searchPath, NavigationItem startingPointItem)
         {
-            if (startPointItem != null)
+            if (startingPointItem != null)
             {
-                var parsed = Url.Content(startPointItem.RelativeUrl);
+                var parsed = Url.Content(startingPointItem.RelativeUrl);
 
                 if (parsed?.Equals(searchPath, StringComparison.OrdinalIgnoreCase) == true)
                 {
-                    return startPointItem;
+                    return startingPointItem;
                 }
-                else if (startPointItem.ChildItems?.Any() == true)
+                else if (startingPointItem.ChildItems?.Any() == true)
                 {
                     var matches = new List<NavigationItem>();
 
-                    foreach (var child in startPointItem.ChildItems)
+                    foreach (var child in startingPointItem.ChildItems)
                     {
                         var childMatch = GetNavigationItemByRelativeUrl(searchPath, child);
                         matches.Add(childMatch!);

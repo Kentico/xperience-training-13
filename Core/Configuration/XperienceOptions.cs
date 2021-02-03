@@ -1,4 +1,6 @@
-﻿namespace Core.Configuration
+﻿using System;
+
+namespace Core.Configuration
 {
     /// <summary>
     /// Xperience-related configuration options.
@@ -43,7 +45,7 @@
     {
         public bool EmailConfirmedRegistration { get; set; }
 
-        public string? PathToDefaultAvatar { get; set; }
+        public Guid DefaultAvatarGuid { get; set; }
 
         public FacebookAuthenticationOptions? FacebookOptions { get; set; }
 

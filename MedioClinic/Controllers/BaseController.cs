@@ -12,7 +12,7 @@ using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly ILogger<BaseController> _logger;
 
@@ -44,7 +44,6 @@ namespace MedioClinic.Controllers
             bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info)
-            //where TViewModel : class, new() =>
             =>
             PageViewModel<TViewModel>.GetPageViewModel(data, title, _siteService, message, displayMessage, displayAsRaw, messageType);
 
@@ -71,6 +70,7 @@ namespace MedioClinic.Controllers
             return View(viewModel);
         }
 
+        // TODO: Create a middle-tier BaseIdentityController.
         protected void AddIdentityErrors<TResultState>(IdentityManagerResult<TResultState> result)
             where TResultState : Enum
         {

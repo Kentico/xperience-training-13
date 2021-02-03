@@ -1,15 +1,15 @@
 ﻿@using XperienceAdapter.Models
 @using Business.Models
 @using Kentico.Membership.Web.Mvc
-@model PageViewModel<(BasePage DoctorsSection, IEnumerable<Doctor> Doctors)>
+@model PageViewModel<IEnumerable<Doctor>>
 
 <main class="row mc-page-fixed">
     <section class="container row section">
         <h1>@Html.DisplayFor(m => m.Metadata.Title)</h1>
         <div class="mc-flex-container">
-            @if (Model?.Data.Doctors?.Any() == true)
+            @if (Model?.Data?.Any() == true)
             {
-                foreach (var doctor in Model.Data.Doctors)
+                foreach (var doctor in Model.Data)
                 {
                     if (doctor != null)
                     {
@@ -24,7 +24,7 @@
                                     <p>@Html.DisplayFor(m => doctor.Specialty)</p>
                                 </div>
                                 <div class="card-action">
-                                    <a href="@Url.Content(doctor.DoctorDetailUrl)">Detail</a>
+                                    <a href="@Html.Raw(doctor.DoctorDetailUrl)">Detail</a>
                                 </div>
                             </div>
                         </section>

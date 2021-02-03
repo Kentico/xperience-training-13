@@ -28,19 +28,15 @@ namespace MedioClinic.Controllers
 
         private readonly IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> _doctorRepository;
 
-        private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
-
         public DoctorsCtbController(
             ILogger<DoctorsCtbController> logger,
             ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageDataContextRetriever pageDataContextRetriever,
-            IPageRepository<BasePage, TreeNode> basePageRepository,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
             : base(logger, siteService, optionsMonitor)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
-            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
         }
 
@@ -50,19 +46,7 @@ namespace MedioClinic.Controllers
                 && pageDataContext.Page != null)
             {
                 var doctorsPath = pageDataContext.Page.NodeAliasPath;
-
-                var doctorsSection = (await _basePageRepository.GetPagesInCurrentCultureAsync(
-                    cancellationToken,
-                    filter => filter
-                        .Path(doctorsPath, PathTypeEnum.Single)
-                        .TopN(1),
-                    buildCacheAction: cache => cache
-                        .Key($"{nameof(DoctorsCtbController)}|DoctorsSection")
-                        .Dependencies((_, builder) => builder
-                            .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME))))
-                                .FirstOrDefault();
-
-                var title = doctorsSection?.Name ?? string.Empty;
+                var title = pageDataContext.Page.DocumentName ?? string.Empty;
 
                 var doctorPages = await _doctorRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
@@ -72,12 +56,12 @@ namespace MedioClinic.Controllers
                         .Key($"{nameof(DoctorsCtbController)}|Doctors")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
+                            .PagePath(doctorsPath, PathTypeEnum.Children)
                             .PageOrder()));
 
-                if (doctorsSection != null && doctorPages?.Any() == true)
+                if (doctorPages?.Any() == true)
                 {
-                    var data = (doctorsSection, doctorPages);
-                    var viewModel = GetPageViewModel(data, title);
+                    var viewModel = GetPageViewModel(doctorPages, title);
 
                     return View("Doctors/Index", viewModel);
                 }
@@ -88,31 +72,30 @@ namespace MedioClinic.Controllers
 
         public async Task<IActionResult> Detail(CancellationToken cancellationToken)
         {
-            PageViewModel? viewModel = default;
-
             if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.Doctor>(out var pageDataContext)
                 && pageDataContext.Page != null)
             {
+                var doctorPath = pageDataContext.Page.NodeAliasPath;
 
-                var doctorsPath = pageDataContext.Page.NodeAliasPath;
-
-                if (!string.IsNullOrEmpty(doctorsPath))
+                if (!string.IsNullOrEmpty(doctorPath))
                 {
                     var doctor = (await _doctorRepository.GetPagesInCurrentCultureAsync(
                         cancellationToken,
                         filter => filter
-                            .Path(doctorsPath, PathTypeEnum.Single),
+                            .Path(doctorPath, PathTypeEnum.Single)
+                            .TopN(1),
                         buildCacheAction: cache => cache
-                            .Key($"{nameof(DoctorsCtbController)}|Doctor|{doctorsPath}")
+                            .Key($"{nameof(DoctorsCtbController)}|Doctor|{doctorPath}")
                             .Dependencies((_, builder) => builder
-                                .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME))))
+                                .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
+                                .PagePath(doctorPath, PathTypeEnum.Single))))
                                 .FirstOrDefault();
 
                     if (doctor != null)
                     {
-                        viewModel = GetPageViewModel(doctor, doctor?.Name!);
+                        var viewModel = GetPageViewModel(doctor, doctor?.Name!);
 
-                        return View("Doctors/Detail", viewModel); 
+                        return View("Doctors/Detail", viewModel);
                     }
                 }
             }

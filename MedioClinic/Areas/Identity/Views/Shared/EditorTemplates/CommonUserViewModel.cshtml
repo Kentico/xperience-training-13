@@ -1,11 +1,22 @@
 ﻿@using Kentico.Membership.Web.Mvc
 @model Identity.Models.Profile.CommonUserViewModel
 @inject Microsoft.Extensions.Options.IOptions<Core.Configuration.XperienceOptions> Options
+@inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+
+@{ 
+    var defaultAvatarGuid = Options?.Value.IdentityOptions?.DefaultAvatarGuid;
+    IMediaFileUrl defaultAvatarUrl = default;
+
+    if (defaultAvatarGuid.HasValue)
+    {
+        defaultAvatarUrl = (await MediaFileRepository.GetMediaFileAsync(defaultAvatarGuid.Value))?.MediaFileUrl;
+    }
+}
 
 <section class="row section col xl6 l6 m6 s12">
     <div class="card-panel white">
         <div class="section">
-            <img class="responsive-img" src="@Url.Kentico().AvatarUrl(Model.UserName, pathToDefaultAvatar: Options?.Value?.IdentityOptions?.PathToDefaultAvatar)" alt="@ResHelper.GetString("Identity.Profile.AvatarFile")" />
+            <img class="responsive-img" src="@Url.Kentico().AvatarUrl(Model.UserName, pathToDefaultAvatar: defaultAvatarUrl?.RelativePath)" alt="@ResHelper.GetString("Identity.Profile.AvatarFile")" />
             @Html.MedioClinicInputFor(m => m.AvatarFile)
         </div>
     </div>

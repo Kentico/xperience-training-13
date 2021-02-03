@@ -3,6 +3,7 @@
 @using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.PageViewModel<SignInViewModel>
 @inject Identity.IMedioClinicSignInManager<Identity.Models.MedioClinicUser> SignInManager
+@inject Kentico.Content.Web.Mvc.IPageUrlRetriever PageUrlRetriever
 
 @{
     Layout = "~/Areas/Identity/Views/Shared/_PasswordLayout.cshtml";
@@ -27,7 +28,7 @@
             @{
                 if (externalIdentityProviders?.Count > 0)
                 {
-                    @using (Html.BeginForm(nameof(AccountController.RequestExternalSignIn), nameof(AccountController), new { returnUrl = Url.UrlInCurrentUiCulture("home") }))
+                    @using (Html.BeginForm(nameof(AccountController.RequestExternalSignIn), nameof(AccountController), new { returnUrl = PageUrlRetriever.Retrieve("/Home")?.AbsoluteUrl }))
                     {
                         <div class="card-panel white">
                             @foreach (AuthenticationScheme provider in externalIdentityProviders)

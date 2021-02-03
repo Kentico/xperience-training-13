@@ -2,6 +2,13 @@
 @using MedioClinic.ViewComponents
 @model Business.Models.NavigationItem
 @inject Microsoft.Extensions.Options.IOptions<Core.Configuration.XperienceOptions> Options
+@inject Kentico.Content.Web.Mvc.IPageUrlRetriever PageUrlRetriever
+@inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+
+@{ 
+    var logoGuid = new Guid("af277d0c-9a28-4fe3-b673-7f524e185548");
+    var logoUrl = (await MediaFileRepository.GetMediaFileAsync(logoGuid))?.MediaFileUrl;
+}
 
 @functions{
     private string _partialViewPath = $"Components/{nameof(Navigation)}/_TopNavigationContents";
@@ -25,8 +32,8 @@
 <div class="navbar-fixed mc-opacity-95">
     <nav role="navigation">
         <div class="nav-wrapper container">
-            <a class="brand-logo" href="@Url.UrlInCurrentUiCulture("home")">
-                <img class="mc-logo" src="~/images/mc-logo.png" alt="Medio Clinic logo" />
+            <a class="brand-logo" href="@PageUrlRetriever.Retrieve("/Home")?.AbsoluteUrl">
+                <img class="mc-logo" src="@Html.Raw(logoUrl.RelativePath)" alt="@Options.Value.CompanyName" />
                 <span class="mc-logo-text">@Options?.Value?.CompanyName</span>
             </a>
             <a class="sidenav-trigger" href="#" data-target="top-navigation-mobile">

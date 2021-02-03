@@ -3,16 +3,16 @@
 
 @{
     var navigationItems = Model?.Navigation?.ChildItems;
+    var triggerViewName = "_DropdownTrigger";
+    var identityIcon = @"<i class=""material-icons"">account_circle</i>";
+}
 
-    (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
+@functions{
+    private (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
         (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), ResHelper.GetString(resourceKey));
 }
 
 <ul id="@Model?.MainId" class="@Model?.ListClass">
-    @{
-        var triggerViewName = "_DropdownTrigger";
-    }
-
     @if (navigationItems?.Any() == true)
     {
         foreach (var item in navigationItems)
@@ -43,8 +43,6 @@
             identityNavigation.Add(GetIdentityItem("Register", "Account", "Identity.Account.Register.Title"));
         }
     }
-
-    @{ var identityIcon = @"<i class=""material-icons"">account_circle</i>"; } 
 
     <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), identityIcon, (IEnumerable<(string, string)>)identityNavigation)" />
 
