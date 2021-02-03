@@ -32,17 +32,12 @@ namespace Business.Repositories
 
         private readonly ISiteCultureRepository _cultureRepository;
 
-        private readonly string[] _navigationEnabledPageTypes = new string[]
-        {
-            CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME,
-            CMS.DocumentEngine.Types.MedioClinic.BasicPageWithUrlSlug.CLASS_NAME,
-            CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME,
-            CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME,
-            CMS.DocumentEngine.Types.MedioClinic.User.CLASS_NAME,
-            CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME
-        };
+        private IEnumerable<string> NavigationEnabledPageTypes => DataClassInfoProvider
+            .GetClasses()
+            .Where(classInfo => classInfo.ClassIsNavigationItem)
+            .Select(classInfo => classInfo.ClassName);
 
-        private IEnumerable<string> NavigationEnabledTypeDependencies => _navigationEnabledPageTypes
+        private IEnumerable<string> NavigationEnabledTypeDependencies => NavigationEnabledPageTypes
             .Select(pageType => $"nodes|{SiteContext.CurrentSiteName}|{pageType}|all");
 
         private NavigationItem RootDto => _basePageRepository.GetPagesInCurrentCulture(query =>
@@ -136,7 +131,7 @@ namespace Business.Repositories
             var checkedCulture = GetSiteCulture(siteCulture);
 
             var allItems = _basePageRepository.GetPagesByTypeAndCulture(
-                _navigationEnabledPageTypes,
+                NavigationEnabledPageTypes,
                 checkedCulture,
                 $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigation)}|{checkedCulture.IsoCode}",
                 filter => GetDefaultFilter(filter)

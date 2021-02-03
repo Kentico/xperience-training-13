@@ -33,7 +33,7 @@ namespace MedioClinic.Controllers
         private readonly IMediaFileRepository _mediaFileRepository;
 
         public ContactCtbController(
-                ILogger<ContactController> logger,
+                ILogger<ContactCtbController> logger,
                 ISiteService siteService,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
                 IPageDataContextRetriever pageDataContextRetriever,
@@ -86,7 +86,7 @@ namespace MedioClinic.Controllers
                     .Path(contactPath, PathTypeEnum.Single)
                     .TopN(1),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(ContactController)}|ContactPage")
+                    .Key($"{nameof(ContactCtbController)}|ContactPage")
                     .Dependencies((_, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME)
                         .PagePath(contactPath, PathTypeEnum.Single))))
@@ -98,7 +98,7 @@ namespace MedioClinic.Controllers
                     .Path(contactPath, PathTypeEnum.Children)
                     .TopN(1),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(ContactController)}|Company")
+                    .Key($"{nameof(ContactCtbController)}|Company")
                     .Dependencies((pages, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)
                         .Pages(pages))))
@@ -109,7 +109,7 @@ namespace MedioClinic.Controllers
                 filter => filter
                     .Path(contactPath, PathTypeEnum.Children),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(ContactController)}|OfficeLocations")
+                    .Key($"{nameof(ContactCtbController)}|OfficeLocations")
                     .Dependencies((pages, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.MapLocation.CLASS_NAME)
                         .Pages(pages))));
