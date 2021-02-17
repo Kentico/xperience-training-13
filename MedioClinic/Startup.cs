@@ -161,7 +161,7 @@ namespace MedioClinic
             app.UseKentico();
 
             /* Conventional routing: Begin */
-            app.UseRouting();
+            //app.UseRouting();
             /* Conventional routing: End */
 
             app.UseRequestCulture();
