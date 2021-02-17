@@ -4,59 +4,65 @@
 
 ## About the repo
 
-The repo contains the Medio Clinic sample website developed throughout the Kentico [Xperience MVC for Developers course](https://www.kentico.com/services/training/). The codebase represents the final state of development.
+The repo contains the Medio Clinic sample website developed throughout the [Kentico Xperience 13 for Developers](https://xperience.io/services/training) course. The codebase represents the final state of development.
 
-The repo will eventually contain code of all modules of the course:
+The repo currently contains code of the following modules of the course:
 
 * Essentials
-* Builders
 * Identity
 
-The code of the modules is not separated into git branches or otherwise. It lives together as one working Visual Studio solution. When taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
+The code of the modules does not exist in separate git branches or is otherwise split. It lives together as one working Visual Studio solution, internally separated using standard conventions (separate projects, MVC areas). Therefore, when taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
 
 ## Requirements
 
-You need the following prerequisites:
+Administration application prerequisites:
 
-* [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1)
-    * You can also get the SDK by installing [Visual Studio 2019 16.4](https://visualstudio.com/vs) or higher.
-* [SQL Server 2016 SP2 or newer](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-    * You can use the Express edition as well as the Developer edition (for development use only).
+* Operating systems
+    * Windows 8.1 and newer
+    * Windows Server 2012 and newer
+* IIS features
+    * ASP.NET
+    * .NET extensibility
+    * ISAPI extensions
+    * ISAPI filters
+    * Static content
+* .NET
+    * .NET Framework 4.8 or newer
+
+Live site application prerequisites:
+
+* .NET
+    * [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) with ASP.NET Core runtime (included in [Visual Studio 2019 16.4](https://visualstudio.com/vs) or newer)
+    
+Common prerequisites:
+
+* Visual Studio 2019 Community or higher
+    * ASP.NET and web development workload
+    * .NET Core cross-platform development workload
+    * Git for Windows
+    * GitHub Extension for Visual Studio
+* [SQL Server 2012 Express or higher](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+    * Case-insensitive collation
+
+For a complete list of system requirements, refer to our [documentation](https://docs.xperience.io/installation/system-requirements).
 
 ## How to run the code
 
-To make the project work, follow these steps:
+Below you'll find a high-level list of instructions. The full instructions can be found in the course.
 
-1. To run the Xperience administration application, make sure your computer meets the [system requirements](https://docs.kentico.com/13/installation/system-requirements) outlined in the Xperience documentation.
-1. To run the ASP.NET Core 3.1 application, download the [.NET Core 3.1.3 SDK](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1.3/3.1.3.md).
-1. Clone the repo (`git clone https://github.com/Kentico/training-xperience-13`).
-1. Register the [administration interface](/CMS) in IIS.
-    * If you register the administration interface as an application that sits under `Default Web Site` and has a `Kentico13_Admin` alias, then you won't have to do any adjustments in Visual Studio.
-1. Open Visual Studio with elevated credentials, open the `WebApp.sln` solution and build it (`Ctrl+Shift+B`).
-1. Close the solution.
-1. Access the administrative interface. Follow the installation wizard to create a new database named "xperience-training-13" with the default Kentico objects.
-1. Register an EMS license when prompted.
-1. Run `ContinuousIntegration.exe -r` from the ~/CMS/bin directory.
-1. Open the __Sites__ application in Xperience and start the MedioClinic website.
-1. Open the `MedioClinic.sln` solution.
-1. Build the solution.
-1. Under [MedioClinic](/MedioClinic), create an `appsettings.Development.json` file. If you run your SQL Server locally, the file can have the following structure:
+You need to install Xperience program files along with a blank website instance. You'll only need the blank database. Once installed, both Visual Studio solutions of the administration application and the blank site can be deleted since all files are provided by this repository.
 
-```json
-    {
-      "ConnectionStrings": {
-        "CMSConnectionString": "Data Source=localhost;Initial Catalog=xperience-training-13;Integrated Security=True;Persist Security Info=False;Connect Timeout=60;Encrypt=False;Current Language=English;"
-      },
-      "CMSHashStringSalt": "ea505e97-2d5f-4d74-b4eb-1cbea203f877",
-      "Logging": {
-        "LogLevel": {
-          "Default": "Information",
-          "Microsoft": "Warning",
-          "Microsoft.Hosting.Lifetime": "Information"
-        }
-      }
-    }
-```
+1. Clone or fork the repository.
+1. Download the installer through the [trial download page](https://xperience.io/get-started/trial). (Existing customers can download the installer in the [client portal](https://client.kentico.com/). Partners can do so in the [partner portal](https://partner.kentico.com/).)
+1. Run the `Kentico_13_0.exe` file.
+1. Install a blank ASP.NET Core website.
+1. Give the site a name `MedioClinic`.
+1. Let the installer deploy a database.
+1. In the cloned repository, adjust the connection strings to point to your newly deployed blank database.
+1. Also, adjust the `CMSHashStringSalt` environment value in the cloned repository to match the one in the newly deployed blank site.
+1. In the cloned repository, run `/CMS/bin/ContinuousIntegration.exe -r` to restore the objects to the database.
+1. Open the `WebApp.sln` solution and build it.
+1. Register the administration application in IIS and add development licenses (found in the course).
 
 ## Enabling external authentication
 

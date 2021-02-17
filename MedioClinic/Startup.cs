@@ -19,19 +19,19 @@ using CMS.Core;
 using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.SiteProvider;
+using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
-using XperienceAdapter.Localization;
 using Core.Configuration;
+using XperienceAdapter.Localization;
 using Identity;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
-using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic
 {
@@ -39,22 +39,22 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-        {
-            Configuration = configuration;
-            Environment = webHostEnvironment;
-            Options = configuration.GetSection(nameof(XperienceOptions));
-        }
-
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
 
-        private IConfigurationSection? Options { get; }
+        public IConfigurationSection? Options { get; }
 
-        private string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
+        public string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
 
-        private AutoFacConfig AutoFacConfig => new AutoFacConfig();
+        public AutoFacConfig AutoFacConfig => new AutoFacConfig();
+
+        public Startup(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        {
+            Environment = webHostEnvironment;
+            Configuration = configuration;
+            Options = configuration.GetSection(nameof(XperienceOptions));
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -87,6 +87,9 @@ namespace MedioClinic
                 kenticoServiceCollection.DisableVirtualContextSecurityForLocalhost();
             }
 
+            // services.AddAuthentication();
+            // services.AddAuthorization();
+
             services.AddLocalization();
 
             services.AddControllersWithViews()
@@ -101,7 +104,9 @@ namespace MedioClinic
                     };
                 });
 
-            services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
+            /* Conventional routing: Begin */
+            //services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
+            /* Conventional routing: End */
 
             services.Configure<XperienceOptions>(Options);
             var xperienceOptions = Options.Get<XperienceOptions>();
@@ -109,22 +114,8 @@ namespace MedioClinic
             ConfigureIdentityServices(services, xperienceOptions);
         }
 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            try
-            {
-                AutoFacConfig.ConfigureContainer(builder);
-            }
-            catch
-            {
-                RegisterInitializationHandler(builder);
-            }
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            IOptions<XperienceOptions> optionsAccessor)
+        public void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())
             {
@@ -162,11 +153,19 @@ namespace MedioClinic
             }
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
+
             app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
+            
             app.UseKentico();
+
+            /* Conventional routing: Begin */
             app.UseRouting();
+            /* Conventional routing: End */
+
             app.UseRequestCulture();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -189,7 +188,10 @@ namespace MedioClinic
                 //MapCultureSpecificRoutes(endpoints, optionsAccessor);
                 /* Conventional routing: End */
 
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("The site has not been configured yet.");
+                });
             });
         }
 
@@ -199,6 +201,18 @@ namespace MedioClinic
         /// <param name="builder">Container builder.</param>
         private void RegisterInitializationHandler(ContainerBuilder builder) =>
             CMS.Base.ApplicationEvents.Initialized.Execute += (sender, eventArgs) => AutoFacConfig.ConfigureContainer(builder);
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            try
+            {
+                AutoFacConfig.ConfigureContainer(builder);
+            }
+            catch
+            {
+                RegisterInitializationHandler(builder);
+            }
+        }
 
         /* Conventional routing: Begin */
 

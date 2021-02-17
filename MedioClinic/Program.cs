@@ -23,7 +23,6 @@ namespace MedioClinic
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.CaptureStartupErrors(true);
                     webBuilder.UseStartup<Startup>();
                 });
     }
