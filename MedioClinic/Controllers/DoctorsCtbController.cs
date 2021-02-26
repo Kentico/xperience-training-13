@@ -61,7 +61,7 @@ namespace MedioClinic.Controllers
 
                 if (doctorPages?.Any() == true)
                 {
-                    var viewModel = GetPageViewModel(doctorPages, title);
+                    var viewModel = GetPageViewModel(pageDataContext.Metadata, doctorPages);
 
                     return View("Doctors/Index", viewModel);
                 }
@@ -93,7 +93,7 @@ namespace MedioClinic.Controllers
 
                     if (doctor != null)
                     {
-                        var viewModel = GetPageViewModel(doctor, doctor?.Name!);
+                        var viewModel = GetPageViewModel(pageDataContext.Metadata, doctor);
 
                         return View("Doctors/Detail", viewModel);
                     }

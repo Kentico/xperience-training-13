@@ -69,7 +69,7 @@ namespace MedioClinic.Controllers
                         OfficeLocations = officeLocations
                     };
 
-                    var viewModel = GetPageViewModel(data, title: contactPage.Name!);
+                    var viewModel = GetPageViewModel(pageDataContext.Metadata, data);
 
                     return View("Contact/Index", viewModel); 
                 }

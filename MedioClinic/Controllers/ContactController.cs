@@ -12,11 +12,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using XperienceAdapter.Repositories;
+using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic.Controllers
 {
     public class ContactController : BaseController
     {
+        private const string ContactPath = "/Contact-us";
+
+        private readonly IPageRetriever _pageRetriever;
+
+        private readonly IPageMetadataRetriever _metadataRetriever;
+
         private readonly IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> _mapLocationRepository;
 
         private readonly IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> _namePerexTextRepository;
@@ -29,12 +36,16 @@ namespace MedioClinic.Controllers
                 ILogger<ContactController> logger,
                 ISiteService siteService,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
+                IPageRetriever pageRetriever,
+                IPageMetadataRetriever metadataRetriever,
                 IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
                 IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
                 IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
                 IMediaFileRepository mediaFileRepository)
                 : base(logger, siteService, optionsMonitor)
         {
+            _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
+            _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));
             _mapLocationRepository = mapLocationRepository ?? throw new ArgumentNullException(nameof(mapLocationRepository));
             _namePerexTextRepository = namePerexTextRepository ?? throw new ArgumentNullException(nameof(namePerexTextRepository));
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
@@ -42,10 +53,22 @@ namespace MedioClinic.Controllers
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
+            var page = (await _pageRetriever.RetrieveAsync<CMS.DocumentEngine.Types.MedioClinic.NamePerexText>(
+                filter => filter
+                    .Path(ContactPath, PathTypeEnum.Single)
+                    .TopN(1),
+                cache => cache
+                    .Key($"{nameof(ContactController)}|ContactPage")
+                    .Dependencies((_, builder) => builder
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME))))
+                    .FirstOrDefault();
+
+            var metadata = _metadataRetriever.Retrieve(page);
+
             var company = (await _companyRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
-                    .Path("/Contact-us/Medio-Clinic", PathTypeEnum.Single)
+                    .Path($"{ContactPath}/Medio-Clinic", PathTypeEnum.Single)
                     .TopN(1),
                 buildCacheAction: cache => cache
                     .Key($"{nameof(ContactController)}|Company")
@@ -56,7 +79,7 @@ namespace MedioClinic.Controllers
             var officeLocations = (await _mapLocationRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
-                    .Path("/Contact-us/Office-locations", PathTypeEnum.Children),
+                    .Path($"{ContactPath}/Office-locations", PathTypeEnum.Children),
                 buildCacheAction: cache => cache
                     .Key($"{nameof(ContactController)}|OfficeLocations")
                     .Dependencies((_, builder) => builder
@@ -65,7 +88,7 @@ namespace MedioClinic.Controllers
             var contactPage = (await _namePerexTextRepository.GetPagesInCurrentCultureAsync(
                cancellationToken,
                filter => filter
-                   .Path("/Contact-us", PathTypeEnum.Single)
+                   .Path(ContactPath, PathTypeEnum.Single)
                    .TopN(1),
                buildCacheAction: cache => cache
                    .Key($"{nameof(ContactController)}|ContactPage")
@@ -86,7 +109,7 @@ namespace MedioClinic.Controllers
                     OfficeLocations = officeLocations
                 };
 
-                var viewModel = GetPageViewModel(data, title: contactPage.Name!);
+                var viewModel = GetPageViewModel(metadata, data);
 
                 return View("Contact/Index", viewModel);
             }

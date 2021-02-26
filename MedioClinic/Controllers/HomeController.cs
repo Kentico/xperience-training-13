@@ -13,11 +13,16 @@ using CMS.DocumentEngine;
 using XperienceAdapter.Repositories;
 using Core.Configuration;
 using Business.Models;
+using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic.Controllers
 {
     public class HomeController : BaseController
     {
+        private readonly IPageRetriever _pageRetriever;
+
+        private readonly IPageMetadataRetriever _metadataRetriever;
+
         private readonly IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> _homePageRepository;
 
         private readonly IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> _companyServiceRepository;
@@ -26,10 +31,14 @@ namespace MedioClinic.Controllers
             ILogger<HomeController> logger,
             ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IPageRetriever pageRetriever,
+            IPageMetadataRetriever metadataRetriever,
             IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
-            IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository) 
+            IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
             : base(logger, siteService, optionsMonitor)
         {
+            _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
+            _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));
             _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));
             _companyServiceRepository = companyServiceRepository ?? throw new ArgumentNullException(nameof(companyServiceRepository));
         }
@@ -37,6 +46,18 @@ namespace MedioClinic.Controllers
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var homePath = "/Home";
+
+            var page = (await _pageRetriever.RetrieveAsync<CMS.DocumentEngine.Types.MedioClinic.Doctor>(
+                filter => filter
+                    .Path(homePath, PathTypeEnum.Single)
+                    .TopN(1),
+                cache => cache
+                    .Key($"{nameof(HomeController)}|HomePage")
+                    .Dependencies((_, builder) => builder
+                        .PageType(CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME))))
+                    .FirstOrDefault();
+
+            var metadata = _metadataRetriever.Retrieve(page);
 
             var homePage = (await _homePageRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
@@ -64,9 +85,9 @@ namespace MedioClinic.Controllers
             if (homePage != null && companyServices?.Any() == true)
             {
                 var data = (homePage, companyServices);
-                var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, homePage.Name!);
+                var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(metadata, data);
 
-                return View("Home/Index", viewModel); 
+                return View("Home/Index", viewModel);
             }
 
             return NotFound();

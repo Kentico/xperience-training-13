@@ -38,6 +38,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(PageViewModel<IUserViewModel> uploadModel)
         {
+
             var message = ConcatenateContactAdmin("General.Error");
 
             if (ModelState.IsValid)
@@ -58,7 +59,12 @@ namespace MedioClinic.Areas.Identity.Controllers
                         break;
                 }
 
-                var model = GetPageViewModel(profileResult.Data.UserViewModel, profileResult.Data.PageTitle ?? ErrorTitle, message);
+                var metadata = new PageMetadata
+                {
+                    Title = profileResult.Data.PageTitle ?? ErrorTitle
+                };
+
+                var model = GetPageViewModel(metadata, profileResult.Data.UserViewModel, message);
 
                 return View(model);
             }
@@ -78,9 +84,14 @@ namespace MedioClinic.Areas.Identity.Controllers
             {
                 var profileResult = await _profileManager.GetProfileAsync(userName);
 
+                var metadata = new PageMetadata
+                {
+                    Title = profileResult.Data.PageTitle
+                };
+
                 if (profileResult.Success)
                 {
-                    var model = GetPageViewModel(profileResult.Data.UserViewModel, profileResult.Data.PageTitle);
+                    var model = GetPageViewModel(metadata, profileResult.Data.UserViewModel);
 
                     return View(model);
                 }
@@ -95,9 +106,14 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// <returns>A not-found page.</returns>
         private ActionResult UserNotFound()
         {
+            var metadata = new PageMetadata
+            {
+                Title = ErrorTitle
+            };
+
             var message = Localize("Identity.UserNotFound");
 
-            return View("UserMessage", GetPageViewModel(title: ErrorTitle, message, messageType: MessageType.Error));
+            return View("UserMessage", GetPageViewModel(metadata, message: message, messageType: MessageType.Error));
         }
     }
 }

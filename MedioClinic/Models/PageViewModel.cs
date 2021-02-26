@@ -13,14 +13,14 @@ namespace MedioClinic.Models
 
         public static PageViewModel GetPageViewModel(
             string title,
+            string description,
+            string keywords,
             ISiteService siteService,
             string? message = default,
-            bool displayMessage = true,
-            bool displayAsRaw = default,
-            MessageType messageType = MessageType.Info) =>
+            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info) =>
             new PageViewModel()
             {
-                Metadata = GetPageMetadata(title, siteService),
+                Metadata = GetPageMetadata(title, message, message, siteService),
                 UserMessage = new UserMessage
                 {
                     Message = message,
@@ -30,7 +30,7 @@ namespace MedioClinic.Models
                 }
             };
 
-        protected static PageMetadata GetPageMetadata(string title, ISiteService siteService) =>
+        protected static PageMetadata GetPageMetadata(string title, string description, string keywords, ISiteService siteService) =>
             new PageMetadata()
             {
                 Title = title,
@@ -51,14 +51,14 @@ namespace MedioClinic.Models
         public static PageViewModel<TViewModel> GetPageViewModel(
             TViewModel data,
             string title,
+            string description,
+            string keywords,
             ISiteService siteService,
             string? message = default,
-            bool displayMessage = true,
-            bool displayAsRaw = default,
-            MessageType messageType = MessageType.Info) =>
+            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info) =>
             new PageViewModel<TViewModel>()
             {
-                Metadata = GetPageMetadata(title, siteService),
+                Metadata = GetPageMetadata(title, message, message, siteService),
                 UserMessage = new UserMessage
                 {
                     Message = message,

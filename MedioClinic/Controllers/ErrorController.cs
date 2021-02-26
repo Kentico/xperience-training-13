@@ -12,6 +12,7 @@ using CMS.Base;
 using XperienceAdapter.Repositories;
 using Core.Configuration;
 using Business.Models;
+using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
 {
@@ -33,6 +34,8 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index(int code)
         {
+            var metadata = new PageMetadata();
+
             if (code == 404)
             {
                 _logger.LogError($"Not found: {ExceptionHandlerPathFeature?.Path}");
@@ -48,7 +51,8 @@ namespace MedioClinic.Controllers
                     includeAttachments: false)
                         .FirstOrDefault();
 
-                var viewModel = GetPageViewModel(notFoundPage, notFoundPage?.Name!);
+                metadata.Title = notFoundPage.Name;
+                var viewModel = GetPageViewModel(metadata, notFoundPage);
 
                 return View("NotFound", viewModel);
             }

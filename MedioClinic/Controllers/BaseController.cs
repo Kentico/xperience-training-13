@@ -9,6 +9,8 @@ using CMS.Helpers;
 using Core.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
+using Kentico.Content.Web.Mvc;
+using CMS.DocumentEngine;
 
 namespace MedioClinic.Controllers
 {
@@ -30,22 +32,37 @@ namespace MedioClinic.Controllers
         }
 
         protected PageViewModel GetPageViewModel(
-            string title,
-            string? message = default,
-            bool displayMessage = true,
-            bool displayAsRaw = default,
-            MessageType messageType = MessageType.Info) =>
-            PageViewModel.GetPageViewModel(title, _siteService, message, displayMessage, displayAsRaw, messageType);
-
-        protected PageViewModel<TViewModel> GetPageViewModel<TViewModel>(
-            TViewModel data,
-            string title,
+            IPageMetadata? metadata,
             string? message = default,
             bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info)
             =>
-            PageViewModel<TViewModel>.GetPageViewModel(data, title, _siteService, message, displayMessage, displayAsRaw, messageType);
+            PageViewModel.GetPageViewModel(
+                metadata?.Title, 
+                metadata?.Description, 
+                metadata?.Keywords, 
+                _siteService, message, 
+                displayMessage, 
+                displayAsRaw, 
+                messageType);
+
+        protected PageViewModel<TViewModel> GetPageViewModel<TViewModel>(
+            IPageMetadata? metadata,
+            TViewModel data,
+            string? message = default,
+            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info)
+            =>
+            PageViewModel<TViewModel>.GetPageViewModel(
+                data, 
+                metadata?.Title, 
+                metadata?.Description, 
+                metadata?.Keywords, 
+                _siteService, 
+                message, 
+                displayMessage, 
+                displayAsRaw, 
+                messageType);
 
         protected string Localize(string resourceKey) =>
             ResHelper.GetString(resourceKey);
@@ -60,8 +77,8 @@ namespace MedioClinic.Controllers
             where TUploadViewModel : class, new()
         {
             var viewModel = GetPageViewModel(
+                null,
                 uploadModel.Data,
-                Localize("General.InvalidInput.Title"),
                 Localize("General.InvalidInput.Message"),
                 true,
                 false,

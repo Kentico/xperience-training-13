@@ -78,7 +78,7 @@ namespace MedioClinic.Controllers
                 if (homePage != null && companyServices?.Any() == true)
                 {
                     var data = (homePage, companyServices);
-                    viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(data, title: homePage.Name!);
+                    viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(pageDataContext.Metadata, data);
 
                     return View("Home/Index", viewModel);
                 }
