@@ -9,14 +9,14 @@ using Microsoft.Extensions.Options;
 using CMS.Base;
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
-
-using XperienceAdapter.Repositories;
-using Core.Configuration;
-using Business.Models;
-using MedioClinic.Models;
 using Kentico.Content.Web.Mvc.Routing;
-using MedioClinic.Controllers;
+
+using Core.Configuration;
 using XperienceAdapter.Models;
+using XperienceAdapter.Repositories;
+using Business.Models;
+using MedioClinic.Controllers;
+using MedioClinic.Models;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Index), Path = "/Doctors")]
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Detail))]
@@ -46,7 +46,6 @@ namespace MedioClinic.Controllers
                 && pageDataContext.Page != null)
             {
                 var doctorsPath = pageDataContext.Page.NodeAliasPath;
-                var title = pageDataContext.Page.DocumentName ?? string.Empty;
 
                 var doctorPages = await _doctorRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,

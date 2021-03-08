@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Configuration;
-using Business.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
 using CMS.Base;
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
-using MedioClinic.Controllers;
-using MedioClinic.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+
+using Core.Configuration;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
+using Business.Models;
+using MedioClinic.Controllers;
+using MedioClinic.Models;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME, typeof(ContactCtbController), Path = "/Contact-us")]
 namespace MedioClinic.Controllers

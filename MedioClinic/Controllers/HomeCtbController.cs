@@ -12,8 +12,8 @@ using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 
-using XperienceAdapter.Repositories;
 using Core.Configuration;
+using XperienceAdapter.Repositories;
 using Business.Models;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
@@ -73,12 +73,10 @@ namespace MedioClinic.Controllers
                             .PagePath(homePath, PathTypeEnum.Children)
                             .PageOrder()));
 
-                PageViewModel<(HomePage, IEnumerable<CompanyService>)>? viewModel = default;
-
                 if (homePage != null && companyServices?.Any() == true)
                 {
                     var data = (homePage, companyServices);
-                    viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(pageDataContext.Metadata, data);
+                    var viewModel = GetPageViewModel<(HomePage, IEnumerable<CompanyService>)>(pageDataContext.Metadata, data);
 
                     return View("Home/Index", viewModel);
                 }

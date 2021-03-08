@@ -9,11 +9,11 @@ using Microsoft.Extensions.Options;
 
 using CMS.Base;
 using CMS.DocumentEngine;
-
-using XperienceAdapter.Repositories;
-using Core.Configuration;
-using Business.Models;
 using Kentico.Content.Web.Mvc;
+
+using Core.Configuration;
+using XperienceAdapter.Repositories;
+using Business.Models;
 
 namespace MedioClinic.Controllers
 {

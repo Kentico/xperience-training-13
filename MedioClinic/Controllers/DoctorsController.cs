@@ -8,12 +8,12 @@ using Microsoft.Extensions.Options;
 
 using CMS.Base;
 using CMS.DocumentEngine;
-
-using XperienceAdapter.Repositories;
-using Core.Configuration;
-using Business.Models;
-using XperienceAdapter.Models;
 using Kentico.Content.Web.Mvc;
+
+using Core.Configuration;
+using XperienceAdapter.Models;
+using XperienceAdapter.Repositories;
+using Business.Models;
 
 namespace MedioClinic.Controllers
 {
@@ -25,8 +25,6 @@ namespace MedioClinic.Controllers
 
         private readonly IPageMetadataRetriever _metadataRetriever;
 
-        private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
-
         private readonly IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> _doctorRepository;
 
         public DoctorsController(
@@ -35,13 +33,11 @@ namespace MedioClinic.Controllers
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageRetriever pageRetriever,
             IPageMetadataRetriever metadataRetriever,
-            IPageRepository<BasePage, TreeNode> basePageRepository,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
             : base(logger, siteService, optionsMonitor)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));
-            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
         }
 
@@ -59,19 +55,6 @@ namespace MedioClinic.Controllers
 
             var metadata = _metadataRetriever.Retrieve(page);
 
-            var doctorsSection = (await _basePageRepository.GetPagesInCurrentCultureAsync(
-                cancellationToken,
-                filter => filter
-                    .Path(DoctorsPath, PathTypeEnum.Single)
-                    .TopN(1),
-                buildCacheAction: cache => cache
-                    .Key($"{nameof(DoctorsController)}|DoctorsSection")
-                    .Dependencies((_, builder) => builder
-                        .PageType(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME))))
-                    .FirstOrDefault();
-
-            var title = doctorsSection?.Name ?? string.Empty;
-
             var doctorPages = await _doctorRepository.GetPagesInCurrentCultureAsync(
                 cancellationToken,
                 filter => filter
@@ -82,10 +65,9 @@ namespace MedioClinic.Controllers
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
                         .PageOrder()));
 
-            if (doctorsSection != null && doctorPages?.Any() == true)
+            if (doctorPages?.Any() == true)
             {
-                var data = (doctorsSection, doctorPages);
-                var viewModel = GetPageViewModel(metadata, data);
+                var viewModel = GetPageViewModel(metadata, doctorPages);
 
                 return View("Doctors/Index", viewModel);
             }
