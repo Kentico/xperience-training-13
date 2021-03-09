@@ -18,16 +18,13 @@ namespace MedioClinic.Controllers
     {
         protected readonly ILogger<BaseController> _logger;
 
-        protected readonly ISiteService _siteService;
-
         protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
         protected string ErrorTitle => Localize("General.Error");
 
-        public BaseController(ILogger<BaseController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor)
+        public BaseController(ILogger<BaseController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         }
 

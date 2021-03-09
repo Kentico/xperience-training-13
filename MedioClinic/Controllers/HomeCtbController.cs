@@ -31,12 +31,11 @@ namespace MedioClinic.Controllers
 
         public HomeCtbController(
             ILogger<HomeCtbController> logger,
-            ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageDataContextRetriever pageDataContextRetriever,
             IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
             IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
-            : base(logger, siteService, optionsMonitor)
+            : base(logger, optionsMonitor)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));

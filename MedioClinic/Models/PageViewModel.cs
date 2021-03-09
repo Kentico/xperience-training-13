@@ -8,7 +8,7 @@ namespace MedioClinic.Models
     /// </summary>
     public class PageViewModel
     {
-        public IPageMetadata Metadata { get; set; } = new PageMetadata();
+        public IPageMetadata Metadata { get; set; } = new MedioClinic.Models.PageMetadata();
 
         public UserMessage UserMessage { get; set; } = new UserMessage();
 

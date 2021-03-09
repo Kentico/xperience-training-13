@@ -30,11 +30,10 @@ namespace MedioClinic.Controllers
 
         public DoctorsCtbController(
             ILogger<DoctorsCtbController> logger,
-            ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageDataContextRetriever pageDataContextRetriever,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
-            : base(logger, siteService, optionsMonitor)
+            : base(logger, optionsMonitor)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));

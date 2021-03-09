@@ -29,13 +29,12 @@ namespace MedioClinic.Controllers
 
         public HomeController(
             ILogger<HomeController> logger,
-            ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageRetriever pageRetriever,
             IPageMetadataRetriever metadataRetriever,
             IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
             IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
-            : base(logger, siteService, optionsMonitor)
+            : base(logger, optionsMonitor)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));

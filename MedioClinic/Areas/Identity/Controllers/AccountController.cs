@@ -27,8 +27,8 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
-        public AccountController(ILogger<AccountController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor, IAccountManager accountManager) 
-            : base(logger, siteService, optionsMonitor)
+        public AccountController(ILogger<AccountController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor, IAccountManager accountManager) 
+            : base(logger, optionsMonitor)
         {
             _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
         }

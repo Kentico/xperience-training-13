@@ -36,7 +36,6 @@ namespace MedioClinic.Controllers
 
         public ContactController(
                 ILogger<ContactController> logger,
-                ISiteService siteService,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
                 IPageRetriever pageRetriever,
                 IPageMetadataRetriever metadataRetriever,
@@ -44,7 +43,7 @@ namespace MedioClinic.Controllers
                 IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
                 IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
                 IMediaFileRepository mediaFileRepository)
-                : base(logger, siteService, optionsMonitor)
+                : base(logger, optionsMonitor)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));

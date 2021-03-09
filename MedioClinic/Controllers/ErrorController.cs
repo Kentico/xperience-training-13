@@ -24,17 +24,16 @@ namespace MedioClinic.Controllers
 
         public ErrorController(
             ILogger<ErrorController> logger,
-            ISiteService siteService,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> pageRepository)
-            : base(logger, siteService, optionsMonitor)
+            : base(logger, optionsMonitor)
         {
             _pageRepository = pageRepository ?? throw new ArgumentNullException(nameof(pageRepository));
         }
 
         public IActionResult Index(int code)
         {
-            var metadata = new PageMetadata();
+            var metadata = new MedioClinic.Models.PageMetadata();
 
             if (code == 404)
             {

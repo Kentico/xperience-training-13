@@ -21,8 +21,8 @@ namespace MedioClinic.Areas.Identity.Controllers
     {
         private readonly IProfileManager _profileManager;
 
-        public ProfileController(ILogger<ProfileController> logger, ISiteService siteService, IOptionsMonitor<XperienceOptions> optionsMonitor, IProfileManager profileManager)
-            : base(logger, siteService, optionsMonitor)
+        public ProfileController(ILogger<ProfileController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor, IProfileManager profileManager)
+            : base(logger, optionsMonitor)
         {
             _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
         }

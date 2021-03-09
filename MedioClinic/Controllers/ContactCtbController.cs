@@ -36,14 +36,13 @@ namespace MedioClinic.Controllers
 
         public ContactCtbController(
                 ILogger<ContactCtbController> logger,
-                ISiteService siteService,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
                 IPageDataContextRetriever pageDataContextRetriever,
                 IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
                 IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
                 IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
                 IMediaFileRepository mediaFileRepository)
-                : base(logger, siteService, optionsMonitor)
+                : base(logger, optionsMonitor)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _mapLocationRepository = mapLocationRepository ?? throw new ArgumentNullException(nameof(mapLocationRepository));
