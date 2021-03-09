@@ -1,4 +1,5 @@
 ﻿using CMS.Base;
+using Kentico.Content.Web.Mvc;
 
 namespace MedioClinic.Models
 {
@@ -7,20 +8,19 @@ namespace MedioClinic.Models
     /// </summary>
     public class PageViewModel
     {
-        public PageMetadata Metadata { get; set; } = new PageMetadata();
+        public IPageMetadata Metadata { get; set; } = new PageMetadata();
 
         public UserMessage UserMessage { get; set; } = new UserMessage();
 
         public static PageViewModel GetPageViewModel(
-            string title,
-            string description,
-            string keywords,
-            ISiteService siteService,
+            IPageMetadata pageMetadata,
             string? message = default,
-            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info) =>
+            bool displayMessage = true, 
+            bool displayAsRaw = default, 
+            MessageType messageType = MessageType.Info) =>
             new PageViewModel()
             {
-                Metadata = GetPageMetadata(title, message, message, siteService),
+                Metadata = pageMetadata,
                 UserMessage = new UserMessage
                 {
                     Message = message,
@@ -29,19 +29,6 @@ namespace MedioClinic.Models
                     Display = displayMessage
                 }
             };
-
-        protected static PageMetadata GetPageMetadata(string title, string description, string keywords, ISiteService siteService) =>
-            new PageMetadata()
-            {
-                Title = title,
-                CompanyName = siteService.CurrentSite.DisplayName
-            };
-
-        public class PageMetadata
-        {
-            public string? Title { get; set; }
-            public string? CompanyName { get; set; }
-        }
     }
 
     public class PageViewModel<TViewModel> : PageViewModel
@@ -50,15 +37,14 @@ namespace MedioClinic.Models
 
         public static PageViewModel<TViewModel> GetPageViewModel(
             TViewModel data,
-            string title,
-            string description,
-            string keywords,
-            ISiteService siteService,
+            IPageMetadata pageMetadata,
             string? message = default,
-            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info) =>
+            bool displayMessage = true, 
+            bool displayAsRaw = default, 
+            MessageType messageType = MessageType.Info) =>
             new PageViewModel<TViewModel>()
             {
-                Metadata = GetPageMetadata(title, message, message, siteService),
+                Metadata = pageMetadata,
                 UserMessage = new UserMessage
                 {
                     Message = message,

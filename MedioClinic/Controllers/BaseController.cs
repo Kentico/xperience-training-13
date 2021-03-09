@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using CMS.Base;
+using CMS.DocumentEngine;
 using CMS.Helpers;
+using Kentico.Content.Web.Mvc;
 
 using Core.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
-using Kentico.Content.Web.Mvc;
-using CMS.DocumentEngine;
 
 namespace MedioClinic.Controllers
 {
@@ -32,33 +32,30 @@ namespace MedioClinic.Controllers
         }
 
         protected PageViewModel GetPageViewModel(
-            IPageMetadata? metadata,
+            IPageMetadata pageMetadata,
             string? message = default,
             bool displayMessage = true,
             bool displayAsRaw = default,
             MessageType messageType = MessageType.Info)
             =>
             PageViewModel.GetPageViewModel(
-                metadata?.Title, 
-                metadata?.Description, 
-                metadata?.Keywords, 
-                _siteService, message, 
+                pageMetadata,
+                message, 
                 displayMessage, 
                 displayAsRaw, 
                 messageType);
 
         protected PageViewModel<TViewModel> GetPageViewModel<TViewModel>(
-            IPageMetadata? metadata,
+            IPageMetadata pageMetadata,
             TViewModel data,
             string? message = default,
-            bool displayMessage = true, bool displayAsRaw = default, MessageType messageType = MessageType.Info)
+            bool displayMessage = true, 
+            bool displayAsRaw = default, 
+            MessageType messageType = MessageType.Info)
             =>
             PageViewModel<TViewModel>.GetPageViewModel(
                 data, 
-                metadata?.Title, 
-                metadata?.Description, 
-                metadata?.Keywords, 
-                _siteService, 
+                pageMetadata,
                 message, 
                 displayMessage, 
                 displayAsRaw, 
