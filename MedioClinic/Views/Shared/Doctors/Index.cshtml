@@ -1,15 +1,15 @@
 ﻿@using XperienceAdapter.Models
 @using Business.Models
 @using Kentico.Membership.Web.Mvc
-@model PageViewModel<IEnumerable<Doctor>>
+@model PageViewModel<(string Name, IEnumerable<Doctor> Doctors)>
 
 <main class="row mc-page-fixed">
     <section class="container row section">
-        <h1>@Html.DisplayFor(m => m.Metadata.Title)</h1>
+        <h1>@Html.DisplayFor(m => m.Data.Name)</h1>
         <div class="mc-flex-container">
-            @if (Model?.Data?.Any() == true)
+            @if (Model?.Data.Doctors?.Any() == true)
             {
-                foreach (var doctor in Model.Data)
+                foreach (var doctor in Model.Data.Doctors)
                 {
                     if (doctor != null)
                     {

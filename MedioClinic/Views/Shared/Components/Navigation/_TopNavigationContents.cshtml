@@ -1,4 +1,5 @@
 ﻿@using System.Threading;
+@using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
 
 @{
@@ -34,13 +35,13 @@
 
         if (Context.User.Identity.IsAuthenticated)
         {
-            identityNavigation.Add(GetIdentityItem("Index", "Profile", "Identity.Profile.Title"));
-            identityNavigation.Add(GetIdentityItem("Signout", "Account", "Identity.Account.SignOut.Title"));
+            identityNavigation.Add(GetIdentityItem(nameof(ProfileController.Index), "Profile", "Identity.Profile.Title"));
+            identityNavigation.Add(GetIdentityItem(nameof(AccountController.SignOut), "Account", "Identity.Account.SignOut.Title"));
         }
         else
         {
-            identityNavigation.Add(GetIdentityItem("Signin", "Account", "Identity.Account.SignIn.Title"));
-            identityNavigation.Add(GetIdentityItem("Register", "Account", "Identity.Account.Register.Title"));
+            identityNavigation.Add(GetIdentityItem(nameof(AccountController.SignIn), "Account", "Identity.Account.SignIn.Title"));
+            identityNavigation.Add(GetIdentityItem(nameof(AccountController.Register), "Account", "Identity.Account.Register.Title"));
         }
     }
 

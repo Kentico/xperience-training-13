@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -9,9 +10,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using CMS.Base;
+using CMS.DocumentEngine;
 using CMS.Helpers;
+using Kentico.Content.Web.Mvc;
 
 using Core.Configuration;
+using XperienceAdapter.Repositories;
+using Business.Models;
 using Identity;
 using Identity.Models;
 using Identity.Models.Account;
@@ -25,12 +30,19 @@ namespace MedioClinic.Areas.Identity.Controllers
     {
         private readonly IAccountManager _accountManager;
 
+        private readonly IPageUrlRetriever _pageUrlRetriever;
+
         private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
-        public AccountController(ILogger<AccountController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor, IAccountManager accountManager) 
+        public AccountController(
+            ILogger<AccountController> logger, 
+            IOptionsMonitor<XperienceOptions> optionsMonitor, 
+            IAccountManager accountManager,
+            IPageUrlRetriever pageUrlRetriever) 
             : base(logger, optionsMonitor)
         {
             _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
+            _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
         }
 
         // GET: /Account/Register
@@ -39,7 +51,7 @@ namespace MedioClinic.Areas.Identity.Controllers
             var model = new RegisterViewModel();
             model.PasswordConfirmationViewModel.ConfirmationAction = nameof(ConfirmUser);
 
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("Identity.Account.Register.Title")
             };
@@ -86,7 +98,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                     messageType = MessageType.Info;
                 }
 
-                var metadata = new PageMetadata
+                var metadata = new Models.PageMetadata
                 {
                     Title = title
                 };
@@ -102,7 +114,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/ConfirmUser
         public async Task<ActionResult> ConfirmUser(int? userId, string token)
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = ErrorTitle
             };
@@ -126,7 +138,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                         break;
                     case ConfirmUserResultState.UserConfirmed:
                         metadata.Title = Localize("Identity.Account.ConfirmUser.Success.Title");
-                        message = ResHelper.GetStringFormat("Identity.Account.ConfirmUser.Success.Message", Url.Action("SignIn"));
+                        message = ResHelper.GetStringFormat("Identity.Account.ConfirmUser.Success.Message", Url.Action(nameof(SignIn)));
                         displayAsRaw = true;
                         messageType = MessageType.Info;
                         break;
@@ -139,7 +151,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/Signin
         public ActionResult SignIn()
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("Identity.Account.SignIn.Title")
             };
@@ -176,7 +188,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [Authorize]
         public async Task<ActionResult> SignOut()
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("General.Error")
             };
@@ -196,7 +208,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/ForgotPassword
         public ActionResult ForgotPassword()
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("Identity.Account.ResetPassword.Title")
             };
@@ -213,7 +225,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(PageViewModel<ForgotPasswordViewModel> uploadModel)
         {
-            var metadata = new PageMetadata();
+            var metadata = new Models.PageMetadata();
 
             if (ModelState.IsValid)
             {
@@ -234,7 +246,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         // GET: /Account/ResetPassword
         public async Task<ActionResult> ResetPassword(int? userId, string token)
         {
-            var metadata = new PageMetadata();
+            var metadata = new Models.PageMetadata();
             var message = ConcatenateContactAdmin("Identity.Account.ResetPassword.Failure.Message");
 
             if (userId.HasValue && !string.IsNullOrEmpty(token))
@@ -263,7 +275,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(PageViewModel<ResetPasswordViewModel> uploadModel)
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("Identity.Account.ResetPassword.Title")
             };
@@ -282,7 +294,7 @@ namespace MedioClinic.Areas.Identity.Controllers
 
                     if (HttpContext.User.Identity?.IsAuthenticated == false)
                     {
-                        var signInAppendix = ResHelper.GetStringFormat("Identity.Account.ResetPassword.Success.SignInAppendix", Url.Action("SignIn"));
+                        var signInAppendix = ResHelper.GetStringFormat("Identity.Account.ResetPassword.Success.SignInAppendix", Url.Action(nameof(SignIn)));
                         message = message.Insert(message.Length, $" {signInAppendix}");
                     }
                 }
@@ -303,7 +315,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToLocal(GetHomeUrl());
         }
 
         /// <summary>
@@ -313,7 +325,7 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// <returns>The user message.</returns>
         private ActionResult InvalidAttempt(PageViewModel<SignInViewModel> uploadModel)
         {
-            var metadata = new PageMetadata
+            var metadata = new Models.PageMetadata
             {
                 Title = Localize("Identity.Account.SignIn.Title")
             };
@@ -385,6 +397,8 @@ namespace MedioClinic.Areas.Identity.Controllers
         /// Gets the home page URL.
         /// </summary>
         /// <returns>Home page URL.</returns>
-        private string GetHomeUrl() => Url.Action("Index", "Home", new { Area = string.Empty });
+        //private string GetHomeUrl() => Url.Action(nameof(HomeCtbController.Index), nameof(HomeCtbController), new { area = string.Empty });
+        private string GetHomeUrl() =>
+            _pageUrlRetriever.Retrieve("/Home").RelativePath;
     }
 }

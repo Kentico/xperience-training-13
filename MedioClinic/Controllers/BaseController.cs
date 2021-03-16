@@ -70,8 +70,13 @@ namespace MedioClinic.Controllers
             PageViewModel<TUploadViewModel> uploadModel)
             where TUploadViewModel : class, new()
         {
+            var metadata = new Models.PageMetadata
+            {
+                Title = Localize("General.InvalidInput.Title")
+            };
+
             var viewModel = GetPageViewModel(
-                null,
+                metadata,
                 uploadModel.Data,
                 Localize("General.InvalidInput.Message"),
                 true,

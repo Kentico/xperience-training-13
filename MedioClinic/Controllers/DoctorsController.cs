@@ -66,7 +66,8 @@ namespace MedioClinic.Controllers
 
             if (doctorPages?.Any() == true)
             {
-                var viewModel = GetPageViewModel(metadata, doctorPages);
+                var data = (page.DocumentName, doctorPages);
+                var viewModel = GetPageViewModel(metadata, data);
 
                 return View("Doctors/Index", viewModel);
             }
