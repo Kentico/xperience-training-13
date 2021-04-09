@@ -13,7 +13,6 @@
     public enum ConfirmUserResultState
     {
         EmailNotConfirmed,
-        AvatarNotCreated,
         UserConfirmed
     }
 

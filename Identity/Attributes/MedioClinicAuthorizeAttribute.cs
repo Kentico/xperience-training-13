@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -27,9 +28,11 @@ namespace Identity.Attributes
 
             if (user != null)
             {
-                var userRoles = UserInfoProvider.GetRolesForUser(user.Identity?.Name, SiteContext.CurrentSiteName).ToMedioClinicRoles();
+                var userRoles = UserInfoProvider.GetRolesForUser(user.Identity?.Name, SiteContext.CurrentSiteName);
 
-                if (user.Identity?.IsAuthenticated == false || !FlagEnums.HasAnyFlags(Roles, userRoles))
+                if (userRoles?.Any() == true 
+                    && user.Identity?.IsAuthenticated == false 
+                    || !FlagEnums.HasAnyFlags(Roles, userRoles.ToMedioClinicRoles()))
                 {
                     context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
 

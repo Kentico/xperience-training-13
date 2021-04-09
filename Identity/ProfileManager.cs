@@ -116,7 +116,7 @@ namespace Identity
                 // Map the common user properties.
                 user = _userModelService.MapToMedioClinicUser(uploadModel.CommonUserViewModel, user, commonUserModelCustomMappings);
 
-                // Map all other potential properties of specific models (patient, doctor, etc.)
+                // Map all other potential properties of specific models (patient, doctor, etc.). The decision logic is omitted for brevity.
                 user = _userModelService.MapToMedioClinicUser(uploadModel, user);
             }
             catch (Exception ex)
@@ -131,27 +131,7 @@ namespace Identity
                 // We need to use the user store directly due to the design of Microsoft.AspNetCore.Identity.UserManager.UpdateAsync().
                 await _userManager.UserStore.UpdateAsync(user, CancellationToken.None);
 
-                var avatarFile = uploadModel.CommonUserViewModel.AvatarFile;
-                var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
-                var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions?.FileSizeLimit;
-
-                if (avatarFile != null && allowedExtensions?.Any() == true)
-                {
-                    var property = typeof(CommonUserViewModel).GetProperty(nameof(CommonUserViewModel.AvatarFile));
-                    var displayName = property?.GetCustomAttribute<DisplayAttribute>()?.Name;
-                    var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit!.Value);
-
-                    if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
-                    {
-                        if (!_avatarService.UpdateAvatar(uploadedFileResult.UploadedFile, uploadModel.CommonUserViewModel.Id, _siteService.CurrentSite.SiteName))
-                        {
-                            var exception = new Exception("Updating of the avatar file failed.");
-                            HandlePostProfileException(ref profileResult, exception, PostProfileResultState.UserNotUpdated);
-
-                            return profileResult;
-                        }
-                    }
-                }
+                profileResult = await SaveAvatarAsync(uploadModel, profileResult);
             }
             catch (Exception ex)
             {
@@ -176,8 +156,6 @@ namespace Identity
         /// Computes the user view model, based on roles.
         /// </summary>
         /// <param name="user">User to compute the view model by.</param>
-        /// <param name="requestContext">Request context.</param>
-        /// <param name="forceAvatarFileOverwrite">Flag that signals the need to update the app-local physical avatar file.</param>
         /// <returns>The view model and a page title.</returns>
         private (IUserViewModel? UserViewModel, string? PageTitle) GetViewModelByUserRoles(MedioClinicUser user)
         {
@@ -187,8 +165,7 @@ namespace Identity
 
                 var commonUserModelCustomMappings = new Dictionary<(string propertyName, Type propertyType), object>
                 {
-                    { (nameof(CommonUserViewModel.EmailViewModel), typeof(EmailViewModel)), new EmailViewModel { Email = user.Email } },
-                    { (nameof(CommonUserViewModel.UserName), typeof(string)), user.UserName }
+                    { (nameof(CommonUserViewModel.EmailViewModel), typeof(EmailViewModel)), new EmailViewModel { Email = user.Email } }
                 };
 
                 object mappedParentModel = default!;
@@ -222,14 +199,34 @@ namespace Identity
         }
 
         /// <summary>
-        /// Gets a role title.
+        /// Saves the avatar binary into the database.
         /// </summary>
-        /// <param name="roles">Role of the user.</param>
-        /// <returns>A friendly name of the role.</returns>
-        private string GetRoleTitle(Roles roles) =>
-            FlagEnums.HasAnyFlags(roles, Roles.Doctor)
-                ? ResHelper.GetString("Identity.Profile.Doctor")
-                : ResHelper.GetString("Identity.Profile.Patient");
+        /// <param name="uploadModel">The upload model.</param>
+        /// <param name="profileResult">The result.</param>
+        /// <returns></returns>
+        private async Task<IdentityManagerResult<PostProfileResultState, (IUserViewModel UserViewModel, string PageTitle)>>
+            SaveAvatarAsync(IUserViewModel uploadModel, IdentityManagerResult<PostProfileResultState, (IUserViewModel UserViewModel, string PageTitle)> profileResult)
+        {
+            var avatarFile = uploadModel.CommonUserViewModel.AvatarFile;
+            var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
+            var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions?.FileSizeLimit;
+
+            if (avatarFile != null && allowedExtensions?.Any() == true)
+            {
+                var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit!.Value);
+
+                if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
+                {
+                    if (!_avatarService.UpdateAvatar(uploadedFileResult.UploadedFile, uploadModel.CommonUserViewModel.Id, _siteService.CurrentSite.SiteName))
+                    {
+                        var exception = new Exception("Updating of the avatar file failed.");
+                        HandlePostProfileException(ref profileResult, exception, PostProfileResultState.UserNotUpdated);
+                    }
+                }
+            }
+
+            return profileResult;
+        }
 
         /// <summary>
         /// Handles exceptions raised in <see cref="ProfileManager.PostProfileAsync(IUserViewModel, RequestContext)"/>
@@ -243,5 +240,15 @@ namespace Identity
             HandleException(nameof(PostProfileAsync), ex, ref pr);
             profileResult.ResultState = resultState;
         }
+
+        /// <summary>
+        /// Gets a role title.
+        /// </summary>
+        /// <param name="roles">Role of the user.</param>
+        /// <returns>A friendly name of the role.</returns>
+        private string GetRoleTitle(Roles roles) =>
+            FlagEnums.HasAnyFlags(roles, Roles.Doctor)
+                ? ResHelper.GetString("Identity.Profile.Doctor")
+                : ResHelper.GetString("Identity.Profile.Patient");
     }
 }

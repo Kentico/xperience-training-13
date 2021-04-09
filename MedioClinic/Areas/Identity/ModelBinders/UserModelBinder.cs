@@ -61,7 +61,7 @@ namespace MedioClinic.Areas.Identity.ModelBinders
                         bindingContext.ModelName);
 
                     await modelBinder.BindModelAsync(newBindingContext);
-                    bindingContext.Result = ModelBindingResult.Success(newBindingContext.Model);
+                    bindingContext.Result = newBindingContext.Result;
 
                     if (newBindingContext.Result.IsModelSet)
                     {

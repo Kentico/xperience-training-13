@@ -328,7 +328,7 @@ namespace MedioClinic
 
             services.ConfigureApplicationCookie(cookieOptions =>
             {
-                cookieOptions.LoginPath = new PathString("/Account/Signin");
+                cookieOptions.LoginPath = new PathString("/account/signin");
 
                 cookieOptions.Events.OnRedirectToLogin = redirectContext =>
                 {
@@ -339,7 +339,7 @@ namespace MedioClinic
                         culture = DefaultCulture;
                     }
 
-                    var redirectUrl = redirectContext.RedirectUri.Replace("/Account/Signin", $"/{culture}/Account/Signin");
+                    var redirectUrl = redirectContext.RedirectUri.Replace("/account/signin", $"/{culture}/account/signin");
                     redirectContext.Response.Redirect(redirectUrl);
                     return Task.CompletedTask;
                 };

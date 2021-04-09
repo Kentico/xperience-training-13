@@ -8,7 +8,7 @@ namespace XperienceAdapter.Models
 {
     public class UploadedFile : IUploadedFile
     {
-        private readonly IFormFile mFormFile;
+        private readonly IFormFile _formFile;
 
         /// <summary>
         /// Gets a value that indicates whether this implementation supports accessing the input stream
@@ -23,19 +23,19 @@ namespace XperienceAdapter.Models
         /// <summary>
         /// Gets the MIME content type of an uploaded file.
         /// </summary>
-        public string ContentType => mFormFile.ContentType;
+        public string ContentType => _formFile.ContentType;
 
 
         /// <summary>
         /// Gets the size of an uploaded file in bytes.
         /// </summary>
-        public long Length => mFormFile.Length;
+        public long Length => _formFile.Length;
 
 
         /// <summary>
         /// Gets the fully qualified name of the file on the client.
         /// </summary>
-        public string FileName => mFormFile.FileName;
+        public string FileName => _formFile.FileName;
 
 
         /// <summary>
@@ -56,16 +56,14 @@ namespace XperienceAdapter.Models
         /// <param name="formFile">The <see cref="IFormFile"/>.</param>
         public UploadedFile(IFormFile formFile)
         {
-            mFormFile = formFile ?? throw new ArgumentNullException(nameof(formFile));
+            _formFile = formFile ?? throw new ArgumentNullException(nameof(formFile));
         }
 
 
         /// <summary>
         /// Opens the request stream for reading the uploaded file.
         /// </summary>
-        public Stream OpenReadStream()
-        {
-            return mFormFile.OpenReadStream();
-        }
+        public Stream OpenReadStream() =>
+            _formFile.OpenReadStream();
     }
 }

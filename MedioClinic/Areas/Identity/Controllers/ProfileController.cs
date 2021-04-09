@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using CMS.Base;
+using Kentico.Content.Web.Mvc;
 
 using Core.Configuration;
 using Identity;
@@ -14,15 +15,21 @@ using Identity.Models.Profile;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
 
+using PageMetadata = MedioClinic.Models.PageMetadata;
+
 namespace MedioClinic.Areas.Identity.Controllers
 {
     // In production, use [RequireHttps].
-    public class ProfileController : BaseController
+    public class ProfileController : BaseIdentityController
     {
         private readonly IProfileManager _profileManager;
 
-        public ProfileController(ILogger<ProfileController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor, IProfileManager profileManager)
-            : base(logger, optionsMonitor)
+        public ProfileController(
+            ILogger<ProfileController> logger, 
+            IOptionsMonitor<XperienceOptions> optionsMonitor, 
+            IPageUrlRetriever pageUrlRetriever,
+            IProfileManager profileManager)
+            : base(logger, optionsMonitor, pageUrlRetriever)
         {
             _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
         }
@@ -38,7 +45,6 @@ namespace MedioClinic.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(PageViewModel<IUserViewModel> uploadModel)
         {
-
             var message = ConcatenateContactAdmin("General.Error");
 
             if (ModelState.IsValid)

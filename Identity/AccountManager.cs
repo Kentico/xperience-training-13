@@ -132,7 +132,7 @@ namespace Identity
             return accountResult;
         }
 
-        public async Task<IdentityManagerResult<ConfirmUserResultState>> ConfirmUserAsync(int userId, string token, HttpRequest request)
+        public async Task<IdentityManagerResult<ConfirmUserResultState>> ConfirmUserAsync(int userId, string token)
         {
             var accountResult = new IdentityManagerResult<ConfirmUserResultState>();
             IdentityResult identityResult = IdentityResult.Failed();
@@ -153,18 +153,10 @@ namespace Identity
 
             if (identityResult.Succeeded && (await AddToPatientRoleAsync(userId)).Succeeded)
             {
-                try
-                {
-                    accountResult.Success = true;
-                    accountResult.ResultState = ConfirmUserResultState.UserConfirmed;
-                }
-                catch (Exception ex)
-                {
-                    accountResult.ResultState = ConfirmUserResultState.AvatarNotCreated;
-                    HandleException(nameof(ConfirmUserAsync), ex, ref accountResult);
+                accountResult.Success = true;
+                accountResult.ResultState = ConfirmUserResultState.UserConfirmed;
 
-                    return accountResult;
-                }
+                return accountResult;
             }
 
             accountResult.Errors.AddNonNullRange(identityResult.Errors.Select(error => error.Description));
@@ -175,7 +167,7 @@ namespace Identity
         public async Task<IdentityManagerResult<SignInResultState>> SignInExternalAsync(ExternalLoginInfo loginInfo)
         {
             var accountResult = new IdentityManagerResult<SignInResultState>();
-            SignInResult signInResult;
+            SignInResult signInResult = default;
 
             try
             {
@@ -197,10 +189,21 @@ namespace Identity
             }
             else
             {
-                IdentityResult userCreation = await _userManager.CreateExternalUser(loginInfo);
+                IdentityResult userCreation = default;
 
                 // Attempts to sign in again with the new user created based on the external authentication data.
-                signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
+                try
+                {
+                    userCreation = await _userManager.CreateExternalUser(loginInfo);
+                    signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
+                }
+                catch (Exception ex)
+                {
+                    accountResult.ResultState = SignInResultState.NotSignedIn;
+                    HandleException(nameof(SignInAsync), ex, ref accountResult);
+
+                    return accountResult;
+                }
 
                 if (userCreation.Succeeded && signInResult == SignInResult.Success)
                 {
@@ -224,7 +227,7 @@ namespace Identity
 
         public async Task<IdentityManagerResult<SignInResultState>> SignInAsync(SignInViewModel uploadModel)
         {
-            var accountResult = new IdentityManagerResult<SignInResultState, SignInViewModel>();
+            var accountResult = new IdentityManagerResult<SignInResultState>();
             MedioClinicUser? user = default;
 
             try
@@ -233,9 +236,8 @@ namespace Identity
             }
             catch (Exception ex)
             {
-                var ar = accountResult as IdentityManagerResult<SignInResultState>;
                 accountResult.ResultState = SignInResultState.UserNotFound;
-                HandleException(nameof(SignInAsync), ex, ref ar);
+                HandleException(nameof(SignInAsync), ex, ref accountResult);
 
                 return accountResult;
             }
@@ -257,9 +259,8 @@ namespace Identity
             }
             catch (Exception ex)
             {
-                var ar = accountResult as IdentityManagerResult<SignInResultState>;
                 accountResult.ResultState = SignInResultState.NotSignedIn;
-                HandleException(nameof(SignInAsync), ex, ref ar);
+                HandleException(nameof(SignInAsync), ex, ref accountResult);
 
                 return accountResult;
             }

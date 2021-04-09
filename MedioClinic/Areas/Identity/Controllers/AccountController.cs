@@ -26,11 +26,9 @@ using MedioClinic.Models;
 namespace MedioClinic.Areas.Identity.Controllers
 {
     // In production, use [RequireHttps].
-    public class AccountController : BaseController
+    public class AccountController : BaseIdentityController
     {
         private readonly IAccountManager _accountManager;
-
-        private readonly IPageUrlRetriever _pageUrlRetriever;
 
         private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
@@ -39,10 +37,9 @@ namespace MedioClinic.Areas.Identity.Controllers
             IOptionsMonitor<XperienceOptions> optionsMonitor, 
             IAccountManager accountManager,
             IPageUrlRetriever pageUrlRetriever) 
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, pageUrlRetriever)
         {
             _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
-            _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
         }
 
         // GET: /Account/Register
@@ -125,16 +122,12 @@ namespace MedioClinic.Areas.Identity.Controllers
 
             if (userId.HasValue)
             {
-                var accountResult = await _accountManager.ConfirmUserAsync(userId.Value, token, Request);
+                var accountResult = await _accountManager.ConfirmUserAsync(userId.Value, token);
 
                 switch (accountResult.ResultState)
                 {
                     case ConfirmUserResultState.EmailNotConfirmed:
                         message = Localize("Identity.Account.ConfirmUser.ConfirmationFailure.Message");
-                        break;
-                    case ConfirmUserResultState.AvatarNotCreated:
-                        message = Localize("Identity.Account.ConfirmUser.AvatarFailure.Message");
-                        messageType = MessageType.Warning;
                         break;
                     case ConfirmUserResultState.UserConfirmed:
                         metadata.Title = Localize("Identity.Account.ConfirmUser.Success.Title");
@@ -304,18 +297,53 @@ namespace MedioClinic.Areas.Identity.Controllers
         }
 
         /// <summary>
-        /// Redirects to a local URL.
+        /// Redirects authentication requests to an external service.
         /// </summary>
-        /// <param name="returnUrl">Local URL to redirect to.</param>
-        /// <returns>Redirect to a URL.</returns>
-        private ActionResult RedirectToLocal(string returnUrl)
+        /// <param name="provider">Name of the authentication middleware.</param>
+        /// <param name="returnUrl">Return URL.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RequestExternalSignIn(string provider, string returnUrl)
         {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            var callbackUrl = Url.Action(nameof(ExternalSignInCallback), new { ReturnUrl = returnUrl });
+            var authenticationProperties = _accountManager.ConfigureExternalAuthenticationProperties(provider, callbackUrl);
+
+            return Challenge(authenticationProperties, provider);
+        }
+
+        /// <summary>
+        /// Handles responses from external authentication services.
+        /// </summary>
+        /// <param name="returnUrl">Return URL.</param>
+        /// <param name="remoteError">Error returned by the external identity provider.</param>
+        public async Task<IActionResult> ExternalSignInCallback(string returnUrl, string? remoteError = default)
+        {
+            if (remoteError != null)
             {
-                return Redirect(returnUrl);
+                var error = $"External authentication failed: {remoteError}";
+                _logger.LogError(error);
+                ModelState.AddModelError(string.Empty, error);
+
+                return View(nameof(SignIn));
             }
 
-            return RedirectToLocal(GetHomeUrl());
+            var loginInfo = await _accountManager.GetExternalLoginInfoAsync();
+
+            if (loginInfo == null)
+            {
+                var error = $"External authentication failed. ExteralLoginInfo must not be null.";
+                _logger.LogError(error);
+                ModelState.AddModelError(string.Empty, error);
+
+                return View(nameof(SignIn));
+            }
+
+            var result = await _accountManager.SignInExternalAsync(loginInfo);
+
+            return result.Success
+                ? RedirectToLocal(returnUrl)
+                : InvalidAttempt(new PageViewModel<SignInViewModel>());
         }
 
         /// <summary>
@@ -334,71 +362,5 @@ namespace MedioClinic.Areas.Identity.Controllers
 
             return View(GetPageViewModel(metadata, uploadModel.Data));
         }
-
-        /// <summary>
-        /// Redirects authentication requests to an external service.
-        /// </summary>
-        /// <param name="provider">Name of the authentication middleware.</param>
-        /// <param name="returnUrl">Return URL.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public IActionResult RequestExternalSignIn(string provider, string returnUrl)
-        {
-            var redirectUrl = Url.Action(nameof(ExternalSignInCallback), new { ReturnUrl = returnUrl });
-            AuthenticationProperties authenticationProperties = _accountManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
-            return Challenge(authenticationProperties, provider);
-        }
-
-        /// <summary>
-        /// Handles responses from external authentication services.
-        /// </summary>
-        /// <param name="returnUrl">Return URL.</param>
-        /// <param name="remoteError">Error returned by the external identity provider.</param>
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ExternalSignInCallback(string returnUrl, string? remoteError = default)
-        {
-            if (remoteError != null)
-            {
-                var error = $"External authentication failed: {remoteError}";
-                _logger.LogError(error);
-                ModelState.AddModelError(string.Empty, error);
-
-                return View(nameof(SignIn));
-            }
-
-            ExternalLoginInfo loginInfo = await _accountManager.GetExternalLoginInfoAsync();
-
-            if (loginInfo == null)
-            {
-                var error = $"External authentication failed. ExteralLoginInfo must not be null.";
-                _logger.LogError(error);
-                ModelState.AddModelError(string.Empty, error);
-
-                return View(nameof(SignIn));
-            }
-
-            IdentityManagerResult<SignInResultState> result = await _accountManager.SignInExternalAsync(loginInfo);
-
-            if (result.Success)
-            {
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                return InvalidAttempt(new PageViewModel<SignInViewModel>());
-            }
-        }
-
-        /// <summary>
-        /// Gets the home page URL.
-        /// </summary>
-        /// <returns>Home page URL.</returns>
-        //private string GetHomeUrl() => Url.Action(nameof(HomeCtbController.Index), nameof(HomeCtbController), new { area = string.Empty });
-        private string GetHomeUrl() =>
-            _pageUrlRetriever.Retrieve("/Home").RelativePath;
     }
 }

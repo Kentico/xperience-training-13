@@ -85,15 +85,5 @@ namespace MedioClinic.Controllers
 
             return View(viewModel);
         }
-
-        // TODO: Create a middle-tier BaseIdentityController.
-        protected void AddIdentityErrors<TResultState>(IdentityManagerResult<TResultState> result)
-            where TResultState : Enum
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error);
-            }
-        }
     }
 }

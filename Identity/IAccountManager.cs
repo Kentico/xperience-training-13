@@ -30,7 +30,7 @@ namespace Identity
         /// <param name="token">Confirmation token.</param>
         /// <param name="requestContext">Request context.</param>
         /// <returns>An operation result.</returns>
-        Task<IdentityManagerResult<ConfirmUserResultState>> ConfirmUserAsync(int userId, string token, HttpRequest request);
+        Task<IdentityManagerResult<ConfirmUserResultState>> ConfirmUserAsync(int userId, string token);
 
         /// <summary>
         /// Signs the user in.
