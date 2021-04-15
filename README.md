@@ -50,7 +50,7 @@ For a complete list of system requirements, refer to our [documentation](https:/
 
 ## How to run the code
 
-Below you'll find a high-level list of instructions. The full instructions can be found in the course.
+> **Note:** Below you'll find a high-level list of instructions. The full instructions can be found in the course.
 
 You need to install Xperience program files along with a blank website instance. You'll only need the blank database. Once installed, both Visual Studio solutions of the administration application and the blank site can be deleted since all files are provided by this repository.
 
