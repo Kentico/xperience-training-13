@@ -14,6 +14,7 @@ namespace Business.Repositories
 
         public override void MapDtoProperties(TreeNode page, BasicPageWithUrlSlug dto)
         {
+            // TODO: Why GetStringValue on TreeNode?
             dto.UrlSlug = page.GetStringValue("UrlSlug", default);
         }
     }

@@ -10,7 +10,8 @@ namespace Business.Models
     /// </summary>
     public class BasicPageWithUrlSlug : BasePage
     {
-        public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "UrlSlug" });
+        public override IEnumerable<string> SourceColumns => 
+            base.SourceColumns.Concat(new[] { nameof(CMS.DocumentEngine.Types.MedioClinic.BasicPageWithUrlSlug.UrlSlug) });
 
         /// <summary>
         /// URL slug used for conventional routing.
