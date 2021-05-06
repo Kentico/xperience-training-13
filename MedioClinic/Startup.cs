@@ -21,7 +21,6 @@ using CMS.Helpers;
 using CMS.SiteProvider;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
-using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
@@ -63,7 +62,7 @@ namespace MedioClinic
             // Enable desired Kentico Xperience features
             var kenticoServiceCollection = services.AddKentico(features =>
             {
-                features.UsePageBuilder();
+                // features.UsePageBuilder();
                 // features.UseActivityTracking();
                 // features.UseABTesting();
                 // features.UseWebAnalytics();
