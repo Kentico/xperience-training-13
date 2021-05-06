@@ -9,6 +9,7 @@ using Kentico.PageBuilder.Web.Mvc.PageTemplates;
 
 using MedioClinic.Components;
 using MedioClinic.Models;
+using MedioClinic.Models.FormComponents;
 
 // TODO: Localize.
 [assembly: RegisterPageTemplate(
@@ -16,3 +17,12 @@ using MedioClinic.Models;
     "Basic page template",
     typeof(PageTemplateProperties),
     Description = "A barebone page template with no special layout.")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.AirportSelectionFormComponent,
+    typeof(AirportSelectionComponent),
+    "{$FormComponent.AirportSelection.Name$}",
+    IsAvailableInFormBuilderEditor = false,
+    ViewName = "FormComponents/_AirportSelection",
+    Description = "{$FormComponent.AirportSelection.Description$}",
+    IconClass = "icon-menu")]
