@@ -24,7 +24,7 @@ using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
 // Uncomment if this controller returns a view instead of TemplateResult.
-[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.LandingPage.CLASS_NAME, typeof(LandingPageCtbController))]
+//[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.LandingPage.CLASS_NAME, typeof(LandingPageCtbController))]
 namespace MedioClinic.Controllers
 {
     public class LandingPageCtbController : BaseController
@@ -68,13 +68,13 @@ namespace MedioClinic.Controllers
                     if (landingPage != null)
                     {
                         // Implementation without page templates (begin)
-                        var viewModel = GetPageViewModel(pageDataContext.Metadata, landingPage);
+                        //var viewModel = GetPageViewModel(pageDataContext.Metadata, landingPage);
 
-                        return View("LandingPage/Index", viewModel);
+                        //return View("LandingPage/Index", viewModel);
                         // Implementation without page templates (end)
 
                         // Page template implementation (begin)
-                        //return new TemplateResult();
+                        return new TemplateResult();
                         // Page template implementation (end)
                     }
 

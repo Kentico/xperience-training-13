@@ -1,27 +1,25 @@
-﻿@model PageViewModel
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-    <title>@Model?.Metadata.Title</title>
+    @Html.Kentico().PageTitle()
     <link rel="shortcut icon" type="image/png" href="~/favicon.png" />
-    <meta name="description" content="@Model?.Metadata.Description" />
-    <meta name="keywords" content="@Model?.Metadata.Keywords" />
+    @Html.Kentico().PageDescription()
+    @Html.Kentico().PageKeywords()
 
-    <!-- OpenGraph -->
-    <meta property="og:title" content="@Model?.Metadata.Title" />
+    @*TODO: OpenGraph*@
 
     <partial name="_DefaultStylesheets.cshtml" />
+    @Html.Kentico().PageBuilderStyles()
     @RenderSection("Styles", required: false)
 </head>
 <body>
     <vc:navigation placement="Top" />
-    <partial name="_UserMessage.cshtml" for="UserMessage" />
     @RenderBody()
     <vc:footer />
     <partial name="_DefaultScripts.cshtml" />
+    @Html.Kentico().PageBuilderScripts()
     @RenderSection("Scripts", required: false)
 </body>
 </html>
