@@ -46,40 +46,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 		#region "Properties"
 
 		/// <summary>
-		/// LandingPageID.
-		/// </summary>
-		[DatabaseIDField]
-		public int LandingPageID
-		{
-			get
-			{
-				return ValidationHelper.GetInteger(GetValue("LandingPageID"), 0);
-			}
-			set
-			{
-				SetValue("LandingPageID", value);
-			}
-		}
-
-
-		/// <summary>
-		/// URL slug.
-		/// </summary>
-		[DatabaseField]
-		public string UrlSlug
-		{
-			get
-			{
-				return ValidationHelper.GetString(GetValue("UrlSlug"), @"");
-			}
-			set
-			{
-				SetValue("UrlSlug", value);
-			}
-		}
-
-
-		/// <summary>
 		/// Gets an object that provides extended API for working with LandingPage fields.
 		/// </summary>
 		[RegisterProperty]
@@ -111,38 +77,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 			public LandingPageFields(LandingPage instance)
 			{
 				mInstance = instance;
-			}
-
-
-			/// <summary>
-			/// LandingPageID.
-			/// </summary>
-			public int ID
-			{
-				get
-				{
-					return mInstance.LandingPageID;
-				}
-				set
-				{
-					mInstance.LandingPageID = value;
-				}
-			}
-
-
-			/// <summary>
-			/// URL slug.
-			/// </summary>
-			public string UrlSlug
-			{
-				get
-				{
-					return mInstance.UrlSlug;
-				}
-				set
-				{
-					mInstance.UrlSlug = value;
-				}
 			}
 		}
 
