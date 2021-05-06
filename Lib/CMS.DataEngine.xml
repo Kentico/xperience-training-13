@@ -3511,6 +3511,11 @@
             Class search settings
             </summary>
         </member>
+        <member name="P:CMS.DataEngine.DataClassInfoBase`1.ClassSearchIndexDataSource">
+            <summary>
+            Class search index data source
+            </summary>
+        </member>
         <member name="P:CMS.DataEngine.DataClassInfoBase`1.ClassInheritsFromClassID">
             <summary>
             Class inherits from class ID
@@ -16391,7 +16396,7 @@
             <param name="nameColumn">Name of the column by which the order should be initialized (if not set, displayname column is used)</param>
             <param name="asc">If true the order will be ascending (default is true)</param>
         </member>
-        <member name="M:CMS.DataEngine.BaseInfo.InitObjectsOrderInternal(System.String,System.String,CMS.DataEngine.WhereCondition,System.Boolean)">
+        <member name="M:CMS.DataEngine.BaseInfo.InitObjectsOrderInternal(System.String,System.String,CMS.DataEngine.WhereCondition,System.Boolean,CMS.DataEngine.DataClassInfo)">
             <summary>
             Inits the proper order of the sibling objects so the order column is consistent.
             </summary>
@@ -16399,6 +16404,7 @@
             <param name="nameColumn">>Name of the column by which the order is to be set. <see cref="P:CMS.DataEngine.ObjectTypeInfo.DisplayNameColumn"/> is used if not set.</param>
             <param name="where">Where condition that defines all the objects that can be reordered.</param>
             <param name="ascending">Indicates whether the order is ascending or descending (ascending order is used by default).</param>
+            <param name="classInfo">Optional data class configuration.</param>
         </member>
         <member name="M:CMS.DataEngine.BaseInfo.CheckDependencies(System.Boolean)">
             <summary>
@@ -24533,6 +24539,27 @@
             </summary>
             <seealso cref="M:CMS.DataEngine.SearchFieldsHelper.IsIndexField(CMS.DataEngine.ISearchIndexInfo,CMS.DataEngine.SearchSettingsInfo)"/>
         </member>
+        <member name="T:CMS.DataEngine.IsTriggerFieldEventArgs">
+            <summary>
+            Argument of event represented by <see cref="T:CMS.DataEngine.IsTriggerFieldHandler"/>.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.IsTriggerFieldEventArgs.Result">
+            <summary>
+            Indicates whether field is index update trigger.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.IsTriggerFieldEventArgs.SearchSettings">
+            <summary>
+            Search settings representing field for which to detect whether it is an index update trigger.
+            </summary>
+        </member>
+        <member name="T:CMS.DataEngine.IsTriggerFieldHandler">
+            <summary>
+            Handler for event raised when field is being decided whether it is an index update trigger.
+            </summary>
+            <seealso cref="M:CMS.DataEngine.SearchFieldsHelper.IsTriggerField(CMS.DataEngine.SearchSettingsInfo)"/>
+        </member>
         <member name="T:CMS.DataEngine.CreateSearchFieldOption">
             <summary>
             Represents creation option of a system search field.
@@ -25196,6 +25223,13 @@
             By default, all fields having flag named <see cref="F:CMS.DataEngine.SearchSettings.SEARCHABLE"/> set to true are added.
             </summary>
         </member>
+        <member name="F:CMS.DataEngine.SearchFieldsHelper.IncludeTriggerField">
+            <summary>
+            An event raised upon <see cref="M:CMS.DataEngine.SearchFieldsHelper.IsTriggerField(CMS.DataEngine.SearchSettingsInfo)"/> execution. Based on the <see cref="P:CMS.DataEngine.IsTriggerFieldEventArgs.Result"/> the change of this field triggers index update.
+            By default, all fields having flag named <see cref="F:CMS.DataEngine.SearchSettings.INDEX_UPDATE_TRIGGER"/> triggers index update. For backward compatibility if the flag is not present
+            fallback is used and returns true if field is Content or Searchable field.
+            </summary>
+        </member>
         <member name="P:CMS.DataEngine.SearchFieldsHelper.Instance">
             <summary>
             Gets the <see cref="T:CMS.DataEngine.SearchFieldsHelper"/> instance.
@@ -25221,6 +25255,13 @@
             <param name="index">Index for which to detect whether field is a content field. Pass null to detect if field is an index field in any index type.</param>
             <param name="searchSettings">Search setting representing tested field.</param>
             <returns>True if field is an index field, false otherwise.</returns>
+        </member>
+        <member name="M:CMS.DataEngine.SearchFieldsHelper.IsTriggerField(CMS.DataEngine.SearchSettingsInfo)">
+            <summary>
+            Returns true if value of field represented by <paramref name="searchSettings"/> triggers index update upon change.
+            </summary>
+            <param name="searchSettings">Search setting representing tested field.</param>
+            <returns>True if field change should issue index update, false otherwise.</returns>
         </member>
         <member name="T:CMS.DataEngine.SearchIndexSettings">
             <summary>
@@ -25467,6 +25508,11 @@
             Name of flag indicating whether field is considered a content field in context of local indexes.
             </summary>
         </member>
+        <member name="F:CMS.DataEngine.SearchSettings.INDEX_UPDATE_TRIGGER">
+            <summary>
+            Name of flag indicating whether field change leads to index update when page is indexed by crawler.
+            </summary>
+        </member>
         <member name="P:CMS.DataEngine.SearchSettings.Items">
             <summary>
             Gets list of all settings items indexed by GUID.
@@ -25543,6 +25589,12 @@
             </summary>
             <param name="columns">Columns to check</param>
         </member>
+        <member name="M:CMS.DataEngine.SearchSettings.ContainsTriggerColumn(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Returns true if the any of the given columns triggers index update.
+            </summary>
+            <param name="columns">Columns to check</param>
+        </member>
         <member name="M:CMS.DataEngine.SearchSettings.CopyTo(CMS.DataEngine.SearchSettings,System.Func{CMS.DataEngine.SearchSettingsInfo,System.Boolean})">
             <summary>
             Copies selected fields to another search settings object
@@ -25596,6 +25648,7 @@
             <seealso cref="F:CMS.DataEngine.SearchSettings.CONTENT"/>
             <seealso cref="F:CMS.DataEngine.SearchSettings.SEARCHABLE"/>
             <seealso cref="F:CMS.DataEngine.SearchSettings.TOKENIZED"/>
+            <seealso cref="F:CMS.DataEngine.SearchSettings.INDEX_UPDATE_TRIGGER"/>
         </member>
         <member name="M:CMS.DataEngine.SearchSettingsInfo.SetFlag(System.String,System.Boolean)">
             <summary>
@@ -25606,6 +25659,7 @@
             <seealso cref="F:CMS.DataEngine.SearchSettings.CONTENT"/>
             <seealso cref="F:CMS.DataEngine.SearchSettings.SEARCHABLE"/>
             <seealso cref="F:CMS.DataEngine.SearchSettings.TOKENIZED"/>
+            <seealso cref="F:CMS.DataEngine.SearchSettings.INDEX_UPDATE_TRIGGER"/>
         </member>
         <member name="P:CMS.DataEngine.SearchSettingsInfo.Item(System.String)">
             <summary>
@@ -30094,6 +30148,29 @@
         <member name="F:CMS.DataEngine.PermissionsEnum.Destroy">
             <summary>
             Destroy permission.
+            </summary>
+        </member>
+        <member name="T:CMS.DataEngine.SearchIndexDataSourceEnum">
+            <summary>
+            Indicates type of the data source for indexed page.
+            </summary>
+            <remarks>
+            Data source applies only to page indexes.
+            </remarks>
+        </member>
+        <member name="F:CMS.DataEngine.SearchIndexDataSourceEnum.HTMLOutput">
+            <summary>
+            Page HTML output is source of index data (crawler).
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.SearchIndexDataSourceEnum.ContentFields">
+            <summary>
+            Page content fields are source of index data.
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.SearchIndexDataSourceEnum.Both">
+            <summary>
+            Both HTML output and content fields are source of index data.
             </summary>
         </member>
         <member name="T:CMS.DataEngine.UpdateResultEnum">

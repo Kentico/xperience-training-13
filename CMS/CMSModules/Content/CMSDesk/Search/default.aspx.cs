@@ -101,6 +101,7 @@ public partial class CMSModules_Content_CMSDesk_Search_default : CMSContentPage,
             }
             repSearchSQL.WhereCondition = searchDialog.WhereCondition;
             repSearchSQL.CultureCode = culture;
+            repSearchSQL.TransformationName = "~/CMSModules/Content/CMSDesk/Search/CMSDeskSQLSearchResults.ascx";
         }
         // Display Smart search results
         else

@@ -9,8 +9,18 @@
 
 
 
-public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_List {
-    
+public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_List
+{
+
+    /// <summary>
+    /// tipHowEMWorks control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_SmartTip tipHowEMWorks;
+
     /// <summary>
     /// UniGrid control.
     /// </summary>

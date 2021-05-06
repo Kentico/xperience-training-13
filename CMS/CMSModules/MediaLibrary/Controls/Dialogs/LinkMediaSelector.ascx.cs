@@ -1279,7 +1279,7 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
         mediaView.LibraryID = LibraryID;
         mediaView.IsLiveSite = IsLiveSite;
 
-        UsePermanentUrls = true;
+        UsePermanentUrls = !(LibraryInfo?.LibraryUseDirectPathForContent ?? false);
         mediaView.UsePermanentUrls = UsePermanentUrls;
 
         mediaView.ListViewControl.OnBeforeSorting += ListViewControl_OnBeforeSorting;

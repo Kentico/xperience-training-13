@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.UI;
 
 using CMS.Base;
+using CMS.Base.Web.UI;
 using CMS.Helpers;
 using CMS.UIControls;
 
@@ -22,8 +25,10 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
     }
 
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override async void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         // Get the debug settings
         var name = QueryHelper.GetString("name", "");
 
@@ -37,7 +42,12 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
             return;
         }
 
-        ReloadData();
+        if (ShowLiveSiteData)
+        {
+            pnlHeaderActions.Parent.Controls.Clear();
+        }
+
+        await ReloadData().ConfigureAwait(false);
     }
 
 
@@ -73,7 +83,7 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
     /// <summary>
     /// Reloads the debug data
     /// </summary>
-    protected void ReloadData()
+    private async Task ReloadData()
     {
         if (!Settings.Enabled)
         {
@@ -83,7 +93,7 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
         {
             plcLogs.Controls.Clear();
 
-            var logs = Settings.LastLogs;
+            var logs = ShowLiveSiteData ? await new LiveSiteDebugProcessor().GetLastLogsAsync(Settings.Name) : Settings.LastLogs;
 
             LoadLogs(logs);
         }
@@ -94,21 +104,32 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
     /// Loads the logs control for each request log and setups the control
     /// </summary>
     /// <param name="logs">List of request logs</param>
-    private void LoadLogs(List<RequestLog> logs)
+    private void LoadLogs(IEnumerable<RequestLog> logs)
     {
+        if (logs == null)
+        {
+            return;
+        }
+
         RequestLog lastLog = null;
+        List<RequestLog> logsList = logs.ToList();
 
         // Load the logs
-        for (int i = logs.Count - 1; i >= 0; i--)
+        for (int i = logsList.Count - 1; i >= 0; i--)
         {
             try
             {
                 // Get the log
-                var log = logs[i];
+                var log = logsList[i];
                 if (log != null)
                 {
                     if ((log.Value != null) || !DataHelper.DataSourceIsEmpty(log.LogTable))
                     {
+                        if (log.Settings == null)
+                        {
+                            log.Settings = Settings;
+                        }
+
                         // Load the control
                         var logCtrl = LoadLogControl(log, Settings.LogControl, i);
 
@@ -135,25 +156,25 @@ public partial class CMSModules_System_Debug_Log : CMSDebugPage
     /// <summary>
     /// Clears the current logs
     /// </summary>
-    protected void btnClear_Click(object sender, EventArgs e)
+    protected async void btnClear_Click(object sender, EventArgs e)
     {
         Settings.LastLogs.Clear();
 
         mLogControls.Clear();
 
-        ReloadData();
+        await ReloadData().ConfigureAwait(false);
     }
 
 
     /// <summary>
     /// Clears the cache
     /// </summary>
-    protected void btnClearCache_Click(object sender, EventArgs e)
+    protected async void btnClearCache_Click(object sender, EventArgs e)
     {
         CacheHelper.ClearCache();
 
         ShowConfirmation(GetString("Administration-System.ClearCacheSuccess"));
 
-        ReloadData();
+        await ReloadData().ConfigureAwait(false);
     }
 }

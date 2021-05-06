@@ -48,7 +48,8 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
     /// </summary>
     protected void InitializeActionMenu()
     {
-        bool enabled = !EmailHelper.Queue.SendingInProgess && UserHasModify;
+        var enabled = !EmailHelper.Queue.SendingInProgess && UserHasModify;
+        var canStopSending = EmailHelper.Queue.SendingInProgess && UserHasModify;
 
         HeaderActions actions = CurrentMaster.HeaderActions;
         actions.ActionsList.Clear();
@@ -82,7 +83,7 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
             CommandName = "resendall",
             Enabled = enabled
         });
-        
+
         // Delete all failed
         HeaderAction deleteAction = new HeaderAction
         {
@@ -115,9 +116,9 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
         actions.ActionsList.Add(new HeaderAction
         {
             Text = GetString("emailqueue.queue.stop"),
-            OnClientClick = !enabled ? string.Format(confirmScript, ScriptHelper.GetString(GetString("EmailQueue.StopConfirmation"))) : null,
+            OnClientClick = canStopSending ? string.Format(confirmScript, ScriptHelper.GetString(GetString("EmailQueue.StopConfirmation"))) : null,
             CommandName = "stop",
-            Enabled = !enabled
+            Enabled = canStopSending
         });
 
         // Refresh
@@ -187,16 +188,11 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
     private void HeaderActions_ActionPerformed(object sender, CommandEventArgs e)
     {
         var commandName = e.CommandName.ToLowerInvariant();
-        bool reloaded = true;
+        var isRefreshAction = commandName.Equals("refresh", StringComparison.OrdinalIgnoreCase);
 
-        if (commandName.Equals("refresh", StringComparison.InvariantCulture))
+        if ((isRefreshAction && !UserHasRead) || (!isRefreshAction && !UserHasModify))
         {
-            reloaded = false;
-        }
-
-        if (!UserHasModify)
-        {
-            RedirectToAccessDenied(ModuleName.EMAILENGINE, MODIFY_PERMISSION);
+            RedirectToAccessDenied(ModuleName.EMAILENGINE, isRefreshAction ? READ_PERMISSION : MODIFY_PERMISSION);
         }
 
         switch (commandName)
@@ -252,8 +248,8 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
 
         gridEmailQueue.ReloadData();
 
-        // Reload on first page if no data found after performing action
-        if (reloaded && DataHelper.DataSourceIsEmpty(gridEmailQueue.EmailGrid.GridView.DataSource))
+        // Change to the first page if no data has been found after performing action
+        if (!isRefreshAction && DataHelper.DataSourceIsEmpty(gridEmailQueue.EmailGrid.GridView.DataSource))
         {
             gridEmailQueue.EmailGrid.Pager.UniPager.CurrentPage = 1;
             gridEmailQueue.ReloadData();
@@ -336,7 +332,7 @@ public partial class CMSModules_EmailQueue_EmailQueue : EmailQueuePage
             where += " AND ";
         }
         where += string.Format("(NOT EmailStatus = {0:D})", EmailStatusEnum.Archived);
-        
+
         if (SiteId == UniSelector.US_GLOBAL_RECORD)
         {
             // Global

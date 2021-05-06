@@ -213,8 +213,15 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_General : CM
     /// </summary>
     private void Rebuild()
     {
+        if (!SearchIndexInfoProvider.SearchEnabled)
+        {
+            ShowError(GetString("srch.index.searchdisabled"));
+
+            return;
+        }
+
         // Extra check for document index
-        if ((SearchIndex.IndexType.Equals(TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase) || (SearchIndex.IndexType == SearchHelper.DOCUMENTS_CRAWLER_INDEX)))
+        if (SearchIndex.IndexType.Equals(TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase))
         {
             // Check if there is at least one site assigned
             if (!SearchIndexSiteInfoProvider.SearchIndexHasAnySite(SearchIndex.IndexID))

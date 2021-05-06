@@ -105,7 +105,7 @@ public partial class CMSModules_Content_Controls_WebPartToolbar : CMSAbstractPor
         if (IsUITemplate())
         {
             categorySelector.RootPath = CATEGORY_UIWEBPARTS;
-            COOKIE_SELECTED_CATEGORY += "UI";
+            COOKIE_SELECTED_CATEGORY = CookieName.WebPartToolbarCategoryUI;
         }
         else
         {
@@ -332,7 +332,7 @@ var WPTImgBaseSrc = '""" + ResolveUrl("~/CMSPages/GetMetaFile.aspx?maxsidesize=6
         if (!dataLoaded || forceLoad)
         {
             var repeaterWhere = new WhereCondition();
-            
+
             /* The order is category driven => first level category display name is used for all nodes incl. sub-nodes */
             string categoryOrder = @"
 (SELECT CMS_WebPartCategory.CategoryDisplayName FROM CMS_WebPartCategory 
@@ -532,11 +532,11 @@ END))
         sb.Append(
 @"var wptIsMinimizedCookie = '", CookieName.WebPartToolbarMinimized, @"';
 var wptIsRTL = ", (uiCultureRTL ? "true" : "false"), @";
-        
+
 var wpLoadingMoreString = " + ScriptHelper.GetLocalizedString("general.loading") + @";
 
 function wptSetupSearch()
-{   
+{
     $cmsj('#", txtSearch.ClientID, @"')
         .keypress(function (e) {
             window.clearTimeout(wptFilterWebPartsTimer);
@@ -570,7 +570,7 @@ function wptReloadScrollPanel(forceReload) {
 }
 
 function wptCategoryChanged() {
-    $cmsj('#" + txtSearch.ClientID + @"').val(''); 
+    $cmsj('#" + txtSearch.ClientID + @"').val('');
     // Remove all tooltip temporary nodes
     $cmsj('.WPTTT').remove(); ",
     ControlsHelper.GetPostBackEventReference(hdnUpdater, CATEGORY_CHANGED_CODE), @";

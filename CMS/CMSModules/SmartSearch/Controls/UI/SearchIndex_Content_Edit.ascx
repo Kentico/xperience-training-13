@@ -37,7 +37,13 @@
                         DisplayColon="true" AssociatedControlID="chkInclAtt" />
                 </div>
                 <div class="editing-form-value-cell">
-                    <cms:CMSCheckBox ID="chkInclAtt" runat="server" />
+                    <div class="settings-group-inline keep-white-space-fixed">
+                        <cms:CMSCheckBox ID="chkInclAtt" runat="server" />
+                        <span class="info-icon">
+                            <asp:Label runat="server" ID="spanScreenReaderInclAtt" CssClass="sr-only"></asp:Label>
+                            <cms:CMSIcon runat="server" ID="iconHelpInclAtt" EnableViewState="false" class="icon-question-circle" aria-hidden="true"></cms:CMSIcon>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -46,7 +52,13 @@
                         DisplayColon="true" AssociatedControlID="chkInclCats" />
                 </div>
                 <div class="editing-form-value-cell">
-                    <cms:CMSCheckBox ID="chkInclCats" runat="server" />
+                    <div class="settings-group-inline keep-white-space-fixed">
+                        <cms:CMSCheckBox ID="chkInclCats" runat="server"/>
+                        <span class="info-icon">
+                            <asp:Label runat="server" ID="spanScreenReaderInclCats" CssClass="sr-only"></asp:Label>
+                            <cms:CMSIcon runat="server" ID="iconHelpInclCats" EnableViewState="false" class="icon-question-circle" aria-hidden="true"></cms:CMSIcon>
+                        </span>
+                    </div>
                 </div>
             </div>
         </asp:PlaceHolder>

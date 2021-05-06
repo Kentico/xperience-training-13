@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
-    
+public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields
+{
+
     /// <summary>
     /// pnlBody control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlBody;
-    
+
     /// <summary>
     /// plcMess control.
     /// </summary>
@@ -28,7 +29,16 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.MessagesPlaceHolder plcMess;
-    
+
+    /// <summary>
+    /// lblGeneral control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblGeneral;
+
     /// <summary>
     /// lblSearchEnabled control.
     /// </summary>
@@ -37,7 +47,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSearchEnabled;
-    
+
     /// <summary>
     /// chkSearchEnabled control.
     /// </summary>
@@ -46,7 +56,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkSearchEnabled;
-    
+
     /// <summary>
     /// pnlSearchFields control.
     /// </summary>
@@ -55,7 +65,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlSearchFields;
-    
+
     /// <summary>
     /// plcAdvancedMode control.
     /// </summary>
@@ -64,7 +74,25 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcAdvancedMode;
-    
+
+    /// <summary>
+    /// lblMappingResults control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblMappingResults;
+
+    /// <summary>
+    /// smarttipSearchResults control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_SmartTip smarttipSearchResults;
+
     /// <summary>
     /// lblTitleField control.
     /// </summary>
@@ -73,7 +101,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTitleField;
-    
+
     /// <summary>
     /// drpTitleField control.
     /// </summary>
@@ -82,7 +110,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList drpTitleField;
-    
+
     /// <summary>
     /// lblContentField control.
     /// </summary>
@@ -91,7 +119,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblContentField;
-    
+
     /// <summary>
     /// drpContentField control.
     /// </summary>
@@ -100,7 +128,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList drpContentField;
-    
+
     /// <summary>
     /// plcImage control.
     /// </summary>
@@ -109,7 +137,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcImage;
-    
+
     /// <summary>
     /// lblImageField control.
     /// </summary>
@@ -118,7 +146,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblImageField;
-    
+
     /// <summary>
     /// drpImageField control.
     /// </summary>
@@ -127,7 +155,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList drpImageField;
-    
+
     /// <summary>
     /// lblDateField control.
     /// </summary>
@@ -136,7 +164,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblDateField;
-    
+
     /// <summary>
     /// drpDateField control.
     /// </summary>
@@ -145,7 +173,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList drpDateField;
-    
+
     /// <summary>
     /// pnlIndent control.
     /// </summary>
@@ -154,7 +182,61 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlIndent;
-    
+
+    /// <summary>
+    /// plcPageIndexingOptions control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcPageIndexingOptions;
+
+    /// <summary>
+    /// lblPageDataSource control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblPageDataSource;
+
+    /// <summary>
+    /// lblDataSource control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblDataSource;
+
+    /// <summary>
+    /// rblPageDataSource control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSRadioButtonList rblPageDataSource;
+
+    /// <summary>
+    /// spanScreenReaderDataSource control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label spanScreenReaderDataSource;
+
+    /// <summary>
+    /// iconHelpDataSource control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelpDataSource;
+
     /// <summary>
     /// ClassFields control.
     /// </summary>
@@ -163,7 +245,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_SmartSearch_Controls_Edit_ClassFields ClassFields;
-    
+
     /// <summary>
     /// btnOk control.
     /// </summary>

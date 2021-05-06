@@ -2,7 +2,7 @@
  * Module for contacting MVC authenticating endpoint.
  */
 
-cmsdefine(["CMS/EventHub", "CMS.Builder/Constants"], function (hub, constants) {
+cmsdefine(["CMS/EventHub", "CMS.Builder/Constants", 'CMS.Builder/FrameLoader'], function (hub, constants, frameLoader) {
 
     var VirtualContextAuthenticator = function (options) {
         var authenticationFrameUrl = options.authenticationFrameUrl;
@@ -21,15 +21,16 @@ cmsdefine(["CMS/EventHub", "CMS.Builder/Constants"], function (hub, constants) {
         frame.style.display = 'none';
         frame.onload = function () {
             frame.parentNode.removeChild(frame);
-            hub.publish(constants.MVC_FRAME_AUTHENTICATED_EVENT_NAME);
+            var mvcFrameAuthenticatedEventName = frameLoader.getMvcFrameAuthenticatedEventName(frameUrl);
+            hub.publish(mvcFrameAuthenticatedEventName);
         };
         frame.src = frameUrl;
         document.body.appendChild(frame);
     }
 
 
-    hub.subscribe(constants.ADMIN_FRAME_REQUEST_AUTHENTICATION_EVENT_NAME, function () {
-        raiseGetAuthenticationFrameUrlCallback();;
+    hub.subscribe(constants.ADMIN_FRAME_REQUEST_AUTHENTICATION_EVENT_NAME, function (data) {
+        raiseGetAuthenticationFrameUrlCallback(data.culture);
     });
 
 

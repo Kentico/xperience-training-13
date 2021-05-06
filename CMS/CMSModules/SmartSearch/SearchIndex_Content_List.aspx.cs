@@ -39,7 +39,6 @@ public partial class CMSModules_SmartSearch_SearchIndex_Content_List : GlobalAdm
             {
                 // Documents
                 case TreeNode.OBJECT_TYPE:
-                case SearchHelper.DOCUMENTS_CRAWLER_INDEX:
                     contentList.StopProcessing = false;
                     contentList.Visible = true;
                     contentList.OnAction += contentList_OnAction;

@@ -212,6 +212,13 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        ScriptHelper.RegisterTooltip(Page);
+        ScriptHelper.AppendTooltip(iconHelpDataSource, GetString("srch.pagedatasource.tooltip"), null);
+
+        var link = string.Format("<a target=\"_blank\" href=\"{0}\">{1}</a>", DocumentationHelper.GetDocumentationTopicUrl("search_results"), GetString("general.ourdocumentation"));
+        var imgElement = string.Format("<img class=\"img-responsive\" src=\"{0}\"/>", URLHelper.ResolveUrl("~/CMSPages/GetResource.ashx?image=CMSModules/CMS_SmartSearch/search-results-smarttip.png"));
+        smarttipSearchResults.Content = string.Format(GetString("srch.pageresults.smarttip.content"), imgElement, link);
+
         ClassFields.OnSaved += ClassFields_OnSaved;
         ClassFields.DisplaySaved = false;
 
@@ -247,13 +254,19 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
     public void ReloadSearch(bool setAutomatically)
     {
         ClassFields.ItemID = ItemID;
-        ClassFields.ReloadData(setAutomatically, true);
 
         // Initialize properties
         List<IDataDefinitionItem> itemList = null;
 
         if (ClassInfo != null)
         {
+            if (ClassInfo.ClassIsDocumentType == true)
+            {
+                plcPageIndexingOptions.Visible = true;
+
+                PreselectPageDataSource();
+            }
+
             // Load XML definition
             fi = FormHelper.GetFormInfo(ClassInfo.ClassName, true);
 
@@ -274,6 +287,8 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
             // Get all fields
             itemList = fi.GetFormElements(true, true);
         }
+
+        ClassFields.ReloadData(setAutomatically, true);
 
         if (itemList != null)
         {
@@ -299,6 +314,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
             ReloadControls();
         }
     }
+
 
     /// <summary>
     /// Enables or disables search for current class.
@@ -335,6 +351,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
     {
         ClassFields.SaveData();
     }
+
 
     /// <summary>
     /// Reloads drop-down lists with new data.
@@ -431,6 +448,36 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
             .Union(options);
     }
 
+
+    private void PreselectPageDataSource()
+    {
+        if (!ClassInfo.ClassHasURL)
+        {
+            rblPageDataSource.Enabled = false;
+            rblPageDataSource.ToolTipResourceString = "srch.pagedatasource.disabled.tooltip";
+        }
+
+        SearchIndexDataSourceEnum preselectValue;
+        if (ClassInfo.GetValue("ClassSearchIndexDataSource") == null)
+        {
+            if (!ClassInfo.ClassIsCoupledClass)
+            {
+                preselectValue = SearchIndexDataSourceEnum.HTMLOutput;
+            }
+            else
+            {
+                preselectValue = ClassInfo.ClassUsesPageBuilder ? SearchIndexDataSourceEnum.Both : SearchIndexDataSourceEnum.ContentFields;
+            }
+        }
+        else
+        {
+            preselectValue = ClassInfo.ClassSearchIndexDataSource;
+        }
+
+        ClassFields.SearchIndexDataSource = preselectValue;
+        rblPageDataSource.SelectedIndex = (int)preselectValue;
+    }
+
     #endregion
 
 
@@ -466,6 +513,11 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
         {
             enabledChanged = SaveSearchAvailability();
 
+            if (ClassInfo.ClassIsDocumentType)
+            {
+                ClassInfo.ClassSearchIndexDataSource = (SearchIndexDataSourceEnum)rblPageDataSource.SelectedIndex;
+            }
+
             if (AdvancedMode)
             {
                 // Save advanced information only in advanced mode
@@ -473,9 +525,9 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
                 ClassInfo.ClassSearchContentColumn = (drpContentField.SelectedValue != "0") ? drpContentField.SelectedValue : DBNull.Value.ToString();
                 ClassInfo.ClassSearchImageColumn = (drpImageField.SelectedValue != "0") ? drpImageField.SelectedValue : DBNull.Value.ToString();
                 ClassInfo.ClassSearchCreationDateColumn = drpDateField.SelectedValue;
-
-                DataClassInfoProvider.SetDataClassInfo(ClassInfo);
             }
+
+            DataClassInfoProvider.SetDataClassInfo(ClassInfo);
 
             RaiseOnSaved();
         }
@@ -494,6 +546,12 @@ public partial class CMSModules_SmartSearch_Controls_Edit_SearchFields : CMSAdmi
         {
             ShowInformation(GetString(RebuildIndexResourceString));
         }
+    }
+
+    protected void rblPageDataSource_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ClassFields.SearchIndexDataSource = (SearchIndexDataSourceEnum)rblPageDataSource.SelectedIndex;
+        ClassFields.ReloadData(false, true);
     }
 
     #endregion

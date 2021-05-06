@@ -1,7 +1,6 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
-using CMS.Helpers;
 using CMS.UIControls;
 
 
@@ -24,7 +23,7 @@ public partial class CMSAdminControls_Debug_QueryLog : QueryLog
             HeaderText = GetString("QueryLog.Info");
 
             // Override maximum size with parameters if larger
-            int paramSize = DataHelper.GetMaximumValue<int>(dt, "QueryParametersSize");
+            int paramSize = GetMaximumValue<int>(dt, "QueryParametersSize");
             if (paramSize > MaxSize)
             {
                 MaxSize = paramSize;

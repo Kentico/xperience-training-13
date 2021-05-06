@@ -55,7 +55,7 @@ public partial class CMSModules_DocumentTypes_FormControls_DocumentTypeIconSelec
                 return null;
             }
 
-            if (fontIconSelector.Value == null)
+            if (String.IsNullOrEmpty((string)fontIconSelector.Value))
             {
                 return DocumentType.ClassIsCoupledClass ? "icon-doc-o" : "icon-folder-o";
             }
@@ -217,7 +217,7 @@ public partial class CMSModules_DocumentTypes_FormControls_DocumentTypeIconSelec
         {
             // Identify the currently selected icon type
             iconType = IconTypeEnum.Files;
-            if (fontIconSelector.Value != null)
+            if (!String.IsNullOrEmpty((string)fontIconSelector.Value))
             {
                 iconType = IconTypeEnum.CssClass;
             }

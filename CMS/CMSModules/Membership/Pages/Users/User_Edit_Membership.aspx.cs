@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
@@ -15,7 +14,6 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
     #region "Variables
 
     private int mUserID;
-    private string currentValues = String.Empty;
     protected UserInfo ui = null;
 
     #endregion
@@ -44,8 +42,10 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
 
     #region "Methods"
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+        
         var user = MembershipContext.AuthenticatedUser;
         // Check UI profile for membership
         if (!user.IsAuthorizedPerUIElement("CMS.Users", "CmsDesk.Membership"))
@@ -80,42 +80,15 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
             CurrentMaster.DisplaySiteSelectorPanel = true;
         }
 
-        var data = MembershipUserInfo.Provider.Get().Where("UserID = " + UserID);
-        if (data.Any())
-        {
-            currentValues = TextHelper.Join(";", DataHelper.GetStringValues(data.Tables[0], "MembershipID"));
-        }
-
-        if (!RequestHelper.IsPostBack())
-        {
-            // Set values
-            usMemberships.Value = currentValues;
-        }
-
-        // Init uni selector
-        usMemberships.SelectItemPageUrl = "~/CMSModules/Membership/Pages/Users/User_Edit_Add_Item_Dialog.aspx";
-        usMemberships.ListingWhereCondition = "UserID=" + UserID;
-        usMemberships.ReturnColumnName = "MembershipID";
-        usMemberships.DynamicColumnName = false;
-        usMemberships.GridName = "User_Membership_List.xml";
-        usMemberships.OnAdditionalDataBound += usMemberships_OnAdditionalDataBound;
-        usMemberships.OnSelectionChanged += usMemberships_OnSelectionChanged;
-        usMemberships.AdditionalColumns = "ValidTo";
-        usMemberships.DialogWindowHeight = 760;
-
         // Init 
         int siteID = SiteID;
         if (CurrentMaster.DisplaySiteSelectorPanel)
         {
             // Set site selector
             siteSelector.DropDownSingleSelect.AutoPostBack = true;
-            siteSelector.AllowAll = false;
-            siteSelector.AllowEmpty = false;
-            siteSelector.AllowGlobal = true;
             // Only sites assigned to user
             siteSelector.UserId = UserID;
-            siteSelector.OnlyRunningSites = false;
-            siteSelector.UniSelector.OnSelectionChanged += new EventHandler(UniSelector_OnSelectionChanged);
+            siteSelector.UniSelector.OnSelectionChanged += UniSelector_OnSelectionChanged;
 
             if (!RequestHelper.IsPostBack())
             {
@@ -132,6 +105,13 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
             siteID = siteSelector.SiteID;
         }
 
+        if (!RequestHelper.IsPostBack())
+        {
+            // Set values
+            usMemberships.Value = GetCurrentMembership();
+        }
+
+        usMemberships.ListingWhereCondition = "UserID=" + UserID;
         string siteWhere = (siteID <= 0) ? "MembershipSiteID IS NULL" : "MembershipSiteID =" + siteID;
         usMemberships.ListingWhereCondition = SqlHelper.AddWhereCondition(usMemberships.ListingWhereCondition, siteWhere);
         usMemberships.WhereCondition = SqlHelper.AddWhereCondition(usMemberships.WhereCondition, siteWhere);
@@ -151,7 +131,6 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
             }
 
             int id = ValidationHelper.GetInteger(hdnDate.Value, 0);
-
             if (id != 0)
             {
                 DateTime dt = ValidationHelper.GetDateTime(eventArgument, DateTimeHelper.ZERO_TIME);
@@ -174,6 +153,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
     }
 
 
+    /// <summary>
     /// Handles site selection change event
     /// </summary>
     protected void UniSelector_OnSelectionChanged(object sender, EventArgs e)
@@ -189,9 +169,9 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
     /// <param name="sourceName">Event source name</param>
     /// <param name="parameter">Event parameter</param>
     /// <param name="val">Value from basic external data bound event</param>
-    private object usMemberships_OnAdditionalDataBound(object sender, string sourceName, object parameter, object val)
+    protected object usMemberships_OnAdditionalDataBound(object sender, string sourceName, object parameter, object val)
     {
-        switch (sourceName.ToLowerCSafe())
+        switch (sourceName.ToLowerInvariant())
         {
             case "calendar":
                 DataRowView drv = (parameter as DataRowView);
@@ -241,7 +221,7 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
     /// </summary>
     /// <param name="userId">Modified user</param>
     /// <returns>"" or error message.</returns>
-    protected static string ValidateGlobalAndDeskAdmin(UserInfo ui)
+    private static string ValidateGlobalAndDeskAdmin(UserInfo ui)
     {
         string result = String.Empty;
 
@@ -296,41 +276,48 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
             return;
         }
 
+        string currentValues = GetCurrentMembership();
+
         // Remove old items
         string newValues = ValidationHelper.GetString(usMemberships.Value, null);
         string items = DataHelper.GetNewItemsInList(newValues, currentValues);
         if (!String.IsNullOrEmpty(items))
         {
-            string[] newItems = items.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] newItems = items.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var selectedSiteId = CurrentMaster.DisplaySiteSelectorPanel ? siteSelector.SiteID : SiteID;
+
             foreach (string item in newItems)
             {
                 int membershipID = ValidationHelper.GetInteger(item, 0);
-                MembershipUserInfo.Provider.Remove(membershipID, UserID);
-                updateUser = true;
-            }
-        }
-
-
-        // Add new items
-        items = DataHelper.GetNewItemsInList(currentValues, newValues);
-        if (!String.IsNullOrEmpty(items))
-        {
-            string[] newItems = items.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            {
-                DateTime dt = ValidationHelper.GetDateTime(hdnDate.Value, DateTimeHelper.ZERO_TIME);
-
-                // Add all new items to membership
-                foreach (string item in newItems)
+                var membership = MembershipInfo.Provider.Get(membershipID);
+                if (membership != null && ((membership.MembershipSiteID == selectedSiteId) ||
+                    (membership.MembershipSiteID == 0 && siteSelector.GlobalRecordValue == selectedSiteId.ToString())))
                 {
-                    int membershipID = ValidationHelper.GetInteger(item, 0);
-                    MembershipUserInfo.Provider.Add(membershipID, UserID, dt);
+                    MembershipUserInfo.Provider.Remove(membershipID, UserID);
                     updateUser = true;
                 }
             }
         }
 
+        // Add new items
+        items = DataHelper.GetNewItemsInList(currentValues, newValues);
+        if (!String.IsNullOrEmpty(items))
+        {
+            string[] newItems = items.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            DateTime dt = ValidationHelper.GetDateTime(hdnDate.Value, DateTimeHelper.ZERO_TIME);
+
+            // Add all new items to membership
+            foreach (string item in newItems)
+            {
+                int membershipID = ValidationHelper.GetInteger(item, 0);
+                MembershipUserInfo.Provider.Add(membershipID, UserID, dt);
+                updateUser = true;
+            }
+        }
+
         if (updateUser)
         {
+            usMemberships.Value = GetCurrentMembership();
             usMemberships.Reload(true);
 
             // Invalidate user object            
@@ -341,6 +328,13 @@ public partial class CMSModules_Membership_Pages_Users_User_Edit_Membership : CM
 
             ShowChangesSaved();
         }
+    }
+
+
+    private string GetCurrentMembership()
+    {
+        var data = MembershipUserInfo.Provider.Get().Where("UserID = " + UserID).Column("MembershipID").GetListResult<int>();
+        return TextHelper.Join(";", data);
     }
 
     #endregion

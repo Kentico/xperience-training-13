@@ -41,8 +41,8 @@
                 success: function (data) {
                     processTemplates(data.defaultPageTemplates, data.customPageTemplates);
                 },
-                error: function () {
-                    processError();
+                error: function (jqXHR) {
+                    processError(jqXHR.status === 0);
                 },
                 complete: function () {
                     hideLoader();
@@ -179,8 +179,8 @@
             trimTemplateNames();
         }
 
-        function processError() {            
-            messaging.showError(localization.getString('pagetemplatesmvc.requesterror'));            
+        function processError(isNetworkError) {            
+            messaging.showError(localization.getString(isNetworkError ? 'pagetemplatesmvc.networkerror' : 'pagetemplatesmvc.requesterror'));            
         }
 
         function displayLoader() {

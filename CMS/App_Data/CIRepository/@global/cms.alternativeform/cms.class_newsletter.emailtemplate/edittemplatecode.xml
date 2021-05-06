@@ -14,8 +14,8 @@
       <field column="TemplateDescription" guid="96044a64-f381-440a-b613-673b845278a5" visible="" />
       <field column="TemplateInlineCSS" guid="8208c709-9f19-487e-b0a7-eb912316b1dd" visible="" />
       <field column="TemplateThumbnailGUID" guid="0f72ba1b-8b84-44a8-85a6-27107135071d" />
-      <field column="TemplateIconClass" guid="b885071c-c113-44f1-8a94-d77a2f019cd9" reftype="" />
-      <field column="TemplateCode" guid="55b5079a-5163-4606-baeb-40e59c8f8aae" reftype="Required" visible="true">
+      <field column="TemplateIconClass" guid="b885071c-c113-44f1-8a94-d77a2f019cd9" />
+      <field column="TemplateCode" guid="55b5079a-5163-4606-baeb-40e59c8f8aae" visible="true">
         <settings>
           <AutoSize>False</AutoSize>
           <controlname>MacroEditor</controlname>
@@ -24,7 +24,16 @@
           <EnableViewState>False</EnableViewState>
           <Height>600</Height>
           <Language>7</Language>
-          <ResolverName>NewsletterResolver</ResolverName>
+          <ResolverName ismacro="true">
+<![CDATA[
+{%
+if (TemplateType == "I") /* using I as email Issue, this is defined in EmailTemplateTypeEnum */
+  { "NewsletterResolver" }
+else
+  { "NewsletterConfirmationResolver" }
+|(identity)GlobalAdministrator|(hash)1595ee6cd3cb9634fff8f9e2cad2022d20eba8798f3eeee227c2f566486a2776%}
+]]>
+          </ResolverName>
           <ShowBookmarks>False</ShowBookmarks>
           <ShowLineNumbers>True</ShowLineNumbers>
           <SingleLineMode>False</SingleLineMode>

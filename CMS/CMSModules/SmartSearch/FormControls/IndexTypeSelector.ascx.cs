@@ -62,8 +62,7 @@ public partial class CMSModules_SmartSearch_FormControls_IndexTypeSelector : For
         var items = new SortedList<string, string>()
         {
             { GetString("smartsearch.indextype." + TreeNode.OBJECT_TYPE), TreeNode.OBJECT_TYPE },
-            { GetString("smartsearch.indextype." + SearchHelper.GENERALINDEX), SearchHelper.GENERALINDEX },
-            { GetString("smartsearch.indextype." + SearchHelper.DOCUMENTS_CRAWLER_INDEX), SearchHelper.DOCUMENTS_CRAWLER_INDEX }
+            { GetString("smartsearch.indextype." + SearchHelper.GENERALINDEX), SearchHelper.GENERALINDEX }
         };
 
         if (searchIndex?.IndexProvider.Equals(SearchIndexInfo.LUCENE_SEARCH_PROVIDER, StringComparison.OrdinalIgnoreCase) ?? false)

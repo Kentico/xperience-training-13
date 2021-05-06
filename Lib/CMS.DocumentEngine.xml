@@ -2861,11 +2861,10 @@
             Get search document parameters
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.GetSearchDocuments(CMS.Search.SearchIndexInfo,CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.GetSearchDocumentsParams,System.Int32@)">
+        <member name="M:CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.GetSearchDocuments(CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.GetSearchDocumentsParams,System.Int32@)">
             <summary>
             Returns list of <see cref="T:CMS.DataEngine.ISearchable"/> objects (documents) for given index and document parameters
             </summary>
-            <param name="indexInfo">Search index</param>
             <param name="documentsParameters">Search parameters</param>
             <param name="lastId">ID of last processed document</param>
         </member>
@@ -2874,11 +2873,6 @@
             Returns true of task type is related to document object
             </summary>
             <param name="taskType">Task type</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.GetDocumentRelatedCondition">
-            <summary>
-            Returns the condition for all index types related to documents
-            </summary>
         </member>
         <member name="M:CMS.DocumentEngine.Internal.DocumentSearchablesRetriever.LogBatchStart(System.Int32,System.Int32,System.String,System.String,System.Boolean)">
             <summary>
@@ -2904,6 +2898,26 @@
             <summary>
             Fires when the attachment handler request is being processed before the attachment is being processed and served.
             </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Internal.DocumentSearchTriggerFieldsHelper">
+            <summary>
+            Provides helper methods to determine if index update trigger field changed.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.DocumentSearchTriggerFieldsHelper.TriggerFieldChanged(CMS.DocumentEngine.TreeNode,System.Collections.Generic.List{System.String})">
+            <summary>
+            Returns true if any field that should trigger index update is changed (checks fields defined in Class Search Settings).
+            </summary>
+            <param name="node">Document node</param>
+            <param name="changedColumns">List of changed columns</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Internal.DocumentSearchTriggerFieldsHelper.TriggerFieldChanged(CMS.DataEngine.BaseInfo,System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Returns true if any field that should trigger index update is changed (checks fields defined in Class Search Settings).
+            </summary>
+            <param name="info">Info object</param>
+            <param name="changedColumns">List of changed columns, if not provided, retrieves the list from the object</param>
+            <param name="checkSpecialFields">If true, the special fields like (ClassSearchTitleColumn, etc.) are checked for changes</param>
         </member>
         <member name="T:CMS.DocumentEngine.Internal.PageTemplateConfiguration">
             <summary>
@@ -11267,6 +11281,20 @@
             Fires when the content of the document for searching is requested.
             </summary>
         </member>
+        <member name="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFields">
+            <summary>
+            Fires when the local index search fields are gathered from all searchable page types. In this phase only field definitions are created and no value needs to be provided.
+            It is required to create custom field definition without value for the whole index using <see cref="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFields"/> 
+            before creating the same field definition with value using <see cref="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFieldsForPage"/> when indexing specific page.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFieldsForPage">
+            <summary>
+            Fires when the local index search fields for specific page that is being indexed are created. In this phase field definition with value has to be provided.
+            It is required to create custom field definition without value for the whole index using <see cref="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFields"/> 
+            before creating the same field definition with value using <see cref="F:CMS.DocumentEngine.DocumentEvents.CreateSearchFieldsForPage"/> when indexing specific page.
+            </summary>
+        </member>
         <member name="F:CMS.DocumentEngine.DocumentEvents.LogChange">
             <summary>
             Fires when document tasks are logged. You can disable tasks logging for staging, integration etc.
@@ -11558,6 +11586,95 @@
             </summary>
             <param name="parentHandler">Parent handler</param>
         </member>
+        <member name="T:CMS.DocumentEngine.CreateSearchFieldsEventArgs">
+            <summary>
+            Create search fields without values for whole local index event arguments.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsEventArgs.IndexInfo">
+            <summary>
+            Search index info.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsEventArgs.Fields">
+            <summary>
+            Search index fields.
+            </summary>
+            <remarks>Add your custom field into this collection.</remarks>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsEventArgs.SearchFields">
+            <summary>
+            List of search fields being processed to local search.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsEventArgs.IndexDataSource">
+            <summary>
+            Indicates type of the data source for indexed page.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs">
+            <summary>
+            Create search fields with values for specific page event arguments.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs.IndexInfo">
+            <summary>
+            Search index info.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs.Fields">
+            <summary>
+            Search index fields.
+            </summary>
+            <remarks>Add your custom field into this collection.</remarks>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs.SearchFields">
+            <summary>
+            List of search fields being processed to local search.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs.IndexDataSource">
+            <summary>
+            Indicates type of the data source for indexed page.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.CreateSearchFieldsForPageEventArgs.Page">
+            <summary>
+            Page for which the search field values are populated.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.CreateSearchFieldsForPageHandler">
+            <summary>
+            Create search fields with values for specific page handler.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.CreateSearchFieldsForPageHandler.#ctor">
+            <summary>
+            Creates instance of <see cref="T:CMS.DocumentEngine.CreateSearchFieldsForPageHandler"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.CreateSearchFieldsForPageHandler.#ctor(CMS.DocumentEngine.CreateSearchFieldsForPageHandler)">
+            <summary>
+            Creates instance of <see cref="T:CMS.DocumentEngine.CreateSearchFieldsForPageHandler"/>.
+            </summary>
+            <param name="parentHandler">Parent handler.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.CreateSearchFieldsHandler">
+            <summary>
+            Create search fields without values for whole local index handler.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.CreateSearchFieldsHandler.#ctor">
+            <summary>
+            Creates instance of <see cref="T:CMS.DocumentEngine.CreateSearchFieldsHandler"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.CreateSearchFieldsHandler.#ctor(CMS.DocumentEngine.CreateSearchFieldsHandler)">
+            <summary>
+            Creates instance of <see cref="T:CMS.DocumentEngine.CreateSearchFieldsHandler"/>.
+            </summary>
+            <param name="parentHandler">Parent handler.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.DocumentSearchEventArgs">
             <summary>
             Document search event arguments
@@ -11591,6 +11708,11 @@
         <member name="P:CMS.DocumentEngine.DocumentSearchEventArgs.IsCrawler">
             <summary>
             If true, the content is indexed for a crawler
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.DocumentSearchEventArgs.IndexDataSource">
+            <summary>
+            Indicates type of the data source for indexed page.
             </summary>
         </member>
         <member name="T:CMS.DocumentEngine.DocumentSearchHandler">
@@ -16290,12 +16412,13 @@
             page for the purpose of searching.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Search.CrawlerSearchContentProvider.#ctor(CMS.DocumentEngine.TreeNode,CMS.Search.ISearchCrawler)">
+        <member name="M:CMS.DocumentEngine.Search.CrawlerSearchContentProvider.#ctor(CMS.DocumentEngine.TreeNode,CMS.Search.ISearchCrawler,CMS.Search.ISearchCrawlerContentProcessor)">
             <summary>
             Initializes a new instance of the <see cref="T:CMS.DocumentEngine.Search.CrawlerSearchContentProvider"/> class.
             </summary>
             <param name="treeNode">Tree node.</param>
             <param name="crawler">Crawler used for downloading of the page content.</param>
+            <param name="contentProcessor">Processor of the HTML content to be indexed.</param>
             <exception cref="T:System.ArgumentNullException">Is thrown when parameters <paramref name="treeNode"/> or <paramref name="crawler"/> is <c>null</c>.</exception>
         </member>
         <member name="M:CMS.DocumentEngine.Search.CrawlerSearchContentProvider.GetContent(CMS.DataEngine.ISearchIndexInfo)">
@@ -16482,6 +16605,23 @@
             <summary>
             Creates search document.
             </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.SearchExtensions">
+            <summary>
+            Extension methods for the pages smart search
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.SearchExtensions.TriggerFieldChanged(CMS.DataEngine.DataClassInfo,System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Returns true if any field included in the search changed (checks fields defined in Class Search Settings).
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.SearchExtensions.SearchTriggerFieldChanged(CMS.DocumentEngine.TreeNode,System.Collections.Generic.List{System.String})">
+            <summary>
+            Returns true if any field that should trigger index update is changed (checks fields defined in Class Search Settings).
+            </summary>
+            <param name="page">Page.</param>
+            <param name="changedColumns">List of changed columns.</param>
         </member>
         <member name="T:CMS.DocumentEngine.AclInfo">
             <summary>
@@ -19787,6 +19927,11 @@
             Creates a new instances of the <see cref="T:CMS.DocumentEngine.PageUrlPathInfo"/> class from the given <see cref="T:System.Data.DataRow"/>.
             </summary>
             <param name="dr">DataRow with the object data.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.PageUrlPathInfo.GetExistingWhereCondition">
+            <summary>
+            Gets a where condition to find an existing object based on current object
+            </summary>
         </member>
         <member name="M:CMS.DocumentEngine.PageUrlPathInfo.GetCacheDependenciesInternal">
             <summary>

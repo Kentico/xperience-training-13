@@ -42,7 +42,6 @@ public partial class CMSModules_SmartSearch_SearchIndex_Content_Edit : GlobalAdm
         switch (indexType)
         {
             case TreeNode.OBJECT_TYPE:
-            case SearchHelper.DOCUMENTS_CRAWLER_INDEX:
                 {
                     // Document index
                     ContentEdit.ItemID = indexId;

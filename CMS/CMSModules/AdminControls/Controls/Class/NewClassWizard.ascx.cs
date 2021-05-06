@@ -1500,10 +1500,30 @@ public partial class CMSModules_AdminControls_Controls_Class_NewClassWizard : CM
 
     private void SetSearchSettings()
     {
+        SetPageTypeSearchDataSource();
+
         DataClassInfo.ClassSearchEnabled = true;
         DataClassInfo.ClassSearchSettings = SearchHelper.GetDefaultSearchSettings(DataClassInfo);
         SearchHelper.SetDefaultClassSearchColumns(DataClassInfo);
         DataClassInfo.Generalized.SetObject();
+    }
+
+
+    private void SetPageTypeSearchDataSource()
+    {
+        if (Mode != NewClassWizardModeEnum.DocumentType)
+        {
+            return;
+        }
+
+        if (!DataClassInfo.ClassIsCoupledClass)
+        {
+            DataClassInfo.ClassSearchIndexDataSource = SearchIndexDataSourceEnum.HTMLOutput;
+        }
+        else
+        {
+            DataClassInfo.ClassSearchIndexDataSource = DataClassInfo.ClassUsesPageBuilder ? SearchIndexDataSourceEnum.Both : SearchIndexDataSourceEnum.ContentFields;
+        }
     }
 
 

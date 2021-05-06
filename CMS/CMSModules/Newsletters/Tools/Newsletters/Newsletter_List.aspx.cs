@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CMS.Base;
+using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.FormEngine.Web.UI;
@@ -16,8 +17,14 @@ using CMS.UIControls;
 [UIElement(ModuleName.NEWSLETTER, "Newsletters")]
 public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_List : CMSNewsletterPage
 {
+    private const string HOWTO_VIDEO_URL = "https://youtu.be/ej3TSxDwcEw";
+    private const string HOWTO_VIDEO_LENGTH = "5:09";
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
+        InitSmartTip();
+
         // Setup UniGrid
         UniGrid.OnAction += uniGrid_OnAction;
         UniGrid.WhereCondition = "NewsletterSiteID=" + SiteContext.CurrentSiteID;
@@ -67,7 +74,7 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_List : 
                 {
                     RedirectToAccessDenied(GetString("general.invalidparameters"));
                 }
-                
+
                 if (!newsletter.CheckPermissions(PermissionsEnum.Delete, CurrentSiteName, CurrentUser))
                 {
                     RedirectToAccessDenied(newsletter.TypeInfo.ModuleName, "Configure");
@@ -75,8 +82,22 @@ public partial class CMSModules_Newsletters_Tools_Newsletters_Newsletter_List : 
 
                 // delete Newsletter object from database
                 newsletter.Delete();
-                
+
                 break;
         }
+    }
+
+
+    private void InitSmartTip()
+    {
+        tipHowEMWorks.ExpandedHeader = GetString("newsletter.listing.howto.title");
+        tipHowEMWorks.Content = $@"
+<div class=""smarttip-video"">
+    <a href=""{HOWTO_VIDEO_URL}"" target=""_blank"">
+        <img src=""{UIHelper.GetImageUrl("CMSModules/CMS_Newsletter/em_howto_video_thumbnail.png")}"" class=""smarttip-video-thumbnail"">
+        <span class=""smarttip-video-title"">{GetString("newsletter.listing.howto.content")}</span>
+        <span class=""smarttip-video-length"">{HOWTO_VIDEO_LENGTH}</span>
+    </a>
+</div>";
     }
 }

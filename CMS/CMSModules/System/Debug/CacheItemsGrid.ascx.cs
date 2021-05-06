@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using CMS.Base;
-using CMS.Base.Web.UI;
-
 using System.Text;
 using System.Web;
 using System.Web.UI;
 
+using CMS.Base;
+using CMS.Base.Web.UI;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
+using CMS.Helpers.Internal;
 using CMS.UIControls;
-using CMS.Core;
-using CMS.Helpers.Caching.Abstractions;
 
 public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IUniPageable, IPostBackEventHandler
 {
@@ -27,7 +24,7 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
     /// <summary>
     /// All cache items array.
     /// </summary>
-    public IEnumerable<string> AllItems
+    public IEnumerable<CacheItemRowContainer> AllItems
     {
         get;
         set;
@@ -75,6 +72,12 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
         set;
     }
 
+
+    /// <summary>
+    /// True, if the data are collected on the live site instead of the Administration.
+    /// </summary>
+    private bool ShowLiveSiteData => QueryHelper.GetBoolean("livesitelogs", false);
+
     #endregion
 
 
@@ -94,7 +97,7 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
         string script =
             "function DeleteCacheItem(key) { if (confirm(" + ScriptHelper.GetString(GetString("general.confirmdelete")) + ")) { document.getElementById('" + hdnKey.ClientID + "').value = key; " + Page.ClientScript.GetPostBackEventReference(this, "delete") + " } }\n" +
             "function Refresh() { " + Page.ClientScript.GetPostBackEventReference(this, "refresh") + " }\n" +
-            "function Show(key) { var url = '" + ResolveUrl("System_ViewObject.aspx?source=cache&key=") + "' + key; modalDialog(url, 'CacheItem', '1000', '700');}" +
+            "function Show(key) { var url = '" + ResolveUrl($"System_ViewObject.aspx?source=cache&livesitelogs={ShowLiveSiteData}&key=") + "' + key; modalDialog(url, 'CacheItem', '1000', '700');}" +
             "function Debug(key) { var url = '" + ResolveUrl("~/CMSAdminControls/UI/Macros/Dialogs/ObjectBrowser.aspx?mode=values&expr=") + "Debug(CacheItem(\"' + key + '\"))'; window.open(url); }";
 
         ScriptHelper.RegisterDialogScript(Page);
@@ -140,42 +143,26 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
         // Process all items
         int filteredCount = 0;
         int count = 0;
-        bool all = (endIndex <= startIndex);
-
-        var cacheAccessor = Service.Resolve<ICacheAccessor>();
+        bool all = endIndex <= startIndex;
 
         string search = txtFilter.Text;
-        
+
         if (AllItems != null)
         {
             // Process dummy keys
-            foreach (string key in AllItems)
+            foreach (var item in AllItems)
             {
                 count++;
 
-                if (key.IndexOfCSafe(search, true) >= 0)
+                if (item.Key.IndexOfCSafe(search, true) >= 0)
                 {
-                    if (!String.IsNullOrEmpty(key) || !ShowDummyItems)
+                    if ((ShowDummyItems && item.Value is DummyItem) || (!ShowDummyItems && !(item.Value is DummyItem)))
                     {
-                        // Process the key
-                        object value = cacheAccessor.Get(key);
-                        CacheItemContainer container = null;
+                        filteredCount++;
 
-                        // Handle the container
-                        if (value is CacheItemContainer)
+                        if (all || (filteredCount >= startIndex) && (filteredCount < endIndex))
                         {
-                            container = (CacheItemContainer)value;
-                            value = container.Data;
-                        }
-
-                        if ((ShowDummyItems && value == CacheHelper.DUMMY_KEY) || (!ShowDummyItems && value != CacheHelper.DUMMY_KEY))
-                        {
-                            filteredCount++;
-
-                            if (all || (filteredCount >= startIndex) && (filteredCount < endIndex))
-                            {
-                                RenderItem(sb, key, container, value, ShowDummyItems);
-                            }
+                            RenderItem(sb, item.Key, item.Container, item.Value, ShowDummyItems);
                         }
                     }
                 }
@@ -184,9 +171,9 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
             TotalItems = count;
             TotalFilteredItems = filteredCount;
 
-            lblInfo.Visible = (filteredCount <= 0);
-            plcItems.Visible = (filteredCount > 0);
-            pnlSearch.Visible = (count > 2);
+            lblInfo.Visible = filteredCount <= 0;
+            plcItems.Visible = filteredCount > 0;
+            pnlSearch.Visible = count > 2;
 
             ltlCacheInfo.Text = sb.ToString();
 
@@ -208,8 +195,11 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
 
         // Get the action
         sb.Append(GetViewAction(key));
-        sb.Append(GetDeleteAction(key));
-        sb.Append(GetDebugAction(key));
+        if (!ShowLiveSiteData)
+        {
+            sb.Append(GetDeleteAction(key));
+            sb.Append(GetDebugAction(key));
+        }
 
         sb.Append("</td><td><span title=\"" + HTMLHelper.HTMLEncode(key) + "\">");
         string keyTag = TextHelper.LimitLength(key, 100);
@@ -273,12 +263,12 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
         {
             IconCssClass = "icon-bug",
             ToolTip = GetString("General.Debug"),
-            OnClientClick = String.Format("Debug('{0}'); return false;", Server.UrlEncode(ScriptHelper.GetString(key, false)))
+            OnClientClick = String.Format("Debug('{0}'); return false;", Server.UrlEncode(ScriptHelper.GetString(key, false))),
+            EnableViewState = false
         };
 
         return button.GetRenderedHTML();
     }
-
 
 
     /// <summary>
@@ -292,7 +282,8 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
             IconCssClass = "icon-eye",
             IconStyle = GridIconStyle.Allow,
             ToolTip = GetString("General.View"),
-            OnClientClick = String.Format("Show('{0}'); return false;", Server.UrlEncode(key))
+            OnClientClick = String.Format("Show('{0}'); return false;", Server.UrlEncode(key)),
+            EnableViewState = false
         };
 
         return button.GetRenderedHTML();
@@ -310,7 +301,8 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
             IconCssClass = "icon-bin",
             IconStyle = GridIconStyle.Critical,
             ToolTip = GetString("General.Delete"),
-            OnClientClick = String.Format("DeleteCacheItem({0}); return false;", ScriptHelper.GetString(key))
+            OnClientClick = String.Format("DeleteCacheItem({0}); return false;", ScriptHelper.GetString(key)),
+            EnableViewState = false
         };
 
         return button.GetRenderedHTML();
@@ -371,7 +363,7 @@ public partial class CMSModules_System_Debug_CacheItemsGrid : CMSUserControl, IU
 
 
     /// <summary>
-    /// Gets or sets the number of result. Enables proceed "fake" datasets, where number 
+    /// Gets or sets the number of result. Enables proceed "fake" datasets, where number
     /// of results in the dataset is not correspondent to the real number of results
     /// This property must be equal -1 if should be disabled
     /// </summary>

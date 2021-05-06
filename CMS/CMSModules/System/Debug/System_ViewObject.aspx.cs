@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.UI.WebControls;
 
@@ -8,80 +10,76 @@ using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.Helpers;
 using CMS.Helpers.Caching.Abstractions;
+using CMS.Helpers.Internal;
 using CMS.UIControls;
-
 
 [Title("ViewObject.Title")]
 public partial class CMSModules_System_Debug_System_ViewObject : CMSDebugPage
 {
-    #region "Variables"
-
     private string mKey;
     private string mSource;
 
-    #endregion
 
-
-    #region "Methods"
-
-    protected void Page_Load(object sender, EventArgs e)
+    protected override async void OnLoad(EventArgs e)
     {
+        base.OnLoad(e);
+
         PageTitle.IsDialog = true;
 
         ScriptHelper.RegisterWOpenerScript(this);
 
         // Delete all action
-        CurrentMaster.HeaderActions.AddAction(new HeaderAction
+        if (!ShowLiveSiteData)
         {
-            Text = GetString("general.delete"),
-            OnClientClick = "if (!confirm(" + ScriptHelper.GetString(GetString("general.confirmdelete")) + ")) return false;",
-            Tooltip = GetString("general.delete"),
-            CommandName = "delete"
-        });
-        CurrentMaster.HeaderActions.ActionPerformed += actionsElem_ActionPerformed;
+            CurrentMaster.HeaderActions.AddAction(new HeaderAction
+            {
+                Text = GetString("general.delete"),
+                OnClientClick = "if (!confirm(" + ScriptHelper.GetString(GetString("general.confirmdelete")) + ")) return false;",
+                Tooltip = GetString("general.delete"),
+                CommandName = "delete"
+            });
+            CurrentMaster.HeaderActions.ActionPerformed += actionsElem_ActionPerformed;
+
+            gridDependencies.OnItemDeleted += gridDependencies_OnItemDeleted;
+        }
 
         gridDependencies.PagerControl.DefaultPageSize = 10;
-        gridDependencies.OnItemDeleted += gridDependencies_OnItemDeleted;
+        gridDependencies.PagerControl.ShowPageSize = false;
 
         mSource = QueryHelper.GetString("source", "");
         mKey = QueryHelper.GetString("key", "");
 
-        ReloadData();
+        await ReloadData(false);
     }
 
 
-    protected void gridDependencies_OnItemDeleted(object sender, EventArgs e)
+    protected async void gridDependencies_OnItemDeleted(object sender, EventArgs e)
     {
-        ReloadData(true);
+        await ReloadData(true);
     }
 
 
     /// <summary>
     /// Reloads the cache item view.
     /// </summary>
-    /// <param name="objectDeleted">True if object was recently deleted</param>
-    protected void ReloadData(bool objectDeleted = false)
+    /// <param name="objectDeleted">True if the object was recently deleted.</param>
+    private async Task ReloadData(bool objectDeleted = false)
     {
         object obj = null;
-        pnlCacheItem.Visible = !objectDeleted;
-        CurrentMaster.HeaderActions.Visible = !objectDeleted;
 
-        switch (mSource.ToLowerCSafe())
+        switch (mSource.ToLowerInvariant())
         {
             case "cache":
                 {
-                    var cacheAccessor = Service.Resolve<ICacheAccessor>();
-                    
                     // Get the item from cache
-                    obj = cacheAccessor.Get(mKey);
+                    obj = ShowLiveSiteData ? await new LiveSiteDebugProcessor().GetCacheItemAsync(Server.UrlEncode(mKey)) : Service.Resolve<ICacheAccessor>().Get(mKey);
 
                     // Take the object from the cache
                     if ((obj != null) && !objectDeleted)
                     {
-                        if (obj is CacheItemContainer)
+                        // Setup the advanced information
+                        if (obj is CacheItemContainer container)
                         {
-                            // Setup the advanced information
-                            CacheItemContainer container = (CacheItemContainer)obj;
                             obj = container.Data;
 
                             // Get the inner value
@@ -100,7 +98,7 @@ public partial class CMSModules_System_Debug_System_ViewObject : CMSDebugPage
 
                             if (container.Dependencies != null)
                             {
-                                gridDependencies.AllItems = container.Dependencies.CacheKeys;
+                                gridDependencies.AllItems = container.Dependencies.CacheKeys?.Select(c => new CacheItemRowContainer(c, new DummyItem(), null));
                                 gridDependencies.ReloadData();
                             }
 
@@ -112,13 +110,19 @@ public partial class CMSModules_System_Debug_System_ViewObject : CMSDebugPage
 
                         pnlBody.Visible = true;
                     }
-                    else if (objectDeleted)
+                    else if (objectDeleted || obj == null)
                     {
-                        ShowConfirmation(GetString("general.wasdeleted"), true);
-                    }
-                    else
-                    {
-                        ShowError(GetString("general.objectnotfound"));
+                        pnlCacheItem.Visible = false;
+                        CurrentMaster.HeaderActions.Visible = false;
+
+                        if (objectDeleted)
+                        {
+                            ShowConfirmation(GetString("general.wasdeleted"), true);
+                        }
+                        else
+                        {
+                            ShowWarning(GetString("general.objectnotfound"));
+                        }
                     }
                 }
                 break;
@@ -128,20 +132,18 @@ public partial class CMSModules_System_Debug_System_ViewObject : CMSDebugPage
     }
 
 
-    private void actionsElem_ActionPerformed(object sender, CommandEventArgs e)
+    private async void actionsElem_ActionPerformed(object sender, CommandEventArgs e)
     {
         switch (e.CommandName.ToLowerCSafe())
         {
             case "delete":
                 // Delete the item from the cache
-                if (!string.IsNullOrEmpty(mKey))
+                if (!String.IsNullOrEmpty(mKey))
                 {
                     CacheHelper.Remove(mKey);
-                    ReloadData(true);
+                    await ReloadData(true);
                 }
                 break;
         }
     }
-
-    #endregion
 }

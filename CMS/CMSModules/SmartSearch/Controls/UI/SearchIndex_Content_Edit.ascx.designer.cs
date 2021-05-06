@@ -112,6 +112,24 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Content_Edit
     protected global::CMS.Base.Web.UI.CMSCheckBox chkInclAtt;
 
     /// <summary>
+    /// spanScreenReaderInclAtt control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label spanScreenReaderInclAtt;
+
+    /// <summary>
+    /// iconHelpInclAtt control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelpInclAtt;
+
+    /// <summary>
     /// lblInclCats control.
     /// </summary>
     /// <remarks>
@@ -128,6 +146,24 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Content_Edit
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkInclCats;
+
+    /// <summary>
+    /// spanScreenReaderInclCats control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label spanScreenReaderInclCats;
+
+    /// <summary>
+    /// iconHelpInclCats control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSIcon iconHelpInclCats;
 
     /// <summary>
     /// btnOk control.

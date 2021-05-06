@@ -30,6 +30,7 @@ public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEvent
     private const string VIRTUALCONTEXT_AUTHENTICATION_ROUTE = "/Kentico.VirtualContext/Authenticate?signInToken={0}";
     private const string SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY = "Kentico.SubscriptionLicense.Closed";
     private const string GET_MVC_AUTHENTICATION_CALLBACK = "GET_MVC_AUTHENTICATION_CALLBACK";
+    private const char CALLBACK_ARGS_SEPARATOR = ';';
 
     private string callbackResult = null;
 
@@ -61,7 +62,7 @@ public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEvent
             });
 
             var loadAuthenticationFrameCallback = Page.ClientScript.GetCallbackEventReference(this, "arg", "window.CMS.VirtualContextAuthenticator.loadAuthenticationFrame", "");
-            var callbackScript = $"function raiseGetAuthenticationFrameUrlCallback() {{  var arg = '{GET_MVC_AUTHENTICATION_CALLBACK}'; {loadAuthenticationFrameCallback}; }}";
+            var callbackScript = $"function raiseGetAuthenticationFrameUrlCallback(culture = '') {{ var arg = '{GET_MVC_AUTHENTICATION_CALLBACK}{CALLBACK_ARGS_SEPARATOR}' + culture; {loadAuthenticationFrameCallback}; }}";
             ScriptHelper.RegisterClientScriptBlock(Page, typeof(string), "loadAuthenticationFrameCallback", callbackScript, true);
         }
 
@@ -178,12 +179,14 @@ function CheckChanges() {
 
     #region "Methods"
 
-    private string GetMvcAuthenticationFrameUrl()
+    private string GetMvcAuthenticationFrameUrl(string culture = null)
     {
+        culture = culture ?? LocalizationContext.PreferredCultureCode;
+
         return URLHelper.CombinePath(
                     string.Format(VIRTUALCONTEXT_AUTHENTICATION_ROUTE, new SecurityTokenManager<VirtualContextSignInConfiguration>().GetToken(CurrentUser)),
                     '/',
-                    new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteName, LocalizationContext.PreferredCultureCode),
+                    new PresentationUrlRetriever().RetrieveForAdministration(SiteContext.CurrentSiteName, culture),
                     null);
     }
 
@@ -482,16 +485,14 @@ function CheckChanges() {
     /// <param name="eventArgument">Event argument</param>
     public void RaiseCallbackEvent(string eventArgument)
     {
-        switch (eventArgument)
+        if (eventArgument.StartsWith(GET_MVC_AUTHENTICATION_CALLBACK + CALLBACK_ARGS_SEPARATOR, StringComparison.Ordinal))
         {
-            case GET_MVC_AUTHENTICATION_CALLBACK:
-                callbackResult = GetMvcAuthenticationFrameUrl();
-                break;
-
-            default:
-                SessionHelper.SetValue(eventArgument, false);
-                break;
+            var culture = eventArgument.Split(new[] { CALLBACK_ARGS_SEPARATOR }, 2)[1];
+            callbackResult = GetMvcAuthenticationFrameUrl(culture);
+            return;
         }
+
+        SessionHelper.SetValue(eventArgument, false);
     }
 
     #endregion

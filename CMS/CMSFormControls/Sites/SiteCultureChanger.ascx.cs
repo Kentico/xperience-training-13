@@ -90,4 +90,11 @@ function ChangeCulture(documentChanged) {
             }
         }
     }
+
+
+    protected override void OnPreRender(EventArgs e)
+    {
+        ScriptHelper.RegisterDialogScript(Page);
+        base.OnPreRender(e);
+    }
 }

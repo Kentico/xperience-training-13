@@ -32,7 +32,7 @@ public partial class CMSModules_EmailQueue_SentEmails : EmailQueuePage, ICallbac
 
         // Store the dialog identifier with appropriate data in the session
         WindowHelper.Add(dialogIdentifier.ToString(), mParameters);
-        
+
         string queryString = "?params=" + dialogIdentifier;
 
         queryString = URLHelper.AddParameterToUrl(queryString, "hash", QueryHelper.GetHash(queryString));
@@ -79,7 +79,7 @@ public partial class CMSModules_EmailQueue_SentEmails : EmailQueuePage, ICallbac
     protected void Page_Load(object sender, EventArgs e)
     {
         Title = GetString("emailqueue.archive.title");
-        
+
         // Load drop-down lists
         if (!RequestHelper.IsPostBack())
         {
@@ -277,17 +277,17 @@ function OpenEmailDetail(queryParameters) {{
 
     protected void HeaderActions_ActionPerformed(object sender, CommandEventArgs e)
     {
-        bool reloaded = false;
         var commandName = e.CommandName.ToLowerInvariant();
+        var isRefreshAction = commandName.Equals("refresh", StringComparison.OrdinalIgnoreCase);
 
-        if (commandName == "refresh")
+        if ((isRefreshAction && !UserHasRead) || (!isRefreshAction && !UserHasModify))
         {
-            gridElem.ReloadData();
+            RedirectToAccessDenied(ModuleName.EMAILENGINE, isRefreshAction ? READ_PERMISSION : MODIFY_PERMISSION);
         }
 
-        if (!UserHasModify)
+        if (isRefreshAction)
         {
-            RedirectToAccessDenied(ModuleName.EMAILENGINE, MODIFY_PERMISSION);
+            gridElem.ReloadData();
         }
 
         switch (commandName)
@@ -295,9 +295,8 @@ function OpenEmailDetail(queryParameters) {{
             case "deleteall":
                 // Delete all archived e-mails
                 EmailHelper.Queue.DeleteArchived(SiteId);
-                
+
                 gridElem.ReloadData();
-                reloaded = true;
                 break;
 
             case "deleteselected":
@@ -309,11 +308,11 @@ function OpenEmailDetail(queryParameters) {{
 
                 gridElem.ResetSelection();
                 gridElem.ReloadData();
-                reloaded = true;
                 break;
         }
+
         // Reload on first page if no data found after perfoming action
-        if (reloaded && DataHelper.DataSourceIsEmpty(gridElem.GridView.DataSource))
+        if (!isRefreshAction && DataHelper.DataSourceIsEmpty(gridElem.GridView.DataSource))
         {
             gridElem.Pager.UniPager.CurrentPage = 1;
             gridElem.ReloadData();

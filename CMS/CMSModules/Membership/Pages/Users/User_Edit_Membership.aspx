@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true"  Codebehind="User_Edit_Membership.aspx.cs"
+﻿<%@ Page Language="C#" AutoEventWireup="false"  Codebehind="User_Edit_Membership.aspx.cs"
     Theme="Default" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" Inherits="CMSModules_Membership_Pages_Users_User_Edit_Membership" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/UniSelector/UniSelector.ascx" TagName="UniSelector"
@@ -15,7 +15,7 @@
                         ResourceString="general.site" DisplayColon="true" />
                 </div>
                 <div class="filter-form-value-cell-wide">
-                    <cms:SiteSelector ID="siteSelector" runat="server" IsLiveSite="false" />
+                    <cms:SiteSelector ID="siteSelector" runat="server" IsLiveSite="false" AllowAll="false" AllowEmpty="false" AllowGlobal="true" OnlyRunningSites="false" />
                 </div>
             </div>
         </div>
@@ -36,7 +36,9 @@
                     <cms:DateTimePicker runat="server" ID="ucCalendar" />
                 </div>
                 <cms:UniSelector runat="server" ID="usMemberships" IsLiveSite="false" ObjectType="cms.membership"
-                    ListingObjectType="cms.membershiplist" SelectionMode="Multiple" ResourcePrefix="membershipselector" />
+                    ListingObjectType="cms.membershiplist" SelectionMode="Multiple" ResourcePrefix="membershipselector" GridName="User_Membership_List.xml" AdditionalColumns="ValidTo"
+                    SelectItemPageUrl="~/CMSModules/Membership/Pages/Users/User_Edit_Add_Item_Dialog.aspx" ReturnColumnName="MembershipID" DynamicColumnName="false"
+                    DialogWindowHeight="760" OnOnAdditionalDataBound="usMemberships_OnAdditionalDataBound" OnOnSelectionChanged="usMemberships_OnSelectionChanged" />
             </ContentTemplate>
         </cms:CMSUpdatePanel>
     </asp:PlaceHolder>

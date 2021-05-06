@@ -13,7 +13,7 @@ public partial class CMSModules_DocumentTypes_Pages_Development_DocumentType_Edi
     protected void Page_Load(object sender, EventArgs e)
     {
         DataClassInfo dci = DataClassInfoProvider.GetDataClassInfo(classId);
-        if ((dci == null) || (!dci.ClassHasURL))
+        if ((dci == null) || (!dci.ClassHasURL && !dci.ClassIsCoupledClass))
         {
             // Show error message
             ShowError(GetString("srch.doctype.ErrorCannotHaveSearchFieldsOptions"));

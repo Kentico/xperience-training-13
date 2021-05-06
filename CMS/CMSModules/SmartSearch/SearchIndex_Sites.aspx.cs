@@ -136,7 +136,7 @@ public partial class CMSModules_SmartSearch_SearchIndex_Sites : GlobalAdminPage,
             }
 
             SearchIndexInfo sii = SearchIndexInfoProvider.GetSearchIndexInfo(indexId);
-            if (sii.IndexType.Equals(CMS.DocumentEngine.TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase) || (sii.IndexType == SearchHelper.DOCUMENTS_CRAWLER_INDEX))
+            if (sii.IndexType.Equals(CMS.DocumentEngine.TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase))
             {
                 if (!SearchIndexCultureInfoProvider.SearchIndexHasAnyCulture(sii.IndexID))
                 {

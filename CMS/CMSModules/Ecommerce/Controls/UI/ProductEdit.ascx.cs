@@ -10,6 +10,7 @@ using CMS.Base.Web.UI.ActionsConfig;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
+using CMS.DocumentEngine.Web.UI.Internal;
 using CMS.Ecommerce;
 using CMS.Ecommerce.Web.UI;
 using CMS.FormEngine;
@@ -717,6 +718,24 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductEdit : CMSAdminCont
         InitDocumentManager();
         InitProduct();
 
+
+        if (DocumentManager.Mode == FormModeEnum.Insert)
+        {
+            int classId = QueryHelper.GetInteger("classId", 0);
+            var ci = DataClassInfoProvider.GetDataClassInfo(classId);
+
+            if (ci != null && ci.ClassUsesPageBuilder)
+            {
+                var templateIdentifier = QueryHelper.GetString("templateidentifier", string.Empty);
+                var noTemplateFlag = QueryHelper.GetBoolean("noTemplate", false);
+
+                if (!noTemplateFlag && string.IsNullOrEmpty(templateIdentifier))
+                {
+                    URLHelper.Redirect("~/CMSModules/Content/CMSDesk/MVC/TemplateSelection.aspx" + RequestContext.CurrentQueryString);
+                }
+            }
+        }
+
         if (Product != null)
         {
             InitSkuForms();
@@ -877,6 +896,7 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductEdit : CMSAdminCont
         };
 
         DocumentManager.OnAfterAction += DocumentManager_OnAfterAction;
+        DocumentManager.OnBeforeAction += TemplateSelectioUtils.SetTemplateForNewPage;
     }
 
 

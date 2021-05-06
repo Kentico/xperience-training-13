@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_System_Debug_System_ViewObject"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Async="true" Inherits="CMSModules_System_Debug_System_ViewObject"
     Theme="Default" MasterPageFile="~/CMSMasterPages/UI/Dialogs/ModalDialogPage.master"
     MaintainScrollPositionOnPostback="true"  Codebehind="System_ViewObject.aspx.cs" %>
 

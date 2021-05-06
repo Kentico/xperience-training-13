@@ -9,8 +9,18 @@
 
 
 
-public partial class CMSModules_System_Debug_Log {
-    
+public partial class CMSModules_System_Debug_Log
+{
+
+    /// <summary>
+    /// pnlHeaderActions control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlHeaderActions;
+
     /// <summary>
     /// btnClearCache control.
     /// </summary>
@@ -19,7 +29,7 @@ public partial class CMSModules_System_Debug_Log {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnClearCache;
-    
+
     /// <summary>
     /// btnClear control.
     /// </summary>
@@ -28,7 +38,7 @@ public partial class CMSModules_System_Debug_Log {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedButton btnClear;
-    
+
     /// <summary>
     /// chkCompleteContext control.
     /// </summary>
@@ -37,7 +47,7 @@ public partial class CMSModules_System_Debug_Log {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSCheckBox chkCompleteContext;
-    
+
     /// <summary>
     /// lblInfo control.
     /// </summary>
@@ -46,7 +56,7 @@ public partial class CMSModules_System_Debug_Log {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblInfo;
-    
+
     /// <summary>
     /// plcLogs control.
     /// </summary>

@@ -193,7 +193,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_General_List : CMSAdminC
         if (eventArgument == "saved")
         {
             SearchIndexInfo sii = SearchIndexInfoProvider.GetSearchIndexInfo(ItemID);
-            if (sii.IndexType.Equals(Treenode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase) || (sii.IndexType == SearchHelper.DOCUMENTS_CRAWLER_INDEX))
+            if (sii.IndexType.Equals(Treenode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase))
             {
                 if (!SearchIndexCultureInfoProvider.SearchIndexHasAnyCulture(sii.IndexID))
                 {

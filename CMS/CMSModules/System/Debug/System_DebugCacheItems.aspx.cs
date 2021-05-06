@@ -1,46 +1,39 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using CMS.Core;
+using System.Linq;
+using System.Threading.Tasks;
+
+using CMS.Base.Web.UI;
 using CMS.Helpers;
-using CMS.Helpers.Caching.Abstractions;
 using CMS.UIControls;
 
 
 public partial class CMSModules_System_Debug_System_DebugCacheItems : CMSDebugPage
 {
-    protected void Page_Load(object sender, EventArgs e)
+    protected override async void OnLoad(EventArgs e)
     {
-        btnClear.Text = GetString("Administration-System.btnClearCache");
-    }
+        base.OnLoad(e);
 
+        if (ShowLiveSiteData)
+        {
+            pnlHeaderActions.Parent.Controls.Clear();
+        }
+        else
+        {
+            btnClear.Text = GetString("Administration-System.btnClearCache");
+        }
 
-    protected override void OnPreRender(EventArgs e)
-    {
-        base.OnPreRender(e);
-
-        ReloadData();
+        await ReloadData();
     }
 
 
     /// <summary>
     /// Loads the data.
     /// </summary>
-    protected void ReloadData()
+    protected async Task ReloadData()
     {
-        List<string> keyList = new List<string>();
-        IDictionaryEnumerator cacheEnum = Service.Resolve<ICacheAccessor>().GetEnumerator();
+        var keyList = ShowLiveSiteData ? await new LiveSiteDebugProcessor().GetAllCacheItemsAsync() : CacheHelper.GetCacheItemRows();
 
-        // Build the items list
-        while (cacheEnum.MoveNext())
-        {
-            string key = cacheEnum.Key.ToString();
-            if (!String.IsNullOrEmpty(key))
-            {
-                keyList.Add(key);
-            }
-        }
-        keyList.Sort();
+        keyList = keyList?.OrderBy(g => g.Key);
 
         // Load the grids
         gridItems.AllItems = keyList;
@@ -51,10 +44,10 @@ public partial class CMSModules_System_Debug_System_DebugCacheItems : CMSDebugPa
     }
 
 
-    protected void btnClear_Click(object sender, EventArgs e)
+    protected async void btnClear_Click(object sender, EventArgs e)
     {
         CacheHelper.ClearCache();
 
-        ReloadData();
+        await ReloadData().ConfigureAwait(false);
     }
 }

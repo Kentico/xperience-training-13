@@ -31,10 +31,10 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
         {
             PredefinedObjectType.DOCUMENT, new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase)
             {
-                { "DocumentId", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE } },
-                { "NodeID", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE } },
-                { "NodeLinkedNodeID", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE } },
-                { "NodeAliasPath", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE } },
+                { "DocumentId", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE, SearchSettings.INDEX_UPDATE_TRIGGER } },
+                { "NodeID", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE, SearchSettings.INDEX_UPDATE_TRIGGER } },
+                { "NodeLinkedNodeID", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE, SearchSettings.INDEX_UPDATE_TRIGGER } },
+                { "NodeAliasPath", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { AzureSearchFieldFlags.RETRIEVABLE, AzureSearchFieldFlags.FILTERABLE, SearchSettings.SEARCHABLE, SearchSettings.INDEX_UPDATE_TRIGGER } },
             }
         }
     };
@@ -146,6 +146,23 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
         private set;
     }
 
+
+    /// <summary>
+    /// Selected search index data source.
+    /// </summary>
+    public SearchIndexDataSourceEnum? SearchIndexDataSource
+    {
+        get
+        {
+            return (SearchIndexDataSourceEnum?)ViewState["SearchIndexDataSource"];
+        }
+
+        set
+        {
+            ViewState["SearchIndexDataSource"] = value;
+        }
+    }
+
     #endregion
 
 
@@ -179,7 +196,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
                 var dataClassInfo = DataClassInfoProvider.GetDataClassInfo(ItemID);
 
                 mDci = dataClassInfo;
-                mAttributes = dataClassInfo.GetSearchIndexColumns()?.ToList();
+                mAttributes = dataClassInfo?.GetSearchIndexColumns()?.ToList();
 
                 if (mDci != null)
                 {
@@ -197,28 +214,38 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
             // Display checkbox matrix only if field names array is not empty
             if (mAttributes?.Count > 0)
             {
-                // Setup controls
-                btnAutomatically.Visible = true;
-                if (mFields == null)
-                {
-                    mFields = new SearchSettings();
-                }
-
-                if (mDci != null)
-                {
-                    mFields.LoadData(mDci.ClassSearchSettings);
-                }
-                mInfos = mFields.GetAllSettingsInfos();
-
-                CreateTable(setAutomatically);
-
-                Literal ltl = new Literal();
-                ltl.Text = "<br />";
-                pnlContent.Controls.Add(ltl);
+                DisplayCheckboxMatrix(setAutomatically);
+            }
+            else if (mDci != null && mDci.ClassIsDocumentType)
+            {
+                ShowInformation(SearchIndexDataSource != SearchIndexDataSourceEnum.HTMLOutput ? GetString("srch.settings.nocontentfields") : string.Empty);
             }
         }
     }
 
+
+    private void DisplayCheckboxMatrix(bool setAutomatically)
+    {
+        // Setup controls
+        lblHeader.Visible = true;
+        btnAutomatically.Visible = true;
+        if (mFields == null)
+        {
+            mFields = new SearchSettings();
+        }
+
+        if (mDci != null)
+        {
+            mFields.LoadData(mDci.ClassSearchSettings);
+        }
+        mInfos = mFields.GetAllSettingsInfos();
+
+        CreateTable(setAutomatically);
+
+        Literal ltl = new Literal();
+        ltl.Text = "<br />";
+        pnlContent.Controls.Add(ltl);
+    }
 
     /// <summary>
     /// Creates table.
@@ -237,31 +264,26 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
         header.TableSection = TableRowSection.TableHeader;
 
         AddTableHeaderCell(topHeader, "");
-        AddTableHeaderCell(topHeader, GetString("srch.local"), false, 3);
-
         AddTableHeaderCell(header, GetString("srch.settings.fieldname"), true);
-        AddTableHeaderCell(header, GetString("development.content"), true);
-        AddTableHeaderCell(header, GetString("srch.settings.searchable"), true);
-        AddTableHeaderCell(header, GetString("srch.settings.tokenized"), true);
+
+        AddLocalHeaders(topHeader, header);
 
         if (DisplayAzureFields)
         {
-            AddTableHeaderCell(topHeader, GetString("srch.azure"), false, 6);
-
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.CONTENT), true);
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.RETRIEVABLE), true);
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.SEARCHABLE), true);
-
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.FACETABLE), true);
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.FILTERABLE), true);
-            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.SORTABLE), true);
+            AddAzureHeaders(topHeader, header);
         }
 
-        if (DisplayIField)
+        var colspan = 1;
+        var displayUpdateTrigger = mDci.ClassIsDocumentType || mDci.ClassName == PredefinedObjectType.DOCUMENT;
+
+        if (displayUpdateTrigger)
         {
-            AddTableHeaderCell(topHeader, GetString("general.general"));
-            AddTableHeaderCell(header, GetString("srch.settings.ifield"), true);
+            AddTableHeaderCell(header, GetString("srch.settings.indexupdatetrigger"), true);
+            colspan++;
         }
+
+        AddTableHeaderCell(header, GetString("srch.settings.ifield"), true);
+        AddTableHeaderCell(topHeader, GetString("general.general"), colspan: colspan);
 
         var thc = new TableHeaderCell();
         thc.CssClass = "main-column-100";
@@ -301,41 +323,121 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
 
                 var defaultSearchSettings = useDefaultValue ? SearchHelper.CreateDefaultSearchSettings(column.ColumnName, column.ColumnType) : null;
 
-                tr.Cells.Add(CreateTableCell(SearchSettings.CONTENT, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.CONTENT) : ssi?.GetFlag(SearchSettings.CONTENT) ?? false, "development.content"));
-                tr.Cells.Add(CreateTableCell(SearchSettings.SEARCHABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.SEARCHABLE) : ssi?.GetFlag(SearchSettings.SEARCHABLE) ?? false, "srch.settings.searchable"));
-                tr.Cells.Add(CreateTableCell(SearchSettings.TOKENIZED, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.TOKENIZED) : ssi?.GetFlag(SearchSettings.TOKENIZED) ?? false, "srch.settings.tokenized"));
+                if (SearchIndexDataSource != SearchIndexDataSourceEnum.HTMLOutput)
+                {
+                    tr.Cells.Add(CreateTableCell(SearchSettings.CONTENT, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.CONTENT) : ssi?.GetFlag(SearchSettings.CONTENT) ?? false, "srch.settings.content.tooltip"));
+                }
+                tr.Cells.Add(CreateTableCell(SearchSettings.SEARCHABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.SEARCHABLE) : ssi?.GetFlag(SearchSettings.SEARCHABLE) ?? false, "srch.settings.searchable.tooltip"));
+                tr.Cells.Add(CreateTableCell(SearchSettings.TOKENIZED, column, useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.TOKENIZED) : ssi?.GetFlag(SearchSettings.TOKENIZED) ?? false, "srch.settings.tokenized.tooltip"));
 
                 if (DisplayAzureFields)
                 {
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.CONTENT, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.CONTENT) : ssi?.GetFlag(AzureSearchFieldFlags.CONTENT) ?? false, "srch.settings." + AzureSearchFieldFlags.CONTENT));
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.RETRIEVABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.RETRIEVABLE) : ssi?.GetFlag(AzureSearchFieldFlags.RETRIEVABLE) ?? false, "srch.settings." + AzureSearchFieldFlags.RETRIEVABLE));
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.SEARCHABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.SEARCHABLE) : ssi?.GetFlag(AzureSearchFieldFlags.SEARCHABLE) ?? false, "srch.settings." + AzureSearchFieldFlags.SEARCHABLE));
+                    if (SearchIndexDataSource != SearchIndexDataSourceEnum.HTMLOutput)
+                    {
+                        tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.CONTENT, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.CONTENT) : ssi?.GetFlag(AzureSearchFieldFlags.CONTENT) ?? false, $"srch.settings.{AzureSearchFieldFlags.CONTENT}.tooltip"));
+                    }
+                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.RETRIEVABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.RETRIEVABLE) : ssi?.GetFlag(AzureSearchFieldFlags.RETRIEVABLE) ?? false, $"srch.settings.{AzureSearchFieldFlags.RETRIEVABLE}.tooltip"));
+                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.SEARCHABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.SEARCHABLE) : ssi?.GetFlag(AzureSearchFieldFlags.SEARCHABLE) ?? false, $"srch.settings.{AzureSearchFieldFlags.SEARCHABLE}.tooltip"));
 
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.FACETABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.FACETABLE) : ssi?.GetFlag(AzureSearchFieldFlags.FACETABLE) ?? false, "srch.settings." + AzureSearchFieldFlags.FACETABLE));
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.FILTERABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.FILTERABLE) : ssi?.GetFlag(AzureSearchFieldFlags.FILTERABLE) ?? false, "srch.settings." + AzureSearchFieldFlags.FILTERABLE));
-                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.SORTABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.SORTABLE) : ssi?.GetFlag(AzureSearchFieldFlags.SORTABLE) ?? false, "srch.settings." + AzureSearchFieldFlags.SORTABLE));
+                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.FACETABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.FACETABLE) : ssi?.GetFlag(AzureSearchFieldFlags.FACETABLE) ?? false, $"srch.settings.{AzureSearchFieldFlags.FACETABLE}.tooltip"));
+                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.FILTERABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.FILTERABLE) : ssi?.GetFlag(AzureSearchFieldFlags.FILTERABLE) ?? false, $"srch.settings.{AzureSearchFieldFlags.FILTERABLE}.tooltip"));
+                    tr.Cells.Add(CreateTableCell(AzureSearchFieldFlags.SORTABLE, column, useDefaultValue ? defaultSearchSettings.GetFlag(AzureSearchFieldFlags.SORTABLE) : ssi?.GetFlag(AzureSearchFieldFlags.SORTABLE) ?? false, $"srch.settings.{AzureSearchFieldFlags.SORTABLE}.tooltip"));
+                }
+
+                if (displayUpdateTrigger)
+                {
+                    tr.Cells.Add(CreateTableCell(SearchSettings.INDEX_UPDATE_TRIGGER, column, GetUpdateTriggerFlagValue(useDefaultValue, defaultSearchSettings, ssi), "srch.settings.indexupdatetrigger.tooltip"));
                 }
 
                 // Add cell with 'iFieldname' value
-                if (DisplayIField)
-                {
-                    tc = new TableCell();
-                    CMSTextBox txt = new CMSTextBox();
-                    txt.ID = column.ColumnName + SearchSettings.IFIELDNAME;
-                    txt.CssClass += " form-control";
-                    txt.MaxLength = 200;
-                    if (ssi != null)
-                    {
-                        txt.Text = ssi.FieldName;
-                    }
-                    tc.Controls.Add(txt);
-                    tr.Cells.Add(tc);
-                }
+                tr.Cells.Add(CreateFieldNameCell(column, ssi));
+
                 tc = new TableCell();
                 tr.Cells.Add(tc);
                 table.Rows.Add(tr);
             }
         }
+    }
+
+
+    private bool GetUpdateTriggerFlagValue(bool useDefaultValue, SearchSettingsInfo defaultSearchSettings, SearchSettingsInfo ssi)
+    {
+        return useDefaultValue ? defaultSearchSettings.GetFlag(SearchSettings.INDEX_UPDATE_TRIGGER) : GetUpdateTriggerFlagValue(ssi);
+    }
+
+
+    private bool GetUpdateTriggerFlagValue(SearchSettingsInfo ssi)
+    {
+        if (ssi == null)
+        {
+            return false;
+        }
+
+        if (ssi.ContainsColumn(SearchSettings.INDEX_UPDATE_TRIGGER))
+        {
+            return ssi.GetFlag(SearchSettings.INDEX_UPDATE_TRIGGER);
+        }
+
+        return ssi.GetFlag(SearchSettings.CONTENT)
+            || ssi.GetFlag(SearchSettings.SEARCHABLE)
+            || ssi.GetFlag(AzureSearchFieldFlags.CONTENT)
+            || ssi.GetFlag(AzureSearchFieldFlags.SEARCHABLE);
+    }
+
+
+    private TableCell CreateFieldNameCell(ColumnDefinition column, SearchSettingsInfo ssi)
+    {
+        var tc = new TableCell();
+        CMSTextBox txt = new CMSTextBox();
+        txt.ID = column.ColumnName + SearchSettings.IFIELDNAME;
+        txt.CssClass += " form-control";
+        txt.MaxLength = 200;
+        txt.ToolTip = GetString("srch.settings.ifield.tooltip");
+        if (ssi != null)
+        {
+            txt.Text = ssi.FieldName;
+        }
+        tc.Controls.Add(txt);
+
+        return tc;
+    }
+
+
+    private void AddLocalHeaders(TableHeaderRow topHeader, TableHeaderRow header)
+    {
+        var colspan = 2;
+
+        if (SearchIndexDataSource != SearchIndexDataSourceEnum.HTMLOutput)
+        {
+            AddTableHeaderCell(header, GetString("development.content"), true);
+            colspan++;
+        }
+
+        AddTableHeaderCell(topHeader, GetString("srch.local"), false, colspan);
+
+        AddTableHeaderCell(header, GetString("srch.settings.searchable"), true);
+        AddTableHeaderCell(header, GetString("srch.settings.tokenized"), true);
+    }
+
+
+    private void AddAzureHeaders(TableHeaderRow topHeader, TableHeaderRow header)
+    {
+        var colspan = 5;
+
+        if (SearchIndexDataSource != SearchIndexDataSourceEnum.HTMLOutput)
+        {
+            AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.CONTENT), true);
+            colspan++;
+        }
+
+        AddTableHeaderCell(topHeader, GetString("srch.azure"), false, colspan);
+
+        AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.RETRIEVABLE), true);
+        AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.SEARCHABLE), true);
+
+        AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.FACETABLE), true);
+        AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.FILTERABLE), true);
+        AddTableHeaderCell(header, GetString("srch.settings." + AzureSearchFieldFlags.SORTABLE), true);
     }
 
 
@@ -367,6 +469,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
             bool content = (pnlContent.FindControl(name + SearchSettings.CONTENT) as CMSCheckBox)?.Checked ?? false;
             bool searchable = (pnlContent.FindControl(name + SearchSettings.SEARCHABLE) as CMSCheckBox)?.Checked ?? false;
             bool tokenized = (pnlContent.FindControl(name + SearchSettings.TOKENIZED) as CMSCheckBox)?.Checked ?? false;
+            bool indexUpdateTrigger = (pnlContent.FindControl(name + SearchSettings.INDEX_UPDATE_TRIGGER) as CMSCheckBox)?.Checked ?? false;
 
             bool azureContent = (pnlContent.FindControl(name + AzureSearchFieldFlags.CONTENT) as CMSCheckBox)?.Checked ?? false;
             bool azureRetrievable = (pnlContent.FindControl(name + AzureSearchFieldFlags.RETRIEVABLE) as CMSCheckBox)?.Checked ?? false;
@@ -386,6 +489,7 @@ public partial class CMSModules_SmartSearch_Controls_Edit_ClassFields : CMSAdmin
             flags.Add(SearchSettings.CONTENT, content);
             flags.Add(SearchSettings.SEARCHABLE, searchable);
             flags.Add(SearchSettings.TOKENIZED, tokenized);
+            flags.Add(SearchSettings.INDEX_UPDATE_TRIGGER, indexUpdateTrigger);
 
             if (DisplayAzureFields)
             {

@@ -2000,6 +2000,24 @@
             <param name="moduleName">Module name</param>
             <returns>Collection of all strings obtained from the localization file localized to the current preferred UI culture</returns>
         </member>
+        <member name="T:CMS.Base.Web.UI.Internal.IDebugWebAPIProvider">
+            <summary>
+            Describes methods for sending HTTP requests and receiving HTTP responses from live site debug resources identified by a URI.
+            </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+        </member>
+        <member name="M:CMS.Base.Web.UI.Internal.IDebugWebAPIProvider.GetDebugItemsAsync``1(System.Uri,CMS.Base.IUserInfo,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+            <summary>
+            Returns asynchronously result of type <typeparamref name="T"/> from live site debug API endpoint specified by URI in parameter <paramref name="requestUri"/>.
+            User from parameter <paramref name="userInfo"/> is ment to be used for the API call authentication.
+            </summary>
+            <typeparam name="T">Type in which the API call result should be returned.</typeparam>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="userInfo">User used for request authentication.</param>
+            <param name="formatters">A list of <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter"/>s to use when serializing.</param>
+        </member>
         <member name="M:CMS.Base.Web.UI.Internal.UIMacroMethods.TextEncodings(CMS.MacroEngine.EvaluationContext,System.Object[])">
             <summary>
             Gets the collection of text encodings available in system.
@@ -3736,6 +3754,62 @@
             </summary>
             <param name="sender">Sender</param>
             <param name="e">Event arguments</param>
+        </member>
+        <member name="T:CMS.Base.Web.UI.LiveSiteDebugProcessor">
+            <summary>
+            Handles debug information on live sites.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.LiveSiteDebugProcessor.#ctor">
+            <summary>
+            Parameterless constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.LiveSiteDebugProcessor.#ctor(CMS.Base.Web.UI.Internal.IDebugWebAPIProvider,CMS.Base.IUserInfo)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.LiveSiteDebugProcessor.GetLastLogsAsync(System.String)">
+            <summary>
+            Retrieves last debug logs for the specified debug name created on current site.
+            </summary>
+            <param name="debugName">The name of the debug.</param>
+        </member>
+        <member name="M:CMS.Base.Web.UI.LiveSiteDebugProcessor.GetAllCacheItemsAsync">
+            <summary>
+            Retrieves all cache items created on current site.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.LiveSiteDebugProcessor.GetCacheItemAsync(System.String)">
+            <summary>
+            Retrieves cache item detail with the specified cache key created on current site.
+            </summary>
+            <param name="key">The key of the cache item.</param>
+        </member>
+        <member name="T:CMS.Base.Web.UI.DebugWebAPIProvider">
+            <summary>
+            Provides a base class for sending HTTP requests and receiving HTTP responses from live site debug resources identified by a URI.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.DebugWebAPIProvider.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:CMS.Base.Web.UI.DebugWebAPIProvider.GetDebugItemsAsync``1(System.Uri,CMS.Base.IUserInfo,System.Collections.Generic.IEnumerable{System.Net.Http.Formatting.MediaTypeFormatter})">
+            <summary>
+            Returns asynchronously result of type <typeparamref name="T"/> from live site debug API endpoint specified by URI in parameter <paramref name="requestUri"/>.
+            </summary>
+            <remarks>
+            User from parameter <paramref name="userInfo"/> is used for the API call authentication.
+            Default value of type <typeparamref name="T"/> is returned if the response is not successful.
+            </remarks>
+            <typeparam name="T">Type in which the API call result should be returned.</typeparam>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="userInfo">User used for request authentication.</param>
+            <param name="formatters">A list of <see cref="T:System.Net.Http.Formatting.MediaTypeFormatter"/>s to use when serializing.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if any one of the parameters is null.</exception>
         </member>
         <member name="T:CMS.Base.Web.UI.PageContext">
             <summary>

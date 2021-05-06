@@ -1,11 +1,13 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true"
     Inherits="CMSModules_Newsletters_Tools_Newsletters_Newsletter_List" Theme="Default"
     MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" Title="Tools - Newsletters"  Codebehind="Newsletter_List.aspx.cs" %>
-    
-<%@ Register src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" tagname="UniGrid" tagprefix="cms" %>
+
+<%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid" TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/SmartTip.ascx" TagName="SmartTip" TagPrefix="cms" %>
 <%@ Register Namespace="CMS.UIControls.UniGridConfig" TagPrefix="ug" Assembly="CMS.UIControls" %>
 
 <asp:Content ContentPlaceHolderID="plcContent" ID="content" runat="server">
+    <cms:SmartTip runat="server" ID="tipHowEMWorks" Visible="true" />
     <cms:UniGrid runat="server" ID="UniGrid" ShortID="g" OrderBy="NewsletterDisplayName" IsLiveSite="false"
         ObjectType="newsletter.newsletter" RememberStateByParam=""
         Columns="NewsletterID, NewsletterDisplayName, (SELECT MAX(IssueMailoutTime) FROM Newsletter_NewsletterIssue WHERE IssueNewsletterID = Newsletter_Newsletter.NewsletterID ) AS LastIssue, NewsletterType">
@@ -19,8 +21,8 @@
             </ug:Column>
             <ug:Column Source="LastIssue" Caption="$Unigrid.Newsletter.Columns.LastIssue$" Wrap="false" AllowSorting="false" />
             <ug:Column Source="NewsletterType" Caption="$Unigrid.Newsletter.Columns.NewsletterType$" ExternalSourceName="type" Wrap="false" AllowSorting="false" Localize="True" />
-            <ug:Column CssClass="filling-column" />            
-        </GridColumns>   
+            <ug:Column CssClass="filling-column" />
+        </GridColumns>
         <GridOptions DisplayFilter="true" />
-    </cms:UniGrid>                             
+    </cms:UniGrid>
 </asp:Content>

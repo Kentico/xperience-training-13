@@ -3030,6 +3030,18 @@
             </summary>
             <param name="url">URL of the page to download.</param>
         </member>
+        <member name="T:CMS.Search.ISearchCrawlerContentProcessor">
+            <summary>
+            Interface for processing a content retrieved by a search crawler to be indexed.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISearchCrawlerContentProcessor.Process(System.String)">
+            <summary>
+            Processes the HTML content retrieved by the crawler to get a content to be indexed by the search.
+            </summary>
+            <param name="htmlContent">HTML content to process.</param>
+            <returns>Returns a content suitable for search indexing (without e.g. HTML tags).</returns>
+        </member>
         <member name="T:CMS.Search.ISearchFilterable">
             <summary>
             Interface for search filter.
@@ -3154,6 +3166,14 @@
             </summary>
             <param name="htmlCode">HTML code</param>
         </member>
+        <member name="M:CMS.Search.SearchCrawler.InvokeCustomContentHandling(System.String,System.String)">
+            <summary>
+            Invokes custom content handlig if used.
+            </summary>
+            <param name="htmlCode">Processed HTML code.</param>
+            <param name="originalCode">Original HTML code.</param>
+            <returns>Returns the processed content.</returns>
+        </member>
         <member name="M:CMS.Search.SearchCrawler.CreateRequest(System.String)">
             <summary>
             Creates HttpWebRequest for specific URL.
@@ -3199,6 +3219,18 @@
             Checks whether the current request comes from crawler.
             </summary>
             <returns>True, if current request comes from crawler; otherwise, false</returns>
+        </member>
+        <member name="T:CMS.Search.SearchCrawlerContentProcessor">
+            <summary>
+            Processes a content retrieved by the search crawler to be indexed.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchCrawlerContentProcessor.Process(System.String)">
+            <summary>
+            Processes the HTML content retrieved by the crawler to get a content to be indexed by the search.
+            </summary>
+            <param name="htmlContent">HTML content to process.</param>
+            <returns>Returns a content suitable for search indexing (without e.g. HTML tags).</returns>
         </member>
         <member name="T:CMS.Search.SearchHelper">
             <summary>
@@ -3251,14 +3283,14 @@
             Constant for custom search index.
             </summary>
         </member>
-        <member name="F:CMS.Search.SearchHelper.DOCUMENTS_CRAWLER_INDEX">
-            <summary>
-            Constant for custom search index.
-            </summary>
-        </member>
         <member name="F:CMS.Search.SearchHelper.DEFAULT_SEARCH_TITLE_COLUMN">
             <summary>
             Constant for default class search title column.
+            </summary>
+        </member>
+        <member name="F:CMS.Search.SearchHelper.DOCUMENTS_CRAWLER_INDEX">
+            <summary>
+            Constant for custom search index.
             </summary>
         </member>
         <member name="F:CMS.Search.SearchHelper.DEFAULT_SEARCH_CREATION_DATE_COLUMN">

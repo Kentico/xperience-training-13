@@ -161,7 +161,8 @@ public partial class CMSModules_EmailQueue_SendEmail : EmailQueuePage
 
         if (plcText.Visible)
         {
-            msg.Body = htmlText.ResolvedValue;
+            // Resolve relative URLs (leading with ~) which may eventually occur in ResolvedValue because its getter unresolves the links contained.
+            msg.Body = URLHelper.MakeLinksAbsolute(htmlText.ResolvedValue);
         }
         if (plcPlainText.Visible)
         {

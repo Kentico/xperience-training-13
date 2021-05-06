@@ -86,7 +86,7 @@
     </asp:PlaceHolder>
     <%--Days--%>
     <asp:PlaceHolder runat="server" ID="pnlDays">
-        <div class="form-group">
+        <div class="form-group scheduled-task-days">
             <div class="editing-form-label-cell">
                 <cms:LocalizedLabel CssClass="control-label" ID="lblDays" runat="server" EnableViewState="false" ResourceString="scheduleinterval.days"
                     AssociatedControlID="chkWeek" />

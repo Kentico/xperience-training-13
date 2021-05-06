@@ -6,7 +6,7 @@ using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
-using CMS.DocumentEngine.Internal;
+using CMS.DocumentEngine.Web.UI.Internal;
 using CMS.FormEngine;
 using CMS.Helpers;
 using CMS.LicenseProvider;
@@ -132,7 +132,7 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
 
         DocumentManager.OnAfterAction += DocumentManager_OnAfterAction;
         DocumentManager.OnLoadData += DocumentManager_OnLoadData;
-        DocumentManager.OnBeforeAction += DocumentManager_OnBeforeAction;
+        DocumentManager.OnBeforeAction += TemplateSelectioUtils.SetTemplateForNewPage;
 
         // Register scripts
         string script = "function " + formElem.ClientID + "_RefreshForm(){" + Page.ClientScript.GetPostBackEventReference(btnRefresh, "") + " }";
@@ -394,58 +394,6 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
 
     #region "Document manager events"
 
-    void DocumentManager_OnBeforeAction(object sender, DocumentManagerEventArgs e)
-    {
-        if (newdocument)
-        {
-            var templateIdentifier = QueryHelper.GetString("templateidentifier", string.Empty);
-            if (string.IsNullOrEmpty(templateIdentifier))
-            {
-                return;
-            }
-
-            var templateType = QueryHelper.GetString("templateType", string.Empty);
-            if (string.IsNullOrEmpty(templateType))
-            {
-                e.IsValid = false;
-                e.ErrorMessage = GetString("pagetemplatesmvc.missingtype");
-                return;
-            }
-
-            if (!ValidationHelper.IsCodeName(templateIdentifier))
-            {
-                e.IsValid = false;
-                e.ErrorMessage = GetString("pagetemplatesmvc.invalidcodename");
-                return;
-            }
-
-
-            if (string.Equals(templateType, "custom", StringComparison.OrdinalIgnoreCase))
-            {
-                PreparePageWithCustomTemplate(e);
-            }
-            else if (string.Equals(templateType, "default", StringComparison.OrdinalIgnoreCase))
-            {
-                PreparePageWithDefaultTemplate(e, templateIdentifier);
-            }
-            else
-            {
-                e.IsValid = false;
-                e.ErrorMessage = GetString("pagetemplatesmvc.invalidtype");
-            }
-        }
-        else if (newculture)
-        {
-            var defaultCulture = CultureHelper.GetDefaultCultureCode(CurrentSiteName);
-            var templateConfiguration = new PageTemplateConfigurationForEmptyCultureVersionProvider()
-                .Get(NodeID, defaultCulture);
-
-            if (templateConfiguration != null)
-            {
-                PreparePageWithDefaultTemplate(e, templateConfiguration.Identifier);
-            }
-        }
-    }
 
 
     protected void DocumentManager_OnAfterAction(object sender, DocumentManagerEventArgs e)
@@ -478,56 +426,6 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
 
 
     #region "Methods"
-
-
-    private void PreparePageWithCustomTemplate(DocumentManagerEventArgs e)
-    {
-        var templateGuid = QueryHelper.GetGuid("templateidentifier", Guid.Empty);
-        if (templateGuid == Guid.Empty)
-        {
-            e.IsValid = false;
-            e.ErrorMessage = GetString("pagetemplatesmvc.invalididentifier");
-            return;
-        }
-
-        var template = PageTemplateConfigurationInfo.Provider.Get(templateGuid, SiteContext.CurrentSiteID);
-        if (template == null)
-        {
-            e.IsValid = false;
-            e.ErrorMessage = GetString("pagetemplatesmvc.notfound");
-            return;
-        }
-
-        string templateConfiguration = GetTemplateConfiguration(template);
-
-        e.Node.SetValue("DocumentPageBuilderWidgets", template.PageTemplateConfigurationWidgets);
-        e.Node.SetValue("DocumentPageTemplateConfiguration", templateConfiguration);
-    }
-
-
-    private static string GetTemplateConfiguration(PageTemplateConfigurationInfo template)
-    {
-        var templateConfiguration = template.PageTemplateConfigurationTemplate;
-
-        PageTemplateConfigurationSerializer serializer = new PageTemplateConfigurationSerializer();
-
-        var templateConfigurationInstance = serializer.Deserialize(templateConfiguration);
-        templateConfigurationInstance.ConfigurationIdentifier = template.PageTemplateConfigurationGUID;
-
-        return serializer.Serialize(templateConfigurationInstance);
-    }
-
-
-    private static void PreparePageWithDefaultTemplate(DocumentManagerEventArgs e, string templateIdentifier)
-    {
-        var configuration = new PageTemplateConfiguration
-        {
-            Identifier = templateIdentifier
-        };
-
-        var json = new PageTemplateConfigurationSerializer().Serialize(configuration);
-        e.Node.SetValue("DocumentPageTemplateConfiguration", json);
-    }
 
 
     /// <summary>

@@ -52,9 +52,6 @@ public partial class CMSFormControls_Selectors_LocalizableTextBox_LocalizeField 
             localizedInputContainer = ValidationHelper.GetString(parameters["LocalizedContainer"], String.Empty);
         }
 
-        // Disable option to use existing resource string for user who is not admin
-        lstExistingOrNew.Items[1].Enabled = CurrentUser.CheckPrivilegeLevel(UserPrivilegeLevelEnum.GlobalAdmin);
-
         if (lstExistingOrNew.SelectedValue == "new")
         {
             pnlExistingKey.Visible = false;

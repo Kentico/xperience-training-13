@@ -32,7 +32,7 @@
                 <cms:LocalizedButton ID="btnSignOut" Visible="false" runat="server" ButtonStyle="Primary"
                     OnClick="btnSignOut_Click" ResourceString="signoutbutton.signout" />
                 <cms:LocalizedButton ID="btnLogin" Visible="false" runat="server" ButtonStyle="Primary"
-                    OnClick="btnLogin_Click" ResourceString="webparts_membership_signoutbutton.signin" />
+                    OnClick="btnLogin_Click" ResourceString="screenlock.signin" />
             <asp:Literal ID="ltlScript" runat="server" Text="" />
             <br />
             <br />

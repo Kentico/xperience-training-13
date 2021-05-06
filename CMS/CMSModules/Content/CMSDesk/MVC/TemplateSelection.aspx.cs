@@ -65,7 +65,7 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
     private string GetTemplatesServiceUrl(string culture)
     {
         var parentNodeId = QueryHelper.GetInteger("parentnodeid", 0);
-        int classId = QueryHelper.GetInteger("classid", 0);        
+        int classId = QueryHelper.GetInteger("classid", 0);
 
         var parentNode = DocumentHelper.GetDocument(parentNodeId, TreeProvider.ALL_CULTURES, Tree);
         var pageTypeInfo = DataClassInfoProvider.GetDataClassInfo(classId);
@@ -92,7 +92,18 @@ public partial class CMSModules_Content_CMSDesk_MVC_TemplateSelection : CMSPage
 
     private string GetRedirectionUrl()
     {
-        var redirectionUrl = URLHelper.ResolveUrl("~/CMSModules/Content/CMSDesk/Edit/Edit.aspx");
+        int classId = QueryHelper.GetInteger("classid", 0);
+        var pageTypeInfo = DataClassInfoProvider.GetDataClassInfo(classId);
+        string redirectionUrl;
+        if (pageTypeInfo != null && pageTypeInfo.ClassIsProduct)
+        {
+            redirectionUrl = URLHelper.ResolveUrl("~/CMSModules/Ecommerce/Pages/Tools/Products/Product_New.aspx");
+        }
+        else
+        {
+            redirectionUrl = URLHelper.ResolveUrl("~/CMSModules/Content/CMSDesk/Edit/Edit.aspx");
+        }
+
         return URLHelper.AppendQuery(redirectionUrl, RequestContext.CurrentQueryString);
     }
 }

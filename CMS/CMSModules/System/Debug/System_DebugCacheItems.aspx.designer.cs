@@ -9,8 +9,18 @@
 
 
 
-public partial class CMSModules_System_Debug_System_DebugCacheItems {
-    
+public partial class CMSModules_System_Debug_System_DebugCacheItems
+{
+
+    /// <summary>
+    /// pnlHeaderActions control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel pnlHeaderActions;
+
     /// <summary>
     /// btnClear control.
     /// </summary>
@@ -19,7 +29,7 @@ public partial class CMSModules_System_Debug_System_DebugCacheItems {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSButton btnClear;
-    
+
     /// <summary>
     /// headItems control.
     /// </summary>
@@ -28,7 +38,7 @@ public partial class CMSModules_System_Debug_System_DebugCacheItems {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headItems;
-    
+
     /// <summary>
     /// gridItems control.
     /// </summary>
@@ -37,7 +47,7 @@ public partial class CMSModules_System_Debug_System_DebugCacheItems {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_System_Debug_CacheItemsGrid gridItems;
-    
+
     /// <summary>
     /// headDummy control.
     /// </summary>
@@ -46,7 +56,7 @@ public partial class CMSModules_System_Debug_System_DebugCacheItems {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedHeading headDummy;
-    
+
     /// <summary>
     /// gridDummy control.
     /// </summary>

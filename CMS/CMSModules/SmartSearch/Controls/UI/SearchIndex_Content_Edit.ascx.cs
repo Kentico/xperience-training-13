@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Web.UI;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
@@ -92,6 +90,13 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Content_Edit
     {
         SearchIndexInfo sii = SearchIndexInfoProvider.GetSearchIndexInfo(ItemID);
 
+        ScriptHelper.RegisterTooltip(Page);
+        ScriptHelper.AppendTooltip(iconHelpInclAtt, GetString("srch.index.includeattachments"), null);
+        ScriptHelper.AppendTooltip(iconHelpInclCats, GetString("srch.index.includecategories"), null);
+
+        chkInclAtt.ToolTipResourceString = lblIncludeAttachments.ToolTipResourceString = "srch.index.includeattachments";
+        chkInclCats.ToolTipResourceString = lblInclCats.ToolTipResourceString = "srch.index.includecategories";
+
         // If we are editing existing search index
         if (sii != null)
         {
@@ -113,7 +118,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Content_Edit
         }
 
         // Hide appropriate controls for excluded item
-        if ((ItemType == SearchIndexSettingsInfo.TYPE_EXLUDED) || ((sii != null) && (sii.IndexType == SearchHelper.DOCUMENTS_CRAWLER_INDEX)))
+        if (ItemType == SearchIndexSettingsInfo.TYPE_EXLUDED)
         {
             pnlAllowed.Visible = false;
         }
@@ -226,7 +231,7 @@ public partial class CMSModules_SmartSearch_Controls_UI_SearchIndex_Content_Edit
         if (eventArgument == "saved")
         {
             SearchIndexInfo sii = SearchIndexInfoProvider.GetSearchIndexInfo(ItemID);
-            if (sii.IndexType.Equals(TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase) || (sii.IndexType == SearchHelper.DOCUMENTS_CRAWLER_INDEX))
+            if (sii.IndexType.Equals(TreeNode.OBJECT_TYPE, StringComparison.OrdinalIgnoreCase))
             {
                 if (!SearchIndexCultureInfoProvider.SearchIndexHasAnyCulture(sii.IndexID))
                 {

@@ -55,7 +55,7 @@ public partial class CMSModules_Content_CMSDesk_Search_default
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMS.DocumentEngine.Web.UI.CMSRepeater repSearchSQL;
+    protected global::CMS.DocumentEngine.Web.UI.CMSSearchResults repSearchSQL;
 
     /// <summary>
     /// repSmartSearch control.

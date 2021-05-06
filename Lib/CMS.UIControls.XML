@@ -5375,6 +5375,12 @@
             Marks hotfix procedure end in the database.
             </summary>
         </member>
+        <member name="M:CMS.UIControls.HotfixHelper.UpdateHotfixDataVersion(System.Int32)">
+            <summary>
+            Updates hotfix data version setting (CMSHotfixDataVersion) in the database.
+            </summary>
+            <param name="hotfixDataVersion"></param>
+        </member>
         <member name="T:CMS.UIControls.HotfixProcedure">
             <summary>
             Applies additional hotfix changes which cannot be applied by the Hotfix utility.
@@ -5391,6 +5397,18 @@
         <member name="M:CMS.UIControls.HotfixProcedure.ApplyHotfix(System.Int32)">
             <summary>
             Applies hotfix to bring the database data from <paramref name="fromHotfixVersion"/> to current version.
+            </summary>
+            <param name="fromHotfixVersion">Hotfix version as applied by the last hotfix procedure run.</param>
+        </member>
+        <member name="M:CMS.UIControls.HotfixProcedure.ResignMacrosForProductRefresh(System.Int32)">
+            <summary>
+            Signs all macros (even already signed) of objects that has been modified for service pack with <see cref="P:CMS.Membership.UserInfoProvider.AdministratorUser"/>.
+            </summary>
+            <param name="fromHotfixVersion">Hotfix version as applied by the last hotfix procedure run.</param>
+        </member>
+        <member name="M:CMS.UIControls.HotfixProcedure.ResignMacrosForHotfix(System.Int32)">
+            <summary>
+            Signs all macros (even already signed) of objects that has been modified for hotfix with <see cref="P:CMS.Membership.UserInfoProvider.AdministratorUser"/>.
             </summary>
             <param name="fromHotfixVersion">Hotfix version as applied by the last hotfix procedure run.</param>
         </member>
@@ -7380,7 +7398,7 @@
             </summary>
             <param name="duration">Duration</param>
         </member>
-        <member name="M:CMS.UIControls.AllLog.GetInfo(System.Data.DataTable,System.Data.DataRow,System.Int32,System.Web.UI.Page)">
+        <member name="M:CMS.UIControls.AllLog.GetInfo(System.Data.DataTable,System.Data.DataRow,System.Double,System.Web.UI.Page)">
             <summary>
             Gets the formatted Info column.
             </summary>
@@ -7601,6 +7619,14 @@
             Gets the URL
             </summary>
             <param name="guid">Request GUID</param>
+        </member>
+        <member name="M:CMS.UIControls.LogControl.GetMaximumValue``1(System.Data.DataTable,System.String)">
+            <summary>
+            Gets the maximum value in type <typeparamref name="T"/> from the given <paramref name="column"/> within the table <paramref name="table"/>.
+            </summary>
+            <typeparam name="T">Comparable type</typeparam>
+            <param name="table">Table with data</param>
+            <param name="column">Specifies table column where the max value is sought</param>
         </member>
         <member name="M:CMS.UIControls.LogControl.GetIndex">
             <summary>
@@ -18386,6 +18412,11 @@
             Indicates whether current user has privilege level at least <see cref="F:CMS.Base.UserPrivilegeLevelEnum.Admin"/> on current site.
             </summary>
         </member>
+        <member name="P:CMS.UIControls.EmailQueuePage.UserHasRead">
+            <summary>
+            Indicates whether current user can read email queue.
+            </summary>
+        </member>
         <member name="P:CMS.UIControls.EmailQueuePage.UserHasModify">
             <summary>
             Indicates whether current user can modify email queue.
@@ -18393,7 +18424,7 @@
         </member>
         <member name="M:CMS.UIControls.EmailQueuePage.OnPreLoad(System.EventArgs)">
             <summary>
-            OnPreLoad event. 
+            OnPreLoad event.
             </summary>
         </member>
         <member name="T:CMS.UIControls.ICMSModalMasterPage">
@@ -18908,6 +18939,11 @@
         <member name="T:CMS.UIControls.CMSDebugPage">
             <summary>
             Base page for the debug tab of administration -> system pages to apply global settings to the pages.
+            </summary>
+        </member>
+        <member name="P:CMS.UIControls.CMSDebugPage.ShowLiveSiteData">
+            <summary>
+            Indicates whether the debug data are collected on the live site.
             </summary>
         </member>
         <member name="M:CMS.UIControls.CMSDebugPage.OnPreInit(System.EventArgs)">

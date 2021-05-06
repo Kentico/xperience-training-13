@@ -4,6 +4,28 @@
         <name>CMS.OnlineForms</name>
     </assembly>
     <members>
+        <member name="T:CMS.OnlineForms.ContactEmailFromFormRetriever">
+            <summary>
+            Retrieves contact email from <see cref="T:CMS.OnlineForms.BizFormItem"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.ContactEmailFromFormRetriever.Get(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Returns contact email from the given <paramref name="formItem"/>.
+            </summary>
+            <param name="formItem">Form item.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.CurrentContactFromFormUpdater">
+            <summary>
+            Encapsulates functionality that updates current contact based on form data.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.CurrentContactFromFormUpdater.Update(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Updates current contact based on the given <paramref name="formData"/>.
+            </summary>
+            <param name="formData">From data.</param>
+        </member>
         <member name="T:CMS.OnlineForms.FormActivityGenerator">
             <summary>
             Contains methods for generating sample activities data.
@@ -18,6 +40,23 @@
             <param name="document">Document to generate activity for</param>
             <param name="contactID">ID of contact the activity is generated for</param>
             <param name="siteId">Site to generate activity in</param>
+        </member>
+        <member name="T:CMS.OnlineForms.FormSubmissionActivityManager">
+            <summary>
+            Encapsulates form submission activity logging. The manager decides based on current context if the activity can be 
+            logged with full tracking consent support or if just legitimate insterest is available.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FormSubmissionActivityManager.LogActivity(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Performs form submission activity logging. 
+            </summary>
+            <param name="formItem">Form data.</param>
+            <remarks>The method logs form submission activity with data that are limited by available consent. 
+            If the tracking consent is given no data limitation is applied and the activity is logged in a  standard way. 
+            If tracking consent is not given, so-called "legitimate interest" is used which leads to limited activity data. 
+            In this case, a new contact is created for such activity (the current contact is not available).
+            The limited activity itself has applied neither UTM parameters nor AB test.</remarks>
         </member>
         <member name="T:CMS.OnlineForms.FormSubmitActivityInitializer">
             <summary>
@@ -48,6 +87,103 @@
             <summary>
             Activity settings key name, used to check whether activity logging is enabled.
             </summary>
+        </member>
+        <member name="T:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy">
+            <summary>
+            Logger that ensures form submission activity and current contact updating when tracking consent is available.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy.#ctor">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy.#ctor(CMS.Base.Internal.IHttpContextRetriever,CMS.Base.ISiteService,CMS.Activities.IActivityLogService)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy"/> class.
+            </summary>
+            <param name="httpContextRetriever">HTTP context retriever.</param>
+            <param name="siteService">Site service.</param>
+            <param name="activityLogService">Activity log service.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.FullConsentFormSubmissionActivityLoggingStrategy.Execute(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Executest activity logging and updates current contact with data from the given <paramref name="formItem"/>.
+            </summary>
+            <param name="formItem">Form item used as source of data for activity and contact.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.IContactEmailFromFormRetriever">
+            <summary>
+            Contract for retrieving contact email from <see cref="T:CMS.OnlineForms.BizFormItem"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IContactEmailFromFormRetriever.Get(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Returns contact email from the given <paramref name="formItem"/>.
+            </summary>
+            <param name="formItem">Form item.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.IFormSubmissionActivityLoggingStrategy">
+            <summary>
+            Contract for form submission activity logging strategies.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.IFormSubmissionActivityLoggingStrategy.Execute(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Executes strategy.
+            </summary>
+            <param name="formItem">Form item.</param>
+        </member>
+        <member name="T:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy">
+            <summary>
+            Logger that ensures form submission activity and corresponding when legitimate interest can be applied.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy.#ctor">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy.#ctor(CMS.ContactManagement.IContactCreator,CMS.ContactManagement.IContactInfoProvider,CMS.Base.ISiteService,CMS.Base.Internal.IHttpContextRetriever,CMS.Activities.IActivityLogService,CMS.OnlineForms.IContactEmailFromFormRetriever,CMS.DataEngine.ILicenseService,CMS.Activities.Internal.IActivitySettings)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy"/> class.
+            </summary>
+            <param name="contactCreator">Contact creator.</param>
+            <param name="contactInfoProvider">Contact info provider.</param>
+            <param name="siteService">Site service.</param>
+            <param name="httpContextRetriever">HTTP context retriever.</param>
+            <param name="activityLogService">Activity log service.</param>
+            <param name="contactEmailFromFormRetriever">Contact email retriever.</param>
+            <param name="licenseService">Licence service.</param>
+            <param name="activitySettings">Settings service.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.LegitimateInterestFormSubmissionActivityLoggingStrategy.Execute(CMS.OnlineForms.BizFormItem)">
+            <summary>
+            Executes form submission activity logging and creates related contact based on data from the given <paramref name="formItem"/>.
+            </summary>
+            <param name="formItem">Form item used as source of data for activity and contact.</param>
+            <remarks>If already exists a contact with the same email address as is the given <paramref name="formItem"/>,
+            new contact is not created but the existing one is reused.</remarks>
+        </member>
+        <member name="T:CMS.OnlineForms.LegitimateInterestFormSubmitActivityInitializer">
+            <summary>
+            Represents implementation of <see cref="T:CMS.Activities.IActivityInitializer"/> for form submission activity when legitimate interest is applied.
+            </summary>
+        </member>
+        <member name="M:CMS.OnlineForms.LegitimateInterestFormSubmitActivityInitializer.#ctor(CMS.OnlineForms.BizFormItem,CMS.ContactManagement.ContactInfo,CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.OnlineForms.LegitimateInterestFormSubmitActivityInitializer"/> class.
+            </summary>
+            <param name="recordItem">Specifies the inserted record the activity is related to.</param>
+            <param name="contact">Specifies the contact that performed the form submission.</param>
+            <param name="siteIdentifier">Site identifier.</param>
+        </member>
+        <member name="M:CMS.OnlineForms.LegitimateInterestFormSubmitActivityInitializer.Initialize(CMS.Activities.IActivityInfo)">
+            <summary>
+            Initializes <see cref="T:CMS.Activities.IActivityInfo"/> properties.
+            </summary>
+            <param name="activity">Activity to initialize.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="activity"/> is <c>null</c>,</exception>
         </member>
         <member name="T:CMS.OnlineForms.BizFormConstants">
             <summary>
@@ -1757,11 +1893,6 @@
         <member name="M:CMS.OnlineForms.OnlineFormsHandlers.CreateIndexIfNeeded(System.Object,CMS.DataEngine.ObjectEventArgs)">
             <summary>
             Ensures index existence after each <see cref="T:CMS.OnlineForms.FormClassInfo"/> info insert or update operation.
-            </summary>
-        </member>
-        <member name="M:CMS.OnlineForms.OnlineFormsHandlers.LogFormSubmitActivity(System.Object,CMS.OnlineForms.BizFormItemEventArgs)">
-            <summary>
-            Logs form submission activity.
             </summary>
         </member>
         <member name="M:CMS.OnlineForms.OnlineFormsHandlers.Insert(System.Object,CMS.DataEngine.ObjectEventArgs)">

@@ -8,7 +8,7 @@
                 EnableViewState="false" DisplayColon="true" AssociatedControlID="txtTableName" />
         </div>
         <div class="editing-form-value-cell">
-            <cms:CMSTextBox runat="server" ID="txtTableName" MaxLength="100" />
+            <cms:CMSTextBox runat="server" ID="txtTableName" MaxLength="60" />
         </div>
     </div>
     <div class="form-group">

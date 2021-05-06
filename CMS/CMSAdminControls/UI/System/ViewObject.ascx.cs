@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-
-using CMS.Base;
-
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.UI;
 
+using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Web.UI;
 using CMS.Helpers;
+using CMS.Helpers.Internal;
 using CMS.Membership;
 using CMS.UIControls;
+
+using Newtonsoft.Json.Linq;
 
 public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
 {
     #region "Constants"
 
     private const int MAX_HEADER_LEVEL = 6;
+    private const string JSON_TYPE_PROPERTY = "$type";
 
     #endregion
-    
+
 
     #region "Variables"
 
@@ -124,21 +128,13 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
                         ReadOnly = true
                     });
                 }
+                else if (obj is UnknownTypeDictionary<string, object>)
+                {
+                    WriteDictionary(headerLevel, "IDictionary (unknown type)", (IDictionary)obj);
+                }
                 else if (obj is IDictionary)
                 {
-                    var table = new DataTable("IDictionary");
-                    table.Columns.Add("Key");
-                    table.Columns.Add("Value");
-
-                    foreach (DictionaryEntry item in (IDictionary)obj)
-                    {
-                        var keyString = item.Key?.ToString() ?? "null";
-                        var valueString = item.Value?.ToString() ?? "null";
-
-                        table.Rows.Add(keyString, valueString);
-                    }
-
-                    WriteDataTable(table, headerLevel);
+                    WriteDictionary(headerLevel, "IDictionary", (IDictionary)obj);
                 }
                 else if (headerLevel < MAX_HEADER_LEVEL && obj is IEnumerable)
                 {
@@ -150,17 +146,31 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
                 }
                 else
                 {
-                    // Write regular object
-                    var objString = DataHelper.GetObjectString(obj);
-                    if (objString != typeName)
-                    {
-                        pnlContent.Controls.Add(new LiteralControl("<div>" + objString + "</div>"));
-                    }
+                    WriteObject(obj, headerLevel, typeName);
                 }
             }
         }
 
         pnlContent.Controls.Add(new LiteralControl("<br /><br />"));
+    }
+
+
+    private bool TryGetObject(JObject sourceObj, out object targetObj)
+    {
+        var objectTypeName = sourceObj[JSON_TYPE_PROPERTY].ToString();
+        if (objectTypeName != null)
+        {
+            var objectType = Type.GetType(objectTypeName);
+
+            if (objectType != null)
+            {
+                targetObj = sourceObj.ToObject(objectType);
+                return true;
+            }
+        }
+
+        targetObj = sourceObj;
+        return false;
     }
 
 
@@ -320,7 +330,7 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
         }
 
         var h = new LocalizedHeading { Text = text, Level = level };
-        
+
         pnlContent.Controls.Add(h);
     }
 
@@ -333,6 +343,75 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
     private void WriteObjectTypeHeader(string objectType, int level)
     {
         WriteHeader(GetString("general.objecttype") + ": " + objectType, level);
+    }
+
+
+    /// <summary>
+    /// Writes regular object to the output.
+    /// </summary>
+    /// <param name="obj">Object</param>
+    /// <param name="headerLevel">Header level</param>
+    /// <param name="typeName">Object type name</param>
+    private void WriteObject(object obj, int headerLevel, string typeName)
+    {
+        // Write regular object
+        var objString = DataHelper.GetObjectString(obj);
+        if (objString != typeName)
+        {
+            pnlContent.Controls.Add(new LiteralControl("<div>" + objString + "</div>"));
+        }
+        else
+        {
+            var objDict = new Dictionary<string, object>();
+            var objType = obj.GetType();
+
+            // struct
+            if (objType.IsValueType && !objType.IsEnum)
+            {
+                objDict = objType.GetFields(BindingFlags.Instance | BindingFlags.Public)
+                    .ToDictionary(prop => prop.Name, prop => prop.GetValue(obj));
+            }
+            // object
+            else
+            {
+                objDict = objType.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    .ToDictionary(prop => prop.Name, prop =>
+                    {
+                        var valTemp = prop.GetValue(obj, null);
+                        if (valTemp != null && valTemp is string)
+                        {
+                            return (string)valTemp;
+                        }
+                        return valTemp;
+                    });
+            }
+
+            WriteDictionary(headerLevel, String.Empty, objDict);
+        }
+    }
+
+
+    /// <summary>
+    /// Writes the object as dictionary to the output.
+    /// </summary>
+    /// <param name="headerLevel">Header level</param>
+    /// <param name="typeName">Object type name</param>
+    /// <param name="objDict">Object to write</param>
+    private void WriteDictionary(int headerLevel, string typeName, IDictionary objDict)
+    {
+        var table = new DataTable(typeName);
+        table.Columns.Add("Key");
+        table.Columns.Add("Value");
+
+        foreach (DictionaryEntry item in objDict)
+        {
+            var keyString = item.Key?.ToString() ?? "null";
+            var valueString = item.Value?.ToString() ?? "null";
+
+            table.Rows.Add(keyString, valueString);
+        }
+
+        WriteDataTable(table, headerLevel);
     }
 
 
@@ -353,7 +432,7 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
 
             // Add control for pager
             UIPager pagerElem = (UIPager)LoadUserControl("~/CMSAdminControls/UI/Pager/UIPager.ascx");
-            pagerElem.ID = dt.TableName + "_pager";
+            pagerElem.ID = $"{dt.TableName}_{pnlContent.Controls.OfType<UIPager>().Count() + 1}_pager";
             pagerElem.PageSizeOptions = "1,2,5,10,25,50,100";
             if (dt.Columns.Count > 10)
             {
@@ -364,6 +443,7 @@ public partial class CMSAdminControls_UI_System_ViewObject : CMSAdminEditControl
                 pagerElem.DefaultPageSize = 2;
             }
             pnlContent.Controls.Add(pagerElem);
+            pagerElem.ShowPageSize = false;
 
             // Add pager connector
             UniPagerConnector connectorElem = new UniPagerConnector();

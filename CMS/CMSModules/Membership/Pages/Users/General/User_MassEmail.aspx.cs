@@ -223,7 +223,9 @@ function IsSubjectEmpty()
         message.From = sender;
         if (plcText.Visible)
         {
-            message.Body = resolver.ResolveMacros(htmlText.ResolvedValue);
+            string emailBody = resolver.ResolveMacros(htmlText.ResolvedValue);
+            // Resolve relative URLs (leading with ~) which may eventually occur in ResolvedValue because its getter unresolves the links contained.
+            message.Body = URLHelper.MakeLinksAbsolute(emailBody);
         }
         if (plcPlainText.Visible)
         {

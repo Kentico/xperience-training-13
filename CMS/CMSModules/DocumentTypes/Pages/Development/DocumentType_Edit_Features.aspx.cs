@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
+using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Internal;
 using CMS.Helpers;
@@ -66,14 +67,29 @@ window.parent.location.href = currentParentUrl + '&tabname=features&saved=1'";
 
     private void Form_OnBeforeSave(object sender, EventArgs e)
     {
-        var needsFullRefresh = DocumentType.ClassHasURL != chbUrl.Checked;
+        var urlFeatureChanged = DocumentType.ClassHasURL != chbUrl.Checked;
 
         DocumentType.ClassUsesPageBuilder = chbPageBuilder.Checked;
         DocumentType.ClassIsNavigationItem = chbNavigationItem.Checked;
         DocumentType.ClassHasURL = chbUrl.Checked;
         DocumentType.ClassHasMetadata = chbMetadata.Checked;
 
-        if (needsFullRefresh)
+        if (urlFeatureChanged && !DocumentType.ClassHasURL)
+        {
+            if (!DocumentType.ClassIsCoupledClass && DocumentType.ClassSearchEnabled)
+            {
+                // Disable search when search tab is hidden
+                DocumentType.ClassSearchEnabled = false;
+            }
+
+            if (DocumentType.ClassIsCoupledClass && DocumentType.GetValue("ClassSearchIndexDataSource") != null && DocumentType.ClassSearchIndexDataSource != SearchIndexDataSourceEnum.ContentFields)
+            {
+                // Set ContentFields data source for coupled pages without URL feature
+                DocumentType.ClassSearchIndexDataSource = SearchIndexDataSourceEnum.ContentFields;
+            }
+        }
+
+        if (urlFeatureChanged)
         {
             ScriptHelper.RegisterStartupScript(Page, typeof(string), "RefreshParent", ScriptHelper.GetScript(REFRESH_PARENT_SCRIPT));
         }

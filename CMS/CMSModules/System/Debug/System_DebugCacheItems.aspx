@@ -1,13 +1,12 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_System_Debug_System_DebugCacheItems"
+﻿<%@ Page Language="C#" AutoEventWireup="false" Async="true" Inherits="CMSModules_System_Debug_System_DebugCacheItems"
     Theme="Default" MasterPageFile="~/CMSMasterPages/UI/SimplePage.master" Title="Group list"
     MaintainScrollPositionOnPostback="true"  Codebehind="System_DebugCacheItems.aspx.cs" %>
 <%@ Register Src="CacheItemsGrid.ascx" TagName="CacheItemsGrid" TagPrefix="cms" %>
 
 <asp:Content ContentPlaceHolderID="plcActions" runat="server">
-    <div class="header-actions-container">
-        <cms:CMSButton runat="server" ID="btnClear" OnClick="btnClear_Click" ButtonStyle="Default"
-            EnableViewState="false" />
-    </div>
+    <asp:Panel runat="server" ID="pnlHeaderActions" CssClass="header-actions-container">
+        <cms:CMSButton runat="server" ID="btnClear" OnClick="btnClear_Click" ButtonStyle="Default" EnableViewState="false" />
+    </asp:Panel>
 </asp:Content>
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">
     <asp:Panel runat="server" style="padding-bottom: 32px">

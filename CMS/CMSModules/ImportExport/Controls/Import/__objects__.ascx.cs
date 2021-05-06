@@ -168,13 +168,13 @@ InitCheckboxes();
             else
             {
                 chkUpdateSite.Checked = ValidationHelper.GetBoolean(updateSiteDefinition, !singleObject);
-            }      
+            }
 
             chkSkipOrfans.Checked = ValidationHelper.GetBoolean(ImportSettings.GetSettings(ImportExportHelper.SETTINGS_SKIP_OBJECT_ON_TRANSLATION_ERROR), false);
             chkImportTasks.Checked = ValidationHelper.GetBoolean(ImportSettings.GetSettings(ImportExportHelper.SETTINGS_TASKS), true);
             chkLogSync.Checked = ImportSettings.LogSynchronization;
             chkLogInt.Checked = ImportSettings.LogIntegration;
-            chkRebuildIndexes.Checked = ImportSettings.SiteIsIncluded;
+            chkRebuildIndexes.Checked = ImportSettings.RebuildSearchIndex;
             chkRebuildIndexes.Visible = ImportSettings.SiteIsIncluded;
 
             Visible = true;
