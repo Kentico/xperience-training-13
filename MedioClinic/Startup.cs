@@ -33,6 +33,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
+using MedioClinic.PageTemplates.PageTemplateFilters;
 
 namespace MedioClinic
 {
@@ -113,6 +114,7 @@ namespace MedioClinic
             var xperienceOptions = Options.Get<XperienceOptions>();
 
             ConfigureIdentityServices(services, xperienceOptions);
+            ConfigurePageBuilderFilters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -411,6 +413,14 @@ namespace MedioClinic
                     options.RetrieveUserDetails = true;
                 });
             }
+        }
+
+        /// <summary>
+        /// Configures the page template filters.
+        /// </summary>
+        private static void ConfigurePageBuilderFilters()
+        {
+            PageBuilderFilters.PageTemplates.Add(new EventPageTemplateFilter());
         }
     }
 }

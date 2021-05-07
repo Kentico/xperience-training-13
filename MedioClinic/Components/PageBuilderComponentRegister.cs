@@ -10,13 +10,19 @@ using Kentico.PageBuilder.Web.Mvc.PageTemplates;
 using MedioClinic.Components;
 using MedioClinic.Models;
 using MedioClinic.Models.FormComponents;
+using MedioClinic.PageTemplates.LandingPage;
 
-// TODO: Localize.
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.BasicPageTemplate,
-    "Basic page template",
+    "{$PageTemplate.BasicTemplate.Title$}",
     typeof(PageTemplateProperties),
-    Description = "A barebone page template with no special layout.")]
+    Description = "{$PageTemplate.BasicTemplate.Description$}")]
+
+[assembly: RegisterPageTemplate(
+    ComponentIdentifiers.EventPageTemplate,
+    "{$PageTemplate.EventTemplate.Title$}",
+    typeof(EventLandingPageProperties),
+    Description = "{$PageTemplate.EventTemplate.Description$}")]
 
 [assembly: RegisterFormComponent(
     ComponentIdentifiers.AirportSelectionFormComponent,
