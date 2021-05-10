@@ -33,7 +33,7 @@ using MedioClinic.Configuration;
 using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
-using MedioClinic.PageTemplates.PageTemplateFilters;
+using MedioClinic.PageTemplates;
 
 namespace MedioClinic
 {

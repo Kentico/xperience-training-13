@@ -11,10 +11,18 @@ namespace MedioClinic.Components
 
         private const string FormComponentPrefix = Prefix + "FormComponent.";
 
-        public const string BasicPageTemplate = Prefix + "BasicPageTemplate";
+        private const string PageTemplatePrefix = Prefix + "PageTemplate.";
 
-        public const string EventPageTemplate = Prefix + "EventPageTemplate";
+        private const string PageSectionPrefix = Prefix + "Section.";
+
+        public const string BasicPageTemplate = PageTemplatePrefix + "Basic";
+
+        public const string EventPageTemplate = PageTemplatePrefix + "Event";
 
         public const string AirportSelectionFormComponent = FormComponentPrefix + "AirportSelection";
+
+        public const string SingleColumnSection = PageSectionPrefix + "SingleColumn";
+
+        public const string TwoColumnSection = PageSectionPrefix + "TwoColumn";
     }
 }

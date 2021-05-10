@@ -9,26 +9,43 @@ using Kentico.PageBuilder.Web.Mvc.PageTemplates;
 
 using MedioClinic.Components;
 using MedioClinic.Models;
-using MedioClinic.Models.FormComponents;
-using MedioClinic.PageTemplates.LandingPage;
+using MedioClinic.Components.FormComponents;
+using MedioClinic.PageTemplates;
 
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.BasicPageTemplate,
-    "{$PageTemplate.BasicTemplate.Title$}",
+    "{$" + ComponentIdentifiers.BasicPageTemplate + ".Title$}",
     typeof(PageTemplateProperties),
-    Description = "{$PageTemplate.BasicTemplate.Description$}")]
+    customViewName: "~/PageTemplates/_BasicTemplate.cshtml",
+    Description = "{$" + ComponentIdentifiers.BasicPageTemplate + ".Description$}")]
 
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.EventPageTemplate,
-    "{$PageTemplate.EventTemplate.Title$}",
+    "{$" + ComponentIdentifiers.EventPageTemplate + ".Title$}",
     typeof(EventLandingPageProperties),
-    Description = "{$PageTemplate.EventTemplate.Description$}")]
+    customViewName: "~/PageTemplates/_EventTemplate.cshtml",
+    Description = "{$" + ComponentIdentifiers.EventPageTemplate + ".Description$}")]
 
 [assembly: RegisterFormComponent(
     ComponentIdentifiers.AirportSelectionFormComponent,
-    typeof(AirportSelectionComponent),
-    "{$FormComponent.AirportSelection.Name$}",
+    typeof(AirportSelection),
+    "{$" + ComponentIdentifiers.AirportSelectionFormComponent + ".Title$}",
     IsAvailableInFormBuilderEditor = false,
-    ViewName = "FormComponents/_AirportSelection",
-    Description = "{$FormComponent.AirportSelection.Description$}",
+    ViewName = "~/Components/FormComponents/_AirportSelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.AirportSelectionFormComponent + ".Description$}",
     IconClass = "icon-menu")]
+
+[assembly: RegisterSection(
+    ComponentIdentifiers.SingleColumnSection,
+    "{$" + ComponentIdentifiers.SingleColumnSection + ".Title$}",
+    customViewName: "~/Components/Sections/_SingleColumn.cshtml",
+    Description = "{$" + ComponentIdentifiers.SingleColumnSection + ".Description$}",
+    IconClass = "icon-square")]
+
+[assembly: RegisterSection(
+    ComponentIdentifiers.TwoColumnSection,
+    "{$" + ComponentIdentifiers.TwoColumnSection + ".Title$}",
+    propertiesType: typeof(MedioClinic.Components.Sections.TwoColumnProperties),
+    customViewName: "~/Components/Sections/_TwoColumn.cshtml",
+    Description = "{$" + ComponentIdentifiers.TwoColumnSection + ".Description$}",
+    IconClass = "icon-l-cols-2")]
