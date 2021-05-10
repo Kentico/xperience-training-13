@@ -15,6 +15,8 @@ namespace MedioClinic.Components
 
         private const string PageSectionPrefix = Prefix + "Section.";
 
+        private const string WidgetPrefix = Prefix + "Widget.";
+
         public const string BasicPageTemplate = PageTemplatePrefix + "Basic";
 
         public const string EventPageTemplate = PageTemplatePrefix + "Event";
@@ -24,5 +26,7 @@ namespace MedioClinic.Components
         public const string SingleColumnSection = PageSectionPrefix + "SingleColumn";
 
         public const string TwoColumnSection = PageSectionPrefix + "TwoColumn";
+
+        public const string TextWidget = WidgetPrefix + "Text";
     }
 }

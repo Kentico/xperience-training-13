@@ -1,0 +1,20 @@
+﻿@using MedioClinic.Components.InlineEditors
+@using MedioClinic.Components.Widgets
+@model ComponentViewModel<MedioClinic.Components.Widgets.TextProperties>
+
+@inject IPageBuilderDataContextRetriever ContextRetriever
+
+@if (ContextRetriever.Retrieve().EditMode)
+{
+    var model = new TextViewModel
+    {
+        PropertyName = nameof(TextProperties.Text),
+        Text = Model.Properties.Text
+    };
+
+    <partial name="~/Components/InlineEditors/_Text.cshtml" model="model" />
+}
+else
+{
+    @Html.Raw(Model.Properties.Text);
+}

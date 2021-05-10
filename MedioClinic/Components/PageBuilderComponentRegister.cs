@@ -22,7 +22,7 @@ using MedioClinic.PageTemplates;
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.EventPageTemplate,
     "{$" + ComponentIdentifiers.EventPageTemplate + ".Title$}",
-    typeof(EventLandingPageProperties),
+    typeof(EventTemplateProperties),
     customViewName: "~/PageTemplates/_EventTemplate.cshtml",
     Description = "{$" + ComponentIdentifiers.EventPageTemplate + ".Description$}")]
 
@@ -49,3 +49,11 @@ using MedioClinic.PageTemplates;
     customViewName: "~/Components/Sections/_TwoColumn.cshtml",
     Description = "{$" + ComponentIdentifiers.TwoColumnSection + ".Description$}",
     IconClass = "icon-l-cols-2")]
+
+[assembly: RegisterWidget(
+    ComponentIdentifiers.TextWidget,
+    "{$" + ComponentIdentifiers.TextWidget + ".Title$}",
+    typeof(MedioClinic.Components.Widgets.TextProperties),
+    customViewName: "~/Components/Widgets/_Text.cshtml",
+    Description = "{$" + ComponentIdentifiers.TextWidget + ".Description$}",
+    IconClass = "icon-l-text")]

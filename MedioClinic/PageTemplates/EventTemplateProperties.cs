@@ -12,7 +12,7 @@ using MedioClinic.Components.FormComponents;
 
 namespace MedioClinic.PageTemplates
 {
-    public class EventLandingPageProperties : PageTemplateProperties
+    public class EventTemplateProperties : PageTemplateProperties
     {
         [EditingComponent(ComponentIdentifiers.AirportSelectionFormComponent,
             Label = "{$" + ComponentIdentifiers.AirportSelectionFormComponent + ".LocationAirport$}",
