@@ -30,5 +30,7 @@ namespace MedioClinic.Components
         public const string TextWidget = WidgetPrefix + "Text";
 
         public const string ImageWidget = WidgetPrefix + "Image";
+
+        public const string MediaLibrarySelectionFormComponent = FormComponentPrefix + "MediaLibrarySelection";
     }
 }

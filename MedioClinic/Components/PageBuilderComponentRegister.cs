@@ -73,3 +73,12 @@ using MedioClinic.PageTemplates;
     IconClass = "icon-picture")]
 
 [assembly: RegisterPageBuilderLocalizationResource(typeof(ImageUploaderResource), "en-US")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.MediaLibrarySelectionFormComponent,
+    typeof(MediaLibrarySelection),
+    "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = false,
+    ViewName = "~/Components/FormComponents/_MediaLibrarySelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Description$}",
+    IconClass = "icon-menu")]
