@@ -211,9 +211,9 @@ namespace Identity
             var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
             var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions?.FileSizeLimit;
 
-            if (avatarFile != null && allowedExtensions?.Any() == true)
+            if (avatarFile != null && allowedExtensions?.Any() == true && fileSizeLimit.HasValue)
             {
-                var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit!.Value);
+                var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit.Value);
 
                 if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
                 {

@@ -28,5 +28,7 @@ namespace MedioClinic.Components
         public const string TwoColumnSection = PageSectionPrefix + "TwoColumn";
 
         public const string TextWidget = WidgetPrefix + "Text";
+
+        public const string ImageWidget = WidgetPrefix + "Image";
     }
 }

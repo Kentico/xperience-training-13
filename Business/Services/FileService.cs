@@ -83,28 +83,73 @@ namespace Business.Services
                     return (FormFileResultState.FileEmpty, null);
                 }
 
+                var safeName = GetSafeFileName(formFile.FileName);
+                FormFile renamedFile;
+
+                var stream = formFile.OpenReadStream();
+                renamedFile = new FormFile(stream,
+                                        0,
+                                        stream.Length,
+                                        safeName.Name,
+                                        $"{safeName.Name}.{safeName.Extension}");
+
                 if (!IsValidFileExtensionAndSignature(
-                    formFile.FileName, memoryStream, permittedExtensions))
+                    safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))
                 {
                     return (FormFileResultState.ForbiddenFileType, null);
                 }
                 else
                 {
-                    return (FormFileResultState.FileOk, new UploadedFile(formFile));
+                    return (FormFileResultState.FileOk, new UploadedFile(renamedFile));
                 }
             }
         }
 
-        private static bool IsValidFileExtensionAndSignature(string fileName, Stream data, string[] permittedExtensions)
+        public (string Name, string Extension) GetSafeFileName(string completeFileName)
+        {
+            if (string.IsNullOrEmpty(completeFileName))
+            {
+                throw new ArgumentException("File name is null or an empty string.", nameof(completeFileName));
+            }
+
+            var separator = '.';
+            var segments = completeFileName.Split(separator);
+            string name, extension;
+
+            if (segments?.Length > 1)
+            {
+                var subtractedLength = segments.Length - 1;
+                string[] segmentsExceptLast = new string[subtractedLength];
+                Array.Copy(segments, segmentsExceptLast, subtractedLength);
+                name = segmentsExceptLast.Length == 1 ? segmentsExceptLast[0] : string.Join(separator.ToString(), segmentsExceptLast);
+                extension = segments[subtractedLength];
+            }
+            else
+            {
+                name = completeFileName;
+                extension = null;
+            }
+
+            var safeName = RemoveNonLettersOrDigits(name)?.ToLowerInvariant();
+            var safeExtension = RemoveNonLettersOrDigits(extension)?.ToLowerInvariant();
+
+            return (safeName, safeExtension);
+        }
+
+        private static string RemoveNonLettersOrDigits(string input) =>
+             new string((from c in input
+                         where char.IsWhiteSpace(c) || char.IsLetterOrDigit(c)
+                         select c)
+                .ToArray());
+
+        private static bool IsValidFileExtensionAndSignature(string fileName, string fileExtension, Stream data, string[] permittedExtensions)
         {
             if (string.IsNullOrEmpty(fileName) || data == null || data.Length == 0)
             {
                 return false;
             }
 
-            var ext = Path.GetExtension(fileName).ToLowerInvariant();
-
-            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            if (string.IsNullOrEmpty(fileExtension) || !permittedExtensions.Contains(fileExtension))
             {
                 return false;
             }
@@ -113,7 +158,7 @@ namespace Business.Services
 
             using (var reader = new BinaryReader(data))
             {
-                if (ext.Equals(".txt") || ext.Equals(".csv") || ext.Equals(".prn"))
+                if (fileExtension.Equals(".txt") || fileExtension.Equals(".csv") || fileExtension.Equals(".prn"))
                 {
                     if (_allowedChars.Length == 0)
                     {
@@ -149,7 +194,7 @@ namespace Business.Services
                 // With the file signatures provided in the _fileSignature
                 // dictionary, the following code tests the input content's
                 // file signature.
-                var signatures = _fileSignature[ext];
+                var signatures = _fileSignature[fileExtension];
                 var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
 
                 return signatures.Any(signature =>

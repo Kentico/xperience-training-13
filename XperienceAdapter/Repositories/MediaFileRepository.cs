@@ -43,11 +43,19 @@ namespace XperienceAdapter.Repositories
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         }
 
-        public async Task<Guid> AddMediaFileAsync(string filePath, string mediaLibraryName, string? libraryFolderPath = default, bool checkPermissions = default)
+        public async Task<Guid> AddMediaFileAsync(IUploadedFile uploadedFile,
+                                                  string mediaLibraryName,
+                                                  string? libraryFolderPath = default,
+                                                  bool checkPermissions = default)
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (uploadedFile is null)
             {
-                throw new ArgumentException("File path was not specified.", nameof(filePath));
+                throw new ArgumentNullException(nameof(uploadedFile));
+            }
+
+            if (string.IsNullOrEmpty(mediaLibraryName))
+            {
+                throw new ArgumentException($"'{nameof(mediaLibraryName)}' cannot be null or empty.", nameof(mediaLibraryName));
             }
 
             return await AddMediaFileAsyncImplementation();
@@ -73,17 +81,19 @@ namespace XperienceAdapter.Repositories
                         $"The user {MembershipContext.AuthenticatedUser.FullName} lacks permissions to the {mediaLibraryName} library.");
                 }
 
-                MediaFileInfo mediaFile = !string.IsNullOrEmpty(libraryFolderPath)
-                    ? new MediaFileInfo(filePath, mediaLibraryInfo.LibraryID, libraryFolderPath)
-                    : new MediaFileInfo(filePath, mediaLibraryInfo.LibraryID);
+                MediaFileInfo mediaFile = default;
 
-                var fileInfo = FileInfo.New(filePath);
-                mediaFile.FileName = fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length);
-                mediaFile.FileExtension = fileInfo.Extension;
-                mediaFile.FileMimeType = MimeTypeHelper.GetMimetype(fileInfo.Extension);
-                mediaFile.FileSiteID = siteId;
-                mediaFile.FileLibraryID = mediaLibraryInfo.LibraryID;
-                mediaFile.FileSize = fileInfo.Length;
+                try
+                {
+                    mediaFile = !string.IsNullOrEmpty(libraryFolderPath)
+                ? new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID, libraryFolderPath)
+                : new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID);
+                }
+                catch (Exception)
+                {
+                    throw new Exception($"The {uploadedFile.FileName} file could not be created in the {mediaLibraryInfo.LibraryName} library.");
+                }
+
                 _mediaFileInfoProvider.Set(mediaFile);
 
                 return mediaFile.FileGUID;

@@ -1,0 +1,33 @@
+﻿@using MedioClinic.Components.InlineEditors
+@using MedioClinic.Components.Widgets
+@model ImageViewModel
+
+@inject IPageBuilderDataContextRetriever ContextRetriever
+
+@{
+    var relativePath = Model?.MediaLibraryFile?.MediaFileUrl?.RelativePath;
+
+    if (Model?.HasImage == true && !string.IsNullOrEmpty(relativePath))
+    {
+        <img src="@Url.Content(relativePath)" class="responsive-img" />
+    }
+    else
+    {
+        <div class="dz-message">@ResHelper.GetString("General.ImageDoesntExist")</div>
+    }
+
+    var context = ContextRetriever.Retrieve();
+
+    if (context.EditMode)
+    {
+        var model = new ImageUploaderViewModel
+        {
+            PropertyName = nameof(ImageProperties.ImageGuid),
+            PageId = Model.PageId,
+            HasImage = Model.HasImage,
+            MediaLibraryViewModel = Model.MediaLibraryViewModel
+        };
+
+        <partial name="~/Components/InlineEditors/_ImageUploader.cshtml" model="model" />
+    }
+}

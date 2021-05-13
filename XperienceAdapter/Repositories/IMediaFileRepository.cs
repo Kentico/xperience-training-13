@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
+using CMS.Base;
+
 using Core;
 using XperienceAdapter.Models;
 
@@ -20,7 +22,7 @@ namespace XperienceAdapter.Repositories
         /// <param name="libraryFolderPath">Library folder path.</param>
         /// <param name="checkPermisions">Indicates if permissions shall be verified.</param>
         /// <returns></returns>
-        Task<Guid> AddMediaFileAsync(string filePath, string mediaLibraryName, string? libraryFolderPath = default, bool checkPermisions = default);
+        Task<Guid> AddMediaFileAsync(IUploadedFile uploadedFile, string mediaLibraryName, string? libraryFolderPath = default, bool checkPermisions = default);
 
         /// <summary>
         /// Gets media files.
