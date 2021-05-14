@@ -45,12 +45,10 @@ namespace MedioClinic.Components.Widgets
                 PageId = componentViewModel?.Page?.DocumentID,
                 HasImage = mediaFile?.MediaFileUrl?.IsImage == true,
                 MediaLibraryFile = mediaFile,
-                MediaLibraryViewModel = new MediaLibraryViewModel
-                {
-                    AllowedFileExtensions = _optionsMonitor.CurrentValue?.MediaLibraryOptions?.AllowedImageExtensions.ToHashSet(),
-                    LibraryName = properties?.MediaLibraryName,
-                }
             };
+
+            model.MediaLibraryViewModel.AllowedFileExtensions = _optionsMonitor.CurrentValue?.MediaLibraryOptions?.AllowedImageExtensions.ToHashSet();
+            model.MediaLibraryViewModel.LibraryName = properties?.MediaLibraryName;
 
             return View("~/Components/Widgets/_Image.cshtml", model);
         }

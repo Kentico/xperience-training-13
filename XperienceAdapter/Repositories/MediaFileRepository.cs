@@ -145,6 +145,16 @@ namespace XperienceAdapter.Repositories
                 cancellationToken);
         }
 
+        public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, IEnumerable<Guid> fileGuids, CancellationToken? cancellationToken = default)
+        {
+            var libraryId = GetLibraryId(mediaLibraryName);
+
+            return await GetResultAsync(baseQuery =>
+                baseQuery
+                    .WhereIn("FileGUID", fileGuids.ToArray()),
+                cancellationToken);
+        }
+
         public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default) =>
             await GetResultAsync(null, cancellationToken: cancellationToken);
 

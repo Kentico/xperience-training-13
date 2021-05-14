@@ -4,17 +4,19 @@
 
 @inject IPageBuilderDataContextRetriever ContextRetriever
 
-@if (ContextRetriever.Retrieve().EditMode)
+@{ var text = Model?.Properties?.Text; } 
+
+@if (ContextRetriever?.Retrieve()?.EditMode == true)
 {
     var model = new TextViewModel
     {
         PropertyName = nameof(TextProperties.Text),
-        Text = Model.Properties.Text
+        Text = text
     };
 
     <partial name="~/Components/InlineEditors/_Text.cshtml" model="model" />
 }
 else
 {
-    @Html.Raw(Model.Properties.Text);
+    @Html.Raw(text);
 }

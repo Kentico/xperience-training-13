@@ -82,3 +82,14 @@ using MedioClinic.PageTemplates;
     ViewName = "~/Components/FormComponents/_MediaLibrarySelection.cshtml",
     Description = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Description$}",
     IconClass = "icon-menu")]
+
+[assembly: RegisterWidget(
+    ComponentIdentifiers.SlideshowWidget,
+    typeof(SlideshowViewComponent),
+    "{$" + ComponentIdentifiers.SlideshowWidget + ".Title$}",
+    typeof(SlideshowProperties),
+    //AllowCache = true,
+    Description = "{$" + ComponentIdentifiers.SlideshowWidget + ".Description$}",
+    IconClass = "icon-carousel")]
+
+[assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US")]

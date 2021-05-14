@@ -1,0 +1,27 @@
+﻿@using MedioClinic.Components.InlineEditors
+@model SlideshowEditorViewModel
+
+@{
+    string SerializeGuids(IEnumerable<Guid> guids) =>
+        string.Concat(guids.Select(guid => $"{guid.ToString()};"));
+}
+
+@using (Html.Kentico().BeginInlineEditor("slideshow-editor", Model.PropertyName,
+   new
+   {
+       @class = "mc-slideshow-editor",
+       data_swiper_guid = Model?.SwiperId,
+       data_media_library_name = Model?.MediaLibraryViewModel?.LibraryName,
+       data_image_guids = SerializeGuids(Model?.Images?.Select(image => image.Guid)),
+       data_allowed_image_extensions = string.Join(";", Model?.MediaLibraryViewModel?.AllowedFileExtensions)
+   }))
+{
+    <ul class="mc-slideshow-buttons">
+        <li>
+            <button class="mc-swiper-plus">+</button>
+        </li>
+        <li>
+            <button class="mc-swiper-minus">-</button>
+        </li>
+    </ul>
+}

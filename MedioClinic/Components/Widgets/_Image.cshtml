@@ -16,16 +16,14 @@
         <div class="dz-message">@ResHelper.GetString("General.ImageDoesntExist")</div>
     }
 
-    var context = ContextRetriever.Retrieve();
-
-    if (context.EditMode)
+    if (ContextRetriever?.Retrieve()?.EditMode == true)
     {
         var model = new ImageUploaderViewModel
         {
             PropertyName = nameof(ImageProperties.ImageGuid),
-            PageId = Model.PageId,
-            HasImage = Model.HasImage,
-            MediaLibraryViewModel = Model.MediaLibraryViewModel
+            PageId = Model?.PageId,
+            HasImage = Model?.HasImage == true,
+            MediaLibraryViewModel = Model?.MediaLibraryViewModel
         };
 
         <partial name="~/Components/InlineEditors/_ImageUploader.cshtml" model="model" />

@@ -23,8 +23,14 @@ namespace MedioClinic.Components.Widgets
         /// </summary>
         public bool HasImage { get; set; }
 
+        /// <summary>
+        /// Media library file.
+        /// </summary>
         public MediaLibraryFile? MediaLibraryFile { get; set; }
 
-        public MediaLibraryViewModel? MediaLibraryViewModel { get; set; }
+        /// <summary>
+        /// Info about the media library in use.
+        /// </summary>
+        public MediaLibraryViewModel MediaLibraryViewModel { get; set; } = new MediaLibraryViewModel();
     }
 }
