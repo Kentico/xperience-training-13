@@ -72,7 +72,7 @@ using MedioClinic.PageTemplates;
     Description = "{$" + ComponentIdentifiers.ImageWidget + ".Description$}",
     IconClass = "icon-picture")]
 
-[assembly: RegisterPageBuilderLocalizationResource(typeof(ImageUploaderResource), "en-US")]
+[assembly: RegisterPageBuilderLocalizationResource(typeof(ImageUploaderResource), "en-US", "es-ES")]
 
 [assembly: RegisterFormComponent(
     ComponentIdentifiers.MediaLibrarySelectionFormComponent,
@@ -92,4 +92,4 @@ using MedioClinic.PageTemplates;
     Description = "{$" + ComponentIdentifiers.SlideshowWidget + ".Description$}",
     IconClass = "icon-carousel")]
 
-[assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US")]
+[assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US", "es-ES")]
