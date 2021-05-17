@@ -6,7 +6,7 @@
         Model.HasImage == true ? "mc-image-uploader-container" : "mc-image-uploader-empty-container";
 
     // Gets the URL for the ImageUploaderController's action.
-    IHtmlContentProxy GetActionUrl()
+    Microsoft.AspNetCore.Html.IHtmlContent GetActionUrl() //avoid using proxies if the project is not multitargeting
     {
         var url = Url.Kentico().AuthenticateUrl(Url.Action("Upload", "ImageUploader", new
         {
@@ -29,7 +29,7 @@
     <div class="@GetContainerClass()">
         <div class="dz-uploader">
             <div class="dz-message top">
-                @Html.Raw(ResHelper.GetString("InlineEditor.ImageUploader.Dropzone.DropText"))
+                @Html.Raw(ResHelper.GetString("InlineEditor.ImageUploader.Dropzone.DropText")) @*try the ihtmllocalizer - the MS approach isntead of ours*@
             </div>
         </div>
     </div>

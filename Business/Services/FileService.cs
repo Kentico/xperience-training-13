@@ -92,7 +92,7 @@ namespace Business.Services
                                         stream.Length,
                                         safeName.Name,
                                         $"{safeName.Name}.{safeName.Extension}");
-
+                
                 if (!IsValidFileExtensionAndSignature(
                     safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))
                 {

@@ -28,11 +28,6 @@ namespace Business.Services
                 throw new ArgumentException($"The page is not of type {nameof(EventLandingPage)}.", nameof(page));
             }
 
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
-
             var landingPagePath = page.NodeAliasPath;
 
             if (!string.IsNullOrEmpty(landingPagePath))

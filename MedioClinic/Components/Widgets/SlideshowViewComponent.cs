@@ -55,7 +55,7 @@ namespace MedioClinic.Components.Widgets
             return View("~/Components/Widgets/_Slideshow.cshtml", model);
         }
 
-        private static IEnumerable<MediaLibraryFile> ReorderFilesByGuids(IEnumerable<MediaLibraryFile> mediaLibraryFiles, IEnumerable<Guid> guids)
+        private static IEnumerable<MediaLibraryFile> ReorderFilesByGuids(IEnumerable<MediaLibraryFile> mediaLibraryFiles, IEnumerable<Guid> guids) //unsued, why not linq - Where|OrderBy and so on?
         {
             if (guids is null)
             {

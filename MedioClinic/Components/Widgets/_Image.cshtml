@@ -2,8 +2,6 @@
 @using MedioClinic.Components.Widgets
 @model ImageViewModel
 
-@inject IPageBuilderDataContextRetriever ContextRetriever
-
 @{
     var relativePath = Model?.MediaLibraryFile?.MediaFileUrl?.RelativePath;
 
@@ -16,7 +14,7 @@
         <div class="dz-message">@ResHelper.GetString("General.ImageDoesntExist")</div>
     }
 
-    if (ContextRetriever?.Retrieve()?.EditMode == true)
+    if (Context.Kentico().PageBuilder().EditMode)
     {
         var model = new ImageUploaderViewModel
         {

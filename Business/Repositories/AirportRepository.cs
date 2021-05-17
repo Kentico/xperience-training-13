@@ -20,7 +20,7 @@ namespace Business.Repositories
 
         private const string Name = "AirportName";
 
-        public IEnumerable<Airport> GetAll() => GetAllAsync().GetAwaiter().GetResult();
+        public IEnumerable<Airport> GetAll() => GetAllAsync().Result;
 
         public async Task<IEnumerable<Airport>> GetAllAsync(CancellationToken? cancellationToken = default) =>
             await GetResultAsync(null, cancellationToken);
