@@ -1,19 +1,23 @@
 ﻿@using Identity.Models.Profile
 @model PageViewModel<IUserViewModel>
+@inject IStringLocalizer<SharedResource> StringLocalizer
 
 @{
     var templateName = Model.Data.GetType()?.Name;
+
+    var routeData = new Dictionary<string, string>()
+    {
+        ["enctype"] = "multipart/form-data"
+    };
 }
 
-@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<form method="post" asp-all-route-data="@routeData">
     <main class="row mc-page-fixed">
         <div class="container mc-section-4">
             <h1>@Html.DisplayFor(m => m.Metadata.Title)</h1>
             @Html.ValidationSummary()
             @Html.EditorFor(m => m.Data, templateName)
-            <button class="btn waves-effect waves-light" type="submit">@ResHelper.GetString("General.Save")</button>
+            <button class="btn waves-effect waves-light" type="submit">@StringLocalizer["General.Save"]</button>
         </div>
     </main>
-}
+</form>

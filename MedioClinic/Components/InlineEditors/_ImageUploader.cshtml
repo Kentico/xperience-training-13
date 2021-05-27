@@ -1,6 +1,7 @@
-﻿@using Microsoft.AspNetCore.Html 
+﻿@using Microsoft.AspNetCore.Html
 @using MedioClinic.Components.InlineEditors
 @model ImageUploaderViewModel
+@inject IStringLocalizer<SharedResource> StringLocalizer
 
 @functions{
     /// <summary>
@@ -23,17 +24,18 @@
 }
 
 @using (Html.Kentico().BeginInlineEditor("image-uploader", Model.PropertyName,
-  new
-  {
-      @class = "mc-image-uploader-editor",
-      data_upload_url = GetActionUrl().ToString(),
-      data_allowed_image_extensions = string.Join(",", Model.MediaLibraryViewModel.AllowedFileExtensions)
-  }))
+ new
+ {
+     @class = "mc-image-uploader-editor",
+     data_upload_url = GetActionUrl().ToString(),
+     data_allowed_image_extensions = string.Join(",", Model.MediaLibraryViewModel.AllowedFileExtensions)
+ }))
 {
     <div class="@GetContainerClass()">
         <div class="dz-uploader">
             <div class="dz-message top">
-                @Html.Raw(ResHelper.GetString("InlineEditor.ImageUploader.Dropzone.DropText"))
+                @*TODO: Implement IHtmlLocalizer*@
+                @Html.Raw(StringLocalizer["InlineEditor.ImageUploader.Dropzone.DropText"])
             </div>
         </div>
     </div>

@@ -187,7 +187,7 @@ namespace XperienceAdapter.Repositories
         public async Task<IEnumerable<MediaLibraryFile>> GetAllAsync(CancellationToken? cancellationToken = default) =>
             await GetResultAsync(null, cancellationToken: cancellationToken);
 
-        public IEnumerable<MediaLibraryFile> GetAll() => GetAllAsync().GetAwaiter().GetResult();
+        public IEnumerable<MediaLibraryFile> GetAll() => GetResult(null);
 
         /// <summary>
         /// Gets a media library ID by its code name.
@@ -215,6 +215,22 @@ namespace XperienceAdapter.Repositories
             Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter,
             CancellationToken? cancellationToken)
         {
+            var query = GetQuery(filter);
+
+            return (await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
+                .Select(item => MapDtoProperties(item));
+        }
+
+        private IEnumerable<MediaLibraryFile> GetResult(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter)
+        {
+            var query = GetQuery(filter);
+
+            return query.GetEnumerableTypedResult()
+                .Select(item => MapDtoProperties(item));
+        }
+
+        private ObjectQuery<MediaFileInfo> GetQuery(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter)
+        {
             var query = _mediaFileInfoProvider.Get();
 
             if (filter != null)
@@ -222,8 +238,7 @@ namespace XperienceAdapter.Repositories
                 query = filter(query);
             }
 
-            return (await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
-                .Select(item => MapDtoProperties(item));
+            return query;
         }
 
         /// <summary>

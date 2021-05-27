@@ -13,6 +13,8 @@ using XperienceAdapter.Repositories;
 using Core.Configuration;
 using Business.Models;
 using MedioClinic.Models;
+using XperienceAdapter.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace MedioClinic.Controllers
 {
@@ -25,8 +27,9 @@ namespace MedioClinic.Controllers
         public ErrorController(
             ILogger<ErrorController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> pageRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageRepository = pageRepository ?? throw new ArgumentNullException(nameof(pageRepository));
         }

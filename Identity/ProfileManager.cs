@@ -21,6 +21,8 @@ using Identity.Extensions;
 using Identity.Models;
 using Identity.Models.Profile;
 using Identity.Services;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace Identity
 {
@@ -39,13 +41,14 @@ namespace Identity
         public ProfileManager(
             ILogger<ProfileManager> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IFileService fileService,
             IUserModelService userModelService,
             IAvatarService avatarService,
             ISiteService siteService,
             IMedioClinicUserManager<MedioClinicUser> userManager
             )
-                : base(logger, userManager)
+                : base(logger, stringLocalizer, userManager)
         {
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -89,8 +92,8 @@ namespace Identity
             PostProfileAsync(IUserViewModel uploadModel)
         {
             var profileResult = new IdentityManagerResult<PostProfileResultState, (IUserViewModel, string)>();
-            var userTitle = ResHelper.GetString("General.User");
-            var userDoesntExistTitle = ResHelper.GetString("Adm.User.NotExist");
+            var userTitle = Localize("General.User");
+            var userDoesntExistTitle = Localize("Adm.User.NotExist");
             profileResult.Data = (uploadModel, userTitle);
             MedioClinicUser user = default!;
 
@@ -249,7 +252,7 @@ namespace Identity
         /// <returns>A friendly name of the role.</returns>
         private string GetRoleTitle(Roles roles) =>
             FlagEnums.HasAnyFlags(roles, Roles.Doctor)
-                ? ResHelper.GetString("Identity.Profile.Doctor")
-                : ResHelper.GetString("Identity.Profile.Patient");
+                ? Localize("Identity.Profile.Doctor")
+                : Localize("Identity.Profile.Patient");
     }
 }

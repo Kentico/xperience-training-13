@@ -14,6 +14,8 @@ using Kentico.Content.Web.Mvc;
 using Core.Configuration;
 using XperienceAdapter.Repositories;
 using Business.Models;
+using XperienceAdapter.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace MedioClinic.Controllers
 {
@@ -30,11 +32,12 @@ namespace MedioClinic.Controllers
         public HomeController(
             ILogger<HomeController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageRetriever pageRetriever,
             IPageMetadataRetriever metadataRetriever,
             IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
             IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));

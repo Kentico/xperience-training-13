@@ -16,6 +16,8 @@ using MedioClinic.Controllers;
 using MedioClinic.Models;
 
 using PageMetadata = MedioClinic.Models.PageMetadata;
+using XperienceAdapter.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace MedioClinic.Areas.Identity.Controllers
 {
@@ -26,10 +28,11 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         public ProfileController(
             ILogger<ProfileController> logger, 
-            IOptionsMonitor<XperienceOptions> optionsMonitor, 
+            IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageUrlRetriever pageUrlRetriever,
             IProfileManager profileManager)
-            : base(logger, optionsMonitor, pageUrlRetriever)
+            : base(logger, optionsMonitor, stringLocalizer, pageUrlRetriever)
         {
             _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
         }

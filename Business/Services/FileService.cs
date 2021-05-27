@@ -84,14 +84,16 @@ namespace Business.Services
                 }
 
                 var safeName = GetSafeFileName(formFile.FileName);
-                FormFile renamedFile;
+                //FormFile renamedFile;
 
-                var stream = formFile.OpenReadStream();
-                renamedFile = new FormFile(stream,
-                                        0,
-                                        stream.Length,
-                                        safeName.Name,
-                                        $"{safeName.Name}.{safeName.Extension}");
+                //var stream = formFile.OpenReadStream();
+                
+                //renamedFile = new FormFile(stream,
+                //                        0,
+                //                        stream.Length,
+                //                        safeName.Name,
+                //                        $"{safeName.Name}.{safeName.Extension}");
+
 
                 if (!IsValidFileExtensionAndSignature(
                     safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))
@@ -100,7 +102,10 @@ namespace Business.Services
                 }
                 else
                 {
-                    return new ProcessedFile(FormFileResultState.FileOk, new UploadedFile(renamedFile));
+                    var uploadedFile = new UploadedFile(formFile);
+                    uploadedFile.FileName = $"{safeName.Name}.{safeName.Extension}";
+
+                    return new ProcessedFile(FormFileResultState.FileOk, new UploadedFile(formFile));
                 }
             }
         }

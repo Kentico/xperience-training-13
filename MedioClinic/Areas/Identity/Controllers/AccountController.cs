@@ -22,6 +22,8 @@ using Identity.Models;
 using Identity.Models.Account;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Areas.Identity.Controllers
 {
@@ -34,10 +36,11 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         public AccountController(
             ILogger<AccountController> logger, 
-            IOptionsMonitor<XperienceOptions> optionsMonitor, 
+            IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IAccountManager accountManager,
             IPageUrlRetriever pageUrlRetriever) 
-            : base(logger, optionsMonitor, pageUrlRetriever)
+            : base(logger, optionsMonitor, stringLocalizer, pageUrlRetriever)
         {
             _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
         }
@@ -100,7 +103,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                     Title = title
                 };
 
-                var messageViewModel = GetPageViewModel(metadata, message, false, false, messageType);
+                var messageViewModel = GetPageViewModel(metadata, message, true, false, messageType);
 
                 return View("UserMessage", messageViewModel);
             }
@@ -131,14 +134,14 @@ namespace MedioClinic.Areas.Identity.Controllers
                         break;
                     case ConfirmUserResultState.UserConfirmed:
                         metadata.Title = Localize("Identity.Account.ConfirmUser.Success.Title");
-                        message = ResHelper.GetStringFormat("Identity.Account.ConfirmUser.Success.Message", Url.Action(nameof(SignIn)));
+                        message = Localize("Identity.Account.ConfirmUser.Success.Message", Url.Action(nameof(SignIn)));
                         displayAsRaw = true;
                         messageType = MessageType.Info;
                         break;
                 }
             }
 
-            return View("UserMessage", GetPageViewModel(metadata, message, false, displayAsRaw, messageType));
+            return View("UserMessage", GetPageViewModel(metadata, message, true, displayAsRaw, messageType));
         }
 
         // GET: /Account/Signin
@@ -287,7 +290,7 @@ namespace MedioClinic.Areas.Identity.Controllers
 
                     if (HttpContext.User.Identity?.IsAuthenticated == false)
                     {
-                        var signInAppendix = ResHelper.GetStringFormat("Identity.Account.ResetPassword.Success.SignInAppendix", Url.Action(nameof(SignIn)));
+                        var signInAppendix = Localize("Identity.Account.ResetPassword.Success.SignInAppendix", Url.Action(nameof(SignIn)));
                         message = message.Insert(message.Length, $" {signInAppendix}");
                     }
                 }

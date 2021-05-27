@@ -22,5 +22,29 @@ namespace Identity.Models
         public string? Phone { get; set; }
 
         public string? Nationality { get; set; }
+
+        public override void MapFromUserInfo(UserInfo source)
+        {
+            base.MapFromUserInfo(source);
+
+            DateOfBirth = source.GetDateTimeValue("UserDateOfBirth", DateTime.MinValue);
+            Gender = (Gender)source.UserSettings.UserGender;
+            City = source.GetStringValue("City", string.Empty);
+            Street = source.GetStringValue("Street", string.Empty);
+            Phone = source.UserSettings.UserPhone;
+            Nationality = source.GetStringValue("Nationality", string.Empty);
+        }
+
+        public override void MapToUserInfo(UserInfo target)
+        {
+            base.MapToUserInfo(target);
+
+            target.UserSettings.UserDateOfBirth = DateOfBirth;
+            target.UserSettings.UserGender = (int)Gender;
+            target.UserSettings.UserPhone = Phone;
+            target.SetValue("City", City);
+            target.SetValue("Street", Street);
+            target.SetValue("Nationality", Nationality);
+        }
     }
 }

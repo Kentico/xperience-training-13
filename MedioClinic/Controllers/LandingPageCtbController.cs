@@ -17,9 +17,11 @@ using Kentico.PageBuilder.Web.Mvc.PageTemplates;
 using MedioClinic.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using XperienceAdapter.Localization;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
@@ -36,9 +38,10 @@ namespace MedioClinic.Controllers
         public LandingPageCtbController(
             ILogger<LandingPageCtbController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageDataContextRetriever pageDataContextRetriever,
             IPageRepository<BasePage, TreeNode> landingPageRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _landingPageRepository = landingPageRepository ?? throw new ArgumentNullException(nameof(landingPageRepository));

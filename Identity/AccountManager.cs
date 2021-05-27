@@ -15,6 +15,8 @@ using Core.Extensions;
 using Business.Extensions;
 using Identity.Models;
 using Identity.Models.Account;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace Identity
 {
@@ -30,18 +32,20 @@ namespace Identity
 
         public AccountManager(
             ILogger<AccountManager> logger,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccessor,
             IMessageService messageService,
             IMedioClinicUserManager<MedioClinicUser> userManager,
             IMedioClinicSignInManager<MedioClinicUser> signInManager
             )
-            : base(logger, userManager)
+            : base(logger, stringLocalizer, userManager)
         {
             _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
             _actionContextAccessor = actionContextAccessor ?? throw new ArgumentNullException(nameof(actionContextAccessor));
             _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            
         }
 
         public async Task<IdentityManagerResult<RegisterResultState>> RegisterAsync(RegisterViewModel uploadModel, bool emailConfirmed, HttpRequest request)
@@ -94,8 +98,8 @@ namespace Identity
                             .GetUrlHelper(_actionContextAccessor.ActionContext)
                             .AbsoluteUrl(request, uploadModel.PasswordConfirmationViewModel.ConfirmationAction!, routeValues: new { userId = user.Id, token });
 
-                        var subject = ResHelper.GetString("Identity.Account.Register.Email.Confirm.Subject");
-                        var body = ResHelper.GetStringFormat("Identity.Account.Register.Email.Confirm.Body", confirmationUrl);
+                        var subject = Localize("Identity.Account.Register.Email.Confirm.Subject");
+                        var body = Localize("Identity.Account.Register.Email.Confirm.Body", confirmationUrl);
 
                         await _messageService.SendEmailAsync(user.Email, subject, body);
 
@@ -337,8 +341,8 @@ namespace Identity
                 .GetUrlHelper(_actionContextAccessor.ActionContext)
                 .AbsoluteUrl(request, uploadModel.ResetPasswordAction!, uploadModel.ResetPasswordController!, new { userId = user.Id, token });
 
-            var subject = ResHelper.GetString("Identity.Account.ResetPassword.Title");
-            var body = ResHelper.GetStringFormat("Identity.Account.ForgotPassword.Email.Body", resetUrl);
+            var subject = Localize("Identity.Account.ResetPassword.Title");
+            var body = Localize("Identity.Account.ForgotPassword.Email.Body", resetUrl);
 
             try
             {

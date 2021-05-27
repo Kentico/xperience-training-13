@@ -1,25 +1,24 @@
 ﻿@using Identity.Models.Account
 @using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.PageViewModel<RegisterViewModel>
+@inject IStringLocalizer<SharedResource> StringLocalizer
 
 @{
     Layout = "~/Areas/Identity/Views/Shared/_AccountLayout.cshtml";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form method="post">
     <div class="container mc-section-4">
         <h1>@Html.DisplayFor(m => m.Metadata.Title)</h1>
         <section class="row section col xl7 l9 m12 s12">
             <div class="card-panel white">
-                <a href="@Url.Action(nameof(AccountController.SignIn))">@ResHelper.GetString("Identity.Account.AlreadyRegistered")</a>
+                <a href="@Url.Action(nameof(AccountController.SignIn))">@StringLocalizer["Identity.Account.AlreadyRegistered"]</a>
                 @Html.ValidationSummary()
                 @Html.EditorFor(m => m.Data)
                 <div class="section">
-                    <button class="btn waves-effect waves-light" type="submit">@ResHelper.GetString("Identity.Account.CreateMyAccount")</button>
+                    <button class="btn waves-effect waves-light" type="submit">@StringLocalizer["Identity.Account.CreateMyAccount"]</button>
                 </div>
             </div>
         </section>
     </div>
-}
+</form>

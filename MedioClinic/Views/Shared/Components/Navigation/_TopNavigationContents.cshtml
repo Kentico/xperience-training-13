@@ -1,6 +1,7 @@
 ﻿@using System.Threading;
 @using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
+@inject IStringLocalizer<SharedResource> StringLocalizer
 
 @{
     var navigationItems = Model?.Navigation?.ChildItems;
@@ -10,7 +11,7 @@
 
 @functions{
     private (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
-        (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), ResHelper.GetString(resourceKey));
+        (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), StringLocalizer[resourceKey]);
 }
 
 <ul id="@Model?.MainId" class="@Model?.ListClass">

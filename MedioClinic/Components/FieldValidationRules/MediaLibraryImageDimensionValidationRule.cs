@@ -20,8 +20,6 @@ namespace MedioClinic.Components.FieldValidationRules
         private const string MinimumHeightKey = ComponentIdentifiers.ImageValidationRule + ".MinimumHeight";
         private const string MaximumHeightKey = ComponentIdentifiers.ImageValidationRule + ".MaximumHeight";
 
-        private readonly IMediaFileRepository _mediaFileRepository;
-
         [EditingComponent(IntInputComponent.IDENTIFIER, Label = "{$" + MinimumWidthKey + "$}", Order = 0)]
         public int MinimumWidth { get; set; }
 

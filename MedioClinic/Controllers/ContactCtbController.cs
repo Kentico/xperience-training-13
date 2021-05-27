@@ -18,6 +18,8 @@ using XperienceAdapter.Repositories;
 using Business.Models;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.NamePerexText.CLASS_NAME, typeof(ContactCtbController), Path = "/Contact-us")]
 namespace MedioClinic.Controllers
@@ -37,12 +39,13 @@ namespace MedioClinic.Controllers
         public ContactCtbController(
                 ILogger<ContactCtbController> logger,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
+                IStringLocalizer<SharedResource> stringLocalizer,
                 IPageDataContextRetriever pageDataContextRetriever,
                 IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
                 IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
                 IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
                 IMediaFileRepository mediaFileRepository)
-                : base(logger, optionsMonitor)
+                : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _mapLocationRepository = mapLocationRepository ?? throw new ArgumentNullException(nameof(mapLocationRepository));

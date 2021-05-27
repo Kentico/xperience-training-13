@@ -10,6 +10,10 @@ namespace XperienceAdapter.Models
     {
         private readonly IFormFile _formFile;
 
+        private string? _contentType;
+
+        private string? _fileName;
+
         private bool _disposed;
 
         /// <summary>
@@ -25,7 +29,11 @@ namespace XperienceAdapter.Models
         /// <summary>
         /// Gets the MIME content type of an uploaded file.
         /// </summary>
-        public string ContentType => _formFile.ContentType;
+        public string ContentType
+        {
+            get => _formFile.ContentType ?? _contentType;
+            set => _contentType = value;
+        }
 
 
         /// <summary>
@@ -37,7 +45,11 @@ namespace XperienceAdapter.Models
         /// <summary>
         /// Gets the fully qualified name of the file on the client.
         /// </summary>
-        public string FileName => _formFile.FileName;
+        public string FileName
+        {
+            get => _formFile.FileName ?? _fileName;
+            set => _fileName = value;
+        }
 
 
         /// <summary>

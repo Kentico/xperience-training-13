@@ -17,6 +17,8 @@ using XperienceAdapter.Repositories;
 using Business.Models;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
+using XperienceAdapter.Localization;
+using Microsoft.Extensions.Localization;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.HomePage.CLASS_NAME, typeof(HomeCtbController))]
 namespace MedioClinic.Controllers
@@ -32,10 +34,11 @@ namespace MedioClinic.Controllers
         public HomeCtbController(
             ILogger<HomeCtbController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageDataContextRetriever pageDataContextRetriever,
             IPageRepository<HomePage, CMS.DocumentEngine.Types.MedioClinic.HomePage> homePageRepository,
             IPageRepository<CompanyService, CMS.DocumentEngine.Types.MedioClinic.CompanyService> companyServiceRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _homePageRepository = homePageRepository ?? throw new ArgumentNullException(nameof(homePageRepository));

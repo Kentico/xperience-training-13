@@ -11,6 +11,8 @@ using Kentico.Content.Web.Mvc;
 using Core.Configuration;
 using Identity.Models;
 using MedioClinic.Controllers;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Areas.Identity.Controllers
 {
@@ -21,8 +23,9 @@ namespace MedioClinic.Areas.Identity.Controllers
         public BaseIdentityController(
             ILogger<BaseController> logger, 
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageUrlRetriever pageUrlRetriever)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
         }

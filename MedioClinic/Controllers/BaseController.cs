@@ -11,6 +11,8 @@ using Kentico.Content.Web.Mvc;
 using Core.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Controllers
 {
@@ -20,12 +22,17 @@ namespace MedioClinic.Controllers
 
         protected readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
+        protected readonly IStringLocalizer<SharedResource> _stringLocalizer;
+
         protected string ErrorTitle => Localize("General.Error");
 
-        public BaseController(ILogger<BaseController> logger, IOptionsMonitor<XperienceOptions> optionsMonitor)
+        public BaseController(ILogger<BaseController> logger,
+                              IOptionsMonitor<XperienceOptions> optionsMonitor,
+                              IStringLocalizer<SharedResource> stringLocalizer)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
+            _stringLocalizer = stringLocalizer ?? throw new ArgumentNullException(nameof(stringLocalizer));
         }
 
         protected PageViewModel GetPageViewModel(
@@ -37,29 +44,41 @@ namespace MedioClinic.Controllers
             =>
             PageViewModel.GetPageViewModel(
                 pageMetadata,
-                message, 
-                displayMessage, 
-                displayAsRaw, 
+                message,
+                displayMessage,
+                displayAsRaw,
                 messageType);
 
         protected PageViewModel<TViewModel> GetPageViewModel<TViewModel>(
             IPageMetadata pageMetadata,
             TViewModel data,
             string? message = default,
-            bool displayMessage = true, 
-            bool displayAsRaw = default, 
+            bool displayMessage = true,
+            bool displayAsRaw = default,
             MessageType messageType = MessageType.Info)
             =>
             PageViewModel<TViewModel>.GetPageViewModel(
-                data, 
+                data,
                 pageMetadata,
-                message, 
-                displayMessage, 
-                displayAsRaw, 
+                message,
+                displayMessage,
+                displayAsRaw,
                 messageType);
 
-        protected string Localize(string resourceKey) =>
-            ResHelper.GetString(resourceKey);
+        /// <summary>
+        /// Localizes a string resource.
+        /// </summary>
+        /// <param name="resourceKey">Resource key.</param>
+        /// <returns></returns>
+        protected string Localize(string resourceKey) => _stringLocalizer[resourceKey];
+
+        /// <summary>
+        /// Localizes a string resource using a pattern.
+        /// </summary>
+        /// <param name="resourceKey">Resource key.</param>
+        /// <param name="args">The values to format the string with.</param>
+        /// <returns></returns>
+        protected string Localize(string resourceKey, params object[] args) => _stringLocalizer[resourceKey, args];
 
         protected string ConcatenateContactAdmin(string messageKey) =>
             Localize(messageKey)

@@ -17,6 +17,8 @@ using XperienceAdapter.Repositories;
 using Business.Models;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
+using XperienceAdapter.Localization;
+using Microsoft.Extensions.Localization;
 
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.SiteSection.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Index), Path = "/Doctors")]
 [assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME, typeof(DoctorsCtbController), ActionName = nameof(DoctorsCtbController.Detail))]
@@ -31,9 +33,10 @@ namespace MedioClinic.Controllers
         public DoctorsCtbController(
             ILogger<DoctorsCtbController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageDataContextRetriever pageDataContextRetriever,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
@@ -49,6 +52,8 @@ namespace MedioClinic.Controllers
                 var doctorPages = await _doctorRepository.GetPagesInCurrentCultureAsync(
                     cancellationToken,
                     filter => filter
+                        // TODO: Bug?
+                        .FilterDuplicates()
                         .Path(doctorsPath, PathTypeEnum.Children),
                     buildCacheAction: cache => cache
                         .Key($"{nameof(DoctorsCtbController)}|Doctors")

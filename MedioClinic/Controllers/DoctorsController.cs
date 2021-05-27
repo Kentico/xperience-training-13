@@ -14,6 +14,8 @@ using Core.Configuration;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using Business.Models;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Controllers
 {
@@ -30,10 +32,11 @@ namespace MedioClinic.Controllers
         public DoctorsController(
             ILogger<DoctorsController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
             IPageRetriever pageRetriever,
             IPageMetadataRetriever metadataRetriever,
             IPageRepository<Doctor, CMS.DocumentEngine.Types.MedioClinic.Doctor> doctorRepository)
-            : base(logger, optionsMonitor)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));

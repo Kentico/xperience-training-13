@@ -1,7 +1,8 @@
 ﻿@model string
+@inject IStringLocalizer<SharedResource> StringLocalizer
 @inject Core.IRepository<XperienceAdapter.Models.Country> CountryRepository
 
-@{ 
+@{
     var countries = CountryRepository
         .GetAll()
         .Select(country => new SelectListItem
@@ -18,7 +19,7 @@
             .Insert(0, new SelectListItem
             {
                 Value = "unknown",
-                Text = ResHelper.GetString("General.Unknown"),
+                Text = StringLocalizer["General.Unknown"],
                 Selected = true
             });
     }

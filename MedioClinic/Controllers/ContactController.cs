@@ -15,6 +15,8 @@ using Core.Configuration;
 using XperienceAdapter.Repositories;
 using Business.Models;
 using MedioClinic.Models;
+using Microsoft.Extensions.Localization;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic.Controllers
 {
@@ -37,13 +39,14 @@ namespace MedioClinic.Controllers
         public ContactController(
                 ILogger<ContactController> logger,
                 IOptionsMonitor<XperienceOptions> optionsMonitor,
+                IStringLocalizer<SharedResource> stringLocalizer,
                 IPageRetriever pageRetriever,
                 IPageMetadataRetriever metadataRetriever,
                 IPageRepository<MapLocation, CMS.DocumentEngine.Types.MedioClinic.MapLocation> mapLocationRepository,
                 IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> namePerexTextRepository,
                 IPageRepository<Company, CMS.DocumentEngine.Types.MedioClinic.Company> companyRepository,
                 IMediaFileRepository mediaFileRepository)
-                : base(logger, optionsMonitor)
+                : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageRetriever = pageRetriever ?? throw new ArgumentNullException(nameof(pageRetriever));
             _metadataRetriever = metadataRetriever ?? throw new ArgumentNullException(nameof(metadataRetriever));

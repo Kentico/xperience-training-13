@@ -20,7 +20,7 @@ namespace Business.Repositories
 
         private const string Name = "AirportName";
 
-        public IEnumerable<Airport> GetAll() => GetAllAsync().GetAwaiter().GetResult();
+        public IEnumerable<Airport> GetAll() => GetResult(null);
 
         public async Task<IEnumerable<Airport>> GetAllAsync(CancellationToken? cancellationToken = default) =>
             await GetResultAsync(null, cancellationToken);
@@ -37,6 +37,22 @@ namespace Business.Repositories
             Func<ObjectQuery<AirportsItem>, ObjectQuery<AirportsItem>>? filter,
             CancellationToken? cancellationToken)
         {
+            var query = GetQuery(filter);
+
+            return (await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
+                .Select(item => MapDtoProperties(item));
+        }
+
+        private IEnumerable<Airport> GetResult(Func<ObjectQuery<AirportsItem>, ObjectQuery<AirportsItem>>? filter)
+        {
+            var query = GetQuery(filter);
+
+            return query.GetEnumerableTypedResult()
+                .Select(item => MapDtoProperties(item));
+        }
+
+        private static ObjectQuery<AirportsItem> GetQuery(Func<ObjectQuery<AirportsItem>, ObjectQuery<AirportsItem>>? filter)
+        {
             var query = CustomTableItemProvider.GetItems<AirportsItem>();
 
             if (filter != null)
@@ -44,8 +60,7 @@ namespace Business.Repositories
                 query = filter(query);
             }
 
-            return (await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
-                .Select(item => MapDtoProperties(item));
+            return query;
         }
 
         private static Airport MapDtoProperties(AirportsItem item) => new Airport
