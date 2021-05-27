@@ -50,7 +50,7 @@ namespace Business.Services
             },
         };
 
-        public async Task<(FormFileResultState ResultState, UploadedFile? UploadedFile)> ProcessFormFile(IFormFile formFile,
+        public async Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile,
             string[] permittedExtensions,
             long sizeLimit = 4194304)
         {
@@ -63,12 +63,12 @@ namespace Business.Services
             // a BOM as their content.
             if (formFile.Length == 0)
             {
-                return (FormFileResultState.FileEmpty, null);
+                return new ProcessedFile(FormFileResultState.FileEmpty);
             }
 
             if (formFile.Length > sizeLimit)
             {
-                return (FormFileResultState.FileTooBig, null);
+                return new ProcessedFile(FormFileResultState.FileTooBig);
             }
 
             using (var memoryStream = new MemoryStream())
@@ -80,7 +80,7 @@ namespace Business.Services
                 // empty after removing the BOM.
                 if (memoryStream.Length == 0)
                 {
-                    return (FormFileResultState.FileEmpty, null);
+                    return new ProcessedFile(FormFileResultState.FileEmpty);
                 }
 
                 var safeName = GetSafeFileName(formFile.FileName);
@@ -96,11 +96,11 @@ namespace Business.Services
                 if (!IsValidFileExtensionAndSignature(
                     safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))
                 {
-                    return (FormFileResultState.ForbiddenFileType, null);
+                    return new ProcessedFile(FormFileResultState.ForbiddenFileType);
                 }
                 else
                 {
-                    return (FormFileResultState.FileOk, new UploadedFile(renamedFile));
+                    return new ProcessedFile(FormFileResultState.FileOk, new UploadedFile(renamedFile));
                 }
             }
         }

@@ -93,3 +93,12 @@ using MedioClinic.PageTemplates;
     IconClass = "icon-carousel")]
 
 [assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US", "es-ES")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.MediaLibraryUploaderFormComponent,
+    typeof(MediaLibraryUploader),
+    "{$" + ComponentIdentifiers.MediaLibraryUploaderFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = true,
+    ViewName = "~/Components/FormComponents/_MediaLibraryUploader.cshtml",
+    Description = "{$" + ComponentIdentifiers.MediaLibraryUploaderFormComponent + ".Description$}",
+    IconClass = "icon-picture")]

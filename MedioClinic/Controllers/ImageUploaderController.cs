@@ -88,33 +88,33 @@ namespace MedioClinic.Controllers
 
             if ((await CheckPagePermissions(pageId.Value)) == false)
             {
-                return Forbid();
+                return StatusCode((int)System.Net.HttpStatusCode.Forbidden);
             }
 
             var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
             var fileSizeLimit = _optionsMonitor.CurrentValue.MediaLibraryOptions?.FileSizeLimit;
 
-
             if (allowedExtensions?.Any() == true && fileSizeLimit.HasValue)
             {
-                var uploadedFileResult = await _fileService.ProcessFormFile(file, allowedExtensions, fileSizeLimit.Value!);
-
-                if (uploadedFileResult.ResultState == Business.Models.FormFileResultState.FileOk)
+                using (var processedFile = await _fileService.ProcessFormFileAsync(file, allowedExtensions, fileSizeLimit.Value!))
                 {
-                    Guid imageGuid = default;
+                    if (processedFile.ResultState == Business.Models.FormFileResultState.FileOk)
+                    {
+                        Guid imageGuid = default;
 
-                    try
-                    {
-                        imageGuid = await _mediaFileRepository.AddMediaFileAsync(uploadedFileResult.UploadedFile, mediaLibraryName, checkPermisions: true);
-                    }
-                    catch (PermissionException ex)
-                    {
-                        return Forbid();
-                    }
+                        try
+                        {
+                            imageGuid = await _mediaFileRepository.AddMediaFileAsync(processedFile.UploadedFile, mediaLibraryName, checkPermisions: true);
+                        }
+                        catch (PermissionException ex)
+                        {
+                            return StatusCode((int)System.Net.HttpStatusCode.Forbidden);
+                        }
 
-                    if (imageGuid != default)
-                    {
-                        return Ok(new { guid = imageGuid });
+                        if (imageGuid != default)
+                        {
+                            return Ok(new { guid = imageGuid });
+                        }
                     }
                 }
             }

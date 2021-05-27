@@ -17,6 +17,8 @@ namespace MedioClinic.Components
 
         private const string WidgetPrefix = Prefix + "Widget.";
 
+        private const string FieldValidationRulePrefix = Prefix + "FieldValidationRule.";
+
         public const string BasicPageTemplate = PageTemplatePrefix + "Basic";
 
         public const string EventPageTemplate = PageTemplatePrefix + "Event";
@@ -34,5 +36,7 @@ namespace MedioClinic.Components
         public const string MediaLibrarySelectionFormComponent = FormComponentPrefix + "MediaLibrarySelection";
 
         public const string SlideshowWidget = WidgetPrefix + "Slideshow";
+
+        public const string MediaLibraryUploaderFormComponent = FormComponentPrefix + "MediaLibraryUploader";
     }
 }

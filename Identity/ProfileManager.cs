@@ -213,14 +213,15 @@ namespace Identity
 
             if (avatarFile != null && allowedExtensions?.Any() == true && fileSizeLimit.HasValue)
             {
-                var uploadedFileResult = await _fileService.ProcessFormFile(avatarFile, allowedExtensions, fileSizeLimit.Value);
-
-                if (uploadedFileResult.ResultState == FormFileResultState.FileOk)
+                using (var processedFile = await _fileService.ProcessFormFileAsync(avatarFile, allowedExtensions, fileSizeLimit.Value))
                 {
-                    if (!_avatarService.UpdateAvatar(uploadedFileResult.UploadedFile, uploadModel.CommonUserViewModel.Id, _siteService.CurrentSite.SiteName))
+                    if (processedFile.ResultState == FormFileResultState.FileOk)
                     {
-                        var exception = new Exception("Updating of the avatar file failed.");
-                        HandlePostProfileException(ref profileResult, exception, PostProfileResultState.UserNotUpdated);
+                        if (!_avatarService.UpdateAvatar(processedFile.UploadedFile, uploadModel.CommonUserViewModel.Id, _siteService.CurrentSite.SiteName))
+                        {
+                            var exception = new Exception("Updating of the avatar file failed.");
+                            HandlePostProfileException(ref profileResult, exception, PostProfileResultState.UserNotUpdated);
+                        }
                     }
                 }
             }

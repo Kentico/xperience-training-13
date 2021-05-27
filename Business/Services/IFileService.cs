@@ -16,7 +16,7 @@ namespace Business.Services
         /// <param name="permittedExtensions">Permitted file name extensions.</param>
         /// <param name="sizeLimit">File size limit.</param>
         /// <returns>Uploaded file.</returns>
-        Task<(FormFileResultState ResultState, UploadedFile? UploadedFile)> ProcessFormFile(IFormFile formFile, string[] permittedExtensions, long sizeLimit);
+        Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile, string[] permittedExtensions, long sizeLimit);
 
         /// <summary>
         /// Sanitizes a file name and extension.

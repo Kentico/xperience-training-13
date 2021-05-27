@@ -10,9 +10,13 @@ using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
+
 using Core.Configuration;
+
 using Kentico.Content.Web.Mvc;
+
 using Microsoft.Extensions.Options;
+
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories
@@ -30,9 +34,9 @@ namespace XperienceAdapter.Repositories
         private readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
         public MediaFileRepository(
-            IMediaLibraryInfoProvider mediaLibraryInfoProvider, 
-            IMediaFileInfoProvider mediaFileInfoProvider, 
-            ISiteService siteService, 
+            IMediaLibraryInfoProvider mediaLibraryInfoProvider,
+            IMediaFileInfoProvider mediaFileInfoProvider,
+            ISiteService siteService,
             IMediaFileUrlRetriever mediaFileUrlRetriever,
             IOptionsMonitor<XperienceOptions> optionsMonitor)
         {
@@ -44,9 +48,26 @@ namespace XperienceAdapter.Repositories
         }
 
         public async Task<Guid> AddMediaFileAsync(IUploadedFile uploadedFile,
-                                                  string mediaLibraryName,
+                                                  int mediaLibraryId,
                                                   string? libraryFolderPath = default,
-                                                  bool checkPermissions = default)
+                                                  bool checkPermissions = default,
+                                                  CancellationToken? cancellationToken = default)
+        {
+            if (uploadedFile is null)
+            {
+                throw new ArgumentNullException(nameof(uploadedFile));
+            }
+
+            var library = await GetMediaLibrary(cancellationToken, mediaLibraryId);
+
+            return await AddMediaFileInternalAsync(uploadedFile, libraryFolderPath, library, checkPermissions);
+        }
+
+        public async Task<Guid> AddMediaFileAsync(IUploadedFile uploadedFile,
+                                              string mediaLibraryName,
+                                              string? libraryFolderPath = default,
+                                              bool checkPermissions = default,
+                                              CancellationToken? cancellationToken = default)
         {
             if (uploadedFile is null)
             {
@@ -58,46 +79,54 @@ namespace XperienceAdapter.Repositories
                 throw new ArgumentException($"'{nameof(mediaLibraryName)}' cannot be null or empty.", nameof(mediaLibraryName));
             }
 
-            return await AddMediaFileAsyncImplementation();
+            var library = await GetMediaLibrary(cancellationToken, libraryName: mediaLibraryName);
 
-            async Task<Guid> AddMediaFileAsyncImplementation()
+            return await AddMediaFileInternalAsync(uploadedFile, libraryFolderPath, library, checkPermissions);
+        }
+
+        private async Task<Guid> AddMediaFileInternalAsync(IUploadedFile uploadedFile, string libraryFolderPath, MediaLibraryInfo mediaLibraryInfo, bool checkPermissions)
+        {
+            if (checkPermissions && !mediaLibraryInfo.CheckPermissions(PermissionsEnum.Create, _siteService.CurrentSite.SiteName, MembershipContext.AuthenticatedUser))
             {
-                var siteId = _siteService.CurrentSite.SiteID;
-                var siteName = _siteService.CurrentSite.SiteName;
-                MediaLibraryInfo mediaLibraryInfo;
-
-                try
-                {
-                    mediaLibraryInfo = await _mediaLibraryInfoProvider.GetAsync(mediaLibraryName, siteId);
-                }
-                catch (Exception)
-                {
-                    throw new Exception($"The {mediaLibraryName} library was not found on the {siteName} site.");
-                }
-
-                if (checkPermissions && !mediaLibraryInfo.CheckPermissions(PermissionsEnum.Create, siteName, MembershipContext.AuthenticatedUser))
-                {
-                    throw new PermissionException(
-                        $"The user {MembershipContext.AuthenticatedUser.FullName} lacks permissions to the {mediaLibraryName} library.");
-                }
-
-                MediaFileInfo mediaFile = default;
-
-                try
-                {
-                    mediaFile = !string.IsNullOrEmpty(libraryFolderPath)
-                ? new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID, libraryFolderPath)
-                : new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID);
-                }
-                catch (Exception)
-                {
-                    throw new Exception($"The {uploadedFile.FileName} file could not be created in the {mediaLibraryInfo.LibraryName} library.");
-                }
-
-                _mediaFileInfoProvider.Set(mediaFile);
-
-                return mediaFile.FileGUID;
+                throw new PermissionException(
+                    $"The user {MembershipContext.AuthenticatedUser.FullName} lacks permissions to the {mediaLibraryInfo.LibraryDisplayName} library.");
             }
+
+            MediaFileInfo mediaFile = default;
+
+            try
+            {
+                mediaFile = !string.IsNullOrEmpty(libraryFolderPath)
+                    ? new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID, libraryFolderPath)
+                    : new MediaFileInfo(uploadedFile, mediaLibraryInfo.LibraryID);
+            }
+            catch (Exception)
+            {
+                throw new Exception($"The {uploadedFile.FileName} file could not be created in the {mediaLibraryInfo.LibraryName} library.");
+            }
+
+            _mediaFileInfoProvider.Set(mediaFile);
+
+            return mediaFile.FileGUID;
+        }
+
+        private async Task<MediaLibraryInfo> GetMediaLibrary(CancellationToken? cancellationToken, int? libraryId = default, string? libraryName = default)
+        {
+            if (!libraryId.HasValue && string.IsNullOrEmpty(libraryName))
+            {
+                throw new ArgumentException("Neither library ID nor library name was specified.");
+            }
+
+            return libraryId.HasValue
+                ? await _mediaLibraryInfoProvider.GetAsync(libraryId.Value, cancellationToken)
+                : await _mediaLibraryInfoProvider.GetAsync(libraryName, _siteService.CurrentSite.SiteID, cancellationToken);
+        }
+
+        public MediaLibraryFile GetMediaFile(Guid fileGuid)
+        {
+            var mediaFileInfo = MediaFileInfoProvider.GetMediaFileInfo(fileGuid, _siteService.CurrentSite.SiteName);
+
+            return mediaFileInfo != null ? MapDtoProperties(mediaFileInfo) : null;
         }
 
         public async Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid, CancellationToken? cancellationToken = default)
@@ -111,10 +140,10 @@ namespace XperienceAdapter.Repositories
         {
             var libraryId = GetLibraryId(mediaLibraryName);
 
-            return (await GetResultAsync(baseQuery => 
+            return (await GetResultAsync(baseQuery =>
                 baseQuery
                     .WhereEquals("FileLibraryID", libraryId)
-                    .WhereStartsWith("FilePath", path), 
+                    .WhereStartsWith("FilePath", path),
                 cancellationToken))
                 .FirstOrDefault();
         }

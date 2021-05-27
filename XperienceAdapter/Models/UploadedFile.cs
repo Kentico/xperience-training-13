@@ -6,9 +6,11 @@ using CMS.Base;
 
 namespace XperienceAdapter.Models
 {
-    public class UploadedFile : IUploadedFile
+    public class UploadedFile : IUploadedFile, IDisposable
     {
         private readonly IFormFile _formFile;
+
+        private bool _disposed;
 
         /// <summary>
         /// Gets a value that indicates whether this implementation supports accessing the input stream
@@ -65,5 +67,26 @@ namespace XperienceAdapter.Models
         /// </summary>
         public Stream OpenReadStream() =>
             _formFile.OpenReadStream();
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                OpenReadStream()?.Dispose();
+            }
+
+            _disposed = true;
+        }
     }
 }
