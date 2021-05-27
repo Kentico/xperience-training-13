@@ -37,6 +37,8 @@ namespace MedioClinic.Components
 
         public const string SlideshowWidget = WidgetPrefix + "Slideshow";
 
+        public const string ImageValidationRule = FieldValidationRulePrefix + "MediaLibraryImageDimension";
+
         public const string MediaLibraryUploaderFormComponent = FormComponentPrefix + "MediaLibraryUploader";
     }
 }

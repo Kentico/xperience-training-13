@@ -9,6 +9,7 @@ using Kentico.PageBuilder.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc.PageTemplates;
 
 using MedioClinic.Components;
+using MedioClinic.Components.FieldValidationRules;
 using MedioClinic.Components.FormComponents;
 using MedioClinic.Components.InlineEditors;
 using MedioClinic.Components.Sections;
@@ -93,6 +94,12 @@ using MedioClinic.PageTemplates;
     IconClass = "icon-carousel")]
 
 [assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US", "es-ES")]
+
+[assembly: RegisterFormValidationRule(
+    ComponentIdentifiers.ImageValidationRule,
+    typeof(MediaLibraryImageDimensionValidationRule),
+    "{$" + ComponentIdentifiers.ImageValidationRule + ".Title$}",
+    Description = "{$" + ComponentIdentifiers.ImageValidationRule + ".Description$}")]
 
 [assembly: RegisterFormComponent(
     ComponentIdentifiers.MediaLibraryUploaderFormComponent,
