@@ -36,11 +36,12 @@ namespace MedioClinic.Components.Widgets
             if (imageGuids?.Any() == true && !string.IsNullOrEmpty(properties?.MediaLibraryName))
             {
                 mediaFiles.AddRange(await _mediaFileRepository.GetMediaFilesAsync(properties.MediaLibraryName, imageGuids));
+                componentViewModel.CacheDependencies.CacheKeys = mediaFiles.Select(file => $"mediafile|{file.Guid}").ToList();
             }
 
             var model = new SlideshowViewModel
             {
-                Images = mediaFiles,
+                Images = ReorderFilesByGuids(mediaFiles, imageGuids),
                 Width = properties.Width,
                 Height = properties.Height,
                 EnforceDimensions = properties.EnforceDimensions,

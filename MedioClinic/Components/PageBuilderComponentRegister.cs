@@ -69,7 +69,7 @@ using MedioClinic.PageTemplates;
     typeof(ImageViewComponent),
     "{$" + ComponentIdentifiers.ImageWidget + ".Title$}",
     typeof(ImageProperties),
-    //AllowCache = true,
+    AllowCache = true,
     Description = "{$" + ComponentIdentifiers.ImageWidget + ".Description$}",
     IconClass = "icon-picture")]
 

@@ -13,6 +13,9 @@ using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using XperienceAdapter.Extensions;
 using Business.Models;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using CMS.Helpers.Caching;
 
 namespace Business.Repositories
 {
@@ -21,6 +24,10 @@ namespace Business.Repositories
         private const string RootPath = "/";
 
         private static readonly string[] NodeOrdering = new string[] { "NodeLevel", "NodeOrder" };
+
+        private readonly IMemoryCache _memoryCache;
+
+        private readonly ICacheDependencyAdapter _cacheDependencyAdapter;
 
         private readonly IPageUrlRetriever _pageUrlRetriever;
 
@@ -32,12 +39,12 @@ namespace Business.Repositories
 
         private readonly ISiteCultureRepository _cultureRepository;
 
-        private IEnumerable<string> NavigationEnabledPageTypes => DataClassInfoProvider
+        public IEnumerable<string> NavigationEnabledPageTypes => DataClassInfoProvider
             .GetClasses()
             .Where(classInfo => classInfo.ClassIsNavigationItem)
             .Select(classInfo => classInfo.ClassName);
 
-        private IEnumerable<string> NavigationEnabledTypeDependencies => NavigationEnabledPageTypes
+        public IEnumerable<string> NavigationEnabledTypeDependencies => NavigationEnabledPageTypes
             .Select(pageType => $"nodes|{SiteContext.CurrentSiteName}|{pageType}|all");
 
         private NavigationItem RootDto => _basePageRepository.GetPagesInCurrentCulture(query =>
@@ -54,6 +61,8 @@ namespace Business.Repositories
                 .FirstOrDefault();
 
         public NavigationRepository(
+            IMemoryCache memoryCache,
+            ICacheDependencyAdapter cacheDependencyAdapter,
             IPageUrlRetriever pageUrlRetriever,
             IPageRepository<BasePage, TreeNode> basePageRepository,
             /* Conventional routing: Begin */
@@ -61,6 +70,8 @@ namespace Business.Repositories
             /* Conventional routing: End */
             ISiteCultureRepository siteCultureRepository)
         {
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
+            _cacheDependencyAdapter = cacheDependencyAdapter ?? throw new ArgumentNullException(nameof(cacheDependencyAdapter));
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
             _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
             /* Conventional routing: Begin */
@@ -70,10 +81,11 @@ namespace Business.Repositories
         }
 
         /* CTB routing: Begin */
-        public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetContentTreeNavigation();
+        public async Task<Dictionary<SiteCulture, NavigationItem>> GetWholeNavigationAsync(CancellationToken? cancellationToken = default) =>
+            await GetContentTreeNavigationAsync(cancellationToken);
 
-        public NavigationItem GetNavigation(SiteCulture? siteCulture = default) =>
-            GetContentTreeNavigation(siteCulture);
+        public async Task<NavigationItem> GetNavigationAsync(SiteCulture? siteCulture = default, CancellationToken? cancellationToken = default) =>
+            await GetContentTreeNavigationAsync(siteCulture, cancellationToken);
         /* CTB routing: End */
 
         public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
@@ -105,16 +117,16 @@ namespace Business.Repositories
         /// Gets navigation hierarchies for all cultures, based on data provided by the CTB router.
         /// </summary>
         /// <returns>All navigation hierarchies.</returns>
-        private Dictionary<SiteCulture, NavigationItem> GetContentTreeNavigation()
+        private async Task<Dictionary<SiteCulture, NavigationItem>> GetContentTreeNavigationAsync(CancellationToken? cancellationToken)
         {
-            var cultures = _cultureRepository.GetAll();
+            var cultures = await _cultureRepository.GetAllAsync();
             var cultureSpecificNavigations = new Dictionary<SiteCulture, NavigationItem>();
 
             if (cultures != null && cultures.Any())
             {
                 foreach (var culture in cultures)
                 {
-                    cultureSpecificNavigations.Add(culture, GetContentTreeNavigation(culture));
+                    cultureSpecificNavigations.Add(culture, await GetContentTreeNavigationAsync(culture, cancellationToken));
                 }
             }
 
@@ -126,20 +138,30 @@ namespace Business.Repositories
         /// </summary>
         /// <param name="siteCulture">Site culture.</param>
         /// <returns>Navigation hierarchy of a given culture.</returns>
-        private NavigationItem GetContentTreeNavigation(SiteCulture? siteCulture)
+        private async Task<NavigationItem> GetContentTreeNavigationAsync(SiteCulture? siteCulture, CancellationToken? cancellationToken)
         {
             var checkedCulture = GetSiteCulture(siteCulture);
+            NavigationItem navigation;
 
-            var allItems = _basePageRepository.GetPagesByTypeAndCulture(
-                NavigationEnabledPageTypes,
-                checkedCulture,
-                $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigation)}|{checkedCulture.IsoCode}",
-                filter => GetDefaultFilter(filter)
-                    .MenuItems(),
-                cacheDependencies: NavigationEnabledTypeDependencies.ToArray())
-                    .Select(basePage => MapBaseToNavigationDto(basePage));
+            if (!_memoryCache.TryGetValue(checkedCulture.IsoCode, out navigation))
+            {
+                var allItems = (await _basePageRepository.GetPagesByTypeAndCultureAsync(
+                    NavigationEnabledPageTypes,
+                    checkedCulture,
+                    $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigationAsync)}|{checkedCulture.IsoCode}",
+                    filter => GetDefaultFilter(filter)
+                        .MenuItems(),
+                    cacheDependencies: NavigationEnabledTypeDependencies.ToArray(),
+                    cancellationToken: cancellationToken))
+                        .Select(basePage => MapBaseToNavigationDto(basePage));
 
-            return DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
+                navigation = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
+                var changeToken = _cacheDependencyAdapter.GetChangeToken(NavigationEnabledTypeDependencies?.ToArray());
+
+                _memoryCache.Set(checkedCulture.IsoCode, navigation, changeToken);
+            }
+
+            return navigation;
         }
 
         private SiteCulture GetSiteCulture(SiteCulture? siteCulture) =>
@@ -255,6 +277,14 @@ namespace Business.Repositories
             }
 
         }
+
+        public IEnumerable<string> GetNavigationEnabledPageTypes() =>
+            DataClassInfoProvider.GetClasses()
+                .WhereEquals("ClassIsDocumentType", 1)
+                .WhereEquals("ClassIsNavigationItem", 1)
+                .Select(pageType => pageType.ClassName);
+
+
 
         /* Conventional routing: Begin */
         //public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetConventionalRoutingNavigation();

@@ -12,21 +12,12 @@
     /// </summary>
     /// <param name="fileInputElementId">HTML element to fill with the file GUID.</param>
     /// <returns>The controller action's URL.</returns>
-    string GetActionUrl(string fileInputElementId)
-    {
-        var authenticatedUrl = Url.Kentico().AuthenticateUrl(Url.Action("Upload", "MediaLibraryUploader", new
+    string GetActionUrl(string fileInputElementId) =>
+        Url.Kentico().AuthenticateUrlRaw(Url.Action("Upload", "MediaLibraryUploader", new
         {
             fileInputElementId,
             mediaLibraryId = Model?.Properties?.MediaLibraryId
         }));
-
-        using (var stringWriter = new System.IO.StringWriter())
-        {
-            authenticatedUrl.WriteTo(stringWriter, HtmlEncoder);
-
-            return stringWriter.ToString();
-        }
-    }
 }
 
 @{

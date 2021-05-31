@@ -11,6 +11,7 @@ using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using Business.Models;
 using Business.Repositories;
+using System.Threading.Tasks;
 
 namespace MedioClinic.ViewComponents
 {
@@ -26,15 +27,15 @@ namespace MedioClinic.ViewComponents
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
-        public IViewComponentResult Invoke(string cultureSwitchId)
+        public async Task<IViewComponentResult> InvokeAsync(string cultureSwitchId)
         {
-            var variants = GetUrlCultureVariants();
+            var variants = await GetUrlCultureVariantsAsync();
             var model = (cultureSwitchId, variants.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
 
             return View(model);
         }
 
-        private IEnumerable<KeyValuePair<SiteCulture, string>>? GetUrlCultureVariants()
+        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetUrlCultureVariantsAsync(CancellationToken? cancellationToken = default)
         {
             var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
             var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : Request.Path.Value;
@@ -42,15 +43,15 @@ namespace MedioClinic.ViewComponents
 
             if (currentCulture != null)
             {
-                return GetDatabaseUrlVariants(searchPath, currentCulture) ?? GetNonDatabaseUrlVariants(searchPath);
+                return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture, cancellationToken) ?? GetNonDatabaseUrlVariants(searchPath);
             }
 
             return null;
         }
 
-        private IEnumerable<KeyValuePair<SiteCulture, string>>? GetDatabaseUrlVariants(string searchPath, SiteCulture currentCulture)
+        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetDatabaseUrlVariantsAsync(string searchPath, SiteCulture currentCulture, CancellationToken? cancellationToken = default)
         {
-            var navigation = _navigationRepository.GetWholeNavigation();
+            var navigation = await _navigationRepository.GetWholeNavigationAsync(cancellationToken);
             var currentPageNavigationItem = GetNavigationItemByRelativeUrl(searchPath, navigation[currentCulture]);
 
             if (currentPageNavigationItem != null)

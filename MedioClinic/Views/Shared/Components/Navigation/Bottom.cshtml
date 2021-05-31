@@ -1,17 +1,22 @@
 ﻿@model Business.Models.NavigationItem
 @inject IStringLocalizer<SharedResource> StringLocalizer
+@inject Business.Repositories.INavigationRepository NavigationRepository
 
 @{
     var childItems = Model?.ChildItems;
+    var cacheDependencyKeys = NavigationRepository.NavigationEnabledTypeDependencies?.ToArray();
 }
 
-<h5 class="white-text">@StringLocalizer["ViewComponent.Navigation.Bottom.Navigation"]</h5>
-<ul>
-    @if (childItems?.Any() == true)
-    {
-        foreach (var item in childItems)
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true">
+    <cache-dependency cache-keys="cacheDependencyKeys" />
+    <h5 class="white-text">@StringLocalizer["ViewComponent.Navigation.Bottom.Navigation"]</h5>
+    <ul>
+        @if (childItems?.Any() == true)
         {
-            <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Name, "white-text")" />
+            foreach (var item in childItems)
+            {
+                <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Name, "white-text")" />
+            }
         }
-    }
-</ul>
+    </ul>
+</cache>

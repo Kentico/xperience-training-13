@@ -2,6 +2,8 @@
 
 using XperienceAdapter.Models;
 using Business.Models;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Business.Repositories
 {
@@ -11,17 +13,27 @@ namespace Business.Repositories
     public interface INavigationRepository
     {
         /// <summary>
+        /// Code names of page types with the 'Navigation item' feature enabled.
+        /// </summary>
+        public IEnumerable<string> NavigationEnabledPageTypes { get; }
+
+        /// <summary>
+        /// Cache dependency keys computed out of <see cref="NavigationEnabledPageTypes"/>.
+        /// </summary>
+        IEnumerable<string> NavigationEnabledTypeDependencies { get; }
+
+        /// <summary>
         /// Gets navigation hierarchies of all site cultures.
         /// </summary>
         /// <returns>Dictionary with navigation hierarchies per each site culture.</returns>
-        Dictionary<SiteCulture, NavigationItem> GetWholeNavigation();
+        Task<Dictionary<SiteCulture, NavigationItem>> GetWholeNavigationAsync(CancellationToken? cancellationToken = default);
 
         /// <summary>
         /// Gets a navigation hierarchy for a specified or actual site culture, further constrained by the starting node alias path.
         /// </summary>
         /// <param name="siteCulture">Site culture.</param>
         /// <returns>Navigation item in a given culture.</returns>
-        NavigationItem GetNavigation(SiteCulture? siteCulture = default);
+        Task<NavigationItem> GetNavigationAsync(SiteCulture? siteCulture = default, CancellationToken? cancellationToken = default);
 
         /* Conventional routing: Begin */
         ///// <summary>

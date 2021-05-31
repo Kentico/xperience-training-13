@@ -100,13 +100,13 @@ namespace XperienceAdapter.Repositories
         }
 
         public virtual async Task<IEnumerable<TPageDto>> GetPagesByTypeAndCultureAsync(
-            CancellationToken cancellationToken,
             IEnumerable<string> types,
             SiteCulture culture,
             string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             bool includeAttachments = default,
+            CancellationToken? cancellationToken = default,
             params string[] cacheDependencies)
         {
             var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);

@@ -20,10 +20,10 @@ namespace MedioClinic.ViewComponents
             _navigationRepository = navigationRepository ?? throw new ArgumentNullException(nameof(navigationRepository));
         }
 
-        public IViewComponentResult Invoke(string placement)
+        public async Task<IViewComponentResult> InvokeAsync(string placement)
         {
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
-            var navigation = _navigationRepository.GetNavigation(currentCulture);
+            var navigation = await _navigationRepository.GetNavigationAsync(currentCulture);
 
             return View(placement, navigation);
         }

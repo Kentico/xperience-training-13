@@ -4,10 +4,12 @@
 @inject Microsoft.Extensions.Options.IOptions<Core.Configuration.XperienceOptions> Options
 @inject Kentico.Content.Web.Mvc.IPageUrlRetriever PageUrlRetriever
 @inject XperienceAdapter.Repositories.IMediaFileRepository MediaFileRepository
+@inject Business.Repositories.INavigationRepository NavigationRepository
 
-@{ 
+@{
     var logoGuid = new Guid("af277d0c-9a28-4fe3-b673-7f524e185548");
     var logoUrl = (await MediaFileRepository.GetMediaFileAsync(logoGuid))?.MediaFileUrl;
+    var cacheDependencyKeys = NavigationRepository.NavigationEnabledTypeDependencies?.ToArray();
 }
 
 @functions{
@@ -27,20 +29,26 @@
         Navigation = Model,
         DisplaySecondLevel = true
     };
+
+    private string GetCacheDependencyKey(string pageType) =>
+        $"nodes|{Options.Value.SiteCodeName}|{Options.Value.SiteCodeName}.{pageType}|all";
 }
 
-<div class="navbar-fixed mc-opacity-95">
-    <nav role="navigation">
-        <div class="nav-wrapper container">
-            <a class="brand-logo" href="@PageUrlRetriever.Retrieve("/Home")?.AbsoluteUrl">
-                <img class="mc-logo" src="@Html.Raw(logoUrl.RelativePath)" alt="@Options.Value.CompanyName" />
-                <span class="mc-logo-text">@Options?.Value?.CompanyName</span>
-            </a>
-            <a class="sidenav-trigger" href="#" data-target="top-navigation-mobile">
-                <i class="material-icons">menu</i>
-            </a>
-            <partial name="@_partialViewPath" model="GetModel(_desktopSuffix, _desktopListClass)" />
-        </div>
-    </nav>
-</div>
-<partial name="@_partialViewPath" model="GetModel(_mobileSuffix, _mobileListClass)" />
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true">
+    <cache-dependency cache-keys="@cacheDependencyKeys" />
+    <div class="navbar-fixed mc-opacity-95">
+        <nav role="navigation">
+            <div class="nav-wrapper container">
+                <a class="brand-logo" href="@PageUrlRetriever.Retrieve("/Home")?.AbsoluteUrl">
+                    <img class="mc-logo" src="@Html.Raw(logoUrl.RelativePath)" alt="@Options.Value.CompanyName" />
+                    <span class="mc-logo-text">@Options?.Value?.CompanyName</span>
+                </a>
+                <a class="sidenav-trigger" href="#" data-target="top-navigation-mobile">
+                    <i class="material-icons">menu</i>
+                </a>
+                <partial name="@_partialViewPath" model="GetModel(_desktopSuffix, _desktopListClass)" />
+            </div>
+        </nav>
+    </div>
+    <partial name="@_partialViewPath" model="GetModel(_mobileSuffix, _mobileListClass)" />
+</cache>

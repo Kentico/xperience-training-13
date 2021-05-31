@@ -81,13 +81,13 @@ namespace XperienceAdapter.Repositories
         /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
         /// <returns>Page DTOs.</returns>
         Task<IEnumerable<TPageDto>> GetPagesByTypeAndCultureAsync(
-            CancellationToken cancellationToken,
             IEnumerable<string> types,
             SiteCulture culture,
             string cacheKey,
             Action<MultiDocumentQuery>? filter = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
             bool includeAttachments = default,
+            CancellationToken? cancellationToken = default,
             params string[] cacheDependencies);
 
         /// <summary>
