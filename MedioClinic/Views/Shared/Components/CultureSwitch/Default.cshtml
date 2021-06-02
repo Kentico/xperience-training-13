@@ -4,14 +4,13 @@
 @{
     var triggerViewName = "_DropdownTrigger";
 
-    var orderedItems = Model.Variants.Keys
+    var orderedItems = Model.Variants?.Keys?
         .OrderBy(culture => culture.Name, StringComparer.CurrentCultureIgnoreCase)
         .Select(culture => (Url.Content(Model.Variants[culture]?.ToLowerInvariant()), culture.ShortName));
 
     if (Model.Variants?.Any() == true)
     {
         var titleIcon = @"<i class=""material-icons"">language</i>";
-
         <partial name="@triggerViewName" model="@(Model.CultureSwitchId, titleIcon, orderedItems)" />
     }
 }

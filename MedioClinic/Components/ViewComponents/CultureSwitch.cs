@@ -17,6 +17,12 @@ namespace MedioClinic.ViewComponents
 {
     public class CultureSwitch : ViewComponent
     {
+        private readonly string[] ExcludedPaths =
+        {
+            "landing-pages",
+            "paginas-de-destino"
+        };
+
         private readonly INavigationRepository _navigationRepository;
 
         private readonly ISiteCultureRepository _siteCultureRepository;
@@ -30,28 +36,28 @@ namespace MedioClinic.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(string cultureSwitchId)
         {
             var variants = await GetUrlCultureVariantsAsync();
-            var model = (cultureSwitchId, variants.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
+            var model = (cultureSwitchId, variants?.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
 
             return View(model);
         }
 
-        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetUrlCultureVariantsAsync(CancellationToken? cancellationToken = default)
+        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetUrlCultureVariantsAsync()
         {
             var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
             var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : Request.Path.Value;
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
 
-            if (currentCulture != null)
+            if (currentCulture != null && !ExcludedPaths.Any(path => searchPath.Contains(path)))
             {
-                return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture, cancellationToken) ?? GetNonDatabaseUrlVariants(searchPath);
+                return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture) ?? GetNonDatabaseUrlVariants(searchPath);
             }
 
             return null;
         }
 
-        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetDatabaseUrlVariantsAsync(string searchPath, SiteCulture currentCulture, CancellationToken? cancellationToken = default)
+        private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetDatabaseUrlVariantsAsync(string searchPath, SiteCulture currentCulture)
         {
-            var navigation = await _navigationRepository.GetWholeNavigationAsync(cancellationToken);
+            var navigation = await _navigationRepository.GetWholeNavigationAsync();
             var currentPageNavigationItem = GetNavigationItemByRelativeUrl(searchPath, navigation[currentCulture]);
 
             if (currentPageNavigationItem != null)

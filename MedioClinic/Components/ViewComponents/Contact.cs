@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using XperienceAdapter.Repositories;
 using Business.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MedioClinic.ViewComponents
 {
@@ -20,18 +22,19 @@ namespace MedioClinic.ViewComponents
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = _companyRepository.GetPagesInCurrentCulture(
+            var model = (await _companyRepository.GetPagesInCurrentCultureAsync(
+                CancellationToken.None,
                 filter => filter
                     .Path(PagePath)
                     .TopN(1),
                 buildCacheAction:
                     cache => cache
-                        .Key($"{nameof(Contact)}|{nameof(Invoke)}")
+                        .Key($"{nameof(Contact)}|{nameof(InvokeAsync)}")
                         .Dependencies((_, builder) => builder
                             .PageType(CMS.DocumentEngine.Types.MedioClinic.Company.CLASS_NAME)
-                            .PagePath(PagePath, CMS.DocumentEngine.PathTypeEnum.Single)))
+                            .PagePath(PagePath, CMS.DocumentEngine.PathTypeEnum.Single))))
                 .FirstOrDefault();
                 
             return View(model);

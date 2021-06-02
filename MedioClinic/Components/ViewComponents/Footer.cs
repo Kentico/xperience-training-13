@@ -11,9 +11,6 @@ namespace MedioClinic.ViewComponents
 {
     public class Footer : ViewComponent
     {
-        public IViewComponentResult Invoke()
-        {
-            return View();
-        }
+        public async Task<IViewComponentResult> InvokeAsync() => View();
     }
 }

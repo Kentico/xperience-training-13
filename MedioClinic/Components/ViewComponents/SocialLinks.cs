@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using XperienceAdapter.Repositories;
 using Business.Models;
+using System.Threading;
 
 namespace MedioClinic.ViewComponents
 {
@@ -22,13 +23,14 @@ namespace MedioClinic.ViewComponents
             _socialLinkRepository = socialLinkRepository ?? throw new ArgumentNullException(nameof(socialLinkRepository));
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = _socialLinkRepository.GetPagesInCurrentCulture(
+            var model = await _socialLinkRepository.GetPagesInCurrentCultureAsync(
+                CancellationToken.None,
                 filter => filter
                     .Path(PagePath, CMS.DocumentEngine.PathTypeEnum.Children),
                 buildCacheAction: cache => cache
-                    .Key($"{nameof(SocialLinks)}|{nameof(Invoke)}")
+                    .Key($"{nameof(SocialLinks)}|{nameof(InvokeAsync)}")
                     .Dependencies((_, builder) => builder
                         .PageType(CMS.DocumentEngine.Types.MedioClinic.SocialLink.CLASS_NAME)
                         .PagePath(PagePath, CMS.DocumentEngine.PathTypeEnum.Children)

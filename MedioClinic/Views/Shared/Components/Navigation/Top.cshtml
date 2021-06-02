@@ -29,12 +29,9 @@
         Navigation = Model,
         DisplaySecondLevel = true
     };
-
-    private string GetCacheDependencyKey(string pageType) =>
-        $"nodes|{Options.Value.SiteCodeName}|{Options.Value.SiteCodeName}.{pageType}|all";
 }
 
-<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true">
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" vary-by-route="@CacheVaryByConstants.ROUTE_URL_SLUG" enabled="true">
     <cache-dependency cache-keys="@cacheDependencyKeys" />
     <div class="navbar-fixed mc-opacity-95">
         <nav role="navigation">

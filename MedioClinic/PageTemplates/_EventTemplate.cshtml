@@ -1,4 +1,4 @@
-﻿@using MedioClinic.Components 
+﻿@using MedioClinic.Components
 @using MedioClinic.PageTemplates
 @model ComponentViewModel<EventTemplateProperties>
 
@@ -12,12 +12,9 @@
     if (eventDate.HasValue)
     {
         var eventDateValue = eventDate.Value;
-        var year = eventDateValue.Year;
-        var month = eventDateValue.Month;
-        var day = eventDateValue.Day;
-        var dayBefore = eventDateValue == DateTime.MinValue ? eventDateValue.Day : eventDateValue.AddDays(-1).Day;
-        var kiwiStartDate = $"{year}/{month}/{dayBefore}";
-        var kiwiEndDate = $"{year}-{month}-{day}";
+        var dayBefore = eventDateValue == DateTime.MinValue ? eventDateValue : eventDateValue.AddDays(-1);
+        var kiwiStartDate = $"{dayBefore.Year}-{dayBefore.Month}-{dayBefore.Day}";
+        var kiwiEndDate = $"{eventDateValue.Year}-{eventDateValue.Month}-{eventDateValue.Day}";
         kiwiDateExpression = !string.IsNullOrEmpty(kiwiStartDate) && !string.IsNullOrEmpty(kiwiEndDate)
             ? $"{kiwiStartDate}_{kiwiEndDate}"
             : string.Empty;
@@ -36,7 +33,7 @@
 <main class="row mc-page-fold-right">
     <div class="container mc-section-4">
         <partial name="~/Views/Shared/_UserMessage.cshtml" for="Properties.UserMessage" />
-        <editable-area area-identifier="top" area-options="areaOptions" />
+        <editable-area area-identifier="area01" area-options="areaOptions" />
     </div>
     <div class="container mc-section-4">
         @*Placeholder for the Kiwi.com widget.*@
@@ -45,9 +42,6 @@
 </main>
 
 @section Scripts {
-    <script src="https://unpkg.com/vue"></script>
-    @Html.Kentico().PageBuilderScripts()
-
     <script data-affilid="janlenochwidget"
             data-from=""
             data-to="@Model.Properties.EventLocationAirport"
