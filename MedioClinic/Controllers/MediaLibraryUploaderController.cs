@@ -9,6 +9,7 @@ using CMS.Helpers;
 
 using Core.Configuration;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -39,21 +40,32 @@ namespace MedioClinic.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(string? fileInputElementId, int? mediaLibraryId)
         {
+            var result = new MediaLibraryUploaderResult
+            {
+                fileInputElementId = fileInputElementId
+            };
+
             if (string.IsNullOrEmpty(fileInputElementId))
             {
-                return UnprocessableEntity($"The {nameof(fileInputElementId)} parameter was missing.");
+                result.error = $"The {nameof(fileInputElementId)} parameter was missing.";
+
+                return JsonWithStatusCode(result, StatusCodes.Status422UnprocessableEntity);
             }
 
             if (!mediaLibraryId.HasValue)
             {
-                return UnprocessableEntity($"The {nameof(mediaLibraryId)} parameter was missing.");
+                result.error = $"The {nameof(mediaLibraryId)} parameter was missing.";
+
+                return JsonWithStatusCode(result, StatusCodes.Status422UnprocessableEntity);
             }
 
             var file = Request.Form?.Files?.FirstOrDefault();
 
             if (file is null)
             {
-                return UnprocessableEntity("There was no file to upload.");
+                result.error = "There was no file to upload.";
+
+                return JsonWithStatusCode(result, StatusCodes.Status422UnprocessableEntity);
             }
 
             var allowedExtensions = _optionsMonitor.CurrentValue.MediaLibraryOptions?.AllowedImageExtensions;
@@ -73,16 +85,16 @@ namespace MedioClinic.Controllers
                         }
                         catch (Exception ex)
                         {
-                            return UnprocessableEntity("There was an error when saving the uploaded file.");
+                            result.error = "There was an error when saving the uploaded file.";
+
+                            return JsonWithStatusCode(result, StatusCodes.Status422UnprocessableEntity);
                         }
 
                         if (imageGuid != default)
                         {
-                            return Ok(new 
-                            { 
-                                fileInputElementId,
-                                fileGuid = imageGuid
-                            });
+                            result.fileGuid = imageGuid;
+
+                            return JsonWithStatusCode(result, StatusCodes.Status200OK);
                         }
                     }
                 }
@@ -90,5 +102,20 @@ namespace MedioClinic.Controllers
 
             return NotFound();
         }
+
+        private IActionResult JsonWithStatusCode(object value, int statusCode) =>
+            new ObjectResult(value)
+            {
+                StatusCode = statusCode
+            };
+    }
+
+    internal class MediaLibraryUploaderResult
+    {
+        public string fileInputElementId { get; set; }
+
+        public Guid fileGuid { get; set; }
+
+        public string? error { get; set; }
     }
 }

@@ -278,14 +278,6 @@ namespace Business.Repositories
 
         }
 
-        public IEnumerable<string> GetNavigationEnabledPageTypes() =>
-            DataClassInfoProvider.GetClasses()
-                .WhereEquals("ClassIsDocumentType", 1)
-                .WhereEquals("ClassIsNavigationItem", 1)
-                .Select(pageType => pageType.ClassName);
-
-
-
         /* Conventional routing: Begin */
         //public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetConventionalRoutingNavigation();
 

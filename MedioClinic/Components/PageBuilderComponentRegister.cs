@@ -69,20 +69,11 @@ using MedioClinic.PageTemplates;
     typeof(ImageViewComponent),
     "{$" + ComponentIdentifiers.ImageWidget + ".Title$}",
     typeof(ImageProperties),
-    AllowCache = true,
+    //AllowCache = true,
     Description = "{$" + ComponentIdentifiers.ImageWidget + ".Description$}",
     IconClass = "icon-picture")]
 
 [assembly: RegisterPageBuilderLocalizationResource(typeof(ImageUploaderResource), "en-US", "es-ES")]
-
-[assembly: RegisterFormComponent(
-    ComponentIdentifiers.MediaLibrarySelectionFormComponent,
-    typeof(MediaLibrarySelection),
-    "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Title$}",
-    IsAvailableInFormBuilderEditor = false,
-    ViewName = "~/Components/FormComponents/_MediaLibrarySelection.cshtml",
-    Description = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Description$}",
-    IconClass = "icon-menu")]
 
 [assembly: RegisterWidget(
     ComponentIdentifiers.SlideshowWidget,
@@ -94,6 +85,24 @@ using MedioClinic.PageTemplates;
     IconClass = "icon-carousel")]
 
 [assembly: RegisterPageBuilderLocalizationResource(typeof(SlideshowEditorResource), "en-US", "es-ES")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.MediaLibrarySelectionFormComponent,
+    typeof(MediaLibrarySelection),
+    "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = false,
+    ViewName = "~/Components/FormComponents/_MediaLibrarySelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Description$}",
+    IconClass = "icon-menu")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.CheckBoxFormComponent,
+    typeof(CheckBox),
+    "{$" + ComponentIdentifiers.CheckBoxFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = true,
+    ViewName = "~/Components/FormComponents/_CheckBox.cshtml",
+    Description = "{$" + ComponentIdentifiers.CheckBoxFormComponent + ".Description$}",
+    IconClass = "icon-cb-check-preview")]
 
 [assembly: RegisterFormValidationRule(
     ComponentIdentifiers.ImageValidationRule,

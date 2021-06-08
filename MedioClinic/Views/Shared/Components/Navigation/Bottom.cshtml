@@ -4,11 +4,12 @@
 
 @{
     var childItems = Model?.ChildItems;
+    var outputCacheEnabled = false;
     var cacheDependencyKeys = NavigationRepository.NavigationEnabledTypeDependencies?.ToArray();
 }
 
-<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true">
-    <cache-dependency cache-keys="cacheDependencyKeys" />
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" enabled="@outputCacheEnabled">
+    <cache-dependency cache-keys="cacheDependencyKeys" enabled="@outputCacheEnabled" />
     <h5 class="white-text">@StringLocalizer["ViewComponent.Navigation.Bottom.Navigation"]</h5>
     <ul>
         @if (childItems?.Any() == true)

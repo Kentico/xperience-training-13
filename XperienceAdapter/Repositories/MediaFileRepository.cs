@@ -210,7 +210,8 @@ namespace XperienceAdapter.Repositories
         /// Gets a query with an optional filter.
         /// </summary>
         /// <param name="filter">Optional filter.</param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A sequence of media file DTOs.</returns>
         private async Task<IEnumerable<MediaLibraryFile>> GetResultAsync(
             Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter,
             CancellationToken? cancellationToken)
@@ -221,6 +222,11 @@ namespace XperienceAdapter.Repositories
                 .Select(item => MapDtoProperties(item));
         }
 
+        /// <summary>
+        /// Gets a query with an optional filter.
+        /// </summary>
+        /// <param name="filter">Optional filter.</param>
+        /// <returns>A sequence of media file DTOs.</returns>
         private IEnumerable<MediaLibraryFile> GetResult(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter)
         {
             var query = GetQuery(filter);
@@ -229,6 +235,11 @@ namespace XperienceAdapter.Repositories
                 .Select(item => MapDtoProperties(item));
         }
 
+        /// <summary>
+        /// Gets an <see cref="ObjectQuery"/>.
+        /// </summary>
+        /// <param name="filter">Filtering criteria.</param>
+        /// <returns>The query.</returns>
         private ObjectQuery<MediaFileInfo> GetQuery(Func<ObjectQuery<MediaFileInfo>, ObjectQuery<MediaFileInfo>>? filter)
         {
             var query = _mediaFileInfoProvider.Get();

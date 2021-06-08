@@ -9,6 +9,7 @@
 @{
     var logoGuid = new Guid("af277d0c-9a28-4fe3-b673-7f524e185548");
     var logoUrl = (await MediaFileRepository.GetMediaFileAsync(logoGuid))?.MediaFileUrl;
+    var outputCacheEnabled = false;
     var cacheDependencyKeys = NavigationRepository.NavigationEnabledTypeDependencies?.ToArray();
 }
 
@@ -31,8 +32,8 @@
     };
 }
 
-<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" vary-by-route="@CacheVaryByConstants.ROUTE_URL_SLUG" enabled="true">
-    <cache-dependency cache-keys="@cacheDependencyKeys" />
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" vary-by-route="@CacheVaryByConstants.ROUTE_URL_SLUG" enabled="@outputCacheEnabled">
+    <cache-dependency cache-keys="@cacheDependencyKeys" enabled="@outputCacheEnabled"/>
     <div class="navbar-fixed mc-opacity-95">
         <nav role="navigation">
             <div class="nav-wrapper container">

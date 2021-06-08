@@ -47,6 +47,7 @@ namespace XperienceAdapter.Repositories
         /// Gets media files.
         /// </summary>
         /// <param name="path">Path in the library.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>File DTOs.</returns>
         Task<MediaLibraryFile> GetMediaFileAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default);
 
@@ -54,6 +55,7 @@ namespace XperienceAdapter.Repositories
         /// Gets a media file.
         /// </summary>
         /// <param name="fileGuid">File GUID.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Media file DTO.</returns>
         Task<MediaLibraryFile?> GetMediaFileAsync(Guid fileGuid, CancellationToken? cancellationToken = default);
 
@@ -79,12 +81,21 @@ namespace XperienceAdapter.Repositories
         Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, CancellationToken? cancellationToken = default, params string[] extensions);
 
         /// <summary>
-        /// Gets media files.
+        /// Gets media files by folder path.
         /// </summary>
+        /// <param name="mediaLibraryName">Media library code name.</param>
         /// <param name="path">Folder path.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>File DTOs.</returns>
         Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default);
 
+        /// <summary>
+        /// Gets media files by their GUIDs.
+        /// </summary>
+        /// <param name="mediaLibraryName">Media library code name.</param>
+        /// <param name="fileGuids">File GUIDs.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>File DTOs.</returns>
         Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, IEnumerable<Guid> fileGuids, CancellationToken? cancellationToken = default);
     }
 }

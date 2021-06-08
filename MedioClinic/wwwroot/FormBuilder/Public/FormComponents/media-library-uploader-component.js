@@ -138,39 +138,27 @@
     /**
      * Handles error codes
      * @param {number} statusCode HTTP status code.
-     * @param {HTMLElement} targetElement The HTML element containing the form message element.
+     * @param {string} errorMessage Error message.
+     * @param {HTMLElement} [targetElement] The HTML element containing the form message element.
      */
-    var processErrors = function (statusCode, targetElement) {
+    var processErrors = function (statusCode, errorMessage, targetElement) {
         var errorFlag = "error";
+        var completeMessage = "HTTP error " + statusCode + ". " + errorMessage;
 
-        if (statusCode >= 500) {
-            processMessage(
-                "The upload of the image failed. Please contact the system administrator.",
-                errorFlag,
-                targetElement);
-        } else if (statusCode === 422) {
-            processMessage(
-                "The uploaded image could not be processed. Please contact the system administrator.",
-                errorFlag,
-                targetElement);
-        } else {
-            processMessage(
-                "An unknown error happened. Please contact the system administrator.",
-                errorFlag,
-                targetElement);
-        }
+        processMessage(completeMessage, errorFlag, targetElement);
     };
 
     /**
      * Logs a console message and displays it in the page, if possible.
      * @param {string} message The message.
      * @param {string} type The type of the message.
-     * @param {HTMLElement} targetElement The HTML element containing the form message element.
+     * @param {HTMLElement} [targetElement] The HTML element containing the form message element.
      */
     var processMessage = function (message, type, targetElement) {
         var cssClasses = "";
+        var isNamespaceAvailable = typeof window.medioClinic.showMessage === "function";
 
-        if (typeof window.medioClinic.showMessage === "function") {
+        if (isNamespaceAvailable) {
             window.medioClinic.showMessage(message, type, false);
         }
 
@@ -185,7 +173,7 @@
             console.error(message);
         }
 
-        if (targetElement) {
+        if (targetElement && isNamespaceAvailable) {
             var messageElement = targetElement.querySelector(".mc-form-messages");
             messageElement.appendChild(window.medioClinic.buildMessageMarkup(message, cssClasses));
         }
@@ -205,7 +193,7 @@
             var message = "Upload of the image is complete. File GUID: " + responseObject.fileGuid;
             processMessage(message, "info", detailsElement);
         } else {
-            processErrors(e.target.status, detailsElement);
+            processErrors(xhr.status, responseObject.error, detailsElement);
         }
 
         window.medioClinic.mediaLibraryUploaderFormComponent.checkForUnuploadedFile(isFileRequired, fileGuidHiddenElementId);
@@ -227,7 +215,7 @@
      * @param {Event} e Event invoked when the upload fails.
      */
     var onUploadFailed = function (xhr, isFileRequired, fileGuidHiddenElementId) {
-        processErrors(xhr.status);
+        processErrors(xhr.status, null, null);
 
         window.medioClinic.mediaLibraryUploaderFormComponent.checkForUnuploadedFile(isFileRequired, fileGuidHiddenElementId);
     };

@@ -15,7 +15,7 @@ namespace Business.Repositories
         /// <summary>
         /// Code names of page types with the 'Navigation item' feature enabled.
         /// </summary>
-        public IEnumerable<string> NavigationEnabledPageTypes { get; }
+        IEnumerable<string> NavigationEnabledPageTypes { get; }
 
         /// <summary>
         /// Cache dependency keys computed out of <see cref="NavigationEnabledPageTypes"/>.

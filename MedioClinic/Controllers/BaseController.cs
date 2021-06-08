@@ -80,11 +80,22 @@ namespace MedioClinic.Controllers
         /// <returns></returns>
         protected string Localize(string resourceKey, params object[] args) => _stringLocalizer[resourceKey, args];
 
+        /// <summary>
+        /// Concatenates an error message with a "contact administrator" suffix.
+        /// </summary>
+        /// <param name="messageKey">A resource key of the error message.</param>
+        /// <returns>Concatenated error messages.</returns>
         protected string ConcatenateContactAdmin(string messageKey) =>
             Localize(messageKey)
                 + " "
                 + Localize("General.ContactAdministrator");
 
+        /// <summary>
+        /// Returns an error message about an invalid user input.
+        /// </summary>
+        /// <typeparam name="TUploadViewModel">Upload view model.</typeparam>
+        /// <param name="uploadModel">Upload view model.</param>
+        /// <returns>A message view.</returns>
         protected ActionResult InvalidInput<TUploadViewModel>(
             PageViewModel<TUploadViewModel> uploadModel)
             where TUploadViewModel : class, new()

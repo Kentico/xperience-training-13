@@ -5,12 +5,14 @@
 @inject Microsoft.Extensions.Options.IOptions<Core.Configuration.XperienceOptions> Options
 
 @{
+    var outputCacheEnabled = false;
+
     // TODO: Handle reordered child nodes.
     var cacheDependencyKeys = new[] { $"node|{Options.Value.SiteCodeName}|/Doctors|childnodes" };
 }
 
-<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true">
-    <cache-dependency cache-keys="@cacheDependencyKeys" />
+<cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" enabled="@outputCacheEnabled">
+    <cache-dependency cache-keys="@cacheDependencyKeys" enabled="@outputCacheEnabled" />
     <main class="row mc-page-fixed">
         <section class="container row section">
             <h1>@Html.DisplayFor(m => m.Data.Name)</h1>
