@@ -24,21 +24,20 @@
     string currentFileGuidHiddenElementId = Html.IdFor(model => model.FileGuidAsString).ToString();
     var textInputAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
     var fileInputAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
-    fileInputAttributes["onchange"] = $"window.medioClinic.mediaLibraryUploaderFormComponent.onFileSelected(this);";
-
-    var fileLabelAttributes = new Dictionary<string, object>()
-    {
-        ["class"] = buttonCssClasses
-    };
-
+    fileInputAttributes.AddOrEnrichEntry("onchange", $"window.medioClinic.mediaLibraryUploaderFormComponent.onFileSelected(this);", ';');
     var fileGuidAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
-    fileGuidAttributes["class"] = "mc-file-guid-hidden";
+    fileGuidAttributes.AddOrEnrichEntry("class", "mc-file-guid-hidden");
     var fileNameAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
-    fileNameAttributes["class"] = "mc-file-name-hidden";
+    fileNameAttributes.AddOrEnrichEntry("class", "mc-file-name-hidden");
     var buttonAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
     var currentUrl = GetActionUrl(currentFileGuidHiddenElementId);
-    buttonAttributes["onclick"] = $"window.medioClinic.mediaLibraryUploaderFormComponent.uploadFile(this, '{currentUrl}', {Model.Properties.Required.ToString().ToLowerInvariant()}, '{currentFileGuidHiddenElementId}');";
-    buttonAttributes["class"] = buttonCssClasses;
+    var requiredAsStringLiteral = Model?.Properties?.Required.ToString().ToLowerInvariant();
+
+    buttonAttributes.AddOrEnrichEntry(
+        "onclick", 
+        $"window.medioClinic.mediaLibraryUploaderFormComponent.uploadFile(this, '{currentUrl}', {requiredAsStringLiteral}, '{currentFileGuidHiddenElementId}');", ';');
+    
+    buttonAttributes.AddOrEnrichEntry("class", buttonCssClasses);
 }
 
 <div class="mc-media-library-uploader grey lighten-5">
