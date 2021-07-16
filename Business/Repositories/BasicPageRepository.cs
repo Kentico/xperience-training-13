@@ -9,9 +9,9 @@ namespace Business.Repositories
     /// <summary>
     /// Stores pages without page type-specific data (coupled data).
     /// </summary>
-    public class BasePageRepository : BasePageRepository<BasePage, TreeNode>
+    public class BasicPageRepository : BasePageRepository<BasicPage, TreeNode>
     {
-        public BasePageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
+        public BasicPageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
         {
         }
     }

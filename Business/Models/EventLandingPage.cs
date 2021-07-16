@@ -7,7 +7,7 @@ using XperienceAdapter.Models;
 
 namespace Business.Models
 {
-    public class EventLandingPage : BasePage
+    public class EventLandingPage : BasicPage
     {
         public override IEnumerable<string> SourceColumns =>
             base.SourceColumns.Concat(new[] { nameof(CMS.DocumentEngine.Types.MedioClinic.EventLandingPage.EventDate) });

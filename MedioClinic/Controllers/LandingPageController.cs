@@ -26,21 +26,21 @@ using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
 // Uncomment if this controller returns a view instead of TemplateResult.
-//[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.LandingPage.CLASS_NAME, typeof(LandingPageCtbController))]
+//[assembly: RegisterPageRoute(CMS.DocumentEngine.Types.MedioClinic.LandingPage.CLASS_NAME, typeof(LandingPageController))]
 namespace MedioClinic.Controllers
 {
-    public class LandingPageCtbController : BaseController
+    public class LandingPageController : BaseController
     {
         private readonly IPageDataContextRetriever _pageDataContextRetriever;
 
-        private readonly IPageRepository<BasePage, TreeNode> _landingPageRepository;
+        private readonly IPageRepository<BasicPage, TreeNode> _landingPageRepository;
 
-        public LandingPageCtbController(
-            ILogger<LandingPageCtbController> logger,
+        public LandingPageController(
+            ILogger<LandingPageController> logger,
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IStringLocalizer<SharedResource> stringLocalizer,
             IPageDataContextRetriever pageDataContextRetriever,
-            IPageRepository<BasePage, TreeNode> landingPageRepository)
+            IPageRepository<BasicPage, TreeNode> landingPageRepository)
             : base(logger, optionsMonitor, stringLocalizer)
         {
             _pageDataContextRetriever = pageDataContextRetriever ?? throw new ArgumentNullException(nameof(pageDataContextRetriever));
@@ -62,7 +62,7 @@ namespace MedioClinic.Controllers
                             .Path(landingPagePath, PathTypeEnum.Single)
                             .TopN(1),
                         buildCacheAction: cache => cache
-                            .Key($"{nameof(LandingPageCtbController)}|Page|{landingPagePath}")
+                            .Key($"{nameof(LandingPageController)}|Page|{landingPagePath}")
                             .Dependencies((_, builder) => builder
                                 .PageType(CMS.DocumentEngine.Types.MedioClinic.LandingPage.CLASS_NAME)
                                 .PagePath(landingPagePath, PathTypeEnum.Single))))
@@ -73,7 +73,7 @@ namespace MedioClinic.Controllers
                         // Implementation without page templates (begin)
                         //var viewModel = GetPageViewModel(pageDataContext.Metadata, landingPage);
 
-                        //return View("LandingPage/Index", viewModel);
+                        //return View(viewModel);
                         // Implementation without page templates (end)
 
                         // Page template implementation (begin)

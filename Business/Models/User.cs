@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using XperienceAdapter.Models;
+
 namespace Business.Models
 {
-    public class User : BasicPageWithUrlSlug
+    public class User : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "UserAccount" });
 

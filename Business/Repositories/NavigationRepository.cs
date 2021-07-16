@@ -31,11 +31,7 @@ namespace Business.Repositories
 
         private readonly IPageUrlRetriever _pageUrlRetriever;
 
-        private readonly IPageRepository<BasePage, TreeNode> _basePageRepository;
-
-        /* Conventional routing: Begin */
-        //private readonly IPageRepository<BasicPageWithUrlSlug, TreeNode> _urlSlugPageRepository;
-        /* Conventional routing: End */
+        private readonly IPageRepository<BasicPage, TreeNode> _basePageRepository;
 
         private readonly ISiteCultureRepository _cultureRepository;
 
@@ -64,29 +60,21 @@ namespace Business.Repositories
             IMemoryCache memoryCache,
             ICacheDependencyAdapter cacheDependencyAdapter,
             IPageUrlRetriever pageUrlRetriever,
-            IPageRepository<BasePage, TreeNode> basePageRepository,
-            /* Conventional routing: Begin */
-            //IPageRepository<BasicPageWithUrlSlug, TreeNode> urlSlugPageRepository,
-            /* Conventional routing: End */
+            IPageRepository<BasicPage, TreeNode> basePageRepository,
             ISiteCultureRepository siteCultureRepository)
         {
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             _cacheDependencyAdapter = cacheDependencyAdapter ?? throw new ArgumentNullException(nameof(cacheDependencyAdapter));
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
             _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
-            /* Conventional routing: Begin */
-            //_urlSlugPageRepository = urlSlugPageRepository ?? throw new ArgumentNullException(nameof(urlSlugPageRepository));
-            /* Conventional routing: End */
             _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
-        /* CTB routing: Begin */
         public async Task<Dictionary<SiteCulture, NavigationItem>> GetWholeNavigationAsync(CancellationToken? cancellationToken = default) =>
             await GetContentTreeNavigationAsync(cancellationToken);
 
         public async Task<NavigationItem> GetNavigationAsync(SiteCulture? siteCulture = default, CancellationToken? cancellationToken = default) =>
             await GetContentTreeNavigationAsync(siteCulture, cancellationToken);
-        /* CTB routing: End */
 
         public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
         {
@@ -170,11 +158,11 @@ namespace Business.Repositories
             ?? throw new Exception($"The {nameof(siteCulture)} parameter is either null or not a valid site culture.");
 
         /// <summary>
-        /// Maps the <see cref="BasePage"/> onto a new <see cref="NavigationItem"/>.
+        /// Maps the <see cref="BasicPage"/> onto a new <see cref="NavigationItem"/>.
         /// </summary>
         /// <param name="basePage">The base page.</param>
         /// <returns>The navigation item.</returns>
-        private static NavigationItem MapBaseToNavigationDto(BasePage basePage) => new NavigationItem
+        private static NavigationItem MapBaseToNavigationDto(BasicPage basePage) => new NavigationItem
         {
             NodeId = basePage.NodeId,
             Guid = basePage.Guid,
@@ -277,86 +265,5 @@ namespace Business.Repositories
             }
 
         }
-
-        /* Conventional routing: Begin */
-        //public Dictionary<SiteCulture, NavigationItem> GetWholeNavigation() => GetConventionalRoutingNavigation();
-
-        //public NavigationItem GetNavigation(SiteCulture? siteCulture = default, string? nodeAliasPath = default) =>
-        //    GetConventionalRoutingNavigation(siteCulture, nodeAliasPath);
-
-        //private Dictionary<SiteCulture, NavigationItem> GetConventionalRoutingNavigation()
-        //{
-        //    GetInputData(out IEnumerable<SiteCulture> cultures, out Dictionary<SiteCulture, NavigationItem> cultureSpecificNavigations);
-
-        //    if (cultures.Any())
-        //    {
-        //        foreach (var culture in cultures)
-        //        {
-        //            NavigationItem decorated = GetConventionalRoutingNavigation(culture, null);
-
-        //            cultureSpecificNavigations.Add(culture, decorated);
-        //        }
-        //    }
-
-        //    return cultureSpecificNavigations;
-        //}
-
-        //private NavigationItem GetConventionalRoutingNavigation(SiteCulture? siteCulture, string? nodeAliasPath)
-        //{
-        //    var checkedCulture = GetSiteCulture(siteCulture);
-
-        //    var allItems = _urlSlugPageRepository.GetPagesByTypeAndCulture(
-        //        _navigationEnabledPageTypes,
-        //        checkedCulture,
-        //        $"{nameof(NavigationRepository)}|{nameof(GetConventionalRoutingNavigation)}|{checkedCulture.IsoCode}",
-        //        filter => GetDefaultFilter(filter, nodeAliasPath),
-        //        cacheDependencies: NavigationEnabledTypeDependencies.ToArray())
-        //            .Select(basicPage => MapBasicPageWithSlugToNavigation(basicPage));
-
-        //    return DecorateItems(RootDto, allItems, GetConventionalRoutingUrl);
-        //}
-
-        //public string? GetUrlByNodeId(int nodeId, SiteCulture pageCulture)
-        //{
-        //    var navigation = RoutingMode == PageRoutingModeEnum.BasedOnContentTree
-        //        ? GetContentTreeNavigation(pageCulture, RootPath)
-        //        : GetConventionalRoutingNavigation(pageCulture, RootPath);
-
-        //    return GetNavigationItemByNodeId(nodeId, navigation)?.RelativeUrl;
-        //}
-
-        ///// <summary>
-        ///// Maps the <see cref="BasicPageWithUrlSlug"/> onto a new <see cref="NavigationItem"/>.
-        ///// </summary>
-        ///// <param name="basicPage">The basic page with URL slug.</param>
-        ///// <returns>The navigation item.</returns>
-        //private static NavigationItem MapBasicPageWithSlugToNavigation(BasicPageWithUrlSlug basicPage)
-        //{
-        //    var navigationItem = MapBaseToNavigationDto(basicPage);
-        //    navigationItem.UrlSlug = basicPage.UrlSlug;
-
-        //    return navigationItem;
-        //}
-
-        ///// <summary>
-        ///// Gets a URL for conventional routing.
-        ///// </summary>
-        ///// <param name="item">Item to get the URL for.</param>
-        ///// <returns>URL.</returns>
-        //private string GetConventionalRoutingUrl(NavigationItem item)
-        //{
-        //    var patternBasedUrl = GetPageUrl(item);
-
-        //    if (string.IsNullOrEmpty(patternBasedUrl))
-        //    {
-        //        var trailingPath = string.Join('/', item.AllParents.Concat(new[] { item }).Select(item => item.UrlSlug));
-        //        var culture = item.Culture ?? _cultureRepository.DefaultSiteCulture;
-
-        //        return $"~/{culture?.IsoCode?.ToLowerInvariant()}{trailingPath}/";
-        //    }
-
-        //    return patternBasedUrl;
-        //}
-        /* Conventional routing: End */
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 
+using XperienceAdapter.Models;
+
 namespace Business.Models
 {
     /// <summary>
     /// Navigation item.
     /// </summary>
-    /// <remarks>Represents a navigation item in both modes: the content tree-based mode and the conventional routing one.</remarks>
-    public class NavigationItem : BasicPageWithUrlSlug
+    /// <remarks>Represents a navigation item.</remarks>
+    public class NavigationItem : BasicPage
     {
         /// <summary>
         /// Relative URL.

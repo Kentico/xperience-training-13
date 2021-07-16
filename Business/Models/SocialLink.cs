@@ -10,7 +10,7 @@ namespace Business.Models
     /// <summary>
     /// Social media link.
     /// </summary>
-    public class SocialLink : BasePage
+    public class SocialLink : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[]
         {

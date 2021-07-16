@@ -41,7 +41,7 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        private const string ConventionalRoutingControllers = "Contact|Doctors|Error|Home|ImageUploader|MediaLibraryUploader|Account|Profile";
+        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
 
         public IConfiguration Configuration { get; }
 
@@ -108,10 +108,6 @@ namespace MedioClinic
                     };
                 });
 
-            /* Conventional routing: Begin */
-            //services.Configure<RouteOptions>(options => options.AppendTrailingSlash = true);
-            /* Conventional routing: End */
-
             services.Configure<XperienceOptions>(Options);
             var xperienceOptions = Options.Get<XperienceOptions>();
 
@@ -169,9 +165,7 @@ namespace MedioClinic
 
             app.UseCors();
 
-            /* Conventional routing: Begin */
-            //app.UseRouting();
-            /* Conventional routing: End */
+            app.UseRouting();
 
             app.UseRequestCulture();
 
@@ -200,9 +194,7 @@ namespace MedioClinic
                         controller = ConventionalRoutingControllers
                     });
 
-                /* Conventional routing: Begin */
-                //MapCultureSpecificRoutes(endpoints, optionsAccessor);
-                /* Conventional routing: End */
+                endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapGet("/", async context =>
                 {
@@ -229,96 +221,6 @@ namespace MedioClinic
                 RegisterInitializationHandler(builder);
             }
         }
-
-        /* Conventional routing: Begin */
-
-        /// <summary>
-        /// Registers culture-specific routes using the conventional ASP.NET routing.
-        /// </summary>
-        /// <param name="builder">Route builder.</param>
-        /// <param name="optionsAccessor">Options accessor.</param>
-        //private void MapCultureSpecificRoutes(IEndpointRouteBuilder builder, IOptions<XperienceOptions> optionsAccessor)
-        //{
-        //    if (AppCore.Initialized)
-        //    {
-        //        var currentSiteName = optionsAccessor.Value.SiteCodeName;
-        //        string? spanishCulture = default;
-
-        //        if (!string.IsNullOrEmpty(currentSiteName))
-        //        {
-        //            var cultures = CultureSiteInfoProvider.GetSiteCultures(currentSiteName);
-        //            spanishCulture = cultures.FirstOrDefault(culture => culture.CultureCode.Equals("es-ES")).CultureCode;
-        //        }
-
-        //        if (!string.IsNullOrEmpty(DefaultCulture) && !string.IsNullOrEmpty(spanishCulture))
-        //        {
-        //            var routeOptions = new List<RouteBuilderOptions>
-        //            {
-        //                new RouteBuilderOptions("home", new { controller = "Home", action = "Index" }, new[]
-        //                {
-        //                    (DefaultCulture, "home"),
-        //                    (spanishCulture, "inicio"),
-        //                }),
-
-        //                new RouteBuilderOptions("doctor-listing", new { controller = "Doctors", action = "Index" }, new[]
-        //                {
-        //                    (DefaultCulture, "doctors"),
-        //                    (spanishCulture, "medicos"),
-        //                }),
-
-        //                new RouteBuilderOptions("doctor-detail", new { controller = "Doctors", action = "Detail" }, new[]
-        //                {
-        //                    (DefaultCulture, "doctors/{urlSlug?}"),
-        //                    (spanishCulture, "medicos/{urlSlug?}"),
-        //                }),
-
-        //                new RouteBuilderOptions("contact", new { controller = "Contact", action = "Index" }, new[]
-        //                {
-        //                    (DefaultCulture, "contact-us"),
-        //                    (spanishCulture, "contacta-con-nosotros"),
-        //                }),
-        //            };
-
-        //            foreach (var options in routeOptions)
-        //            {
-        //                foreach (var culture in options.CulturePatterns)
-        //                {
-        //                    mapRouteCultureVariantsImplementation(culture?.Culture!, options?.RouteName!, culture?.RoutePattern!, options?.RouteDefaults!);
-        //                }
-        //            }
-
-        //            void mapRouteCultureVariantsImplementation(
-        //                string culture,
-        //                string routeName,
-        //                string routePattern,
-        //                object routeDefaults)
-        //            {
-        //                var stringParameters = new string[] { culture, routeName, routePattern };
-
-        //                if (stringParameters.All(parameter => !string.IsNullOrEmpty(parameter)) && routeDefaults != null)
-        //                {
-        //                    builder.MapControllerRoute(
-        //                    name: $"{routeName}_{culture}",
-        //                    pattern: AddCulturePrefix(culture, routePattern!),
-        //                    defaults: routeDefaults,
-        //                    constraints: new { culture = new Kentico.Web.Mvc.Internal.SiteCultureConstraint() }
-        //                    );
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Decorates route patterns with a well-known culture prefix.
-        ///// </summary>
-        ///// <param name="culture">Culture prefix.</param>
-        ///// <param name="pattern">Route pattern.</param>
-        ///// <returns></returns>
-        //private static string AddCulturePrefix(string culture, string pattern) =>
-        //    $"{{culture={culture.ToLowerInvariant()}}}/{pattern}";
-
-        /* Conventional routing: End */
 
         /// <summary>
         /// Configures ASP.NET Identity services of Xperience.

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using XperienceAdapter.Models;
+
 namespace Business.Models
 {
     /// <summary>
     /// A general page with name, perex, and text.
     /// </summary>
-    public class NamePerexText : BasicPageWithUrlSlug
+    public class NamePerexText : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "Perex", "Text" });
 

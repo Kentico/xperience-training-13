@@ -6,7 +6,7 @@ using XperienceAdapter.Models;
 
 namespace Business.Models
 {
-    public class Company : BasePage
+    public class Company : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[]
         {

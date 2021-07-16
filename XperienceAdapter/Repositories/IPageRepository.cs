@@ -17,7 +17,7 @@ namespace XperienceAdapter.Repositories
     /// <typeparam name="TPageDto">Page DTO.</typeparam>
     /// <typeparam name="TPage">Xperience page.</typeparam>
     public interface IPageRepository<TPageDto, TPage> : IRepository<TPageDto>
-        where TPageDto : BasePage, new()
+        where TPageDto : BasicPage, new()
         where TPage : TreeNode, new()
     {
         /// <summary>

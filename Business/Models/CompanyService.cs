@@ -9,7 +9,7 @@ namespace Business.Models
     /// <summary>
     /// Company service.
     /// </summary>
-    public class CompanyService : BasePage
+    public class CompanyService : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "ServiceDescription", "Icon" });
 

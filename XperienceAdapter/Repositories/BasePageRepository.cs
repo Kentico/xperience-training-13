@@ -20,7 +20,7 @@ namespace XperienceAdapter.Repositories
     /// <typeparam name="TPageDto">Page DTO.</typeparam>
     /// <typeparam name="TPage">Xperience page.</typeparam>
     public abstract class BasePageRepository<TPageDto, TPage> : IPageRepository<TPageDto, TPage>
-        where TPageDto : BasePage, new()
+        where TPageDto : BasicPage, new()
         where TPage : TreeNode, new()
     {
         protected readonly IRepositoryServices _repositoryServices;

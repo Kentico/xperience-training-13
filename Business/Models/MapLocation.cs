@@ -6,7 +6,7 @@ using XperienceAdapter.Models;
 
 namespace Business.Models
 {
-    public class MapLocation : BasePage
+    public class MapLocation : BasicPage
     {
         public override IEnumerable<string> SourceColumns => base.SourceColumns.Concat(new[] { "Latitude", "Longitude" });
 

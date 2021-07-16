@@ -7,7 +7,7 @@ namespace XperienceAdapter.Models
     /// <summary>
     /// Base page model.
     /// </summary>
-    public class BasePage
+    public class BasicPage
     {
         public virtual IEnumerable<string> SourceColumns => new List<string>
         {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Core.Configuration;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,5 +22,7 @@ namespace MedioClinic.Controllers
             : base(logger, optionsMonitor, stringLocalizer)
         {
         }
+
+        public async Task<IActionResult> Index() => View();
     }
 }
