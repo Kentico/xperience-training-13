@@ -19,23 +19,6 @@
     double GetImageAspectRatio(MediaLibraryFile image) =>
         (double)image?.Width / (double)image?.Height;
 
-    // Gets the image constraint in case "Enforce dimensions" is checked.
-    SizeConstraint GetImageSizeConstraint(double imageAspectRatio)
-    {
-        if (dimensionsAreSet)
-        {
-            if (containerAspectRatio >= imageAspectRatio)
-            {
-                return SizeConstraint.Width(Model.Width.Value);
-            }
-            else
-            {
-                return SizeConstraint.Height(Model.Height.Value);
-            }
-        }
-
-        return SizeConstraint.Empty;
-    }
 
     // Builds the widget container size attribute.
     IHtmlContent GetContainerStylingAttribute() =>
@@ -66,11 +49,30 @@
         return $"class=\"responsive-img\"";
     }
 
+    // Gets the image constraint in case "Enforce dimensions" is checked.
+    SizeConstraint GetImageSizeConstraint(double imageAspectRatio)
+    {
+        if (dimensionsAreSet)
+        {
+            if (containerAspectRatio >= imageAspectRatio)
+            {
+                return SizeConstraint.Width(Model.Width.Value);
+            }
+            else
+            {
+                return SizeConstraint.Height(Model.Height.Value);
+            }
+        }
+
+        return SizeConstraint.Empty;
+    }
+
     string GetImageUrl(MediaLibraryFile image, SizeConstraint imageSizeConstraint)
     {
         if (dimensionsAreSet && Model?.EnforceDimensions == true)
         {
-            // In edit mode and with "Enforce dimensions (on the live site)", we can leverage the Kentico responsive images feature to get images resized to fixed dimensions.
+            // In edit mode and with "Enforce dimensions (on the live site)",
+            // we can leverage the responsive images feature of Xperience to get images resized to fixed dimensions.
             return image?.MediaFileUrl?.WithSizeConstraint(imageSizeConstraint)?.RelativePath;
         }
         else
@@ -91,8 +93,8 @@
                 if (image != null)
                 {
                     var imageAspectRatio = GetImageAspectRatio(image);
-                    var imageSizeConstraint = GetImageSizeConstraint(imageAspectRatio);
                     var stylingAttribute = GetImageStylingAttribute(imageAspectRatio);
+                    var imageSizeConstraint = GetImageSizeConstraint(imageAspectRatio);
                     var imageUrl = GetImageUrl(image, imageSizeConstraint);
 
                     <div class="swiper-slide" id="slide-@image.Guid">

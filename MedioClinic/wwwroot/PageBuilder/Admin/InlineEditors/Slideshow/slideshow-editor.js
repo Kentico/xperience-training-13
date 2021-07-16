@@ -42,7 +42,7 @@
                 pickingLink.addEventListener("click", function () {
                     if (!mediaLibraryName) {
                         showErrorMessage(slide, tempGuid,
-                            options.localizationService.getString("MedioClinic.InlineEditor.Slideshow..NoLibrarySpecified"));
+                            options.localizationService.getString("MedioClinic.InlineEditor.Slideshow.NoLibrarySpecified"));
                     } else {
                         var dialogOptions = createDialogOptions(slide, pickingLink);
                         window.kentico.modalDialog.contentSelector.open(dialogOptions);

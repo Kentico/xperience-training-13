@@ -60,7 +60,7 @@ using MedioClinic.PageTemplates;
     "{$" + ComponentIdentifiers.TextWidget + ".Title$}",
     typeof(TextProperties),
     customViewName: "~/Components/Widgets/_Text.cshtml",
-    //AllowCache = true,
+    AllowCache = true,
     Description = "{$" + ComponentIdentifiers.TextWidget + ".Description$}",
     IconClass = "icon-l-text")]
 
@@ -69,7 +69,7 @@ using MedioClinic.PageTemplates;
     typeof(ImageViewComponent),
     "{$" + ComponentIdentifiers.ImageWidget + ".Title$}",
     typeof(ImageProperties),
-    //AllowCache = true,
+    AllowCache = true,
     Description = "{$" + ComponentIdentifiers.ImageWidget + ".Description$}",
     IconClass = "icon-picture")]
 
@@ -80,7 +80,7 @@ using MedioClinic.PageTemplates;
     typeof(SlideshowViewComponent),
     "{$" + ComponentIdentifiers.SlideshowWidget + ".Title$}",
     typeof(SlideshowProperties),
-    //AllowCache = true,
+    AllowCache = true,
     Description = "{$" + ComponentIdentifiers.SlideshowWidget + ".Description$}",
     IconClass = "icon-carousel")]
 

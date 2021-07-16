@@ -37,15 +37,19 @@ namespace MedioClinic.Components.FormComponents
 
         public Guid? FileGuid { get; set; }
 
-        public override bool CustomAutopostHandling => true;
-
-        public bool ShowViewFileLink =>
-            MembershipContext.AuthenticatedUser.IsAuthorizedPerResource(ModuleName.BIZFORM, "ReadData");
-
         public MediaLibraryUploader(IMediaFileRepository mediaFileRepository)
         {
             _mediaFileRepository = mediaFileRepository ?? throw new ArgumentNullException(nameof(mediaFileRepository));
         }
+
+        public override string GetValue() => FileGuidAsString;
+
+        public override void SetValue(string value) => FileGuidAsString = value;
+
+        public override bool CustomAutopostHandling => true;
+
+        public bool ShowViewFileLink =>
+            MembershipContext.AuthenticatedUser.IsAuthorizedPerResource(ModuleName.BIZFORM, "ReadData");
 
         [ValidateNever]
         public string ImageRelativePath
@@ -63,13 +67,6 @@ namespace MedioClinic.Components.FormComponents
 
                 return null;
             }
-        }
-
-        public override string GetValue() => FileGuidAsString;
-
-        public override void SetValue(string value)
-        {
-            FileGuidAsString = value;
         }
     }
 }

@@ -30,18 +30,12 @@ namespace MedioClinic.Components.FormComponents
         /// <summary>
         /// Gets the <see cref="Value"/>.
         /// </summary>
-        public override bool GetValue()
-        {
-            return Value;
-        }
+        public override bool GetValue() => Value;
 
         /// <summary>
         /// Sets the <see cref="Value"/>.
         /// </summary>
-        public override void SetValue(bool value)
-        {
-            Value = value;
-        }
+        public override void SetValue(bool value) => Value = value;
 
         public override bool CustomAutopostHandling => true;
     }

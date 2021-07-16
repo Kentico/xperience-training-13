@@ -16,8 +16,6 @@ namespace Business.Repositories
 {
     public class AirportRepository : IAirportRepository
     {
-        private const string Code = "AirportIataCode";
-
         private const string Name = "AirportName";
 
         public IEnumerable<Airport> GetAll() => GetResult(null);

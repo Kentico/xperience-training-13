@@ -31,12 +31,12 @@
     fileNameAttributes.AddOrEnrichEntry("class", "mc-file-name-hidden");
     var buttonAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
     var currentUrl = GetActionUrl(currentFileGuidHiddenElementId);
-    var requiredAsStringLiteral = Model?.Properties?.Required.ToString().ToLowerInvariant();
+    var requiredLiteral = Model?.Properties?.Required.ToString().ToLowerInvariant();
 
     buttonAttributes.AddOrEnrichEntry(
-        "onclick", 
-        $"window.medioClinic.mediaLibraryUploaderFormComponent.uploadFile(this, '{currentUrl}', {requiredAsStringLiteral}, '{currentFileGuidHiddenElementId}');", ';');
-    
+        "onclick",
+        $"window.medioClinic.mediaLibraryUploaderFormComponent.uploadFile(this, '{currentUrl}', {requiredLiteral}, '{currentFileGuidHiddenElementId}');", ';');
+
     buttonAttributes.AddOrEnrichEntry("class", buttonCssClasses);
 }
 
@@ -74,7 +74,7 @@
 @* Partial views don't support @section directives. *@
 <script>
     @{
-        var warnAboutFileLiteral = $"window.medioClinic.mediaLibraryUploaderFormComponent.checkForUnuploadedFile({Model.Properties.Required.ToString().ToLowerInvariant()}, '{currentFileGuidHiddenElementId}');";
+        var warnAboutFileLiteral = $"window.medioClinic.mediaLibraryUploaderFormComponent.checkForUnuploadedFile({requiredLiteral}, '{currentFileGuidHiddenElementId}');";
     }
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function () {

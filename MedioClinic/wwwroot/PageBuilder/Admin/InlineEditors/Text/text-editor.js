@@ -38,6 +38,7 @@
 
         destroy: function (options) {
             var mediumEditor = MediumEditor.getEditorFromElement(options.editor);
+
             if (mediumEditor) {
                 mediumEditor.destroy();
             }

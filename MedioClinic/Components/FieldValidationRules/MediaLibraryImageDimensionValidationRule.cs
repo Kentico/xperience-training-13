@@ -13,6 +13,7 @@ using XperienceAdapter.Repositories;
 
 namespace MedioClinic.Components.FieldValidationRules
 {
+    [Serializable]
     public class MediaLibraryImageDimensionValidationRule : ValidationRule<string>
     {
         private const string MinimumWidthKey = ComponentIdentifiers.ImageValidationRule + ".MinimumWidth";

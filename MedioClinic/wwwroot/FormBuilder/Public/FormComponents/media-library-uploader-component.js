@@ -5,7 +5,7 @@
      * Displays file size and MIME type of the selected file.
      * @param {HTMLElement} target HTML element that invoked the function.
      */
-    mediaLibraryUploaderFormComponent.onFileSelected = function (target, isFileRequired, fileGuidHiddenElementId) {
+    mediaLibraryUploaderFormComponent.onFileSelected = function (target) {
         var mbSize = 1048576;
         var file = target.files[0];
         var fileSizeString = "";

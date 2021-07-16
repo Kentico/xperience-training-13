@@ -41,6 +41,8 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
+        private const string ConventionalRoutingControllers = "Contact|Doctors|Error|Home|ImageUploader|MediaLibraryUploader|Account|Profile";
+
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
@@ -158,9 +160,9 @@ namespace MedioClinic
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
 
             app.UseHttpsRedirection();
-            
+
             app.UseStaticFiles();
-            
+
             app.UseKentico();
 
             app.UseCookiePolicy();
@@ -183,13 +185,20 @@ namespace MedioClinic
                 endpoints.MapControllerRoute(
                     name: "error",
                     pattern: "{culture}/error/{code}",
-                    defaults: new { controller = "Error", action = "Index" }
-                    );
+                    defaults: new { controller = "Error", action = "Index" },
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
 
                 endpoints.MapAreaControllerRoute(
                     name: "identity",
                     areaName: "Identity",
-                    pattern: "{culture}/identity/{controller}/{action}/{id?}");
+                    pattern: "{culture}/identity/{controller}/{action}/{id?}",
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
 
                 /* Conventional routing: Begin */
                 //MapCultureSpecificRoutes(endpoints, optionsAccessor);
@@ -418,9 +427,7 @@ namespace MedioClinic
         /// <summary>
         /// Configures the page template filters.
         /// </summary>
-        private static void ConfigurePageBuilderFilters()
-        {
+        private static void ConfigurePageBuilderFilters() =>
             PageBuilderFilters.PageTemplates.Add(new EventPageTemplateFilter());
-        }
     }
 }

@@ -84,7 +84,7 @@ namespace XperienceAdapter.Repositories
             return await AddMediaFileInternalAsync(uploadedFile, libraryFolderPath, library, checkPermissions);
         }
 
-        private async Task<Guid> AddMediaFileInternalAsync(IUploadedFile uploadedFile, string libraryFolderPath, MediaLibraryInfo mediaLibraryInfo, bool checkPermissions)
+        private async Task<Guid> AddMediaFileInternalAsync(IUploadedFile uploadedFile, string? libraryFolderPath, MediaLibraryInfo mediaLibraryInfo, bool checkPermissions)
         {
             if (checkPermissions && !mediaLibraryInfo.CheckPermissions(PermissionsEnum.Create, _siteService.CurrentSite.SiteName, MembershipContext.AuthenticatedUser))
             {

@@ -86,7 +86,7 @@ namespace MedioClinic.Controllers
                 return Unauthorized("The page is not in edit mode.");
             }
 
-            if ((await CheckPagePermissions(pageId.Value)) == false)
+            if ((await CheckPagePermissionsAsync(pageId.Value)) == false)
             {
                 return StatusCode((int)System.Net.HttpStatusCode.Forbidden);
             }
@@ -127,7 +127,7 @@ namespace MedioClinic.Controllers
         /// </summary>
         /// <param name="pageId"></param>
         /// <returns></returns>
-        private async Task<bool> CheckPagePermissions(int pageId)
+        private async Task<bool> CheckPagePermissionsAsync(int pageId)
         {
             var cacheKey = $"{nameof(ImageUploaderController)}|{nameof(Upload)}|{pageId}";
 

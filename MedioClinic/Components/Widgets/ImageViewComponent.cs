@@ -33,9 +33,9 @@ namespace MedioClinic.Components.Widgets
         {
             var properties = componentViewModel?.Properties;
             var imageGuid = properties?.ImageGuid;
-            MediaLibraryFile mediaFile = default;
+            MediaLibraryFile? mediaFile = default;
 
-            if (properties?.ImageGuid.HasValue == true && !string.IsNullOrEmpty(properties?.MediaLibraryName))
+            if (imageGuid.HasValue == true && !string.IsNullOrEmpty(properties?.MediaLibraryName) && componentViewModel != null)
             {
                 mediaFile = await _mediaFileRepository.GetMediaFileAsync(imageGuid.Value);
                 componentViewModel.CacheDependencies.CacheKeys = new List<string>() { $"mediafile|{mediaFile?.Guid}" };
