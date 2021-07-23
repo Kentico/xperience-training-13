@@ -1,17 +1,10 @@
 ﻿@using System.Threading;
-@using MedioClinic.Areas.Identity.Controllers
 @model MedioClinic.Models.ViewComponents.Navigation.TopNavigationContentsModel
 @inject IStringLocalizer<SharedResource> StringLocalizer
 
 @{
     var navigationItems = Model?.Navigation?.ChildItems;
     var triggerViewName = "_DropdownTrigger";
-    var identityIcon = @"<i class=""material-icons"">account_circle</i>";
-}
-
-@functions{
-    private (string, string) GetIdentityItem(string action, string controller, string resourceKey) =>
-        (Url.Action(action, controller, new { area = "Identity", culture = Thread.CurrentThread.CurrentUICulture.Name }).ToLowerInvariant(), StringLocalizer[resourceKey]);
 }
 
 <ul id="@Model?.MainId" class="@Model?.ListClass">
@@ -30,23 +23,6 @@
             }
         }
     }
-
-    @{
-        var identityNavigation = new List<(string, string)>();
-
-        if (Context.User.Identity.IsAuthenticated)
-        {
-            identityNavigation.Add(GetIdentityItem(nameof(ProfileController.Index), "Profile", "Identity.Profile.Title"));
-            identityNavigation.Add(GetIdentityItem(nameof(AccountController.SignOut), "Account", "Identity.Account.SignOut.Title"));
-        }
-        else
-        {
-            identityNavigation.Add(GetIdentityItem(nameof(AccountController.SignIn), "Account", "Identity.Account.SignIn.Title"));
-            identityNavigation.Add(GetIdentityItem(nameof(AccountController.Register), "Account", "Identity.Account.Register.Title"));
-        }
-    }
-
-    <partial name="@triggerViewName" model="@(Guid.NewGuid().ToString(), identityIcon, (IEnumerable<(string, string)>)identityNavigation)" />
 
     @if (Model?.CultureSwitchId != null)
     {

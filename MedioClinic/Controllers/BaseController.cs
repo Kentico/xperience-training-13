@@ -9,7 +9,6 @@ using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 
 using Core.Configuration;
-using Identity.Models;
 using MedioClinic.Models;
 using Microsoft.Extensions.Localization;
 using XperienceAdapter.Localization;
