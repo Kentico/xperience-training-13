@@ -9,6 +9,7 @@ The repo contains the Medio Clinic sample website developed throughout the [Kent
 The repo currently contains code of the following modules of the course:
 
 * Essentials
+* Builders
 * Identity
 
 The code of the modules does not exist in separate git branches or is otherwise split. It lives together as one working Visual Studio solution, internally separated using standard conventions (separate projects, MVC areas). Therefore, when taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
