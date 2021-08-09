@@ -264,7 +264,6 @@ namespace XperienceAdapter.Repositories
                 Name = mediaFileInfo.FileTitle,
                 Extension = mediaFileInfo.FileExtension,
                 MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
-                IsImage = _optionsMonitor.CurrentValue?.MediaLibraryOptions?.AllowedImageExtensions?.Contains(mediaFileInfo.FileExtension) == true,
                 Width = mediaFileInfo.FileImageWidth,
                 Height = mediaFileInfo.FileImageHeight
             };

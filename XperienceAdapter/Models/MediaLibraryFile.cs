@@ -16,8 +16,6 @@ namespace XperienceAdapter.Models
         
         public string? Extension { get; set; }
 
-        public bool IsImage { get; set; }
-
         public int Width { get; set; }
         
         public int Height { get; set; }
