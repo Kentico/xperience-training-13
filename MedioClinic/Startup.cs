@@ -195,11 +195,6 @@ namespace MedioClinic
                     });
 
                 endpoints.MapDefaultControllerRoute();
-
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("The site has not been configured yet.");
-                });
             });
         }
 
