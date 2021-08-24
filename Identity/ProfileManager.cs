@@ -95,7 +95,15 @@ namespace Identity
             var userTitle = Localize("General.User");
             var userDoesntExistTitle = Localize("Adm.User.NotExist");
             profileResult.Data = (uploadModel, userTitle);
+            var currentUserId = MembershipContext.AuthenticatedUser.UserID;
             MedioClinicUser user = default!;
+
+            if (currentUserId != uploadModel.CommonUserViewModel.Id)
+            {
+                profileResult.Data = (uploadModel, userDoesntExistTitle);
+
+                return profileResult;
+            }
 
             try
             {
