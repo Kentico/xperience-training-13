@@ -95,6 +95,7 @@ namespace MedioClinic
             // services.AddAuthorization();
 
             services.AddLocalization();
+            services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = false);
 
             services.AddControllersWithViews()
                 .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()))
