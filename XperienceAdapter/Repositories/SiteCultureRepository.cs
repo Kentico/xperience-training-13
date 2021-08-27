@@ -20,7 +20,7 @@ namespace XperienceAdapter.Repositories
         public SiteCulture DefaultSiteCulture =>
             GetAll().FirstOrDefault(culture => culture.IsDefault);
 
-        public SiteCultureRepository(ISiteService siteService, ICultureSiteInfoProvider cultureSiteInfoProvider)
+        public SiteCultureRepository(ISiteService siteService)
         {
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
         }

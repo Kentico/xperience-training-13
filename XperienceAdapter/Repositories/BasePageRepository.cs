@@ -130,8 +130,7 @@ namespace XperienceAdapter.Repositories
         protected IEnumerable<TPageDto> MapPages(
             IEnumerable<TPage?>? pages = default,
             Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
-            bool includeAttachments = default,
-            SiteCulture? culture = default)
+            bool includeAttachments = default)
         {
             if (pages != null && pages.Any())
             {
