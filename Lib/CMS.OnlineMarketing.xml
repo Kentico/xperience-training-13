@@ -29,11 +29,6 @@
             Code name of the conversion.
             </summary>
         </member>
-        <member name="F:CMS.OnlineMarketing.ABTestConstants.AB_COOKIE_PREFIX">
-            <summary>
-            Prefix of A/B test cookie names.
-            </summary>
-        </member>
         <member name="T:CMS.OnlineMarketing.Internal.ABTestHelper">
             <summary>
             Contains A/B test helper methods.
@@ -370,6 +365,11 @@
             Gets or sets cached cookie value.
             </summary>
         </member>
+        <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager.VariantCookieValue">
+            <summary>
+            Gets or sets cached variant cookie value (present even without cookie consent).
+            </summary>
+        </member>
         <member name="P:CMS.OnlineMarketing.Internal.ABUserStateManager.IsExcluded">
             <summary>
             Indicates whether is visitor included in A/B test or not.
@@ -463,12 +463,26 @@
             </summary>
             <param name="cookieName">Cookie name</param>
         </member>
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.GetVariantCookieValue(System.String)">
+            <summary>
+            Returns value of specified variant cookie.
+            </summary>
+            <param name="cookieName">Cookie name</param>
+        </member>
         <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.SetCookie(System.String,CMS.OnlineMarketing.Internal.ABCookieValue,System.DateTime)">
             <summary>
             Serializes object to a cookie as a JSON object.
             </summary>
             <param name="cookieName">Name of the cookie to save object to</param>
             <param name="cookieValue">Object to serialize to the cookie</param>
+            <param name="expiration">Expiration of the cookie</param>
+        </member>
+        <member name="M:CMS.OnlineMarketing.Internal.ABUserStateManager.SetCookie(System.String,System.Guid,System.DateTime)">
+            <summary>
+            Sets GUID to a cookie.
+            </summary>
+            <param name="cookieName">Name of the cookie to save object to</param>
+            <param name="abVariant">AB variant GUID</param>
             <param name="expiration">Expiration of the cookie</param>
         </member>
         <member name="T:CMS.OnlineMarketing.Internal.ABUserStateManagerFactory">

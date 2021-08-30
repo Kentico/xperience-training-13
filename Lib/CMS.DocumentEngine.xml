@@ -15505,6 +15505,20 @@
             </summary>
             <param name="page">Page for which URL paths should be generated including the descending pages.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathCulturePathsGenerator.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.PageUrlPathCulturePathsGenerator"/> class.
+            </summary>
+            <param name="site">Site for which URL paths should be generated.</param>
+            <param name="culturesTableBuilder">PageUrlPathCulturesTable builder.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathCulturePathsGenerator.#ctor(CMS.DocumentEngine.TreeNode,CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.PageUrlPathCulturePathsGenerator"/> class.
+            </summary>
+            <param name="page">Page for which URL paths should be generated including the descending pages.</param>
+            <param name="culturesTableBuilder">PageUrlPathCulturesTable builder.</param>
+        </member>
         <member name="M:CMS.DocumentEngine.Routing.PageUrlPathCulturePathsGenerator.Generate(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Generates page URL paths for given cultures.
@@ -15747,6 +15761,52 @@
             <param name="dataContext">If successful, contains page URL data context extracted from given data.</param>
             <returns>Returns <c>true</c> if the page URL data context is determined from the data.</returns>
         </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder">
+            <summary>
+            Interface for translation table from culture code to culture alias builder.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder.Build">
+            <summary>
+            Build translation table from culture code to culture alias.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.PageRoutingUrlCultureFormatChangeModeEnum">
+            <summary>
+            Enumeration representing culture format change mode.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.Internal.PageRoutingUrlCultureFormatChangeModeEnum.Remove">
+            <summary>
+            Remove language prefix from page URL paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.Internal.PageRoutingUrlCultureFormatChangeModeEnum.Add">
+            <summary>
+            Add language prefix to page URL paths.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.Internal.PageRoutingUrlCultureFormatChangeModeEnum.Modify">
+            <summary>
+            Modify language prefix in page URL paths.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureAliasesTableBuilder">
+            <summary>
+            Translation table from culture code to culture alias builder for given site.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureAliasesTableBuilder.#ctor(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureAliasesTableBuilder"/> class.
+            </summary>
+            <param name="site">Site for which translation table should be built.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureAliasesTableBuilder.Build">
+            <summary>
+            Build translation table from culture code to culture alias.
+            </summary>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger">
             <summary>
             Changes URL culture format of page URL paths on given site.
@@ -15758,12 +15818,13 @@
             </summary>
             <param name="site">Site for which URL paths culture format should be changed.</param>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger)">
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger,CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder)">
             <summary>
             Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger"/> class.
             </summary>
             <param name="site">Site for which URL paths culture format should be changed.</param>
             <param name="synchronizationLogger">Synchronization tasks logger.</param>
+            <param name="culturesTableBuilder">PageUrlPathCulturesTable builder.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathCultureFormatChanger.Change(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum)">
             <summary>
@@ -15777,6 +15838,101 @@
             </summary>
             <param name="cultureCode">Culture code.</param>
             <param name="newFormat">New URL culture format.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeHelper">
+            <summary>
+            Helper class encapsulating common methods for the page URL format change action.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeHelper.GetWhereCondition(System.Int32,System.String)">
+            <summary>
+            Generates <see cref="T:CMS.DataEngine.WhereCondition"/> to restrict Page URL path by site ID and by culture code.
+            </summary>
+            <param name="siteId">Site ID.</param>
+            <param name="cultureCode">Culture code.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeHelper.GetChangeCulturePrefixesQueryName">
+            <summary>
+            Returns name of the update query.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeHelper.GetQueryParameters(CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters)">
+            <summary>
+            Provides SQL parameters for update.
+            </summary>
+            <param name="parameters">Parameters in object representation.</param>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters">
+            <summary>
+            Object representation of the SQL procedure parameters.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.Site">
+            <summary>
+            Site.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.CultureCode">
+            <summary>
+            Culture code.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.CultureFormatChangeMode">
+            <summary>
+            Culture format change mode.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.DefaultCultureCode">
+            <summary>
+            Default culture code.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.HidePrefixForDefaultCulture">
+            <summary>
+            Hide language prefix for default culture.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.UseCultureAliasAsCulturePrefix">
+            <summary>
+            Use culture alias as language prefix.
+            </summary>
+        </member>
+        <member name="P:CMS.DocumentEngine.Routing.Internal.PageUrlPathFormatChangeParameters.CultureAliasesTable">
+            <summary>
+            Table with culture aliases.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger">
+            <summary>
+            Changes URL language prefix format of page URL paths on given site.
+            </summary>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger.#ctor(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger"/> class.
+            </summary>
+            <param name="site">Site for which URL paths culture format should be changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger.#ctor(CMS.DataEngine.SiteInfoIdentifier,CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger,CMS.DocumentEngine.Routing.Internal.IPageUrlPathCultureAliasesTableBuilder)">
+            <summary>
+            Initializes an instance of the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger"/> class.
+            </summary>
+            <param name="site">Site for which URL paths culture format should be changed.</param>
+            <param name="synchronizationLogger">Synchronization tasks logger.</param>
+            <param name="culturesTableBuilder">PageUrlPathCulturesTable builder.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger.Change(CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum)">
+            <summary>
+            Change URL language prefix format of page URL paths.
+            </summary>
+            <param name="newFormat">New URL language prefix format.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.Internal.PageUrlPathLanguagePrefixFormatChanger.ChangeForCulture(CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum,System.String)">
+            <summary>
+            Change URL language prefix format of page URL paths for given culture.
+            </summary>
+            <param name="newFormat">New URL language prefix format.</param>
+            <param name="cultureCode">Culture code.</param>
         </member>
         <member name="T:CMS.DocumentEngine.Routing.Internal.PageUrlPathSlugUpdater">
             <summary>
@@ -15911,13 +16067,20 @@
             Interface for synchronization tasks of page URL paths logger.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangePathsFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangeCultureFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
             <summary>
-            Logs task for page URL paths format change.
+            Logs task for page URL paths culture format change.
             </summary>
             <param name="newFormat">New format.</param>
             <param name="site">Site.</param>
             <param name="cultureCode">Culture code for which the paths should be changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangeLanguagePrefixFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum,CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Logs task for page URL paths language prefix format change.
+            </summary>
+            <param name="newFormat">New language prefix format.</param>
+            <param name="site">Site.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.IPageUrlPathsSynchronizationLogger.LogChangeSlugTask(CMS.DocumentEngine.TreeNode,System.String,System.String)">
             <summary>
@@ -16081,6 +16244,11 @@
             Settings key name for hiding the language prefix for default culture version.
             </summary>
         </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingHelper.USE_CULTURE_ALIAS_AS_LANGUAGE_PREFIX_IN_URL">
+            <summary>
+            Settings key name for using culture alias as language prefix in URLs.
+            </summary>
+        </member>
         <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.GetStoreFormerUrls(CMS.DataEngine.SiteInfoIdentifier)">
             <summary>
             Indicates if the former URLs should be stored.
@@ -16147,6 +16315,12 @@
             </summary>
             <param name="site">Site.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.UseCultureAliasAsLanguagePrefixInUrl(CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Indicates if culture alias is used as language prefix in URLs
+            </summary>
+            <param name="site">Site.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.PageRoutingModeEnum">
             <summary>
             Enumeration representing the page routing mode.
@@ -16175,6 +16349,21 @@
         <member name="F:CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum.DomainDriven">
             <summary>
             Format using domain for culture detection.
+            </summary>
+        </member>
+        <member name="T:CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum">
+            <summary>
+            Enumeration representing the page URL language prefix format for content tree-based routing.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum.CultureCode">
+            <summary>
+            Format using culture code as language prefix.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum.CultureAlias">
+            <summary>
+            Format using culture alias as language prefix.
             </summary>
         </member>
         <member name="T:CMS.DocumentEngine.Routing.PageUrlDataContextExtractor">
@@ -16308,9 +16497,14 @@
             Logger for synchronization tasks of page URL paths.
             </summary>
         </member>
-        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.UPDATE_TASK_FORMAT">
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.UPDATE_TASK_CULTURE_FORMAT">
             <summary>
-            Type of the update page URL paths task.
+            Update page URL culture format task type.
+            </summary>
+        </member>
+        <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.UPDATE_TASK_PREFIX_FORMAT">
+            <summary>
+            Update page URL language prefix format task type.
             </summary>
         </member>
         <member name="F:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.TYPE_PARAM_NAME">
@@ -16333,13 +16527,20 @@
             New slug parameter key.
             </summary>
         </member>
-        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogChangePathsFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogChangeCultureFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlCultureFormatEnum,CMS.DataEngine.SiteInfoIdentifier,System.String)">
             <summary>
-            Logs task for page URL paths format change.
+            Logs task for page URL paths culture format change.
             </summary>
             <param name="newFormat">New format.</param>
             <param name="site">Site.</param>
             <param name="cultureCode">Culture code for which the paths should be changed.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogChangeLanguagePrefixFormatTask(CMS.DocumentEngine.Routing.PageRoutingUrlLanguagePrefixFormatEnum,CMS.DataEngine.SiteInfoIdentifier)">
+            <summary>
+            Logs task for page URL paths language prefix format change.
+            </summary>
+            <param name="newFormat">New language prefix format.</param>
+            <param name="site">Site.</param>
         </member>
         <member name="M:CMS.DocumentEngine.Routing.PageUrlPathsSynchronizationLogger.LogGeneratePathsTask(CMS.DataEngine.SiteInfoIdentifier,System.String)">
             <summary>
@@ -20075,6 +20276,11 @@
             <param name="siteName">Site name</param>
             <param name="parentNodeId">Parent node ID</param>
             <param name="currentNodeId">Current node ID</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.TreePathUtils.TrimEndReplacementCharacter(System.String,System.String)">
+            <summary>
+            Returns node alias without trailing forbidden character replacement.
+            </summary>
         </member>
         <member name="M:CMS.DocumentEngine.TreePathUtils.GetAliasPathCondition(System.String,System.Boolean,System.Boolean)">
             <summary>

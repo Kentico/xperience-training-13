@@ -12,10 +12,15 @@ using CMS.UIControls;
 [UIElement(ModuleName.CONTACTMANAGEMENT, "Contacts")]
 public partial class CMSModules_ContactManagement_Pages_Tools_Contact_List : CMSContactManagementPage
 {
+    private const string HOWTO_VIDEO_URL = "https://www.youtube.com/watch?v=h8bnBnAZB14&list=PL9RdJplq_ukaNEfpLp0YVJENKU2NAokbM&index=3";
+    private const string HOWTO_VIDEO_LENGTH = "5:14";
+
     #region "Page events"
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        InitSmartTip();
+
         // Set header actions (add button)
         string url = ResolveUrl("New.aspx");
 
@@ -50,4 +55,17 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Contact_List : CMS
     }
 
     #endregion
+
+    private void InitSmartTip()
+    {
+        tipHowCMWorks.ExpandedHeader = GetString("contactmanagement.listing.howto.title");
+        tipHowCMWorks.Content = $@"
+<div class=""smarttip-video"">
+    <a href=""{HOWTO_VIDEO_URL}"" target=""_blank"">
+        <img src=""{UIHelper.GetImageUrl("CMSModules/CMS_ContactManagement/cm_howto_video_thumbnail.png")}"" class=""smarttip-video-thumbnail"">
+        <span class=""smarttip-video-title"">{GetString("contactmanagement.listing.howto.content")}</span>
+        <span class=""smarttip-video-length"">{HOWTO_VIDEO_LENGTH}</span>
+    </a>
+</div>";
+    }
 }

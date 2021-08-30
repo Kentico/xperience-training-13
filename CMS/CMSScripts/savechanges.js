@@ -183,7 +183,13 @@ var CMSContentManager = {
                             var oldText = this._fullTrim(prevValue);
 
                             var newText = this._fullTrim(oEditor.getData());
-                            if (oldText != newText) {
+                            if (oldText !== newText) {
+                                return true;
+                            }
+                        } else {
+                            oldText = this._fullTrim(document.getElementById(name).innerText);
+                            newText = this._fullTrim(oEditor.getData());
+                            if (oldText !== newText) {
                                 return true;
                             }
                         }

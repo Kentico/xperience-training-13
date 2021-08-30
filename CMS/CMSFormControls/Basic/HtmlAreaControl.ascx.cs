@@ -15,7 +15,7 @@ using CMS.MacroEngine;
 using CMS.PortalEngine.Web.UI;
 using CMS.SiteProvider;
 
-public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserControl
+public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserControl, IControlWithSentimentAnalysisComponent
 {
     #region "Properties"
 
@@ -208,6 +208,12 @@ public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserContr
         }
     }
 
+
+    /// <summary>
+    /// Indicates whether the sentiment analysis component should be rendered.
+    /// </summary>
+    public bool RenderSentimentAnalysisComponent { get; set; } = false;
+
     #endregion
 
 
@@ -301,6 +307,35 @@ public partial class CMSFormControls_Basic_HtmlAreaControl : FormEngineUserContr
         {
             //Add stamp button
             RegisterAndShowStampButton();
+        }
+    }
+
+
+    protected override void CreateChildControls()
+    {
+        base.CreateChildControls();
+
+        if (RenderSentimentAnalysisComponent)
+        {
+            var initFunction = @"
+var ckeditor = CKEDITOR.instances['" + editor.ClientID + @"'];
+ckeditor.on('instanceReady',function() {
+    var ckeditorElement = CKEDITOR.instances['" + editor.ClientID + @"'].container.$;  
+    sentimentAnalysisComponent.relatedField = ckeditorElement;        
+    sentimentAnalysisComponent.dataset.sentimentAnalysisForSelector = '#" + editor.ClientID + @" + div';
+});
+sentimentAnalysisComponent.getText = function() {
+    var text = CKEDITOR.instances['" + editor.ClientID + @"'].getData();
+    // Encapsulate content from CKEditor to DIV element since it can directly contain text
+    return $cmsj('<div/>').html(text).text();
+};
+ckeditor.on('change', function() { 
+    sentimentAnalysisComponent.onTextChanged(); 
+});
+";
+
+            var sentimentAnalysisButton = new SentimentAnalysisButton(initFunction);
+            Controls.Add(sentimentAnalysisButton);
         }
     }
 

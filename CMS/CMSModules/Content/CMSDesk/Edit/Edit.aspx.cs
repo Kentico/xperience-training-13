@@ -8,6 +8,7 @@ using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.DocumentEngine.Web.UI.Internal;
 using CMS.FormEngine;
+using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.LicenseProvider;
 using CMS.Localization;
@@ -507,6 +508,35 @@ public partial class CMSModules_Content_CMSDesk_Edit_Edit : CMSContentPage
                 SessionHelper.Remove("FormErrorText|" + node.NodeID);
             }
         }
+
+        if (!IsSentimentAnalysisConfigured())
+        {
+            return;
+        }
+
+        if (MembershipContext.AuthenticatedUser.IsAuthorizedPerDocument(node, NodePermissionsEnum.Modify) != AuthorizationResultEnum.Allowed)
+        {
+            return;
+        }
+
+        foreach (var fieldName in formElem.Fields)
+        {
+            if (formElem.FieldControls[fieldName] is IControlWithSentimentAnalysisComponent fieldControl)
+            {
+                fieldControl.RenderSentimentAnalysisComponent = true;
+            }
+        }
+    }
+
+
+    private static bool IsSentimentAnalysisConfigured()
+    {
+        var settingsService = Service.Resolve<ISettingsService>();
+        var siteName = SiteContext.CurrentSiteName;
+        var sentimentAnalysisEnabled = ValidationHelper.GetBoolean(settingsService[$"{siteName}.CMSEnableSentimentAnalysis"], false);
+        var endpoint = settingsService[$"{siteName}.CMSAzureTextAnalyticsAPIEndpoint"];
+        var key = settingsService[$"{siteName}.CMSAzureTextAnalyticsAPIKey"];
+        return sentimentAnalysisEnabled && !string.IsNullOrEmpty(endpoint) && !string.IsNullOrEmpty(key);
     }
 
 

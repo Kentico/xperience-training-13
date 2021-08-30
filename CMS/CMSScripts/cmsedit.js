@@ -85,11 +85,14 @@ function InitializeToolbarResize() {
                 setTimeout(function () {
                     InitializeHeader();
                     InitializeFooter();
-                    InitializeToolbarResize();
+                    InitializeToolbarResize();                 
                 }, 100);
             }
         } else {
             ResizeToolbar();
+            setTimeout(function () {
+                setSentimentAnalysisButtonsPosition();
+            }, 100);
         }
     } else {
         setTimeout(function () {
@@ -230,6 +233,8 @@ function ResizeToolbar() {
             if (window.cmsfixpanelheight) {
                 window.cmsHeader.style.top = cmsfixpanelheight + 'px';
             }
+
+            setSentimentAnalysisButtonsPosition();
         }
         if (window.cmsFooterPad) {
             window.cmsFooterPad.style.height = height.footer + 'px';
@@ -238,6 +243,45 @@ function ResizeToolbar() {
         InitializeHeader();
         InitializeFooter();
     }
+}
+
+function setSentimentAnalysisButtonsPosition() {
+    var sentimentAnalysisComponents = document.getElementsByClassName('kentico-sentiment-analysis-container');
+    for (var i = 0; i < sentimentAnalysisComponents.length; i++) {
+
+        var component = sentimentAnalysisComponents[i];
+        if (component.dataset.sentimentAnalysisForSelector) {
+            var textField = document.querySelector(component.dataset.sentimentAnalysisForSelector);
+
+            component.style.visibility = 'visible';
+            component.style.position = 'absolute';
+            handleResize(textField, component, sentimentAnalysisComponents);
+        }
+    }   
+}
+
+function setPosition(textField, component) {
+    var top = textField.offsetTop + textField.offsetHeight - 19 - 7;
+    var left = textField.offsetLeft + textField.offsetWidth + 5;
+    component.style.top = top + 'px';
+    component.style.left = left + 'px';
+}
+
+function handleResize(observed, component, sentimentAnalysisComponents) {
+    new ResizeObserver(function (e) {
+        // update position of the observed element
+        setPosition(observed, component);
+
+        // update the rest of the sentiment analysis buttons placed after the observed element in the DOM
+        var index = [].slice.call(sentimentAnalysisComponents).indexOf(component);
+        for (var i = index + 1; i < sentimentAnalysisComponents.length; i++) {
+
+            var textField = document.querySelector(sentimentAnalysisComponents[i].dataset.sentimentAnalysisForSelector);
+            if (textField) {
+                setPosition(textField, sentimentAnalysisComponents[i]);
+            }
+        }
+    }).observe(observed)
 }
 
 function ShowToolbar() {

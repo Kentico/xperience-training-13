@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.TextAnalytics.Azure</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.TextAnalytics.Azure.ISentimentAnalysisService">
+            <summary>
+            Provides integration with Azure Text Analytics API.
+            </summary>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.ISentimentAnalysisService.AnalyzeText(System.String,System.String,System.String)">
+            <summary>
+            Analyzes the sentiment of given <paramref name="text"/>.
+            </summary>
+            <param name="text">Text to analyze.</param>
+            <param name="cultureCode">Culture of the provided text. 
+            If unspecified, this value will be set to the default language ('en') in the request sent to the service. 
+            If set to an empty string, the service will apply a model where the language is explicitly set to "None".</param>
+            <param name="siteName">Site whose Sentiment Analysis API configuration to use.</param>
+            <returns>Returns the sentiment analysis result.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="cultureCode"/> is not supported by Azure Sentiment Analysis service.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the API endpoint or key are not configured for the <paramref name="siteName"/>.</exception>
+            <exception cref="T:Azure.RequestFailedException">Thrown when Azure service returned a non-success status code.</exception>
+        </member>
+        <member name="T:CMS.TextAnalytics.Azure.SentimentAnalysisLanguageHelper">
+            <summary>
+            Provides helper methods for Sentiment Analysis feature.
+            </summary>
+        </member>
+        <member name="F:CMS.TextAnalytics.Azure.SentimentAnalysisLanguageHelper.supportedLanguages">
+            <summary>
+            Language codes supported by Azure Sentiment Analysis service according to
+            https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support. 
+            </summary>
+        </member>
+        <member name="F:CMS.TextAnalytics.Azure.SentimentAnalysisLanguageHelper.specialSupportedLanguageMappings">
+            <summary>
+            Special cases for cultures - Azure expects a different format that might be provided. 
+            </summary>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.SentimentAnalysisLanguageHelper.IsCultureSupported(System.String,System.String@)">
+            <summary>
+            Checks if the provided <paramref name="cultureCode"/> is supported by Azure Sentiment Analysis service.
+            https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support. 
+            </summary>
+            <param name="cultureCode">Culture code.</param>
+            <param name="languageCodeForAzure">Language code that should be used for sentiment analysis requests.</param>
+        </member>
+        <member name="T:CMS.TextAnalytics.Azure.SentimentAnalysisService">
+            <summary>
+            Provides integration with Azure Text Analytics API.
+            </summary>
+        </member>
+        <member name="F:CMS.TextAnalytics.Azure.SentimentAnalysisService.DOCUMENT_LENGTH_LIMIT">
+            <summary>
+            Document length limit, based on the Azure service documentation.
+            </summary>
+        </member>
+        <member name="F:CMS.TextAnalytics.Azure.SentimentAnalysisService.MAXIMUM_REQUEST_BATCH_SIZE">
+            <summary>
+            Maximum number of documents within one request, based on the Azure service documentation.
+            </summary>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.SentimentAnalysisService.#ctor(CMS.Core.ISettingsService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CMS.TextAnalytics.Azure.SentimentAnalysisService"/> class.
+            </summary>
+            <param name="settingsService">Settings service.</param>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.SentimentAnalysisService.AnalyzeText(System.String,System.String,System.String)">
+            <summary>
+            Analyzes the sentiment of given <paramref name="text"/>.
+            </summary>
+            <param name="text">Text to analyze.</param>
+            <param name="cultureCode">Culture of the provided text. 
+            If unspecified, this value will be set to the default language ('en') in the request sent to the service. 
+            If set to an empty string, the service will apply a model where the language is explicitly set to "None".</param>
+            <param name="siteName">Site whose Sentiment Analysis API configuration to use.</param>
+            <returns>Returns the sentiment analysis result.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="cultureCode"/> is not supported by Azure Sentiment Analysis service.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the API endpoint or key are not configured for the <paramref name="siteName"/>.</exception>
+            <exception cref="T:Azure.RequestFailedException">Thrown when Azure service returned a non-success status code.</exception>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.SentimentAnalysisService.CalculateAverageDocumentSentiment(System.Collections.Generic.List{Azure.AI.TextAnalytics.DocumentSentiment})">
+            <summary>
+            Calculates the weighted average sentiment from the provided <paramref name="documentSentiments"/>. The scores are weghted based on their corresponding text lengths.
+            </summary>
+            <param name="documentSentiments">Collection of document sentiments to combine.</param>
+        </member>
+        <member name="M:CMS.TextAnalytics.Azure.SentimentAnalysisService.CreateClient(System.String)">
+            <summary>
+            Creates the Azure Text Analytics client.
+            </summary>
+            <param name="siteName">Name of site for which to return the client.</param>
+            <returns>Returns the Text Analytics client.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown when the API endpoint or key are not configured for the site.</exception>
+        </member>
+    </members>
+</doc>

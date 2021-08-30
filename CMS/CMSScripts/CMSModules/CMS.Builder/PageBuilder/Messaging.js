@@ -148,6 +148,10 @@
                 window.top.CancelScreenLockCountdown && window.top.CancelScreenLockCountdown();
                 break;
 
+            case messageTypes.MESSAGING_SUCCESS:
+                msgService.showSuccess(event.data.data, false);
+                break;
+
             case messageTypes.MESSAGING_ERROR:
                 msgService.showError(event.data.data, true);
                 break;
@@ -195,6 +199,11 @@
 
             case messageTypes.CLOSE_MODAL_DIALOG:
                 modalService.removeModalDialogOverlay();
+                break;
+
+            case messageTypes.CONFIRM:
+                const result = window.confirm(event.data.data.message);
+                frame.contentWindow.postMessage({ msg: messageTypes.CONFIRM_RESPONSE, result }, targetOrigin);
                 break;
         }
     };

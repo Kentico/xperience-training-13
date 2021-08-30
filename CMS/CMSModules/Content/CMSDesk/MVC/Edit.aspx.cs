@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
+using CMS.DocumentEngine.Internal;
 using CMS.DocumentEngine.PageBuilder;
 using CMS.DocumentEngine.Web.UI.Internal;
 using CMS.FormEngine.Web.UI;
@@ -199,7 +200,8 @@ public partial class CMSModules_Content_CMSDesk_MVC_Edit : CMSContentPage
         try
         {
             var queryStringParameters = GetQueryStringParameters();
-            url = PageBuilderHelper.GetPreviewModeUrl(Node, MembershipContext.AuthenticatedUser.UserGUID, queryStringParameters);
+            var useReadonlyMode = !DocumentManager.AllowSave;
+            url = new PreviewLinkGenerator(Node).GeneratePreviewModeUrl(MembershipContext.AuthenticatedUser.UserGUID, useReadonlyMode, true, queryStringParameters);
         }
         catch (InvalidOperationException ex)
         {

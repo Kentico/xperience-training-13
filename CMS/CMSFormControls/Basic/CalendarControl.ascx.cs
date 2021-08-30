@@ -108,7 +108,7 @@ public partial class CMSFormControls_Basic_CalendarControl : FormEngineUserContr
             }
             else
             {
-                timePicker.SelectedDateTime = ValidationHelper.GetDateTimeSystem(value, DateTimeHelper.ZERO_TIME);
+                timePicker.SelectedDateTime = ValidationHelper.GetDateTime(value, DateTimeHelper.ZERO_TIME, CultureHelper.PreferredUICultureInfo);
             }
         }
     }

@@ -10,7 +10,16 @@
 
 
 public partial class CMSModules_ContactManagement_Pages_Tools_ContactGroup_List {
-    
+
+    /// <summary>
+    /// tipHowEMWorks control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_SmartTip tipHowCGWorks;
+
     /// <summary>
     /// pnlActons control.
     /// </summary>

@@ -891,7 +891,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                     // Get only imported files if required
                     if (DisplayOnlyImportedFiles)
                     {
-                        string normFolderPath = Path.EnsureForwardSlashes(FolderPath).Trim('/');
+                        string normFolderPath = Path.EnsureForwardSlashes(LastFolderPath).Trim('/');
                         normFolderPath = SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(normFolderPath));
 
                         // Create WHERE condition
@@ -902,7 +902,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                             where += String.Format(" AND (FileName LIKE N'%{0}%')", SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(searchText)));
                         }
 
-                        const string columns = "(FileName + FileExtension) as CompletFileName, FileID, FileName, FileGUID, FilePath, FileExtension, FileExtension as Extension, FileImageWidth, FileImageHeight, FileTitle, FileSize, FileModifiedWhen, FileSiteID, FileDescription";
+                        const string columns = "(FileName + FileExtension) as CompletFileName, FileID, FileName, FileGUID, FilePath, FileExtension, FileExtension as Extension, FileImageWidth, FileImageHeight, FileTitle, FileSize, FileModifiedWhen, FileModifiedWhen as Modified, FileSiteID, FileDescription";
 
                         // Get all files from current folder and pass it to the media view control
                         var query = MediaFileInfoProvider.GetMediaFiles(where, orderBy, -1, columns);

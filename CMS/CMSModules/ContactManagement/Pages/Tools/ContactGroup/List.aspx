@@ -6,6 +6,7 @@
     TagName="ContactGroupList" TagPrefix="cms" %>
 <%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
     TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/SmartTip.ascx" TagName="SmartTip" TagPrefix="cms" %>
 <asp:Content ID="cntActions" runat="server" ContentPlaceHolderID="plcActions">
     <cms:CMSUpdatePanel ID="pnlActons" runat="server">
         <ContentTemplate>
@@ -16,5 +17,6 @@
     </cms:CMSUpdatePanel>
 </asp:Content>
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">
+    <cms:SmartTip runat="server" ID="tipHowCGWorks" Visible="true" />
     <cms:ContactGroupList ID="listElem" runat="server" IsLiveSite="false" />
 </asp:Content>

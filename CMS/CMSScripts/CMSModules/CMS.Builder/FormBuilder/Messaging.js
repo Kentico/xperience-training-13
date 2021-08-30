@@ -41,6 +41,11 @@
                 case messageTypes.CLOSE_MODAL_DIALOG:
                     modalService.removeModalDialogOverlay();
                     break;
+
+                case messageTypes.CONFIRM:
+                    const result = window.confirm(event.data.data.message);
+                    frame.contentWindow.postMessage({ msg: messageTypes.CONFIRM_RESPONSE, result }, targetOrigin);
+                    break;
             }
         };
 

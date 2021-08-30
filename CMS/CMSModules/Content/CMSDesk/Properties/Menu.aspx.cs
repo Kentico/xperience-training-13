@@ -21,8 +21,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
             RedirectToUIElementAccessDenied("CMS.Content", "Properties.Menu");
         }
 
-        DocumentManager.OnSaveData += DocumentManager_OnSaveData;
-
         EnableSplitMode = true;
 
         // Register the scripts
@@ -48,15 +46,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
 
     #region "Private methods"
 
-    private void DocumentManager_OnSaveData(object sender, DocumentManagerEventArgs e)
-    {
-        if (!pnlUIBasicProperties.IsHidden)
-        {
-            Node.DocumentShowInMenu = chkShowInMenu.Checked;
-        }
-    }
-
-
     /// <summary>
     /// Reload data.
     /// </summary>
@@ -67,20 +56,14 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
             return;
         }
 
-        // Redirect to information page when no UI elements displayed
-        if (pnlUIBasicProperties.IsHidden || !Node.IsNavigationItem())
+        if (!Node.IsNavigationItem())
         {
             RedirectToUINotAvailable();
         }
-        
+
         chkShowInMenu.Checked = Node.DocumentShowInMenu;
 
         pnlForm.Enabled = DocumentManager.AllowSave;
-
-        if (!Node.IsNavigationItem())
-        {
-            pnlUIBasicProperties.Visible = false;
-        }
     }
 
     #endregion
