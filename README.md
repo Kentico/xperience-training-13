@@ -51,21 +51,7 @@ For a complete list of system requirements, refer to our [documentation](https:/
 
 ## How to run the code
 
-> **Note:** Below you'll find a high-level list of instructions. The full instructions can be found in the course.
-
-You need to install Xperience program files along with a blank website instance. You'll only need the blank database. Once installed, both Visual Studio solutions of the administration application and the blank site can be deleted since all files are provided by this repository.
-
-1. Clone or fork the repository.
-1. Download the installer through the [trial download page](https://xperience.io/get-started/trial). (Existing customers can download the installer in the [client portal](https://client.kentico.com/). Partners can do so in the [partner portal](https://partner.kentico.com/).)
-1. Run the `Kentico_13_0.exe` file.
-1. Install a blank ASP.NET Core website.
-1. Give the site a name `MedioClinic`.
-1. Let the installer deploy a database.
-1. In the cloned repository, adjust the connection strings to point to your newly deployed blank database.
-1. Also, adjust the `CMSHashStringSalt` environment value in the cloned repository to match the one in the newly deployed blank site.
-1. In the cloned repository, run `/CMS/bin/ContinuousIntegration.exe -r` to restore the objects to the database.
-1. Open the `WebApp.sln` solution and build it.
-1. Register the administration application in IIS and add development licenses (found in the course).
+> Please find the instructions [in the course](https://xperience.training.kentico.com/).
 
 ## Enabling external authentication
 
