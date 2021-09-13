@@ -45,7 +45,16 @@ namespace XperienceAdapter.Logging
             if (!string.IsNullOrEmpty(message) || exception != null)
             {
                 var eventType = MapLogLevel(logLevel);
-                var siteId = Service.ResolveOptional<ISiteService>().CurrentSite?.SiteID ?? default;
+                int siteId = default;
+
+                try
+                {
+                    siteId = Service.ResolveOptional<ISiteService>().CurrentSite?.SiteID ?? default;
+                }
+                catch
+                {
+                }
+
                 EventLogData eventData;
 
                 if (!string.IsNullOrEmpty(eventId.Name))
