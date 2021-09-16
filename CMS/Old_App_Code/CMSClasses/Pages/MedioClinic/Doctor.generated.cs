@@ -131,18 +131,18 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// URL slug.
+		/// Picture used as background in doctor profile pages.
 		/// </summary>
 		[DatabaseField]
-		public string UrlSlug
+		public Guid BackdropPicture
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("UrlSlug"), @"");
+				return ValidationHelper.GetGuid(GetValue("BackdropPicture"), Guid.Empty);
 			}
 			set
 			{
-				SetValue("UrlSlug", value);
+				SetValue("BackdropPicture", value);
 			}
 		}
 
@@ -275,17 +275,13 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// URL slug.
+			/// Picture used as background in doctor profile pages.
 			/// </summary>
-			public string UrlSlug
+			public DocumentAttachment BackdropPicture
 			{
 				get
 				{
-					return mInstance.UrlSlug;
-				}
-				set
-				{
-					mInstance.UrlSlug = value;
+					return mInstance.GetFieldDocumentAttachment("BackdropPicture");
 				}
 			}
 		}

@@ -84,16 +84,6 @@ namespace Business.Services
                 }
 
                 var safeName = GetSafeFileName(formFile.FileName);
-                //FormFile renamedFile;
-
-                //var stream = formFile.OpenReadStream();
-                
-                //renamedFile = new FormFile(stream,
-                //                        0,
-                //                        stream.Length,
-                //                        safeName.Name,
-                //                        $"{safeName.Name}.{safeName.Extension}");
-
 
                 if (!IsValidFileExtensionAndSignature(
                     safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))

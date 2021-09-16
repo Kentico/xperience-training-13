@@ -9,7 +9,7 @@ using Business.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MedioClinic.ViewComponents
+namespace MedioClinic.Components.ViewComponents
 {
     public class Contact : ViewComponent
     {

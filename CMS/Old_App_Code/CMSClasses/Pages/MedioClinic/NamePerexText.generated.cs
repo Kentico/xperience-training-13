@@ -97,23 +97,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// URL slug.
-		/// </summary>
-		[DatabaseField]
-		public string UrlSlug
-		{
-			get
-			{
-				return ValidationHelper.GetString(GetValue("UrlSlug"), @"");
-			}
-			set
-			{
-				SetValue("UrlSlug", value);
-			}
-		}
-
-
-		/// <summary>
 		/// Gets an object that provides extended API for working with NamePerexText fields.
 		/// </summary>
 		[RegisterProperty]
@@ -192,22 +175,6 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 				set
 				{
 					mInstance.Text = value;
-				}
-			}
-
-
-			/// <summary>
-			/// URL slug.
-			/// </summary>
-			public string UrlSlug
-			{
-				get
-				{
-					return mInstance.UrlSlug;
-				}
-				set
-				{
-					mInstance.UrlSlug = value;
 				}
 			}
 		}

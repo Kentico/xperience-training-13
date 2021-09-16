@@ -9,7 +9,7 @@ using XperienceAdapter.Extensions;
 using XperienceAdapter.Repositories;
 using Business.Repositories;
 
-namespace MedioClinic.ViewComponents
+namespace MedioClinic.Components.ViewComponents
 {
     public class Navigation : ViewComponent
     {

@@ -63,18 +63,18 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// URL slug.
+		/// SiteSectionName.
 		/// </summary>
 		[DatabaseField]
-		public string UrlSlug
+		public string SiteSectionName
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("UrlSlug"), @"");
+				return ValidationHelper.GetString(GetValue("SiteSectionName"), @"");
 			}
 			set
 			{
-				SetValue("UrlSlug", value);
+				SetValue("SiteSectionName", value);
 			}
 		}
 
@@ -131,17 +131,17 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// URL slug.
+			/// SiteSectionName.
 			/// </summary>
-			public string UrlSlug
+			public string Name
 			{
 				get
 				{
-					return mInstance.UrlSlug;
+					return mInstance.SiteSectionName;
 				}
 				set
 				{
-					mInstance.UrlSlug = value;
+					mInstance.SiteSectionName = value;
 				}
 			}
 		}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace MedioClinic.ViewComponents
+namespace MedioClinic.Components.ViewComponents
 {
     public class Footer : ViewComponent
     {

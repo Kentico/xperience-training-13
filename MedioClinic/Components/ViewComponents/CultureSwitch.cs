@@ -13,7 +13,7 @@ using Business.Models;
 using Business.Repositories;
 using System.Threading.Tasks;
 
-namespace MedioClinic.ViewComponents
+namespace MedioClinic.Components.ViewComponents
 {
     public class CultureSwitch : ViewComponent
     {

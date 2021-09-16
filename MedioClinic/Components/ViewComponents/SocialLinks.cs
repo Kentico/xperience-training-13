@@ -10,7 +10,7 @@ using XperienceAdapter.Repositories;
 using Business.Models;
 using System.Threading;
 
-namespace MedioClinic.ViewComponents
+namespace MedioClinic.Components.ViewComponents
 {
     public class SocialLinks : ViewComponent
     {

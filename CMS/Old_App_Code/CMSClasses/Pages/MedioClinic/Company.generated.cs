@@ -114,35 +114,35 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 		/// <summary>
-		/// Zip code.
+		/// Postal code.
 		/// </summary>
 		[DatabaseField]
-		public string ZipCode
+		public string PostalCode
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("ZipCode"), @"");
+				return ValidationHelper.GetString(GetValue("PostalCode"), @"");
 			}
 			set
 			{
-				SetValue("ZipCode", value);
+				SetValue("PostalCode", value);
 			}
 		}
 
 
 		/// <summary>
-		/// Email.
+		/// Email address.
 		/// </summary>
 		[DatabaseField]
-		public string Email
+		public string EmailAddress
 		{
 			get
 			{
-				return ValidationHelper.GetString(GetValue("Email"), @"");
+				return ValidationHelper.GetString(GetValue("EmailAddress"), @"");
 			}
 			set
 			{
-				SetValue("Email", value);
+				SetValue("EmailAddress", value);
 			}
 		}
 
@@ -264,33 +264,33 @@ namespace CMS.DocumentEngine.Types.MedioClinic
 
 
 			/// <summary>
-			/// Zip code.
+			/// Postal code.
 			/// </summary>
-			public string ZipCode
+			public string PostalCode
 			{
 				get
 				{
-					return mInstance.ZipCode;
+					return mInstance.PostalCode;
 				}
 				set
 				{
-					mInstance.ZipCode = value;
+					mInstance.PostalCode = value;
 				}
 			}
 
 
 			/// <summary>
-			/// Email.
+			/// Email address.
 			/// </summary>
-			public string Email
+			public string EmailAddress
 			{
 				get
 				{
-					return mInstance.Email;
+					return mInstance.EmailAddress;
 				}
 				set
 				{
-					mInstance.Email = value;
+					mInstance.EmailAddress = value;
 				}
 			}
 
