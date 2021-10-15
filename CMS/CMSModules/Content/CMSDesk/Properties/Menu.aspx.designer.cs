@@ -49,15 +49,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu
     protected global::System.Web.UI.WebControls.Panel pnlForm;
 
     /// <summary>
-    /// pnlUIBasicProperties control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.UIControls.UIPlaceHolder pnlUIBasicProperties;
-
-    /// <summary>
     /// pnlBasicProperties control.
     /// </summary>
     /// <remarks>

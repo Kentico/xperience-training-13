@@ -21,6 +21,8 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
             RedirectToUIElementAccessDenied("CMS.Content", "Properties.Menu");
         }
 
+        DocumentManager.OnSaveData += DocumentManager_OnSaveData;
+
         EnableSplitMode = true;
 
         // Register the scripts
@@ -45,6 +47,12 @@ public partial class CMSModules_Content_CMSDesk_Properties_Menu : CMSPropertiesP
 
 
     #region "Private methods"
+
+    private void DocumentManager_OnSaveData(object sender, DocumentManagerEventArgs e)
+    {
+        Node.DocumentShowInMenu = chkShowInMenu.Checked;
+    }
+
 
     /// <summary>
     /// Reload data.

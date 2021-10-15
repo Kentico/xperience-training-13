@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
+using CMS.Base.Web.UI.Internal;
 using CMS.Core;
 using CMS.DocumentEngine.Internal;
 using CMS.DocumentEngine.PageBuilder;
@@ -179,6 +180,9 @@ public partial class CMSModules_Content_CMSDesk_MVC_Edit : CMSContentPage
     {
         var uri = new Uri(url);
         var targetOrigin = uri.GetLeftPart(UriPartial.Authority);
+        string moduleId = "CMS.Builder/PageBuilder/Messaging";
+        var localizationProvider = Service.Resolve<IClientLocalizationProvider>();
+        ScriptHelper.RegisterModule(this, "CMS/RegisterClientLocalization", localizationProvider.GetClientLocalization(moduleId));
 
         ScriptHelper.RegisterModule(this, "CMS.Builder/PageBuilder/Messaging", new
         {

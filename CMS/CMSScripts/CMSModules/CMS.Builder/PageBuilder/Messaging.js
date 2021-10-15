@@ -2,12 +2,13 @@
     'CMS/MessageService',
     'CMS/UrlHelper',
     'CMS/CurrentUrlHelper',
+    'CMS/ClientLocalization',
     'CMS.Builder/PageBuilder/DragAndDropService',
     'CMS.Builder/ModalDialogService',
     'CMS.Builder/MessageTypes',
     'CMS.Builder/Constants',
     'CMS.Builder/FrameLoader'
-], function (msgService, urlHelper, currentUrlHelper, dndService, ModalDialogService, messageTypes, constants, frameLoader) {
+], function (msgService, urlHelper, currentUrlHelper, localization, dndService, ModalDialogService, messageTypes, constants, frameLoader) {
     var DISPLAYED_WIDGET_VARIANTS_SESSION_STORAGE_KEY;
     var targetOrigin;
     var originalScript;
@@ -16,6 +17,7 @@
     var loadFrame;
     var instanceGuid;
     var contentModified;
+    var restrictedWidgetsAvailable = false;
 
     var Module = function (serverData) {
         var frameLoaded = false;
@@ -52,10 +54,13 @@
 
         var saveConfiguration = function (script) {
             if (frameLoaded === false) return;
+            
+            var canSave = restrictedWidgetsAvailable ? confirm(localization.getString('widgetzone.restrictedwidgets.savewarning')) : true;
 
-            originalScript = script;
-
-            frame.contentWindow.postMessage({ msg: messageTypes.SAVE_CONFIGURATION, guid: instanceGuid, contentModified: contentModified }, targetOrigin);
+            if (canSave) {
+                originalScript = script;
+                frame.contentWindow.postMessage({ msg: messageTypes.SAVE_CONFIGURATION, guid: instanceGuid, contentModified: contentModified }, targetOrigin);
+            }
         };
 
         var bindSaveChanges = function () {
@@ -161,7 +166,11 @@
                 break;
 
             case messageTypes.MESSAGING_WARNING:
-                msgService.showWarning(event.data.data, true);
+                msgService.showWarning(event.data.data, false);
+                break;
+
+            case messageTypes.MESSAGING_WARNING_HIDE:
+                msgService.showWarningHide(event.data.data, false);
                 break;
 
             case messageTypes.MESSAGING_DRAG_START:
@@ -204,6 +213,10 @@
             case messageTypes.CONFIRM:
                 const result = window.confirm(event.data.data.message);
                 frame.contentWindow.postMessage({ msg: messageTypes.CONFIRM_RESPONSE, result }, targetOrigin);
+                break;
+
+            case messageTypes.SET_RESTRICTED_WIDGETS:
+                restrictedWidgetsAvailable = event.data.data;
                 break;
         }
     };

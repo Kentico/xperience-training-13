@@ -44,7 +44,8 @@ namespace MedioClinic.Components.ViewComponents
         private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetUrlCultureVariantsAsync()
         {
             var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
-            var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : Request.Path.Value;
+            var completePath = string.IsNullOrEmpty(Request.PathBase) ? Request.Path.Value : $"{Request.PathBase}{Request.Path.Value}";
+            var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : completePath;
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
 
             if (currentCulture != null && !ExcludedPaths.Any(path => searchPath.Contains(path)))

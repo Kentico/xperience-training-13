@@ -1066,7 +1066,11 @@ public partial class CMSModules_Ecommerce_Controls_UI_ProductEdit : CMSAdminCont
         // Save bundle binding after SKU is saved for new products
         if (ProductIsNew)
         {
-            skuBundleForm.OnUploadFile += (sender, args) => skuBundleForm.SaveData(null);
+            skuBundleForm.OnUploadFile += (sender, args) =>
+            {
+                skuBundleForm.SaveData(null);
+                SKUInfo.Provider.Set(SKU);
+            };
         }
 
         // Initialize General SKU form

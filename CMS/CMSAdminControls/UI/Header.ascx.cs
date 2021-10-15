@@ -19,6 +19,7 @@ using CMS.SiteProvider;
 using CMS.Synchronization;
 using CMS.UIControls;
 
+using static CMS.UIControls.Internal.VirtualContextAuthenticatorConstants;
 
 public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEventHandler
 {
@@ -29,8 +30,6 @@ public partial class CMSAdminControls_UI_Header : CMSUserControl, ICallbackEvent
     protected const string SESSION_KEY_SUBSCRIPTION_LICENCES = "WRNShowSubscriptionLicences";
     private const string VIRTUALCONTEXT_AUTHENTICATION_IFRAME_URL = "/Kentico.VirtualContext/AuthenticationIframe";
     private const string SUBSCRIPTION_LICENSES_WARNING_ALREADY_CLOSED_TODAY = "Kentico.SubscriptionLicense.Closed";
-    private const string GET_MVC_AUTHENTICATION_CALLBACK = "GET_MVC_AUTHENTICATION_CALLBACK";
-    private const char CALLBACK_ARGS_SEPARATOR = ';';
 
     private string callbackResult = null;
 
