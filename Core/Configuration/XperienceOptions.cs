@@ -20,6 +20,8 @@ namespace Core.Configuration
         public MediaLibraryOptions? MediaLibraryOptions { get; set; }
 
         public IdentityOptions? IdentityOptions { get; set; }
+
+        public OnlineMarketingOptions? OnlineMarketingOptions { get; set; }
     }
 
     /// <summary>
@@ -92,5 +94,18 @@ namespace Core.Configuration
         public string? ConsumerKey { get; set; }
 
         public string? ConsumerSecret { get; set; }
+    }
+
+    public class OnlineMarketingOptions
+    {
+        public string? GoogleTagManagerId { get; set; }
+
+        public string? GoogleAnalyticsPropertyId { get; set; }
+
+        public string? AnalyticalCookiesConsentName { get; set; }
+
+        public string? FormsDataConsentName { get; set; }
+
+        public string? FileDataConsentName { get; set; }
     }
 }

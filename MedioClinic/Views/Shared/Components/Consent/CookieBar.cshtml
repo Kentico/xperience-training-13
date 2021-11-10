@@ -1,0 +1,38 @@
+﻿@using CMS.DocumentEngine
+@using Business.Models
+@model ConsentViewModel
+@inject IStringLocalizer<SharedResource> StringLocalizer
+@inject IPageDataContextRetriever pageDataContextRetriever
+
+@functions{
+    string GetReturnUrl()
+    {
+        // Get URL for pages handled by content tree-based router, otherwise get path from the context
+        return pageDataContextRetriever.TryRetrieve<TreeNode>(out var _) ?
+            Url.Kentico().CurrentPageUrl() :
+            (Context.Request.PathBase + Context.Request.Path).Value;
+    }
+}
+
+@{
+    var routeData = new Dictionary<string, string>
+{
+        { "consentName", Model?.CodeName! },
+        { "cookieLevel", Model?.CookieLevel?.ToString()! },
+        { "returnUrl", GetReturnUrl() }
+    };
+}
+
+<div class="mc-fixed-bar-bottom light-blue lighten-1">
+    <div class="container">
+        <form asp-action="Agree"
+              asp-controller="Privacy"
+              asp-antiforgery="true"
+              asp-all-route-data="routeData">
+            <p class="white-text">
+                @Html.DisplayFor(m => m.ShortText) 
+                <button type="submit" name="submit" class="btn waves-effect waves-light">@StringLocalizer["OnlineMarketing.Agree"]</button>
+            </p>
+        </form>
+    </div>
+</div>
