@@ -6,8 +6,21 @@ using CMS.Helpers;
 
 namespace XperienceAdapter.Cookies
 {
-    public static class CookieManager
+    public class CookieManager : ICookieManager
     {
+        public const string FirstReferrerCookieName = "FirstReferrer";
+
+        private readonly ICurrentCookieLevelProvider _currentCookieLevelProvider;
+
+        public bool VisitorCookiesEnabled => _currentCookieLevelProvider.GetCurrentCookieLevel() >= CookieLevel.Visitor;
+
+        public bool IsDefaultCookieLevel => _currentCookieLevelProvider.GetCurrentCookieLevel() == _currentCookieLevelProvider.GetDefaultCookieLevel();
+
+        public CookieManager(ICurrentCookieLevelProvider currentCookieLevelProvider)
+        {
+            _currentCookieLevelProvider = currentCookieLevelProvider ?? throw new ArgumentNullException(nameof(currentCookieLevelProvider));
+        }
+
         public static string[] GetGoogleAnalyticsCookieNames(string gaPropertyId) => new string[14]
             {
                 "_ga",
@@ -28,5 +41,8 @@ namespace XperienceAdapter.Cookies
 
         public static void RegisterCookieAtTheVisitorLevel(string cookieName) =>
             CookieHelper.RegisterCookie(cookieName, CookieLevel.Visitor);
+
+        public static void RegisterCookieAtTheEssentialLevel(string cookieName) =>
+            CookieHelper.RegisterCookie(cookieName, CookieLevel.Essential);
     }
 }

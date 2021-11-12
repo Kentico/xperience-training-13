@@ -1,9 +1,5 @@
 ﻿#define no_suffix
 
-using Business.Models;
-
-using CMS.Helpers;
-
 using Core.Configuration;
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,22 +10,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using XperienceAdapter.Cookies;
+
 namespace MedioClinic.Components.ViewComponents
 {
     public class ExternalAnalyticalTools : ViewComponent
     {
         private readonly IOptionsMonitor<XperienceOptions> _optionsMonitor;
 
-        private readonly ICurrentCookieLevelProvider _currentCookieLevelProvider;
+        private readonly ICookieManager _cookieManager;
 
-        public bool IsDefaultCookieLevel => _currentCookieLevelProvider.GetCurrentCookieLevel() == _currentCookieLevelProvider.GetDefaultCookieLevel();
-
-        public bool VisitorCookiesEnabled => _currentCookieLevelProvider.GetCurrentCookieLevel() == CookieLevel.Visitor;
-
-        public ExternalAnalyticalTools(IOptionsMonitor<XperienceOptions> optionsMonitor, ICurrentCookieLevelProvider currentCookieLevelProvider)
+        public ExternalAnalyticalTools(IOptionsMonitor<XperienceOptions> optionsMonitor, ICookieManager cookieManager)
         {
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
-            _currentCookieLevelProvider = currentCookieLevelProvider ?? throw new ArgumentNullException(nameof(currentCookieLevelProvider));
+            _cookieManager = cookieManager ?? throw new ArgumentNullException(nameof(cookieManager));
         }
 
         public IViewComponentResult Invoke(TagKind tagKind)
@@ -43,19 +37,19 @@ namespace MedioClinic.Components.ViewComponents
                 switch (tagKind)
                 {
                     case TagKind.HeadScript:
-                        if (VisitorCookiesEnabled)
+                        if (_cookieManager.VisitorCookiesEnabled)
                         {
                             return View("HeadScript", googleTagManagerId);
                         }
                         break;
                     case TagKind.Noscript:
-                        if (VisitorCookiesEnabled)
+                        if (_cookieManager.VisitorCookiesEnabled)
                         {
                             return View("Noscript", googleTagManagerId);
                         }
                         break;
                     case TagKind.Disabler:
-                        if (IsDefaultCookieLevel)
+                        if (_cookieManager.IsDefaultCookieLevel)
                         {
                             return View("Disabler", googleAnalyticsId);
                         }

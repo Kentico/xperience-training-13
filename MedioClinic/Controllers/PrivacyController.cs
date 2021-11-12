@@ -162,7 +162,7 @@ namespace MedioClinic.Controllers
                 }
             }
 
-            return null;
+            return null!;
         }
     }
 }

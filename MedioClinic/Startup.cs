@@ -160,6 +160,8 @@ namespace MedioClinic
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
 
+            app.UseUrlReferrer();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
@@ -357,6 +359,8 @@ namespace MedioClinic
                     CookieManager.RegisterCookieAtTheVisitorLevel(cookieName);
                 }
             }
+
+            CookieManager.RegisterCookieAtTheEssentialLevel(CookieManager.FirstReferrerCookieName);
         }
     }
 }

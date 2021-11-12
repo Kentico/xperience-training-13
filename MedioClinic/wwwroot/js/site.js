@@ -70,4 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return section;
     };
+
+    medioClinic.capture
 }(window.medioClinic = window.medioClinic || {}));
