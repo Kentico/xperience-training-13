@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Linq;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,8 @@ namespace Business.Extensions
     /// </summary>
     public static class UrlExtensions
     {
+        private static readonly string[] _schemes = { "http://", "https://" };
+
         /// <summary>
         /// Builds an absolute URL out of context information.
         /// </summary>
@@ -66,5 +70,23 @@ namespace Business.Extensions
 
         public static string UrlInCurrentUiCulture(this IUrlHelper helper, string routeName) =>
             helper.RouteUrl($"{routeName}_{Thread.CurrentThread.CurrentUICulture.Name}");
+
+        public static string Hostname(this string fullUrl)
+        {
+            if (!string.IsNullOrEmpty(fullUrl))
+            {
+                foreach (var scheme in _schemes)
+                {
+                    if (fullUrl.StartsWith(scheme))
+                    {
+                        var match = Regex.Match(fullUrl, @$"({scheme})([^/]+)");
+
+                        return match.Groups[2].Value;
+                    }
+                }
+            }
+
+            return null!;
+        }
     }
 }

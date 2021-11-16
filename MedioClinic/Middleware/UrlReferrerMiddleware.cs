@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using XperienceAdapter.Cookies;
+using XperienceAdapter.Services;
+
+using Business.Extensions;
 
 namespace MedioClinic.Middleware
 {
@@ -47,10 +50,13 @@ namespace MedioClinic.Middleware
                 var firstReferrer = httpContext.Request.Cookies[CookieManager.FirstReferrerCookieName];
                 var isReferrerSet = !string.IsNullOrEmpty(referrer);
                 var isFirstReferrerSet = !string.IsNullOrEmpty(firstReferrer);
+                var requestHostname = $"{httpContext.Request.Host.Host}:{httpContext.Request.Host.Port}";
+                var referrerHostname = referrer.Hostname();
+                var referrerIsCurrentSite = referrerHostname?.Equals(requestHostname, StringComparison.OrdinalIgnoreCase) ?? false;
 
                 if (!httpContext.Response.HasStarted)
                 {
-                    if (isReferrerSet && !isFirstReferrerSet)
+                    if (isReferrerSet && !isFirstReferrerSet && !referrerIsCurrentSite)
                     {
                         var cookieOptions = new CookieOptions
                         {
@@ -82,7 +88,6 @@ namespace MedioClinic.Middleware
 
                             httpContext.Response.OnStarting(() =>
                             {
-                                // TODO: Why the heck it is not deleted or is created again?
                                 httpContext.Response.Cookies.Delete(CookieManager.FirstReferrerCookieName);
 
                                 return Task.CompletedTask;
