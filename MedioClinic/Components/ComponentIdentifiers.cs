@@ -42,5 +42,7 @@ namespace MedioClinic.Components
         public const string MediaLibraryUploaderFormComponent = FormComponentPrefix + "MediaLibraryUploader";
 
         public const string CheckBoxFormComponent = FormComponentPrefix + "CheckBox";
+
+        public const string DateTimeSelectionFormComponent = FormComponentPrefix + "DateTimeSelection";
     }
 }

@@ -118,3 +118,12 @@ using MedioClinic.PageTemplates;
     ViewName = "~/Components/FormComponents/_MediaLibraryUploader.cshtml",
     Description = "{$" + ComponentIdentifiers.MediaLibraryUploaderFormComponent + ".Description$}",
     IconClass = "icon-picture")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.DateTimeSelectionFormComponent,
+    typeof(DateTimeSelection),
+    "{$" + ComponentIdentifiers.DateTimeSelectionFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = true,
+    ViewName = "~/Components/FormComponents/_DateTimeSelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.DateTimeSelectionFormComponent + ".Description$}",
+    IconClass = "icon-calendar")]

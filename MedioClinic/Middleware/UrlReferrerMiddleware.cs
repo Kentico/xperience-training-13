@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using XperienceAdapter.Cookies;
-using XperienceAdapter.Services;
 
 using Business.Extensions;
 
