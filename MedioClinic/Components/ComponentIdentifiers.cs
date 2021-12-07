@@ -43,6 +43,6 @@ namespace MedioClinic.Components
 
         public const string CheckBoxFormComponent = FormComponentPrefix + "CheckBox";
 
-        public const string DateTimeSelectionFormComponent = FormComponentPrefix + "DateTimeSelection";
+        public const string DateSelectionFormComponent = FormComponentPrefix + "DateSelection";
     }
 }

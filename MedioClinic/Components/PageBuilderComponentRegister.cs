@@ -120,10 +120,10 @@ using MedioClinic.PageTemplates;
     IconClass = "icon-picture")]
 
 [assembly: RegisterFormComponent(
-    ComponentIdentifiers.DateTimeSelectionFormComponent,
-    typeof(DateTimeSelection),
-    "{$" + ComponentIdentifiers.DateTimeSelectionFormComponent + ".Title$}",
+    ComponentIdentifiers.DateSelectionFormComponent,
+    typeof(DateSelection),
+    "{$" + ComponentIdentifiers.DateSelectionFormComponent + ".Title$}",
     IsAvailableInFormBuilderEditor = true,
-    ViewName = "~/Components/FormComponents/_DateTimeSelection.cshtml",
-    Description = "{$" + ComponentIdentifiers.DateTimeSelectionFormComponent + ".Description$}",
+    ViewName = "~/Components/FormComponents/_DateSelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.DateSelectionFormComponent + ".Description$}",
     IconClass = "icon-calendar")]
