@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 
 using Kentico.Web.Mvc;
+using System;
 
 namespace Business.Extensions
 {
@@ -73,17 +74,9 @@ namespace Business.Extensions
 
         public static string Hostname(this string fullUrl)
         {
-            if (!string.IsNullOrEmpty(fullUrl))
+            if (!string.IsNullOrEmpty(fullUrl) && Uri.TryCreate(fullUrl, UriKind.Absolute, out var uri))
             {
-                foreach (var scheme in _schemes)
-                {
-                    if (fullUrl.StartsWith(scheme))
-                    {
-                        var match = Regex.Match(fullUrl, @$"({scheme})([^/]+)");
-
-                        return match.Groups[2].Value;
-                    }
-                }
+                return uri?.Host!;
             }
 
             return null!;
