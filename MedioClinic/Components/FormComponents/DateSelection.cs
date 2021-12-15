@@ -12,13 +12,13 @@ namespace MedioClinic.Components.FormComponents
     {
         [BindableProperty]
         [DataType(DataType.Date)]
-        public string? Value { get; set; }
+        public DateTime? Value { get; set; }
 
-        public override DateTime GetValue() => DateTime.TryParse(Value, out var result) ? result : DateTime.Today;
+        public override DateTime GetValue() => Value ?? DateTime.Today;
 
         public override void SetValue(DateTime value)
         {
-            Value = value.ToString("yyyy-MM-dd");
+            Value = value;
         }
     }
 }
