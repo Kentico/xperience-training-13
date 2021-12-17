@@ -44,12 +44,22 @@ namespace XperienceAdapter.Repositories
                                      CancellationToken? cancellationToken = default);
 
         /// <summary>
-        /// Gets media files.
+        /// Gets media file.
         /// </summary>
+        /// <param name="mediaLibraryName">Media library code name.</param>
         /// <param name="path">Path in the library.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>File DTOs.</returns>
         Task<MediaLibraryFile> GetMediaFileAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default);
+
+        ///// <summary>
+        ///// Gets media file.
+        ///// </summary>
+        ///// <param name="mediaLibraryId">Media library ID.</param>
+        ///// <param name="path">Path in the library.</param>
+        ///// <param name="cancellationToken">Cancellation token.</param>
+        ///// <returns>File DTOs.</returns>
+        //Task<MediaLibraryFile> GetMediaFileAsync(int mediaLibraryId, string path, CancellationToken? cancellationToken = default);
 
         /// <summary>
         /// Gets a media file.
@@ -97,5 +107,21 @@ namespace XperienceAdapter.Repositories
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>File DTOs.</returns>
         Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, IEnumerable<Guid> fileGuids, CancellationToken? cancellationToken = default);
+
+        /// <summary>
+        /// Gets a media library ID by its code name.
+        /// </summary>
+        /// <param name="mediaLibraryName">Code name.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Library ID.</returns>
+        Task<int> GetLibraryIdAsync(string mediaLibraryName, CancellationToken? cancellationToken = default);
+
+        /// <summary>
+        /// Gets a media library code name.
+        /// </summary>
+        /// <param name="mediaLibraryId">Library ID.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns></returns>
+        Task<string> GetLibraryNameAsync(int mediaLibraryId, CancellationToken? cancellationToken = default);
     }
 }

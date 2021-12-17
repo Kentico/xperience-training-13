@@ -1,0 +1,24 @@
+﻿@using MedioClinic.Components.InlineEditors
+@using MedioClinic.Components.Widgets
+@model (string? MediaLibraryName, Guid? FileGuid, bool SecuredDownload)
+@inject IPageBuilderDataContextRetriever ContextRetriever
+
+@if (Model.FileGuid != null)
+{
+    if (!Model.SecuredDownload)
+    {
+        <a href="@Url.Action("Public", "Download", new { fileGuid = Model.FileGuid.Value })">Download the file</a>
+    }
+}
+
+@if (ContextRetriever?.Retrieve()?.EditMode == true)
+{
+    var model = new FileDownloadViewModel
+    {
+        PropertyName = nameof(FileDownloadProperties.FileGuid),
+        MediaLibraryName = Model.MediaLibraryName,
+        FileGuid = Model.FileGuid
+    };
+
+    <partial name="~/Components/InlineEditors/_FileDownloadSelector.cshtml" model="model" />
+}

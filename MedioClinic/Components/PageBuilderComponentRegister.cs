@@ -127,3 +127,14 @@ using MedioClinic.PageTemplates;
     ViewName = "~/Components/FormComponents/_DateSelection.cshtml",
     Description = "{$" + ComponentIdentifiers.DateSelectionFormComponent + ".Description$}",
     IconClass = "icon-calendar")]
+
+[assembly: RegisterPageBuilderLocalizationResource(typeof(PageBuilderSharedResource), "en-US", "es-ES")]
+
+[assembly: RegisterWidget(
+    ComponentIdentifiers.FileDownloadWidget,
+    typeof(FileDownloadViewComponent),
+    "File download widget",
+    typeof(FileDownloadProperties),
+    AllowCache = true,
+    Description = "File download widget",
+    IconClass = "icon-arrow-down-line")]

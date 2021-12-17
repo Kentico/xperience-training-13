@@ -25,12 +25,12 @@ namespace MedioClinic.Controllers
         private readonly IGenerator _generator;
 
         public GeneratorController(
-        ILogger<GeneratorController> logger,
-        IOptionsMonitor<XperienceOptions> optionsMonitor,
-        IStringLocalizer<SharedResource> stringLocalizer,
-        IWebHostEnvironment environment,
-        IGenerator generator)
-        : base(logger, optionsMonitor, stringLocalizer)
+            ILogger<GeneratorController> logger,
+            IOptionsMonitor<XperienceOptions> optionsMonitor,
+            IStringLocalizer<SharedResource> stringLocalizer,
+            IWebHostEnvironment environment,
+            IGenerator generator)
+            : base(logger, optionsMonitor, stringLocalizer)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
