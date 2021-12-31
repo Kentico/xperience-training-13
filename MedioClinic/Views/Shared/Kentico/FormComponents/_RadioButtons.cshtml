@@ -1,0 +1,22 @@
+﻿@using Kentico.Forms.Web.Mvc
+
+@model RadioButtonsComponent
+
+@{
+    var htmlAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
+}
+
+<span class="ktc-radio ktc-radio-list">
+    @foreach (var item in Model.HtmlOptions)
+    {
+        var id = ViewData.TemplateInfo.HtmlFieldPrefix + item.Value;
+        htmlAttributes["id"] = id;
+
+        <p>
+            <label>
+                @Html.RadioButtonFor(x => x.SelectedValue, item.Value, htmlAttributes)
+                <span>@Html.DisplayFor(m => item.Text)</span>
+            </label>
+        </p>
+    }
+</span>
