@@ -1,0 +1,20 @@
+@using Kentico.Forms.Web.Mvc
+
+@model ConsentAgreementComponent
+
+@{
+    var htmlAttributes = ViewData.Kentico().GetEditorHtmlAttributes();
+    var spanTitle = htmlAttributes.TryGetValue("title", out object title) ? title : String.Empty;
+
+    if (!Model.CheckboxEnabled)
+    {
+        htmlAttributes["disabled"] = "disabled";
+    }
+}
+
+<p>
+    <label>
+        @Html.CheckBoxFor(m => m.ConsentChecked, htmlAttributes)
+        <span title="@spanTitle">@(String.IsNullOrWhiteSpace(Model.Properties.ConsentText) ? Html.Raw("&nbsp;") : Html.DisplayFor(m => m.Properties.ConsentText))</span>
+    </label>
+</p>
