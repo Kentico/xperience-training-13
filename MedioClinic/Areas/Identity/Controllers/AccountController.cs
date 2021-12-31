@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using CMS.Activities.Loggers;
 using CMS.Base;
 using CMS.DocumentEngine;
 using CMS.Helpers;
@@ -32,17 +33,21 @@ namespace MedioClinic.Areas.Identity.Controllers
     {
         private readonly IAccountManager _accountManager;
 
+        private readonly IMembershipActivityLogger _membershipActivityLogger;
+
         private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
         public AccountController(
             ILogger<AccountController> logger, 
             IOptionsMonitor<XperienceOptions> optionsMonitor,
             IStringLocalizer<SharedResource> stringLocalizer,
+            IPageUrlRetriever pageUrlRetriever, 
             IAccountManager accountManager,
-            IPageUrlRetriever pageUrlRetriever) 
+            IMembershipActivityLogger membershipActivityLogger)
             : base(logger, optionsMonitor, stringLocalizer, pageUrlRetriever)
         {
             _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
+            _membershipActivityLogger = membershipActivityLogger ?? throw new ArgumentNullException(nameof(membershipActivityLogger));
         }
 
         // GET: /Account/Register
@@ -137,6 +142,8 @@ namespace MedioClinic.Areas.Identity.Controllers
                         message = Localize("Identity.Account.ConfirmUser.Success.Message", Url.Action(nameof(SignIn)));
                         displayAsRaw = true;
                         messageType = MessageType.Info;
+                        var userName = await _accountManager.GetUserNameAsync(userId.ToString()!);
+                        _membershipActivityLogger.LogRegistration(userName);
                         break;
                 }
             }
@@ -173,6 +180,7 @@ namespace MedioClinic.Areas.Identity.Controllers
                     default:
                         return InvalidAttempt(uploadModel);
                     case SignInResultState.SignedIn:
+                        _membershipActivityLogger.LogLogin(uploadModel.Data?.EmailViewModel?.Email);
                         return RedirectToLocal(url);
                 }
             }

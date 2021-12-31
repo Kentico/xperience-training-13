@@ -431,6 +431,9 @@ namespace Identity
 
         public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
 
+        public async Task<string?> GetUserNameAsync(string userId) =>
+            (await _userManager.FindByIdAsync(userId))?.UserName;
+
         /// <summary>
         /// Adds a user to the patient role.
         /// </summary>

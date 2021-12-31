@@ -88,5 +88,12 @@ namespace Identity
         /// <param name="loginInfo">Login info.</param>
         /// <returns>Result state.</returns>
         Task<IdentityManagerResult<SignInResultState>> SignInExternalAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo loginInfo);
+
+        /// <summary>
+        /// Gets the user name by ID.
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <returns>The user name.</returns>
+        Task<string?> GetUserNameAsync(string userId);
     }
 }
