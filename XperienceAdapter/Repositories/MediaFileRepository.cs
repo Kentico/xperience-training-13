@@ -265,7 +265,7 @@ namespace XperienceAdapter.Repositories
             new MediaLibraryFile()
             {
                 Guid = mediaFileInfo.FileGUID,
-                Name = mediaFileInfo.FileTitle,
+                Name = !string.IsNullOrEmpty(mediaFileInfo.FileTitle) ? mediaFileInfo.FileTitle : mediaFileInfo.FileName,
                 Extension = mediaFileInfo.FileExtension,
                 MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
                 Width = mediaFileInfo.FileImageWidth,

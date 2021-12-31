@@ -17,8 +17,6 @@ namespace Business.Extensions
     /// </summary>
     public static class UrlExtensions
     {
-        private static readonly string[] _schemes = { "http://", "https://" };
-
         /// <summary>
         /// Builds an absolute URL out of context information.
         /// </summary>

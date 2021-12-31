@@ -52,14 +52,14 @@ namespace XperienceAdapter.Repositories
         /// <returns>File DTOs.</returns>
         Task<MediaLibraryFile> GetMediaFileAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default);
 
-        ///// <summary>
-        ///// Gets media file.
-        ///// </summary>
-        ///// <param name="mediaLibraryId">Media library ID.</param>
-        ///// <param name="path">Path in the library.</param>
-        ///// <param name="cancellationToken">Cancellation token.</param>
-        ///// <returns>File DTOs.</returns>
-        //Task<MediaLibraryFile> GetMediaFileAsync(int mediaLibraryId, string path, CancellationToken? cancellationToken = default);
+        /// <summary>
+        /// Gets media file.
+        /// </summary>
+        /// <param name="mediaLibraryId">Media library ID.</param>
+        /// <param name="path">Path in the library.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>File DTOs.</returns>
+        Task<MediaLibraryFile> GetMediaFileAsync(int mediaLibraryId, string path, CancellationToken? cancellationToken = default);
 
         /// <summary>
         /// Gets a media file.

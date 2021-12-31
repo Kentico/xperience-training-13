@@ -10,15 +10,17 @@ namespace MedioClinic.Components.Widgets
 {
     public class FileDownloadProperties : IWidgetProperties
     {
-        [EditingComponent(ComponentIdentifiers.MediaLibrarySelectionFormComponent,
-            Label = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Title$}",
-            Tooltip = "{$" + ComponentIdentifiers.MediaLibrarySelectionFormComponent + ".Description$}",
-            Order = 0)]
+        [EditingComponent(MediaFilesSelector.IDENTIFIER, Label = "{$MedioClinic.InlineEditor.FileDownloadSelector.DownloadedFile$}", Order = 1)]
+        [EditingComponentProperty(nameof(MediaFilesSelectorProperties.MaxFilesLimit), 1)]
         [Required]
-        public string? MediLibraryId { get; set; }
+        public IEnumerable<MediaFilesSelectorItem> DownloadedFile { get; set; } = new List<MediaFilesSelectorItem>();
 
-        public Guid? FileGuid { get; set; }
+        [EditingComponent(TextInputComponent.IDENTIFIER, Label = "{$MedioClinic.InlineEditor.FileDownloadSelector.LinkTextResourceKey$}", Order = 2)]
+        [Required]
+        public string? LinkTextResourceKey { get; set; }
 
+        /// <remarks>This property shall be accompanied by another configuration property that specifies roles entitled for download.</remarks>
+        [EditingComponent(CheckBoxComponent.IDENTIFIER, Label = "{$MedioClinic.InlineEditor.FileDownloadSelector.SecuredDownload$}", Order = 3)]
         public bool SecuredDownload { get; set; }
     }
 }

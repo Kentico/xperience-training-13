@@ -64,11 +64,12 @@ namespace MedioClinic.Controllers
                 var etag = new EntityTagHeaderValue($"\"{hashedEtagValue}\"", false);
                 var path = mediaFile.MediaFileUrl?.DirectPath.Trim('~').Replace('/', '\\');
                 var completePath = $"{_environment.ContentRootPath}{path}";
+                var completeName = $"{mediaFile.Name}{mediaFile.Extension}";
 
                 // ControllerBase.File() takes care of the object disposal, hence no 'using' statement.
                 var stream = System.IO.File.OpenRead(completePath);
 
-                return File(stream, mediaFile.MimeType, mediaFile.LastModified, etag);
+                return File(stream, mediaFile.MimeType, completeName, mediaFile.LastModified, etag);
             }
 
             return NotFound();
