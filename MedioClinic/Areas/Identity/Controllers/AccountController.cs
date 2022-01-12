@@ -15,7 +15,7 @@ using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using XperienceAdapter.Repositories;
 using Business.Models;
 using Identity;
@@ -35,7 +35,7 @@ namespace MedioClinic.Areas.Identity.Controllers
 
         private readonly IMembershipActivityLogger _membershipActivityLogger;
 
-        private Core.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
+        private Common.Configuration.IdentityOptions? IdentityOptions => _optionsMonitor.CurrentValue.IdentityOptions;
 
         public AccountController(
             ILogger<AccountController> logger, 

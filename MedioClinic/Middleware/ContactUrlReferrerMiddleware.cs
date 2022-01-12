@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using XperienceAdapter.Cookies;
+using MedioClinicCustomizations.Cookies;
 
 using Business.Extensions;
 
 namespace MedioClinic.Middleware
 {
-    public class UrlReferrerMiddleware
+    public class ContactUrlReferrerMiddleware
     {
         private const string ReferrerHeaderName = "Referer";
 
@@ -25,7 +25,7 @@ namespace MedioClinic.Middleware
 
         private readonly IContactInfoProvider _contactInfoProvider;
 
-        public UrlReferrerMiddleware(RequestDelegate next,
+        public ContactUrlReferrerMiddleware(RequestDelegate next,
                                      ICookieManager cookieManager,
                                      IContactInfoProvider contactInfoProvider)
         {

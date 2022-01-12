@@ -1,6 +1,8 @@
 ﻿#define no_suffix
 
-using Core.Configuration;
+using Common.Configuration;
+
+using MedioClinicCustomizations.Cookies;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using XperienceAdapter.Cookies;
 
 namespace MedioClinic.Components.ViewComponents
 {
@@ -28,9 +28,8 @@ namespace MedioClinic.Components.ViewComponents
 
         public IViewComponentResult Invoke(TagKind tagKind)
         {
-            var marketingOptions = _optionsMonitor.CurrentValue?.OnlineMarketingOptions;
-            var googleTagManagerId = marketingOptions?.GoogleTagManagerId;
-            var googleAnalyticsId = marketingOptions?.GoogleAnalyticsPropertyId;
+            var googleTagManagerId = CookieManager.GoogleTagManagerId;
+            var googleAnalyticsId = CookieManager.GoogleAnalyticsPropertyId;
 
             if (!string.IsNullOrEmpty(googleTagManagerId) && !string.IsNullOrEmpty(googleAnalyticsId))
             {

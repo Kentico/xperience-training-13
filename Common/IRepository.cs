@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Core
+namespace Common
 {
     /// <summary>
     /// Provides data from a data source in the form of a DTO object.

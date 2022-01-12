@@ -27,9 +27,8 @@ using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using XperienceAdapter.Localization;
-using XperienceAdapter.Cookies;
 using Identity;
 using Identity.Models;
 using MedioClinic.Configuration;
@@ -37,6 +36,9 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using MedioClinic.PageTemplates;
+using MedioClinicCustomizations.Cookies;
+using CMS.DataProtection;
+using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
 
 namespace MedioClinic
 {
@@ -160,7 +162,7 @@ namespace MedioClinic
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
 
-            app.UseUrlReferrer();
+            app.UseContactUrlReferrer();
 
             app.UseHttpsRedirection();
 
@@ -278,7 +280,7 @@ namespace MedioClinic
                 cookieOptions.Cookie.Name = AuthCookieName;
             });
 
-            CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+            CookieHelper.RegisterCookie(AuthCookieName, CMS.Helpers.CookieLevel.Essential);
         }
 
         /// <summary>
@@ -345,22 +347,8 @@ namespace MedioClinic
         
         private void ConfigureOnlineMarketing(XperienceOptions? xperienceOptions)
         {
-            RegisterOnlineMarketingCookies(xperienceOptions);
-        }
-
-        private static void RegisterOnlineMarketingCookies(XperienceOptions? xperienceOptions)
-        {
-            var googleAnalyticsPropertyId = xperienceOptions?.OnlineMarketingOptions?.GoogleAnalyticsPropertyId;
-
-            if (!string.IsNullOrEmpty(googleAnalyticsPropertyId))
-            {
-                foreach (var cookieName in CookieManager.GetGoogleAnalyticsCookieNames(googleAnalyticsPropertyId))
-                {
-                    CookieManager.RegisterCookieAtTheVisitorLevel(cookieName);
-                }
-            }
-
-            CookieManager.RegisterCookieAtTheEssentialLevel(CookieManager.FirstReferrerCookieName);
+            CookieManager.RegisterOnlineMarketingCookies();
+            DataProtectionEvents.RevokeConsentAgreement.Execute += ConsentManager.RevokeConsentAgreementHandler;
         }
     }
 }

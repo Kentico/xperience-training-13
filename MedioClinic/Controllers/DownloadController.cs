@@ -1,6 +1,6 @@
 ﻿using CMS.Activities;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

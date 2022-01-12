@@ -36,14 +36,14 @@ namespace MedioClinic.Extensions
         /// </summary>
         /// <param name="builder">Application builder.</param>
         /// <returns>Modified application builder.</returns>
-        public static IApplicationBuilder UseUrlReferrer(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseContactUrlReferrer(this IApplicationBuilder builder)
         {
             if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            return builder.UseMiddleware<UrlReferrerMiddleware>();
+            return builder.UseMiddleware<ContactUrlReferrerMiddleware>();
         }
 
         /// <summary>

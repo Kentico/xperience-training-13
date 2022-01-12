@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using CMS.Base;
 
-using Core;
+using Common;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

@@ -8,7 +8,7 @@ using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using Identity.Models;
 using MedioClinic.Models;
 using Microsoft.Extensions.Localization;

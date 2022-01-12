@@ -1,4 +1,4 @@
-﻿namespace Core
+﻿namespace Common
 {
     /// <summary>
     /// Provides functions to client code.

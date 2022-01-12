@@ -11,7 +11,7 @@ using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Kentico.Content.Web.Mvc;
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
-using Core;
+using Common;
 using Business.Models;
 using Identity.Models;
 using Identity.Models.Account;

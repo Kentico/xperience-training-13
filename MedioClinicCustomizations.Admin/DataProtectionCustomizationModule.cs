@@ -1,8 +1,10 @@
 ﻿using CMS;
+using CMS.Core;
 using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.UIControls;
 
+using MedioClinicCustomizations.Cookies;
 using MedioClinicCustomizations.DataProtection;
 
 using System;
@@ -36,6 +38,9 @@ namespace MedioClinicCustomizations.DataProtection
 
             // Registers the custom eraser configuration control
             DataProtectionControlsRegister.Instance.RegisterErasureConfigurationControl("~/CMSModules/DataProtectionCustomization/ContactDataEraserConfiguration.ascx");
+
+            //var cookieManager = Service.Resolve<ICookieManager>();
+            CookieManager.RegisterOnlineMarketingCookies();
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿@using CMS.DocumentEngine
 @using Business.Models
+@using MedioClinic.Controllers 
 @model ConsentViewModel
 @inject IStringLocalizer<SharedResource> StringLocalizer
-@inject IPageDataContextRetriever pageDataContextRetriever
+@inject IPageDataContextRetriever PageDataContextRetriever
 
 @functions{
     string GetReturnUrl()
     {
         // Get URL for pages handled by content tree-based router, otherwise get path from the context
-        return pageDataContextRetriever.TryRetrieve<TreeNode>(out var _) ?
+        return PageDataContextRetriever.TryRetrieve<TreeNode>(out var _) ?
             Url.Kentico().CurrentPageUrl() :
             (Context.Request.PathBase + Context.Request.Path).Value;
     }
@@ -17,15 +18,14 @@
 @{
     var routeData = new Dictionary<string, string>
     {
-        { "consentName", Model?.CodeName! },
-        { "cookieLevel", Model?.CookieLevel?.ToString()! },
+        { "consentId", Model?.Id?.ToString()! },
         { "returnUrl", GetReturnUrl() }
     };
 }
 
 <div class="mc-fixed-bar-bottom light-blue lighten-1">
     <div class="container">
-        <form asp-action="Agree"
+        <form asp-action="@nameof(PrivacyController.SetCookieLevel)"
               asp-controller="Privacy"
               asp-antiforgery="true"
               asp-all-route-data="routeData">

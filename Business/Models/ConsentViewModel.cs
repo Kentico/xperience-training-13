@@ -8,6 +8,10 @@ namespace Business.Models
     {
         public string? CodeName { get; set; }
 
+        public int? Id { get; set; }
+
+        public string? Name { get; set; }
+
         public string? ShortText { get; set; }
 
         public string? FullText { get; set; }
@@ -15,7 +19,5 @@ namespace Business.Models
         public bool Agreed { get; set; }
 
         public int? CookieLevel { get; set; }
-
-        public int? RevocationCookieLevel { get; set; }
     }
 }

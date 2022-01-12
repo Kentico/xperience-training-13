@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using CMS.Base;
 
 using XperienceAdapter.Repositories;
-using Core.Configuration;
+using Common.Configuration;
 using Business.Models;
 using MedioClinic.Models;
 using XperienceAdapter.Localization;

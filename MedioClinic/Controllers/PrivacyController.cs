@@ -1,10 +1,15 @@
 ﻿using Business.Models;
 
 using CMS.ContactManagement;
+using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Helpers;
 
-using Core.Configuration;
+using Common.Configuration;
+using Common.Extensions;
+
+using MedioClinicCustomizations.Cookies;
+using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,89 +35,137 @@ namespace MedioClinic.Controllers
 
         private readonly ICurrentCookieLevelProvider _currentCookieLevelProvider;
 
+        private readonly IConsentCookieLevelInfoProvider _consentCookieLevelInfoProvider;
+
+        private readonly ICookieManager _cookieManager;
+
+        private readonly IConsentManager _consentManager;
+
         public PrivacyController(ILogger<BaseController> logger,
                               IOptionsMonitor<XperienceOptions> optionsMonitor,
                               IStringLocalizer<SharedResource> stringLocalizer,
                               IConsentInfoProvider consentInfoProvider,
                               IConsentAgreementService consentAgreementService,
-                              ICurrentCookieLevelProvider currentCookieLevelProvider)
+                              ICurrentCookieLevelProvider currentCookieLevelProvider,
+                              IConsentCookieLevelInfoProvider consentCookieLevelInfoProvider,
+                              ICookieManager cookieManager,
+                              IConsentManager consentManager)
             : base(logger, optionsMonitor, stringLocalizer)
         {
             _consentInfoProvider = consentInfoProvider ?? throw new ArgumentNullException(nameof(consentInfoProvider));
             _consentAgreementService = consentAgreementService ?? throw new ArgumentNullException(nameof(consentAgreementService));
             _currentCookieLevelProvider = currentCookieLevelProvider ?? throw new ArgumentNullException(nameof(currentCookieLevelProvider));
+            _consentCookieLevelInfoProvider = consentCookieLevelInfoProvider ?? throw new ArgumentNullException(nameof(consentCookieLevelInfoProvider));
+            _cookieManager = cookieManager ?? throw new ArgumentNullException(nameof(cookieManager));
+            _consentManager = consentManager ?? throw new ArgumentNullException(nameof(consentManager));
         }
 
+        // GET: Consent/
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var marketingOptions = _optionsMonitor.CurrentValue?.OnlineMarketingOptions;
             var contact = ContactManagementContext.GetCurrentContact(false);
-            var allConsents = new List<ConsentViewModel>();
+            var cookieConsents = new List<ConsentViewModel>();
+            var otherConsents = new List<ConsentViewModel>();
+            var consentsWithCookieLevels = GetConsentCookieLevels();
 
-            if (marketingOptions != null)
+            cookieConsents.Add(new ConsentViewModel
             {
-                var cookieConsentName = marketingOptions.AnalyticalCookiesConsentName;
+                Agreed = _cookieManager.IsDefaultCookieLevel,
+                Name = _stringLocalizer["SettingsKey.CMSDefaultCookieLevel"],
+                CookieLevel = _currentCookieLevelProvider.GetDefaultCookieLevel(),
+                Id = -1
+            });
 
-                if (!string.IsNullOrEmpty(cookieConsentName))
-                {
-                    allConsents.Add(await GetViewModelAsync(cookieConsentName, CookieLevel.Visitor, CookieLevel.Essential, contact, cancellationToken));
-                }
-
-                var formsDataConsentName = marketingOptions.FormsDataConsentName;
-
-                if (!string.IsNullOrEmpty(formsDataConsentName))
-                {
-                    allConsents.Add(await GetViewModelAsync(formsDataConsentName, null, null, contact, cancellationToken));
-                }
-                var fileDataConsentName = marketingOptions.FileDataConsentName;
-
-                if (!string.IsNullOrEmpty(fileDataConsentName))
-                {
-                    allConsents.Add(await GetViewModelAsync(fileDataConsentName, null, null, contact, cancellationToken));
-                }
-
-                var metadata = new Models.PageMetadata
-                {
-                    Title = Localize("OnlineMarketing.Privacy")
-                };
-
-                var viewModel = GetPageViewModel(metadata, allConsents);
-
-                return View(viewModel);
+            foreach (var consentCookieLevel in consentsWithCookieLevels.OrderBy(CookieManager.CookieLevelColumnName))
+            {
+                cookieConsents.AddIfNotNull(await GetViewModelAsync(consentCookieLevel.ConsentID, consentCookieLevel.CookieLevel, contact, cancellationToken));
             }
 
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            var consentsWithoutCookieLevels = _consentInfoProvider.Get()
+                .WhereNotIn(ConsentManager.ConsentIdColumnName, consentsWithCookieLevels.Select(consent => consent.ConsentID).ToList());
+
+            foreach (var otherConsent in consentsWithoutCookieLevels)
+            {
+                otherConsents.AddIfNotNull(await GetViewModelAsync(otherConsent.ConsentID, null, contact, cancellationToken));
+            }
+
+            var metadata = new Models.PageMetadata
+            {
+                Title = Localize("OnlineMarketing.Privacy")
+            };
+
+            var allConsents = (cookieConsents, otherConsents);
+
+            var viewModel = GetPageViewModel(metadata, allConsents);
+
+            return View(viewModel);
         }
 
-        // POST: Consent/Agree
+        // POST: Consent/SetCookieLevel/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agree(string consentName, int? cookieLevel, string? returnUrl = null)
+        public IActionResult SetCookieLevel(int consentId, string? returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(consentName))
+            var consentCookieLevels = GetConsentCookieLevels();
+
+            // Get the cookie level to be set.
+            var cookieLevelToSet = consentCookieLevels?.TypedResult?.FirstOrDefault(cookieLevel => cookieLevel.ConsentID == consentId)?.CookieLevel
+                ?? _currentCookieLevelProvider.GetDefaultCookieLevel();
+
+            var existingContact = ContactManagementContext.GetCurrentContact(false);
+
+            // Get ALL consents with SAME or LOWER cookie level and AGREE to them.
+            var smallerOrEqualCookieLevelConsents = _consentManager.GetAllConsentsWithSameOrLowerCookieLevel(cookieLevelToSet);
+
+            // Set the cookie level before attempting to get/create the current contact.
+            _currentCookieLevelProvider.SetCurrentCookieLevel(cookieLevelToSet);
+
+            // Try to use the existing contact first as the new cookie level may not allow you to create one.
+            var contact = existingContact ?? ContactManagementContext.GetCurrentContact(_cookieManager.VisitorCookiesEnabled);
+
+            if (contact != null)
             {
-                var consent = await _consentInfoProvider.GetAsync(consentName);
-
-                if (consent != null)
+                // First agree to the required consents to allow ConsentManager.RevokeConsentAgreementHandler() find a proper baseline cookie level.
+                foreach (var consentToAgree in smallerOrEqualCookieLevelConsents)
                 {
-                    if (cookieLevel.HasValue)
-                    {
-                        // Set the cookie level before attempting to get/create the current contact.
-                        _currentCookieLevelProvider.SetCurrentCookieLevel(cookieLevel.Value);
-                    }
-
-                    var contact = ContactManagementContext.GetCurrentContact(true);
-                    _consentAgreementService.Agree(contact, consent);
-
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
+                    _consentAgreementService.Agree(contact, consentToAgree);
                 }
+
+                // Get AGREED consents with HIGHER cookie level and REVOKE them.
+                var agreedConsentsWithHigherCookieLevel = _consentManager.GetAgreedConsentsWithHigherCookieLevel(contact, cookieLevelToSet);
+
+                // When revoking, the handler continuously lowers the cookie level until it eventually finds the baseline level
+                // (even through agreedConsentsWithHigherCookieLevel is not ordered by the cookie level).
+                foreach (var consentToRevoke in agreedConsentsWithHigherCookieLevel)
+                {
+                    _consentAgreementService.Revoke(contact, consentToRevoke);
+                }
+            }
+
+            return RedirectIfPossible(returnUrl);
+        }
+
+        // POST: Consent/Agree/consentId
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agree(int consentId, string? returnUrl = null)
+        {
+            var consent = await _consentInfoProvider.GetAsync(consentId);
+
+            if (consent != null)
+            {
+                var existingContact = ContactManagementContext.GetCurrentContact(false);
+
+                // The current cookie level may prevent us from getting the contact
+                // and no changes to the cookie level will be done,
+                // hence only the existing contact can potentially be used.
+                if (existingContact != null)
+                {
+                    // Agree to the consent that has no cookie level assigned.
+                    _consentAgreementService.Agree(existingContact, consent);
+                }
+
+                return RedirectIfPossible(returnUrl);
             }
 
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
@@ -121,7 +174,7 @@ namespace MedioClinic.Controllers
         // POST: Consent/Revoke
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Revoke(string consentName, int? revocationCookieLevel)
+        public async Task<IActionResult> Revoke(string consentName)
         {
             if (!string.IsNullOrEmpty(consentName))
             {
@@ -131,7 +184,6 @@ namespace MedioClinic.Controllers
                 if (consent != null)
                 {
                     _consentAgreementService.Revoke(contact, consent);
-                    _currentCookieLevelProvider.SetCurrentCookieLevel(revocationCookieLevel ?? _currentCookieLevelProvider.GetDefaultCookieLevel());
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -140,26 +192,40 @@ namespace MedioClinic.Controllers
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
 
-        private async Task<ConsentViewModel> GetViewModelAsync(string codeName, int? cookieLevel, int? revocationCookieLevel, ContactInfo? contactInfo, CancellationToken cancellationToken)
+        private IActionResult RedirectIfPossible(string? returnUrl)
         {
-            if (!string.IsNullOrEmpty(codeName))
+            if (!string.IsNullOrEmpty(returnUrl))
             {
-                var consentInfo = await _consentInfoProvider.GetAsync(codeName, cancellationToken);
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
 
-                if (consentInfo != null)
+        private ObjectQuery<ConsentCookieLevelInfo> GetConsentCookieLevels() =>
+            _consentCookieLevelInfoProvider.Get()
+                .WhereGreaterThan(CookieManager.CookieLevelColumnName, CookieManager.NullIntegerValue);
+
+        private async Task<ConsentViewModel> GetViewModelAsync(int consentId, int? cookieLevel, ContactInfo? contactInfo, CancellationToken cancellationToken)
+        {
+            var consentInfo = await _consentInfoProvider.GetAsync(consentId, cancellationToken);
+
+            if (consentInfo != null)
+            {
+                var text = consentInfo.GetConsentText(Thread.CurrentThread.CurrentUICulture.Name);
+
+                return new ConsentViewModel
                 {
-                    var text = consentInfo.GetConsentText(Thread.CurrentThread.CurrentUICulture.Name);
-
-                    return new ConsentViewModel
-                    {
-                        CodeName = consentInfo.ConsentName,
-                        ShortText = text?.ShortText,
-                        FullText = text?.FullText,
-                        CookieLevel = cookieLevel,
-                        RevocationCookieLevel = revocationCookieLevel,
-                        Agreed = contactInfo != null && _consentAgreementService.IsAgreed(contactInfo, consentInfo)
-                    };
-                }
+                    Id = consentInfo.ConsentID,
+                    CodeName = consentInfo.ConsentName,
+                    Name = consentInfo.ConsentDisplayName,
+                    ShortText = text?.ShortText,
+                    FullText = text?.FullText,
+                    CookieLevel = cookieLevel,
+                    Agreed = contactInfo != null && _consentAgreementService.IsAgreed(contactInfo, consentInfo)
+                };
             }
 
             return null!;

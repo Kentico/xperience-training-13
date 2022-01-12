@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using CMS.Base;
 using Kentico.Content.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using Identity;
 using Identity.Attributes;
 using Identity.Models;

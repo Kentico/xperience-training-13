@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 using CMS.DataProtection;
 using Microsoft.Extensions.Options;
-using Core.Configuration;
+using Common.Configuration;
 using CMS.ContactManagement;
 using Business.Models;
 using CMS.Helpers;
@@ -50,9 +50,8 @@ namespace MedioClinic.Components.ViewComponents
 
                         var consentViewModel = new ConsentViewModel
                         {
-                            CodeName = consent.ConsentName,
+                            Id = consent.ConsentID,
                             ShortText = text?.ShortText,
-                            CookieLevel = CookieLevel.Visitor
                         };
 
                         // Display the consent overlay bar.
