@@ -27,19 +27,19 @@ namespace MedioClinicCustomizations.DataProtection
         {
             base.OnInit();
 
-            // Adds the ContactIdentityCollector to the collection of registered identity collectors
+            // Adds the ContactIdentityCollector to the collection of registered identity collectors.
             IdentityCollectorRegister.Instance.Add(new ContactIdentityCollector());
 
-            // Adds the ContactDataCollector to the collection of registered personal data collectors
+            // Adds the ContactDataCollector to the collection of registered personal data collectors.
             PersonalDataCollectorRegister.Instance.Add(new ContactDataCollector());
 
-            // Adds the ContactDataEraser to the collection of registered personal data erasers
+            // Adds the ContactDataEraser to the collection of registered personal data erasers.
             PersonalDataEraserRegister.Instance.Add(new ContactDataEraser());
 
-            // Registers the custom eraser configuration control
+            // Registers the custom eraser configuration control.
             DataProtectionControlsRegister.Instance.RegisterErasureConfigurationControl("~/CMSModules/DataProtectionCustomization/ContactDataEraserConfiguration.ascx");
 
-            //var cookieManager = Service.Resolve<ICookieManager>();
+            // Registers online marketing cookies at their respective cookie levels.
             CookieManager.RegisterOnlineMarketingCookies();
         }
     }

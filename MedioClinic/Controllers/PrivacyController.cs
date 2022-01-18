@@ -71,7 +71,7 @@ namespace MedioClinic.Controllers
             cookieConsents.Add(new ConsentViewModel
             {
                 Agreed = _cookieManager.IsDefaultCookieLevel,
-                Name = _stringLocalizer["SettingsKey.CMSDefaultCookieLevel"],
+                Name = _stringLocalizer["OnlineMarketing.EssentialCookies"],
                 CookieLevel = _currentCookieLevelProvider.GetDefaultCookieLevel(),
                 Id = -1
             });
