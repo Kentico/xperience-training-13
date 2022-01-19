@@ -15,7 +15,7 @@ namespace MedioClinicCustomizations.DataProtection.ConsentCustomizations
 {
     public class ConsentManager : IConsentManager
     {
-        public const string ConsentIdColumnName = "ConsentID";
+        public const string ConsentIdColumnName = nameof(ConsentCookieLevelInfo.ConsentID);
 
         private readonly IConsentCookieLevelInfoProvider _consentCookieLevelInfoProvider;
 
@@ -27,6 +27,11 @@ namespace MedioClinicCustomizations.DataProtection.ConsentCustomizations
             _consentInfoProvider = consentInfoProvider ?? throw new ArgumentNullException(nameof(consentInfoProvider));
         }
 
+        /// <summary>
+        /// Handles the <see cref="DataProtectionEvents.RevokeConsentAgreement"/> event.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Event arguments.</param>
         public static void RevokeConsentAgreementHandler(object sender, EventArgs args)
         {
             var currentCookieLevelProvider = Service.Resolve<ICurrentCookieLevelProvider>();
@@ -43,6 +48,7 @@ namespace MedioClinicCustomizations.DataProtection.ConsentCustomizations
                 smallerOrSameCookieLevel = consentCookieLevelInfoProvider.Get()
                     .WhereIn(ConsentIdColumnName, agreedConsentIds)
                     .WhereLessOrEquals(CookieManager.CookieLevelColumnName, currentCookieLevel)
+                    .WhereGreaterThan(CookieManager.CookieLevelColumnName, CookieManager.NullIntegerValue)
                     .OrderBy(CookieManager.CookieLevelColumnName)
                     .TopN(1)
                     .FirstOrDefault()

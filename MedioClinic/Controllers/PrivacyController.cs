@@ -68,6 +68,7 @@ namespace MedioClinic.Controllers
             var otherConsents = new List<ConsentViewModel>();
             var consentsWithCookieLevels = GetConsentCookieLevels();
 
+            // Prepare an in-memory consent representing the default cookie level.
             cookieConsents.Add(new ConsentViewModel
             {
                 Agreed = _cookieManager.IsDefaultCookieLevel,
@@ -76,11 +77,13 @@ namespace MedioClinic.Controllers
                 Id = -1
             });
 
+            // Prepare other consents related to cookies.
             foreach (var consentCookieLevel in consentsWithCookieLevels.OrderBy(CookieManager.CookieLevelColumnName))
             {
                 cookieConsents.AddIfNotNull(await GetViewModelAsync(consentCookieLevel.ConsentID, consentCookieLevel.CookieLevel, contact, cancellationToken));
             }
 
+            // Prepare consents not related to cookies.
             var consentsWithoutCookieLevels = _consentInfoProvider.Get()
                 .WhereNotIn(ConsentManager.ConsentIdColumnName, consentsWithCookieLevels.Select(consent => consent.ConsentID).ToList());
 
@@ -101,7 +104,7 @@ namespace MedioClinic.Controllers
             return View(viewModel);
         }
 
-        // POST: Consent/SetCookieLevel/
+        // POST: Consent/SetCookieLevel/1
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SetCookieLevel(int consentId, string? returnUrl = null)
@@ -145,25 +148,21 @@ namespace MedioClinic.Controllers
             return RedirectIfPossible(returnUrl);
         }
 
-        // POST: Consent/Agree/consentId
+        // POST: Consent/Agree/1
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Agree(int consentId, string? returnUrl = null)
         {
             var consent = await _consentInfoProvider.GetAsync(consentId);
+            var contact = ContactManagementContext.GetCurrentContact(false);
 
-            if (consent != null)
+            // The current cookie level may prevent us from getting the contact
+            // and no changes to the cookie level will be done,
+            // hence only the existing contact can potentially be used.
+            if (consent != null && contact != null)
             {
-                var existingContact = ContactManagementContext.GetCurrentContact(false);
-
-                // The current cookie level may prevent us from getting the contact
-                // and no changes to the cookie level will be done,
-                // hence only the existing contact can potentially be used.
-                if (existingContact != null)
-                {
-                    // Agree to the consent that has no cookie level assigned.
-                    _consentAgreementService.Agree(existingContact, consent);
-                }
+                // Agree to the consent that has no cookie level assigned.
+                _consentAgreementService.Agree(contact, consent);
 
                 return RedirectIfPossible(returnUrl);
             }
@@ -174,19 +173,17 @@ namespace MedioClinic.Controllers
         // POST: Consent/Revoke
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Revoke(string consentName)
+        public async Task<IActionResult> Revoke(int consentId)
         {
-            if (!string.IsNullOrEmpty(consentName))
+            var consent = await _consentInfoProvider.GetAsync(consentId);
+            var contact = ContactManagementContext.GetCurrentContact(false);
+
+            if (consent != null && contact != null)
             {
-                var consent = await _consentInfoProvider.GetAsync(consentName);
-                var contact = ContactManagementContext.GetCurrentContact(false);
+                // Revoke the consent that has no cookie level assigned.
+                _consentAgreementService.Revoke(contact, consent);
 
-                if (consent != null)
-                {
-                    _consentAgreementService.Revoke(contact, consent);
-
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
 
             return new StatusCodeResult(StatusCodes.Status400BadRequest);

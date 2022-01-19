@@ -3,6 +3,7 @@ using CMS.Core;
 using CMS.Helpers;
 
 using MedioClinicCustomizations.Cookies;
+using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
 
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,19 @@ namespace MedioClinicCustomizations.Cookies
 
         public const string GoogleAnalyticsPropertyId = "UA-XXXXX-X";
 
-        public const string CookieLevelColumnName = "CookieLevel";
+        public const string ExampleAdvertisingCookieName = "ExampleAdvertisingCookie";
+
+        public const string CookieLevelColumnName = nameof(ConsentCookieLevelInfo.CookieLevel);
 
         public const int NullIntegerValue = -10000;
 
         private readonly ICurrentCookieLevelProvider _currentCookieLevelProvider;
 
+        /// <summary>
+        /// Gets names of Google Analytics cookies with the Google Property ID in them.
+        /// </summary>
+        /// <param name="gaPropertyId">Google Property ID.</param>
+        /// <returns>An array of cookie names.</returns>
         public static string[] GetGoogleAnalyticsCookieNames(string gaPropertyId) => new string[14]
             {
                 "_ga",
@@ -56,9 +64,11 @@ namespace MedioClinicCustomizations.Cookies
         }
 
         public IEnumerable<string> AllCookieNames => GetGoogleAnalyticsCookieNames(GoogleAnalyticsPropertyId)
-                .Concat(new[] { FirstReferrerCookieName, "Test03" });
+                .Concat(new[] { FirstReferrerCookieName, ExampleAdvertisingCookieName });
+
 
         public IEnumerable<Cookie> GetCookies() => GetCookies(AllCookieNames);
+
 
         public IEnumerable<Cookie> GetCookies(IEnumerable<string> cookieNames)
         {
@@ -111,7 +121,7 @@ namespace MedioClinicCustomizations.Cookies
 
             RegisterCookieAtTheEssentialLevel(FirstReferrerCookieName);
 
-            RegisterCookie("Test03", 500);
+            RegisterCookie(ExampleAdvertisingCookieName, 500);
         }
 
         public static void RegisterCookieAtTheVisitorLevel(string cookieName) =>
