@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <cms.formclass>
+  <ClassContactMapping>
+    <form>
+      <field column="TestingCenterStartingDate" mappedtofield="StartingDate" />
+    </form>
+  </ClassContactMapping>
+  <ClassContactOverwriteEnabled>False</ClassContactOverwriteEnabled>
   <ClassDisplayName>Allergy test center application</ClassDisplayName>
   <ClassFormDefinition>
     <form version="2">
@@ -17,6 +23,89 @@
         <properties>
           <fieldcaption>Form updated</fieldcaption>
         </properties>
+      </field>
+      <field column="CompanyName" columnsize="500" columntype="text" guid="4b63f9b2-82e0-4daf-ba09-c751ec746939" visible="true">
+        <properties>
+          <fieldcaption>Company name</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.TextInput</componentidentifier>
+        </settings>
+      </field>
+      <field column="Type" columnsize="200" columntype="text" guid="45a84e97-5d1c-4eab-a256-14550919c626" visible="true">
+        <properties>
+          <fieldcaption>Type</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.RadioButtons</componentidentifier>
+          <DataSource>
+<![CDATA[
+Medical institution
+Spa/wellness center
+Pharmacy store
+]]>
+          </DataSource>
+        </settings>
+      </field>
+      <field allowempty="true" column="ReasonsToJoin" columntype="longtext" guid="5adaed46-a2f2-4e7c-8e2a-29828632b803" visible="true">
+        <properties>
+          <fieldcaption>Why do you want to join the partner program?</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.TextArea</componentidentifier>
+        </settings>
+      </field>
+      <field column="StartingDate" columnprecision="7" columntype="datetime" guid="303cf811-1f12-4013-a6cb-eb7016f63130" visible="true">
+        <properties>
+          <defaultvalue>1/1/2023 12:00:00 AM</defaultvalue>
+          <fieldcaption>Proposed starting date</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>MedioClinic.FormComponent.DateSelection</componentidentifier>
+        </settings>
+      </field>
+      <field column="EmailInput" columnsize="500" columntype="text" guid="56b2d110-56f5-4bff-8b4a-e4cd79c6ab99" visible="true">
+        <properties>
+          <fieldcaption>Email</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.EmailInput</componentidentifier>
+        </settings>
+      </field>
+      <field column="PhotoOrMap" columnsize="400" columntype="text" guid="24db8e99-c1c1-4b2a-9ce4-62cc8041f15a" visible="true">
+        <properties>
+          <fieldcaption>Photo/map</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>MedioClinic.FormComponent.MediaLibraryUploader</componentidentifier>
+          <MediaLibraryId>6</MediaLibraryId>
+        </settings>
+      </field>
+      <field allowempty="true" column="ConsentAgreementForms" columntype="guid" guid="d871c855-5c47-4ffb-a3bc-1b24c2e750d0" visible="true">
+        <properties>
+          <fieldcaption>Consent agreement</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.ConsentAgreement</componentidentifier>
+          <ConsentCodeName>MedioClinic.DataSubmittedInForms</ConsentCodeName>
+        </settings>
+      </field>
+      <field allowempty="true" column="ConsentAgreementFiles" columntype="guid" guid="54aba8fb-ecea-4a27-9a35-729a0bcb2c51" visible="true">
+        <properties>
+          <fieldcaption>Consent agreement</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.ConsentAgreement</componentidentifier>
+          <ConsentCodeName>MedioClinic.DataUploadedAsFiles</ConsentCodeName>
+        </settings>
       </field>
     </form>
   </ClassFormDefinition>
@@ -56,6 +145,44 @@
               <xs:element name="AllergyTestCenterApplicationID" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
               <xs:element name="FormInserted" type="xs:dateTime" />
               <xs:element name="FormUpdated" type="xs:dateTime" />
+              <xs:element name="CompanyName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="EmailInput">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Type">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="StartingDate" type="xs:dateTime" />
+              <xs:element name="ReasonsToJoin" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ConsentAgreementForms" msdata:DataType="System.Guid, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" type="xs:string" minOccurs="0" />
+              <xs:element name="PhotoOrMap">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="400" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ConsentAgreementFiles" msdata:DataType="System.Guid, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
