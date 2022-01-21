@@ -73,6 +73,7 @@ namespace MedioClinic.Controllers
             {
                 Agreed = _cookieManager.IsDefaultCookieLevel,
                 Name = _stringLocalizer["OnlineMarketing.EssentialCookies"],
+                FullText = _stringLocalizer["OnlineMarketing.FirstReferrerCookieExplanationLong"],
                 CookieLevel = _currentCookieLevelProvider.GetDefaultCookieLevel(),
                 Id = -1
             });
