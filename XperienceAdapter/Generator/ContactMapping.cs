@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using TinyCsvParser.Mapping;
+﻿using TinyCsvParser.Mapping;
 
 namespace XperienceAdapter.Generator
 {
@@ -13,8 +9,7 @@ namespace XperienceAdapter.Generator
             MapProperty(0, m => m.FirstName);
             MapProperty(1, m => m.LastName);
             MapProperty(2, m => m.EmailAddress);
-            MapProperty(3, m => m.UrlReferrer);
-            MapProperty(4, m => m.TestingCenterStartingDate);
+            MapProperty(3, m => m.TestingCenterStartingDate);
         }
     }
 }

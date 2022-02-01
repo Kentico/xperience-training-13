@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CookieLevelSelector.ascx.cs" Inherits="CMSApp.CMSFormControls.MedioClinic.CookieLevelSelector" %>
+<cms:CMSDropDownList ID="drpCookieLevel" runat="server" />

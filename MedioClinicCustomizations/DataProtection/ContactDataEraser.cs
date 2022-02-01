@@ -1,14 +1,12 @@
-﻿using CMS.Activities;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using CMS.Activities;
 using CMS.Base;
 using CMS.ContactManagement;
 using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Helpers;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MedioClinicCustomizations.DataProtection
 {

@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Xml;
 
-using CMS.Activities;
 using CMS.ContactManagement;
 using CMS.DataEngine;
 using CMS.DataProtection;
-using CMS.Globalization;
-using CMS.Helpers;
 
 using MedioClinicCustomizations.DataProtection.Writers;
 
@@ -38,7 +34,6 @@ namespace MedioClinicCustomizations.DataProtection
         Tuple.Create("ContactCreated", "Created"),
         Tuple.Create("ContactCampaign", "Campaign"),
         Tuple.Create("ContactCompanyName", "Company name"),
-        Tuple.Create("UrlReferrer", "URL referrer"),
         Tuple.Create("TestingCenterStartingDate", "Testing center starting date")
     };
 

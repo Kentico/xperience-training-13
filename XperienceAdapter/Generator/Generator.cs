@@ -1,19 +1,16 @@
-﻿using CMS.ContactManagement;
+﻿using System;
+using System.Text;
+using System.Linq;
 
 using TinyCsvParser;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+using CMS.ContactManagement;
 using CMS.Globalization;
 
 namespace XperienceAdapter.Generator
 {
     public class Generator : IGenerator
     {
-        private const string ReferrerDbColumnName = "UrlReferrer";
-
         private const string TestingCenterStartingDateDbName = "TestingCenterStartingDate";
 
         private static CsvParserOptions _csvParserOptions = new CsvParserOptions(true, ',');
@@ -49,7 +46,6 @@ namespace XperienceAdapter.Generator
                             ContactCountryID = countryIds[countryIndex]
                         };
 
-                        contactInfo.SetValue(ReferrerDbColumnName, result.UrlReferrer);
                         contactInfo.SetValue(TestingCenterStartingDateDbName, result.TestingCenterStartingDate);
 
                         ContactInfo.Provider.Set(contactInfo);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,6 @@ using CMS.DataEngine;
 using CMS.SiteProvider;
 
 using MedioClinic.Middleware;
-using System.Threading.Tasks;
 
 namespace MedioClinic.Extensions
 {
@@ -29,21 +29,6 @@ namespace MedioClinic.Extensions
             }
 
             return builder.UseMiddleware<CultureMiddleware>();
-        }
-
-        /// <summary>
-        /// Attaches the URL referrer middleware to the request pipeline.
-        /// </summary>
-        /// <param name="builder">Application builder.</param>
-        /// <returns>Modified application builder.</returns>
-        public static IApplicationBuilder UseContactUrlReferrer(this IApplicationBuilder builder)
-        {
-            if (builder is null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
-            return builder.UseMiddleware<ContactUrlReferrerMiddleware>();
         }
 
         /// <summary>

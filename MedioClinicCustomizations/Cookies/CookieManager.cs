@@ -5,10 +5,8 @@ using CMS.Helpers;
 using MedioClinicCustomizations.Cookies;
 using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 [assembly: RegisterImplementation(typeof(ICookieManager), typeof(CookieManager))]
 

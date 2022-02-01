@@ -1,4 +1,8 @@
-﻿using CMS.ContactManagement;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using CMS.ContactManagement;
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.DataProtection;
@@ -6,10 +10,6 @@ using CMS.Helpers;
 
 using MedioClinicCustomizations.Cookies;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MedioClinicCustomizations.DataProtection.ConsentCustomizations
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace XperienceAdapter.Generator
 {
@@ -11,8 +9,6 @@ namespace XperienceAdapter.Generator
         public string? LastName { get; set; }
 
         public string? EmailAddress { get; set; }
-
-        public string? UrlReferrer { get; set; }
 
         public DateTime? TestingCenterStartingDate { get; set; }
     }

@@ -162,8 +162,6 @@ namespace MedioClinic
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
 
-            app.UseContactUrlReferrer();
-
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();

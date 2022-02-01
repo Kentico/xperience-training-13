@@ -1,8 +1,6 @@
-﻿using CMS.Activities;
+﻿using System;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using CMS.Activities;
 
 namespace XperienceAdapter.Activities
 {
