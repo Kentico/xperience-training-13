@@ -1,6 +1,6 @@
 ﻿#define no_suffix
 
-using MedioClinicCustomizations.Cookies;
+using MedioClinic.Customizations.Cookies;
 
 using Microsoft.AspNetCore.Mvc;
 

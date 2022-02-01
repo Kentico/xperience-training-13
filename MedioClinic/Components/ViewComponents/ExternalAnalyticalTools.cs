@@ -2,7 +2,7 @@
 
 using Common.Configuration;
 
-using MedioClinicCustomizations.Cookies;
+using MedioClinic.Customizations.Cookies;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

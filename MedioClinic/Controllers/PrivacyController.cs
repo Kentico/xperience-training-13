@@ -8,8 +8,8 @@ using CMS.Helpers;
 using Common.Configuration;
 using Common.Extensions;
 
-using MedioClinicCustomizations.Cookies;
-using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
+using MedioClinic.Customizations.Cookies;
+using MedioClinic.Customizations.DataProtection.Consent;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -159,10 +159,13 @@ namespace MedioClinic.Controllers
             // The current cookie level may prevent us from getting the contact
             // and no changes to the cookie level will be done,
             // hence only the existing contact can potentially be used.
-            if (consent != null && contact != null)
+            if (consent != null)
             {
-                // Agree to the consent that has no cookie level assigned.
-                _consentAgreementService.Agree(contact, consent);
+                if (contact != null)
+                {
+                    // Agree to the consent that has no cookie level assigned.
+                    _consentAgreementService.Agree(contact, consent);
+                }
 
                 return RedirectIfPossible(returnUrl);
             }
@@ -178,10 +181,13 @@ namespace MedioClinic.Controllers
             var consent = await _consentInfoProvider.GetAsync(consentId);
             var contact = ContactManagementContext.GetCurrentContact(false);
 
-            if (consent != null && contact != null)
+            if (consent != null)
             {
-                // Revoke the consent that has no cookie level assigned.
-                _consentAgreementService.Revoke(contact, consent);
+                if (contact != null)
+                {
+                    // Revoke the consent that has no cookie level assigned.
+                    _consentAgreementService.Revoke(contact, consent);
+                }
 
                 return RedirectToAction(nameof(Index));
             }

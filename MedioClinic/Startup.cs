@@ -17,6 +17,7 @@ using Autofac;
 
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.SiteProvider;
 using Kentico.Activities.Web.Mvc;
@@ -28,6 +29,8 @@ using Kentico.Membership;
 using Kentico.Web.Mvc;
 
 using Common.Configuration;
+using MedioClinic.Customizations.Cookies;
+using MedioClinic.Customizations.DataProtection.Consent;
 using XperienceAdapter.Localization;
 using Identity;
 using Identity.Models;
@@ -36,9 +39,6 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using MedioClinic.PageTemplates;
-using MedioClinicCustomizations.Cookies;
-using CMS.DataProtection;
-using MedioClinicCustomizations.DataProtection.ConsentCustomizations;
 
 namespace MedioClinic
 {
@@ -119,7 +119,7 @@ namespace MedioClinic
 
             ConfigureIdentityServices(services, xperienceOptions);
             ConfigurePageBuilderFilters();
-            ConfigureOnlineMarketing(xperienceOptions);
+            ConfigureOnlineMarketing();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -343,7 +343,7 @@ namespace MedioClinic
         private static void ConfigurePageBuilderFilters() =>
             PageBuilderFilters.PageTemplates.Add(new EventPageTemplateFilter());
         
-        private void ConfigureOnlineMarketing(XperienceOptions? xperienceOptions)
+        private void ConfigureOnlineMarketing()
         {
             CookieManager.RegisterOnlineMarketingCookies();
             DataProtectionEvents.RevokeConsentAgreement.Execute += ConsentManager.RevokeConsentAgreementHandler;

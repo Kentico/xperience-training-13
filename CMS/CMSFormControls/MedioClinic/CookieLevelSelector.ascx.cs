@@ -6,7 +6,7 @@ using CMS.Core;
 using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 
-using MedioClinicCustomizations.Cookies;
+using MedioClinic.Customizations.Cookies;
 
 namespace CMSApp.CMSFormControls.MedioClinic
 {
