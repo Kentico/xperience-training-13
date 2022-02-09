@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Linq;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 
 using Kentico.Web.Mvc;
-using System;
 
 namespace Business.Extensions
 {
@@ -69,15 +69,5 @@ namespace Business.Extensions
 
         public static string UrlInCurrentUiCulture(this IUrlHelper helper, string routeName) =>
             helper.RouteUrl($"{routeName}_{Thread.CurrentThread.CurrentUICulture.Name}");
-
-        public static string Hostname(this string fullUrl)
-        {
-            if (!string.IsNullOrEmpty(fullUrl) && Uri.TryCreate(fullUrl, UriKind.Absolute, out var uri))
-            {
-                return uri?.Host!;
-            }
-
-            return null!;
-        }
     }
 }

@@ -338,7 +338,7 @@ public partial class CMSModules_Content_Controls_Attachments_DirectFileUploader_
             // Log the exception
             Service.Resolve<IEventLogService>().LogException("Content", "UploadAttachment", ex);
 
-            message = ex.Message;
+            message = ResHelper.GetString("media.newfile.failed");
         }
         finally
         {
@@ -369,6 +369,8 @@ public partial class CMSModules_Content_Controls_Attachments_DirectFileUploader_
                             obj[DialogParameters.AV_EXT] = newAttachment.AttachmentExtension;
                             obj[DialogParameters.AV_WIDTH] = DEFAULT_OBJECT_WIDTH;
                             obj[DialogParameters.AV_HEIGHT] = DEFAULT_OBJECT_HEIGHT;
+                            obj[DialogParameters.AV_MIME_TYPE] = MimeTypeHelper.GetMimetype(newAttachment.AttachmentExtension);
+                            obj[DialogParameters.AV_CONTROLS] = true;
                         }
                         else
                         {
@@ -626,6 +628,11 @@ if (window.{0} != null) {{
                     mfi.MetaFileName = URLHelper.GetSafeFileName(FileUploadControl.FileName, null);
                     mfi.MetaFileExtension = fileExt;
 
+                    if (fileExt.Equals(".xml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        XmlVulnerabilityChecker.Check(FileUploadControl.PostedFile.InputStream);
+                    }
+
                     mfi.MetaFileSize = Convert.ToInt32(FileUploadControl.PostedFile.InputStream.Length);
                     mfi.MetaFileMimeType = MimeTypeHelper.GetMimetype(fileExt);
                     mfi.InputStream = FileUploadControl.PostedFile.InputStream;
@@ -653,7 +660,7 @@ if (window.{0} != null) {{
             // Log the exception
             Service.Resolve<IEventLogService>().LogException("Uploader", "UploadMetaFile", ex);
 
-            message = ex.Message;
+            message = ResHelper.GetString("media.newfile.failed");
         }
         finally
         {
