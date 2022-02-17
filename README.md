@@ -5,8 +5,8 @@
 ## About the repo
 
 The repo contains the Medio Clinic sample website developed throughout the two following e-learning courses:
-* [Kentico Xperience for Developers](https://xperience.io/services/training/xperience-for-developers)
-* [Kentico Xperience Marketing for Developers](https://xperience.io/services/training/xperience-marketing-for-developers)
+* [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers)
+* [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
 ### About the current branch
 
