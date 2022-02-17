@@ -126,6 +126,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
 
         var displaySlugUrl = ScriptHelper.ResolveUrl(PageRoutingUIHelper.GetSlugsListingPath(Node.NodeID, Node.DocumentCulture));
         btnDisplaySlugs.OnClientClick = GetClickScript(displaySlugUrl);
+        btnResetPreviewGuid.Click += btnResetPreviewGuid_Click;
     }
 
 
@@ -216,7 +217,6 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         {
             plcPreview.Visible = true;
             btnResetPreviewGuid.ToolTip = GetString("content.ui.properties.invalidatepreviewurl");
-            btnResetPreviewGuid.Click += btnResetPreviewGuid_Click;
             btnResetPreviewGuid.OnClientClick = "if(!confirm(" + ScriptHelper.GetLocalizedString("content.ui.properties.generatepreviewurlconf") + ")){return false;}";
 
             SetPreviewUrl(previewUrl);

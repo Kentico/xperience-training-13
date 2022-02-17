@@ -276,7 +276,9 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_DirectFileUploader
             catch (Exception ex)
             {
                 // Creation of new media file failed
-                message = ex.Message;
+                Service.Resolve<IEventLogService>().LogException("Uploader", "UploadMediaFile", ex);
+
+                message = ResHelper.GetString("media.newfile.failed");
             }
             finally
             {

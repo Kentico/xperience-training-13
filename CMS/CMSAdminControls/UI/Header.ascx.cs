@@ -253,7 +253,7 @@ function CheckChanges() {
 
             return LicenseKeyInfoProvider.GetLicenseKeys()
                                          .TypedResult
-                                         .Where(l => l.LicenseGuid != null);
+                                         .Where(l => l.LicenseGuid != null && l.ExpirationDateReal != LicenseKeyInfo.TIME_UNLIMITED_LICENSE);
 
         }, new CacheSettings(60, "Header", "AreSubscriptionLicensesValid"));
 

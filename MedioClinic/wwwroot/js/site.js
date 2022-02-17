@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var selectElements = document.querySelectorAll("select");
     M.FormSelect.init(selectElements);
-    var datepickerElements = document.querySelectorAll("datepicker");
-    M.Datepicker.init(datepickerElements);
 });
 
 (function (medioClinic) {
