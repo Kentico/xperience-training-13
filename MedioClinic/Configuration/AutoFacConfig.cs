@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 
-using Core;
+using Common;
 using XperienceAdapter.Services;
 using XperienceAdapter.Repositories;
 using Business.Repositories;

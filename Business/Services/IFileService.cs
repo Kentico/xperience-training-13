@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-using Core;
+using Common;
 using XperienceAdapter.Models;
 using Business.Models;
 

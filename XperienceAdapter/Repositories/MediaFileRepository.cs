@@ -11,7 +11,7 @@ using CMS.IO;
 using CMS.MediaLibrary;
 using CMS.Membership;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Kentico.Content.Web.Mvc;
 
@@ -138,15 +138,20 @@ namespace XperienceAdapter.Repositories
 
         public async Task<MediaLibraryFile> GetMediaFileAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default)
         {
-            var libraryId = GetLibraryId(mediaLibraryName);
+            var libraryId = await GetLibraryIdAsync(mediaLibraryName, cancellationToken);
 
-            return (await GetResultAsync(baseQuery =>
+            return await GetMediaFileAsync(libraryId, path, cancellationToken);
+        }
+
+        public async Task<MediaLibraryFile> GetMediaFileAsync(int mediaLibraryId, string path, CancellationToken? cancellationToken = default) =>
+            (await GetResultAsync(baseQuery =>
                 baseQuery
-                    .WhereEquals("FileLibraryID", libraryId)
+                    .WhereEquals("FileLibraryID", mediaLibraryId)
                     .WhereStartsWith("FilePath", path),
                 cancellationToken))
                 .FirstOrDefault();
-        }
+
+
 
         public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(CancellationToken? cancellationToken = default, params Guid[] fileGuids) =>
             await GetResultAsync(baseQuery =>
@@ -156,7 +161,7 @@ namespace XperienceAdapter.Repositories
 
         public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, CancellationToken? cancellationToken = default, params string[] extensions)
         {
-            var libraryId = GetLibraryId(mediaLibraryName);
+            var libraryId = GetLibraryIdAsync(mediaLibraryName, cancellationToken);
 
             return await GetResultAsync(baseQuery =>
                 baseQuery
@@ -166,7 +171,7 @@ namespace XperienceAdapter.Repositories
 
         public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, string path, CancellationToken? cancellationToken = default)
         {
-            var libraryId = GetLibraryId(mediaLibraryName);
+            var libraryId = GetLibraryIdAsync(mediaLibraryName, cancellationToken);
 
             return await GetResultAsync(baseQuery =>
                 baseQuery
@@ -176,7 +181,7 @@ namespace XperienceAdapter.Repositories
 
         public async Task<IEnumerable<MediaLibraryFile>> GetMediaFilesAsync(string mediaLibraryName, IEnumerable<Guid> fileGuids, CancellationToken? cancellationToken = default)
         {
-            var libraryId = GetLibraryId(mediaLibraryName);
+            var libraryId = GetLibraryIdAsync(mediaLibraryName, cancellationToken);
 
             return await GetResultAsync(baseQuery =>
                 baseQuery
@@ -189,22 +194,21 @@ namespace XperienceAdapter.Repositories
 
         public IEnumerable<MediaLibraryFile> GetAll() => GetResult(null);
 
-        /// <summary>
-        /// Gets a media library ID by its code name.
-        /// </summary>
-        /// <param name="mediaLibraryName">Code name.</param>
-        /// <returns>Library ID.</returns>
-        private int GetLibraryId(string mediaLibraryName)
+
+        public async Task<int> GetLibraryIdAsync(string mediaLibraryName, CancellationToken? cancellationToken = default)
         {
             if (string.IsNullOrEmpty(mediaLibraryName))
             {
                 throw new ArgumentException($"The {nameof(mediaLibraryName)} parameter must a non-empty string.");
             }
 
-            return _mediaLibraryInfoProvider
-                .Get(mediaLibraryName, _siteService.CurrentSite.SiteID)
+            return (await _mediaLibraryInfoProvider
+                .GetAsync(mediaLibraryName, _siteService.CurrentSite.SiteID))
                 .LibraryID;
         }
+
+        public async Task<string> GetLibraryNameAsync(int mediaLibraryId, CancellationToken? cancellationToken = default) =>
+            (await _mediaLibraryInfoProvider.GetAsync(mediaLibraryId, cancellationToken)).LibraryName;
 
         /// <summary>
         /// Gets a query with an optional filter.
@@ -261,11 +265,15 @@ namespace XperienceAdapter.Repositories
             new MediaLibraryFile()
             {
                 Guid = mediaFileInfo.FileGUID,
-                Name = mediaFileInfo.FileTitle,
+                Name = !string.IsNullOrEmpty(mediaFileInfo.FileTitle) ? mediaFileInfo.FileTitle : mediaFileInfo.FileName,
                 Extension = mediaFileInfo.FileExtension,
                 MediaFileUrl = _mediaFileUrlRetriever.Retrieve(mediaFileInfo),
                 Width = mediaFileInfo.FileImageWidth,
-                Height = mediaFileInfo.FileImageHeight
+                Height = mediaFileInfo.FileImageHeight,
+                MimeType = mediaFileInfo.FileMimeType,
+                // No Offset is set since we set a UTC value.
+                // See https://docs.microsoft.com/en-us/dotnet/api/system.datetimeoffset?view=netcore-3.1
+                LastModified = mediaFileInfo.FileModifiedWhen.ToUniversalTime()
             };
     }
 }

@@ -19,5 +19,9 @@ namespace XperienceAdapter.Models
         public int Width { get; set; }
         
         public int Height { get; set; }
+
+        public string? MimeType { get; set; }
+
+        public DateTimeOffset? LastModified { get; set; }
     }
 }

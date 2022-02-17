@@ -8,32 +8,29 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Autofac;
 
-using CMS.Core;
 using CMS.DataEngine;
+using CMS.DataProtection;
 using CMS.Helpers;
-using CMS.SiteProvider;
+using Kentico.Activities.Web.Mvc;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using XperienceAdapter.Localization;
 using Identity;
 using Identity.Models;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
-using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
-using MedioClinic.PageTemplates;
 
 namespace MedioClinic
 {
@@ -41,7 +38,7 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
+        private const string ConventionalRoutingControllers = "Error|Account|Profile";
 
         public IConfiguration Configuration { get; }
 
@@ -66,7 +63,7 @@ namespace MedioClinic
             // Enable desired Kentico Xperience features
             var kenticoServiceCollection = services.AddKentico(features =>
             {
-                features.UsePageBuilder();
+                // features.UsePageBuilder();
                 // features.UseActivityTracking();
                 // features.UseABTesting();
                 // features.UseWebAnalytics();
@@ -113,7 +110,6 @@ namespace MedioClinic
             var xperienceOptions = Options.Get<XperienceOptions>();
 
             ConfigureIdentityServices(services, xperienceOptions);
-            ConfigurePageBuilderFilters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -162,9 +158,7 @@ namespace MedioClinic
 
             app.UseKentico();
 
-            app.UseCookiePolicy();
-
-            app.UseCors();
+            //app.UseCookiePolicy();
 
             app.UseRouting();
 
@@ -194,6 +188,15 @@ namespace MedioClinic
                     {
                         controller = ConventionalRoutingControllers
                     });
+
+                endpoints.MapControllerRoute(
+                    name: "static",
+                    pattern: "{culture}/{controller}/{action}/{id?}",
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
+
 
                 endpoints.MapDefaultControllerRoute();
             });
@@ -263,7 +266,7 @@ namespace MedioClinic
                 cookieOptions.Cookie.Name = AuthCookieName;
             });
 
-            CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+            CookieHelper.RegisterCookie(AuthCookieName, CMS.Helpers.CookieLevel.Essential);
         }
 
         /// <summary>
@@ -321,11 +324,5 @@ namespace MedioClinic
                 });
             }
         }
-
-        /// <summary>
-        /// Configures the page template filters.
-        /// </summary>
-        private static void ConfigurePageBuilderFilters() =>
-            PageBuilderFilters.PageTemplates.Add(new EventPageTemplateFilter());
     }
 }

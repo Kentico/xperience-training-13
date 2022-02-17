@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Common;
 
 namespace Identity.Models.Profile
 {

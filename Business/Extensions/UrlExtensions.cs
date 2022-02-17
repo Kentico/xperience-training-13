@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Linq;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,27 +47,5 @@ namespace Business.Extensions
 
             return $"{scheme}://{domain}{relativePath}";
         }
-
-        /// <summary>
-        /// Makes a string contain only characters allowed in URLs.
-        /// </summary>
-        /// <param name="input">String to transform.</param>
-        /// <returns>String transformed to be URL-compliant.</returns>
-        public static string ToUrlCompliantString(this string input)
-        {
-            var allowedCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=";
-            var stringBuilder = new StringBuilder();
-
-            foreach (var character in input)
-            {
-                var charToAdd = allowedCharacters.Contains(character) ? character : '_';
-                stringBuilder.Append(charToAdd);
-            }
-
-            return stringBuilder.ToString();
-        }
-
-        public static string UrlInCurrentUiCulture(this IUrlHelper helper, string routeName) =>
-            helper.RouteUrl($"{routeName}_{Thread.CurrentThread.CurrentUICulture.Name}");
     }
 }

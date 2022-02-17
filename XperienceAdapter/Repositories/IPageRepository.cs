@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 
-using Core;
+using Common;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

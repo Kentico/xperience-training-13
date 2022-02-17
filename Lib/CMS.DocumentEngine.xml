@@ -12219,8 +12219,9 @@
         </member>
         <member name="P:CMS.DocumentEngine.PageResolvers.ContentResolver">
             <summary>
-            Macro resolver for resolving macros inside the content of current page.
+            Returns new instance of macro resolver for resolving macros inside the content of current page.
             </summary>
+            <remarks>Culture for resolving is based on the current culture.</remarks>
         </member>
         <member name="T:CMS.DocumentEngine.PageRoutingEnums">
             <summary>
@@ -16321,6 +16322,21 @@
             </summary>
             <param name="site">Site.</param>
         </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.GetPageUrlPath(CMS.Base.IDataContainer,System.String)">
+            <summary>
+            Gets the <see cref="T:CMS.DocumentEngine.Routing.Internal.PageUrlPath"/> from given data container.
+            </summary>
+            <param name="container">Data container with partial page data.</param>
+            <param name="cultureCode">If specified, the path for a culture version defined by the culture code is returned instead the one in the data container.</param>
+        </member>
+        <member name="M:CMS.DocumentEngine.Routing.PageRoutingHelper.GetPageUrlPathQueryInternal(System.Int32,System.String,System.String)">
+            <summary>
+            Gets the parametrized query for page URL path retrieval.
+            </summary>
+            <param name="nodeId">Page node ID.</param>
+            <param name="cultureCode">Culture code of the page.</param>
+            <param name="customCultureCode">Custom culture code.</param>
+        </member>
         <member name="T:CMS.DocumentEngine.Routing.PageRoutingModeEnum">
             <summary>
             Enumeration representing the page routing mode.
@@ -16599,13 +16615,6 @@
             Indicates if the page is handled by the content tree based router.
             </summary>
             <param name="page">Page.</param>
-        </member>
-        <member name="M:CMS.DocumentEngine.Routing.TreeNodeRoutingExtensions.GetPageUrlPathQueryInternal(CMS.Base.ITreeNode,System.String)">
-            <summary>
-            Gets the parametrized query for page URL path retrieval.
-            </summary>
-            <param name="page">Page.</param>
-            <param name="customCultureCode">Custom culture code.</param>
         </member>
         <member name="T:CMS.DocumentEngine.Search.CrawlerSearchContentProvider">
             <summary>

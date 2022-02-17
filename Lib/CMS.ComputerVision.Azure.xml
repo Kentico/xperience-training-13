@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMS.ComputerVision.Azure</name>
+    </assembly>
+    <members>
+        <member name="T:CMS.ComputerVision.Azure.IImageAnalyzer">
+            <summary>
+            Represents a service for accessing the Azure Computer Vision API.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.IImageAnalyzer.GetDescriptionForImageAsync(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Returns a description of the provided image.
+            </summary>
+            <param name="image">Image file stream.</param>
+            <param name="language">
+            Language of the returned description. Default language is English (en).
+            For other supported languages see https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/language-support#image-analysis.
+            </param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.Internal.IImageRecognitionService">
+            <summary>
+            Represents a service for recognizing image content. 
+            </summary>
+        </member>
+        <member name="P:CMS.ComputerVision.Azure.Internal.IImageRecognitionService.TimeoutInterval">
+            <summary>
+            Number of milliseconds after which the request for the image description is canceled.
+            </summary>
+        </member>
+        <member name="P:CMS.ComputerVision.Azure.Internal.IImageRecognitionService.Language">
+            <summary>
+            Language in which the image description should be returned. The default language is English (en).
+            For other supported languages see https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/language-support#image-analysis.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.Internal.IImageRecognitionService.GetImageDescriptionAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Returns a description of the provided image.
+            </summary>
+            <param name="stream">Image file stream.</param>
+            <param name="cancellationToken">The cancellation instruction.</param>
+            <returns>Description of the image or <c>null</c> when none of the descriptions match the minimum confidence or if the image recognition feature is not configured correctly.</returns>
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.Internal.ImageRecognitionConstants">
+            <summary>
+            Image recognition feature constants.
+            </summary>
+        </member>
+        <member name="F:CMS.ComputerVision.Azure.Internal.ImageRecognitionConstants.ENABLE_IMAGE_RECOGNITION_SETTING_KEY">
+            <summary>
+            Setting key for enabling the image recognition service.
+            </summary>
+        </member>
+        <member name="F:CMS.ComputerVision.Azure.Internal.ImageRecognitionConstants.IMAGE_RECOGNITION_API_ENDPOINT_SETTING_KEY">
+            <summary>
+            Setting key for the image recognition API endpoint.
+            </summary>
+        </member>
+        <member name="F:CMS.ComputerVision.Azure.Internal.ImageRecognitionConstants.IMAGE_RECOGNITION_API_KEY_SETTING_KEY">
+            <summary>
+            Setting key for the image recognition API key.
+            </summary>
+        </member>
+        <member name="F:CMS.ComputerVision.Azure.Internal.ImageRecognitionConstants.IMAGE_RECOGNITION_CONFIDENCE_SETTING_KEY">
+            <summary>
+            Setting key for the image recognition minimum confidence.
+            </summary>
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.Internal.ImageRecognitionService">
+            <summary>
+            Implementation of the image recognition service.
+            </summary>
+        </member>
+        <member name="P:CMS.ComputerVision.Azure.Internal.ImageRecognitionService.TimeoutInterval">
+            <inheritdoc />
+        </member>
+        <member name="P:CMS.ComputerVision.Azure.Internal.ImageRecognitionService.Language">
+            <inheritdoc />
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.Internal.ImageRecognitionService.#ctor">
+            <summary>
+            Creates an instance of the <see cref="T:CMS.ComputerVision.Azure.Internal.ImageRecognitionService"/> class.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.Internal.ImageRecognitionService.GetImageDescriptionAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.IImageResizer">
+            <summary>
+            Provides methods for image size reduction.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.IImageResizer.Resize(System.IO.Stream,System.Single)">
+            <summary>
+            Changes dimensions of an image given by <paramref name="imageData"/> proportionally by given <paramref name="coefficient"/>.
+            </summary>
+            <param name="imageData">A stream containing image data.</param>
+            <param name="coefficient">Resizing coefficient. The only valid values are in interval from 0 (not included) to 1 (not included).</param>
+            <returns>A stream with resized image data.</returns>
+            <remarks>
+            Implementation shouldn't modify the stream passed in the method.
+            </remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">If value of <paramref name="coefficient"/> doesn't fit into interval (0, 1).</exception>
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.ImageAnalyzer">
+            <summary>
+            Represents a service for accessing the Azure Computer Vision API.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.ImageAnalyzer.GetDescriptionForImageAsync(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:CMS.ComputerVision.Azure.ImageResizer">
+            <summary>
+            Provides methods for image size reduction.
+            </summary>
+        </member>
+        <member name="M:CMS.ComputerVision.Azure.ImageResizer.Resize(System.IO.Stream,System.Single)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Models.Account

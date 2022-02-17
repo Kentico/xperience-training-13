@@ -697,6 +697,7 @@ function SetParentAction(argument) {
             sb.Append("|FileImageWidth|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileImageWidth")));
             sb.Append("|FileImageHeight|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileImageHeight")));
             sb.Append("|FileTitle|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileTitle")));
+            sb.Append("|FileDescription|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileDescription")));
             sb.Append("|FileSize|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileSize")));
             sb.Append("|FileID|" + CMSDialogHelper.EscapeArgument(data.GetValue("FileID")));
         }

@@ -1034,7 +1034,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Properties_HTMLMediaPro
 
                 if (tabVideoGeneral.Visible)
                 {
-                    string vidExt = ValidationHelper.GetString(properties[DialogParameters.AV_EXT], "");
+                    string vidExt = ValidationHelper.GetString(properties[DialogParameters.AV_EXT] ?? properties[DialogParameters.URL_EXT], "");
 
                     int vidWidth = ValidationHelper.GetInteger(properties[DialogParameters.AV_WIDTH], 300);
                     int vidHeight = ValidationHelper.GetInteger(properties[DialogParameters.AV_HEIGHT], 200);
@@ -1207,6 +1207,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Properties_HTMLMediaPro
             retval[DialogParameters.AV_EXT] = ViewState[DialogParameters.AV_EXT];
             retval[DialogParameters.AV_URL] = UrlResolver.ResolveUrl(CurrentUrl);
             retval[DialogParameters.OBJECT_TYPE] = "audiovideo";
+            retval[DialogParameters.AV_MIME_TYPE] = MimeTypeHelper.GetMimetype(ValidationHelper.GetString(ViewState[DialogParameters.AV_EXT], string.Empty), string.Empty);
         }
 
         #endregion
