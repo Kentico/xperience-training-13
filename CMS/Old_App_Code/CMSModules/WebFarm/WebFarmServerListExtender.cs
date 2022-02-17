@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Web.UI.WebControls;
 
 using CMS;
 using CMS.Base;
@@ -68,6 +70,25 @@ public class WebFarmServerListExtender : ControlExtender<UniGrid>
     {
         switch (sourceName.ToLowerCSafe())
         {
+            case "delete":
+                if (WebFarmContext.WebFarmMode == WebFarmModeEnum.Automatic)
+                {
+                    var row = (DataRowView)((GridViewRow)parameter).DataItem;
+                    var serverId = DataHelper.GetIntValue(row.Row, "ServerID");
+                    var webFarmServer = WebFarmServerInfo.Provider.Get(serverId);
+
+                    var enabled = webFarmServer.Status == WebFarmServerStatusEnum.AutoDisabled || webFarmServer.Status == WebFarmServerStatusEnum.NotResponding;
+
+                    CMSGridActionButton button = (CMSGridActionButton)sender;
+                    button.Enabled = enabled;
+
+                    if (!enabled)
+                    {
+                        button.ToolTip = ResHelper.GetString("webfarmservers_list.disableddelete");
+                    }
+                }
+                break;
+
             case "serveredit":
                 if (WebFarmContext.WebFarmMode == WebFarmModeEnum.Automatic)
                 {

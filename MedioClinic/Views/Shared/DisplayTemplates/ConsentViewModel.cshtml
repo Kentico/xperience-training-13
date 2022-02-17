@@ -1,0 +1,49 @@
+﻿@using Business.Models
+@model ConsentViewModel
+@inject IStringLocalizer<SharedResource> StringLocalizer
+
+@functions{
+    Dictionary<string, string> GetRouteData(ConsentViewModel consentViewModel)
+    {
+        if (consentViewModel != null)
+        {
+            var routeData = new Dictionary<string, string>
+            {
+                { "consentId", consentViewModel.Id.ToString()! }
+            };
+
+            return routeData;
+        }
+
+        return null!;
+    }
+}
+
+@{ 
+    var disabledLiteral = "disabled";
+    var agreeDisabledLiteral = Model.Agreed ? disabledLiteral : string.Empty;
+    var revokeDisabledLiteral = Model.Agreed ? string.Empty : disabledLiteral;
+} 
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">@Html.DisplayFor(m => m.Name)</span>
+        <p>@Html.DisplayFor(m => m.FullText)</p>
+    </div>
+    <div class="card-action">
+        @*TODO: Use a style.*@
+        <form asp-action="Agree"
+              asp-controller="Privacy"
+              asp-antiforgery="true"
+              asp-all-route-data="GetRouteData(Model)" style="display: inline-block">
+            <button type="submit" name="submit" @Html.Raw(agreeDisabledLiteral) class="btn waves-effect waves-light @Html.Raw(agreeDisabledLiteral)">@StringLocalizer["OnlineMarketing.Agree"]</button>
+        </form>
+        @*TODO: Use a style.*@
+        <form asp-action="Revoke"
+              asp-controller="Privacy"
+              asp-antiforgery="true"
+              asp-all-route-data="GetRouteData(Model)" style="display: inline-block">
+            <button type="submit" name="submit" @Html.Raw(revokeDisabledLiteral) class="btn waves-effect waves-light @Html.Raw(revokeDisabledLiteral)">@StringLocalizer["OnlineMarketing.Revoke"]</button>
+        </form>
+    </div>
+</div>

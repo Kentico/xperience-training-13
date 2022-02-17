@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using CMS.Helpers;
 using Kentico.Membership;
 
-using Core.Extensions;
+using Common.Extensions;
 using Business.Extensions;
 using Identity.Models;
 using Identity.Models.Account;
@@ -430,6 +430,9 @@ namespace Identity
             _signInManager.ConfigureExternalAuthenticationProperties(provider, returnUrl);
 
         public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync() => await _signInManager.GetExternalLoginInfoAsync();
+
+        public async Task<string?> GetUserNameAsync(string userId) =>
+            (await _userManager.FindByIdAsync(userId))?.UserName;
 
         /// <summary>
         /// Adds a user to the patient role.

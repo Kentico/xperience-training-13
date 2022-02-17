@@ -11,7 +11,7 @@ using CMS.DocumentEngine;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 
-using Core.Configuration;
+using Common.Configuration;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 using Business.Models;

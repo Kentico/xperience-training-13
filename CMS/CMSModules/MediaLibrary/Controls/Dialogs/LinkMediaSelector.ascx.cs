@@ -5,8 +5,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using CMS.Base.Web.UI;
+using CMS.Core;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
 using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
@@ -579,7 +579,14 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
                 int imageWidth = ValidationHelper.GetInteger(argTable["fileimagewidth"], 0);
                 int imageHeight = ValidationHelper.GetInteger(argTable["fileimageheight"], 0);
                 long fileSize = ValidationHelper.GetLong(argTable["filesize"], 0);
+                string description = argTable["filedescription"].ToString();
                 string fileUrl = argTable["url"].ToString();
+
+                if (String.IsNullOrEmpty(description) && ImageHelper.IsImage(fileExt))
+                {
+                    int fileId = ValidationHelper.GetInteger(argTable["fileid"], 0);
+                    description = GetImageDescription(fileId);
+                }
 
                 string fileNameWithouExtension = fileName;
                 fileName = AttachmentHelper.GetFullFileName(fileName, fileExt);
@@ -603,10 +610,52 @@ public partial class CMSModules_MediaLibrary_Controls_Dialogs_LinkMediaSelector 
 
                 if (!avoidPropUpdate)
                 {
-                    SelectMediaItem(fileNameWithouExtension, fileExt, imageWidth, imageHeight, fileSize, fileUrl, filePermanentUrl);
+                    SelectMediaItem(fileNameWithouExtension, fileExt, imageWidth, imageHeight, fileSize, fileUrl, filePermanentUrl, 0, "", description);
                 }
             }
         }
+    }
+
+
+    /// <summary>
+    /// Returns an image media file description from the Azure Computer Vision API.
+    /// </summary>
+    private string GetImageDescription(int fileId)
+    {
+        var fileInfo = MediaFileInfo.Provider.Get(fileId);
+        return GetImageDescription(fileInfo);
+    }
+
+
+    /// <summary>
+    /// Returns an image media file description from the Azure Computer Vision API.
+    /// </summary>
+    private string GetImageDescription(MediaFileInfo mediafile)
+    {
+        if (mediafile == null)
+        {
+            return String.Empty;
+        }
+
+        string description = String.Empty;
+
+        if (IsComputerVisionEnabled())
+        {
+            var filePath = MediaFileInfoProvider.GetMediaFilePath(mediafile.FileLibraryID, mediafile.FilePath);
+            try
+            {
+                using (var stream = File.OpenRead(filePath))
+                {
+                    description = GetImageDescriptionFromComputerVision(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Service.Resolve<IEventLogService>().LogException("LinkMediaSelector", "ImageDescriptionRetrieval", ex);
+            }
+        }
+
+        return description;
     }
 
     #endregion
@@ -1775,9 +1824,10 @@ function imageEdit_Refresh(guid){{
                     // Get file URL
                     string fileUrl = mediaView.GetItemUrl(LibrarySiteInfo, fileInfo.FileGUID, fileInfo.FileName, fileInfo.FileExtension, fileInfo.FilePath, false, 0, 0, 0);
                     string permUrl = mediaView.GetItemUrl(LibrarySiteInfo, fileInfo.FileGUID, fileInfo.FileName, fileInfo.FileExtension, fileInfo.FilePath, true, 0, 0, 0);
+                    string description = ImageHelper.IsImage(fileInfo.FileExtension) ? GetImageDescription(fileInfo) : String.Empty;
 
                     SelectMediaItem(fileInfo.FileName, fileInfo.FileExtension, fileInfo.FileImageWidth,
-                                    fileInfo.FileImageHeight, fileInfo.FileSize, fileUrl, permUrl);
+                                    fileInfo.FileImageHeight, fileInfo.FileSize, fileUrl, permUrl, description: description);
 
                     ItemToColorize = fileInfo.FileGUID;
                 }

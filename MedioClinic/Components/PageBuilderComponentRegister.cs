@@ -118,3 +118,23 @@ using MedioClinic.PageTemplates;
     ViewName = "~/Components/FormComponents/_MediaLibraryUploader.cshtml",
     Description = "{$" + ComponentIdentifiers.MediaLibraryUploaderFormComponent + ".Description$}",
     IconClass = "icon-picture")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.DateSelectionFormComponent,
+    typeof(DateSelection),
+    "{$" + ComponentIdentifiers.DateSelectionFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = true,
+    ViewName = "~/Components/FormComponents/_DateSelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.DateSelectionFormComponent + ".Description$}",
+    IconClass = "icon-calendar")]
+
+[assembly: RegisterPageBuilderLocalizationResource(typeof(PageBuilderSharedResource), "en-US", "es-ES")]
+
+[assembly: RegisterWidget(
+    ComponentIdentifiers.FileDownloadWidget,
+    typeof(FileDownloadViewComponent),
+    "File download widget",
+    typeof(FileDownloadProperties),
+    AllowCache = true,
+    Description = "File download widget",
+    IconClass = "icon-arrow-down-line")]

@@ -17,15 +17,20 @@ using Autofac;
 
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.SiteProvider;
+using Kentico.Activities.Web.Mvc;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
+using MedioClinic.Customizations.Cookies;
+using MedioClinic.Customizations.DataProtection.Consent;
 using XperienceAdapter.Localization;
 using Identity;
 using Identity.Models;
@@ -41,7 +46,7 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
+        private const string ConventionalRoutingControllers = "Error|Privacy|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
 
         public IConfiguration Configuration { get; }
 
@@ -67,9 +72,9 @@ namespace MedioClinic
             var kenticoServiceCollection = services.AddKentico(features =>
             {
                 features.UsePageBuilder();
-                // features.UseActivityTracking();
+                features.UseActivityTracking();
                 // features.UseABTesting();
-                // features.UseWebAnalytics();
+                features.UseWebAnalytics();
                 // features.UseEmailTracking();
                 // features.UseCampaignLogger();
                 // features.UseScheduler();
@@ -114,6 +119,7 @@ namespace MedioClinic
 
             ConfigureIdentityServices(services, xperienceOptions);
             ConfigurePageBuilderFilters();
+            ConfigureOnlineMarketing();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -195,6 +201,15 @@ namespace MedioClinic
                         controller = ConventionalRoutingControllers
                     });
 
+                endpoints.MapControllerRoute(
+                    name: "static",
+                    pattern: "{culture}/{controller}/{action}/{id?}",
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
+
+
                 endpoints.MapDefaultControllerRoute();
             });
         }
@@ -263,7 +278,7 @@ namespace MedioClinic
                 cookieOptions.Cookie.Name = AuthCookieName;
             });
 
-            CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+            CookieHelper.RegisterCookie(AuthCookieName, CMS.Helpers.CookieLevel.Essential);
         }
 
         /// <summary>
@@ -327,5 +342,11 @@ namespace MedioClinic
         /// </summary>
         private static void ConfigurePageBuilderFilters() =>
             PageBuilderFilters.PageTemplates.Add(new EventPageTemplateFilter());
+        
+        private void ConfigureOnlineMarketing()
+        {
+            CookieManager.RegisterOnlineMarketingCookies();
+            DataProtectionEvents.RevokeConsentAgreement.Execute += ConsentManager.RevokeConsentAgreementHandler;
+        }
     }
 }

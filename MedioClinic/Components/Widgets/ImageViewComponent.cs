@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using XperienceAdapter.Repositories;
 using MedioClinic.Models;
 using Microsoft.Extensions.Options;
-using Core.Configuration;
+using Common.Configuration;
 using CMS.Base;
 using XperienceAdapter.Models;
 

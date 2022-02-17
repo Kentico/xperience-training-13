@@ -42,7 +42,7 @@
                 pickingLink.addEventListener("click", function () {
                     if (!mediaLibraryName) {
                         showErrorMessage(slide, tempGuid,
-                            options.localizationService.getString("MedioClinic.InlineEditor.Slideshow.NoLibrarySpecified"));
+                            options.localizationService.getString("MedioClinic.NoLibrarySpecified"));
                     } else {
                         var dialogOptions = createDialogOptions(slide, pickingLink);
                         window.kentico.modalDialog.contentSelector.open(dialogOptions);
@@ -130,7 +130,7 @@
                 } else {
                     return null;
                 }
-            }
+            };
 
             /**
              * Creates a new Swiper slide.

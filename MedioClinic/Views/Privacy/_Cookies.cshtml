@@ -1,0 +1,34 @@
+﻿@using Business.Models
+@model List<ConsentViewModel>
+@inject IStringLocalizer<SharedResource> StringLocalizer
+
+@{ 
+    var checkedItem = Model.OrderBy(consent => consent.CookieLevel).LastOrDefault(consent => consent.Agreed);
+}
+
+<div class="card">
+    <form asp-action="SetCookieLevel"
+          asp-controller="Privacy"
+          asp-antiforgery="true">
+        <div class="card-content">
+            <span class="card-title">@StringLocalizer["OnlineMarketing.Cookies"]</span>
+            @foreach (var consentViewModel in Model.OrderBy(m => m.CookieLevel))
+            {
+                var checkedLiteral = Object.ReferenceEquals(consentViewModel, checkedItem) ? "checked" : string.Empty;
+                <p>
+                    <label>
+                        <input name="consentId" value="@consentViewModel.Id" id="@consentViewModel.Id" type="radio" @checkedLiteral />
+                        <span>
+                            <strong>@Html.DisplayFor(m => consentViewModel.Name)</strong><br />
+                            @Html.DisplayFor(m => consentViewModel.FullText)
+                        </span>
+                    </label>
+                </p>
+            }
+        </div>
+        <div class="card-action">
+            @*TODO: Use a style.*@
+            <button type="submit" name="submit" class="btn waves-effect waves-light">@StringLocalizer["General.Submit"]</button>
+        </div>
+    </form>
+</div>
