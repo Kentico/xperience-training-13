@@ -4,17 +4,30 @@
 
 ## About the repo
 
-The repo contains the Medio Clinic sample website developed throughout the [Kentico Xperience 13 for Developers](https://xperience.io/services/training) course. The codebase represents the final state of development.
+The repo contains the Medio Clinic sample website developed throughout the two following e-learning courses:
+* [Kentico Xperience for Developers](https://xperience.io/services/training/xperience-for-developers)
+* [Kentico Xperience Marketing for Developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
-The repo currently contains code of the following modules of the course:
+### About the current branch
 
-* Essentials
-* Builders
-* Identity
+The codebase in the current branch represents the final state of development of the **Essentials module** of the [Kentico Xperience for Developers](https://xperience.io/services/training/xperience-for-developers) course.
 
-The code of the modules does not exist in separate git branches or is otherwise split. It lives together as one working Visual Studio solution, internally separated using standard conventions (separate projects, MVC areas). Therefore, when taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
+### About the other branches
 
-See [Kentico Xperience sample sites](https://devnet.kentico.com/articles/kentico-xperience-sample-sites-and-their-differences) for a detailed description of this and other Xperience sample sites.
+Branches in this repo contain the finished codebases of individual modules of the two above courses:
+
+* [Kentico Xperience for developers: Essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials)
+* [Kentico Xperience for developers: Builders](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-builders)
+* [Kentico Xperience for developers: Identity](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-identity)
+* [Kentico Xperience marketing for developers: Contact management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management)
+
+The [master branch](https://github.com/Kentico/xperience-training-13) contains all the functionality of both of the courses.
+
+### About the Medio Clinic sample site
+
+The Medio Clinic sample site was developed for other purposes than the Dancing Goat sample site shipped with the Kentico Xperience installer. You'll find different approaches and design patterns in this repo.
+
+See [Kentico Xperience sample sites](https://devnet.kentico.com/articles/kentico-xperience-sample-sites-and-their-differences) for a detailed description of the Medio Clinic site versus the other Xperience sample sites.
 
 ## Requirements
 
