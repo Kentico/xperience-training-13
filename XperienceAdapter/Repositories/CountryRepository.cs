@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using CMS.Globalization;
 
-using Core;
+using Common;
 using XperienceAdapter.Models;
 
 namespace XperienceAdapter.Repositories

@@ -7,7 +7,7 @@ using Business.Services;
 
 using CMS.Helpers;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

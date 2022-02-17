@@ -38,6 +38,7 @@ function GetSelectedItem() {
 
             var elemName = selElem.tagName.toLowerCase();
             switch (elemName) {
+                case 'video':
                 case 'object':
                 case 'cke:object':
                     obj = CMSPlugin.getInline(selElem, originalElem);

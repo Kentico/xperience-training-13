@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Kentico.PageBuilder.Web.Mvc;
 

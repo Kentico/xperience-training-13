@@ -118,3 +118,5 @@ using MedioClinic.PageTemplates;
     ViewName = "~/Components/FormComponents/_MediaLibraryUploader.cshtml",
     Description = "{$" + ComponentIdentifiers.MediaLibraryUploaderFormComponent + ".Description$}",
     IconClass = "icon-picture")]
+
+[assembly: RegisterPageBuilderLocalizationResource(typeof(PageBuilderSharedResource), "en-US", "es-ES")]

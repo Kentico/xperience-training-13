@@ -8,7 +8,7 @@ using Business.Models;
 
 using CMS.DocumentEngine;
 
-using Core;
+using Common;
 
 using Kentico.Content.Web.Mvc;
 
