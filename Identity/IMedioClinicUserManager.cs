@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Core;
+using Common;
 using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;

@@ -17,15 +17,18 @@ using Autofac;
 
 using CMS.Core;
 using CMS.DataEngine;
+using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.SiteProvider;
+using Kentico.Activities.Web.Mvc;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using XperienceAdapter.Localization;
 using Identity;
 using Identity.Models;
@@ -195,6 +198,15 @@ namespace MedioClinic
                         controller = ConventionalRoutingControllers
                     });
 
+                endpoints.MapControllerRoute(
+                    name: "static",
+                    pattern: "{culture}/{controller}/{action}/{id?}",
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
+
+
                 endpoints.MapDefaultControllerRoute();
             });
         }
@@ -263,7 +275,7 @@ namespace MedioClinic
                 cookieOptions.Cookie.Name = AuthCookieName;
             });
 
-            CookieHelper.RegisterCookie(AuthCookieName, CookieLevel.Essential);
+            CookieHelper.RegisterCookie(AuthCookieName, CMS.Helpers.CookieLevel.Essential);
         }
 
         /// <summary>

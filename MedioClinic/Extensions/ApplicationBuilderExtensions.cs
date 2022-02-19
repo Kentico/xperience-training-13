@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,6 @@ using CMS.DataEngine;
 using CMS.SiteProvider;
 
 using MedioClinic.Middleware;
-using System.Threading.Tasks;
 
 namespace MedioClinic.Extensions
 {

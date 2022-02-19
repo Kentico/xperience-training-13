@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-using Core;
+using Common;
 using Identity.Models;
 using Identity.Models.Profile;
 

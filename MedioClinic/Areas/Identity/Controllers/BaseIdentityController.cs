@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 using Kentico.Content.Web.Mvc;
 
-using Core.Configuration;
+using Common.Configuration;
 using Identity.Models;
 using MedioClinic.Controllers;
 using Microsoft.Extensions.Localization;

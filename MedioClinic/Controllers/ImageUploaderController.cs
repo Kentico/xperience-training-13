@@ -14,7 +14,7 @@ using CMS.DocumentEngine;
 using CMS.Helpers;
 using CMS.Membership;
 
-using Core.Configuration;
+using Common.Configuration;
 
 using Kentico.Content.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;

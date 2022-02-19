@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace XperienceAdapter.Models
 {
     /// <summary>
-    /// Base page model.
+    /// Basic page model.
     /// </summary>
     public class BasicPage
     {

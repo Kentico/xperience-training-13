@@ -1,5 +1,6 @@
 ﻿using System;
 
+using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.IO;
 using CMS.MediaLibrary;
@@ -291,6 +292,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileSing
                     ErrorOccurred = true;
                 }
             }
+        }
+        catch (XmlMaliciousContentException ex)
+        {
+            ErrorOccurred = true;
+            lblErrorNew.Text = ex.Message;
         }
         catch (Exception ex)
         {

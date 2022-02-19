@@ -1,17 +1,12 @@
-﻿using CMS.Helpers;
-
-using MedioClinic.Models;
-
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using CMS.Helpers;
 
 namespace MedioClinic.Extensions
 {
