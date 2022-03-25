@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -9,9 +10,8 @@ using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 
 using Common.Configuration;
-using MedioClinic.Models;
-using Microsoft.Extensions.Localization;
 using XperienceAdapter.Localization;
+using MedioClinic.Models;
 
 namespace MedioClinic.Controllers
 {

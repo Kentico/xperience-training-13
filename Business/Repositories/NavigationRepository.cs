@@ -160,16 +160,16 @@ namespace Business.Repositories
         /// <summary>
         /// Maps the <see cref="BasicPage"/> onto a new <see cref="NavigationItem"/>.
         /// </summary>
-        /// <param name="basicPage">The base page.</param>
+        /// <param name="basePage">The base page.</param>
         /// <returns>The navigation item.</returns>
-        private static NavigationItem MapBaseToNavigationDto(BasicPage basicPage) => new NavigationItem
+        private static NavigationItem MapBaseToNavigationDto(BasicPage basePage) => new NavigationItem
         {
-            NodeId = basicPage.NodeId,
-            Guid = basicPage.Guid,
-            ParentId = basicPage.ParentId,
-            Name = basicPage.Name,
-            NodeAliasPath = basicPage.NodeAliasPath,
-            Culture = basicPage.Culture
+            NodeId = basePage.NodeId,
+            Guid = basePage.Guid,
+            ParentId = basePage.ParentId,
+            Name = basePage.Name,
+            NodeAliasPath = basePage.NodeAliasPath,
+            Culture = basePage.Culture
         };
 
         /// <summary>
