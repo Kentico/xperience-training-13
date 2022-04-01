@@ -16,7 +16,7 @@ namespace MedioClinic.Customizations.DataProtection.Consent
     /// Data container class for <see cref="ConsentCookieLevelInfo"/>.
     /// </summary>
     [Serializable]
-    public class ConsentCookieLevelInfo : AbstractInfo<ConsentCookieLevelInfo, IConsentCookieLevelInfoProvider>
+    public partial class ConsentCookieLevelInfo : AbstractInfo<ConsentCookieLevelInfo, IConsentCookieLevelInfoProvider>
     {
         /// <summary>
         /// Object type.
@@ -68,7 +68,7 @@ namespace MedioClinic.Customizations.DataProtection.Consent
             }
             set
             {
-                SetValue("ConsentID", value);
+                SetValue("ConsentID", value, 0);
             }
         }
 

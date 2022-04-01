@@ -21,6 +21,8 @@
         { "consentId", Model?.Id?.ToString()! },
         { "returnUrl", GetReturnUrl() }
     };
+
+    var learnMore = string.Format(StringLocalizer["OnlineMarketing.LearnMoreInPrivacyPage"], Url.Action(nameof(PrivacyController.Index), "Privacy"));
 }
 
 <div class="mc-fixed-bar-bottom light-blue lighten-1">
@@ -31,6 +33,7 @@
               asp-all-route-data="routeData">
             <p class="white-text">
                 @Html.DisplayFor(m => m.ShortText) 
+                @Html.Raw(learnMore)
                 <button type="submit" name="submit" class="btn waves-effect waves-light">@StringLocalizer["OnlineMarketing.Agree"]</button>
             </p>
         </form>
