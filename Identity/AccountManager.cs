@@ -236,7 +236,7 @@ namespace Identity
 
             try
             {
-                user = await _userManager.FindByNameAsync(uploadModel.EmailViewModel.Email!);
+                user = await _userManager.FindByEmailAsync(uploadModel.EmailViewModel.Email!);
             }
             catch (Exception ex)
             {
@@ -246,33 +246,36 @@ namespace Identity
                 return accountResult;
             }
 
-            // Registration: Confirmed registration (begin)
-            if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
+            if (user != null)
             {
-                accountResult.ResultState = SignInResultState.EmailNotConfirmed;
+                // Registration: Confirmed registration (begin)
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    accountResult.ResultState = SignInResultState.EmailNotConfirmed;
 
-                return accountResult;
-            }
-            // Registration: Confirmed registration (end)
+                    return accountResult;
+                }
+                // Registration: Confirmed registration (end)
 
-            SignInResult signInResult;
+                SignInResult signInResult;
 
-            try
-            {
-                signInResult = await _signInManager.PasswordSignInAsync(uploadModel.EmailViewModel.Email!, uploadModel.PasswordViewModel.Password!, uploadModel.StaySignedIn, false);
-            }
-            catch (Exception ex)
-            {
-                accountResult.ResultState = SignInResultState.NotSignedIn;
-                HandleException(nameof(SignInAsync), ex, ref accountResult);
+                try
+                {
+                    signInResult = await _signInManager.PasswordSignInAsync(user, uploadModel.PasswordViewModel.Password!, uploadModel.StaySignedIn, false);
+                }
+                catch (Exception ex)
+                {
+                    accountResult.ResultState = SignInResultState.NotSignedIn;
+                    HandleException(nameof(SignInAsync), ex, ref accountResult);
 
-                return accountResult;
-            }
+                    return accountResult;
+                }
 
-            if (signInResult.Succeeded)
-            {
-                accountResult.Success = true;
-                accountResult.ResultState = SignInResultState.SignedIn;
+                if (signInResult.Succeeded)
+                {
+                    accountResult.Success = true;
+                    accountResult.ResultState = SignInResultState.SignedIn;
+                } 
             }
 
             return accountResult;
