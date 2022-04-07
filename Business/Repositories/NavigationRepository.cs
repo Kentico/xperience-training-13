@@ -49,10 +49,10 @@ namespace Business.Repositories
                 .TopN(1),
             buildCacheAction: cache => cache
                 .Key($"{nameof(NavigationRepository)}|{nameof(RootDto)}"))
-                .Select(basePageDto => new NavigationItem
+                .Select(basicPageDto => new NavigationItem
                 {
-                    NodeId = basePageDto.NodeId,
-                    Name = basePageDto.Name
+                    NodeId = basicPageDto.NodeId,
+                    Name = basicPageDto.Name
                 })
                 .FirstOrDefault();
 
@@ -141,7 +141,7 @@ namespace Business.Repositories
                         .MenuItems(),
                     cacheDependencies: NavigationEnabledTypeDependencies.ToArray(),
                     cancellationToken: cancellationToken))
-                        .Select(basePage => MapBaseToNavigationDto(basePage));
+                        .Select(basicPage => MapBaseToNavigationDto(basicPage));
 
                 navigation = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
                 var changeToken = _cacheDependencyAdapter.GetChangeToken(NavigationEnabledTypeDependencies?.ToArray());
