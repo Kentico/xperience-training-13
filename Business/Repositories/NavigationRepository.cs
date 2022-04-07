@@ -49,10 +49,10 @@ namespace Business.Repositories
                 .TopN(1),
             buildCacheAction: cache => cache
                 .Key($"{nameof(NavigationRepository)}|{nameof(RootDto)}"))
-                .Select(basePageDto => new NavigationItem
+                .Select(basicPageDto => new NavigationItem
                 {
-                    NodeId = basePageDto.NodeId,
-                    Name = basePageDto.Name
+                    NodeId = basicPageDto.NodeId,
+                    Name = basicPageDto.Name
                 })
                 .FirstOrDefault();
 
@@ -141,7 +141,7 @@ namespace Business.Repositories
                         .MenuItems(),
                     cacheDependencies: NavigationEnabledTypeDependencies.ToArray(),
                     cancellationToken: cancellationToken))
-                        .Select(basePage => MapBaseToNavigationDto(basePage));
+                        .Select(basicPage => MapBaseToNavigationDto(basicPage));
 
                 navigation = DecorateItems(RootDto, allItems, GetContentTreeBasedUrl);
                 var changeToken = _cacheDependencyAdapter.GetChangeToken(NavigationEnabledTypeDependencies?.ToArray());
@@ -160,16 +160,16 @@ namespace Business.Repositories
         /// <summary>
         /// Maps the <see cref="BasicPage"/> onto a new <see cref="NavigationItem"/>.
         /// </summary>
-        /// <param name="basePage">The base page.</param>
+        /// <param name="basicPage">The base page.</param>
         /// <returns>The navigation item.</returns>
-        private static NavigationItem MapBaseToNavigationDto(BasicPage basePage) => new NavigationItem
+        private static NavigationItem MapBaseToNavigationDto(BasicPage basicPage) => new NavigationItem
         {
-            NodeId = basePage.NodeId,
-            Guid = basePage.Guid,
-            ParentId = basePage.ParentId,
-            Name = basePage.Name,
-            NodeAliasPath = basePage.NodeAliasPath,
-            Culture = basePage.Culture
+            NodeId = basicPage.NodeId,
+            Guid = basicPage.Guid,
+            ParentId = basicPage.ParentId,
+            Name = basicPage.Name,
+            NodeAliasPath = basicPage.NodeAliasPath,
+            Culture = basicPage.Culture
         };
 
         /// <summary>
