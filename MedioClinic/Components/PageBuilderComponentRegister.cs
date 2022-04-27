@@ -7,6 +7,7 @@ using Kentico.Content.Web.Mvc;
 using Kentico.Forms.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc.PageTemplates;
+using Kentico.PageBuilder.Web.Mvc.Personalization;
 
 using MedioClinic.Components;
 using MedioClinic.Components.FieldValidationRules;
@@ -14,8 +15,10 @@ using MedioClinic.Components.FormComponents;
 using MedioClinic.Components.InlineEditors;
 using MedioClinic.Components.Sections;
 using MedioClinic.Components.Widgets;
+using MedioClinic.Controllers;
 using MedioClinic.Models;
 using MedioClinic.PageTemplates;
+using MedioClinic.Personalization;
 
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.BasicPageTemplate,
@@ -138,3 +141,11 @@ using MedioClinic.PageTemplates;
     AllowCache = true,
     Description = "File download widget",
     IconClass = "icon-arrow-down-line")]
+
+[assembly: RegisterPersonalizationConditionType(
+    ComponentIdentifiers.IsInPersonaCondition, 
+    typeof(IsInPersonaConditionType), 
+    "{$" + ComponentIdentifiers.IsInPersonaCondition + ".Title$}", 
+    ControllerType = typeof(IsInPersonaController), 
+    Description = "{$" + ComponentIdentifiers.IsInPersonaCondition + ".Description$}",
+    IconClass = "icon-app-personas")]
