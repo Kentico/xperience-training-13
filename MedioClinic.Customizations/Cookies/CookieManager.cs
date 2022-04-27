@@ -14,8 +14,6 @@ namespace MedioClinic.Customizations.Cookies
 {
     public class CookieManager : CookieHelper, ICookieManager
     {
-        public const string FirstReferrerCookieName = "FirstReferrer";
-
         public const string GoogleTagManagerId = "GTM-XXXX";
 
         public const string GoogleAnalyticsPropertyId = "UA-XXXXX-X";
@@ -51,7 +49,6 @@ namespace MedioClinic.Customizations.Cookies
                 "__utmxx"
             };
 
-
         public bool VisitorCookiesEnabled => _currentCookieLevelProvider.GetCurrentCookieLevel() >= CMS.Helpers.CookieLevel.Visitor;
 
         public bool IsDefaultCookieLevel => _currentCookieLevelProvider.GetCurrentCookieLevel() == _currentCookieLevelProvider.GetDefaultCookieLevel();
@@ -62,11 +59,9 @@ namespace MedioClinic.Customizations.Cookies
         }
 
         public IEnumerable<string> AllCookieNames => GetGoogleAnalyticsCookieNames(GoogleAnalyticsPropertyId)
-                .Concat(new[] { FirstReferrerCookieName, ExampleAdvertisingCookieName });
-
+                .Concat(new[] { ExampleAdvertisingCookieName });
 
         public IEnumerable<Cookie> GetCookies() => GetCookies(AllCookieNames);
-
 
         public IEnumerable<Cookie> GetCookies(IEnumerable<string> cookieNames)
         {
@@ -117,16 +112,11 @@ namespace MedioClinic.Customizations.Cookies
                 RegisterCookieAtTheVisitorLevel(cookieName);
             }
 
-            RegisterCookieAtTheEssentialLevel(FirstReferrerCookieName);
-
             RegisterCookie(ExampleAdvertisingCookieName, 500);
         }
 
         public static void RegisterCookieAtTheVisitorLevel(string cookieName) =>
             RegisterCookie(cookieName, CMS.Helpers.CookieLevel.Visitor);
-
-        public static void RegisterCookieAtTheEssentialLevel(string cookieName) =>
-            RegisterCookie(cookieName, CMS.Helpers.CookieLevel.Essential);
 
         private CookieLevel MapCookieLevel(string cookieName)
         {

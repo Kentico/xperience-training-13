@@ -2,6 +2,10 @@
 <cms.formclass>
   <ClassContactMapping>
     <form>
+      <field column="ContactCompanyName" mappedtofield="CompanyName" />
+      <field column="ContactEmail" mappedtofield="EmailInput" />
+      <field column="ContactFirstName" mappedtofield="FirstName" />
+      <field column="ContactLastName" mappedtofield="LastName" />
       <field column="TestingCenterStartingDate" mappedtofield="StartingDate" />
     </form>
   </ClassContactMapping>
@@ -68,6 +72,34 @@ Pharmacy store
           <componentidentifier>MedioClinic.FormComponent.DateSelection</componentidentifier>
         </settings>
       </field>
+      <field column="PhotoOrMap" columnsize="400" columntype="text" guid="24db8e99-c1c1-4b2a-9ce4-62cc8041f15a" visible="true">
+        <properties>
+          <fieldcaption>Photo/map</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>MedioClinic.FormComponent.MediaLibraryUploader</componentidentifier>
+          <MediaLibraryId>15</MediaLibraryId>
+        </settings>
+      </field>
+      <field column="FirstName" columnsize="500" columntype="text" guid="156617d9-8dd2-41bc-a5ac-f3c548e13267" visible="true">
+        <properties>
+          <fieldcaption>First name</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.TextInput</componentidentifier>
+        </settings>
+      </field>
+      <field column="LastName" columnsize="500" columntype="text" guid="133d277b-621c-48ad-913d-4ad3c17d708e" visible="true">
+        <properties>
+          <fieldcaption>Last name</fieldcaption>
+          <smart>False</smart>
+        </properties>
+        <settings>
+          <componentidentifier>Kentico.TextInput</componentidentifier>
+        </settings>
+      </field>
       <field column="EmailInput" columnsize="500" columntype="text" guid="56b2d110-56f5-4bff-8b4a-e4cd79c6ab99" visible="true">
         <properties>
           <fieldcaption>Email</fieldcaption>
@@ -77,18 +109,11 @@ Pharmacy store
           <componentidentifier>Kentico.EmailInput</componentidentifier>
         </settings>
       </field>
-      <field column="PhotoOrMap" columnsize="400" columntype="text" guid="24db8e99-c1c1-4b2a-9ce4-62cc8041f15a" visible="true">
-        <properties>
-          <fieldcaption>Photo/map</fieldcaption>
-          <smart>False</smart>
-        </properties>
-        <settings>
-          <componentidentifier>MedioClinic.FormComponent.MediaLibraryUploader</componentidentifier>
-          <MediaLibraryId>6</MediaLibraryId>
-        </settings>
-      </field>
       <field allowempty="true" column="ConsentAgreementForms" columntype="guid" guid="d871c855-5c47-4ffb-a3bc-1b24c2e750d0" visible="true">
         <properties>
+          <explanationtext>
+            <![CDATA[You'll be able to revoke the consent only if you have agreed to storing analytical cookies.]]>
+          </explanationtext>
           <fieldcaption>Consent agreement</fieldcaption>
           <smart>False</smart>
         </properties>
@@ -99,6 +124,9 @@ Pharmacy store
       </field>
       <field allowempty="true" column="ConsentAgreementFiles" columntype="guid" guid="54aba8fb-ecea-4a27-9a35-729a0bcb2c51" visible="true">
         <properties>
+          <explanationtext>
+            <![CDATA[You'll be able to revoke the consent only if you have agreed to storing analytical cookies.]]>
+          </explanationtext>
           <fieldcaption>Consent agreement</fieldcaption>
           <smart>False</smart>
         </properties>
@@ -152,13 +180,6 @@ Pharmacy store
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="EmailInput">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="500" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
               <xs:element name="Type">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
@@ -166,7 +187,6 @@ Pharmacy store
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="StartingDate" type="xs:dateTime" />
               <xs:element name="ReasonsToJoin" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
@@ -174,7 +194,14 @@ Pharmacy store
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="ConsentAgreementForms" msdata:DataType="System.Guid, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" type="xs:string" minOccurs="0" />
+              <xs:element name="StartingDate" type="xs:dateTime" />
+              <xs:element name="EmailInput">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
               <xs:element name="PhotoOrMap">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
@@ -182,7 +209,22 @@ Pharmacy store
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="ConsentAgreementForms" msdata:DataType="System.Guid, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" type="xs:string" minOccurs="0" />
               <xs:element name="ConsentAgreementFiles" msdata:DataType="System.Guid, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" type="xs:string" minOccurs="0" />
+              <xs:element name="FirstName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LastName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

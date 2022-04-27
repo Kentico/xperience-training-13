@@ -6,7 +6,7 @@ namespace MedioClinic.Customizations.DataProtection.Consent
     /// Class providing <see cref="ConsentCookieLevelInfo"/> management.
     /// </summary>
     [ProviderInterface(typeof(IConsentCookieLevelInfoProvider))]
-    public class ConsentCookieLevelInfoProvider : AbstractInfoProvider<ConsentCookieLevelInfo, ConsentCookieLevelInfoProvider>, IConsentCookieLevelInfoProvider
+    public partial class ConsentCookieLevelInfoProvider : AbstractInfoProvider<ConsentCookieLevelInfo, ConsentCookieLevelInfoProvider>, IConsentCookieLevelInfoProvider
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsentCookieLevelInfoProvider"/> class.
