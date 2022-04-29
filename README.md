@@ -4,24 +4,29 @@
 
 ## About the repo
 
-The repo contains the Medio Clinic sample website developed throughout the two following e-learning courses:
+The repo contains the **Medio Clinic** sample website developed throughout the two following e-learning courses:
 * [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers)
 * [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
-### About the current branch
+### The current branch
 
-The codebase in the current branch represents the final state of development of the **Builders module** of the [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers) course.
+The code in the current branch represents the final state of development of the **Builders** module of the [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers) course.
 
-### About the other branches
+## Other branches
 
-Branches in this repo contain the finished codebases of individual modules of the two above courses:
+The repo has branches that represent the various stages of development. The above two courses are split into modules. A course always has an introductory module, followed by several optional ones. Typically, a single branch represents the outcome of all the exercises in a given course module. At the same time, the branch serves as a starting point for another module or another course.
 
-* [Kentico Xperience for developers: Essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials)
-* [Kentico Xperience for developers: Builders](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-builders)
-* [Kentico Xperience for developers: Identity](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-identity)
-* [Kentico Xperience marketing for developers: Contact management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management)
+As for the **Kentico Xperience 13 for developers** course, the repo offers the following branches:  
 
-The [master branch](https://github.com/Kentico/xperience-training-13) contains all the functionality of both of the courses.
+* For the introductory **Essentials** module, you can checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. The branch contains the final state of the development of the Essentials module. If you wish to start developing the solution from scratch, the only thing you need from the branch are the XML files in the [CIRepository](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials/CMS/App_Data/CIRepository) folder used to restore database objects.
+* To start coding along the exercises in the **Builders** module, checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. To see the final state of development, checkout the [xp-for-developers-builders](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-builders) branch.
+* To start coding along the **Identity** module, checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. To see the final state of development, checkout the [xp-for-developers-identity](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-identity) branch.
+
+As for the **Kentico Xperience 13 online marketing for developers** course, the repo offer the following branches:
+
+* To start coding along the exercises in the introductory **Contact management** module, you can checkout the [xp-marketing-for-developers-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-starting-point) branch. To see the the final state of development, checkout the [xp-marketing-for-developers-contact-management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management) branch.
+
+The [master] branch represents the final state of development of **both** the _Kentico Xperience 13 for developers_ and _Kentico Xperience 13 online marketing for developers_ courses, including their optional modules. The branch has all the code working together.
 
 ### About the Medio Clinic sample site
 
@@ -29,42 +34,9 @@ The Medio Clinic sample site was developed for other purposes than the Dancing G
 
 See [Kentico Xperience sample sites](https://devnet.kentico.com/articles/kentico-xperience-sample-sites-and-their-differences) for a detailed description of the Medio Clinic site versus the other Xperience sample sites.
 
-## Requirements
-
-Administration application prerequisites:
-
-* Operating systems
-    * Windows 8.1 and newer
-    * Windows Server 2012 and newer
-* IIS features
-    * ASP.NET
-    * .NET extensibility
-    * ISAPI extensions
-    * ISAPI filters
-    * Static content
-* .NET
-    * .NET Framework 4.8 or newer
-
-Live site application prerequisites:
-
-* .NET
-    * [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) with ASP.NET Core runtime (included in [Visual Studio 2019 16.4](https://visualstudio.com/vs) or newer)
-    
-Common prerequisites:
-
-* Visual Studio 2019 Community or higher
-    * ASP.NET and web development workload
-    * .NET Core cross-platform development workload
-    * Git for Windows
-    * GitHub Extension for Visual Studio
-* [SQL Server 2012 Express or higher](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-    * Case-insensitive collation
-
-For a complete list of system requirements, refer to our [documentation](https://docs.xperience.io/installation/system-requirements).
-
 ## How to run the code
 
-> Please find the instructions [in the course](https://xperience.training.kentico.com/).
+> Please find the instructions [in the courses](https://xperience.training.kentico.com/).
 
 ## Coding conventions
 
