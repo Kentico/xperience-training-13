@@ -28,7 +28,7 @@ As for the **Kentico Xperience 13 online marketing for developers** course, the 
 
 The [master](https://github.com/Kentico/xperience-training-13) branch represents the final state of development of **both** the _Kentico Xperience 13 for developers_ and _Kentico Xperience 13 online marketing for developers_ courses, including their optional modules. The branch has all the code working together.
 
-### About the Medio Clinic sample site
+## About the Medio Clinic sample site
 
 The Medio Clinic sample site was developed for other purposes than the Dancing Goat sample site shipped with the Kentico Xperience installer. You'll find different approaches and design patterns in this repo.
 
