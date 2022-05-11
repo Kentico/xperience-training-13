@@ -4,118 +4,35 @@
 
 ## About the repo
 
-The repo contains the Medio Clinic sample website developed throughout the [Kentico Xperience 13 for Developers](https://xperience.io/services/training) course. The codebase represents the final state of development.
+The repo contains the **Medio Clinic** sample website developed throughout the two following e-learning courses:
+* [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers)
+* [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
-The repo currently contains code of the following modules of the course:
+## Branches
 
-* Essentials
-* Builders
-* Identity
+The repo has branches that represent the various stages of development. The above two courses are split into modules. A course always has an introductory module, followed by several optional ones. Typically, a single branch represents the outcome of all the exercises in a given course module. At the same time, the branch serves as a starting point for another module or another course.
 
-The code of the modules does not exist in separate git branches or is otherwise split. It lives together as one working Visual Studio solution, internally separated using standard conventions (separate projects, MVC areas). Therefore, when taking the course, bear in mind that the code snippets in the course might slightly differ from what you see here in GitHub.
+As for the **Kentico Xperience 13 for developers** course, the repo offers the following branches:  
 
-See [Kentico Xperience sample sites](https://devnet.kentico.com/articles/kentico-xperience-sample-sites-and-their-differences) for a detailed description of this and other Xperience sample sites.
+* For the introductory **Essentials** module, you can checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. The branch contains the final state of the development of the Essentials module. If you wish to start developing the solution from scratch, the only thing you need from the branch are the XML files in the [CIRepository](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials/CMS/App_Data/CIRepository) folder used to restore database objects.
+* To start coding along the exercises in the **Builders** module, checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. To see the final state of development, checkout the [xp-for-developers-builders](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-builders) branch.
+* To start coding along the **Identity** module, checkout the [xp-for-developers-essentials](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-essentials) branch. To see the final state of development, checkout the [xp-for-developers-identity](https://github.com/Kentico/xperience-training-13/tree/xp-for-developers-identity) branch.
 
-## Requirements
+As for the **Kentico Xperience 13 online marketing for developers** course, the repo offer the following branches:
 
-Administration application prerequisites:
+* To start coding along the exercises in the introductory **Contact management** module, you can checkout the [xp-marketing-for-developers-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-starting-point) branch. To see the the final state of development, checkout the [xp-marketing-for-developers-contact-management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management) branch.
 
-* Operating systems
-    * Windows 8.1 and newer
-    * Windows Server 2012 and newer
-* IIS features
-    * ASP.NET
-    * .NET extensibility
-    * ISAPI extensions
-    * ISAPI filters
-    * Static content
-* .NET
-    * .NET Framework 4.8 or newer
+The [master](https://github.com/Kentico/xperience-training-13) branch represents the final state of development of **both** the _Kentico Xperience 13 for developers_ and _Kentico Xperience 13 online marketing for developers_ courses, including their optional modules. The branch has all the code working together.
 
-Live site application prerequisites:
+## About the Medio Clinic sample site
 
-* .NET
-    * [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) with ASP.NET Core runtime (included in [Visual Studio 2019 16.4](https://visualstudio.com/vs) or newer)
-    
-Common prerequisites:
+The Medio Clinic sample site was developed for other purposes than the Dancing Goat sample site shipped with the Kentico Xperience installer. You'll find different approaches and design patterns in this repo.
 
-* Visual Studio 2019 Community or higher
-    * ASP.NET and web development workload
-    * .NET Core cross-platform development workload
-    * Git for Windows
-    * GitHub Extension for Visual Studio
-* [SQL Server 2012 Express or higher](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-    * Case-insensitive collation
-
-For a complete list of system requirements, refer to our [documentation](https://docs.xperience.io/installation/system-requirements).
+See [Kentico Xperience sample sites](https://devnet.kentico.com/articles/kentico-xperience-sample-sites-and-their-differences) for a detailed description of the Medio Clinic site versus the other Xperience sample sites.
 
 ## How to run the code
 
-> Please find the instructions [in the course](https://xperience.training.kentico.com/).
-
-## Enabling external authentication
-
-Prior to enabling external authentication for your development instance, make sure you've set the `ASPNETCORE_ENVIRONMENT` [environment variable](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-3.1) to `Development`.
-
-### Google
-
-Create a new [Google Console](https://console.developers.google.com/) project for your website. Create the OAuth Consent Screen and generate the [OAuth Client ID](https://support.google.com/cloud/answer/6158849). Set the __Authorized redirect URIs__ to `https://localhost:44324/signin-google`.
-
-Add the generated __Client ID__ to your `appsettings.json`:
-
-```json
-"GoogleAuthenticationOptions": {
-  "UseGoogleAuth": true,
-  "ClientId": "<your-client-id>",
-  "ClientSecret": "<your-client-secret>"
-},
-```
-
-Store the __Client Secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
-
-### Microsoft
-
-In the Azure Portal, create a new __App registration__ following [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-3.1#create-the-app-in-microsoft-developer-portal). Ensure that the __Redirect URI__ is set to `https://localhost:44324/signin-microsoft`.
-
-Add the __Application (client) ID__ from the _Overview tab_ you generated to the `appsettings.json`:
-
-```json
-"MicrosoftAuthenticationOptions": {
-  "UseMicrosoftAuth": true,
-  "ClientId": "<your-client-id>",
-  "ClientSecret": "<your-client-secret>"
-},
-```
-
-Store the __Client secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
-
-### Facebook
-
-Create a [Facebook application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-3.1#create-the-app-in-facebook) with the __OAuth Redirect URL__ of `https://localhost:44324/signin-facebook`. Add the following to your `appsettings.json` with the __App ID__ from the _Settings > Basic_ tab:
-
-```json
-"FacebookAuthenticationOptions": {
-  "UseFacebookAuth": true,
-  "AppId": "<your-app-id>",
-  "AppSecret": "<your-app-secret>"
-},
-```
-
-Store the __App secret__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
-
-### Twitter
-
-Create a [Twitter application](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/twitter-logins?view=aspnetcore-3.1#create-the-app-in-twitter) with the __Callback URL__ of `https://localhost:44324/signin-twitter`. On the _Keys and Tokens_ tab, copy the __API key__ into your `appsettings.json`:
-
-```json
-"TwitterAuthenticationOptions": {
-  "UseTwitterAuth": true,
-  "ConsumerKey": "<your-api-key>",
-  "ConsumerSecret": "<your-api-secret-key>"
-},
-```
-
-Store the __API secret key__ value using the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows) feature.
+> Please find the instructions [in the courses](https://xperience.training.kentico.com/).
 
 ## Coding conventions
 

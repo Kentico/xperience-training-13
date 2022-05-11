@@ -21,6 +21,8 @@ namespace XperienceAdapter.Generator
         private const string NoPathMessage = "The path must be specified.";
 
         private const string NoCodenameMessage = "The codename must be specified";
+
+        private const string UsThreeLetterCode = "USA";
         
         private static CsvParserOptions _csvParserOptions = new CsvParserOptions(true, ',');
 
@@ -41,30 +43,47 @@ namespace XperienceAdapter.Generator
             var mapping = new ContactMapping();
             var parser = new CsvParser<Contact>(_csvParserOptions, mapping);
             var contacts = parser?.ReadFromFile(path, Encoding.UTF8).ToList();
-            var countryIds = CountryInfo.Provider.Get().OrderBy("CountryID").Select(c => c.CountryID).ToList();
-            var random = new Random();
-            var max = countryIds?.Count();
 
-            if (contacts?.Any() == true && countryIds?.Any() == true)
+            var usCountryId = CountryInfo.Provider.Get()
+                .WhereEquals(nameof(CountryInfo.CountryThreeLetterCode), UsThreeLetterCode)
+                .TopN(1)
+                .FirstOrDefault()?
+                .CountryID;
+
+            if (contacts?.Any() == true)
             {
                 foreach (var contact in contacts)
                 {
                     if (contact?.IsValid == true)
                     {
                         var result = contact.Result;
-                        var countryIndex = random?.Next(0, max ?? 0) ?? 0;
+
+                        var stateId = StateInfo.Provider.Get()
+                            .WhereEquals(nameof(StateInfo.StateCode), result.StateCode)
+                            .TopN(1)
+                            .FirstOrDefault()?
+                            .StateID;
 
                         var contactInfo = new ContactInfo()
                         {
                             ContactFirstName = result.FirstName,
                             ContactLastName = result.LastName,
                             ContactEmail = result.EmailAddress,
-                            ContactCountryID = countryIds[countryIndex],
+                            ContactCity = result.City,
                             ContactMonitored = true
                         };
 
-                        contactInfo.SetValue(TestingCenterStartingDateDbName, result.TestingCenterStartingDate);
+                        if (usCountryId.HasValue)
+                        {
+                            contactInfo.ContactCountryID = usCountryId.Value;
+                        }
 
+                        if (stateId.HasValue)
+                        {
+                            contactInfo.ContactStateID = stateId.Value;
+                        }
+
+                        contactInfo.SetValue(TestingCenterStartingDateDbName, result.TestingCenterStartingDate);
                         ContactInfo.Provider.Set(contactInfo);
                     }
                 }

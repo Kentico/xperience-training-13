@@ -40,7 +40,6 @@ namespace CMSApp.CMSFormControls.MedioClinic
                     : CookieManager.NullIntegerValue;
             set
             {
-                ValidationHelper.GetInteger(value, CookieManager.NullIntegerValue);
                 drpCookieLevel.SelectedValue = ValidationHelper.GetString(value, CookieManager.NullIntegerValue.ToString());
             }
         }
