@@ -50,5 +50,7 @@ namespace MedioClinic.Components
         public const string FileDownloadWidget = WidgetPrefix + "FileDownload";
 
         public const string IsInPersonaCondition = PersonalizationConditionPrefix + "IsInPersona";
+
+        public const string ComesFromBigUsCityCondition = PersonalizationConditionPrefix + "ComesFromBigUsCity";
     }
 }

@@ -149,3 +149,11 @@ using MedioClinic.Personalization;
     ControllerType = typeof(IsInPersonaController), 
     Description = "{$" + ComponentIdentifiers.IsInPersonaCondition + ".Description$}",
     IconClass = "icon-app-personas")]
+
+[assembly: RegisterPersonalizationConditionType(
+    ComponentIdentifiers.ComesFromBigUsCityCondition,
+    typeof(ComesFromBigUsCityConditionType),
+    "{$" + ComponentIdentifiers.ComesFromBigUsCityCondition + ".Title$}",
+    ControllerType = typeof(ComesFromBigUsCityController),
+    Description = "{$" + ComponentIdentifiers.ComesFromBigUsCityCondition + ".Description$}",
+    IconClass = "icon-app-personas")]
