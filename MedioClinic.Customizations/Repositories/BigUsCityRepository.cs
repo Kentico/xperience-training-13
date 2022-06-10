@@ -4,14 +4,18 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using CMS;
 using CMS.CustomTables;
 using CMS.CustomTables.Types.MedioClinic;
 using CMS.DataEngine;
 using CMS.Helpers;
 
-using Business.Models;
+using MedioClinic.Customizations.Models;
+using MedioClinic.Customizations.Repositories;
 
-namespace Business.Repositories
+[assembly: RegisterImplementation(typeof(IBigUsCityRepository), typeof(BigUsCityRepository))]
+
+namespace MedioClinic.Customizations.Repositories
 {
     public class BigUsCityRepository : IBigUsCityRepository
     {
@@ -54,7 +58,7 @@ namespace Business.Repositories
             : Enumerable.Empty<BigUsCity>();
 
         private async Task<IEnumerable<BigUsCity>> GetResultAsync(
-            Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>>? filter,
+            Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>> filter,
             CancellationToken? cancellationToken,
             string cacheKey,
             params string[] cacheDependencies)
@@ -69,7 +73,7 @@ namespace Business.Repositories
         }
 
         private IEnumerable<BigUsCity> GetResult(
-            Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>>? filter,
+            Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>> filter,
             string cacheKey,
             params string[] cacheDependencies)
         {
@@ -82,7 +86,7 @@ namespace Business.Repositories
                 .Select(item => MapDtoProperties(item));
         }
 
-        private static ObjectQuery<BigUsCitiesItem> GetQuery(Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>>? filter)
+        private static ObjectQuery<BigUsCitiesItem> GetQuery(Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>> filter)
         {
             var query = CustomTableItemProvider.GetItems<BigUsCitiesItem>();
 

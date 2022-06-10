@@ -1,4 +1,4 @@
-﻿using Business.Models;
+﻿using MedioClinic.Customizations.Models;
 
 using Common;
 
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Business.Repositories
+namespace MedioClinic.Customizations.Repositories
 {
     public interface IBigUsCityRepository : IRepository<BigUsCity>
     {
