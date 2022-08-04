@@ -34,11 +34,17 @@ namespace MedioClinic.Controllers
 
         private const string NoCsvFile = "The .csv file name must be specified.";
 
+        private const string ContactsGenerated = "The contacts have been generated.";
+
+        private const string FormDataGenerated = "The form data has been generated.";
+
         private readonly IWebHostEnvironment _environment;
 
         private readonly IPageRetriever _pageRetriever;
 
         private readonly IGenerator _generator;
+
+        private IPageMetadata PageMetadata => new Models.PageMetadata { Title = "Data generator" };
 
         public GeneratorController(
             ILogger<GeneratorController> logger,
@@ -54,8 +60,16 @@ namespace MedioClinic.Controllers
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
         }
 
-        public IActionResult GenerateContacts() => GenerateData(_generator.GenerateContacts, ContactFilePath);
+        [HttpGet]
+        public IActionResult Index() => DefaultView();
 
+        // POST: Generator/GenerateContacts
+        [HttpPost]
+        public IActionResult GenerateContacts() =>
+            GenerateData(_generator.GenerateContacts, ContactFilePath, ContactsGenerated);
+
+        // POST: Generator/GenerateFormData
+        [HttpPost]
         public IActionResult GenerateFormData()
         {
             var landingPage = _pageRetriever.Retrieve<TreeNode>(query =>
@@ -77,10 +91,10 @@ namespace MedioClinic.Controllers
                 return ErrorMessage(ex);
             }
 
-            return Done();
+            return DefaultView(FormDataGenerated);
         }
 
-        private IActionResult GenerateData(Action<string> generatorAction, string csvFileName)
+        private IActionResult GenerateData(Action<string> generatorAction, string csvFileName, string successMessage)
         {
             if (string.IsNullOrEmpty(csvFileName))
             {
@@ -105,11 +119,31 @@ namespace MedioClinic.Controllers
                 return ErrorMessage(ex);
             }
 
-            return Done();
+            return DefaultView(successMessage);
         }
 
-        private IActionResult Done() => Content("Done");
+        private IActionResult DefaultView(string? message = default)
+        {
+            var viewModel = GetPageViewModel(
+                PageMetadata,
+                message,
+                true,
+                false,
+                Models.MessageType.Info);
 
-        private IActionResult ErrorMessage(Exception ex) => Content($"Error: {ex.Message}");
+            return View(nameof(this.Index), viewModel);
+        }
+
+        private IActionResult ErrorMessage(Exception ex)
+        {
+            var viewModel = GetPageViewModel(
+                PageMetadata,
+                ex.Message,
+                true,
+                false,
+                Models.MessageType.Error);
+
+            return View(nameof(this.Index), viewModel);
+        }
     }
 }
