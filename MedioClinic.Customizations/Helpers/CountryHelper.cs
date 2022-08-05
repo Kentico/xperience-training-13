@@ -37,48 +37,13 @@ namespace MedioClinic.Customizations.Helpers
             return false;
         }
 
-        public static CountryInfo GetUsCountry()
-        {
-            var progressiveCache = Service.Resolve<IProgressiveCache>();
-
-            return progressiveCache.Load(cacheSettings =>
-            {
-                var result = CountryInfo.Provider.Get()
-                    .WhereEquals(nameof(CountryInfo.CountryThreeLetterCode), "USA")
-                    .TopN(1)
-                    .FirstOrDefault();
-
-                cacheSettings.CacheDependency =
-                    CacheHelper.GetCacheDependency($"{CountryCacheDependencyStub}|ById|{result.CountryID}");
-
-                return result;
-            }, GetCacheSettings($"{CacheKeyStub}|UsCountry"));
-        }
+        public static CountryInfo GetUsCountry() => CountryInfo.Provider.Get("USA");
 
         public static StateInfo GetContactState(ContactInfo contact, CountryInfo country)
         {
-            var progressiveCache = Service.Resolve<IProgressiveCache>();
-
-            if (contact?.ContactStateID > 0 == true && country != null)
-            {
-                var data = progressiveCache.Load(cacheSettings =>
-                {
-                    var result = StateInfo.Provider.Get()
-                        .WhereEquals(nameof(StateInfo.StateID), contact?.ContactStateID)
-                        .WhereEquals(nameof(StateInfo.CountryID), country?.CountryID)
-                        .TopN(1)
-                        .FirstOrDefault();
-
-                    cacheSettings.CacheDependency =
-                        CacheHelper.GetCacheDependency($"{StateCacheDependencyStub}|ById|{result.StateID}");
-
-                    return result;
-                }, GetCacheSettings($"{CacheKeyStub}|ContactState"));
-
-                return data;
-            }
-
-            return null;
+            return contact?.ContactStateID > 0 == true && country != null
+                ? StateInfo.Provider.Get(contact.ContactStateID)
+                : null;
         }
 
         private static CacheSettings GetCacheSettings(string cacheKey) =>

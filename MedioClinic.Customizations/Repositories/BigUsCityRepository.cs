@@ -38,24 +38,28 @@ namespace MedioClinic.Customizations.Repositories
                 $"{nameof(BigUsCityRepository)}|{nameof(GetAllAsync)}",
                 CacheDependencies);
 
-        public IEnumerable<BigUsCity> GetByNameAndStateCode(string cityName, string stateCode) =>
-            !string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(stateCode)
-            ? GetResult(filter => filter
-                .WhereEquals(nameof(BigUsCitiesItem.CityName), cityName)
-                .WhereEquals(nameof(BigUsCitiesItem.StateCode), stateCode),
-                $"{nameof(BigUsCityRepository)}|{nameof(GetByNameAndStateCode)}|{cityName}|{stateCode}",
-                CacheDependencies)
-            : Enumerable.Empty<BigUsCity>();
+        public IEnumerable<BigUsCity> GetByNameAndStateCode(string cityName, string stateCode)
+        {
+            return !string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(stateCode)
+                ? GetResult(filter => filter
+                    .WhereEquals(nameof(BigUsCitiesItem.CityName), cityName)
+                    .WhereEquals(nameof(BigUsCitiesItem.StateCode), stateCode),
+                    $"{nameof(BigUsCityRepository)}|{nameof(GetByNameAndStateCode)}|{cityName}|{stateCode}",
+                    CacheDependencies)
+                : Enumerable.Empty<BigUsCity>();
+        }
 
-        public async Task<IEnumerable<BigUsCity>> GetByNameAndStateCodeAsync(string cityName, string stateCode, CancellationToken cancellationToken) =>
-            !string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(stateCode)
-            ? await GetResultAsync(filter => filter
-                .WhereEquals(nameof(BigUsCitiesItem.CityName), cityName)
-                .WhereEquals(nameof(BigUsCitiesItem.StateCode), stateCode),
-                cancellationToken,
-                $"{nameof(BigUsCityRepository)}|{nameof(GetByNameAndStateCodeAsync)}|{cityName}|{stateCode}",
-                CacheDependencies)
-            : Enumerable.Empty<BigUsCity>();
+        public async Task<IEnumerable<BigUsCity>> GetByNameAndStateCodeAsync(string cityName, string stateCode, CancellationToken cancellationToken)
+        {
+            return !string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(stateCode)
+                ? await GetResultAsync(filter => filter
+                    .WhereEquals(nameof(BigUsCitiesItem.CityName), cityName)
+                    .WhereEquals(nameof(BigUsCitiesItem.StateCode), stateCode),
+                    cancellationToken,
+                    $"{nameof(BigUsCityRepository)}|{nameof(GetByNameAndStateCodeAsync)}|{cityName}|{stateCode}",
+                    CacheDependencies)
+                : Enumerable.Empty<BigUsCity>();
+        }
 
         private async Task<IEnumerable<BigUsCity>> GetResultAsync(
             Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>> filter,
@@ -66,8 +70,12 @@ namespace MedioClinic.Customizations.Repositories
             var query = GetQuery(filter);
             var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
 
-            return (await _progressiveCache.LoadAsync(async _ =>
-                await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken),
+            return (await _progressiveCache.LoadAsync(async modifiedCacheSettings =>
+            {
+                modifiedCacheSettings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+
+                return await query.GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
+            },
                 cacheSettings))
                 .Select(item => MapDtoProperties(item));
         }
@@ -80,8 +88,12 @@ namespace MedioClinic.Customizations.Repositories
             var query = GetQuery(filter);
             var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
 
-            return _progressiveCache.Load(_ => 
-                query.GetEnumerableTypedResult(),
+            return _progressiveCache.Load(modifiedCacheSettings =>
+                {
+                    modifiedCacheSettings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+
+                    return query.GetEnumerableTypedResult();
+                },
                 cacheSettings)
                 .Select(item => MapDtoProperties(item));
         }
@@ -98,13 +110,8 @@ namespace MedioClinic.Customizations.Repositories
             return query;
         }
 
-        private static CacheSettings GetCacheSettings(string cacheKey, params string[] cacheDependencies)
-        {
-            var settings = new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
-            settings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
-
-            return settings;
-        }
+        private static CacheSettings GetCacheSettings(string cacheKey, params string[] cacheDependencies) =>
+            new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
 
         private static BigUsCity MapDtoProperties(BigUsCitiesItem item) => new BigUsCity
         {

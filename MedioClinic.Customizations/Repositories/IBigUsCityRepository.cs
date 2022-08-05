@@ -14,7 +14,6 @@ namespace MedioClinic.Customizations.Repositories
     {
         IEnumerable<BigUsCity> GetByNameAndStateCode(string cityName, string stateCode);
 
-        Task<IEnumerable<BigUsCity>> GetByNameAndStateCodeAsync(
-            string cityName, string stateCode, CancellationToken cancellationToken);
+        Task<IEnumerable<BigUsCity>> GetByNameAndStateCodeAsync(string cityName, string stateCode, CancellationToken cancellationToken);
     }
 }
