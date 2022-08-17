@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 
 using CMS.ContactManagement;
 using CMS.Core;
@@ -39,7 +37,8 @@ namespace MedioClinic.Personalization
 
             if (IsForBigCities && currentContact != null)
             {
-                return CountryHelper.ContactComesFromBigUsCity(currentContact);
+                return CountryHelper.ContactComesFromBigUsCity(currentContact)
+                    && CountryHelper.IsUsState(currentContact.ContactStateID);
             }
 
             return false;

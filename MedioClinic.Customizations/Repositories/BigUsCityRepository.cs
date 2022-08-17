@@ -38,6 +38,9 @@ namespace MedioClinic.Customizations.Repositories
                 $"{nameof(BigUsCityRepository)}|{nameof(GetAllAsync)}",
                 CacheDependencies);
 
+        public ObjectQuery<BigUsCitiesItem> GetAllItems() =>
+            GetQuery(null);
+
         public IEnumerable<BigUsCity> GetByNameAndStateCode(string cityName, string stateCode)
         {
             return !string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(stateCode)
@@ -100,6 +103,8 @@ namespace MedioClinic.Customizations.Repositories
 
         private static ObjectQuery<BigUsCitiesItem> GetQuery(Func<ObjectQuery<BigUsCitiesItem>, ObjectQuery<BigUsCitiesItem>> filter)
         {
+            // The repository cannot guarantee that other objects (e.g. ContactInfo) belong to just american cities.
+            // It is the responsibility of the client code to also check, whether the contact's city belongs to a US state, not some other.
             var query = CustomTableItemProvider.GetItems<BigUsCitiesItem>();
 
             if (filter != null)
