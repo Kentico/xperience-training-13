@@ -136,7 +136,7 @@ using MedioClinic.Personalization;
 [assembly: RegisterWidget(
     ComponentIdentifiers.FileDownloadWidget,
     typeof(FileDownloadViewComponent),
-    "File download widget",
+    "{$" + ComponentIdentifiers.FileDownloadWidget + ".Title$}", 
     typeof(FileDownloadProperties),
     AllowCache = true,
     Description = "File download widget",
@@ -157,3 +157,21 @@ using MedioClinic.Personalization;
     ControllerType = typeof(ComesFromBigUsCityController),
     Description = "{$" + ComponentIdentifiers.ComesFromBigUsCityCondition + ".Description$}",
     IconClass = "icon-app-personas")]
+
+[assembly: RegisterFormComponent(
+    ComponentIdentifiers.ColorSelectionFormComponent,
+    typeof(ColorSelection),
+    "{$" + ComponentIdentifiers.ColorSelectionFormComponent + ".Title$}",
+    IsAvailableInFormBuilderEditor = false,
+    ViewName = "~/Components/FormComponents/_ColorSelection.cshtml",
+    Description = "{$" + ComponentIdentifiers.ColorSelectionFormComponent + ".Description$}",
+    IconClass = "icon-menu")]
+
+[assembly: RegisterWidget(
+    ComponentIdentifiers.ButtonWidget,
+    "{$" + ComponentIdentifiers.ButtonWidget + ".Title$}",
+    typeof(ButtonProperties),
+    customViewName: "~/Components/Widgets/_Button.cshtml",
+    AllowCache = true,
+    Description = "{$" + ComponentIdentifiers.ButtonWidget + ".Description$}",
+    IconClass = "icon-square-dashed-line")]

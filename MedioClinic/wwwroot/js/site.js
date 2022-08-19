@@ -69,4 +69,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return section;
     };
 
+    medioClinic.verifyAbTestConversion = function (abTestConversionLoggerUrl) {
+        let xmlHttpReq = new XMLHttpRequest();
+        xmlHttpReq.open("POST", abTestConversionLoggerUrl, true);
+        xmlHttpReq.send(null);
+    };
+
 }(window.medioClinic = window.medioClinic || {}));

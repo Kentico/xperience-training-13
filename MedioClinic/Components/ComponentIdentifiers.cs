@@ -52,5 +52,9 @@ namespace MedioClinic.Components
         public const string IsInPersonaCondition = PersonalizationConditionPrefix + "IsInPersona";
 
         public const string ComesFromBigUsCityCondition = PersonalizationConditionPrefix + "ComesFromBigUsCity";
+
+        public const string ColorSelectionFormComponent = FormComponentPrefix + "ColorSelection";
+
+        public const string ButtonWidget = WidgetPrefix + "Button";
     }
 }
