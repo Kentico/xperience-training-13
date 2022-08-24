@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
@@ -11,6 +12,11 @@ using CMS.SiteProvider;
 using CMS.DataEngine;
 using CMS.Activities;
 using CMS.Base;
+using CMS.OnlineMarketing;
+using CMS.LicenseProvider;
+using CMS.WebAnalytics;
+using System.Threading;
+using CMS.DocumentEngine;
 
 namespace XperienceAdapter.Generator
 {
@@ -23,14 +29,27 @@ namespace XperienceAdapter.Generator
         private const string NoCodenameMessage = "The codename must be specified";
 
         private const string UsThreeLetterCode = "USA";
-        
+
         private static CsvParserOptions _csvParserOptions = new CsvParserOptions(true, ',');
 
         private readonly IActivityLogService _activityLogService;
 
-        public Generator(IActivityLogService activityLogService)
+        private readonly ISiteService _siteService;
+
+        private readonly IAnalyticsLogger _analyticsLogger;
+
+        private readonly IABTestManager _abTestManager;
+
+        public Generator(IActivityLogService activityLogService,
+                         ISiteService siteService,
+                         IABTestConversionLogger abTestConversionLogger,
+                         IAnalyticsLogger analyticsLogger,
+                         IABTestManager abTestManager)
         {
             _activityLogService = activityLogService ?? throw new ArgumentNullException(nameof(activityLogService));
+            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
+            _analyticsLogger = analyticsLogger ?? throw new ArgumentNullException(nameof(analyticsLogger));
+            _abTestManager = abTestManager ?? throw new ArgumentNullException(nameof(abTestManager));
         }
 
         public void GenerateContacts(string path)
@@ -116,7 +135,7 @@ namespace XperienceAdapter.Generator
 
                         if (contact != null)
                         {
-                            LogFormSubmissionActivity(contact, treeNode, formItem); 
+                            LogFormSubmissionActivity(contact, treeNode, formItem);
                         }
                     }
                 }
@@ -133,9 +152,19 @@ namespace XperienceAdapter.Generator
             throw new NotImplementedException();
         }
 
-        public void GenerateConversions()
+        public void GenerateAbTestConversions(TreeNode page, string requestDomain)
         {
-            throw new NotImplementedException();
+            if (page is null)
+            {
+                throw new ArgumentNullException(nameof(page));
+            }
+
+            if (string.IsNullOrEmpty(requestDomain))
+            {
+                throw new ArgumentException($"'{nameof(requestDomain)}' cannot be null or empty.", nameof(requestDomain));
+            }
+
+            LogRandomAbTestConversions(page, requestDomain);
         }
 
         private BizFormItem SaveFormData(string formCodename, FormData formData)
@@ -174,6 +203,76 @@ namespace XperienceAdapter.Generator
         {
             var activityInitializer = new FormSubmissionActivityInitializer(contactInfo, treeNode, formItem);
             _activityLogService.Log(activityInitializer);
+        }
+
+        private void LogRandomAbTestConversions(TreeNode page, string requestDomain)
+        {
+            var site = _siteService.CurrentSite;
+
+            if (site == null 
+                || !LicenseHelper.CheckFeature(requestDomain, FeatureEnum.ABTesting) 
+                || !ABTestInfoProvider.ABTestingEnabled(site.SiteName))
+            {
+                return;
+            }
+
+            var abTestInfo = ABTestInfo.Provider.Get()
+                .WhereEquals(nameof(ABTestInfo.ABTestOriginalPage), page.NodeAliasPath)
+                .TopN(1)
+                .FirstOrDefault();
+
+            if (abTestInfo == null || !ABTestStatusEvaluator.ABTestIsRunning(abTestInfo))
+            {
+                return;
+            }
+
+            var conversions = abTestInfo.ABTestConversionConfiguration.ABTestConversions;
+            var variants = _abTestManager.GetVariants(page);
+            var randomizer = new Random();
+
+            foreach (var variant in variants)
+            {
+                foreach (var conversion in conversions)
+                {
+                    var isConversionInAbTest = abTestInfo.ABTestConversionConfiguration.TryGetConversion(conversion.ConversionName, out _);
+
+                    if (!isConversionInAbTest)
+                    {
+                        continue;
+                    }
+
+                    var conversionValue = GetConversionValue(abTestInfo, conversion.ConversionName, 1);
+                    var codeNameSuffix = $"{abTestInfo.ABTestName};{variant.Guid}";
+                    var randomHits = randomizer.Next(1, 100);
+
+                    var data = new AnalyticsData(site.SiteID,
+                                                 conversion.ConversionName,
+                                                 hits: randomHits,
+                                                 value: conversionValue,
+                                                 culture: Thread.CurrentThread.CurrentCulture.Name);
+                    
+                    var name = $"absessionconversionrecurring;{codeNameSuffix}";
+                    var randomPastDayNumber = randomizer.Next(-30, 0);
+                    var randomPastDay = DateTimeOffset.UtcNow.AddDays(randomPastDayNumber).Date;
+
+                    _analyticsLogger.LogCustomAnalytics(name, data, randomPastDay);
+
+                    var statisticsName = $"abconversion;{codeNameSuffix}";
+
+                    _analyticsLogger.LogCustomAnalytics(statisticsName, data, randomPastDay);
+                }
+            }
+        }
+
+        private static decimal GetConversionValue(ABTestInfo abTest, string conversionName, decimal value)
+        {
+            if (abTest.ABTestConversionConfiguration.TryGetConversion(conversionName, out var testConversion)
+                && !testConversion.Value.Equals(0.0m))
+            {
+                return testConversion.Value;
+            }
+
+            return value;
         }
     }
 }

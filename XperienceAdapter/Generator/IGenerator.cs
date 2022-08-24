@@ -1,4 +1,5 @@
 ﻿using CMS.Base;
+using CMS.DocumentEngine;
 
 using Common;
 
@@ -14,6 +15,6 @@ namespace XperienceAdapter.Generator
 
         void GenerateContactGroup();
 
-        void GenerateConversions();
+        void GenerateAbTestConversions(TreeNode page, string requestDomain);
     }
 }

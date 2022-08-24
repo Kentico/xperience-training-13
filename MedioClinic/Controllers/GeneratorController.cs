@@ -30,6 +30,9 @@ namespace MedioClinic.Controllers
 
         private const string AllergyTestCenterPagePath = "/Landing-pages/Allergy-test-center-partner-program";
 
+        // TODO: Delete upon course release.
+        private const string AbTestPagePath = "/Landing-pages/AbTestConversionTest";
+
         private const string FormCodename = "AllergyTestCenterApplication";
 
         private const string NoCsvFile = "The .csv file name must be specified.";
@@ -37,6 +40,8 @@ namespace MedioClinic.Controllers
         private const string ContactsGenerated = "The contacts have been generated.";
 
         private const string FormDataGenerated = "The form data has been generated.";
+
+        private const string AbTestConversionsGenerated = "The A/B test conversions have been generated.";
 
         private readonly IWebHostEnvironment _environment;
 
@@ -92,6 +97,27 @@ namespace MedioClinic.Controllers
             }
 
             return DefaultView(FormDataGenerated);
+        }
+
+        // POST: Generator/GenerateAbTestConversions
+        [HttpPost]
+        public IActionResult GenerateAbTestConversions()
+        {
+            var page = _pageRetriever.Retrieve<TreeNode>(filter => filter.Path(AbTestPagePath)).FirstOrDefault();
+            var requestDomain = HttpContext.Request.Host.Host;
+
+            try
+            {
+                _generator.GenerateAbTestConversions(page, requestDomain);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return ErrorMessage(ex);
+            }
+
+            return DefaultView(AbTestConversionsGenerated);
         }
 
         private IActionResult GenerateData(Action<string> generatorAction, string csvFileName, string successMessage)
