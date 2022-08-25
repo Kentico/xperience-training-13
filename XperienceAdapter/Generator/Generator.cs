@@ -30,6 +30,8 @@ namespace XperienceAdapter.Generator
 
         private const string UsThreeLetterCode = "USA";
 
+        private const int LoggingHistoryDays = 30;
+
         private static CsvParserOptions _csvParserOptions = new CsvParserOptions(true, ',');
 
         private readonly IActivityLogService _activityLogService;
@@ -226,6 +228,9 @@ namespace XperienceAdapter.Generator
                 return;
             }
 
+            abTestInfo.ABTestOpenFrom = DateTimeOffset.UtcNow.AddDays(0 - LoggingHistoryDays).Date;
+            ABTestInfo.Provider.Set(abTestInfo);
+
             var conversions = abTestInfo.ABTestConversionConfiguration.ABTestConversions;
             var variants = _abTestManager.GetVariants(page);
             var randomizer = new Random();
@@ -252,7 +257,7 @@ namespace XperienceAdapter.Generator
                                                  culture: Thread.CurrentThread.CurrentCulture.Name);
                     
                     var name = $"absessionconversionrecurring;{codeNameSuffix}";
-                    var randomPastDayNumber = randomizer.Next(-30, 0);
+                    var randomPastDayNumber = randomizer.Next(0 - LoggingHistoryDays, 0);
                     var randomPastDay = DateTimeOffset.UtcNow.AddDays(randomPastDayNumber).Date;
 
                     _analyticsLogger.LogCustomAnalytics(name, data, randomPastDay);
