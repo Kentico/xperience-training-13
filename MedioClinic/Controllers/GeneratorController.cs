@@ -4,6 +4,8 @@ using Common.Configuration;
 
 using Kentico.Content.Web.Mvc;
 
+using MedioClinic.Models;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -29,9 +31,6 @@ namespace MedioClinic.Controllers
         private const string FormDataFilePath = GeneratorDataPath + "FormData.csv";
 
         private const string AllergyTestCenterPagePath = "/Landing-pages/Allergy-test-center-partner-program";
-
-        // TODO: Delete upon course release.
-        private const string AbTestPagePath = "/Landing-pages/AbTestConversionTest";
 
         private const string FormCodename = "AllergyTestCenterApplication";
 
@@ -101,9 +100,14 @@ namespace MedioClinic.Controllers
 
         // POST: Generator/GenerateAbTestConversions
         [HttpPost]
-        public IActionResult GenerateAbTestConversions()
+        public IActionResult GenerateAbTestConversions(PageViewModel<GeneratorViewModel> uploadModel)
         {
-            var page = _pageRetriever.Retrieve<TreeNode>(filter => filter.Path(AbTestPagePath)).FirstOrDefault();
+            if (string.IsNullOrEmpty(uploadModel?.Data?.AbTestNodeAliasPath))
+            {
+                return ErrorMessage(new ArgumentException("The node alias path must not be null or empty."));
+            }
+
+            var page = _pageRetriever.Retrieve<TreeNode>(filter => filter.Path(uploadModel.Data.AbTestNodeAliasPath)).FirstOrDefault();
             var requestDomain = HttpContext.Request.Host.Host;
 
             try
@@ -152,10 +156,14 @@ namespace MedioClinic.Controllers
         {
             var viewModel = GetPageViewModel(
                 PageMetadata,
+                new GeneratorViewModel
+                {
+                    AbTestNodeAliasPath = string.Empty
+                },
                 message,
                 true,
                 false,
-                Models.MessageType.Info);
+                MessageType.Info);
 
             return View(nameof(this.Index), viewModel);
         }
@@ -164,10 +172,14 @@ namespace MedioClinic.Controllers
         {
             var viewModel = GetPageViewModel(
                 PageMetadata,
+                new GeneratorViewModel
+                {
+                    AbTestNodeAliasPath = string.Empty
+                },
                 ex.Message,
                 true,
                 false,
-                Models.MessageType.Error);
+                MessageType.Error);
 
             return View(nameof(this.Index), viewModel);
         }

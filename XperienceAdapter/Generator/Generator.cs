@@ -211,8 +211,8 @@ namespace XperienceAdapter.Generator
         {
             var site = _siteService.CurrentSite;
 
-            if (site == null 
-                || !LicenseHelper.CheckFeature(requestDomain, FeatureEnum.ABTesting) 
+            if (site == null
+                || !LicenseHelper.CheckFeature(requestDomain, FeatureEnum.ABTesting)
                 || !ABTestInfoProvider.ABTestingEnabled(site.SiteName))
             {
                 return;
@@ -235,36 +235,47 @@ namespace XperienceAdapter.Generator
             var variants = _abTestManager.GetVariants(page);
             var randomizer = new Random();
 
-            foreach (var variant in variants)
+            for (int i = 0; i < LoggingHistoryDays; i++)
             {
-                foreach (var conversion in conversions)
+                var day = DateTime.UtcNow.AddDays(i - LoggingHistoryDays);
+
+                foreach (var variant in variants)
                 {
-                    var isConversionInAbTest = abTestInfo.ABTestConversionConfiguration.TryGetConversion(conversion.ConversionName, out _);
-
-                    if (!isConversionInAbTest)
+                    foreach (var conversion in conversions)
                     {
-                        continue;
+                        var isConversionInAbTest = abTestInfo.ABTestConversionConfiguration.TryGetConversion(conversion.ConversionName, out _);
+
+                        if (!isConversionInAbTest)
+                        {
+                            continue;
+                        }
+
+                        var visitHitName = $"abvisitfirst;{abTestInfo.ABTestName};{variant.Guid}";
+                        var visitData = new AnalyticsData(site.SiteID, conversion.ConversionName);
+
+                        _analyticsLogger.LogCustomAnalytics(visitHitName, visitData, day);
+
+                        var conversionValue = GetConversionValue(abTestInfo, conversion.ConversionName, 1);
+                        var codeNameSuffix = $"{abTestInfo.ABTestName};{variant.Guid}";
+                        var randomLowHigh = randomizer.Next(0, 1);
+                        var randomLowHits = randomizer.Next(1, 100);
+                        var randomHighHits = randomizer.Next(2000, 3000);
+                        var randomHits = randomLowHigh == 0 ? randomLowHits : randomHighHits;
+
+                        var conversionData = new AnalyticsData(site.SiteID,
+                                                     conversion.ConversionName,
+                                                     hits: randomHits,
+                                                     value: conversionValue,
+                                                     culture: Thread.CurrentThread.CurrentCulture.Name);
+
+                        var conversionRecurringHitName = $"absessionconversionrecurring;{codeNameSuffix}";
+
+                        _analyticsLogger.LogCustomAnalytics(conversionRecurringHitName, conversionData, day);
+
+                        var statisticsName = $"abconversion;{codeNameSuffix}";
+
+                        _analyticsLogger.LogCustomAnalytics(statisticsName, conversionData, day);
                     }
-
-                    var conversionValue = GetConversionValue(abTestInfo, conversion.ConversionName, 1);
-                    var codeNameSuffix = $"{abTestInfo.ABTestName};{variant.Guid}";
-                    var randomHits = randomizer.Next(1, 100);
-
-                    var data = new AnalyticsData(site.SiteID,
-                                                 conversion.ConversionName,
-                                                 hits: randomHits,
-                                                 value: conversionValue,
-                                                 culture: Thread.CurrentThread.CurrentCulture.Name);
-                    
-                    var name = $"absessionconversionrecurring;{codeNameSuffix}";
-                    var randomPastDayNumber = randomizer.Next(0 - LoggingHistoryDays, 0);
-                    var randomPastDay = DateTimeOffset.UtcNow.AddDays(randomPastDayNumber).Date;
-
-                    _analyticsLogger.LogCustomAnalytics(name, data, randomPastDay);
-
-                    var statisticsName = $"abconversion;{codeNameSuffix}";
-
-                    _analyticsLogger.LogCustomAnalytics(statisticsName, data, randomPastDay);
                 }
             }
         }
