@@ -25,7 +25,7 @@ namespace MedioClinic.Customizations.Macros
                 throw new ArgumentNullException(nameof(macroRuleInstance));
             }
 
-            if (!macroRuleInstance.MacroRuleName.Equals(nameof(ContactInfoMethods.ComesFromBigUsCity), StringComparison.Ordinal))
+            if (!macroRuleInstance.MacroRuleName.Equals(ContactInfoMethods.ComesFromBigUsCityName, StringComparison.Ordinal))
             {
                 throw new ArgumentException($"[{nameof(ComesFromBigUsCityTranslator)}.{nameof(ComesFromBigUsCityTranslator.Translate)}]: Only macro rule instances of type {nameof(ContactInfoMethods.ComesFromBigUsCity)} can be translated.");
             }
