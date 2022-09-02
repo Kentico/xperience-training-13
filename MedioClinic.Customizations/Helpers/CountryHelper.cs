@@ -16,10 +16,18 @@ namespace MedioClinic.Customizations.Helpers
 
         private const string StateCacheDependencyStub = "CMS.State";
 
-        private static string CacheKeyStub = nameof(CountryHelper);
-
         public static bool ContactComesFromBigUsCity(ContactInfo contact)
         {
+            if (contact is null)
+            {
+                throw new System.ArgumentNullException(nameof(contact));
+            }
+
+            if (!IsUsState(contact.ContactStateID))
+            {
+                return false;
+            }
+
             var bigUsCityRepository = Service.Resolve<IBigUsCityRepository>();
             var contactState = GetContactState(contact);
             var contactCity = contact?.ContactCity;
@@ -60,8 +68,6 @@ namespace MedioClinic.Customizations.Helpers
         }
 
         public static bool IsUsState(int stateId) =>
-            GetUsStates()
-                .Column(nameof(StateInfo.StateID))
-                .Any(state => state.StateID == stateId);
+            StateInfo.Provider.Get(stateId)?.CountryID == GetUsCountry().CountryID;
     }
 }

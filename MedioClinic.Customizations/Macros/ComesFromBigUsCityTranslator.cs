@@ -34,8 +34,7 @@ namespace MedioClinic.Customizations.Macros
 
             return ContactInfo.Provider.Get()
                 .WhereIn(nameof(ContactInfo.ContactCity), bigUsCityRepository.GetAllItems().Column(nameof(BigUsCitiesItem.CityName)))
-                .WhereIn(nameof(ContactInfo.ContactStateID), CountryHelper.GetUsStates().Column(nameof(StateInfo.StateID))
-                .WhereEquals(nameof(ContactInfo.ContactCountryID), CountryHelper.GetUsCountry().CountryID));
+                .WhereIn(nameof(ContactInfo.ContactStateID), CountryHelper.GetUsStates().Column(nameof(StateInfo.StateID)));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MedioClinic.Customizations.Macros
     {
         public const string ComesFromBigUsCityName = "MedioClinic.ContactComesFromBigUsCity";
 
-        [MacroMethod(typeof(bool), "Returns true if the contact's city is found in the MedioClinic.BigUsCities custom table and if the contact's state is an american one.", 1)]
+        [MacroMethod(typeof(bool), "Returns true if the contact's city is found in the MedioClinic.BigUsCities custom table and if the contact's state is an American one.", 1)]
         [MacroMethodParam(0, "contact", typeof(object), "Contact info object.")]
         public static object ComesFromBigUsCity(EvaluationContext context, params object[] parameters)
         {
@@ -34,8 +34,7 @@ namespace MedioClinic.Customizations.Macros
 
             if (contactInfo != null)
             {
-                return CountryHelper.ContactComesFromBigUsCity(contactInfo) 
-                    && CountryHelper.IsUsState(contactInfo.ContactStateID);
+                return CountryHelper.ContactComesFromBigUsCity(contactInfo);
             }
 
             return false;

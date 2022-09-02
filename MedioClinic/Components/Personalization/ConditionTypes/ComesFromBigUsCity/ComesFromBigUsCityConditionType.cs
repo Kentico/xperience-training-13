@@ -37,8 +37,7 @@ namespace MedioClinic.Personalization
 
             if (IsForBigCities && currentContact != null)
             {
-                return CountryHelper.ContactComesFromBigUsCity(currentContact)
-                    && CountryHelper.IsUsState(currentContact.ContactStateID);
+                return CountryHelper.ContactComesFromBigUsCity(currentContact);
             }
 
             return false;
