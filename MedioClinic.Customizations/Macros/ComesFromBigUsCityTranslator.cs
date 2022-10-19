@@ -14,7 +14,7 @@ namespace MedioClinic.Customizations.Macros
     public class ComesFromBigUsCityTranslator : IMacroRuleInstanceTranslator
     {
         /// <summary>
-        /// Returns all contacts who's city is found in the MedioClinic.BigUsCities custom table and who's state is an american one.
+        /// Depending on the {_comes} macro parameter, returns all contacts who's city is found in the MedioClinic.BigUsCities custom table and who's state is an American one.
         /// </summary>
         /// <param name="macroRuleInstance">Macro rule instance.</param>
         /// <returns>All contacts from big US cities.</returns>
@@ -31,10 +31,25 @@ namespace MedioClinic.Customizations.Macros
             }
 
             var bigUsCityRepository = Service.Resolve<IBigUsCityRepository>();
+            var comesOrDoesNotComeParameter = macroRuleInstance.Parameters["_comes"];
 
-            return ContactInfo.Provider.Get()
-                .WhereIn(nameof(ContactInfo.ContactCity), bigUsCityRepository.GetAllItems().Column(nameof(BigUsCitiesItem.CityName)))
-                .WhereIn(nameof(ContactInfo.ContactStateID), CountryHelper.GetUsStates().Column(nameof(StateInfo.StateID)));
+            if (comesOrDoesNotComeParameter.Value.Equals("!", StringComparison.OrdinalIgnoreCase))
+            {
+                return ContactInfo.Provider.Get()
+                    .WhereNotIn(nameof(ContactInfo.ContactStateID), CountryHelper.GetUsStates().Column(nameof(StateInfo.StateID)))
+                    .Or()
+                    .WhereNull(nameof(ContactInfo.ContactStateID))
+                    .Or()
+                    .WhereNotIn(nameof(ContactInfo.ContactCity), bigUsCityRepository.GetAllItems().Column(nameof(BigUsCitiesItem.CityName)))
+                    .Or()
+                    .WhereNull(nameof(ContactInfo.ContactCity));
+            }
+            else
+            {
+                return ContactInfo.Provider.Get()
+                    .WhereIn(nameof(ContactInfo.ContactStateID), CountryHelper.GetUsStates().Column(nameof(StateInfo.StateID)))
+                    .WhereIn(nameof(ContactInfo.ContactCity), bigUsCityRepository.GetAllItems().Column(nameof(BigUsCitiesItem.CityName)));
+            }
         }
     }
 }

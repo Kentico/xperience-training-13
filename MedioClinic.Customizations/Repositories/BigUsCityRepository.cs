@@ -71,7 +71,7 @@ namespace MedioClinic.Customizations.Repositories
             params string[] cacheDependencies)
         {
             var query = GetQuery(filter);
-            var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
+            var cacheSettings = GetCacheSettings(cacheKey);
 
             return (await _progressiveCache.LoadAsync(async modifiedCacheSettings =>
             {
@@ -89,7 +89,7 @@ namespace MedioClinic.Customizations.Repositories
             params string[] cacheDependencies)
         {
             var query = GetQuery(filter);
-            var cacheSettings = GetCacheSettings(cacheKey, cacheDependencies);
+            var cacheSettings = GetCacheSettings(cacheKey);
 
             return _progressiveCache.Load(modifiedCacheSettings =>
                 {
@@ -115,7 +115,7 @@ namespace MedioClinic.Customizations.Repositories
             return query;
         }
 
-        private static CacheSettings GetCacheSettings(string cacheKey, params string[] cacheDependencies) =>
+        private static CacheSettings GetCacheSettings(string cacheKey) =>
             new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
 
         private static BigUsCity MapDtoProperties(BigUsCitiesItem item) => new BigUsCity

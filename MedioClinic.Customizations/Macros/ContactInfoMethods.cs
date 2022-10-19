@@ -22,19 +22,26 @@ namespace MedioClinic.Customizations.Macros
             switch (parameters.Length)
             {
                 case 1:
-                    return ComesFromBigUsCity(parameters[0]);
+                    {
+                        if (parameters[0] is ContactInfo)
+                        {
+                            return ComesFromBigUsCity(parameters[0] as ContactInfo);
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"The argument is not of the {typeof(ContactInfo)} type.", "contact");
+                        }
+                    }
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        private static bool ComesFromBigUsCity(object contact)
+        private static bool ComesFromBigUsCity(ContactInfo contact)
         {
-            var contactInfo = contact as ContactInfo;
-
-            if (contactInfo != null)
+            if (contact != null)
             {
-                return CountryHelper.ContactComesFromBigUsCity(contactInfo);
+                return CountryHelper.ContactComesFromBigUsCity(contact);
             }
 
             return false;

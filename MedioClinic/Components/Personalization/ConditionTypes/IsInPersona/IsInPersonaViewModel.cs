@@ -9,7 +9,6 @@ namespace MedioClinic.Personalization
         [Display(Name = "OnlineMarketing.Persona.CodeName")]
         public string? PersonaCodeName { get; set; }
 
-
         public List<IsInPersonaListItemViewModel>? AllPersonas { get; set; }
     }
 }
