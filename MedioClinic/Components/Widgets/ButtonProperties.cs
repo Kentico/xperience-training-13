@@ -9,6 +9,7 @@ namespace MedioClinic.Components.Widgets
     {
         [EditingComponent(TextInputComponent.IDENTIFIER, Label = "{$MedioClinic.Widget.Button.Url$}")]
         [Required]
+        [Url]
         public string? Url { get; set; }
 
         [EditingComponent(TextInputComponent.IDENTIFIER, Label = "{$MedioClinic.LinkTextResourceKey$}")]

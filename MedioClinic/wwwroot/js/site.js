@@ -69,10 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return section;
     };
 
-    medioClinic.verifyAbTestConversion = function (abTestConversionLoggerUrl) {
+    medioClinic.logAbTestConversion = function (abTestConversionLoggerUrl) {
         let xmlHttpReq = new XMLHttpRequest();
         xmlHttpReq.open("POST", abTestConversionLoggerUrl, true);
         xmlHttpReq.send(null);
+        return true;
     };
 
 }(window.medioClinic = window.medioClinic || {}));

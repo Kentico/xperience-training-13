@@ -14,7 +14,7 @@
             parameter = Model.Properties.ButtonColor
         };
 
-        var url = Url.Action(nameof(MedioClinic.Controllers.AbTestConversionController.VerifyConversion), "AbTestConversion", routeValues);
+        var url = Url.Action(nameof(MedioClinic.Controllers.AbTestConversionController.LogConversion), "AbTestConversion", routeValues);
 
         return Url.Kentico().AuthenticateUrlRaw(url);
     }
@@ -24,7 +24,7 @@
     var abTestsEnabled = ABTestInfoProvider.ABTestingEnabled(SiteService.CurrentSite.SiteName);
 
     var abTestConversionUrlLiteral = abTestsEnabled 
-        ? $"window.medioClinic.verifyAbTestConversion('{GetAbTestConversionUrl()}')" 
+        ? $"window.medioClinic.logAbTestConversion('{GetAbTestConversionUrl()}')" 
         : string.Empty;
 
     var colorLiteral = !string.IsNullOrEmpty(Model.Properties.ButtonColor)

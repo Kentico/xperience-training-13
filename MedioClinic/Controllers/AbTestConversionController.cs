@@ -32,7 +32,7 @@ namespace MedioClinic.Controllers
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
         }
 
-        public IActionResult VerifyConversion(string conversionName, string parameter)
+        public IActionResult LogConversion(string conversionName, string parameter)
         {
             if (string.IsNullOrEmpty(conversionName) || string.IsNullOrEmpty(parameter))
             {
