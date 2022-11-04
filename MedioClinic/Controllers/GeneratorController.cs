@@ -107,7 +107,8 @@ namespace MedioClinic.Controllers
                 return ErrorMessage(new ArgumentException("The node alias path must not be null or empty."));
             }
 
-            var page = _pageRetriever.Retrieve<TreeNode>(filter => filter.Path(uploadModel.Data.AbTestNodeAliasPath)).FirstOrDefault();
+            var trimmedPath = uploadModel.Data.AbTestNodeAliasPath.Trim();
+            var page = _pageRetriever.Retrieve<TreeNode>(filter => filter.Path(trimmedPath)).FirstOrDefault();
             var requestDomain = HttpContext.Request.Host.Host;
 
             try
