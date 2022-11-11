@@ -44,7 +44,6 @@ namespace XperienceAdapter.Generator
 
         public Generator(IActivityLogService activityLogService,
                          ISiteService siteService,
-                         IABTestConversionLogger abTestConversionLogger,
                          IAnalyticsLogger analyticsLogger,
                          IABTestManager abTestManager)
         {
