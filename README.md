@@ -21,6 +21,7 @@ As for the **Kentico Xperience 13 for developers** course, the repo offers the f
 As for the **Kentico Xperience 13 online marketing for developers** course, the repo offer the following branches:
 
 * To start coding along the exercises in the introductory **Contact management** module, you can checkout the [xp-marketing-for-developers-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-starting-point) branch. To see the the final state of development, checkout the [xp-marketing-for-developers-contact-management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management) branch.
+* To start coding along the exercises in the **Personalization** module, you can checkout the [xp-marketing-for-developers-personalization-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-personalization-starting-point) branch. To see the final state of development, checkout the [xp-marketing-for-developers-personalization](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-personalization) branch.
 
 The [master](https://github.com/Kentico/xperience-training-13) branch represents the final state of development of **both** the _Kentico Xperience 13 for developers_ and _Kentico Xperience 13 online marketing for developers_ courses, including their optional modules. The branch has all the code working together.
 
