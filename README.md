@@ -8,7 +8,11 @@ The repo contains the **Medio Clinic** sample website developed throughout the t
 * [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers)
 * [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
-## Branches
+### The current branch
+
+The code in the current branch serves as a starting point for the exercises in the **Personalization** module of the [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers) course.
+
+## Other branches
 
 The repo has branches that represent the various stages of development. The above two courses are split into modules. A course always has an introductory module, followed by several optional ones. Typically, a single branch represents the outcome of all the exercises in a given course module. At the same time, the branch serves as a starting point for another module or another course.
 
@@ -21,6 +25,7 @@ As for the **Kentico Xperience 13 for developers** course, the repo offers the f
 As for the **Kentico Xperience 13 online marketing for developers** course, the repo offer the following branches:
 
 * To start coding along the exercises in the introductory **Contact management** module, you can checkout the [xp-marketing-for-developers-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-starting-point) branch. To see the the final state of development, checkout the [xp-marketing-for-developers-contact-management](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-contact-management) branch.
+* To start coding along the exercises in the **Personalization** module, you can checkout the [xp-marketing-for-developers-personalization-starting-point](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-personalization-starting-point) branch. To see the final state of development, checkout the [xp-marketing-for-developers-personalization](https://github.com/Kentico/xperience-training-13/tree/xp-marketing-for-developers-personalization) branch.
 
 The [master](https://github.com/Kentico/xperience-training-13) branch represents the final state of development of **both** the _Kentico Xperience 13 for developers_ and _Kentico Xperience 13 online marketing for developers_ courses, including their optional modules. The branch has all the code working together.
 
