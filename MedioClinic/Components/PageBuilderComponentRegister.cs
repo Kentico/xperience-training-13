@@ -133,7 +133,7 @@ using MedioClinic.PageTemplates;
 [assembly: RegisterWidget(
     ComponentIdentifiers.FileDownloadWidget,
     typeof(FileDownloadViewComponent),
-    "File download widget",
+    "{$" + ComponentIdentifiers.FileDownloadWidget + ".Title$}",
     typeof(FileDownloadProperties),
     AllowCache = true,
     Description = "File download widget",
