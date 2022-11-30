@@ -1,4 +1,7 @@
-﻿using Common;
+﻿using CMS.Base;
+using CMS.DocumentEngine;
+
+using Common;
 
 namespace XperienceAdapter.Generator
 {
@@ -6,12 +9,12 @@ namespace XperienceAdapter.Generator
     {
         void GenerateContacts(string path);
 
-        void GenerateActivities();
+        void GenerateFormData(string path, string formCodename, ITreeNode treeNode);
 
-        void GeneratePersona();
+        void GenerateActivities();
 
         void GenerateContactGroup();
 
-        void GenerateConversions();
+        void GenerateAbTestConversions(TreeNode page, string requestDomain);
     }
 }

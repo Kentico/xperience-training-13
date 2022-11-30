@@ -17,6 +17,8 @@ namespace MedioClinic.Components
 
         private const string WidgetPrefix = Prefix + "Widget.";
 
+        private const string PersonalizationConditionPrefix = Prefix + "PersonalizationCondition.";
+
         private const string FieldValidationRulePrefix = Prefix + "FieldValidationRule.";
 
         public const string BasicPageTemplate = PageTemplatePrefix + "Basic";
@@ -46,5 +48,13 @@ namespace MedioClinic.Components
         public const string DateSelectionFormComponent = FormComponentPrefix + "DateSelection";
 
         public const string FileDownloadWidget = WidgetPrefix + "FileDownload";
+
+        public const string IsInPersonaCondition = PersonalizationConditionPrefix + "IsInPersona";
+
+        public const string ComesFromBigUsCityCondition = PersonalizationConditionPrefix + "ComesFromBigUsCity";
+
+        public const string ColorSelectionFormComponent = FormComponentPrefix + "ColorSelection";
+
+        public const string ButtonWidget = WidgetPrefix + "Button";
     }
 }

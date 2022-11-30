@@ -1,0 +1,52 @@
+﻿@using MedioClinic.Controllers
+@model PageViewModel<GeneratorViewModel>
+
+@{
+    const string GeneratorControllerName = "Generator";
+}
+
+<div class="container">
+    <partial name="~/Views/Shared/_UserMessage.cshtml" for="UserMessage" />
+    <h2>@Html.DisplayFor(m => m.Metadata.Title)</h2>
+    <section class="card" id="contacts">
+        <form asp-action="@nameof(GeneratorController.GenerateContacts)"
+              asp-controller="@GeneratorControllerName"
+              asp-antiforgery="true">
+            <div class="card-content">
+                <span class="card-title">Contacts</span>
+                <p>Press the button to generate sample contacts used in multiple scenarios throughout this course. You'll find the contacts in the administration application in the &quot;Contact management&quot; app.</p>
+            </div>
+            <div class="card-action">
+                <button type="submit" name="submit" class="btn waves-effect waves-light">Generate contacts</button>
+            </div>
+        </form>
+    </section>
+    <section class="card" id="form-data">
+        <form asp-action="@nameof(GeneratorController.GenerateFormData)"
+              asp-controller="@GeneratorControllerName"
+              asp-antiforgery="true">
+            <div class="card-content">
+                <span class="card-title">Form data</span>
+                <p>Press the button to generate sample form data. You'll find the data in the administration application in the &quot;Forms&quot; or &quot;Form data&quot; apps.</p>
+            </div>
+            <div class="card-action">
+                <button type="submit" name="submit" class="btn waves-effect waves-light">Generate form data</button>
+            </div>
+        </form>
+    </section>
+    <section class="card" id="ab-test-conversions">
+        <form asp-action="@nameof(GeneratorController.GenerateAbTestConversions)"
+              asp-controller="@GeneratorControllerName"
+              asp-antiforgery="true">
+            <div class="card-content">
+                <span class="card-title">A/B test conversions</span>
+                <p>Enter the node alias path of a page, whose A/B test you want the data be generated for.</p>
+                @Html.MedioClinicInputFor(m => m.Data.AbTestNodeAliasPath)
+                <p>Press the button to generate sample A/B test conversions. You'll find the data in the administration application in the &quot;A/B tests&quot;app.</p>
+            </div>
+            <div class="card-action">
+                <button type="submit" name="submit" class="btn waves-effect waves-light">Generate A/B test conversions</button>
+            </div>
+        </form>
+    </section>
+</div>

@@ -10,6 +10,10 @@ namespace XperienceAdapter.Generator
 
         public string? EmailAddress { get; set; }
 
+        public string? City { get; set; }
+
+        public string? StateCode { get; set; }
+
         public DateTime? TestingCenterStartingDate { get; set; }
     }
 }
