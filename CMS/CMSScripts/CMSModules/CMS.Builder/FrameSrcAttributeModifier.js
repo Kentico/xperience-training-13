@@ -21,7 +21,7 @@ cmsdefine([
         var url = serverData.frameSrc;
         var applicationPath = serverData.applicationPath;
 
-        if (urlHelper.isUrlSecure(currentUrlHelper.getCurrentUrl()) && !urlHelper.isUrlSecure(url)) {
+          if (isUrlSecure(url)) {
             msgService.showWarning(serverData.mixedContentMessage, true);
             frame.setAttribute("src", "about:blank");
             return;
@@ -37,7 +37,23 @@ cmsdefine([
         frameLoader.loadFrame(frame, url);
       }
     }
-  };
+    };
+
+    function isUrlSecure(url) {
+        // We are checking current url (admin url) if it's secured (https), 
+        // because we need to prevent mixed content (https and http frame on the same page).
+        if (!urlHelper.isUrlSecure(currentUrlHelper.getCurrentUrl())) {
+            return false;
+        }
+
+        try {
+            return !urlHelper.isUrlSecure(url);
+        }
+        catch {
+            // Relative URLs indicate an admin page to be displayed.
+            return true;
+        }
+    }
 
   return Module;
 });

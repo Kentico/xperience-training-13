@@ -15,7 +15,7 @@ using CMS.Modules;
 using CMS.UIControls;
 using CMS.WorkflowEngine;
 
-[Security(Resource = ModuleName.ONLINEMARKETING, UIElements = "EditProcess;EditProcessContacts")]
+[Security(Resource = ModuleName.ONLINEMARKETING, UIElements = "EditProcess")]
 [EditedObject(WorkflowInfo.OBJECT_TYPE, "processid")]
 public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Tab_Contacts : CMSAutomationPage
 {

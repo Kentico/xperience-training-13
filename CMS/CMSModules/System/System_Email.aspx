@@ -3,6 +3,8 @@
     Title="Administration - System - Email"  Codebehind="System_Email.aspx.cs" %>
 
 <%@ Register Src="~/CMSFormControls/Inputs/EmailInput.ascx" TagName="EmailInput" TagPrefix="cms" %>
+<%@ Register Src="~/CMSFormControls/System/EnumSelector.ascx" TagName="EnumSelector" TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/UniSelector/UniSelector.ascx" TagPrefix="cms" TagName="UniSelector" %>
 
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">            
     <div class="form-horizontal">
@@ -26,25 +28,51 @@
                 <cms:CMSTextBox ID="txtUserName" runat="server" MaxLength="200" />
             </div>
         </div>
-        <div class="form-group">
-            <div class="editing-form-label-cell">
-                <cms:LocalizedLabel CssClass="control-label" ID="lblPassword" runat="server" EnableViewState="false" 
-                    ResourceString="System_Email.SMTPPassword" DisplayColon="true" AssociatedControlID="txtPassword" />
-            </div>
-            <div class="editing-form-value-cell">
-                <cms:CMSTextBox ID="txtPassword" runat="server" TextMode="Password" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="editing-form-label-cell">
-                <cms:LocalizedLabel CssClass="control-label" ID="lblSSL" runat="server" EnableViewState="false" 
-                    ResourceString="System_Email.SSL" DisplayColon="true" AssociatedControlID="chkSSL" />
-            </div>
-            <div class="editing-form-value-cell">
-                <cms:CMSCheckBox runat="server" ID="chkSSL" />
-            </div>
-        </div>
+        <cms:CMSUpdatePanel ID="pnlUpdateAuthenticationType" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <div class="form-group">
+                    <div class="editing-form-label-cell">
+                        <cms:LocalizedLabel CssClass="control-label" ID="lblAuthenticationType" runat="server" EnableViewState="false" 
+                            ResourceString="System_Email.SMTPServerAuthenticationType" DisplayColon="true" AssociatedControlID="rbAuthenticationType" />
+                    </div>
+                    <div class="editing-form-value-cell">
+                        <cms:EnumSelector runat="server" ID="rbAuthenticationType" AssemblyName="CMS.EmailEngine" TypeName="CMS.EmailEngine.EmailServerAuthenticationType" DisplayType="RadioButtonsHorizontal" />
+                    </div>
+                </div>
+          </ContentTemplate>
+        </cms:CMSUpdatePanel>
+        <cms:CMSUpdatePanel ID="pnlAuthentication" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
+            <ContentTemplate>
+                <asp:PlaceHolder ID="plcOAuth" runat="server">
+                    <div class="form-group">
+                        <div class="editing-form-label-cell">
+                            <cms:LocalizedLabel CssClass="control-label" ID="lblOAuthCredentials" runat="server" EnableViewState="false" 
+                                ResourceString="System_Email.SMTPServerOAuthCredentials" DisplayColon="true" AssociatedControlID="selOAuthCredentials" />
+                        </div>
+                        <div class="editing-form-value-cell">
+                            <cms:UniSelector ID="selOAuthCredentials" runat="server" ObjectType="cms.emailoauthcredentials" ReturnColumnName="EmailOAuthCredentialsGUID" 
+                                AllowEmpty="False" AllowAll="false"
+                                DisplayNameFormat="{%EmailOAuthCredentialsDisplayName%} ({%EmailOAuthCredentialsProviderClass%})" 
+                                SelectionMode="SingleTextBox"  OrderBy="EmailOAuthCredentialsProviderClass, EmailOAuthCredentialsDisplayName"/>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plcBasic" runat="server">
+                    <div class="form-group">
+                        <div class="editing-form-label-cell">
+                            <cms:LocalizedLabel CssClass="control-label" ID="lblPassword" runat="server" EnableViewState="false" 
+                                ResourceString="System_Email.SMTPPassword" DisplayColon="true" AssociatedControlID="txtPassword" />
+                        </div>
+                        <div class="editing-form-value-cell">
+                            <cms:CMSTextBox ID="txtPassword" runat="server" TextMode="Password" />
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+            </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="rbAuthenticationType:radEnum" EventName="SelectedIndexChanged" />
+            </Triggers>
+        </cms:CMSUpdatePanel>
         <div class="form-group">
             <div class="editing-form-label-cell">
                 <cms:LocalizedLabel CssClass="control-label" ID="lblFrom" runat="server" EnableViewState="false" 

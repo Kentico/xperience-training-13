@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.UI;
 
 using CMS.Base.Web.UI;
 using CMS.Core;
@@ -12,13 +13,16 @@ using CMS.UIControls;
 
 
 [UIElement(ModuleName.CONTENT, "content")]
-public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
+public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage, ICallbackEventHandler
 {
     #region "Variables & constants"
 
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_Content_CMSDesk_Default);
+
+
     private int? mResultNodeID;
     private string mResultMode;
-	private readonly ContentUrlRetriever urlRetriever;
+    private readonly ContentUrlRetriever urlRetriever;
 
     #endregion
 
@@ -47,7 +51,7 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
     {
         get
         {
-			return ValidationHelper.GetString(Request.Params["selectedCulture"], LocalizationContext.PreferredCultureCode);
+            return ValidationHelper.GetString(Request.Params["selectedCulture"], LocalizationContext.PreferredCultureCode);
         }
     }
 
@@ -152,6 +156,9 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
 
     protected override void OnInit(EventArgs e)
     {
+        layoutElem.OnResizeEndScript = ScriptHelper.GetLayoutResizeScript(contentcontrolpanel, this);
+        layoutElem.MaxSize = "50%";
+
         EnsureScriptManager();
 
         if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
@@ -165,6 +172,12 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
 
             // Set the view mode if specified in query string
             PortalContext.UpdateViewMode(ViewModeEnum.Edit);
+
+            var width = UILayoutHelper.GetLayoutWidth(UI_LAYOUT_KEY);
+            if (width.HasValue)
+            {
+                contentcontrolpanel.Size = width.ToString();
+            }
         }
 
         // Check (and ensure) the proper content culture
@@ -172,10 +185,10 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
 
         contentcontrolpanel.Values.AddRange(new[]
         {
-	        new UILayoutValue("NodeID", ResultNodeID), 
-			new UILayoutValue("ExpandNodeID", ExpandNodeID), 
-			new UILayoutValue("Culture", SelectedCulture), 
-			new UILayoutValue("SelectedMode", ResultMode)
+            new UILayoutValue("NodeID", ResultNodeID),
+            new UILayoutValue("ExpandNodeID", ExpandNodeID),
+            new UILayoutValue("Culture", SelectedCulture),
+            new UILayoutValue("SelectedMode", ResultMode)
         });
 
         base.OnInit(e);
@@ -208,6 +221,25 @@ public partial class CMSModules_Content_CMSDesk_Default : CMSContentPage
             // Set default live site URL in header link
             ScriptHelper.RegisterClientScriptBlock(this, typeof(string), "SetDefaultLiveSiteURL", ScriptHelper.GetScript("SetLiveSiteURL('" + HttpUtility.JavaScriptStringEncode(urls[1]) + "');"));
         }
+    }
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UI_LAYOUT_KEY, width);
+            }
+        }
+    }
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
     }
 
     #endregion

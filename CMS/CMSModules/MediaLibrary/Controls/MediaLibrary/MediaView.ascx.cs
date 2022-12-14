@@ -197,6 +197,21 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         }
     }
 
+    /// <summary>
+    /// Indicates whether or not the <see cref="ContentInnerMediaView"/> is in search mode.
+    /// </summary>
+    public bool IsInSearchMode
+    {
+        get
+        {
+            return innermedia.IsInSearchMode;
+        }
+        set
+        {
+            innermedia.IsInSearchMode = value;
+        }
+    }
+
 
     /// <summary>
     /// Gets list of names of selected files.
@@ -257,6 +272,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
 
         innermedia.ViewMode = ViewMode;
         innermedia.IsLiveSite = IsLiveSite;
+        innermedia.LibraryFolder = LibraryInfo?.LibraryFolder;
     }
 
     #endregion
@@ -299,6 +315,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         innermedia.ResizeToHeight = ResizeToHeight;
         innermedia.ResizeToMaxSideSize = ResizeToMaxSideSize;
         innermedia.ResizeToWidth = ResizeToWidth;
+        innermedia.LibraryFolder = LibraryInfo?.LibraryFolder;
 
         // Set inner control binding columns
         innermedia.FileIdColumn = "FileGUID";
@@ -307,6 +324,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         innermedia.FileSizeColumn = "FileSize";
         innermedia.FileWidthColumn = "FileImageWidth";
         innermedia.FileHeightColumn = "FileImageHeight";
+        innermedia.FilePath = "FilePath";
 
         // Register for inner media events
         innermedia.GetArgumentSet += innermedia_GetArgumentSet;
@@ -314,6 +332,11 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView : M
         innermedia.GetThumbsItemUrl += innermedia_GetThumbsItemUrl;
         innermedia.GetInformation += innermedia_GetInformation;
         innermedia.GetModifyPermission += innermedia_GetModifyPermission;
+
+        if (SourceType == MediaSourceEnum.MediaLibraries && !IsCopyMoveLinkDialog)
+        {
+            dialogSearch.SetWatermarkText(GetString("dialogs.view.searchbynametitledesc"));
+        }
     }
 
 
@@ -723,7 +746,7 @@ function SetParentAction(argument) {
 
         string[] argArr = argument.Split('|');
         // Fill table
-        for (int i = 0; i < argArr.Length; i = i + 2)
+        for (int i = 0; i < argArr.Length; i += 2)
         {
             table[argArr[i].ToLowerCSafe()] = CMSDialogHelper.UnEscapeArgument(argArr[i + 1]);
         }

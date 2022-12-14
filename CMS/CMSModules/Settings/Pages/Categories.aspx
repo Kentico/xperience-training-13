@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CMSModules_Settings_Pages_Categories"
     Theme="Default" MasterPageFile="~/CMSMasterPages/UI/EmptyPage.master" Title="Settings"
-     Codebehind="Categories.aspx.cs" %>
+    CodeBehind="Categories.aspx.cs" %>
 
 <%@ Register Src="~/CMSAdminControls/UI/Trees/TreeBorder.ascx" TagName="TreeBorder"
     TagPrefix="cms" %>
@@ -9,5 +9,11 @@
 <asp:Content ID="cntBody" runat="server" ContentPlaceHolderID="plcContent">
     <cms:TreeBorder ID="borderElem" runat="server" FramesetName="colsFrameset" />
     <cms:SettingsTree ID="TreeViewCategories" ShortID="t" runat="server" CssClass="ContentTree"
-        CategoryName="CMS.Settings" MaxRelativeLevel="10" JavaScriptHandler="NodeSelected" ShowEmptyCategories="false" ShowSiteSelector="True" ShowHeaderPanel="False"/>
+        CategoryName="CMS.Settings" MaxRelativeLevel="10" JavaScriptHandler="NodeSelected" ShowEmptyCategories="false" ShowSiteSelector="True" ShowHeaderPanel="False" />
+
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        window.dynamicDialogWidth = true;
+    //]]>
+    </script>
 </asp:Content>

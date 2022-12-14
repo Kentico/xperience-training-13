@@ -40,7 +40,7 @@ public class LicenseListControlExtender : ControlExtender<UniGrid>
     /// <summary>
     /// Sales e-mail address
     /// </summary>
-    private const string SALES_MAIL = "sales@xperience.io";
+    private const string SALES_MAIL = "sales@kentico.com";
 
     #endregion
 

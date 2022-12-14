@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -168,7 +167,6 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         base.OnInit(e);
     }
 
-
     protected void Page_Load(object sender, EventArgs e)
     {
         Visible = !StopProcessing;
@@ -258,6 +256,21 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
             if (gridList.NamedColumns.ContainsKey("extedit"))
             {
                 gridList.NamedColumns["extedit"].Visible = false;
+            }
+        }
+
+        // Hide or display mass actions drop-down list and selection if displayed for MediaLibrary UI depending on if the search was performed
+        if (!IsCopyMoveLinkDialog && DisplayMode == ControlDisplayModeEnum.Simple && SourceType == MediaSourceEnum.MediaLibraries && gridList.GridOptions.ShowSelection)
+        {
+            if (IsInSearchMode)
+            {
+                gridList.GridView.Columns[0].Visible = false;
+                pnlMassAction.Visible = false;
+            }
+            else
+            {
+                gridList.GridView.Columns[0].Visible = true;
+                pnlMassAction.Visible = true;
             }
         }
 

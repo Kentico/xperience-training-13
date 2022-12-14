@@ -621,6 +621,35 @@
             Releases file lock.
             </summary>
         </member>
+        <member name="T:CMS.Search.Internal.SystemSearchIndexers">
+            <summary>
+            Manages the system search indexers used for specific system search index.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.SystemSearchIndexers.Register``2(System.String)">
+            <summary>
+            Registers the given system indexer and its results converter under specified name.
+            </summary>
+            <param name="indexerName">Name of the system indexer.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SystemSearchIndexers.Get(System.String)">
+            <summary>
+            Returns specified system search indexer.
+            </summary>
+            <param name="indexerName">Name of the system indexer.</param>        
+        </member>
+        <member name="M:CMS.Search.Internal.SystemSearchIndexers.GetSystemConverter``1(System.String)">
+            <summary>
+            Returns converter for specified system search indexer.
+            </summary>
+            <typeparam name="TModel">Type of model returned by converter.</typeparam>
+            <param name="indexerName">Name of the system indexer.</param>
+        </member>
+        <member name="M:CMS.Search.Internal.SystemSearchIndexers.GetAll">
+            <summary>
+            Returns all registered system indexers.
+            </summary>        
+        </member>
         <member name="T:CMS.Search.Internal.IndexLogger">
             <summary>
             Class encapsulates logic to log actions related to indexes and search tasks.
@@ -784,6 +813,17 @@
             Gets searchables retriever related to given <paramref name="objectType"/>.
             </summary>
             <param name="objectType">Object type.</param>
+        </member>
+        <member name="T:CMS.Search.Internal.ISystemIndexResultsProvider">
+            <summary>
+            Provides an interface to the system index search results provider.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.Internal.ISystemIndexResultsProvider.Search(CMS.Search.SystemIndexSearchParameters)">
+            <summary>
+            Searches system index based on specified search parameters.
+            </summary>
+            <param name="parameters">Search parameters.</param>
         </member>
         <member name="T:CMS.Search.ICrawlerAuthCookieBuilder">
             <summary>
@@ -1263,6 +1303,23 @@
             <param name="index">Search index</param>
             <param name="searchFields">Search fields collection</param>
         </member>
+        <member name="T:CMS.Search.ISystemSearchIndexer">
+            <summary>
+            System search indexer used to index objects belonging to system smart search indexes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISystemSearchIndexer.ExecuteTask(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Executes specified search task.
+            </summary>
+            <param name="searchTask">Search task to execute.</param>
+        </member>
+        <member name="M:CMS.Search.ISystemSearchIndexer.IsObjectTypeIndexed(System.String)">
+            <summary>
+            Indicates if given object type is covered by the index.
+            </summary>
+            <param name="objectType">Object type.</param>
+        </member>
         <member name="T:CMS.Search.SearchIndexer">
             <summary>
             Base class for search indexer
@@ -1295,6 +1352,12 @@
             Executes the search index task
             </summary>
             <param name="sti">Search task</param>
+        </member>
+        <member name="M:CMS.Search.SearchIndexer.IsTaskProcessingAllowed(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Indicates if task processing is allowed for given task.
+            </summary>
+            <param name="sti">Search task to process.</param>
         </member>
         <member name="M:CMS.Search.SearchIndexer.ExecuteUpdateTask(CMS.Search.SearchTaskInfo)">
             <summary>
@@ -1412,45 +1475,45 @@
         </member>
         <member name="T:CMS.Search.SearchIndexers">
             <summary>
-            Manages the search indexers used for specific object type
+            Manages the search indexers used for specific object type.
             </summary>
         </member>
         <member name="F:CMS.Search.SearchIndexers.mIndexers">
             <summary>
-            Registered search indexer tasks by their type
+            Registered search indexer tasks by their type.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchIndexers.DefaultIndexer">
             <summary>
-            Default search indexer
+            Default search indexer.
             </summary>
         </member>
         <member name="P:CMS.Search.SearchIndexers.IndexerTypes">
             <summary>
-            Returns the collection of the indexers
+            Returns the collection of the indexers.
             </summary>
         </member>
         <member name="M:CMS.Search.SearchIndexers.Init">
             <summary>
-            Initializes the system indexers
+            Initializes the system indexers.
             </summary>
         </member>
         <member name="M:CMS.Search.SearchIndexers.RegisterDefaultIndexer``1">
             <summary>
-            Registers the default indexer which handles the search for all object types which don't have specific indexer
+            Registers the default indexer which handles the search for all object types which don't have specific indexer.
             </summary>
         </member>
         <member name="M:CMS.Search.SearchIndexers.RegisterIndexer``1(System.String)">
             <summary>
             Registers the given indexer under specified name. Usually an object type that is handled by the indexer.
             </summary>
-            <param name="indexerName">Name of the indexer</param>
+            <param name="indexerName">Name of the indexer.</param>
         </member>
         <member name="M:CMS.Search.SearchIndexers.GetIndexer(System.String)">
             <summary>
             Gets the indexer by its name. Usually an object type.
             </summary>
-            <param name="indexerName">Name of the indexer</param>
+            <param name="indexerName">Name of the indexer.</param>
         </member>
         <member name="T:CMS.Search.ExtractionContext">
             <summary>
@@ -2257,7 +2320,7 @@
         </member>
         <member name="M:CMS.Search.SearchIndexInfoProvider.IsObjectTypeIndexed(System.String)">
             <summary>
-            Determines whether the class has a general index.
+            Determines whether the class has a general or system index.
             </summary>
             <param name="objectType">Object type</param>
         </member>
@@ -3283,6 +3346,11 @@
             Constant for custom search index.
             </summary>
         </member>
+        <member name="F:CMS.Search.SearchHelper.SYSTEM_SEARCH_INDEX">
+            <summary>
+            Constant for system search index.
+            </summary>
+        </member>
         <member name="F:CMS.Search.SearchHelper.DEFAULT_SEARCH_TITLE_COLUMN">
             <summary>
             Constant for default class search title column.
@@ -3442,12 +3510,6 @@
             <param name="indexID">Index ID</param>
             <returns>True if search task was created, false if not</returns>
         </member>
-        <member name="M:CMS.Search.SearchHelper.IsClassSearchEnabled(System.String)">
-            <summary>
-            Returns true if given class allows search.
-            </summary>
-            <param name="className">Code name of the class</param>
-        </member>
         <member name="M:CMS.Search.SearchHelper.Optimize(CMS.Search.SearchIndexInfo)">
             <summary>
             Optimize specified index.
@@ -3466,6 +3528,20 @@
             Rebuild specified index.
             </summary>
             <param name="indexInfo">Search index</param>
+        </member>
+        <member name="M:CMS.Search.SearchHelper.RebuildIndex(CMS.Search.SearchIndexInfo,System.Action{CMS.Search.SearchIndexInfo})">
+            <summary>
+            Rebuilds search index with given rebuild action and sets correct status of the index based on the rebuild result.
+            </summary>
+            <param name="searchIndex">Search index.</param>
+            <param name="rebuildAction">Action to use for index rebuild.</param>
+        </member>
+        <member name="M:CMS.Search.SearchHelper.RebuildIndex(CMS.Search.SearchIndexInfo,System.Func{CMS.Search.SearchIndexInfo,System.Collections.Generic.IEnumerable{CMS.DataEngine.SearchDocument}})">
+            <summary>
+            Rebuilds search index based on the provided search documents.
+            </summary>
+            <param name="searchIndex">Search index.</param>
+            <param name="getSearchDocuments">Provides search documents to be used for the rebuild.</param>
         </member>
         <member name="M:CMS.Search.SearchHelper.FinishRebuild(CMS.Search.SearchIndexInfo)">
             <summary>
@@ -3496,6 +3572,12 @@
             <param name="fieldName">Field name</param>
             <param name="value">Field value</param>
             <param name="indexInfo">Search index</param>
+        </member>
+        <member name="M:CMS.Search.SearchHelper.RebuildSystemIndexes(System.Nullable{System.Boolean})">
+            <summary>
+            Rebuilds system indexes.
+            </summary>
+            <param name="runIndexer">Indicates whether the indexer starts immediately.</param>
         </member>
         <member name="M:CMS.Search.SearchHelper.HighlightMatch(System.Text.RegularExpressions.Match,System.Object[]@)">
             <summary>
@@ -3658,9 +3740,15 @@
         </member>
         <member name="M:CMS.Search.SearchHelper.SearchEnabledForClass(System.String)">
             <summary>
-            Returns true if search is enabled for a given class (document type). Returns false if class not found.
+            Returns true if search is enabled for a given class. Returns false if class not found.
             </summary>
             <param name="className">Name of the class</param>
+        </member>
+        <member name="M:CMS.Search.SearchHelper.IsClassSearchEnabled(System.String)">
+            <summary>
+            Returns true if given class allows search.
+            </summary>
+            <param name="className">Code name of the class</param>
         </member>
         <member name="M:CMS.Search.SearchHelper.GetSearchFieldDefaultValue(System.String,System.Type)">
             <summary>
@@ -4342,6 +4430,75 @@
             <param name="obj">Input object</param>]
             <param name="collection">Collection of highlighted words</param>
         </member>
+        <member name="T:CMS.Search.ISystemIndexSearchResult">
+            <summary>
+            Interface representing system index search result.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISystemIndexSearchResult.Get(System.String)">
+            <summary>
+            Gets the value of specified field.
+            </summary>
+            <param name="name">Field name.</param>
+        </member>
+        <member name="T:CMS.Search.ISystemIndexSearchResultsConverter`1">
+            <summary>
+            Converts system index search results to desired model.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISystemIndexSearchResultsConverter`1.Convert(System.Collections.Generic.IEnumerable{CMS.Search.ISystemIndexSearchResult},CMS.Search.SystemIndexSearchParameters)">
+            <summary>
+            Converts system index search results to desired model.
+            </summary>
+            <param name="searchResults">System index search results.</param>
+            <param name="searchParameters">Search parameters.</param>        
+        </member>
+        <member name="T:CMS.Search.ISystemIndexSearchService">
+            <summary>
+            Provides interface for service that allows searching in system search indexes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.ISystemIndexSearchService.Search``1(CMS.Search.SystemIndexSearchParameters)">
+            <summary>
+            Searches system index based on specified parameters and returns results with desired model.
+            </summary>
+            <typeparam name="TModel">Type of result model.</typeparam>
+            <param name="searchParameters">Search parameters.</param>
+        </member>
+        <member name="T:CMS.Search.SystemIndexSearchParameters">
+            <summary>
+            Defines the search parameters used for search in system index.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.SystemIndexSearchParameters.SearchQuery">
+            <summary>
+            Search query.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.SystemIndexSearchParameters.SearchIndex">
+            <summary>
+            System search index where to search.
+            </summary>
+        </member>
+        <member name="P:CMS.Search.SystemIndexSearchParameters.User">
+            <summary>
+            User to apply permission restrictions.
+            </summary>
+        </member>
+        <member name="T:CMS.Search.SystemIndexSearchService">
+            <summary>
+            Service that allows searching in system search indexes.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SystemIndexSearchService.#ctor(CMS.Search.Internal.ISystemIndexResultsProvider)">
+            <summary>
+            Creates an instance of <see cref="T:CMS.Search.SystemIndexSearchService"/> class.
+            </summary>
+            <param name="systemIndexResultsProvider">System index search results provider.</param>
+        </member>
+        <member name="M:CMS.Search.SystemIndexSearchService.Search``1(CMS.Search.SystemIndexSearchParameters)">
+            <inheritdoc/>
+        </member>
         <member name="T:CMS.Search.DocumentFilterSearchResultsParameters">
             <summary>
             Settings for search index permission check for documents
@@ -4777,6 +4934,17 @@
             <summary>
             Represents indexer thread.
             </summary>
+        </member>
+        <member name="T:CMS.Search.SearchTaskProcessor">
+            <summary>
+            Processes local search indexes tasks.
+            </summary>
+        </member>
+        <member name="M:CMS.Search.SearchTaskProcessor.ProcessTask(CMS.Search.SearchTaskInfo)">
+            <summary>
+            Process specified local search index task.
+            </summary>
+            <param name="taskInfo">Search task to process.</param>
         </member>
         <member name="T:CMS.Search.SearchIndexOptimizer">
             <summary>
