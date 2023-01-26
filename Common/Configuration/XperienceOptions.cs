@@ -99,5 +99,9 @@ namespace Common.Configuration
     public class OnlineMarketingOptions
     {
         public string AnalyticalCookiesConsentName { get; set; }
+
+        public string NewsletterSubscriptionConsentName { get; set; }
+
+        public bool SendConfirmationEmails { get; set; }
     }
 }
