@@ -36,7 +36,7 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index(int code)
         {
-            var metadata = new MedioClinic.Models.PageMetadata();
+            var metadata = new PageMetadata();
 
             if (code == 404)
             {

@@ -81,12 +81,20 @@ namespace MedioClinic.Controllers
         public IActionResult ConfirmSubscription(NewsletterSubscriptionConfirmationModel model)
         {
             var outputModel = CreateDefaultOutputModel("MedioClinic.EmailMarketing.SubscriptionConfirmation");
-            
+
             if (!ModelState.IsValid)
             {
-                _logger.LogError($"A contact could not confirm their newsletter subscription due to invalid data. Hash: {model.SubscriptionHash}, date: {model.DateTime}.");
+                if (string.IsNullOrEmpty(model?.SubscriptionHash) && string.IsNullOrEmpty(model?.DateTime))
+                {
+                    // An expected ping from the administration application, not logged as an error.
+                    return Ok();
+                }
+                else
+                {
+                    _logger.LogError($"A contact could not confirm their newsletter subscription due to invalid data. Hash: {model.SubscriptionHash}, date: {model.DateTime}.");
 
-                return View(MessageViewName, outputModel);
+                    return View(MessageViewName, outputModel);
+                }
             }
 
             var result = _emailCommunicationService.ConfirmSubscription(model);
@@ -138,9 +146,20 @@ namespace MedioClinic.Controllers
 
             if (!ModelState.IsValid)
             {
+                if (model?.NewsletterGuid == Guid.Empty 
+                    && model?.IssueGuid == Guid.Empty 
+                    && string.IsNullOrEmpty(model?.Email) 
+                    && model?.UnsubscribeFromAll == false)
+                {
+                    // An expected ping from the administration application, not logged as an error.
+                    return Ok();
+                }
+                else
+                {
                 _logger.LogError($"A contact could not unsubscribe from a newsletter due to invalid data. Email: {model.Email}, newsletter GUID: {model.NewsletterGuid}, issue GUID: {model.IssueGuid}, hash: {model.Hash}.");
 
                 return View(MessageViewName, outputModel);
+                }
             }
 
             var result = await _emailCommunicationService.UnsubscribeAsync(model, cancellationToken);
