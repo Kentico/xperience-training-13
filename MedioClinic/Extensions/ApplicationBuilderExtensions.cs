@@ -58,8 +58,8 @@ namespace MedioClinic.Extensions
                 // Store the original paths so the app can check it.
                 context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(new StatusCodeReExecuteFeature()
                 {
-                    OriginalPathBase = context.HttpContext.Request.PathBase.Value,
-                    OriginalPath = originalPath.Value,
+                    OriginalPathBase = context.HttpContext.Request.PathBase.Value!,
+                    OriginalPath = originalPath.Value!,
                     OriginalQueryString = originalQueryString.HasValue ? originalQueryString.Value : null,
                 });
 
