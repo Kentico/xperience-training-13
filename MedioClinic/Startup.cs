@@ -39,6 +39,7 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using MedioClinic.PageTemplates;
+using Kentico.Newsletters.Web.Mvc;
 
 namespace MedioClinic
 {
@@ -73,9 +74,9 @@ namespace MedioClinic
             {
                 features.UsePageBuilder();
                 features.UseActivityTracking();
-                // features.UseABTesting();
+                features.UseABTesting();
                 features.UseWebAnalytics();
-                // features.UseEmailTracking();
+                features.UseEmailTracking();
                 // features.UseCampaignLogger();
                 // features.UseScheduler();
                 features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });

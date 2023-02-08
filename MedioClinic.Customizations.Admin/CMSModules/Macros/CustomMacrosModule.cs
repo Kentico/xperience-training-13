@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using CMS;
+using CMS.Activities;
 using CMS.ContactManagement;
 using CMS.DataEngine;
 
@@ -21,7 +22,7 @@ namespace MedioClinic.Customizations.Admin.CMSModules.Macros
         {
             base.OnInit();
 
-            var metadata = new MacroRuleMetadata(ContactInfoMethods.ComesFromBigUsCityName,
+            var comesFromBigUsCityMetadata = new MacroRuleMetadata(ContactInfoMethods.ComesFromBigUsCityName,
                                                  new ComesFromBigUsCityTranslator(),
                                                  new List<string>(0),
                                                  new List<string>
@@ -31,7 +32,17 @@ namespace MedioClinic.Customizations.Admin.CMSModules.Macros
                                                      nameof(ContactInfo.ContactCity)
                                                  });
 
-            MacroRuleMetadataContainer.RegisterMetadata(metadata);
+            MacroRuleMetadataContainer.RegisterMetadata(comesFromBigUsCityMetadata);
+
+            var clickedLinkInEmailInLastDaysMetadata = new MacroRuleMetadata(ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName,
+                                     new ContactHasClickedLinkInEmailInLastDaysTranslator(),
+                                     new List<string>
+                                     {
+                                         PredefinedActivityType.NEWSLETTER_CLICKTHROUGH
+                                     },
+                                     new List<string>(0));
+
+            MacroRuleMetadataContainer.RegisterMetadata(clickedLinkInEmailInLastDaysMetadata);
         }
     }
 }
