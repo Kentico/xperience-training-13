@@ -20,7 +20,7 @@ namespace MedioClinic.Customizations.Macros
 
             if (!macroRuleInstance.MacroRuleName.Equals(ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName, StringComparison.Ordinal))
             {
-                throw new ArgumentException($"[{nameof(ComesFromBigUsCityTranslator)}.{nameof(ComesFromBigUsCityTranslator.Translate)}]: Only macro rule instances of type {ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName} can be translated.");
+                throw new ArgumentException($"[{nameof(ContactHasClickedLinkInEmailInLastDaysTranslator)}.{nameof(ContactHasClickedLinkInEmailInLastDaysTranslator.Translate)}]: Only macro rule instances of type {ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName} can be translated.");
             }
 
             var linkStringValue = macroRuleInstance.Parameters["_link"]?.Value;

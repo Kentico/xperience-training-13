@@ -104,7 +104,7 @@ namespace MedioClinic.Customizations.Macros
                     .WhereGreaterOrEquals(nameof(ClickedLinkInfo.ClickedLinkTime), earliestDate);
             }
 
-            return query.TopN(1).Column(ClickedLinkInfo.TYPEINFO.IDColumn).Any();
+            return query.TopN(1).Column(ClickedLinkInfo.TYPEINFO.IDColumn).Count > 0;
         }
     }
 }
