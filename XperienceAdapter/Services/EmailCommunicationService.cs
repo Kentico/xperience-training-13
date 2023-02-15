@@ -198,59 +198,59 @@ namespace XperienceAdapter.Services
             var result = new NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>();
             var email = model?.Email;
 
-            if (!string.IsNullOrWhiteSpace(email) && _emailHashValidator.ValidateEmailHash(model!.Hash, email))
+            if (string.IsNullOrWhiteSpace(email) || _emailHashValidator.ValidateEmailHash(model!.Hash, email))
             {
-                var issue = await _issueInfoProvider.GetAsync(model.IssueGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+                result.ResultState = NewsletterUnsubscriptionResultState.InvalidHash;
 
-                if (issue is not null)
-                {
-                    if (model.UnsubscribeFromAll)
-                    {
-                        if (!_unsubscriptionProvider.IsUnsubscribedFromAllNewsletters(email))
-                        {
-                            try
-                            {
-                                _subscriptionService.UnsubscribeFromAllNewsletters(email);
-                                result.Success = true;
-                                result.ResultState = NewsletterUnsubscriptionResultState.Unsubscribed;
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, ex.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var newsletter = await _newsletterInfoProvider.GetAsync(model.NewsletterGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+                return result;
+            }
 
-                        if (newsletter is null)
-                        {
-                            result.ResultState = NewsletterUnsubscriptionResultState.NewsletterNotFound;
-                        }
-                        else if (!_unsubscriptionProvider.IsUnsubscribedFromSingleNewsletter(email, newsletter.NewsletterID))
-                        {
-                            try
-                            {
-                                _subscriptionService.UnsubscribeFromSingleNewsletter(email, newsletter.NewsletterID, issue.IssueID);
-                                result.Success = true;
-                                result.ResultState = NewsletterUnsubscriptionResultState.Unsubscribed;
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, ex.Message);
-                            }
-                        }
-                    }
-                }
-                else
+            var issue = await _issueInfoProvider.GetAsync(model.IssueGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+
+            if (issue is null)
+            {
+                result.ResultState = NewsletterUnsubscriptionResultState.IssueNotFound;
+
+                return result;
+            }
+
+            if (model.UnsubscribeFromAll)
+            {
+                if (!_unsubscriptionProvider.IsUnsubscribedFromAllNewsletters(email))
                 {
-                    result.ResultState = NewsletterUnsubscriptionResultState.IssueNotFound;
+                    try
+                    {
+                        _subscriptionService.UnsubscribeFromAllNewsletters(email);
+                        result.Success = true;
+                        result.ResultState = NewsletterUnsubscriptionResultState.Unsubscribed;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, ex.Message);
+                    }
                 }
             }
             else
             {
-                result.ResultState = NewsletterUnsubscriptionResultState.InvalidHash;
+                var newsletter = await _newsletterInfoProvider.GetAsync(model.NewsletterGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+
+                if (newsletter is null)
+                {
+                    result.ResultState = NewsletterUnsubscriptionResultState.NewsletterNotFound;
+                }
+                else if (!_unsubscriptionProvider.IsUnsubscribedFromSingleNewsletter(email, newsletter.NewsletterID))
+                {
+                    try
+                    {
+                        _subscriptionService.UnsubscribeFromSingleNewsletter(email, newsletter.NewsletterID, issue.IssueID);
+                        result.Success = true;
+                        result.ResultState = NewsletterUnsubscriptionResultState.Unsubscribed;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, ex.Message);
+                    }
+                }
             }
 
             return result;
@@ -263,25 +263,22 @@ namespace XperienceAdapter.Services
         /// <param name="contact">The contact.</param>
         /// <param name="updateContact">Result of other update inspections.</param>
         /// <returns>True if the object needs update.</returns>
-        private bool UpdateName(NewsletterSubscriptionModel model, ContactInfo? contact, bool updateContact)
+        private bool UpdateName(NewsletterSubscriptionModel model, ContactInfo contact, bool updateContact)
         {
-            if (contact is not null)
+            if (!string.IsNullOrWhiteSpace(model.FirstName)
+                && !contact.ContactFirstName.Equals(model.FirstName, StringComparison.InvariantCultureIgnoreCase))
             {
-                if (!string.IsNullOrWhiteSpace(model.FirstName)
-                    && !contact.ContactFirstName.Equals(model.FirstName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _logger.LogWarning($"The contact {model.ContactGuid} with a first name \"{contact.ContactFirstName}\" has subscribed to a newsletter {model.NewsletterGuid} with a first name \"{model.FirstName}\". The contact will be updated.");
-                    contact.ContactFirstName = model.FirstName;
-                    updateContact = true;
-                }
+                _logger.LogWarning($"The contact {model.ContactGuid} with a first name \"{contact.ContactFirstName}\" has subscribed to a newsletter {model.NewsletterGuid} with a first name \"{model.FirstName}\". The contact will be updated.");
+                contact.ContactFirstName = model.FirstName;
+                updateContact = true;
+            }
 
-                if (!string.IsNullOrWhiteSpace(model.LastName)
-                    && !contact.ContactFirstName.Equals(model.LastName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _logger.LogWarning($"The contact {model.ContactGuid} with a last name \"{contact.ContactLastName}\" has subscribed to a newsletter {model.NewsletterGuid} with a last name \"{model.LastName}\". The contact will be updated.");
-                    contact.ContactLastName = model.LastName;
-                    updateContact = true;
-                }
+            if (!string.IsNullOrWhiteSpace(model.LastName)
+                && !contact.ContactFirstName.Equals(model.LastName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.LogWarning($"The contact {model.ContactGuid} with a last name \"{contact.ContactLastName}\" has subscribed to a newsletter {model.NewsletterGuid} with a last name \"{model.LastName}\". The contact will be updated.");
+                contact.ContactLastName = model.LastName;
+                updateContact = true;
             }
 
             return updateContact;
@@ -294,13 +291,14 @@ namespace XperienceAdapter.Services
         /// <param name="updateContact">Result of other update inspections.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>True if the object needs update.</returns>
-        private async Task<bool> UpdateEmailOrMergeAsync(NewsletterSubscriptionModel model, ContactInfo? contact, bool updateContact, CancellationToken cancellationToken)
+        private async Task<bool> UpdateEmailOrMergeAsync(NewsletterSubscriptionModel model, ContactInfo contact, bool updateContact, CancellationToken cancellationToken)
         {
             if (!string.IsNullOrWhiteSpace(model?.Email))
             {
                 var collidingContact = (await _contactInfoProvider
                     .Get()
                     .WhereEquals(nameof(ContactInfo.ContactEmail), model.Email)
+                    .WhereNotEquals(ContactInfo.TYPEINFO.GUIDColumn, contact.ContactGUID)
                     .TopN(1)
                     .GetEnumerableTypedResultAsync(cancellationToken: cancellationToken))
                     .FirstOrDefault();

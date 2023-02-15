@@ -63,9 +63,9 @@
      * @param {string} emailAddress An email address to validate.
     */
     var isEmailValid = function (emailAddress) {
-        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        var pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-        return emailAddress && emailAddress.match(pattern);
+        return emailAddress && String(emailAddress).toLowerCase().match(pattern);
     }
 
     /**

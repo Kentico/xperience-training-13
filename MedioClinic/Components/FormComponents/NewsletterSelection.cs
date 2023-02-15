@@ -1,5 +1,7 @@
-﻿using CMS.Helpers;
+﻿using CMS.Base;
+using CMS.Helpers;
 using CMS.Newsletters;
+using CMS.SiteProvider;
 
 using Kentico.Forms.Web.Mvc;
 using Kentico.Web.Mvc;
@@ -12,6 +14,13 @@ namespace MedioClinic.Components.FormComponents
 {
     public class NewsletterSelection : DropDownComponent
     {
+        private readonly ISiteService _siteService;
+
+        public NewsletterSelection(ISiteService siteService)
+        {
+            _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
+        }
+
         public override void LoadProperties(FormComponentProperties properties)
         {
             base.LoadProperties(properties);
@@ -26,6 +35,7 @@ namespace MedioClinic.Components.FormComponents
             var newsletters = NewsletterInfo
                 .Provider
                 .Get()
+                .OnSite(_siteService.CurrentSite.SiteID)
                 .Columns(columns)
                 .TypedResult
                 .Select(newsletter => new HtmlOptionItem { Value = newsletter.NewsletterGUID.ToString(), Text = newsletter.NewsletterDisplayName });

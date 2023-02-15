@@ -37,7 +37,7 @@ namespace MedioClinic.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError($"A contact could not subscribe to a newsletter due to missing data. Newsletter GUID: {model.NewsletterGuid}, contact GUID: {model.ContactGuid}.");
+                _logger.LogError($"A contact could not subscribe to a newsletter due to missing data. Newsletter GUID: {model.NewsletterGuid}, contact GUID: {model.ContactGuid}, email: {model.Email}.");
 
                 return BadRequest(ModelState);
             }

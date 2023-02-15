@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,7 +55,8 @@ namespace MedioClinic.Components.Widgets
 
             if (!string.IsNullOrEmpty(properties?.NewsletterGuid) && Guid.TryParse(properties.NewsletterGuid, out Guid newsletterGuid))
             {
-                var newsletter = await _newsletterInfoProvider.GetAsync(newsletterGuid, _siteService.CurrentSite.SiteID);
+                var allNewsletters = _newsletterInfoProvider.Get().OnSite(_siteService.CurrentSite.SiteID);
+                var newsletter = (await allNewsletters.WithGuid(newsletterGuid).GetEnumerableTypedResultAsync())?.FirstOrDefault();
                 var currentContact = ContactManagementContext.GetCurrentContact(false);
 
                 if (newsletter is not null && currentContact is not null && _subscriptionService.IsMarketable(currentContact, newsletter))
@@ -67,6 +69,8 @@ namespace MedioClinic.Components.Widgets
 
                 if (newsletter is not null && consent is not null)
                 {
+                    var cacheKeys = (await allNewsletters.GetEnumerableTypedResultAsync())?.Select(newsletter => $"Newsletter.Newsletter|ByGuid|{newsletter.NewsletterGUID}");
+                    componentViewModel!.CacheDependencies.CacheKeys = cacheKeys?.ToList();
                     var consentIsAgreed = currentContact is not null ? _consentAgreementService.IsAgreed(currentContact, consent) : false;
 
                     var model = new NewsletterSubscriptionModel

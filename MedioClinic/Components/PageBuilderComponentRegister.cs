@@ -190,6 +190,6 @@ using MedioClinic.Personalization;
     typeof(NewsletterSubscriptionViewComponent),
     "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Title$}",
     typeof(NewsletterSubscriptionProperties),
-    AllowCache = true, // TODO: Test.
+    AllowCache = true,
     Description = "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Description$}",
     IconClass = "icon-messages")]
