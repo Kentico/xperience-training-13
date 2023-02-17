@@ -1,22 +1,24 @@
-﻿using System;
+﻿using CMS.Activities;
+using CMS.Base;
+using CMS.ContactManagement;
+using CMS.DataEngine;
+using CMS.DocumentEngine;
+using CMS.Globalization;
+using CMS.LicenseProvider;
+using CMS.Newsletters;
+using CMS.OnlineForms;
+using CMS.OnlineMarketing;
+using CMS.Scheduler;
+using CMS.SiteProvider;
+using CMS.WebAnalytics;
+
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
+using System.Threading;
 
 using TinyCsvParser;
-
-using CMS.ContactManagement;
-using CMS.Globalization;
-using CMS.OnlineForms;
-using CMS.SiteProvider;
-using CMS.DataEngine;
-using CMS.Activities;
-using CMS.Base;
-using CMS.OnlineMarketing;
-using CMS.LicenseProvider;
-using CMS.WebAnalytics;
-using System.Threading;
-using CMS.DocumentEngine;
 
 namespace XperienceAdapter.Generator
 {
@@ -32,6 +34,8 @@ namespace XperienceAdapter.Generator
 
         private const int LoggingHistoryDays = 30;
 
+        private const string mailingTaskName = "NewsletterSender";
+
         private static CsvParserOptions _csvParserOptions = new CsvParserOptions(true, ',');
 
         private readonly IActivityLogService _activityLogService;
@@ -42,15 +46,20 @@ namespace XperienceAdapter.Generator
 
         private readonly IABTestManager _abTestManager;
 
+        private readonly IIssueScheduler _issueScheduler;
+
         public Generator(IActivityLogService activityLogService,
                          ISiteService siteService,
                          IAnalyticsLogger analyticsLogger,
-                         IABTestManager abTestManager)
+                         IABTestManager abTestManager,
+                         IIssueScheduler issueScheduler)
         {
             _activityLogService = activityLogService ?? throw new ArgumentNullException(nameof(activityLogService));
             _siteService = siteService ?? throw new ArgumentNullException(nameof(siteService));
             _analyticsLogger = analyticsLogger ?? throw new ArgumentNullException(nameof(analyticsLogger));
             _abTestManager = abTestManager ?? throw new ArgumentNullException(nameof(abTestManager));
+            _issueScheduler = issueScheduler ?? throw new ArgumentNullException(nameof(issueScheduler));
+
         }
 
         public void GenerateContacts(string path)
@@ -168,6 +177,99 @@ namespace XperienceAdapter.Generator
             LogRandomAbTestConversions(page, requestDomain);
         }
 
+        public List<string> GenerateNewsletterSubscribers(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(NoPathMessage, nameof(path));
+            }
+
+            var mapping = new NewsletterSubscriberMapping();
+            var parser = new CsvParser<NewsletterSubscriber>(_csvParserOptions, mapping);
+            var allSubscribers = parser?.ReadFromFile(path, Encoding.UTF8).ToList();
+            var successfullSaves = new List<string>();
+
+            if (allSubscribers?.Any() == true)
+            {
+                foreach (var subscriber in allSubscribers)
+                {
+                    if (subscriber.IsValid)
+                    {
+                        var relatedContact = ContactInfo.Provider.Get()
+                            .WhereEquals(nameof(ContactInfo.ContactEmail), subscriber.Result.SubscriberEmail)
+                            .TopN(1)
+                            .FirstOrDefault();
+
+                        var newsletter = NewsletterInfo.Provider.Get()
+                            .WhereEquals(NewsletterInfo.TYPEINFO.CodeNameColumn, subscriber.Result.NewsletterName)
+                            .TopN(1)
+                            .FirstOrDefault();
+
+                        if (relatedContact != null && newsletter != null)
+                        {
+                            try
+                            {
+                                SaveNewsletterSubscriber(relatedContact, newsletter.NewsletterID);
+
+                                successfullSaves.Add(subscriber.Result.SubscriberEmail!);
+                            }
+                            catch
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return successfullSaves;
+        }
+
+        public void GenerateNewsletterOpensAndLinkClicks(string path, List<string> subscribers)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(NoPathMessage, nameof(path));
+            }
+
+            if (subscribers is null)
+            {
+                throw new ArgumentNullException(nameof(subscribers));
+            }
+
+            var randomizer = new Random();
+            var mapping = new NewsletterLinkClickMapping();
+            var parser = new CsvParser<NewsletterLinkClick>(_csvParserOptions, mapping);
+            var allClicks = parser?.ReadFromFile(path, Encoding.UTF8).ToList();
+
+            if (allClicks?.Any() == true)
+            {
+                foreach (var click in allClicks)
+                {
+                    if (click.IsValid && subscribers.Contains(click.Result.ClickedLinkEmail!))
+                    {
+                        var result = click.Result;
+                        var newsletter = NewsletterInfo.Provider.Get().WithCodeName(result.NewsletterName).TopN(1).FirstOrDefault();
+
+                        var issue = IssueInfo.Provider.Get()
+                            .WhereEquals(nameof(IssueInfo.IssueDisplayName), result.IssueDisplayName)
+                            .WhereEquals(nameof(IssueInfo.IssueNewsletterID), newsletter?.NewsletterID)
+                            .TopN(1)
+                            .FirstOrDefault();
+
+                        if (newsletter != null && issue != null)
+                        {
+                            EnsureEmailSending(issue);
+                            var randomDate = DateTime.UtcNow.AddDays(randomizer.Next(-30, -1));
+                            LogEmailOpening(result.ClickedLinkEmail!, issue, randomDate);
+                            LogLinkClick(result.ClickedLinkEmail!, randomDate, issue, randomizer);
+                        }
+                    }
+                }
+            }
+        }
+
+
         private BizFormItem SaveFormData(string formCodename, FormData formData)
         {
             if (string.IsNullOrEmpty(formCodename))
@@ -212,13 +314,13 @@ namespace XperienceAdapter.Generator
 
             if (site == null
                 || !LicenseHelper.CheckFeature(requestDomain, FeatureEnum.ABTesting)
-                || !ABTestInfoProvider.ABTestingEnabled(site.SiteName))
+                || !CMS.OnlineMarketing.ABTestInfoProvider.ABTestingEnabled(site.SiteName))
             {
                 return;
             }
 
-            var abTestInfo = ABTestInfo.Provider.Get()
-                .WhereEquals(nameof(ABTestInfo.ABTestOriginalPage), page.NodeAliasPath)
+            var abTestInfo = CMS.OnlineMarketing.ABTestInfo.Provider.Get()
+                .WhereEquals(nameof(CMS.OnlineMarketing.ABTestInfo.ABTestOriginalPage), page.NodeAliasPath)
                 .TopN(1)
                 .FirstOrDefault();
 
@@ -228,7 +330,7 @@ namespace XperienceAdapter.Generator
             }
 
             abTestInfo.ABTestOpenFrom = DateTimeOffset.UtcNow.AddDays(0 - LoggingHistoryDays).Date;
-            ABTestInfo.Provider.Set(abTestInfo);
+            CMS.OnlineMarketing.ABTestInfo.Provider.Set(abTestInfo);
 
             var conversions = abTestInfo.ABTestConversionConfiguration.ABTestConversions;
             var variants = _abTestManager.GetVariants(page);
@@ -279,7 +381,8 @@ namespace XperienceAdapter.Generator
             }
         }
 
-        private static decimal GetConversionValue(ABTestInfo abTest, string conversionName, decimal value)
+
+        private static decimal GetConversionValue(CMS.OnlineMarketing.ABTestInfo abTest, string conversionName, decimal value)
         {
             if (abTest.ABTestConversionConfiguration.TryGetConversion(conversionName, out var testConversion)
                 && !testConversion.Value.Equals(0.0m))
@@ -288,6 +391,106 @@ namespace XperienceAdapter.Generator
             }
 
             return value;
+        }
+
+        private static SubscriberInfo? GetExistingSubscriber(ContactInfo contact) => SubscriberInfo.Provider.Get()
+            .WhereEquals(nameof(SubscriberInfo.SubscriberEmail), contact.ContactEmail)
+            .TopN(1)
+            .FirstOrDefault();
+
+        private void SaveNewsletterSubscriber(ContactInfo contact, int newsletterId)
+        {
+            var existingSubscriber = GetExistingSubscriber(contact);
+
+            if (existingSubscriber is null)
+            {
+                var subscriberInfo = new SubscriberInfo
+                {
+                    SubscriberEmail = contact.ContactEmail,
+                    SubscriberFirstName = contact.ContactFirstName,
+                    SubscriberLastName = contact.ContactLastName,
+                    SubscriberSiteID = _siteService.CurrentSite.SiteID,
+                    SubscriberType = "om.contact",
+                    SubscriberRelatedID = contact.ContactID,
+                    SubscriberFullName = $"Contact '{contact.ContactFirstName} {contact.ContactLastName}'",
+                };
+
+                SubscriberInfo.Provider.Set(subscriberInfo);
+            }
+
+            existingSubscriber = GetExistingSubscriber(contact);
+
+            var existingAssignmentCount = SubscriberNewsletterInfo.Provider.Get()
+                .WhereEquals(nameof(SubscriberNewsletterInfo.NewsletterID), newsletterId)
+                .WhereEquals(nameof(SubscriberNewsletterInfo.SubscriberID), existingSubscriber!.SubscriberID)
+                .Count;
+
+            if (existingAssignmentCount == 0)
+            {
+                var monthBefore = DateTime.UtcNow.AddDays(-30);
+
+                var subscriberNewsletterInfo = new SubscriberNewsletterInfo
+                {
+                    NewsletterID = newsletterId,
+                    SubscriberID = existingSubscriber.SubscriberID,
+                    SubscribedWhen = monthBefore,
+                    SubscriptionApprovedWhen = monthBefore,
+                    SubscriptionApproved = true
+                };
+
+                SubscriberNewsletterInfo.Provider.Set(subscriberNewsletterInfo);
+            }
+        }
+
+        private void EnsureEmailSending(IssueInfo issue)
+        {
+            if (issue.IssueStatus != IssueStatusEnum.Finished)
+            {
+                NewsletterTasksManager.DeleteMailoutTask(issue.IssueGUID, issue.IssueSiteID);
+                _issueScheduler.ScheduleIssue(issue, DateTime.Now);
+                var scheduledTask = TaskInfo.Provider.Get().WithCodeName(mailingTaskName).TopN(1).FirstOrDefault();
+
+                if (scheduledTask != null)
+                {
+                    SchedulingExecutor.ExecuteTask(scheduledTask);
+                }
+
+                issue.IssueMailoutTime = DateTime.UtcNow.AddDays(-30);
+                IssueInfo.Provider.Set(issue);
+            }
+        }
+
+        private static void LogEmailOpening(string email, IssueInfo issue, DateTime date)
+        {
+            var openedEmailInfo = new OpenedEmailInfo
+            {
+                OpenedEmailEmail = email,
+                OpenedEmailTime = date,
+                OpenedEmailIssueID = issue.IssueID,
+            };
+
+            OpenedEmailInfo.Provider.Set(openedEmailInfo);
+        }
+
+        private static void LogLinkClick(string email, DateTime date, IssueInfo issue, Random randomizer)
+        {
+            var links = LinkInfo.Provider.Get()
+                .WhereEquals(nameof(LinkInfo.LinkIssueID), issue.IssueID)
+                .ToList();
+
+            if (links.Count > 0)
+            {
+                var randomLink = links[randomizer.Next(0, links.Count - 1)];
+
+                var clickedLinkInfo = new ClickedLinkInfo
+                {
+                    ClickedLinkEmail = email,
+                    ClickedLinkTime = date,
+                    ClickedLinkNewsletterLinkID = randomLink.LinkID
+                };
+
+                ClickedLinkInfo.Provider.Set(clickedLinkInfo);
+            }
         }
     }
 }
