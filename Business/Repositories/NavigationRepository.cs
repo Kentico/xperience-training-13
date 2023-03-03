@@ -31,7 +31,7 @@ namespace Business.Repositories
 
         private readonly IPageUrlRetriever _pageUrlRetriever;
 
-        private readonly IPageRepository<BasicPage, TreeNode> _basePageRepository;
+        private readonly IPageRepository<BasicPage, TreeNode> _basicPageRepository;
 
         private readonly ISiteCultureRepository _cultureRepository;
 
@@ -43,7 +43,7 @@ namespace Business.Repositories
         public IEnumerable<string> NavigationEnabledTypeDependencies => NavigationEnabledPageTypes
             .Select(pageType => $"nodes|{SiteContext.CurrentSiteName}|{pageType}|all");
 
-        private NavigationItem RootDto => _basePageRepository.GetPagesInCurrentCulture(query =>
+        private NavigationItem RootDto => _basicPageRepository.GetPagesInCurrentCulture(query =>
             query
                 .Path(RootPath, PathTypeEnum.Single)
                 .TopN(1),
@@ -60,13 +60,13 @@ namespace Business.Repositories
             IMemoryCache memoryCache,
             ICacheDependencyAdapter cacheDependencyAdapter,
             IPageUrlRetriever pageUrlRetriever,
-            IPageRepository<BasicPage, TreeNode> basePageRepository,
+            IPageRepository<BasicPage, TreeNode> basicPageRepository,
             ISiteCultureRepository siteCultureRepository)
         {
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             _cacheDependencyAdapter = cacheDependencyAdapter ?? throw new ArgumentNullException(nameof(cacheDependencyAdapter));
             _pageUrlRetriever = pageUrlRetriever ?? throw new ArgumentNullException(nameof(pageUrlRetriever));
-            _basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
+            _basicPageRepository = basicPageRepository ?? throw new ArgumentNullException(nameof(basicPageRepository));
             _cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
         }
 
@@ -133,7 +133,7 @@ namespace Business.Repositories
 
             if (!_memoryCache.TryGetValue(checkedCulture.IsoCode, out navigation))
             {
-                var allItems = (await _basePageRepository.GetPagesByTypeAndCultureAsync(
+                var allItems = (await _basicPageRepository.GetPagesByTypeAndCultureAsync(
                     NavigationEnabledPageTypes,
                     checkedCulture,
                     $"{nameof(NavigationRepository)}|{nameof(GetContentTreeNavigationAsync)}|{checkedCulture.IsoCode}",
