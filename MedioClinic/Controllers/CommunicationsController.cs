@@ -142,7 +142,8 @@ namespace MedioClinic.Controllers
 
         public async Task<IActionResult> Unsubscribe(NewsletterUnsubscriptionModel model, CancellationToken cancellationToken)
         {
-            var outputModel = CreateDefaultOutputModel("MedioClinic.EmailMarketing.Unsubscription");
+            var titleResourceKey = "MedioClinic.EmailMarketing.Unsubscription";
+            var outputModel = CreateDefaultOutputModel(titleResourceKey);
 
             if (!ModelState.IsValid)
             {
@@ -156,9 +157,9 @@ namespace MedioClinic.Controllers
                 }
                 else
                 {
-                _logger.LogError($"A contact could not unsubscribe from a newsletter due to invalid data. Email: {model.Email}, newsletter GUID: {model.NewsletterGuid}, issue GUID: {model.IssueGuid}, hash: {model.Hash}.");
+                    _logger.LogError($"A contact could not unsubscribe from a newsletter due to invalid data. Email: {model.Email}, newsletter GUID: {model.NewsletterGuid}, issue GUID: {model.IssueGuid}, hash: {model.Hash}.");
 
-                return View(MessageViewName, outputModel);
+                    return View(MessageViewName, outputModel);
                 }
             }
 
@@ -170,10 +171,26 @@ namespace MedioClinic.Controllers
                 case NewsletterUnsubscriptionResultState.AlreadyUnsubscribed:
                 case NewsletterUnsubscriptionResultState.AlreadyUnsubscribedFromAll:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.Unsubscribed"];
-                        outputModel.UserMessage.MessageType = MessageType.Info;
+                        var metadata = new PageMetadata
+                        {
+                            Title = _stringLocalizer[titleResourceKey]
+                        };
 
-                        break;
+                        var formName = _optionsMonitor.CurrentValue.OnlineMarketingOptions.NewsletterUnsubscriptionFeedbackFormName;
+
+                        var unsubscriptionModel = new MessageWithFeedbackModel
+                        {
+                            FormTitle = _stringLocalizer["MedioClinic.EmailMarketing.UnsubscriptionFeedbackTitle"],
+                            FormWidgetProperties = new Kentico.Forms.Web.Mvc.Widgets.FormWidgetProperties 
+                            { 
+                                SelectedForm = formName 
+                            }
+                        };
+
+                        var message = _stringLocalizer["MedioClinic.EmailMarketing.Unsubscribed"];
+                        var unsubscriptionEnvelopeModel = GetPageViewModel(metadata, unsubscriptionModel, message: message);
+
+                        return View("Unsubscribe", unsubscriptionEnvelopeModel);
                     }
                 case NewsletterUnsubscriptionResultState.InvalidHash:
                     {

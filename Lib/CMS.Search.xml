@@ -3295,6 +3295,21 @@
             <param name="htmlContent">HTML content to process.</param>
             <returns>Returns a content suitable for search indexing (without e.g. HTML tags).</returns>
         </member>
+        <member name="M:CMS.Search.SearchCrawlerContentProcessor.EnsureProperTextFormatting(AngleSharp.Html.Dom.IHtmlElement,AngleSharp.Html.Parser.HtmlParser)">
+            <summary>
+            Our widgets do not format their content so getting the TextContent property will strip tags and
+            leave words on line breaks connected. This will reformat the document so that every tag is on it's own line
+            and accessing the TextContent property yields correct result with all words separated.
+            </summary>
+            <param name="element">Html element where to format text.</param>
+            <param name="parser">Html parser.</param>        
+        </member>
+        <member name="T:CMS.Search.SearchCrawlerMarkupFormatter">
+            <summary>
+            Search crawler markup formatter to ensure that some elements will be replaced by whitespace 
+            and thus ensuring correct text after stripping tags.
+            </summary>
+        </member>
         <member name="T:CMS.Search.SearchHelper">
             <summary>
             Provides the smart search methods.

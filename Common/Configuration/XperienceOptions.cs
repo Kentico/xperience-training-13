@@ -103,5 +103,7 @@ namespace Common.Configuration
         public string NewsletterSubscriptionConsentName { get; set; }
 
         public bool SendConfirmationEmails { get; set; }
+
+        public string NewsletterUnsubscriptionFeedbackFormName { get; set; }
     }
 }

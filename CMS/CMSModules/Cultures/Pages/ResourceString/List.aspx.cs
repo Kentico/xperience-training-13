@@ -187,6 +187,8 @@ public partial class CMSModules_Cultures_Pages_ResourceString_List : CMSDeskPage
                         text = MacroSecurityProcessor.RemoveSecurityParameters(text, true, null);
                     }
 
+                    text = HTMLHelper.HTMLEncode(text);
+
                     return text;
                 }
         }
