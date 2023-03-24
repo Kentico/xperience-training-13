@@ -11,6 +11,7 @@ namespace XperienceAdapter.Models
         [Required]
         public Guid ContactGuid { get; set; }
 
+        [Required]
         [EmailAddress]
         public string? Email { get; set; }
 

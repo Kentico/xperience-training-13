@@ -19,7 +19,8 @@ namespace XperienceAdapter.Services
         /// <param name="model">An upload model.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A result object.</returns>
-        Task<NewsletterSubscriptionResult<NewsletterSubscriptionResultState>> SubscribeToNewsletterAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken);
+        /// <param name="allowOptIn"></param>
+        Task<NewsletterSubscriptionResult<NewsletterSubscriptionResultState>> SubscribeToNewsletterAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken, bool allowOptIn);
 
         /// <summary>
         /// Confirms subscription to a newsletter (double opt-in).
@@ -35,5 +36,19 @@ namespace XperienceAdapter.Services
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A result object.</returns>
         Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> UnsubscribeAsync(NewsletterUnsubscriptionModel model, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets newsletters with a boolean flag signaling if the contact is subscribed.
+        /// </summary>
+        /// <returns>Newsletters marked with subscription flags.</returns>
+        Task<List<NewsletterPreferenceModel>> GetNewslettersForContact();
+
+        /// <summary>
+        /// Unsubscribes a single newsletter in the scope of a bulk operation.
+        /// </summary>
+        /// <param name="model">Subscription model.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A result object with two possible states: unsubscribed and newsletter not found.</returns>
+        Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> BulkUnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken);
     }
 }

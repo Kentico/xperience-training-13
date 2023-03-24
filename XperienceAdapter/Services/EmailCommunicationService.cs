@@ -1,6 +1,7 @@
 ﻿using CMS.Base;
 using CMS.ContactManagement;
 using CMS.Helpers;
+using CMS.Membership;
 using CMS.Newsletters;
 
 using Common.Configuration;
@@ -68,7 +69,7 @@ namespace XperienceAdapter.Services
             _issueInfoProvider = issueInfoProvider ?? throw new ArgumentNullException(nameof(issueInfoProvider));
         }
 
-        public async Task<NewsletterSubscriptionResult<NewsletterSubscriptionResultState>> SubscribeToNewsletterAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken)
+        public async Task<NewsletterSubscriptionResult<NewsletterSubscriptionResultState>> SubscribeToNewsletterAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken, bool allowOptIn)
         {
             var result = new NewsletterSubscriptionResult<NewsletterSubscriptionResultState>();
             var newsletter = await _newsletterInfoProvider.GetAsync(model.NewsletterGuid, _siteService.CurrentSite.SiteID, cancellationToken);
@@ -116,7 +117,7 @@ namespace XperienceAdapter.Services
                 {
                     RemoveAlsoUnsubscriptionFromAllNewsletters = true,
                     SendConfirmationEmail = _optionsMonitor.CurrentValue?.OnlineMarketingOptions?.SendConfirmationEmails ?? false,
-                    AllowOptIn = true,
+                    AllowOptIn = allowOptIn,
                     RemoveUnsubscriptionFromNewsletter = true
                 };
 
@@ -232,24 +233,84 @@ namespace XperienceAdapter.Services
             }
             else
             {
-                var newsletter = await _newsletterInfoProvider.GetAsync(model.NewsletterGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+                result = await UnsubscribeInternalAsync(model, cancellationToken, issue.IssueID);
+            }
 
-                if (newsletter is null)
+            return result;
+        }
+
+
+        public async Task<List<NewsletterPreferenceModel>> GetNewslettersForContact()
+        {
+            var currentContact = ContactManagementContext.CurrentContact;
+
+            if (currentContact is null)
+            {
+                return null!;
+            }
+
+            var allNewsletters = await _newsletterInfoProvider.Get().OnSite(_siteService.CurrentSite.SiteID).GetEnumerableTypedResultAsync();
+            var output = new List<NewsletterPreferenceModel>();
+
+            foreach (var newsletter in allNewsletters)
+            {
+                var model = new NewsletterPreferenceModel
                 {
-                    result.ResultState = NewsletterUnsubscriptionResultState.NewsletterNotFound;
+                    NewsletterGuid = newsletter.NewsletterGUID,
+                    NewsletterDisplayName = newsletter.NewsletterDisplayName
+                };
+
+                model.Subscribed = _subscriptionService.IsMarketable(currentContact, newsletter) ? true : false;
+                output.Add(model);
+            }
+
+            return output;
+        }
+
+        public async Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> BulkUnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken)
+        {
+            var unsubscriptionModel = new NewsletterUnsubscriptionModel
+            {
+                Email = model.Email,
+                NewsletterGuid = model.NewsletterGuid
+            };
+
+            return await UnsubscribeInternalAsync(unsubscriptionModel, cancellationToken);
+        }
+
+        /// <summary>
+        /// Looks up a newsletter and unsubscribes a contact therefrom.
+        /// </summary>
+        /// <param name="model">Unsubscription model.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <param name="issueId">Issue ID.</param>
+        /// <returns>A result with two possible states: unsubscribed and newsletter not found.</returns>
+        private async Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> UnsubscribeInternalAsync(NewsletterUnsubscriptionModel model,
+                                                                                                                       CancellationToken cancellationToken,
+                                                                                                                       int? issueId = null)
+        {
+            var result = new NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>
+            {
+                ResultState = NewsletterUnsubscriptionResultState.Unsubscribed,
+                Success = true
+            };
+
+            var newsletter = await _newsletterInfoProvider.GetAsync(model.NewsletterGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+
+            if (newsletter is null)
+            {
+                result.ResultState = NewsletterUnsubscriptionResultState.NewsletterNotFound;
+                result.Success = false;
+            }
+            else if (!_unsubscriptionProvider.IsUnsubscribedFromSingleNewsletter(model.Email, newsletter.NewsletterID))
+            {
+                try
+                {
+                    _subscriptionService.UnsubscribeFromSingleNewsletter(model.Email, newsletter.NewsletterID, issueId);
                 }
-                else if (!_unsubscriptionProvider.IsUnsubscribedFromSingleNewsletter(email, newsletter.NewsletterID))
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        _subscriptionService.UnsubscribeFromSingleNewsletter(email, newsletter.NewsletterID, issue.IssueID);
-                        result.Success = true;
-                        result.ResultState = NewsletterUnsubscriptionResultState.Unsubscribed;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                    }
+                    _logger.LogError(ex, ex.Message);
                 }
             }
 
@@ -283,6 +344,7 @@ namespace XperienceAdapter.Services
 
             return updateContact;
         }
+
         /// <summary>
         /// Determines if the contact object's email address needs to be updated or if the contact needs to be merged with another one.
         /// </summary>

@@ -1,4 +1,7 @@
-﻿using Common.Configuration;
+﻿using CMS.ContactManagement;
+using CMS.DataProtection;
+
+using Common.Configuration;
 
 using MedioClinic.Models;
 
@@ -8,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,13 +28,21 @@ namespace MedioClinic.Controllers
 
         private readonly IEmailCommunicationService _emailCommunicationService;
 
+        private readonly IConsentInfoProvider _consentInfoProvider;
+
+        private readonly IConsentAgreementService _consentAgreementService;
+
         public CommunicationsController(ILogger<BaseController> logger,
                                         IOptionsMonitor<XperienceOptions> optionsMonitor,
                                         IStringLocalizer<SharedResource> stringLocalizer,
-                                        IEmailCommunicationService emailCommunicationService)
+                                        IEmailCommunicationService emailCommunicationService,
+                                        IConsentInfoProvider consentInfoProvider,
+                                        IConsentAgreementService consentAgreementService)
             : base(logger, optionsMonitor, stringLocalizer)
         {
             _emailCommunicationService = emailCommunicationService ?? throw new ArgumentNullException(nameof(emailCommunicationService));
+            _consentInfoProvider = consentInfoProvider ?? throw new ArgumentNullException(nameof(consentInfoProvider));
+            _consentAgreementService = consentAgreementService ?? throw new ArgumentNullException(nameof(consentAgreementService));
         }
 
         public async Task<IActionResult> SubscribeToNewsletter(NewsletterSubscriptionModel model, CancellationToken cancellationToken)
@@ -42,45 +54,97 @@ namespace MedioClinic.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _emailCommunicationService.SubscribeToNewsletterAsync(model, cancellationToken);
+            var result = await _emailCommunicationService.SubscribeToNewsletterAsync(model, cancellationToken, true);
+            var handledResult = HandleSubscriptionResultStates(model, result);
 
-            switch (result.ResultState)
+            return StatusCode(handledResult.StatusCode, handledResult.ResponseText);
+        }
+
+        public async Task<IActionResult> Index() => await GetIndexResultAsync();
+
+        // POST: Communications
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(PageViewModel<NewsletterPreferenceViewModel> uploadModel, CancellationToken cancellationToken)
+        {
+            var contactGuid = ContactManagementContext.CurrentContact.ContactGUID;
+
+            if (!ModelState.IsValid)
             {
-                case NewsletterSubscriptionResultState.Subscribed:
-                    return Ok();
-                case NewsletterSubscriptionResultState.NewsletterNotFound:
-                    {
-                        _logger.LogError($"The newsletter {model.NewsletterGuid} was not found.");
+                var contactData = $"Contact: {contactGuid}";
+                var emailData = $"email: {uploadModel.Data.EmailViewModel.Email}";
+                var consentData = $"consent: {uploadModel.Data.ConsentAgreed}";
+                _logger.LogError($"Newsletter preferences could not be updated due to invalid data. {contactData}, {emailData}, {consentData}.");
 
-                        return BadRequest(_stringLocalizer["MedioClinic.EmailMarketing.NewsletterNotFound"]?.Value);
-                    }
-                case NewsletterSubscriptionResultState.ContactNotFound:
-                    {
-                        _logger.LogError($"The contact {model.ContactGuid} was not found.");
-
-                        return BadRequest(_stringLocalizer["MedioClinic.EmailMarketing.ContactNotFound"]?.Value);
-                    }
-                case NewsletterSubscriptionResultState.ContactNotSet:
-                    {
-                        _logger.LogError($"The contact {model.ContactGuid} could not be set.");
-
-                        return StatusCode(500, _stringLocalizer["MedioClinic.EmailMarketing.ContactNotSet"]?.Value);
-                    }
-                case NewsletterSubscriptionResultState.NotSubscribed:
-                    {
-                        _logger.LogError($"The contact {model.ContactGuid} could not be subscribed to the newsletter {model.NewsletterGuid}.");
-
-                        return StatusCode(500, _stringLocalizer["MedioClinic.EmailMarketing.NotSubscribed"]?.Value);
-                    }
-                case NewsletterSubscriptionResultState.OtherErrors:
-                default:
-                    return StatusCode(500);
+                return await GetIndexResultAsync(uploadModel.Data, Localize("General.InvalidInput.Message"), MessageType.Error);
             }
+
+            if (!uploadModel.Data.ConsentAgreed && uploadModel.Data.Newsletters.Any(newsletter => newsletter.Subscribed))
+            {
+                return await GetIndexResultAsync(uploadModel.Data, Localize("OnlineMarketing.ConsentRequired"), MessageType.Error);
+            }
+            else if (!uploadModel.Data.ConsentAgreed)
+            {
+                var consent = await _consentInfoProvider.GetAsync(_optionsMonitor.CurrentValue.OnlineMarketingOptions.NewsletterSubscriptionConsentName, cancellationToken);
+
+                if (consent is not null)
+                {
+                    _consentAgreementService.Revoke(ContactManagementContext.CurrentContact, consent); 
+                }
+            }
+
+            var handledSubscriptionResults = new List<(int StatusCode, string? ResponseText)>();
+            var unsubscriptionResults = new List<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>>();
+            var message = string.Empty;
+            bool otherFailures = false;
+            var messageType = MessageType.Info;
+
+            foreach (var newsletter in uploadModel.Data.Newsletters)
+            {
+                if (contactGuid != Guid.Empty && newsletter.NewsletterGuid.HasValue)
+                {
+                    var model = new NewsletterSubscriptionModel
+                    {
+                        NewsletterGuid = newsletter.NewsletterGuid.Value,
+                        ContactGuid = contactGuid,
+                        Email = uploadModel.Data.EmailViewModel.Email,
+                        FirstName = uploadModel.Data.FirstName,
+                        LastName = uploadModel.Data.LastName,
+                    };
+
+                    if (newsletter.Subscribed)
+                    {
+                        var result = await _emailCommunicationService.SubscribeToNewsletterAsync(model, cancellationToken, false);
+                        handledSubscriptionResults.Add(HandleSubscriptionResultStates(model, result));
+                    }
+                    else
+                    {
+                        unsubscriptionResults.Add(await _emailCommunicationService.BulkUnsubscribeAsync(model, cancellationToken));
+                    }
+                }
+                else
+                {
+                    otherFailures = true;
+                    _logger.LogWarning($"Contact or newsletter data is missing when subscribing. Contact: {contactGuid}, newsletter: {newsletter.NewsletterGuid}.");
+                }
+            }
+
+            if (handledSubscriptionResults.Any(result => result.StatusCode > 200) || unsubscriptionResults.Any(result => !result.Success) || otherFailures)
+            {
+                messageType = MessageType.Error;
+                message = Localize("OnlineMarketing.NewsletterSubscriptionErrors");
+            }
+            else
+            {
+                message = Localize("OnlineMarketing.NewsletterSubscriptionSuccessfull");
+            }
+
+            return await GetIndexResultAsync(null, message, messageType);
         }
 
         public IActionResult ConfirmSubscription(NewsletterSubscriptionConfirmationModel model)
         {
-            var outputModel = CreateDefaultOutputModel("MedioClinic.EmailMarketing.SubscriptionConfirmation");
+            var outputModel = CreateDefaultOutputModel("OnlineMarketing.SubscriptionConfirmation");
 
             if (!ModelState.IsValid)
             {
@@ -103,32 +167,32 @@ namespace MedioClinic.Controllers
             {
                 case NewsletterSubscriptionConfirmationResultState.Confirmed:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.SubscriptionConfirmed"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.SubscriptionConfirmed"];
                         outputModel.UserMessage.MessageType = MessageType.Info;
 
                         break;
                     }
                 case NewsletterSubscriptionConfirmationResultState.InvalidDateTime:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.InvalidDateTime"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.InvalidDateTime"];
 
                         break;
                     }
                 case NewsletterSubscriptionConfirmationResultState.SubscriptionNotFound:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.SubscriptionNotFound"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.SubscriptionNotFound"];
 
                         break;
                     }
                 case NewsletterSubscriptionConfirmationResultState.TimeExceeded:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.TimeExceeded"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.TimeExceeded"];
 
                         break;
                     }
                 case NewsletterSubscriptionConfirmationResultState.NotConfirmed:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.NotConfirmed"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.NotConfirmed"];
 
                         break;
                     }
@@ -142,14 +206,14 @@ namespace MedioClinic.Controllers
 
         public async Task<IActionResult> Unsubscribe(NewsletterUnsubscriptionModel model, CancellationToken cancellationToken)
         {
-            var titleResourceKey = "MedioClinic.EmailMarketing.Unsubscription";
+            var titleResourceKey = "OnlineMarketing.Unsubscription";
             var outputModel = CreateDefaultOutputModel(titleResourceKey);
 
             if (!ModelState.IsValid)
             {
-                if (model?.NewsletterGuid == Guid.Empty 
-                    && model?.IssueGuid == Guid.Empty 
-                    && string.IsNullOrEmpty(model?.Email) 
+                if (model?.NewsletterGuid == Guid.Empty
+                    && model?.IssueGuid == Guid.Empty
+                    && string.IsNullOrEmpty(model?.Email)
                     && model?.UnsubscribeFromAll == false)
                 {
                     // An expected ping from the administration application, not logged as an error.
@@ -157,7 +221,7 @@ namespace MedioClinic.Controllers
                 }
                 else
                 {
-                    _logger.LogError($"A contact could not unsubscribe from a newsletter due to invalid data. Email: {model.Email}, newsletter GUID: {model.NewsletterGuid}, issue GUID: {model.IssueGuid}, hash: {model.Hash}.");
+                    _logger.LogError($"A contact could not unsubscribe from a newsletter due to invalid data. Email: {model?.Email}, newsletter GUID: {model?.NewsletterGuid}, issue GUID: {model?.IssueGuid}, hash: {model?.Hash}.");
 
                     return View(MessageViewName, outputModel);
                 }
@@ -180,33 +244,33 @@ namespace MedioClinic.Controllers
 
                         var unsubscriptionModel = new MessageWithFeedbackModel
                         {
-                            FormTitle = _stringLocalizer["MedioClinic.EmailMarketing.UnsubscriptionFeedbackTitle"],
-                            FormWidgetProperties = new Kentico.Forms.Web.Mvc.Widgets.FormWidgetProperties 
-                            { 
-                                SelectedForm = formName 
+                            FormTitle = _stringLocalizer["OnlineMarketing.UnsubscriptionFeedback.Title"],
+                            FormWidgetProperties = new Kentico.Forms.Web.Mvc.Widgets.FormWidgetProperties
+                            {
+                                SelectedForm = formName
                             }
                         };
 
-                        var message = _stringLocalizer["MedioClinic.EmailMarketing.Unsubscribed"];
-                        var unsubscriptionEnvelopeModel = GetPageViewModel(metadata, unsubscriptionModel, message: message);
+                        var message = _stringLocalizer["OnlineMarketing.Unsubscribed"];
+                        var unsubscriptionViewModel = GetPageViewModel(metadata, unsubscriptionModel, message: message);
 
-                        return View("Unsubscribe", unsubscriptionEnvelopeModel);
+                        return View("Unsubscribe", unsubscriptionViewModel);
                     }
                 case NewsletterUnsubscriptionResultState.InvalidHash:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.InvalidHash"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.InvalidHash"];
 
                         break;
                     }
                 case NewsletterUnsubscriptionResultState.IssueNotFound:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.IssueNotFound"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.IssueNotFound"];
 
                         break;
                     }
                 case NewsletterUnsubscriptionResultState.NewsletterNotFound:
                     {
-                        outputModel.UserMessage.Message = _stringLocalizer["MedioClinic.EmailMarketing.NewsletterNotFound"];
+                        outputModel.UserMessage.Message = _stringLocalizer["OnlineMarketing.NewsletterNotFound"];
 
                         break;
                     }
@@ -235,6 +299,119 @@ namespace MedioClinic.Controllers
             outputModel.UserMessage.MessageType = MessageType.Error;
 
             return outputModel;
+        }
+
+        /// <summary>
+        /// Draws the main page, either with database data, or, with form data (in case of validation errors).
+        /// </summary>
+        /// <param name="uploadModel">Upload view model.</param>
+        /// <param name="message">User message.</param>
+        /// <param name="messageType">Message type.</param>
+        /// <returns>The implicit Index view.</returns>
+        private async Task<IActionResult> GetIndexResultAsync(NewsletterPreferenceViewModel? uploadModel = default, string? message = default, MessageType messageType = MessageType.Info)
+        {
+            PageViewModel viewModel;
+            var contact = ContactManagementContext.CurrentContact;
+            PageMetadata metadata = new PageMetadata
+            {
+                Title = Localize("MedioClinic.CommunicationPreferences.Title")
+            };
+
+            NewsletterPreferenceViewModel outputModel;
+
+            if (uploadModel is not null)
+            {
+                outputModel = uploadModel;
+            }
+            else
+            {
+                if (contact is null)
+                {
+                    _logger.LogInformation($"A contact was not found when displaying the Communications preferences page.");
+                    message = Localize("OnlineMarketing.ContactNotFound");
+                    viewModel = GetPageViewModel(metadata, message: message);
+
+                    return View(MessageViewName, viewModel);
+                }
+
+                var consentName = _optionsMonitor.CurrentValue.OnlineMarketingOptions.NewsletterSubscriptionConsentName;
+
+                var consent = (await _consentInfoProvider
+                    .Get()
+                    .WhereEquals(ConsentInfo.TYPEINFO.CodeNameColumn, consentName)
+                    .TopN(1)
+                    .GetEnumerableTypedResultAsync())
+                    .FirstOrDefault();
+
+                if (consent is null)
+                {
+                    _logger.LogError($"A newsletter consent was not found. Consent name: {consentName}.");
+                    message = Localize("OnlineMarketing.ConsentNotFound");
+                    viewModel = GetPageViewModel(metadata, message: message);
+
+                    return View(MessageViewName, viewModel);
+                }
+
+                var newsletters = await _emailCommunicationService.GetNewslettersForContact();
+                var text = consent.GetConsentText(Thread.CurrentThread.CurrentUICulture.Name);
+
+                outputModel = new NewsletterPreferenceViewModel
+                {
+                    FirstName = contact.ContactFirstName,
+                    LastName = contact.ContactLastName,
+                    ConsentAgreed = _consentAgreementService.IsAgreed(contact, consent),
+                    ConsentShortText = text?.ShortText,
+                    Newsletters = newsletters
+                };
+
+                outputModel.EmailViewModel.Email = contact.ContactEmail;
+            }
+
+            viewModel = GetPageViewModel(metadata, outputModel, message: message, messageType: messageType);
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// Logs subscription results and returns status codes along with localized user messages.
+        /// </summary>
+        /// <param name="model">Subscription model.</param>
+        /// <param name="result">Result to be processed.</param>
+        /// <returns>A tuple of a status code and the user message.</returns>
+        private (int StatusCode, string? ResponseText) HandleSubscriptionResultStates(NewsletterSubscriptionModel model, NewsletterSubscriptionResult<NewsletterSubscriptionResultState> result)
+        {
+            switch (result.ResultState)
+            {
+                case NewsletterSubscriptionResultState.Subscribed:
+                    return (200, null);
+                case NewsletterSubscriptionResultState.NewsletterNotFound:
+                    {
+                        _logger.LogError($"The newsletter {model.NewsletterGuid} was not found.");
+
+                        return (400, _stringLocalizer["OnlineMarketing.NewsletterNotFound"]?.Value);
+                    }
+                case NewsletterSubscriptionResultState.ContactNotFound:
+                    {
+                        _logger.LogError($"The contact {model.ContactGuid} was not found.");
+
+                        return (400, _stringLocalizer["OnlineMarketing.ContactNotFound"]?.Value);
+                    }
+                case NewsletterSubscriptionResultState.ContactNotSet:
+                    {
+                        _logger.LogError($"The contact {model.ContactGuid} could not be set.");
+
+                        return (500, _stringLocalizer["OnlineMarketing.ContactNotSet"]?.Value);
+                    }
+                case NewsletterSubscriptionResultState.NotSubscribed:
+                    {
+                        _logger.LogError($"The contact {model.ContactGuid} could not be subscribed to the newsletter {model.NewsletterGuid}.");
+
+                        return (500, _stringLocalizer["OnlineMarketing.NotSubscribed"]?.Value);
+                    }
+                case NewsletterSubscriptionResultState.OtherErrors:
+                default:
+                    return (500, null);
+            }
         }
     }
 }
