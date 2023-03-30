@@ -40,8 +40,9 @@ namespace XperienceAdapter.Services
         /// <summary>
         /// Gets newsletters with a boolean flag signaling if the contact is subscribed.
         /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Newsletters marked with subscription flags.</returns>
-        Task<List<NewsletterPreferenceModel>> GetNewslettersForContact();
+        Task<List<NewsletterPreferenceModel>> GetNewslettersForContactAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Unsubscribes a single newsletter in the scope of a bulk operation.
@@ -49,6 +50,6 @@ namespace XperienceAdapter.Services
         /// <param name="model">Subscription model.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A result object with two possible states: unsubscribed and newsletter not found.</returns>
-        Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> BulkUnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken);
+        Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> UnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken);
     }
 }

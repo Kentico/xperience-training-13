@@ -24,6 +24,6 @@ namespace MedioClinic.Models
         public bool ConsentAgreed { get; set; }
 
         [Required]
-        public List<NewsletterPreferenceModel> Newsletters  { get; set; } = new List<NewsletterPreferenceModel>();
+        public List<NewsletterPreferenceModel> Newsletters { get; set; } = new List<NewsletterPreferenceModel>();
     }
 }

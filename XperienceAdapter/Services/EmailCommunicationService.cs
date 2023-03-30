@@ -89,52 +89,47 @@ namespace XperienceAdapter.Services
                 return result;
             }
 
-            if (newsletter is not null && contact is not null)
+            var updateContact = false;
+            updateContact = UpdateName(model, contact, updateContact);
+            updateContact = await UpdateEmailOrMergeAsync(model, contact, updateContact, cancellationToken);
+
+            if (updateContact)
             {
-                var updateContact = false;
-
-                updateContact = UpdateName(model, contact, updateContact);
-
-                updateContact = await UpdateEmailOrMergeAsync(model, contact, updateContact, cancellationToken);
-
-                if (updateContact)
-                {
-                    try
-                    {
-                        _contactInfoProvider.Set(contact);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        result.Errors.Add(ex.Message);
-                        result.ResultState = NewsletterSubscriptionResultState.ContactNotSet;
-
-                        return result;
-                    }
-                }
-
-                var settings = new SubscribeSettings
-                {
-                    RemoveAlsoUnsubscriptionFromAllNewsletters = true,
-                    SendConfirmationEmail = _optionsMonitor.CurrentValue?.OnlineMarketingOptions?.SendConfirmationEmails ?? false,
-                    AllowOptIn = allowOptIn,
-                    RemoveUnsubscriptionFromNewsletter = true
-                };
-
                 try
                 {
-                    _subscriptionService.Subscribe(contact, newsletter, settings);
-                    result.Success = true;
-                    result.ResultState = NewsletterSubscriptionResultState.Subscribed;
-
-                    return result;
+                    _contactInfoProvider.Set(contact);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
                     result.Errors.Add(ex.Message);
-                    result.ResultState = NewsletterSubscriptionResultState.NotSubscribed;
+                    result.ResultState = NewsletterSubscriptionResultState.ContactNotSet;
+
+                    return result;
                 }
+            }
+
+            var settings = new SubscribeSettings
+            {
+                RemoveAlsoUnsubscriptionFromAllNewsletters = true,
+                SendConfirmationEmail = _optionsMonitor.CurrentValue?.OnlineMarketingOptions?.SendConfirmationEmails ?? false,
+                AllowOptIn = allowOptIn,
+                RemoveUnsubscriptionFromNewsletter = true
+            };
+
+            try
+            {
+                _subscriptionService.Subscribe(contact, newsletter, settings);
+                result.Success = true;
+                result.ResultState = NewsletterSubscriptionResultState.Subscribed;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Errors.Add(ex.Message);
+                result.ResultState = NewsletterSubscriptionResultState.NotSubscribed;
             }
 
             return result;
@@ -206,15 +201,6 @@ namespace XperienceAdapter.Services
                 return result;
             }
 
-            var issue = await _issueInfoProvider.GetAsync(model.IssueGuid, _siteService.CurrentSite.SiteID, cancellationToken);
-
-            if (issue is null)
-            {
-                result.ResultState = NewsletterUnsubscriptionResultState.IssueNotFound;
-
-                return result;
-            }
-
             if (model.UnsubscribeFromAll)
             {
                 if (!_unsubscriptionProvider.IsUnsubscribedFromAllNewsletters(email))
@@ -233,14 +219,22 @@ namespace XperienceAdapter.Services
             }
             else
             {
+                var issue = await _issueInfoProvider.GetAsync(model.IssueGuid, _siteService.CurrentSite.SiteID, cancellationToken);
+
+                if (issue is null)
+                {
+                    result.ResultState = NewsletterUnsubscriptionResultState.IssueNotFound;
+
+                    return result;
+                }
+
                 result = await UnsubscribeInternalAsync(model, cancellationToken, issue.IssueID);
             }
 
             return result;
         }
 
-
-        public async Task<List<NewsletterPreferenceModel>> GetNewslettersForContact()
+        public async Task<List<NewsletterPreferenceModel>> GetNewslettersForContactAsync(CancellationToken cancellationToken)
         {
             var currentContact = ContactManagementContext.CurrentContact;
 
@@ -249,7 +243,7 @@ namespace XperienceAdapter.Services
                 return null!;
             }
 
-            var allNewsletters = await _newsletterInfoProvider.Get().OnSite(_siteService.CurrentSite.SiteID).GetEnumerableTypedResultAsync();
+            var allNewsletters = await _newsletterInfoProvider.Get().OnSite(_siteService.CurrentSite.SiteID).GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
             var output = new List<NewsletterPreferenceModel>();
 
             foreach (var newsletter in allNewsletters)
@@ -267,7 +261,7 @@ namespace XperienceAdapter.Services
             return output;
         }
 
-        public async Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> BulkUnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken)
+        public async Task<NewsletterSubscriptionResult<NewsletterUnsubscriptionResultState>> UnsubscribeAsync(NewsletterSubscriptionModel model, CancellationToken cancellationToken)
         {
             var unsubscriptionModel = new NewsletterUnsubscriptionModel
             {

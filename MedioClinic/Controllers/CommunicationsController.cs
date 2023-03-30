@@ -60,7 +60,7 @@ namespace MedioClinic.Controllers
             return StatusCode(handledResult.StatusCode, handledResult.ResponseText);
         }
 
-        public async Task<IActionResult> Index() => await GetIndexResultAsync();
+        public async Task<IActionResult> Index(CancellationToken cancellationToken) => await GetIndexResultAsync(cancellationToken);
 
         // POST: Communications
         [HttpPost]
@@ -76,12 +76,12 @@ namespace MedioClinic.Controllers
                 var consentData = $"consent: {uploadModel.Data.ConsentAgreed}";
                 _logger.LogError($"Newsletter preferences could not be updated due to invalid data. {contactData}, {emailData}, {consentData}.");
 
-                return await GetIndexResultAsync(uploadModel.Data, Localize("General.InvalidInput.Message"), MessageType.Error);
+                return await GetIndexResultAsync(cancellationToken, uploadModel.Data, Localize("General.InvalidInput.Message"), MessageType.Error);
             }
 
             if (!uploadModel.Data.ConsentAgreed && uploadModel.Data.Newsletters.Any(newsletter => newsletter.Subscribed))
             {
-                return await GetIndexResultAsync(uploadModel.Data, Localize("OnlineMarketing.ConsentRequired"), MessageType.Error);
+                return await GetIndexResultAsync(cancellationToken, uploadModel.Data, Localize("OnlineMarketing.ConsentRequired"), MessageType.Error);
             }
             else if (!uploadModel.Data.ConsentAgreed)
             {
@@ -119,7 +119,7 @@ namespace MedioClinic.Controllers
                     }
                     else
                     {
-                        unsubscriptionResults.Add(await _emailCommunicationService.BulkUnsubscribeAsync(model, cancellationToken));
+                        unsubscriptionResults.Add(await _emailCommunicationService.UnsubscribeAsync(model, cancellationToken));
                     }
                 }
                 else
@@ -139,7 +139,7 @@ namespace MedioClinic.Controllers
                 message = Localize("OnlineMarketing.NewsletterSubscriptionSuccessfull");
             }
 
-            return await GetIndexResultAsync(null, message, messageType);
+            return await GetIndexResultAsync(cancellationToken, null, message, messageType);
         }
 
         public IActionResult ConfirmSubscription(NewsletterSubscriptionConfirmationModel model)
@@ -308,7 +308,7 @@ namespace MedioClinic.Controllers
         /// <param name="message">User message.</param>
         /// <param name="messageType">Message type.</param>
         /// <returns>The implicit Index view.</returns>
-        private async Task<IActionResult> GetIndexResultAsync(NewsletterPreferenceViewModel? uploadModel = default, string? message = default, MessageType messageType = MessageType.Info)
+        private async Task<IActionResult> GetIndexResultAsync(CancellationToken cancellationToken, NewsletterPreferenceViewModel? uploadModel = default, string? message = default, MessageType messageType = MessageType.Info)
         {
             PageViewModel viewModel;
             var contact = ContactManagementContext.CurrentContact;
@@ -352,7 +352,7 @@ namespace MedioClinic.Controllers
                     return View(MessageViewName, viewModel);
                 }
 
-                var newsletters = await _emailCommunicationService.GetNewslettersForContact();
+                var newsletters = await _emailCommunicationService.GetNewslettersForContactAsync(cancellationToken);
                 var text = consent.GetConsentText(Thread.CurrentThread.CurrentUICulture.Name);
 
                 outputModel = new NewsletterPreferenceViewModel
