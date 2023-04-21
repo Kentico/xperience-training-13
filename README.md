@@ -8,7 +8,11 @@ The repo contains the **Medio Clinic** sample website developed throughout the t
 * [Kentico Xperience for developers](https://xperience.io/services/training/xperience-for-developers)
 * [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers)
 
-## Branches
+### The current branch
+
+The code in the current branch represents the final state of development in the **Email marketing** module of the [Kentico Xperience marketing for developers](https://xperience.io/services/training/xperience-marketing-for-developers) course.
+
+## Other branches
 
 The repo has branches that represent the various stages of development. The above two courses are split into modules. A course always has an introductory module, followed by several optional ones. Typically, a single branch represents the outcome of all the exercises in a given course module. At the same time, the branch serves as a starting point for another module or another course.
 
