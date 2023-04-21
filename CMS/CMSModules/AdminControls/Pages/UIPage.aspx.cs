@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Web.UI;
 
 using CMS.Base.Web.UI;
-using CMS.DocumentEngine;
+using CMS.FormEngine.Web.UI;
 using CMS.Helpers;
 using CMS.Modules;
 using CMS.PortalEngine;
 using CMS.PortalEngine.Web.UI;
 using CMS.UIControls;
 
-
-public partial class CMSModules_AdminControls_Pages_UIPage : CMSUIPage
+public partial class CMSModules_AdminControls_Pages_UIPage : CMSUIPage, ICallbackEventHandler
 {
     #region "Variables"
 
@@ -277,4 +277,23 @@ function {returnHandler}(parameterValue) {{
     }
 
     #endregion
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
+    }
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UILayoutKey, width);
+            }
+        }
+    }
 }

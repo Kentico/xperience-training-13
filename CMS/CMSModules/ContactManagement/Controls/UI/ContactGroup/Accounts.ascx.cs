@@ -309,10 +309,10 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Accou
         Action action = (Action)ValidationHelper.GetInteger(drpAction.SelectedItem.Value, 0);
         What what = (What)ValidationHelper.GetInteger(drpWhat.SelectedItem.Value, 0);
 
-        var where = new WhereCondition()
-            .WhereEquals("ContactGroupMemberContactGroupID", cgi.ContactGroupID)
-            // Set constraint for account relations only
-            .WhereEquals("ContactGroupMemberType", 1);
+        var membersQuery = ContactGroupMemberInfo.Provider.Get()
+                                .WhereEquals("ContactGroupMemberContactGroupID", cgi.ContactGroupID)
+                                // Set constraint for account relations only
+                                .WhereEquals("ContactGroupMemberType", 1);
 
         switch (what)
         {
@@ -320,12 +320,11 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Accou
             case What.All:
                 var accountIds = GetFilteredAccountsFromView().Column("AccountID");
 
-                where.WhereIn("ContactGroupMemberRelatedID", accountIds);
+                membersQuery.WhereIn("ContactGroupMemberRelatedID", accountIds);
                 break;
             // Selected items
             case What.Selected:
-                // Convert array to integer values to make sure no sql injection is possible (via string values)
-                where.WhereIn("ContactGroupMemberRelatedID", gridElem.SelectedItems);
+                membersQuery.WhereIn("ContactGroupMemberRelatedID", gridElem.SelectedItems);
                 break;
             default:
                 return;
@@ -336,7 +335,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Accou
             // Action 'Remove'
             case Action.Remove:
                 // Delete the relations between contact group and accounts
-                ContactGroupMemberInfoProvider.DeleteContactGroupMembers(where.ToString(true), cgi.ContactGroupID, true, true);
+                ContactGroupMemberInfoProvider.DeleteContactGroupMembers(membersQuery.Expand(membersQuery.WhereCondition), cgi.ContactGroupID, true, true);
                 // Show result message
                 if (what == What.Selected)
                 {

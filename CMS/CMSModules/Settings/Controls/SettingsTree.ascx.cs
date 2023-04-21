@@ -142,6 +142,18 @@ public partial class CMSModules_Settings_Controls_SettingsTree : CMSUserControl
         }
     }
 
+
+    /// <summary>
+    /// Get UI layout element.
+    /// </summary>
+    public UILayout Layout => layoutElem;
+
+
+    /// <summary>
+    /// Get UI layout element.
+    /// </summary>
+    public UILayoutPane TreePane => paneTree;
+
     #endregion
 
 

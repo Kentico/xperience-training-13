@@ -173,6 +173,54 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions
 
 
     /// <summary>
+    /// Indicates whether the move action is enabled.
+    /// </summary>
+    public bool MoveEnabled
+    {
+        get
+        {
+            return btnMove.Enabled;
+        }
+        set
+        {
+            btnMove.Enabled = value;
+        }
+    }
+
+
+    /// <summary>
+    /// Indicates whether the delete action is enabled.
+    /// </summary>
+    public bool DeleteEnabled
+    {
+        get
+        {
+            return btnDelete.Enabled;
+        }
+        set
+        {
+            btnDelete.Enabled = value;
+        }
+    }
+
+
+    /// <summary>
+    /// Indicates whether the add action is enabled.
+    /// </summary>
+    public bool AddEnabled
+    {
+        get
+        {
+            return btnAdd.Enabled;
+        }
+        set
+        {
+            btnAdd.Enabled = value;
+        }
+    }
+
+
+    /// <summary>
     /// Indicates whether the MOVE action should be displayed.
     /// </summary>
     public bool DisplayMove

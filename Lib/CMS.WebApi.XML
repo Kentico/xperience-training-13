@@ -24,32 +24,28 @@
             Gets or sets flag indicating whether session state is required.
             </summary>
         </member>
-        <member name="T:CMS.WebApi.RegisterCMSApiControllerAttribute">
+        <member name="T:CMS.WebApi.ContainsKeyAttribute">
             <summary>
-            Registers route given CMS API controller.
+            Validates if dictionary contains specific key.
             </summary>
+            <remarks>
+            This API supports the framework infrastructure and is not intended to be used directly from your code.
+            </remarks>
+            <exclude />
         </member>
-        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.MarkedType">
+        <member name="M:CMS.WebApi.ContainsKeyAttribute.#ctor(System.Object)">
             <summary>
-            Type of the registered API controller.
+            Constructor.
             </summary>
+            <param name="key">key which should be present in dictionary.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null</exception>
         </member>
-        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.RequiresSessionState">
+        <member name="M:CMS.WebApi.ContainsKeyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <summary>
-            Gets or sets value that defines if the target API controller requires read and write access to session-state values.
-            Default value is <c>true</c>.
+            Checks if object is valid.
             </summary>
-        </member>
-        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.#ctor(System.Type)">
-            <summary>
-            Creates new instance of <see cref="T:CMS.WebApi.RegisterCMSApiControllerAttribute"/>
-            </summary>
-            <param name="markedType"></param>
-        </member>
-        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.PreInit">
-            <summary>
-            Registers instance of this attribute to <see cref="T:CMS.WebApi.HttpControllerRouteTable"/>.
-            </summary>
+            <param name="value">Object to validate.</param>
+            <param name="validationContext">Validation context.</param>
         </member>
         <member name="T:CMS.WebApi.AllowOnlyEditorAttribute">
              <summary>
@@ -247,6 +243,22 @@
             Filter that sets correct thread UI culture based on user preferred UI culture.
             </summary>
         </member>
+        <member name="T:CMS.WebApi.EnsureSessionMessageHandler">
+            <summary>
+            HTTP handler ensuring that the request has available session.
+            </summary>
+        </member>
+        <member name="M:CMS.WebApi.EnsureSessionMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Ensures the request has session available. Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
+            </summary>
+            <param name="request">The HTTP request message to send to the server.</param>
+            <param name="cancellationToken">A cancellation token to cancel operation.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="request"/> is null.</exception>
+            <returns>
+            The task object representing the asynchronous operation.
+            </returns>
+        </member>
         <member name="T:CMS.WebApi.RequiredSessionStateControllerHandler">
             <summary>
             A <see cref="T:System.Web.IHttpAsyncHandler"/> that passes ASP.NET requests into the <see cref="T:System.Web.Http.HttpServer"/>
@@ -278,22 +290,6 @@
             <param name="requestContext">An object that encapsulates information about the request.</param>
             <returns>
             An object that processes the request.
-            </returns>
-        </member>
-        <member name="T:CMS.WebApi.EnsureSessionMessageHandler">
-            <summary>
-            HTTP handler ensuring that the request has available session.
-            </summary>
-        </member>
-        <member name="M:CMS.WebApi.EnsureSessionMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
-            <summary>
-            Ensures the request has session available. Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
-            </summary>
-            <param name="request">The HTTP request message to send to the server.</param>
-            <param name="cancellationToken">A cancellation token to cancel operation.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="request"/> is null.</exception>
-            <returns>
-            The task object representing the asynchronous operation.
             </returns>
         </member>
         <member name="T:CMS.WebApi.HttpControllerRouteMapper">
@@ -389,28 +385,32 @@
             Initializes a new instance of the <see cref="T:CMS.WebApi.WebApiModuleMetadata"/> class.
             </summary>
         </member>
-        <member name="T:CMS.WebApi.ContainsKeyAttribute">
+        <member name="T:CMS.WebApi.RegisterCMSApiControllerAttribute">
             <summary>
-            Validates if dictionary contains specific key.
+            Registers route given CMS API controller.
             </summary>
-            <remarks>
-            This API supports the framework infrastructure and is not intended to be used directly from your code.
-            </remarks>
-            <exclude />
         </member>
-        <member name="M:CMS.WebApi.ContainsKeyAttribute.#ctor(System.Object)">
+        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.MarkedType">
             <summary>
-            Constructor.
+            Type of the registered API controller.
             </summary>
-            <param name="key">key which should be present in dictionary.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null</exception>
         </member>
-        <member name="M:CMS.WebApi.ContainsKeyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+        <member name="P:CMS.WebApi.RegisterCMSApiControllerAttribute.RequiresSessionState">
             <summary>
-            Checks if object is valid.
+            Gets or sets value that defines if the target API controller requires read and write access to session-state values.
+            Default value is <c>true</c>.
             </summary>
-            <param name="value">Object to validate.</param>
-            <param name="validationContext">Validation context.</param>
+        </member>
+        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.#ctor(System.Type)">
+            <summary>
+            Creates new instance of <see cref="T:CMS.WebApi.RegisterCMSApiControllerAttribute"/>
+            </summary>
+            <param name="markedType"></param>
+        </member>
+        <member name="M:CMS.WebApi.RegisterCMSApiControllerAttribute.PreInit">
+            <summary>
+            Registers instance of this attribute to <see cref="T:CMS.WebApi.HttpControllerRouteTable"/>.
+            </summary>
         </member>
         <member name="T:CMS.WebApi.UseDefaultJsonMediaTypeFormatterAttribute">
             <summary>

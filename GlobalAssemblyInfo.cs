@@ -6,6 +6,5 @@ using System.Reflection;
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyVersion("13.0.13.0")]
-#pragma warning disable CS7035 // The specified version string does not conform to the recommended format - major.minor.build.revision
-[assembly: AssemblyFileVersion("13.0.61.94431")]
-[assembly: AssemblyInformationalVersion("13.0.61")]
+[assembly: AssemblyFileVersion("13.0.107.1633")]
+[assembly: AssemblyInformationalVersion("13.0.107")]

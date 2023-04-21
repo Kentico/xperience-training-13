@@ -246,6 +246,12 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         set;
     }
 
+
+    /// <summary>
+    /// Gets or sets key for persisting UI layout dimensions.
+    /// </summary>
+    public string UILayoutKey { get; internal set; }
+
     #endregion
 
 
@@ -329,6 +335,27 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         if (IsCopyMoveLinkDialog)
         {
             DisplayMediaElements();
+        }
+
+        var source = QueryHelper.GetString("source", string.Empty);
+        if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback() && !String.Equals("docattachments", source, StringComparison.OrdinalIgnoreCase))
+        {
+            var width = UILayoutHelper.GetLayoutWidth(UILayoutKey);
+            if (width.HasValue)
+            {
+                pnlLeftContent.Attributes["style"] = $"width: {width}px";
+                pnlTreeArea.Attributes["style"] = $"width: {width}px";
+                pnlRightContent.Attributes["style"] = $"margin-left: {width}px";
+                resizer.Attributes["style"] = $"left: {width}px";
+            }
+
+            var collapsed = UILayoutHelper.IsVerticalResizerCollapsed(UILayoutKey);
+            if (collapsed == true)
+            {
+                var existingClass = resizerV.Attributes["class"];
+                existingClass += " ResizerDown";
+                resizerV.Attributes["class"] = existingClass;
+            }
         }
     }
 
@@ -2597,7 +2624,9 @@ function RaiseHiddenPostBack(){{
             case "insertitem":
                 GetSelectedItem();
                 break;
-
+            case "selectroot":
+                HandleSearchAction(string.Empty);
+                break;
             case "search":
                 HandleSearchAction(CurrentArgument);
                 break;

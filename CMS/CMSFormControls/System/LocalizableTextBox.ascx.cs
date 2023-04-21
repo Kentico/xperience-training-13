@@ -51,6 +51,7 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
 
     private const string ADD_ARGUMENT = "add|";
     private const string TEXT_BOX_LOCALIZED_CSS = "input-localized";
+    private const int FORM_CONTROL_MAX_WIDTH = 320;
 
     #endregion
 
@@ -388,6 +389,25 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
 
 
     /// <summary>
+    /// Width of the text box.
+    /// </summary>
+    public Unit Width
+    {
+        get
+        {
+            object width = GetValue("width");
+
+            if (width is null)
+            {
+                return Unit.Empty;
+            }
+
+            return new Unit(ValidationHelper.GetInteger(width, defaultValue: FORM_CONTROL_MAX_WIDTH));
+        }
+    }
+
+
+    /// <summary>
     /// Indicates whether the validation errors are hidden. Default value is <c>false</c>.
     /// </summary>
     public bool HideValidationErrors
@@ -433,6 +453,7 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
         }
 
         SetClientSideMaxLength();
+        SetTextBoxWidth();
     }
 
 
@@ -502,6 +523,22 @@ public partial class CMSFormControls_System_LocalizableTextBox : LocalizableForm
             if (maxLength > 0)
             {
                 TextBox.MaxLength = maxLength;
+            }
+        }
+    }
+
+
+    private void SetTextBoxWidth()
+    {
+        if (!Width.IsEmpty)
+        {
+            cntrlContainer.Width = Width;
+            TextBox.Width = Width;
+
+            if (Width.Value > FORM_CONTROL_MAX_WIDTH)
+            {
+                cntrlContainer.Style.Add("max-width", Width.ToString());
+                TextBox.Style.Add("max-width", Width.ToString());
             }
         }
     }
