@@ -10,5 +10,8 @@
             <cms:CMSDropDownList ID="SourceDropDownList" runat="server" EnableViewState="false" />
             <asp:PlaceHolder ID="WarningPlaceHolder" runat="server" EnableViewState="false"></asp:PlaceHolder>
         </div>
+        <div style="display:none" class="macro-source-input-container control-group-inline">
+            <cms:MacroEditor ID="MacroSourceInput" runat="server" EnableViewState="false" />
+        </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CMS.Base.Web.UI;
+using CMS.MacroEngine;
 using CMS.UIControls;
 
 
@@ -29,27 +30,40 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     }
 
 
+    public void SetWatermarkText(string watermarkText)
+    {
+        txtSearchByName.WatermarkText = watermarkText;
+    }
+
+
     /// <summary>
     /// Initializes all the nested controls.
     /// </summary>
     private void SetupControls()
     {
+        if (string.IsNullOrEmpty(txtSearchByName.WatermarkText))
+        {
+            SetWatermarkText(GetString("dialogs.view.searchbyname"));
+        }
+
         // Get JavaScript definition of method used to set hidden attributes
-        string setSearchAction = String.Format(@"
+        string setSearchAction = $@"
 function SetSearchAction(){{
-    var searchTxt = document.getElementById('{0}');
-    if(searchTxt!=null){{
+    var searchTxt = document.getElementById('{txtSearchByName.ClientID}');
+    if(searchTxt!=null && searchTxt.value !== '{txtSearchByName.WatermarkText}' && searchTxt.value !== ''){{
         SetAction('search', searchTxt.value);
+    }} else {{
+        SetAction('selectroot');
     }}
 }}
 function SetSearchFocus(){{
-    var searchTxt = document.getElementById('{0}');
-    if(searchTxt!=null){{
+    var searchTxt = document.getElementById('{txtSearchByName.ClientID}');
+    if(searchTxt!=null && searchTxt.value !== '{txtSearchByName.WatermarkText}'){{
         searchTxt.blur();
         searchTxt.focus();
         searchTxt.value = searchTxt.value;
     }}
-}}", txtSearchByName.ClientID);
+}}";
 
         ScriptHelper.RegisterStartupScript(this, GetType(), "SearchScripts", setSearchAction, true);
 

@@ -11,6 +11,15 @@ using CMS.UIControls;
 
 public partial class CMSModules_System_System_Email : GlobalAdminPage
 {
+    private EmailServerAuthenticationType SelectedAuthenticationType
+    {
+        get
+        {
+            return EnumStringRepresentationExtensions.ToEnum<EmailServerAuthenticationType>(ValidationHelper.GetString(rbAuthenticationType.Value, ""));
+        }
+    }
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
         // Enable client side validation for emails
@@ -26,6 +35,10 @@ public partial class CMSModules_System_System_Email : GlobalAdminPage
         rfvServer.ErrorMessage = GetString("System_Email.ErrorServer");
         rfvFrom.ErrorMessage = rfvTo.ErrorMessage = GetString("System_Email.EmptyEmail");
 
+
+        rbAuthenticationType.CurrentSelector.AutoPostBack = true;
+        rbAuthenticationType.CurrentSelector.SelectedIndexChanged += rbAuthenticationType_SelectedIndexChanged;
+
         if (!RequestHelper.IsPostBack())
         {
             // Fill SMTP fields with the default server data
@@ -36,8 +49,16 @@ public partial class CMSModules_System_System_Email : GlobalAdminPage
                 txtUserName.Text = EmailHelper.Settings.ServerUserName(siteName);
                 txtPassword.Text = EmailHelper.Settings.ServerPassword(siteName);
                 txtPassword.Attributes.Add("value", txtPassword.Text);
-                chkSSL.Checked = EmailHelper.Settings.ServerUseSSL(siteName);
+
+                rbAuthenticationType.Value = EmailHelper.Settings.ServerAuthenticationType(siteName);
+                selOAuthCredentials.Value = EmailHelper.Settings.ServerOAuthCredentials(siteName);
             }
+            else
+            {
+                rbAuthenticationType.Value = EmailServerAuthenticationType.Basic;
+            }
+
+            LoadVisibleCredentialsForm();
         }
     }
 
@@ -53,11 +74,22 @@ public partial class CMSModules_System_System_Email : GlobalAdminPage
         txtTo.Text = txtTo.Text.Trim();
         txtServer.Text = txtServer.Text.Trim();
 
-        string result = new Validator()
+        string result = null;
+        
+        if (SelectedAuthenticationType == EmailServerAuthenticationType.Basic)
+        {
+            result = new Validator()
             .NotEmpty(txtServer.Text, GetString("System_Email.ErrorServer"))
             .NotEmpty(txtFrom.Text, GetString("System_Email.EmptyEmail"))
             .NotEmpty(txtTo.Text, GetString("System_Email.EmptyEmail"))
             .Result;
+        }
+        else if (SelectedAuthenticationType == EmailServerAuthenticationType.OAuth)
+        {
+            result = new Validator()
+                .NotEmpty(selOAuthCredentials.Value, GetString("System_Email.EmptyCredentials"))
+                .Result;
+        }
 
         if (!string.IsNullOrEmpty(result))
         {
@@ -116,11 +148,28 @@ public partial class CMSModules_System_System_Email : GlobalAdminPage
 #pragma warning disable 618
                                             ServerPassword = EncryptionHelper.EncryptData(txtPassword.Text),
 #pragma warning restore 618
-                                            ServerUseSSL = chkSSL.Checked
-                                        };
+                                            ServerUseSSL = false,
+                                            ServerAuthenticationType = SelectedAuthenticationType,
+                                            ServerOAuthCredentials = ValidationHelper.GetGuid(selOAuthCredentials.Value, Guid.Empty)
+        };
 
         string siteName = SiteContext.CurrentSiteName ?? string.Empty;
 
         EmailSender.SendTestEmail(siteName, email, smtpServer);
+    }
+
+
+    protected void rbAuthenticationType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        LoadVisibleCredentialsForm();
+    }
+
+
+    private void LoadVisibleCredentialsForm()
+    {
+        var selectedValue = SelectedAuthenticationType;
+
+        plcOAuth.Visible = selectedValue == EmailServerAuthenticationType.OAuth;
+        plcBasic.Visible = selectedValue == EmailServerAuthenticationType.Basic;
     }
 }

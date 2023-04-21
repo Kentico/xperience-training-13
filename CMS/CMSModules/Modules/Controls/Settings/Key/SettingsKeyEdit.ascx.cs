@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
+using System.Globalization;
 using System.Web.UI.WebControls;
 
 using CMS.Base;
@@ -326,7 +327,17 @@ public partial class CMSModules_Modules_Controls_Settings_Key_SettingsKeyEdit : 
         txtKeyExplanationText.Text = SettingsKeyObj.KeyExplanationText;
         drpCategory.SelectedCategory = SettingsKeyObj.KeyCategoryID;
         drpKeyType.SelectedValue = SettingsKeyObj.KeyType;
-        DefaultValue = SettingsKeyObj.KeyDefaultValue;
+
+        if (String.Equals("double", SettingsKeyObj.KeyType, StringComparison.OrdinalIgnoreCase))
+        {
+            var doubleValue = ValidationHelper.GetDoubleSystem(SettingsKeyObj.KeyDefaultValue, Double.NaN);
+            DefaultValue = doubleValue == Double.NaN ? null : doubleValue.ToString();
+        }
+        else
+        {
+            DefaultValue = SettingsKeyObj.KeyDefaultValue;
+        }
+
         txtKeyValidation.Text = SettingsKeyObj.KeyValidation;
         ucSettingsKeyControlSelector.SetSelectorProperties(SettingsKeyObj.KeyType, SettingsKeyObj.KeyEditingControlPath);
 
@@ -401,7 +412,20 @@ public partial class CMSModules_Modules_Controls_Settings_Key_SettingsKeyEdit : 
         keyObj.KeyIsHidden = chkKeyIsHidden.Checked;
         keyObj.KeyType = drpKeyType.SelectedValue;
         keyObj.KeyValidation = (string.IsNullOrEmpty(txtKeyValidation.Text.Trim()) ? null : txtKeyValidation.Text.Trim());
-        keyObj.KeyDefaultValue = (string.IsNullOrEmpty(DefaultValue) ? null : DefaultValue);
+
+        if (String.IsNullOrEmpty(DefaultValue))
+        {
+            keyObj.KeyDefaultValue = null;
+        }
+        else if (String.Equals("double", drpKeyType.SelectedValue, StringComparison.OrdinalIgnoreCase))
+        {
+            var doubleValue = ValidationHelper.GetDouble(DefaultValue, Double.NaN);
+            keyObj.KeyDefaultValue = Double.IsNaN(doubleValue) ? null : doubleValue.ToString(CultureHelper.EnglishCulture);
+        }
+        else
+        {
+            keyObj.KeyDefaultValue = DefaultValue;
+        }
 
         var path = ValidationHelper.GetString(ucSettingsKeyControlSelector.ControlPath, string.Empty);
         keyObj.KeyEditingControlPath = (string.IsNullOrEmpty(path.Trim()) ? null : path.Trim());
@@ -498,7 +522,7 @@ public partial class CMSModules_Modules_Controls_Settings_Key_SettingsKeyEdit : 
             switch (drpKeyType.SelectedValue)
             {
                 case "double":
-                    if (!ValidationHelper.IsDouble(DefaultValue))
+                    if (!String.IsNullOrEmpty(DefaultValue) && !Double.TryParse(DefaultValue, NumberStyles.Float, NumberFormatInfo.CurrentInfo, out _))
                     {
                         lblDefValueError.Text = ResHelper.GetString("settings.validationdoubleerror");
                     }

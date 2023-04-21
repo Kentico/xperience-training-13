@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ImportExport_Controls_ExportWizard {
-    
+public partial class CMSModules_ImportExport_Controls_ExportWizard
+{
+
     /// <summary>
     /// ltlScript control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlScript;
-    
+
     /// <summary>
     /// pnlWrapper control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlWrapper;
-    
+
     /// <summary>
     /// lblBeta control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblBeta;
-    
+
     /// <summary>
     /// ucHeader control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSAdminControls_Wizard_Header ucHeader;
-    
+
     /// <summary>
     /// wzdExport control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSWizard wzdExport;
-    
+
     /// <summary>
     /// wzdStepStart control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.WizardStep wzdStepStart;
-    
+
     /// <summary>
     /// configExport control.
     /// </summary>
@@ -73,7 +74,25 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_ImportExport_Controls_ExportConfiguration configExport;
-    
+
+    /// <summary>
+    /// wzdStepExportSettings control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.WizardStep wzdStepExportSettings;
+
+    /// <summary>
+    /// pnlExportSettings control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSModules_ImportExport_Controls_ExportSettingsPanel pnlExportSettings;
+
     /// <summary>
     /// wzdStepSelectionPanel control.
     /// </summary>
@@ -82,7 +101,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.WizardStep wzdStepSelectionPanel;
-    
+
     /// <summary>
     /// pnlExport control.
     /// </summary>
@@ -91,7 +110,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_ImportExport_Controls_ExportPanel pnlExport;
-    
+
     /// <summary>
     /// wzdStepProgress control.
     /// </summary>
@@ -100,7 +119,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.WizardStep wzdStepProgress;
-    
+
     /// <summary>
     /// ctlAsyncExport control.
     /// </summary>
@@ -109,7 +128,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.UIControls.AsyncControl ctlAsyncExport;
-    
+
     /// <summary>
     /// pnlError control.
     /// </summary>
@@ -118,7 +137,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlError;
-    
+
     /// <summary>
     /// lblError control.
     /// </summary>
@@ -127,7 +146,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.AlertLabel lblError;
-    
+
     /// <summary>
     /// pnlWarning control.
     /// </summary>
@@ -136,7 +155,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlWarning;
-    
+
     /// <summary>
     /// lblWarning control.
     /// </summary>
@@ -145,7 +164,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.AlertLabel lblWarning;
-    
+
     /// <summary>
     /// pnlErrorBlank control.
     /// </summary>
@@ -154,7 +173,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlErrorBlank;
-    
+
     /// <summary>
     /// lblErrorBlank control.
     /// </summary>
@@ -163,7 +182,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.AlertLabel lblErrorBlank;
-    
+
     /// <summary>
     /// pnlPermissions control.
     /// </summary>
@@ -172,7 +191,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlPermissions;
-    
+
     /// <summary>
     /// lnkPermissions control.
     /// </summary>
@@ -181,7 +200,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HyperLink lnkPermissions;
-    
+
     /// <summary>
     /// hdnState control.
     /// </summary>
@@ -190,7 +209,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnState;
-    
+
     /// <summary>
     /// ltlScriptAfter control.
     /// </summary>
@@ -199,7 +218,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlScriptAfter;
-    
+
     /// <summary>
     /// ctrlAsyncSelection control.
     /// </summary>

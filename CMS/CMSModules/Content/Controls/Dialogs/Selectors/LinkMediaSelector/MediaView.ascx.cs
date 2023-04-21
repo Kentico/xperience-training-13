@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.Linq;
 
 using CMS.UIControls;
-
+using CMS.Base.Web.UI;
 
 public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSelector_MediaView : ContentMediaView
 {
@@ -64,6 +62,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
             Visible = true;
 
             // Initialize controls
+            SetupSearchControl();
             SetupControls();
         }
     }
@@ -78,12 +77,22 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     }
 
 
+    private void SetupSearchControl()
+    {
+        if (InnerMediaControl.SourceType == MediaSourceEnum.MediaLibraries)
+        {
+            dialogSearch.SetWatermarkText(GetString("dialogs.view.searchbynametitledesc"));
+        }
+    }
+
+
     /// <summary>
     /// Loads control's content.
     /// </summary>
     public void Reload()
     {
         // Initialize controls
+        SetupSearchControl();
         SetupControls();
         ReloadData();
     }

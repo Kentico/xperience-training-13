@@ -22,6 +22,70 @@
 <%@ Register Src="~/CMSFormControls/Sites/SiteSelector.ascx" TagName="SiteSelector"
     TagPrefix="cms" %>
 
+<script type="text/javascript" language="javascript">
+    //<![CDATA[
+    $cmsj(function () {
+        $cmsj("#separator").draggable({
+            axis: "x",
+            cursor: "ew-resize",
+            drag: function (event, ui) {
+                const halfScreen = window.screen.width / 2;
+                const minWidth = 300;
+
+                var separator = $cmsj(ui.helper[0]);
+                var leftOffset = separator.offset().left;
+
+                if (leftOffset + ui.position.left > halfScreen) {
+                    ui.offset.left = halfScreen;
+                    ui.position.left = halfScreen - leftOffset;
+
+                    return;
+                }
+                
+                if (leftOffset + ui.position.left < minWidth) {
+                    ui.offset.left = minWidth;
+                    ui.position.left = minWidth - leftOffset;
+
+                    return;
+                }
+
+                var resizer = $cmsj('#' + '<%=resizer.ClientID%>')
+
+                resizer.css("left", ui.offset.left);
+            },
+            stop: function (event, ui) {
+                var separator = $cmsj(ui.helper[0]);
+                var resizer = $cmsj('#' + '<%=resizer.ClientID%>')
+
+                var offset = separator.offset();
+                $cmsj('#' + '<%=pnlLeftContent.ClientID%>').width(offset.left);
+                $cmsj('#' + '<%=pnlTreeArea.ClientID%>').width(offset.left);
+                $cmsj('#' + '<%=pnlRightContent.ClientID%>').css("margin-left", offset.left)
+
+                resizer.css("left", offset.left);
+                separator.css("inset", "");
+
+                WebForm_DoCallback('<%=Page.ClientID%>', 'width|' + offset.left, null, null, null);
+            }
+        });
+
+        var verticalResizer = $cmsj('#' + '<%=resizerV.ClientID%>');
+
+        verticalResizer.click(function () {
+            var value = $cmsj(this).hasClass("ResizerDown");
+            WebForm_DoCallback('<%=Page.ClientID%>', 'collapsed|' + value, null, null, null);
+        });
+
+        // copied from DialogHelper.js as the background is not handled by css styles
+        if (verticalResizer.hasClass('ResizerDown')) {
+            var backgroundImage = verticalResizer.css('background-image');
+            backgroundImage = backgroundImage.replace(/maximize/i, 'minimize');
+            verticalResizer.css('background-image', backgroundImage);
+        }
+    });
+    //]]>
+</script>
+
 <div class="Hidden">
     <cms:CMSUpdatePanel ID="pnlUpdateHidden" runat="server">
         <ContentTemplate>
@@ -67,7 +131,7 @@
                         </cms:CMSUpdatePanel>
                     </div>
                 </asp:Panel>
-                <div class="DialogResizerH">
+                <div id="resizer" runat="server" class="DialogResizerH">
                     <div class="DialogResizerArrowH">
                         &nbsp;
                     </div>
@@ -75,7 +139,7 @@
             </asp:PlaceHolder>
         </asp:Panel>
         <asp:PlaceHolder ID="plcSeparator" runat="server">
-            <div class="DialogTreeAreaSeparator">
+            <div id="separator" class="DialogTreeAreaSeparator Resizable">
             </div>
         </asp:PlaceHolder>
         <asp:Panel ID="pnlRightContent" runat="server" CssClass="DialogRightBlock">
@@ -98,7 +162,7 @@
                     </div>
                     <div id="divDialogResizer" class="DialogResizerVLine" runat="server" enableviewstate="false">
                         <div class="DialogResizerV">
-                            <div class="DialogResizerArrowV">
+                            <div id="resizerV" runat="server" class="DialogResizerArrowV">
                                 &nbsp;
                             </div>
                         </div>

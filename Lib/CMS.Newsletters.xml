@@ -925,7 +925,7 @@
             Contains extension methods for POP3 client to simplify message processing.
             </summary>
         </member>
-        <member name="M:CMS.Newsletters.Extensions.Pop3ClientExtensions.GetSafeMessage(OpenPop.Pop3.Pop3Client,System.Int32)">
+        <member name="M:CMS.Newsletters.Extensions.Pop3ClientExtensions.GetSafeMessage(MailKit.Net.Pop3.Pop3Client,System.Int32)">
             <summary>
             Fetches a message from the server and parses it, consuming and logging any exceptions in the process.
             </summary>
@@ -2360,6 +2360,12 @@
             Returns title (text between 'title' tags) of given html page.
             </summary>
             <param name="htmlPage">Source code of html page</param>
+        </member>
+        <member name="M:CMS.Newsletters.EmailQueueManager.GetPageEncoding(System.Byte[])">
+            <summary>
+            Extracts the encoding from the content.
+            </summary>
+            <param name="pageContent">HTTP response content</param>
         </member>
         <member name="M:CMS.Newsletters.EmailQueueManager.GetIssueTextFromURL(System.String)">
             <summary>
@@ -8115,22 +8121,7 @@
             </summary>
             <returns>Textual description of task run's failure if any.</returns>
         </member>
-        <member name="M:CMS.Newsletters.BounceChecker.GetAuthenticationMethod">
-            <summary>
-            Gets the authentication method.
-            </summary>
-            <returns>Value from an enumeration that represents the chosen authentication method</returns>
-            <exception cref="T:System.ArgumentException">Thrown when a chosen authentication method is unsupported or malformed</exception>
-        </member>
-        <member name="M:CMS.Newsletters.BounceChecker.CustomFallbackDecoder(System.String)">
-            <summary>
-            Occurs when a character set name could not be mapped to the encoding.
-            Calls OnFallbackDecoderEvent event if defined.
-            </summary>
-            <param name="characterSet">Character set name</param>
-            <returns>Encoding</returns>
-        </member>
-        <member name="M:CMS.Newsletters.BounceChecker.ProcessEmail(OpenPop.Mime.Message)">
+        <member name="M:CMS.Newsletters.BounceChecker.ProcessEmail(MimeKit.MimeMessage)">
             <summary>
             Checks a given e-mail message for known header fields.
             If the message is recognized as bounced e-mail, then it is processed and counted.
@@ -8138,7 +8129,7 @@
             <param name="message">E-mail message</param>
             <returns>true, if message is a recognized bounced e-mail, otherwise false</returns>
         </member>
-        <member name="M:CMS.Newsletters.BounceChecker.TryGetHeaderValue(System.String,System.Collections.Specialized.NameValueCollection)">
+        <member name="M:CMS.Newsletters.BounceChecker.TryGetHeaderValue(System.String,MimeKit.HeaderList)">
             <summary>
             Attempts to find a known field in unknown header collection.
             </summary>

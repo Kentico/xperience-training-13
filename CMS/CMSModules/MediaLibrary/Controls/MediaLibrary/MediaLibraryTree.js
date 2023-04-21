@@ -75,3 +75,9 @@ function SetLibParentAction(argument) {
     SetAction('morefolderselect', argument);
     RaiseHiddenPostBack();
 }
+
+function DeselectCurrentFolder() {
+    if (currentFolder) {
+        currentFolder.removeClass('ContentTreeSelectedItem');
+    }
+}

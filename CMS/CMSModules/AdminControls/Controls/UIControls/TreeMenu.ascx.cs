@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
+using CMS.Helpers;
 using CMS.UIControls;
 
 
 public partial class CMSModules_AdminControls_Controls_UIControls_TreeMenu : CMSAbstractUIWebpart
 {
-    #region "Variables"
-
     /// <summary>
     /// Indicates whether automatically select first item or display UI guide
     /// </summary>
     protected bool displayGuide = false;
 
-    #endregion
-
-
-    #region "Properties"
 
     /// <summary>
     /// Maximum relative level for tree.
@@ -53,10 +47,6 @@ public partial class CMSModules_AdminControls_Controls_UIControls_TreeMenu : CMS
         }
     }
 
-    #endregion
-
-
-    #region "Methods"
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -79,5 +69,26 @@ public partial class CMSModules_AdminControls_Controls_UIControls_TreeMenu : CMS
         }
     }
 
-    #endregion
+
+    protected override void OnInit(EventArgs e)
+    {
+        var page = ControlsHelper.GetParentControl<CMSUIPage>(this);
+
+        if (page?.UILayoutKey != null)
+        {
+            layoutElem.OnResizeEndScript = ScriptHelper.GetLayoutResizeScript(paneContent, page);
+            layoutElem.MaxSize = "50%";
+
+            if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
+            {
+                var width = UILayoutHelper.GetLayoutWidth(page.UILayoutKey);
+                if (width.HasValue)
+                {
+                    paneContent.Size = width.ToString();
+                }
+            }
+        }
+
+        base.OnInit(e);
+    }
 }

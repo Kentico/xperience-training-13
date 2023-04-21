@@ -156,7 +156,7 @@ public partial class CMSModules_Scoring_Controls_UI_Contact_List : CMSAdminListC
         // Get modify permission of current user
         modifyPermission = AuthorizationHelper.AuthorizedModifyContact(false);
 
-        var sourceData = GetContactsWithScore();
+        var sourceData = GetContactsWithScoreQuery().Result;
         if (DataHelper.GetItemsCount(sourceData) >= MAX_RECORDS)
         {
             ShowInformation(GetString("om.contact.notallrecords"));
@@ -278,40 +278,28 @@ public partial class CMSModules_Scoring_Controls_UI_Contact_List : CMSAdminListC
     protected void btnOk_Click(object sender, EventArgs e)
     {
         string resultMessage = string.Empty;
-        // Get where condition depending on mass action selection
-        string where;
-        List<string> contactIds = null;
 
         What what = (What)ValidationHelper.GetInteger(drpWhat.SelectedValue, 0);
+
+        ObjectQuery<ContactInfo> contactsQuery = null;
+
         switch (what)
         {
             // All items
             case What.All:
                 // Get all contacts with scores based on filter condition
-                var contacts = GetContactsWithScore();
+                var contactsIds = GetContactsWithScoreQuery()
+                                    .AsNested()
+                                    .Column("ContactID");
 
-                if (!DataHelper.DataSourceIsEmpty(contacts))
-                {
-                    // Get array list with IDs
-                    contactIds = DataHelper.GetUniqueValues(contacts.Tables[0], "ContactID", true);
-                }
+                contactsQuery = ContactInfo.Provider.Get().WhereIn("ContactID", contactsIds);
                 break;
 
             // Selected items
             case What.Selected:
                 // Get selected IDs from unigrid
-                contactIds = gridElem.SelectedItems;
+                contactsQuery = ContactInfo.Provider.Get().WhereIn("ContactID", gridElem.SelectedItems);
                 break;
-        }
-
-        // Prepare where condition
-        if ((contactIds != null) && (contactIds.Count > 0))
-        {
-            where = SqlHelper.GetWhereCondition<int>("ContactID", contactIds, false);
-        }
-        else
-        {
-            where = "0=1";
         }
 
         Action action = (Action)ValidationHelper.GetInteger(drpAction.SelectedItem.Value, 0);
@@ -324,7 +312,7 @@ public partial class CMSModules_Scoring_Controls_UI_Contact_List : CMSAdminListC
                 // If status ID is 0, the status will be removed
                 if (statusId >= 0)
                 {
-                    ContactInfoProvider.UpdateContactStatus(statusId, where);
+                    ContactInfoProvider.UpdateContactStatus(statusId, contactsQuery.Expand(contactsQuery.WhereCondition));
                     resultMessage = GetString("om.contact.massaction.statuschanged");
                 }
                 break;
@@ -332,12 +320,14 @@ public partial class CMSModules_Scoring_Controls_UI_Contact_List : CMSAdminListC
             case Action.AddToGroup:
                 // Get contact group ID from hidden field
                 int groupId = ValidationHelper.GetInteger(hdnIdentifier.Value, 0);
-                if ((groupId > 0) && (contactIds != null))
+
+                if (groupId > 0)
                 {
+                    var contactIds = contactsQuery.Column("ContactID").GetListResult<int>();
+
                     // Add each selected contact to the contact group, skip contacts that are already members of the group
-                    foreach (string item in contactIds)
+                    foreach (var contactId in contactIds)
                     {
-                        int contactId = ValidationHelper.GetInteger(item, 0);
                         if (contactId > 0)
                         {
                             ContactGroupMemberInfo.Provider.Add(groupId, contactId, ContactGroupMemberTypeEnum.Contact, MemberAddedHowEnum.Manual);
@@ -515,22 +505,21 @@ function SelectValue_" + ClientID + @"(valueID) {
     /// <summary>
     /// Returns all contacts with scores that meet filter condition.
     /// </summary>
-    private DataSet GetContactsWithScore()
+    private ObjectQuery<ScoreContactRuleInfo> GetContactsWithScoreQuery()
     {
         return ScoreContactRuleInfoProvider.GetContactsWithScore()
-                                           .Source(s => s.InnerJoin<ContactInfo>("OM_ScoreContactRule.ContactID", "OM_Contact.ContactID"))
-                                           .Columns("OM_Contact.ContactID", "ContactFirstName", "ContactLastName")
-                                           .AddColumn(
-                                               new AggregatedColumn(AggregationType.Sum, "Value").As("Score")
-                                            )
-                                           .WhereEquals("ScoreID", scoreId)
-                                           .NewGroupBy()
-                                           .GroupBy("OM_Contact.ContactID", "ContactFirstName", "ContactLastName")
-                                           .Having(ucScoreFilter.GetWhereCondition())
-                                           .OrderByDescending("SUM(VALUE)")
-                                           // Force maximum allowed records
-                                           .TopN(MAX_RECORDS)
-                                           .Result;
+                                                   .Source(s => s.InnerJoin<ContactInfo>("OM_ScoreContactRule.ContactID", "OM_Contact.ContactID"))
+                                                   .Columns("OM_Contact.ContactID", "ContactFirstName", "ContactLastName")
+                                                   .AddColumn(
+                                                       new AggregatedColumn(AggregationType.Sum, "Value").As("Score")
+                                                    )
+                                                   .WhereEquals("ScoreID", scoreId)
+                                                   .NewGroupBy()
+                                                   .GroupBy("OM_Contact.ContactID", "ContactFirstName", "ContactLastName")
+                                                   .Having(ucScoreFilter.GetWhereCondition())
+                                                   .OrderByDescending("SUM(VALUE)")
+                                                   // Force maximum allowed records
+                                                   .TopN(MAX_RECORDS);
     }
 
     #endregion

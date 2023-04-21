@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.UI;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
@@ -9,14 +10,16 @@ using CMS.Ecommerce;
 using CMS.Ecommerce.Web.UI;
 using CMS.Helpers;
 using CMS.Localization;
-using CMS.PortalEngine;
 using CMS.SiteProvider;
 using CMS.UIControls;
 
 
 [UIElement(ModuleName.ECOMMERCE, "Products")]
-public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset : CMSProductsPage
+public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset : CMSProductsPage, ICallbackEventHandler
 {
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset);
+
+
     #region "Variables"
 
     private int? mResultNodeID;
@@ -149,7 +152,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
 
     #endregion
 
-   
+
     #region "Page events"
 
     /// <summary>
@@ -159,7 +162,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
     {
         new ContentUrlRetriever(this, ProductUIHelper.GetProductPageUrl);
     }
-    
+
 
     protected override void OnPreInit(EventArgs e)
     {
@@ -172,8 +175,20 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
 
     protected override void OnInit(EventArgs e)
     {
+        layoutElem.OnResizeEndScript = ScriptHelper.GetLayoutResizeScript(contenttree, this);
+        layoutElem.MaxSize = "50%";
+
+        if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
+        {
+            var width = UILayoutHelper.GetLayoutWidth(UI_LAYOUT_KEY);
+            if (width.HasValue)
+            {
+                contenttree.Size = width.ToString();
+            }
+        }
+
         base.OnInit(e);
-        
+
         string contentUrl = "Product_List.aspx" + RequestContext.CurrentQueryString;
 
         // Display product list if display tree of product sections is not allowed
@@ -214,7 +229,7 @@ public partial class CMSModules_Ecommerce_Pages_Tools_Products_Products_Frameset
 
         // Override content functions
         AddScript(
-@"
+        @"
 function SetMode(mode, passive) {
     if (!CheckChanges()) {
         return false;
@@ -253,7 +268,7 @@ function DragOperation(nodeId, targetNodeId, operation) {
 
 
     #region "Private Methods"
-    
+
     /// <summary>
     /// Checks whether node with given node ID is contained in a products tree,
     /// considering the ProductsStartingPath setting.
@@ -281,6 +296,25 @@ function DragOperation(nodeId, targetNodeId, operation) {
         }
 
         return true;
+    }
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UI_LAYOUT_KEY, width);
+            }
+        }
+    }
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
     }
 
     #endregion
