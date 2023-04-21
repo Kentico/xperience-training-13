@@ -60,7 +60,7 @@ namespace MedioClinic.Controllers
             _consentManager = consentManager ?? throw new ArgumentNullException(nameof(consentManager));
         }
 
-        // GET: Consent/
+        // GET: Privacy/
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var contact = ContactManagementContext.GetCurrentContact(false);

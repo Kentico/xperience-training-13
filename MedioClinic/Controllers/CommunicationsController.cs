@@ -60,9 +60,10 @@ namespace MedioClinic.Controllers
             return StatusCode(handledResult.StatusCode, handledResult.ResponseText);
         }
 
+        // GET: Communications/
         public async Task<IActionResult> Index(CancellationToken cancellationToken) => await GetIndexResultAsync(cancellationToken);
 
-        // POST: Communications
+        // POST: Communications/
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(PageViewModel<NewsletterPreferenceViewModel> uploadModel, CancellationToken cancellationToken)

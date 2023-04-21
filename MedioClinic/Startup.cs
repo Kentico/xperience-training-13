@@ -48,7 +48,7 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        private const string ConventionalRoutingControllers = "Error|Privacy|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
+        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile|Generator|Privacy|Communications";
 
         public IConfiguration Configuration { get; }
 
@@ -210,7 +210,6 @@ namespace MedioClinic
                     {
                         controller = ConventionalRoutingControllers
                     });
-
 
                 endpoints.MapDefaultControllerRoute();
             });
