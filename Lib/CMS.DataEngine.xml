@@ -5155,6 +5155,15 @@
             Creates a data adapter
             </summary>
         </member>
+        <member name="M:CMS.DataEngine.AbstractDataConnection.ProcessOutParameters(System.Data.Common.DbParameterCollection,System.Collections.Generic.IEnumerable{CMS.DataEngine.DataParameter})">
+            <summary>
+            Ensures propagation of output (or inputoutput) parameters after the SQL command execution to the query parameters collection.
+            </summary>
+            <remarks>Processing of output parameters is ensured for the following methods (and their async variants if exist):
+            <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteQuery(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>, <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteNonQuery(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>, <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteScalar(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>.</remarks>
+            <param name="commandParams">SQL command parameters</param>
+            <param name="queryParams">Query parameters</param>
+        </member>
         <member name="M:CMS.DataEngine.AbstractDataConnection.GetNestedConnection(System.String,System.Boolean)">
             <summary>
             Gets the nested connection with the given connection string
@@ -34003,6 +34012,11 @@
             Code name for newsletter email templates.
             </summary>
         </member>
+        <member name="F:CMS.DataEngine.PredefinedObjectType.NEWSLETTERWIDGET">
+            <summary>
+            Code name for newsletter email widgets.
+            </summary>
+        </member>
         <member name="F:CMS.DataEngine.PredefinedObjectType.NEWSLETTERUNSUBSCRIPTION">
             <summary>
             Code name for newsletter unsubscription.
@@ -34171,6 +34185,11 @@
         <member name="F:CMS.DataEngine.PredefinedObjectType.CONSENTAGREEMENT">
             <summary>
             Object type for consent agreement.
+            </summary>
+        </member>
+        <member name="F:CMS.DataEngine.PredefinedObjectType.EMAILTEMPLATE">
+            <summary>
+            Object type for email template.
             </summary>
         </member>
         <member name="T:CMS.DataEngine.AbstractQueryObject">
@@ -37133,6 +37152,12 @@
         <member name="P:CMS.DataEngine.DataParameter.Type">
             <summary>
             Parameter type.
+            </summary>
+        </member>
+        <member name="P:CMS.DataEngine.DataParameter.Direction">
+            <summary>
+            Gets or sets a value that indicates whether the parameter is input-only, output-only, bidirectional, or a stored procedure return value parameter.
+            The default is <see cref="F:System.Data.ParameterDirection.Input"/>.
             </summary>
         </member>
         <member name="P:CMS.DataEngine.DataParameter.ParamRegEx">
@@ -42764,6 +42789,15 @@
             </summary>
             <param name="message">Error message</param>
             <param name="ex">Database exception</param>
+        </member>
+        <member name="M:CMS.DataProviderSQL.DataConnection.ProcessOutParameters(System.Data.Common.DbParameterCollection,System.Collections.Generic.IEnumerable{CMS.DataEngine.DataParameter})">
+            <summary>
+            Ensures propagation of output (or input-output or stored procedure return value) parameters after the SQL command execution to the query parameters collection.
+            </summary>
+            <remarks>Processing of output parameters is ensured for the following methods (and their async variants if exist):
+            <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteQuery(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>, <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteNonQuery(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>, <see cref="M:CMS.DataEngine.AbstractDataConnection.ExecuteScalar(System.String,CMS.DataEngine.QueryDataParameters,CMS.DataEngine.QueryTypeEnum,System.Boolean)"/>.</remarks>
+            <param name="commandParams">SQL command parameters</param>
+            <param name="queryParams">Query parameters</param>
         </member>
         <member name="T:CMS.DataProviderSQL.DataProvider">
             <summary>

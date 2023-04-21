@@ -14,7 +14,7 @@
         }
     </style>
 </head>
-<frameset border="0" cols="320,*" runat="server" id="uiFrameset" enableviewstate="false">
+<frameset border="0" cols="304,*" runat="server" id="uiFrameset" enableviewstate="false">
     <frame name="tree" runat="server" id="treeFrame" scrolling="no" frameborder="0" noresize="noresize"
         enableviewstate="false" />
     <frame name="uicontent" runat="server" id="contentFrame" frameborder="0" noresize="noresize"

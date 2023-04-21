@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_MappingEditorItem {
-    
+public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_MappingEditorItem
+{
+
     /// <summary>
     /// AttributeLabel control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel AttributeLabel;
-    
+
     /// <summary>
     /// EmptyMessageControl control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel EmptyMessageControl;
-    
+
     /// <summary>
     /// SourceDropDownList control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSDropDownList SourceDropDownList;
-    
+
     /// <summary>
     /// WarningPlaceHolder control.
     /// </summary>
@@ -46,4 +47,13 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder WarningPlaceHolder;
+
+    /// <summary>
+    /// MacroSourceInput control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.UIControls.MacroEditor MacroSourceInput;
 }

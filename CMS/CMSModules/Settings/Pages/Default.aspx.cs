@@ -10,6 +10,9 @@ using CMS.UIControls;
 [UIElement(ModuleName.CMS, "Settings")]
 public partial class CMSModules_Settings_Pages_Default : CMSDeskPage
 {
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_Settings_Pages_Default);
+
+
     /// <summary>
     /// OnPreLoad event. 
     /// </summary>
@@ -17,6 +20,21 @@ public partial class CMSModules_Settings_Pages_Default : CMSDeskPage
     {
         base.OnPreLoad(e);
         RequireSite = false;
+    }
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
+        {
+            var width = UILayoutHelper.GetLayoutWidth(UI_LAYOUT_KEY);
+            if (width.HasValue)
+            {
+                colsFrameset.Attributes["cols"] = $"{width}, *";
+            }
+        }
     }
 
 

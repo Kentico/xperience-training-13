@@ -34,7 +34,16 @@ public partial class CMSModules_REST_FormControls_GenerateHash : GlobalAdminPage
 
             if (RESTServiceHelper.TryParseRestUrlPath(newUrl, out string absolutePathPrefix, out string relativeRestPath))
             {
-                string domain = URLHelper.GetDomain(newUrl);
+                string domain = string.Empty;
+
+                // Get domain or domain with port (for others than http:80) from URL
+                if (URLHelper.TryCreateAbsoluteUrl(url, out var uri))
+                {
+                    bool appendPort = !((uri.Port < 0) || uri.Port.Equals(URLHelper.DEFAULT_HTTP_PORT));
+
+                    domain += uri.Host + (appendPort ? (":" + uri.Port) : String.Empty);
+                }
+
                 newUrl = URLHelper.RemoveQuery(relativeRestPath);
 
                 // Rewrite the URL to physical URL

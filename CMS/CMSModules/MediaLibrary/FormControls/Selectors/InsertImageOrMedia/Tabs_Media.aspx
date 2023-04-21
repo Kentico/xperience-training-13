@@ -40,7 +40,8 @@
 
     <script language="javascript" type="text/javascript">
         //<![CDATA[
-            InitResizers();
+        window.dynamicDialogWidth = true;
+        InitResizers();
         //]]>
     </script>
 

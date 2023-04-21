@@ -243,22 +243,6 @@
             The zero-based index within the zone at which widget should be inserted.
             </summary>
         </member>
-        <member name="T:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters">
-            <summary>
-            Represents parameters required to remove a widget.
-            </summary>
-            <exclude />
-        </member>
-        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.IssueIdentifier">
-            <summary>
-            Identifier of the issue.
-            </summary>
-        </member>
-        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.WidgetIdentifier">
-            <summary>
-            Identifier of the widget instance.
-            </summary>
-        </member>
         <member name="T:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters">
             <summary>
             Represents parameters required to move an existing widget.
@@ -283,6 +267,22 @@
         <member name="P:CMS.Newsletters.Web.UI.Internal.MoveWidgetParameters.Index">
             <summary>
             The zero-based index specifying the new location of the widget within the widget zone.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters">
+            <summary>
+            Represents parameters required to remove a widget.
+            </summary>
+            <exclude />
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.IssueIdentifier">
+            <summary>
+            Identifier of the issue.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.Internal.RemoveWidgetParameters.WidgetIdentifier">
+            <summary>
+            Identifier of the widget instance.
             </summary>
         </member>
         <member name="T:CMS.Newsletters.Web.UI.Internal.ContactMarketingEmailStatusController">
@@ -617,6 +617,18 @@
             <param name="contactID">ID of contact <see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> is obtained for</param>
             <returns><see cref="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusViewModel"/> for the given <paramref name="contactID"/></returns>
         </member>
+        <member name="T:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService">
+            <summary>
+            Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService.GetContactNewsletterSubscriptionViewModels(System.Int32)">
+            <summary>
+            Gets collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/>. 
+            </summary>
+            <param name="contactID">ID of contact the collection is obtained for</param>
+            <returns>Collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/></returns>
+        </member>
         <member name="T:CMS.Newsletters.Web.UI.ContactMarketingEmailStatusEnum">
             <summary>
             Specifies possible values of Marketing email setting displayed within the contact card.
@@ -808,26 +820,6 @@
             Registers script that refreshes UniSelector and automation designer graph after the modal dialog is closed.
             </summary>
         </member>
-        <member name="T:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler">
-            <summary>
-            Provides HTML code of email given by <c>issueGuid</c> query string parameter.
-            </summary>
-        </member>
-        <member name="P:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.IsReusable">
-            <summary>
-            Gets whether this handler can be reused for other request; always returns <c>false</c>.
-            </summary>
-            <remarks>
-            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
-            is cheap and also initialization costs are minimal.
-            </remarks>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.ProcessRequest(System.Web.HttpContext)">
-            <summary>
-            Parses query parameters, check permissions and returns newsletter email template code.
-            </summary>
-            <param name="context">Current HTTP context</param>
-        </member>
         <member name="T:CMS.Newsletters.Web.UI.EmailPlainTextEditExtender">
             <summary>
             Newsletter issue plain text UIForm extender.
@@ -837,84 +829,6 @@
             <summary>
             Initializes the extender.
             </summary>
-        </member>
-        <member name="T:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler">
-            <summary>
-            Provides HTML code of email builder for marketing email given by <c>issueid</c> query string parameter.
-            </summary>
-        </member>
-        <member name="P:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.IsReusable">
-            <summary>
-            Gets whether this handler can be reused for other request; always returns <c>false</c>.
-            </summary>
-            <remarks>
-            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
-            is cheap and also initialization costs are minimal.
-            </remarks>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.ProcessRequest(System.Web.HttpContext)">
-            <summary>
-            Parses query parameters, check permissions and returns newsletter email template code.
-            </summary>
-            <param name="context">Current HTTP context</param>
-        </member>
-        <member name="T:CMS.Newsletters.Web.UI.IssueRecipientsListExtender">
-            <summary>
-            Extends Unsubscription listing unigrid.
-            </summary>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.OnInit">
-            <summary>
-            Initializes extender.
-            </summary>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetFullNamesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
-            <summary>
-            Returns dictionary of contacts' full name through issue. Key of the dictionary is the ID of contact.
-            </summary>
-            <param name="type">Object type (ignored).</param>
-            <param name="contactIds">IDs of contacts for which full name is to be fill with.</param>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetStatusesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
-            <summary>
-            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
-            </summary>
-            <param name="type">Object type (ignored).</param>
-            <param name="contactIds">IDs of contacts for which status is to be filled with.</param>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetCountsDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
-            <summary>
-            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
-            </summary>
-            <param name="type">Object type (ignored).</param>
-            <param name="contactIds">IDs of contacts for which count of contact groups is to be filled with.</param>
-        </member>
-        <member name="T:CMS.Newsletters.Web.UI.IssueContactGroupsExtender">
-            <summary>
-            Extends Unsubscription listing unigrid.
-            </summary>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.IssueContactGroupsExtender.OnInit">
-            <summary>
-            Initializes extender.
-            </summary>
-        </member>
-        <member name="T:CMS.Newsletters.Web.UI.EmailTemplateListExtender">
-            <summary>
-            Email marketing template UIForm extender
-            </summary>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.OnInit">
-            <summary>
-            Initializes the extender.
-            </summary>
-        </member>
-        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.Control_OnAction(System.String,System.Object)">
-            <summary>
-            Handles the UniGrid's OnAction event.
-            </summary>
-            <param name="actionName">Name of item (button) that throws event</param>
-            <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
         </member>
         <member name="T:CMS.Newsletters.Web.UI.EmailTemplateEditCodeExtender">
             <summary>
@@ -948,6 +862,64 @@
             <summary>
             Renders the script which insert the selected attachment's URL into the template code editor.
             </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.EmailTemplateListExtender">
+            <summary>
+            Email marketing template UIForm extender
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.OnInit">
+            <summary>
+            Initializes the extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.EmailTemplateListExtender.Control_OnAction(System.String,System.Object)">
+            <summary>
+            Handles the UniGrid's OnAction event.
+            </summary>
+            <param name="actionName">Name of item (button) that throws event</param>
+            <param name="actionArgument">ID (value of Primary key) of corresponding data row</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IssueContactGroupsExtender">
+            <summary>
+            Extends Unsubscription listing unigrid.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueContactGroupsExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.IssueRecipientsListExtender">
+            <summary>
+            Extends Unsubscription listing unigrid.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.OnInit">
+            <summary>
+            Initializes extender.
+            </summary>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetFullNamesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contacts' full name through issue. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which full name is to be fill with.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetStatusesDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which status is to be filled with.</param>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.IssueRecipientsListExtender.GetCountsDataHandler(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns dictionary of contact groups per contact through issue contact group assignment. Key of the dictionary is the ID of contact.
+            </summary>
+            <param name="type">Object type (ignored).</param>
+            <param name="contactIds">IDs of contacts for which count of contact groups is to be filled with.</param>
         </member>
         <member name="T:CMS.Newsletters.Web.UI.UnsubscriptionsListExtender">
             <summary>
@@ -997,17 +969,45 @@
             </summary>
             <returns>Relative URL navigating to the unsubscription listing page.</returns>
         </member>
-        <member name="T:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService">
+        <member name="T:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler">
             <summary>
-            Provides service methods used in <see cref="T:CMS.Newsletters.Web.UI.Internal.ContactNewsletterSubscriptionsController"/>.
+            Provides HTML code of email builder for marketing email given by <c>issueid</c> query string parameter.
             </summary>
         </member>
-        <member name="M:CMS.Newsletters.Web.UI.IContactNewsletterSubscriptionsControllerService.GetContactNewsletterSubscriptionViewModels(System.Int32)">
+        <member name="P:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.IsReusable">
             <summary>
-            Gets collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/>. 
+            Gets whether this handler can be reused for other request; always returns <c>false</c>.
             </summary>
-            <param name="contactID">ID of contact the collection is obtained for</param>
-            <returns>Collection of <see cref="T:CMS.Newsletters.Web.UI.ContactNewsletterSubscriptionViewModel"/> for the given <paramref name="contactID"/></returns>
+            <remarks>
+            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
+            is cheap and also initialization costs are minimal.
+            </remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.GetEmailBuilderContentHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Parses query parameters, check permissions and returns newsletter email template code.
+            </summary>
+            <param name="context">Current HTTP context</param>
+        </member>
+        <member name="T:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler">
+            <summary>
+            Provides HTML code of email given by <c>issueGuid</c> query string parameter.
+            </summary>
+        </member>
+        <member name="P:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.IsReusable">
+            <summary>
+            Gets whether this handler can be reused for other request; always returns <c>false</c>.
+            </summary>
+            <remarks>
+            Although the handler could be re-used by another requests, always create a new instance as allocating memory 
+            is cheap and also initialization costs are minimal.
+            </remarks>
+        </member>
+        <member name="M:CMS.Newsletters.Web.UI.GetEmailPreviewContentHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Parses query parameters, check permissions and returns newsletter email template code.
+            </summary>
+            <param name="context">Current HTTP context</param>
         </member>
         <member name="T:CMS.Newsletters.Web.UI.INewsletterReportDataProvider">
             <summary>

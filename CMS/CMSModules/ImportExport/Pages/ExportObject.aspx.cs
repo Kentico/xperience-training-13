@@ -407,6 +407,14 @@ function StartTimer() {
             {
                 return String.Format(GetString("ExportObject.Users.HigherPrivilegeLevel"), IsBackupMode ? "backup" : "export");
             }
+
+            // Special case, site administrators don't have option to export or backup other site administrators.
+            if (userInfo.SiteIndependentPrivilegeLevel == UserPrivilegeLevelEnum.Admin &&
+                CurrentUser.SiteIndependentPrivilegeLevel == UserPrivilegeLevelEnum.Admin &&
+                userInfo.UserID != CurrentUser.UserID)
+            {
+                return String.Format(GetString("ExportObject.Users.SamePrivilegeLevel"), IsBackupMode ? "backup" : "export");
+            }
         }
 
         return GetString(errorMessage);

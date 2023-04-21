@@ -366,7 +366,7 @@ public partial class CMSModules_RecycleBin_Controls_RecycleBin : CMSUserControl
         mCurrentCulture = CultureHelper.PreferredUICultureCode;
 
         // Get current user info
-        mCurrentUser = MembershipContext.AuthenticatedUser;
+        mCurrentUser = MembershipContext.AuthenticatedUser ?? AuthenticationHelper.GlobalPublicUser;
 
         // Set current site ID to filter
         filter.SiteID = (mSelectedSite != null) ? mSelectedSite.SiteID : UniSelector.US_ALL_RECORDS;

@@ -65,7 +65,7 @@
                                 <cms:CMSIcon ID="iconApproximationAlert" runat="server" CssClass="icon-question-circle" EnableViewState="false" aria-hidden="true" data-html="true" />
                             </span>
                             <div class="email-mobile-preview">
-                                <iframe id="mobile-preview" class="phone-screen"></iframe>
+                                <iframe id="mobile-preview" class="phone-screen" sandbox="allow-same-origin"></iframe>
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
             </div>
             <div class="col-xs-11 col-sm-5 col-md-7 preview-column">
                 <div class="email-preview">
-                    <iframe id="preview"></iframe>
+                    <iframe id="preview" sandbox="allow-same-origin"></iframe>
                 </div>
             </div>
         </div>
