@@ -139,6 +139,15 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     protected global::CMSModules_Content_Controls_ContentTree contentTree;
 
     /// <summary>
+    /// resizer control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl resizer;
+
+    /// <summary>
     /// plcSeparator control.
     /// </summary>
     /// <remarks>
@@ -245,6 +254,15 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDialogResizer;
+
+    /// <summary>
+    /// resizerV control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl resizerV;
 
     /// <summary>
     /// divDialogProperties control.

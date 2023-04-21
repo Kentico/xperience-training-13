@@ -28,6 +28,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
 
     private const string SAVE_AS_TEMPLATE_CLIENT_SCRIPT = "SaveAsTemplate(); return false;";
     private const string CHANGE_VIEW_CLIENT_SCRIPT = "ChangeView(this); return false;";
+    private const string SCHEDULE_ACTIVATION_CLIENT_SCRIPT = "ScheduleActivation(); return false;";
     private const string UNDERLYING_VIEW_ATTR_KEY_NAME = "UnderlyingView";
 
     #endregion
@@ -140,6 +141,11 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     {
         base.OnLoad(e);
 
+        if (RequestHelper.IsPostBack() && Request["__EVENTARGUMENT"] == "toggleState")
+        {
+            ToggleState();
+        }
+
         CheckLicense();
         RegisterScripts();
         InitializeHeader();
@@ -153,6 +159,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     {
         RegisterNavigationScripts();
         RegisterSaveAsTemplateScripts();
+        RegisterScheduleActivation();
     }
 
 
@@ -219,6 +226,26 @@ function SaveAsTemplate() {{
     }
 
 
+    private void RegisterScheduleActivation()
+    {
+        if (!CanEditProcessState)
+        {
+            return;
+        }
+
+        string query = "?processId=" + WorkflowID;
+        string url = UrlResolver.ResolveUrl("~/CMSModules/ContactManagement/Pages/Tools/Automation/Process/Activation_Schedule.aspx") + query;
+
+        var scheduleActivationScript = $@"
+            function ScheduleActivation() {{
+                modalDialog('{url}', 'MA_Schedule_Activation', 690, 420);
+            }}";
+
+        ScriptHelper.RegisterDialogScript(this);
+        ScriptHelper.RegisterClientScriptBlock(this, GetType(), "MA_ScheduleActivation", ScriptHelper.GetScript(scheduleActivationScript));
+    }
+
+
     private void RefreshView()
     {
         var refreshScript = $"var view = $cmsj('#{mainView.ClientID}')[0]; view.src = view.contentWindow.document.location;";
@@ -259,6 +286,7 @@ function SaveAsTemplate() {{
     private void InitializeHeader()
     {
         InitializeProcessState();
+        InicializeToggleStateButton();
         InitializeNavigationButtons();
 
         if (RequestHelper.IsPostBack())
@@ -272,7 +300,7 @@ function SaveAsTemplate() {{
 
     private void InitializeNavigationButtons()
     {
-        var isContactsButtonEnabled = ProcessHasContacts() || Workflow.WorkflowEnabled;
+        var isContactsButtonEnabled = ProcessHasContacts() || Workflow.IsEnabled();
         var cookieNeedsUpdate = RequestHelper.IsPostBack() && CurrentViewName.Equals(CONTACTS_VIEW_NAME, StringComparison.OrdinalIgnoreCase) && !isContactsButtonEnabled && btnContacts.Enabled;
 
         btnContacts.Enabled = isContactsButtonEnabled;
@@ -317,17 +345,70 @@ function SaveAsTemplate() {{
 
     private void InitializeProcessState()
     {
-        Icon.RemoveCssClass(Workflow.WorkflowEnabled ? "disabled" : "enabled");
-        Icon.AddCssClass(Workflow.WorkflowEnabled ? "enabled" : "disabled");
-        lblState.Text = Workflow.WorkflowEnabled ? GetString("automationdesigner.processactive") : GetString("automationdesigner.processinactive");
+        Icon.RemoveCssClass(Workflow.IsEnabled() ? "disabled" : "enabled");
+        Icon.AddCssClass(Workflow.IsEnabled() ? "enabled" : "disabled");
+        lblState.Text = GetScheduledStateText();
+    }
 
+
+    private string GetScheduledStateText()
+    {
+        if (!Workflow.IsScheduled())
+        {
+            return Workflow.WorkflowEnabled ? GetString("automationdesigner.processactive") : GetString("automationdesigner.processinactive");
+        }
+
+        string text = GetString("automationdesigner.processis");
+
+        if (Workflow.IsEnabled())
+        {
+            text += $" { GetString("automationdesigner.active")}";
+
+            if (Workflow.WorkflowEnabledFrom != DateTimeHelper.ZERO_TIME)
+            {
+                text += $" {GetString("automationdesigner.from")} {Workflow.WorkflowEnabledFrom}";
+            }
+
+            if (Workflow.WorkflowEnabledTo != DateTimeHelper.ZERO_TIME)
+            {
+                text += $" {GetString("automationdesigner.to")} {Workflow.WorkflowEnabledTo}";
+            }
+
+            return text;
+        }
+
+        text += $" {GetString("automationdesigner.inactive")}";
+
+        if (Workflow.WorkflowEnabledFrom >= DateTime.Now)
+        {
+            return text += $" {GetString("automationdesigner.until")} {Workflow.WorkflowEnabledFrom}";
+        }
+
+        return text;
+    }
+
+
+    private void InicializeToggleStateButton()
+    {
         if (!CanEditProcessState)
         {
             btnToggleState.Visible = false;
             return;
         }
 
-        btnToggleState.Text = Workflow.WorkflowEnabled ? GetString("general.disable") : GetString("general.enable");
+        btnToggleState.Actions = new List<CMSButtonAction>
+        {
+            new CMSButtonAction
+            {
+                Text = Workflow.IsEnabled() ? GetString("general.disable") : GetString("general.enable"),
+                Name = "toggleState"
+            },
+            new CMSButtonAction
+            {
+                Text = Workflow.IsScheduled() ? GetString("automationdesigner.rescheduleactivation") : GetString("automationdesigner.scheduleactivation"),
+                OnClientClick = SCHEDULE_ACTIVATION_CLIENT_SCRIPT
+            }
+        };
     }
 
 
@@ -361,14 +442,16 @@ function SaveAsTemplate() {{
     }
 
 
-    protected void ToggleState(object sender, EventArgs args)
+    protected void ToggleState()
     {
         if (!CanEditProcessState)
         {
             return;
         }
 
-        Workflow.WorkflowEnabled = !Workflow.WorkflowEnabled;
+        Workflow.WorkflowEnabled = !Workflow.IsEnabled();
+        Workflow.WorkflowEnabledFrom = DateTimeHelper.ZERO_TIME;
+        Workflow.WorkflowEnabledTo = DateTimeHelper.ZERO_TIME;
         WorkflowInfo.Provider.Set(Workflow);
 
         InitializeHeader();

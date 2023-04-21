@@ -120,7 +120,7 @@
                                 </div>
                                 <asp:PlaceHolder ID="plcSelectionBox" runat="server" Visible="false">
                                     <cms:CMSCheckBox ID="chkSelected" CssClass="ThumbMultipleSelection" EnableViewState="false"
-                                        runat="server" />
+                                        runat="server" Visible="<%#!IsInSearchMode%>" />
                                     <asp:HiddenField ID="hdnItemName" runat="server" />
                                 </asp:PlaceHolder>
                             </div>

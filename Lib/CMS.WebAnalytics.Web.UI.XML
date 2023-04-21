@@ -162,6 +162,36 @@
             Returns <c>HTTP status code 200 OK</c> if request is successful.
             </returns>
         </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionItemController">
+            <summary>
+            Provides conversion items for Smart Drop-down in campaign conversions. 
+            Controller handles selected site-specific object types and checks read permissions. 
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.Int32)">
+            <summary>
+            Gets object according to <paramref name="ID"/> and it's <paramref name="objType"/>.
+            </summary>
+            <param name="objType">Object type</param>
+            <param name="ID">Object ID</param>
+            <returns>
+            <c>HTTP status code 400 Bad Request</c>, if object is not found or insufficient permissions;
+            otherwise, <c>HTTP status code 200 OK</c> with serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view model.
+            </returns>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets collection of items on the current site. User must have read permission for given <paramref name="objType"/>.
+            </summary>
+            <param name="objType">Object type of requested items.</param>
+            <param name="name">Search query (part of items's display name).</param>        
+            <param name="pageIndex">Index of the page. Pages are indexed from 0 (first page).</param>
+            <param name="pageSize">Number of results in the page.</param>
+            <returns>
+            Collection of 10 serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view models or
+            <c>HTTP status code 400 Bad Request</c> if <paramref name="objType"/> is not supported or insufficient permissions.
+            </returns>
+        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionPageController">
             <summary>
             Supplies data for page Smart Drop-down in campaign conversions.
@@ -496,23 +526,6 @@
             </summary>
             <param name="allowedActivities">List of allowed activity types.</param>
         </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService">
-            <summary>
-            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel"/> objects.
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.GetObjectiveViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
-            <summary>
-            Returns view model from specified objective (<paramref name="info"/>).
-            </summary>
-            <param name="info">Campaign objective info</param>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.SaveObjective(CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel)">
-            <summary>
-            Sets data from campaign objective model <paramref name="model"/> and returns updated view model.
-            </summary>
-            <param name="model">Campaign objective view model</param>
-        </member>
         <member name="T:CMS.WebAnalytics.Web.UI.ICampaignConversionService">
             <summary>
             Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignConversionViewModel"/> objects.
@@ -529,6 +542,23 @@
             Sets data from campaign conversion model and returns updated view model.
             </summary>
             <param name="model">Campaign conversion view model</param>
+        </member>
+        <member name="T:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService">
+            <summary>
+            Service that provides method to work with the <see cref="T:CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel"/> objects.
+            </summary>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.GetObjectiveViewModel(CMS.WebAnalytics.CampaignObjectiveInfo)">
+            <summary>
+            Returns view model from specified objective (<paramref name="info"/>).
+            </summary>
+            <param name="info">Campaign objective info</param>
+        </member>
+        <member name="M:CMS.WebAnalytics.Web.UI.ICampaignObjectiveService.SaveObjective(CMS.WebAnalytics.Web.UI.CampaignObjectiveViewModel)">
+            <summary>
+            Sets data from campaign objective model <paramref name="model"/> and returns updated view model.
+            </summary>
+            <param name="model">Campaign objective view model</param>
         </member>
         <member name="T:CMS.WebAnalytics.Web.UI.ICampaignReportService">
             <summary>
@@ -922,36 +952,6 @@
             <summary>
             Page type icon markup.
             </summary>
-        </member>
-        <member name="T:CMS.WebAnalytics.Web.UI.CampaignConversionItemController">
-            <summary>
-            Provides conversion items for Smart Drop-down in campaign conversions. 
-            Controller handles selected site-specific object types and checks read permissions. 
-            </summary>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.Int32)">
-            <summary>
-            Gets object according to <paramref name="ID"/> and it's <paramref name="objType"/>.
-            </summary>
-            <param name="objType">Object type</param>
-            <param name="ID">Object ID</param>
-            <returns>
-            <c>HTTP status code 400 Bad Request</c>, if object is not found or insufficient permissions;
-            otherwise, <c>HTTP status code 200 OK</c> with serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view model.
-            </returns>
-        </member>
-        <member name="M:CMS.WebAnalytics.Web.UI.CampaignConversionItemController.Get(System.String,System.String,System.Int32,System.Int32)">
-            <summary>
-            Gets collection of items on the current site. User must have read permission for given <paramref name="objType"/>.
-            </summary>
-            <param name="objType">Object type of requested items.</param>
-            <param name="name">Search query (part of items's display name).</param>        
-            <param name="pageIndex">Index of the page. Pages are indexed from 0 (first page).</param>
-            <param name="pageSize">Number of results in the page.</param>
-            <returns>
-            Collection of 10 serialized <see cref="T:CMS.Base.Web.UI.BaseSelectorViewModel"/> view models or
-            <c>HTTP status code 400 Bad Request</c> if <paramref name="objType"/> is not supported or insufficient permissions.
-            </returns>
         </member>
         <member name="T:CMS.WebAnalytics.Web.UI.UTMCodeAttribute">
             <summary>

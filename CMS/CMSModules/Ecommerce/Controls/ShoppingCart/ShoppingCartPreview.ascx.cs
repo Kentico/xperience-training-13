@@ -376,16 +376,15 @@ public partial class CMSModules_Ecommerce_Controls_ShoppingCart_ShoppingCartPrev
     protected string GetSKUName(object value, object isProductOption, object itemText)
     {
         string name = ResHelper.LocalizeString((string)value);
+        string text = itemText as string;
+        bool isOption = ValidationHelper.GetBoolean(isProductOption, false);
 
-        // If it is a product option or bundle item
-        if (ValidationHelper.GetBoolean(isProductOption, false))
+        if (isOption && !String.IsNullOrEmpty(text))
         {
-            string text = itemText as string;
-            return $"<span style=\"font-size:90%\"> - {HTMLHelper.HTMLEncode(name)}{(!string.IsNullOrEmpty(text) ? " '" + HTMLHelper.HTMLEncode(ResHelper.LocalizeString(text)) + "'" : "")}</span>";
+            name += $" '{text}'";
         }
 
-        // If it is a parent product
-        return HTMLHelper.HTMLEncode(name);
+        return $"<span{(isOption ? " style=\"font-size: 90%\" - " : "")} title=\"{HTMLHelper.HTMLEncode(name)}\">{HTMLHelper.HTMLEncode(TextHelper.LimitLength(name, 120))}</span>";
     }
 
 

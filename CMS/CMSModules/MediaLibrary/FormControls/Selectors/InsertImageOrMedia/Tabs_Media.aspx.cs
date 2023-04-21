@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.UI;
 
 using CMS.Base.Web.UI;
 using CMS.Helpers;
@@ -8,8 +9,11 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageOrMedia_Tabs_Media : CMSModalPage
+public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageOrMedia_Tabs_Media : CMSModalPage, ICallbackEventHandler
 {
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_MediaLibrary_FormControls_Selectors_InsertImageOrMedia_Tabs_Media);
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
         // Check site availability
@@ -20,9 +24,9 @@ public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageO
 
         string output = QueryHelper.GetString("output", "");
 
-	    bool checkUI = (output != "copy") && (output != "move") && (output != "relationship") && (output != "selectpath");
+        bool checkUI = (output != "copy") && (output != "move") && (output != "relationship") && (output != "selectpath");
 
-	    if (checkUI)
+        if (checkUI)
         {
             string errorMessage = "";
 
@@ -52,9 +56,9 @@ public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageO
             }
         }
 
-		// CKEditor's plugin filebrowser add custom params to url. 
-		// This ensures that custom params aren't validated
-		if (QueryHelper.ValidateHash("hash", "CKEditor;CKEditorFuncNum;langCode", validateWithoutExcludedParameters: true))
+        // CKEditor's plugin filebrowser add custom params to url. 
+        // This ensures that custom params aren't validated
+        if (QueryHelper.ValidateHash("hash", "CKEditor;CKEditorFuncNum;langCode", validateWithoutExcludedParameters: true))
         {
             ScriptHelper.RegisterJQuery(Page);
             CMSDialogHelper.RegisterDialogHelper(Page);
@@ -64,6 +68,34 @@ public partial class CMSModules_MediaLibrary_FormControls_Selectors_InsertImageO
         else
         {
             linkMedia.StopProcessing = true;
+        }
+
+        linkMedia.UILayoutKey = UI_LAYOUT_KEY;
+    }
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
+    }
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UI_LAYOUT_KEY, width);
+            }
+        }
+        else if (parsed.Length == 2 && String.Equals(UILayoutHelper.COLLAPSED_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (bool.TryParse(parsed[1], out var value))
+            {
+                UILayoutHelper.SetVerticalResizerCollapsed(UI_LAYOUT_KEY, value);
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.UI.WebControls;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Base.Web.UI.ActionsConfig;
 using CMS.FormEngine.Web.UI;
@@ -141,11 +140,10 @@ public partial class CMSModules_Scheduler_Pages_Tab_Tasks : CMSScheduledTasksPag
             {
                 lblLastRun.Visible = true;
 
-                string siteName = SiteInfo.SiteName.ToLowerCSafe();
+                string siteName = SiteInfo.SiteName;
                 if (SchedulingTimer.TimerExists(siteName))
                 {
-                    DateTime lastRun = ValidationHelper.GetDateTime(SchedulingTimer.LastRuns[siteName], DateTimeHelper.ZERO_TIME);
-                    if (lastRun != DateTimeHelper.ZERO_TIME)
+                    if (SchedulingTimer.LastTimerRuns.TryGetValue(siteName, out DateTime lastRun))
                     {
                         lblLastRun.Text = GetString("Task_List.LastRun") + " " + lastRun;
                     }

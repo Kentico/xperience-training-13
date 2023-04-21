@@ -571,9 +571,9 @@ public partial class CMSModules_Automation_Controls_AutomationMenu : BaseEditMen
                         CommandName = ComponentEvents.AUTOMATION_START,
                         EventName = ComponentEvents.AUTOMATION_START,
                         Text = GetString("autoMenu.StartState"),
-                        Tooltip = process.WorkflowEnabled ? GetString("autoMenu.StartStateDesc") : GetString("autoMenu.DisabledStateDesc"),
+                        Tooltip = process.IsEnabled() ? GetString("autoMenu.StartStateDesc") : GetString("autoMenu.DisabledStateDesc"),
                         CommandArgument = process.WorkflowID.ToString(),
-                        Enabled = process.WorkflowEnabled,
+                        Enabled = process.IsEnabled(),
                         OnClientClick = RaiseGetClientValidationScript(ComponentEvents.AUTOMATION_START, "if(!confirm(" + ScriptHelper.GetString(string.Format(GetString("autoMenu.startSameProcessConfirmation"), objectName)) + ")) { return false; }"),
                         ButtonStyle = ButtonStyle.Default
                     };
