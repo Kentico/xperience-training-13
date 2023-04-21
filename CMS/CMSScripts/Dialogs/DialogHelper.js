@@ -60,8 +60,8 @@ function InitResizers() {
             var maximizeLTR = imgUrl.replace('/##status##.', '/maximize.');
             var minimizeRTL = minimizeLTR.replace('Design/', 'RTL/Design/');
             var maximizeRTL = maximizeLTR.replace('Design/', 'RTL/Design/');
-            var parentWidth = '304px';
-            var thisSideUp = '304px';
+            var parentWidth = window.dynamicDialogWidth ? window.leftBlockElem.width() + 'px' : '304px';
+            var thisSideUp = window.dynamicDialogWidth ? window.leftBlockElem.width() + 'px' : '304px';
             var thisSideDown = '0px';
             if (isRTL) {
                 $cmsj('.JqueryUITabs').css('position', 'static');

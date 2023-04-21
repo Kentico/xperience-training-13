@@ -40,6 +40,8 @@
 
     <script type="text/javascript" language="javascript">
         //<![CDATA[
+        window.dynamicDialogWidth = true;
+
         function SelectNode(elementId, parentId, moduleId, refreshContent) {
             // Set selected item in tree
             $cmsj('span[name=treeNode]').each(function () {
@@ -103,6 +105,6 @@
         //]]>
     </script>
 
-    <cms:TreeBorder runat="server" ID="TreeBorder" />
+    <cms:TreeBorder runat="server" ID="TreeBorder" FramesetName="uiFrameset" />
 
 </asp:Content>

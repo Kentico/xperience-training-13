@@ -256,6 +256,14 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         set;
     }
 
+    /// <summary>
+    /// Gets or sets the enable state.
+    /// </summary>
+    public bool Enabled
+    {
+        get; set;
+    } = true;
+
 
     /// <summary>
     /// Control identifier.
@@ -287,6 +295,9 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         if (!StopProcessing)
         {
             SetupControls();
+
+            fileUploader.Enabled = Enabled;
+            btnNew.Enabled = Enabled;
         }
     }
 
@@ -296,6 +307,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// </summary>
     private void SetupControls()
     {
+
         if (FileSystemMode)
         {
             // New file button

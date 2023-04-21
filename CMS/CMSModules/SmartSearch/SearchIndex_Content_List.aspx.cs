@@ -60,8 +60,8 @@ public partial class CMSModules_SmartSearch_SearchIndex_Content_List : GlobalAdm
                     displaySpecialActions = true;
                     break;
 
-                // Custom tables
-                case PredefinedObjectType.BIZFORM:
+                // Online forms
+                case SearchHelper.ONLINEFORMINDEX:
                     onLineFormList.Visible = true;
                     onLineFormList.StopProcessing = false;
                     onLineFormList.OnAction += contentList_OnAction;

@@ -13,7 +13,7 @@ var getResultShort, ScreenLockLogoutUser, ScreenLockValidateUser, ScreenLockRedi
         screenLockIntervalCounter = null,
         screenLockTimeout = null,
 
-        longPing = 300000,
+        longPing = 120000,
         shortPing = 60000,
         waitForPasscodVal = false,
 

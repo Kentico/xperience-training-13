@@ -424,6 +424,13 @@ function ResizeFrame(ev, wnd) {
                     currentFrameSize -= changeX;
                     fs.cols = fs.cols.replace(/[^,]+$/, currentFrameSize);
                 } else {
+                    if (window.dynamicDialogWidth) {
+                        const halfScreen = window.screen.width / 2;
+                        if (currentFrameSize + changeX > halfScreen) {
+                            return;
+                        }
+                    }
+
                     currentFrameSize += changeX;
                     fs.cols = fs.cols.replace(/^[^,]+/, currentFrameSize);
                 }

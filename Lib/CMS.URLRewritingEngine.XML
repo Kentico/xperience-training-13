@@ -4,6 +4,21 @@
         <name>CMS.URLRewritingEngine</name>
     </assembly>
     <members>
+        <member name="T:CMS.URLRewritingEngine.URLRewritingEvents">
+            <summary>
+            URL rewriting events
+            </summary>
+        </member>
+        <member name="F:CMS.URLRewritingEngine.URLRewritingEvents.ProcessRewritingResult">
+            <summary>
+            Fires when the URL rewriting result is processed
+            </summary>
+        </member>
+        <member name="F:CMS.URLRewritingEngine.URLRewritingEvents.PageNotFound">
+            <summary>
+            Fires when the URL rewriting processing page not found request
+            </summary>
+        </member>
         <member name="T:CMS.URLRewritingEngine.URLRewriterPageNotFoundEventArgs">
             <summary>
             Event arguments for <see cref="T:CMS.URLRewritingEngine.URLRewriterPageNotFoundHandler"/> event handler
@@ -52,6 +67,31 @@
             Initiates the event handling
             </summary>
             <param name="parameters">URL Rewriting parameters</param>
+        </member>
+        <member name="T:CMS.URLRewritingEngine.URLRewritingContext">
+            <summary>
+            Request URL rewriting values
+            </summary>
+        </member>
+        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.PageNotFoundHandled">
+            <summary>
+            Gets or sets the value that indicates whether page not found was set
+            </summary>
+        </member>
+        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.PlannedRedirectUrl">
+            <summary>
+            Gets or sets the redirect URL for time when the full request context is available
+            </summary>
+        </member>
+        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.HttpHandler">
+            <summary>
+            Http handler to use within current request. If set, the handler is automatically applied during the PostMapRequestHandler event
+            </summary>
+        </member>
+        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.CurrentRouteData">
+            <summary>
+            Returns current route data
+            </summary>
         </member>
         <member name="T:CMS.URLRewritingEngine.URLRewritingHandlers">
             <summary>
@@ -145,46 +185,6 @@
             Redirects the file to the images folder.
             </summary>
         </member>
-        <member name="T:CMS.URLRewritingEngine.URLRewritingContext">
-            <summary>
-            Request URL rewriting values
-            </summary>
-        </member>
-        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.PageNotFoundHandled">
-            <summary>
-            Gets or sets the value that indicates whether page not found was set
-            </summary>
-        </member>
-        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.PlannedRedirectUrl">
-            <summary>
-            Gets or sets the redirect URL for time when the full request context is available
-            </summary>
-        </member>
-        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.HttpHandler">
-            <summary>
-            Http handler to use within current request. If set, the handler is automatically applied during the PostMapRequestHandler event
-            </summary>
-        </member>
-        <member name="P:CMS.URLRewritingEngine.URLRewritingContext.CurrentRouteData">
-            <summary>
-            Returns current route data
-            </summary>
-        </member>
-        <member name="T:CMS.URLRewritingEngine.URLRewritingEvents">
-            <summary>
-            URL rewriting events
-            </summary>
-        </member>
-        <member name="F:CMS.URLRewritingEngine.URLRewritingEvents.ProcessRewritingResult">
-            <summary>
-            Fires when the URL rewriting result is processed
-            </summary>
-        </member>
-        <member name="F:CMS.URLRewritingEngine.URLRewritingEvents.PageNotFound">
-            <summary>
-            Fires when the URL rewriting processing page not found request
-            </summary>
-        </member>
         <member name="T:CMS.URLRewritingEngine.URLRewritingMacros">
             <summary>
             Macro support for URL rewriting
@@ -198,6 +198,31 @@
         <member name="M:CMS.URLRewritingEngine.URLRewritingMacros.GetCurrentRouteData">
             <summary>
             Gets the current route data as the macro object
+            </summary>
+        </member>
+        <member name="T:CMS.URLRewritingEngine.URLRewritingModule">
+            <summary>
+            Represents the URL Rewriting module.
+            </summary>
+        </member>
+        <member name="M:CMS.URLRewritingEngine.URLRewritingModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.URLRewritingEngine.URLRewritingModule.OnInit">
+            <summary>
+            Initializes the module
+            </summary>
+        </member>
+        <member name="T:CMS.URLRewritingEngine.URLRewritingModuleMetadata">
+            <summary>
+            Represents the URL Rewriting module metadata.
+            </summary>
+        </member>
+        <member name="M:CMS.URLRewritingEngine.URLRewritingModuleMetadata.#ctor">
+            <summary>
+            Default constructor
             </summary>
         </member>
         <member name="T:CMS.URLRewritingEngine.URLRewriter">
@@ -545,31 +570,6 @@
         <member name="F:CMS.URLRewritingEngine.UrlRewritingAction.RedirectURL">
             <summary>
             Redirection URL.
-            </summary>
-        </member>
-        <member name="T:CMS.URLRewritingEngine.URLRewritingModule">
-            <summary>
-            Represents the URL Rewriting module.
-            </summary>
-        </member>
-        <member name="M:CMS.URLRewritingEngine.URLRewritingModule.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:CMS.URLRewritingEngine.URLRewritingModule.OnInit">
-            <summary>
-            Initializes the module
-            </summary>
-        </member>
-        <member name="T:CMS.URLRewritingEngine.URLRewritingModuleMetadata">
-            <summary>
-            Represents the URL Rewriting module metadata.
-            </summary>
-        </member>
-        <member name="M:CMS.URLRewritingEngine.URLRewritingModuleMetadata.#ctor">
-            <summary>
-            Default constructor
             </summary>
         </member>
         <member name="T:CMS.URLRewritingEngine.URLRewritingParams">

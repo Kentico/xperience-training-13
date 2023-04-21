@@ -276,7 +276,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard : CMSUserCont
             ctlAsyncExport.OnCancel += ctlAsyncExport_OnCancel;
 
             // Init steps
-            if (wzdExport.ActiveStepIndex < 2)
+            if (wzdExport.ActiveStepIndex < 3)
             {
                 configExport.Settings = ExportSettings;
                 if (!RequestHelper.IsPostBack())
@@ -284,6 +284,7 @@ public partial class CMSModules_ImportExport_Controls_ExportWizard : CMSUserCont
                     configExport.SiteId = SiteId;
                 }
 
+                pnlExportSettings.ExportSettings = ExportSettings;
                 pnlExport.Settings = ExportSettings;
 
                 // Ensure directories and check permissions
@@ -464,7 +465,7 @@ function exNextStepAction()
 
     private void wzdExport_PreviousButtonClick(object sender, WizardNavigationEventArgs e)
     {
-        wzdExport.ActiveStepIndex = e.NextStepIndex;
+        wzdExport.ActiveStepIndex--;
     }
 
 
@@ -499,14 +500,27 @@ StartSelectionTimer();");
                 }
                 else
                 {
-                    pnlExport.Settings = ExportSettings;
-                    pnlExport.ReloadData();
+                    pnlExportSettings.ExportSettings = ExportSettings;
+                    pnlExportSettings.ReloadData();
 
                     wzdExport.ActiveStepIndex = e.NextStepIndex;
                 }
                 break;
-
+            
             case 1:
+
+                pnlExportSettings.SaveSettings();
+
+                // Update settings
+                ExportSettings = pnlExportSettings.ExportSettings;
+
+                pnlExport.Settings = ExportSettings;
+                pnlExport.ReloadData();
+
+                wzdExport.ActiveStepIndex = e.NextStepIndex;
+                break;
+
+            case 2:
                 // Apply settings
                 if (!pnlExport.ApplySettings())
                 {
@@ -579,8 +593,8 @@ StartSelectionTimer();");
 
     protected void CtrlAsyncSelectionOnFinished(object sender, EventArgs e)
     {
-        pnlExport.Settings = ExportSettings;
-        pnlExport.ReloadData();
+        pnlExportSettings.ExportSettings = ExportSettings;
+        pnlExportSettings.ReloadData();
 
         wzdExport.ActiveStepIndex = 1;
 
@@ -614,11 +628,15 @@ StartSelectionTimer();");
                 break;
 
             case 1:
+                ucHeader.Header = GetString("ExportObjects.Settings");
+                ucHeader.Description = String.Empty;
+                break;
+            case 2:
                 ucHeader.Header = GetString("ExportPanel.ObjectsSelectionHeader");
                 ucHeader.Description = GetString("ExportPanel.ObjectsSelectionDescription");
                 break;
 
-            case 2:
+            case 3:
                 ucHeader.Header = GetString("ExportPanel.ObjectsProgressHeader");
                 ucHeader.Description = GetString("ExportPanel.ObjectsProgressDescription");
                 break;
@@ -675,8 +693,8 @@ StartSelectionTimer();");
     /// </summary>
     private void ShowObjectTypeCycleWarning()
     {
-        // Show only on the second step
-        if ((wzdExport.ActiveStepIndex == 1) && ImportExportHelper.ObjectTypeCycles.Any())
+        // Show only on the third step
+        if ((wzdExport.ActiveStepIndex == 2) && ImportExportHelper.ObjectTypeCycles.Any())
         {
             SetAlertLabel(lblWarning, String.Format(GetString("importexport.objecttypecycles"), String.Join("<br />", ImportExportHelper.ObjectTypeCycles.Select(HTMLHelper.HTMLEncode))));
         }
