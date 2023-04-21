@@ -176,20 +176,20 @@ using MedioClinic.Personalization;
     Description = "{$" + ComponentIdentifiers.ButtonWidget + ".Description$}",
     IconClass = "icon-square-dashed-line")]
 
-[assembly: RegisterFormComponent(
-    ComponentIdentifiers.NewsletterSelectionFormComponent,
-    typeof(NewsletterSelection),
-    "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Title$}",
-    IsAvailableInFormBuilderEditor = true,
-    ViewName = "~/Components/FormComponents/_NewsletterSelection.cshtml",
-    Description = "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Description$}",
-    IconClass = "icon-messages")]
+//[assembly: RegisterFormComponent(
+//    ComponentIdentifiers.NewsletterSelectionFormComponent,
+//    typeof(NewsletterSelection),
+//    "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Title$}",
+//    IsAvailableInFormBuilderEditor = true,
+//    ViewName = "~/Components/FormComponents/_NewsletterSelection.cshtml",
+//    Description = "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Description$}",
+//    IconClass = "icon-messages")]
 
-[assembly: RegisterWidget(
-    ComponentIdentifiers.NewsletterSubscriptionWidget,
-    typeof(NewsletterSubscriptionViewComponent),
-    "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Title$}",
-    typeof(NewsletterSubscriptionProperties),
-    AllowCache = true,
-    Description = "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Description$}",
-    IconClass = "icon-messages")]
+//[assembly: RegisterWidget(
+//    ComponentIdentifiers.NewsletterSubscriptionWidget,
+//    typeof(NewsletterSubscriptionViewComponent),
+//    "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Title$}",
+//    typeof(NewsletterSubscriptionProperties),
+//    AllowCache = true,
+//    Description = "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Description$}",
+//    IconClass = "icon-messages")]

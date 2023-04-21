@@ -33,16 +33,6 @@ namespace MedioClinic.Customizations.Admin.CMSModules.Macros
                                                  });
 
             MacroRuleMetadataContainer.RegisterMetadata(comesFromBigUsCityMetadata);
-
-            var clickedLinkInEmailInLastDaysMetadata = new MacroRuleMetadata(ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName,
-                                     new ContactHasClickedLinkInEmailInLastDaysTranslator(),
-                                     new List<string>
-                                     {
-                                         PredefinedActivityType.NEWSLETTER_CLICKTHROUGH
-                                     },
-                                     new List<string>(0));
-
-            MacroRuleMetadataContainer.RegisterMetadata(clickedLinkInEmailInLastDaysMetadata);
         }
     }
 }
