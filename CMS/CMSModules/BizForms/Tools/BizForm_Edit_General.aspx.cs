@@ -3,6 +3,7 @@
 using CMS.Base.Web.UI;
 using CMS.DataEngine;
 using CMS.Helpers;
+using CMS.MacroEngine;
 using CMS.Membership;
 using CMS.OnlineForms;
 using CMS.OnlineForms.Web.UI;
@@ -142,7 +143,16 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General : CMSBizForm
         // ... redirect
         if (radRedirect.Checked)
         {
-            bfi.FormRedirectToUrl = txtRedirect.Text.Trim();
+            var value = txtRedirect.Text.Trim();
+            if (string.IsNullOrEmpty(value) || IsValidAbsoluteUrl(value) || IsValidRelativeUrl(value) || MacroProcessor.ContainsMacro(value))
+            {
+                bfi.FormRedirectToUrl = value;
+            }
+            else
+            {
+                ShowError(GetString("BizFormGeneral.RedirectToURL"));
+                return;
+            }
         }
         else
         {
@@ -155,6 +165,18 @@ public partial class CMSModules_BizForms_Tools_BizForm_Edit_General : CMSBizForm
 
         // Reload header if changes were saved
         ScriptHelper.RefreshTabHeader(Page, bfi.FormDisplayName);
+    }
+
+
+    private static bool IsValidAbsoluteUrl(string value)
+    {
+        return Uri.TryCreate(value, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+    }
+
+
+    private static bool IsValidRelativeUrl(string value)
+    {
+        return value.StartsWith("~/", StringComparison.Ordinal) || value.StartsWith("/", StringComparison.Ordinal);
     }
 
     #endregion

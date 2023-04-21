@@ -20,6 +20,17 @@
                     </tr>
                 </ItemTemplate>
             </asp:Repeater>
+            <asp:Repeater ID="CustomCodeRepeater" runat="server">
+                <ItemTemplate>
+                    <tr>
+                        <td style="color:inherit"><%# HTMLHelper.HTMLEncode((string)Container.DataItem) %></td>
+                        <td style="padding-left:2em;color:inherit">
+                            <%# HTMLHelper.HTMLEncode(GetString("sf.mapping.codelabel")) %>
+                            <span style="color:Gray;font-size:smaller">(<%# HTMLHelper.HTMLEncode(GetString("sf.sourcetype.code"))%>)</span>
+                        </td>
+                    </tr>
+                </ItemTemplate>
+            </asp:Repeater>
         </tbody>
     </table>
 </div>

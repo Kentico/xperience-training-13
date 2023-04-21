@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using CMS.Base;
@@ -12,8 +13,12 @@ using CMS.Modules;
 using CMS.UIControls;
 
 
-public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : GlobalAdminPage
+public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : GlobalAdminPage, ICallbackEventHandler
 {
+    // key is connected to frameset page on purpose, where the value is used for frame dimensions
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_Modules_Pages_Module_UserInterface_Frameset);
+
+
     #region "Properties"
 
     /// <summary>
@@ -177,6 +182,9 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        layoutElem.OnResizeEndScript = ScriptHelper.GetLayoutResizeScript(paneTree, this);
+        layoutElem.MaxSize = "50%";
+
         SetupActionButtons();
 
         // Select element and expand modules first level elements
@@ -465,4 +473,23 @@ public partial class CMSModules_Modules_Pages_Module_UserInterface_Tree : Global
     }
 
     #endregion
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UI_LAYOUT_KEY, width);
+            }
+        }
+    }
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
+    }
 }

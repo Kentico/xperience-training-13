@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary {
-    
+public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary
+{
+
     /// <summary>
     /// pnlUpdateHidden control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateHidden;
-    
+
     /// <summary>
     /// ltlScript control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlScript;
-    
+
     /// <summary>
     /// hdnAction control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnAction;
-    
+
     /// <summary>
     /// hdnArgument control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnArgument;
-    
+
     /// <summary>
     /// hdnButton control.
     /// </summary>
@@ -55,7 +56,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Button hdnButton;
-    
+
     /// <summary>
     /// fileSystemDataSource control.
     /// </summary>
@@ -64,7 +65,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.DocumentEngine.Web.UI.FileSystemDataSource fileSystemDataSource;
-    
+
     /// <summary>
     /// pnlLeftContent control.
     /// </summary>
@@ -73,7 +74,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlLeftContent;
-    
+
     /// <summary>
     /// plcFolderActions control.
     /// </summary>
@@ -82,7 +83,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcFolderActions;
-    
+
     /// <summary>
     /// folderActions control.
     /// </summary>
@@ -91,7 +92,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_FolderActions folderActions;
-    
+
     /// <summary>
     /// pnlTreeArea control.
     /// </summary>
@@ -100,7 +101,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTreeArea;
-    
+
     /// <summary>
     /// pnlUpdateTree control.
     /// </summary>
@@ -109,7 +110,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateTree;
-    
+
     /// <summary>
     /// pnlTreeAreaSep control.
     /// </summary>
@@ -118,7 +119,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlTreeAreaSep;
-    
+
     /// <summary>
     /// lblNoLibraries control.
     /// </summary>
@@ -127,7 +128,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblNoLibraries;
-    
+
     /// <summary>
     /// folderTree control.
     /// </summary>
@@ -136,7 +137,16 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibraryTree folderTree;
-    
+
+    /// <summary>
+    /// resizer control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl resizer;
+
     /// <summary>
     /// pnlRightContent control.
     /// </summary>
@@ -145,7 +155,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlRightContent;
-    
+
     /// <summary>
     /// pnlUpdateMenu control.
     /// </summary>
@@ -154,7 +164,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateMenu;
-    
+
     /// <summary>
     /// menuElem control.
     /// </summary>
@@ -163,7 +173,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSelector_Menu menuElem;
-    
+
     /// <summary>
     /// pnlUpdateContent control.
     /// </summary>
@@ -172,7 +182,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateContent;
-    
+
     /// <summary>
     /// divDialogView control.
     /// </summary>
@@ -181,7 +191,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDialogView;
-    
+
     /// <summary>
     /// pnlUpdateView control.
     /// </summary>
@@ -190,7 +200,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateView;
-    
+
     /// <summary>
     /// pnlMessages control.
     /// </summary>
@@ -199,7 +209,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlMessages;
-    
+
     /// <summary>
     /// plcMess control.
     /// </summary>
@@ -208,7 +218,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.MessagesPlaceHolder plcMess;
-    
+
     /// <summary>
     /// mediaView control.
     /// </summary>
@@ -217,7 +227,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_MediaView mediaView;
-    
+
     /// <summary>
     /// pnlUpdateViewInfo control.
     /// </summary>
@@ -226,7 +236,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateViewInfo;
-    
+
     /// <summary>
     /// lblBAWarning control.
     /// </summary>
@@ -235,7 +245,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Label lblBAWarning;
-    
+
     /// <summary>
     /// pnlUpdateViewHidden control.
     /// </summary>
@@ -244,7 +254,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateViewHidden;
-    
+
     /// <summary>
     /// hdnLastSearchedValue control.
     /// </summary>
@@ -253,7 +263,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnLastSearchedValue;
-    
+
     /// <summary>
     /// hdnLastSelectedPath control.
     /// </summary>
@@ -262,7 +272,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HiddenField hdnLastSelectedPath;
-    
+
     /// <summary>
     /// ltlColorizeScript control.
     /// </summary>
@@ -271,7 +281,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlColorizeScript;
-    
+
     /// <summary>
     /// divDialogResizer control.
     /// </summary>
@@ -280,7 +290,16 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDialogResizer;
-    
+
+    /// <summary>
+    /// resizerV control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl resizerV;
+
     /// <summary>
     /// divDialogProperties control.
     /// </summary>
@@ -289,7 +308,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDialogProperties;
-    
+
     /// <summary>
     /// pnlUpdateProperties control.
     /// </summary>
@@ -298,7 +317,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateProperties;
-    
+
     /// <summary>
     /// plcFileEdit control.
     /// </summary>
@@ -307,7 +326,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcFileEdit;
-    
+
     /// <summary>
     /// fileEdit control.
     /// </summary>
@@ -316,7 +335,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit fileEdit;
-    
+
     /// <summary>
     /// plcEditFolder control.
     /// </summary>
@@ -325,7 +344,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcEditFolder;
-    
+
     /// <summary>
     /// folderEdit control.
     /// </summary>
@@ -334,7 +353,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_FolderActions_EditFolder folderEdit;
-    
+
     /// <summary>
     /// plcImportFile control.
     /// </summary>
@@ -343,7 +362,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcImportFile;
-    
+
     /// <summary>
     /// fileImport control.
     /// </summary>
@@ -352,7 +371,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileSingleImport fileImport;
-    
+
     /// <summary>
     /// plcMultipleImport control.
     /// </summary>
@@ -361,7 +380,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcMultipleImport;
-    
+
     /// <summary>
     /// multipleImport control.
     /// </summary>
@@ -370,7 +389,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileMultipleImport multipleImport;
-    
+
     /// <summary>
     /// plcCopyMove control.
     /// </summary>
@@ -379,7 +398,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.PlaceHolder plcCopyMove;
-    
+
     /// <summary>
     /// folderCopyMove control.
     /// </summary>

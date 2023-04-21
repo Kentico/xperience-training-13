@@ -13,7 +13,7 @@
     </script>
 
 </head>
-<frameset border="0" cols="300, *" runat="server" id="colsFrameset" enableviewstate="false"
+<frameset border="0" cols="304, *" runat="server" id="colsFrameset" enableviewstate="false"
     framespacing="0">
     <frame name="categories" src="Categories.aspx" scrolling="no" frameborder="0" runat="server" />
     <frame ID="keysFrame" name="keys" frameborder="0" runat="server" />

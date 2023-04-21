@@ -16,6 +16,8 @@
     </asp:Panel>
     <script type="text/javascript">
             //<![CDATA[
+        window.dynamicDialogWidth = true;
+
         function Refresh() {
             window.location.replace(window.location);
         }

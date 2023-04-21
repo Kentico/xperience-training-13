@@ -62,6 +62,8 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
         usUsers.OnSelectionChanged += UniSelector_OnSelectionChanged;
         usUsers.OnAdditionalDataBound += usUsers_OnAdditionalDataBound;
 
+        DisableUniSelectorIfNoUsers();
+
         string script = "function setNewDateTime(date) {$cmsj('#" + hdnDate.ClientID + "').val(date);}";
         ScriptHelper.RegisterClientScriptBlock(Page, typeof(string), "key", ScriptHelper.GetScript(script));
 
@@ -289,6 +291,24 @@ public partial class CMSModules_Membership_Pages_Roles_Role_Edit_Users : CMSRole
             }
         }
         return result;
+    }
+
+
+    /// <summary>
+    /// Disables the user selector if no users would be available.
+    /// </summary>
+    private void DisableUniSelectorIfNoUsers()
+    {
+        var availableUsersCount = UserInfo.Provider.Get().Where(usUsers.WhereCondition).Count;
+
+        if (availableUsersCount <= 0)
+        {
+            var message = GetString("roleusers.userlist.nodata");
+            usUsers.Enabled = false;
+            usUsers.ZeroRowsText = String.Empty;
+            usUsers.ButtonAddItems.ToolTip = message;
+            ShowInformation(message);
+        }
     }
 
 

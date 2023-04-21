@@ -203,6 +203,12 @@ public partial class CMSModules_Settings_Controls_SettingsGroupViewer : Settings
                         }
                     }
 
+                    if (String.Equals("double", keyInfo.KeyType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var doubleValue = ValidationHelper.GetDoubleSystem(keyValue, Double.NaN);
+                        keyValue = Double.IsNaN(doubleValue) ? null : doubleValue.ToString();
+                    }
+
                     // Add value editing control
                     var enabled = !isInherited;
                     FormEngineUserControl control = GetFormEngineUserControl(keyInfo, groupCount, keyCount);

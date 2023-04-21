@@ -47,7 +47,7 @@
                     </li>
                     <li>
                         <cms:LocalizedLabel ID="lblOpt2" runat="server" ResourceString="invalidlicense.howto.option2" />
-                        <asp:HyperLink ID="lnkOpt2" runat="server" NavigateUrl="mailto:sales@xperience.io" Text="sales@xperience.io" />.<br />
+                        <asp:HyperLink ID="lnkOpt2" runat="server" NavigateUrl="mailto:sales@kentico.com" Text="sales@kentico.com" />.<br />
                     </li>
                     <li>
                         <cms:LocalizedLabel ID="lblOpt3First" runat="server" ResourceString="invalidlicense.howto.option3.firstpart" />

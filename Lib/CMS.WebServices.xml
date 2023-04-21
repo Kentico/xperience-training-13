@@ -4,6 +4,43 @@
         <name>CMS.WebServices</name>
     </assembly>
     <members>
+        <member name="T:CMS.WebServices.AutomationDesignerService">
+            <summary>
+            Automation process graph service implementation.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.AutomationDesignerService.Configure(System.ServiceModel.ServiceConfiguration)">
+            <summary>
+            Configures the service endpoints
+            </summary>
+            <param name="config">Service configuration</param>
+        </member>
+        <member name="P:CMS.WebServices.AutomationDesignerService.WorkflowType">
+            <summary>
+            Workflow type.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.AutomationDesignerService.GetEventLogSource">
+            <summary>
+            Gets event log source
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.AutomationDesignerService.IsAuthorized">
+            <summary>
+            Check user permissions.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.AutomationDesignerService.DeleteNode(System.Int32)">
+            <summary>
+            Deletes node with dependencies check
+            </summary>
+            <param name="id">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.AutomationDesignerService.IsNodeTypeAllowed(CMS.DataEngine.WorkflowStepTypeEnum)">
+            <summary>
+            Determines whether node of given <paramref name="nodeType"/> can be created.
+            </summary>
+        </member>
         <member name="T:CMS.WebServices.GraphPartialRefresh">
             <summary>
             Service response containing part of the graph to be refreshed.
@@ -51,41 +88,249 @@
             <param name="nodes">Nodes to be refreshed</param>
             <param name="connections">Connections to be refreshed</param>
         </member>
-        <member name="T:CMS.WebServices.AutomationDesignerService">
+        <member name="T:CMS.WebServices.ServiceResponse">
             <summary>
-            Automation process graph service implementation.
+            Service general response.
             </summary>
         </member>
-        <member name="M:CMS.WebServices.AutomationDesignerService.Configure(System.ServiceModel.ServiceConfiguration)">
+        <member name="P:CMS.WebServices.ServiceResponse.StatusCode">
             <summary>
-            Configures the service endpoints
-            </summary>
-            <param name="config">Service configuration</param>
-        </member>
-        <member name="P:CMS.WebServices.AutomationDesignerService.WorkflowType">
-            <summary>
-            Workflow type.
+            Status code
             </summary>
         </member>
-        <member name="M:CMS.WebServices.AutomationDesignerService.GetEventLogSource">
+        <member name="P:CMS.WebServices.ServiceResponse.StatusMessage">
             <summary>
-            Gets event log source
+            Status message
             </summary>
         </member>
-        <member name="M:CMS.WebServices.AutomationDesignerService.IsAuthorized">
+        <member name="P:CMS.WebServices.ServiceResponse.ScreenLockInterval">
             <summary>
-            Check user permissions.
+            ScreenLock interval
             </summary>
         </member>
-        <member name="M:CMS.WebServices.AutomationDesignerService.DeleteNode(System.Int32)">
+        <member name="M:CMS.WebServices.ServiceResponse.#ctor">
             <summary>
-            Deletes node with dependencies check
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse.#ctor(CMS.WebServices.ResponseStatusEnum)">
+            <summary>
+            Simple parametric constructor
+            </summary>
+            <param name="statusCode">Status code</param>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse.#ctor(CMS.WebServices.ResponseStatusEnum,System.String)">
+            <summary>
+            Parametric constructor
+            </summary>
+            <param name="statusCode">Status code</param>
+            <param name="statusMessage">Status message</param>
+        </member>
+        <member name="T:CMS.WebServices.ServiceResponse`1">
+            <summary>
+            Generic service response
+            </summary>
+            <typeparam name="TData">Type of payload</typeparam>
+        </member>
+        <member name="P:CMS.WebServices.ServiceResponse`1.Data">
+            <summary>
+            Payload
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ServiceResponse)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="nonGeneric">Source</param>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(`0)">
+            <summary>
+            Parametric constructor for OK cases
+            </summary>
+            <param name="data">Data of response</param>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum)">
+            <summary>
+            Parametric constructor for status response only
+            </summary>
+            <param name="statusCode">Status code</param>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum,System.String)">
+            <summary>
+            Parametric constructor for error cases
+            </summary>
+            <param name="statusCode">Status code</param>
+            <param name="statusMessage">Status message</param>
+        </member>
+        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum,System.String,`0)">
+            <summary>
+            Parametric constructor for error cases
+            </summary>
+            <param name="statusCode">Status code</param>
+            <param name="statusMessage">Status message</param>
+            <param name="data">Data of response</param>
+        </member>
+        <member name="T:CMS.WebServices.ResponseStatusEnum">
+            <summary>
+            Service response codes
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.None">
+            <summary>
+            Default value
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.OK">
+            <summary>
+            OK
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.BadRequest">
+            <summary>
+            Bad request
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.Unauthorized">
+            <summary>
+            Unauthorized
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.NotFound">
+            <summary>
+            Not found
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.ResponseStatusEnum.InternalError">
+            <summary>
+            Internal error
+            </summary>
+        </member>
+        <member name="T:CMS.WebServices.IGraphService">
+            <summary>
+            Graph service contract.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.GetNode(System.String)">
+            <summary>
+            Get node specification for refresh purpose.
             </summary>
             <param name="id">Node ID</param>
         </member>
-        <member name="M:CMS.WebServices.AutomationDesignerService.IsNodeTypeAllowed(CMS.DataEngine.WorkflowStepTypeEnum)">
+        <member name="M:CMS.WebServices.IGraphService.SetNodePosition(System.String,System.Int32,System.Int32)">
             <summary>
-            Determines whether node of given <paramref name="nodeType"/> can be created.
+            Sets new position to specified node.
+            </summary>
+            <param name="id">Node ID</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.SetNodeName(System.String,System.String)">
+            <summary>
+            Sets node name.
+            </summary>
+            <param name="id">Node ID</param>
+            <param name="name">New name</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.SetSwitchCaseName(System.String,System.String,System.String)">
+            <summary>
+            Sets switch case name.
+            </summary>
+            <param name="nodeId">Node ID</param>
+            <param name="caseId">Switch case ID</param>
+            <param name="name">New name</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.SetNoteContent(System.String,System.String)">
+            <summary>
+            Sets content of a note.
+            </summary>
+            <param name="nodeId">Node ID.</param>
+            <param name="noteContent">Content of the note to be set.</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.CreateConnection(System.String,System.String,System.String)">
+            <summary>
+            Creates a new connection between specified nodes.
+            </summary>
+            <param name="startNodeId">Start node ID</param>
+            <param name="endNodeId">End node ID</param>
+            <param name="sourcePointGuid">Source point GUID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.RemoveConnection(System.String)">
+            <summary>
+            Deletes specified connection.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.EditConnectionStart(System.String,System.String,System.String)">
+            <summary>
+            Moves connection start to specified node.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+            <param name="startNodeId">New start node ID</param>
+            <param name="sourcePointGuid">New source point GUID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.EditConnectionEnd(System.String,System.String)">
+            <summary>
+            Moves connection end to specified node.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+            <param name="endNodeId">End node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.AddSwitchCase(System.String)">
+            <summary>
+            Adds switch case to multi-choice node.
+            </summary>
+            <param name="nodeId">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.RemoveSwitchCase(System.String,System.String)">
+            <summary>
+            Removes switch case from multi-choice node.
+            </summary>
+            <param name="nodeId">Node ID</param>
+            <param name="caseId">Case ID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.CreateNode(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Creates new node of specified type.
+            </summary>
+            <param name="type">Node type</param>
+            <param name="actionId">Action type</param>
+            <param name="parentId">Parent ID</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.CreateNodeOnConnections(System.String,System.String,System.String,System.Int32,System.Int32,System.Collections.Generic.List{System.String})">
+            <summary>
+            Creates new node of specified type.
+            </summary>
+            <param name="type">Node type</param>
+            <param name="actionId">Action type</param>
+            <param name="parentId">Parent ID</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+            <param name="splitConnectionsIDs">Connections new node should be attached on</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.RemoveNode(System.String)">
+            <summary>
+            Removes specified node and all its connections.
+            </summary>
+            <param name="nodeId">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.DuplicateNode(System.String,System.Int32,System.Int32)">
+            <summary>
+            Duplicates a node.
+            </summary>
+            <param name="nodeId">ID of node that should be duplicated.</param>
+            <param name="x">Horizontal position of the duplicate.</param>
+            <param name="y">Vertical position of the duplicate.</param>
+        </member>
+        <member name="M:CMS.WebServices.IGraphService.GetData(System.String)">
+            <summary>
+            Gets data for action step with given <paramref name="actionId"/>.
             </summary>
         </member>
         <member name="T:CMS.WebServices.IWorkflowDesignerService">
@@ -94,19 +339,204 @@
             we could access from JavaScript only one implementation. Eventually we want multiple graph implementations with different service implementations on a page.
             </summary>
         </member>
-        <member name="T:CMS.WebServices.WebServicesModule">
+        <member name="T:CMS.WebServices.WorkflowDesignerService">
             <summary>
-            Represents the REST module.
+            Workflow graph service implementation.
             </summary>
         </member>
-        <member name="M:CMS.WebServices.WebServicesModule.#ctor">
+        <member name="P:CMS.WebServices.WorkflowDesignerService.WorkflowType">
             <summary>
-            Default constructor
+            Workflow type.
             </summary>
         </member>
-        <member name="M:CMS.WebServices.WebServicesModule.OnInit">
+        <member name="M:CMS.WebServices.WorkflowDesignerService.Configure(System.ServiceModel.ServiceConfiguration)">
             <summary>
-            Initializes the module
+            Configures the service endpoints
+            </summary>
+            <param name="config">Service configuration</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNode(System.String)">
+            <summary>
+            Get node specification for refresh purpose.
+            </summary>
+            <param name="id">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNodePosition(System.String,System.Int32,System.Int32)">
+            <summary>
+            Sets new position to specified node.
+            </summary>
+            <param name="id">Node identifier</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNodeName(System.String,System.String)">
+            <summary>
+            Sets node name.
+            </summary>
+            <param name="id">Node ID</param>
+            <param name="name">New name</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.SetSwitchCaseName(System.String,System.String,System.String)">
+            <summary>
+            Sets switch case name.
+            </summary>
+            <param name="nodeId">Node ID</param>
+            <param name="caseId">Switch case ID</param>
+            <param name="name">New name</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNoteContent(System.String,System.String)">
+            <summary>
+            Sets content of a note.
+            </summary>
+            <param name="nodeId">Node ID.</param>
+            <param name="noteContent">Content of the note to be set.</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateConnection(System.String,System.String,System.String)">
+            <summary>
+            Creates a new connection between selected nodes.
+            </summary>
+            <param name="startNodeId">Start node ID</param>
+            <param name="endNodeId">End node ID</param>
+            <param name="sourcePointGuid">Source point GUID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveConnection(System.String)">
+            <summary>
+            Deletes selected connection.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.EditConnectionStart(System.String,System.String,System.String)">
+            <summary>
+            Moves connection start to specified node.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+            <param name="startNodeId">New start node ID</param>
+            <param name="sourcePointGuid">New source point GUID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.EditConnectionEnd(System.String,System.String)">
+            <summary>
+            Moves connection end to selected node.
+            </summary>
+            <param name="connectionId">Connection ID</param>
+            <param name="endNodeId">End node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.AddSwitchCase(System.String)">
+            <summary>
+            Adds switch case to multi-choice node.
+            </summary>
+            <param name="nodeId">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveSwitchCase(System.String,System.String)">
+            <summary>
+            Removes switch case from multi-choice node.
+            </summary>
+            <param name="nodeId">Node ID</param>
+            <param name="caseId">Case ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateNodeOnConnections(System.String,System.String,System.String,System.Int32,System.Int32,System.Collections.Generic.List{System.String})">
+            <summary>
+            Creates new node of specified type.
+            </summary>
+            <param name="type">Node type</param>
+            <param name="actionId">Action type</param>
+            <param name="parentId">Parent ID</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+            <param name="splitConnectionsIDs">Connections new node should be attached on</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateNode(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Creates new node of specified type.
+            </summary>
+            <param name="type">Node type</param>
+            <param name="actionId">Action type</param>
+            <param name="parentId">Workflow ID</param>
+            <param name="x">X-coordinate</param>
+            <param name="y">Y-coordinate</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveNode(System.String)">
+            <summary>
+            Removes specified node and all its connections.
+            </summary>
+            <param name="nodeId">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.DuplicateNode(System.String,System.Int32,System.Int32)">
+            <summary>
+            Duplicates a node.
+            </summary>
+            <param name="nodeId">ID of node that should be duplicated.</param>
+            <param name="x">Horizontal position of the duplicate.</param>
+            <param name="y">Vertical position of the duplicate.</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetData(System.String)">
+            <summary>
+            Gets data for action step with given <paramref name="actionId"/>
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetEventLogSource">
+            <summary>
+            Gets event log source
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.IsAuthorized">
+            <summary>
+            Check user permissions.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.DeleteNode(System.Int32)">
+            <summary>
+            Deletes node with dependencies check
+            </summary>
+            <param name="id">Node ID</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse(System.String)">
+            <summary>
+            Returns ServiceResponse with BadRequest type
+            </summary>
+            <param name="message">Error message</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse``1(System.String)">
+            <summary>
+            Returns generic ServiceResponse with BadRequest type
+            </summary>
+            <typeparam name="TData">Response generic type</typeparam>
+            <param name="message">Error message</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse``1(System.String,``0)">
+            <summary>
+            Returns generic ServiceResponse with BadRequest type
+            </summary>
+            <typeparam name="TData">Response generic type</typeparam>
+            <param name="message">Error message</param>
+            <param name="data">Response data</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNotFoundResponse">
+            <summary>
+            Returns ServiceResponse with NotFound type
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNotFoundResponse``1">
+            <summary>
+            Returns generic ServiceResponse with NotFound type
+            </summary>
+            <typeparam name="TData">Response generic type</typeparam>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.CanDeleteStep(CMS.WorkflowEngine.WorkflowStepInfo)">
+            <summary>
+            Returns true if given step can be deleted.
+            </summary>
+            <param name="step">Workflow step</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.UpdateResourceStringTranslation(System.String,System.String)">
+            <summary>
+            Update resource string with given translation
+            </summary>
+            <param name="key">resource string key</param>
+            <param name="translation">resource translation</param>
+        </member>
+        <member name="M:CMS.WebServices.WorkflowDesignerService.IsNodeTypeAllowed(CMS.DataEngine.WorkflowStepTypeEnum)">
+            <summary>
+            Determines whether node of given <paramref name="nodeType"/> can be created.
             </summary>
         </member>
         <member name="T:CMS.WebServices.WebServicesHandlers">
@@ -122,6 +552,21 @@
         <member name="M:CMS.WebServices.WebServicesHandlers.HandleRESTAuthentication(System.Object,System.EventArgs)">
             <summary>
             Handles REST authentication within current request
+            </summary>
+        </member>
+        <member name="T:CMS.WebServices.WebServicesModule">
+            <summary>
+            Represents the REST module.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WebServicesModule.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.WebServicesModule.OnInit">
+            <summary>
+            Initializes the module
             </summary>
         </member>
         <member name="T:CMS.WebServices.BaseRESTService">
@@ -435,447 +880,6 @@
             <param name="httpMethod">HTTP method of the request</param>
             <returns>Two dimensional array, first parameter is rewritten URL, the second is querystring</returns>
         </member>
-        <member name="T:CMS.WebServices.RESTErrorHandler">
-            <summary>
-            Error handler for the REST requests.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTErrorHandler.ServiceType">
-            <summary>
-            Service type.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTErrorHandler.System#ServiceModel#Description#IServiceBehavior#ApplyDispatchBehavior(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase)">
-            <summary>
-            Initializes the error handler.
-            </summary>
-            <param name="description">Service description</param>
-            <param name="host">Service host</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTErrorHandler.AddBindingParameters(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase,System.Collections.ObjectModel.Collection{System.ServiceModel.Description.ServiceEndpoint},System.ServiceModel.Channels.BindingParameterCollection)">
-            <summary>
-            Not needed, remains empty, does nothing.
-            </summary>
-            <param name="serviceDescription">Operation description</param>
-            <param name="serviceHostBase">Service host</param>
-            <param name="endpoints">Endpoints</param>
-            <param name="bindingParameters">Binding parameters</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTErrorHandler.Validate(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase)">
-            <summary>
-            Not needed, remains empty, does nothing.
-            </summary>
-            <param name="serviceDescription">Service description</param>
-            <param name="serviceHostBase">Service host</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTErrorHandler.HandleError(System.Exception)">
-            <summary>
-            Error handler. Logs the exception to the EventLog
-            </summary>
-            <param name="error">Exception</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTErrorHandler.ProvideFault(System.Exception,System.ServiceModel.Channels.MessageVersion,System.ServiceModel.Channels.Message@)">
-            <summary>
-            Not needed. Does nothing.
-            </summary>
-            <param name="error">Exception</param>
-            <param name="version">Message version</param>
-            <param name="fault">Fault message</param>
-        </member>
-        <member name="T:CMS.WebServices.RESTServiceHelper">
-            <summary>
-            Provides utility methods for REST.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)">
-            <summary>
-            Returns hash string to be used for given URL path and query instead of authentication.
-            </summary>
-            <param name="pathAndQuery">URL absolute path and query for which to get the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>).</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> is null.</exception>
-            <remarks>
-            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
-            <c>offset</c> and <c>maxrecords</c>.
-            </remarks>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.IsUrlPathAndQueryHashValid(System.String,System.String)">
-            <summary>
-            Tests whether hash computed for <paramref name="pathAndQuery"/> matches <paramref name="expectedHash"/>.
-            </summary>
-            <param name="pathAndQuery">URL absolute path and query for which to compute the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>
-            or <see cref="P:System.Uri.PathAndQuery"/> of the request being validated).</param>
-            <param name="expectedHash">Hash to perform the computed hash matching against.</param>
-            <returns>Return true if <paramref name="pathAndQuery"/> produces the same hash as <paramref name="expectedHash"/> prescribes. Otherwise returns false.</returns>
-            <remarks>
-            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
-            <c>offset</c> and <c>maxrecords</c>.
-            </remarks>
-            <seealso cref="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)"/>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.TryParseRestUrlPath(System.String,System.String@,System.String@)">
-            <summary>
-            Tries to parse an absolute URL of a REST service endpoint and splits the absolute path to absolute path prefix and relative REST path.
-            </summary>
-            <param name="absoluteUrl">Absolute URL identifying REST service endpoint.</param>
-            <param name="absolutePathPrefix">When this method returns, contains absolute path prefix of the absolute path (the path portion preceding '/rest'). Contains null if parsing fails.</param>
-            <param name="relativeRestPath">When this method returns, contains relative path within the REST endpoint (e.g. '/rest/all'). Contains null if parsing fails.</param>
-            <returns>Returns true upon successful parsing, otherwise false.</returns>
-            <example>
-            Parses a URL in format <c>http://example.com/web/virtual/path/rest/om.activitytype?format=xml</c> to <c>/web/virtual/path</c> prefix and <c>/rest/om.activitytype</c> REST path.
-            </example>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHashInternal(System.String)">
-            <summary>
-            Returns hash string to be used for given URL path and query instead of authentication.
-            </summary>
-            <param name="pathAndQuery">URL absolute path and query for which to get the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>).</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> is null.</exception>
-            <remarks>
-            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
-            <c>offset</c> and <c>maxrecords</c>.
-            </remarks>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.NormalizeUrlPathTrailingSlash(System.String)">
-            <summary>
-            Normalizes URL by removing trailing slash from the end of the URL path. The URL must be normalized in order to be compatible with the way the
-            <see cref="P:System.ServiceModel.OperationContext.IncomingMessageHeaders"/> represents path. 
-            </summary>
-            <param name="pathAndQuery">URL path and query to normalize.</param>
-            <returns>URL which does not contain a trailing slash.</returns>
-            <remarks>
-            Normalizes URL paths like <c>/RESTService.svc/cms.query/?domain=mydomain</c> to <c>/RESTService.svc/cms.query?domain=mydomain</c> by trimming the trailing path slash.
-            </remarks>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.IsUrlPathAndQueryHashValidInternal(System.String,System.String)">
-            <summary>
-            Tests whether hash computed for <paramref name="pathAndQuery"/> matches <paramref name="expectedHash"/>.
-            Validates hash expiration query parameter <c>hashExpirationUtc</c> if provided.
-            </summary>
-            <param name="pathAndQuery">URL absolute path and query for which to compute the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>
-            or <see cref="P:System.Uri.PathAndQuery"/> of the request being validated).</param>
-            <param name="expectedHash">Hash to perform the computed hash matching against.</param>
-            <returns>Return true if <paramref name="pathAndQuery"/> produces the same hash as <paramref name="expectedHash"/> prescribes. Otherwise returns false.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> or <paramref name="expectedHash"/> is null.</exception>
-            <remarks>
-            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
-            <c>offset</c> and <c>maxrecords</c>.
-            </remarks>
-            <seealso cref="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)"/>
-        </member>
-        <member name="M:CMS.WebServices.RESTServiceHelper.TryParseRestUrlPathInternal(System.String,System.String@,System.String@)">
-            <summary>
-            Tries to parse an absolute URL of a REST service endpoint and splits the absolute path to absolute path prefix and relative REST path.
-            </summary>
-            <param name="absoluteUrl">Absolute URL identifying REST service endpoint.</param>
-            <param name="absolutePathPrefix">When this method returns, contains absolute path prefix of the absolute path (the path portion preceding '/rest'). Contains null if parsing fails.</param>
-            <param name="relativeRestPath">When this method returns, contains relative path within the REST endpoint (e.g. '/rest/all'). Contains null if parsing fails.</param>
-            <returns>Returns true upon successful parsing, otherwise false.</returns>
-            <example>
-            Parses a URL in format <c>http://example.com/web/virtual/path/rest/om.activitytype?format=xml</c> to <c>/web/virtual/path</c> prefix and <c>/rest/om.activitytype</c> REST path.
-            </example>
-        </member>
-        <member name="T:CMS.WebServices.ServiceCookieHelper">
-            <summary>
-            Cookie helper methods for WCF Service.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceCookieHelper.Instance">
-            <summary>
-            Singleton Instance of the cookie helper.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceCookieHelper.RequestCookies">
-            <summary>
-            Response cookies collection.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceCookieHelper.GetValue(System.String)">
-            <summary>
-            Gets the value of the given cookie.
-            </summary>
-            <param name="cookieName">Name of the cookie</param>
-        </member>
-        <member name="P:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#Item(System.String)">
-            <summary>
-            Gets or sets the value of the column.
-            </summary>
-            <param name="columnName">Column name</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#GetValue(System.String)">
-            <summary>
-            Gets the value from cookie.
-            </summary>
-            <param name="cookieName">Cookie name</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#SetValue(System.String,System.Object)">
-            <summary>
-            Not implemented.
-            </summary>
-            <param name="cookieName">Cookie name</param>
-            <param name="value">New value</param>
-        </member>
-        <member name="P:CMS.WebServices.ServiceCookieHelper.ColumnNames">
-            <summary>
-            All the cookie names.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceCookieHelper.TryGetValue(System.String,System.Object@)">
-            <summary>
-            Returns value of column.
-            </summary>
-            <param name="columnName">Column name</param>
-            <param name="value">Returns the value</param>
-            <returns>Returns true if the operation was successful (the value was present)</returns>
-        </member>
-        <member name="M:CMS.WebServices.ServiceCookieHelper.ContainsColumn(System.String)">
-            <summary>
-            Returns true if the object contains specified column.
-            </summary>
-            <param name="columnName">Column name</param>
-        </member>
-        <member name="T:CMS.WebServices.ServiceQueryHelper">
-            <summary>
-            QueryString helper methods for WCF Service.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceQueryHelper.Instance">
-            <summary>
-            Singleton Instance of the service query helper.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceQueryHelper.Item(System.String)">
-            <summary>
-            Gets or sets the value of the column.
-            </summary>
-            <param name="columnName">Column name</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceQueryHelper.GetValue(System.String)">
-            <summary>
-            Gets the value from QueryString.
-            </summary>
-            <param name="key">QueryString key</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceQueryHelper.SetValue(System.String,System.Object)">
-            <summary>
-            Not implemented.
-            </summary>
-            <param name="key">QueryString key</param>
-            <param name="value">New value</param>
-        </member>
-        <member name="P:CMS.WebServices.ServiceQueryHelper.ColumnNames">
-            <summary>
-            Column names.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceQueryHelper.TryGetValue(System.String,System.Object@)">
-            <summary>
-            Returns value of column.
-            </summary>
-            <param name="columnName">Column name</param>
-            <param name="value">Returns the value</param>
-            <returns>Returns true if the operation was successful (the value was present)</returns>
-        </member>
-        <member name="M:CMS.WebServices.ServiceQueryHelper.ContainsColumn(System.String)">
-            <summary>
-            Returns true if the object contains specified column.
-            </summary>
-            <param name="columnName">Column name</param>
-        </member>
-        <member name="T:CMS.WebServices.RESTSecurityInvoker">
-            <summary>
-            Security handler over the REST requests
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.RESTSecurityInvoker.HASH_AUTHENTICATED_USERNAME">
-            <summary>
-            Constant to identify the hash authentication requirement 
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.RESTSecurityInvoker.BASIC_AUTHENTICATION_TYPE">
-            <summary>
-            Basic authentication
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.RESTSecurityInvoker.USER_NAME_KEY">
-            <summary>
-            Current user name key
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.RESTSecurityInvoker.HASH_AUTH_KEY">
-            <summary>
-            Is hash authenticated key
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.InternalImplementation">
-            <summary>
-            Singleton instance used to access override-able non-static fields. 
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.IncomingRequest">
-            <summary>
-            Incoming request
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.WebOperationContext">
-            <summary>
-            Web operation context
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.CurrentSiteName">
-            <summary>
-            Gets current site name (retrieved from domain accessed).
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.IsTranslation">
-            <summary>
-            Indicates whether the query is translation query.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.RESTServiceEnabled">
-            <summary>
-            Indicates whether the REST service is enabled (in settings).
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.DocumentAccessReadOnly">
-            <summary>
-            Indicates whether the access to the documents is read-only. If true, only GET requests are allowed.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.ObjectAccessReadOnly">
-            <summary>
-            Indicates whether the access to the objects is read-only. If true, only GET requests are allowed.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.ServiceTypeEnabled">
-            <summary>
-            Gets the type of the service which is enabled (0 = Everything, 1 = Only objects, 2 = Only documents).
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.ApplyDispatchBehavior(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Dispatcher.DispatchOperation)">
-            <summary>
-            Initializes the invoker.
-            </summary>
-            <param name="operationDescription">Operation description</param>
-            <param name="dispatchOperation">Dispatch operation</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.ApplyClientBehavior(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Dispatcher.ClientOperation)">
-            <summary>
-            Not needed, remains empty, does nothing.
-            </summary>
-            <param name="operationDescription">Operation description</param>
-            <param name="clientOperation">Client operation</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AddBindingParameters(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Channels.BindingParameterCollection)">
-            <summary>
-            Not needed, remains empty, does nothing.
-            </summary>
-            <param name="operationDescription">Operation description</param>
-            <param name="bindingParameters">Binding parameters</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.Validate(System.ServiceModel.Description.OperationDescription)">
-            <summary>
-            Not needed, remains empty, does nothing.
-            </summary>
-            <param name="operationDescription">Operation description</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.Invoke(System.Object,System.Object[],System.Object[]@)">
-            <summary>
-            Invokes the operation only when authentication went well.
-            </summary>
-            <param name="instance">Instance object</param>
-            <param name="inputs">List of inputs</param>
-            <param name="outputs">List of outputs</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AllocateInputs">
-            <summary>
-            Calls AllocateInputs on the invoker.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.InvokeBegin(System.Object,System.Object[],System.AsyncCallback,System.Object)">
-            <summary>
-            Not implemented method.
-            </summary>
-            <param name="instance">Instance object</param>
-            <param name="inputs">List of inputs</param>
-            <param name="callback">Callback object</param>
-            <param name="state">State object</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.InvokeEnd(System.Object,System.Object[]@,System.IAsyncResult)">
-            <summary>
-            Not implemented method.
-            </summary>
-            <param name="instance">Instance object</param>
-            <param name="outputs">List of outputs</param>
-            <param name="result">Result object</param>
-        </member>
-        <member name="P:CMS.WebServices.RESTSecurityInvoker.IsSynchronous">
-            <summary>
-            Always true - we need synchronous behavior for authentication.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.HandleRESTAuthentication">
-            <summary>
-            Handles necessary actions to provide proper REST authentication response
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.CheckHash">
-            <summary>
-            Checks hash parameter. Returns true if the parameter matches the requested URL. For request different from GET returns always false.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetUserName">
-            <summary>
-            Returns username of authenticated user.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUser">
-            <summary>
-            Authenticates the user according to authentication type setting.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUser(System.Boolean)">
-            <summary>
-            Authenticates the user according to authentication type setting.
-            </summary>
-            <param name="checkHash">If true, hash is checked and has higher priority than authentication</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUserBasic">
-            <summary>
-            Authenticates the user using basic authentication.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetQueryParam(System.String)">
-            <summary>
-            Returns query string parameter.
-            </summary>
-            <param name="name">Name of the parameter</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetAuthenticatedUserNameInternal(System.Boolean)">
-            <summary>
-            Returns name of authenticated user.
-            </summary>
-            <param name="checkHash">If true, hash is checked and has higher priority than authentication</param>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.CheckHashInternal">
-            <summary>
-            Checks hash parameter. Returns true if the parameter matches the requested URL. For request different from GET returns always false.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUserBasicInternal">
-            <summary>
-            Authenticates the user using basic authentication.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.OperationIsAllowed">
-            <summary>
-            Check the read-only settings for object/document operations.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.RESTSecurityInvoker.IsHashAuthenticated">
-            <summary>
-            Returns true if the request is GET and the hash parameter is present and matches the requested URL.
-            </summary>
-        </member>
         <member name="T:CMS.WebServices.IRESTService">
             <summary>
             REST service interface
@@ -1095,6 +1099,248 @@
             <param name="userName">User name.</param>
             <param name="password">Password.</param>
             <param name="token">Token.</param>
+        </member>
+        <member name="T:CMS.WebServices.RESTErrorHandler">
+            <summary>
+            Error handler for the REST requests.
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTErrorHandler.ServiceType">
+            <summary>
+            Service type.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTErrorHandler.System#ServiceModel#Description#IServiceBehavior#ApplyDispatchBehavior(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase)">
+            <summary>
+            Initializes the error handler.
+            </summary>
+            <param name="description">Service description</param>
+            <param name="host">Service host</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTErrorHandler.AddBindingParameters(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase,System.Collections.ObjectModel.Collection{System.ServiceModel.Description.ServiceEndpoint},System.ServiceModel.Channels.BindingParameterCollection)">
+            <summary>
+            Not needed, remains empty, does nothing.
+            </summary>
+            <param name="serviceDescription">Operation description</param>
+            <param name="serviceHostBase">Service host</param>
+            <param name="endpoints">Endpoints</param>
+            <param name="bindingParameters">Binding parameters</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTErrorHandler.Validate(System.ServiceModel.Description.ServiceDescription,System.ServiceModel.ServiceHostBase)">
+            <summary>
+            Not needed, remains empty, does nothing.
+            </summary>
+            <param name="serviceDescription">Service description</param>
+            <param name="serviceHostBase">Service host</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTErrorHandler.HandleError(System.Exception)">
+            <summary>
+            Error handler. Logs the exception to the EventLog
+            </summary>
+            <param name="error">Exception</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTErrorHandler.ProvideFault(System.Exception,System.ServiceModel.Channels.MessageVersion,System.ServiceModel.Channels.Message@)">
+            <summary>
+            Not needed. Does nothing.
+            </summary>
+            <param name="error">Exception</param>
+            <param name="version">Message version</param>
+            <param name="fault">Fault message</param>
+        </member>
+        <member name="T:CMS.WebServices.RESTSecurityInvoker">
+            <summary>
+            Security handler over the REST requests
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.RESTSecurityInvoker.HASH_AUTHENTICATED_USERNAME">
+            <summary>
+            Constant to identify the hash authentication requirement 
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.RESTSecurityInvoker.BASIC_AUTHENTICATION_TYPE">
+            <summary>
+            Basic authentication
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.RESTSecurityInvoker.USER_NAME_KEY">
+            <summary>
+            Current user name key
+            </summary>
+        </member>
+        <member name="F:CMS.WebServices.RESTSecurityInvoker.HASH_AUTH_KEY">
+            <summary>
+            Is hash authenticated key
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.InternalImplementation">
+            <summary>
+            Singleton instance used to access override-able non-static fields. 
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.IncomingRequest">
+            <summary>
+            Incoming request
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.WebOperationContext">
+            <summary>
+            Web operation context
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.CurrentSiteName">
+            <summary>
+            Gets current site name (retrieved from domain accessed).
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.IsTranslation">
+            <summary>
+            Indicates whether the query is translation query.
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.RESTServiceEnabled">
+            <summary>
+            Indicates whether the REST service is enabled (in settings).
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.DocumentAccessReadOnly">
+            <summary>
+            Indicates whether the access to the documents is read-only. If true, only GET requests are allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.ObjectAccessReadOnly">
+            <summary>
+            Indicates whether the access to the objects is read-only. If true, only GET requests are allowed.
+            </summary>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.ServiceTypeEnabled">
+            <summary>
+            Gets the type of the service which is enabled (0 = Everything, 1 = Only objects, 2 = Only documents).
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.ApplyDispatchBehavior(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Dispatcher.DispatchOperation)">
+            <summary>
+            Initializes the invoker.
+            </summary>
+            <param name="operationDescription">Operation description</param>
+            <param name="dispatchOperation">Dispatch operation</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.ApplyClientBehavior(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Dispatcher.ClientOperation)">
+            <summary>
+            Not needed, remains empty, does nothing.
+            </summary>
+            <param name="operationDescription">Operation description</param>
+            <param name="clientOperation">Client operation</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AddBindingParameters(System.ServiceModel.Description.OperationDescription,System.ServiceModel.Channels.BindingParameterCollection)">
+            <summary>
+            Not needed, remains empty, does nothing.
+            </summary>
+            <param name="operationDescription">Operation description</param>
+            <param name="bindingParameters">Binding parameters</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.Validate(System.ServiceModel.Description.OperationDescription)">
+            <summary>
+            Not needed, remains empty, does nothing.
+            </summary>
+            <param name="operationDescription">Operation description</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.Invoke(System.Object,System.Object[],System.Object[]@)">
+            <summary>
+            Invokes the operation only when authentication went well.
+            </summary>
+            <param name="instance">Instance object</param>
+            <param name="inputs">List of inputs</param>
+            <param name="outputs">List of outputs</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AllocateInputs">
+            <summary>
+            Calls AllocateInputs on the invoker.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.InvokeBegin(System.Object,System.Object[],System.AsyncCallback,System.Object)">
+            <summary>
+            Not implemented method.
+            </summary>
+            <param name="instance">Instance object</param>
+            <param name="inputs">List of inputs</param>
+            <param name="callback">Callback object</param>
+            <param name="state">State object</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.InvokeEnd(System.Object,System.Object[]@,System.IAsyncResult)">
+            <summary>
+            Not implemented method.
+            </summary>
+            <param name="instance">Instance object</param>
+            <param name="outputs">List of outputs</param>
+            <param name="result">Result object</param>
+        </member>
+        <member name="P:CMS.WebServices.RESTSecurityInvoker.IsSynchronous">
+            <summary>
+            Always true - we need synchronous behavior for authentication.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.HandleRESTAuthentication">
+            <summary>
+            Handles necessary actions to provide proper REST authentication response
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.CheckHash">
+            <summary>
+            Checks hash parameter. Returns true if the parameter matches the requested URL. For request different from GET returns always false.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetUserName">
+            <summary>
+            Returns username of authenticated user.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUser">
+            <summary>
+            Authenticates the user according to authentication type setting.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUser(System.Boolean)">
+            <summary>
+            Authenticates the user according to authentication type setting.
+            </summary>
+            <param name="checkHash">If true, hash is checked and has higher priority than authentication</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUserBasic">
+            <summary>
+            Authenticates the user using basic authentication.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetQueryParam(System.String)">
+            <summary>
+            Returns query string parameter.
+            </summary>
+            <param name="name">Name of the parameter</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.GetAuthenticatedUserNameInternal(System.Boolean)">
+            <summary>
+            Returns name of authenticated user.
+            </summary>
+            <param name="checkHash">If true, hash is checked and has higher priority than authentication</param>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.CheckHashInternal">
+            <summary>
+            Checks hash parameter. Returns true if the parameter matches the requested URL. For request different from GET returns always false.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.AuthenticateUserBasicInternal">
+            <summary>
+            Authenticates the user using basic authentication.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.OperationIsAllowed">
+            <summary>
+            Check the read-only settings for object/document operations.
+            </summary>
+        </member>
+        <member name="M:CMS.WebServices.RESTSecurityInvoker.IsHashAuthenticated">
+            <summary>
+            Returns true if the request is GET and the hash parameter is present and matches the requested URL.
+            </summary>
         </member>
         <member name="T:CMS.WebServices.RESTService">
             <summary>
@@ -1327,450 +1573,204 @@
             <param name="password">Password.</param>
             <param name="token">Token.</param>
         </member>
-        <member name="T:CMS.WebServices.WorkflowDesignerService">
+        <member name="T:CMS.WebServices.RESTServiceHelper">
             <summary>
-            Workflow graph service implementation.
+            Provides utility methods for REST.
             </summary>
         </member>
-        <member name="P:CMS.WebServices.WorkflowDesignerService.WorkflowType">
+        <member name="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)">
             <summary>
-            Workflow type.
+            Returns hash string to be used for given URL path and query instead of authentication.
             </summary>
+            <param name="pathAndQuery">URL absolute path and query for which to get the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> is null.</exception>
+            <remarks>
+            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
+            <c>offset</c> and <c>maxrecords</c>.
+            </remarks>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.Configure(System.ServiceModel.ServiceConfiguration)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.IsUrlPathAndQueryHashValid(System.String,System.String)">
             <summary>
-            Configures the service endpoints
+            Tests whether hash computed for <paramref name="pathAndQuery"/> matches <paramref name="expectedHash"/>.
             </summary>
-            <param name="config">Service configuration</param>
+            <param name="pathAndQuery">URL absolute path and query for which to compute the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>
+            or <see cref="P:System.Uri.PathAndQuery"/> of the request being validated).</param>
+            <param name="expectedHash">Hash to perform the computed hash matching against.</param>
+            <returns>Return true if <paramref name="pathAndQuery"/> produces the same hash as <paramref name="expectedHash"/> prescribes. Otherwise returns false.</returns>
+            <remarks>
+            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
+            <c>offset</c> and <c>maxrecords</c>.
+            </remarks>
+            <seealso cref="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)"/>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNode(System.String)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.TryParseRestUrlPath(System.String,System.String@,System.String@)">
             <summary>
-            Get node specification for refresh purpose.
+            Tries to parse an absolute URL of a REST service endpoint and splits the absolute path to absolute path prefix and relative REST path.
             </summary>
-            <param name="id">Node ID</param>
+            <param name="absoluteUrl">Absolute URL identifying REST service endpoint.</param>
+            <param name="absolutePathPrefix">When this method returns, contains absolute path prefix of the absolute path (the path portion preceding '/rest'). Contains null if parsing fails.</param>
+            <param name="relativeRestPath">When this method returns, contains relative path within the REST endpoint (e.g. '/rest/all'). Contains null if parsing fails.</param>
+            <returns>Returns true upon successful parsing, otherwise false.</returns>
+            <example>
+            Parses a URL in format <c>http://example.com/web/virtual/path/rest/om.activitytype?format=xml</c> to <c>/web/virtual/path</c> prefix and <c>/rest/om.activitytype</c> REST path.
+            </example>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNodePosition(System.String,System.Int32,System.Int32)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHashInternal(System.String)">
             <summary>
-            Sets new position to specified node.
+            Returns hash string to be used for given URL path and query instead of authentication.
             </summary>
-            <param name="id">Node identifier</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
+            <param name="pathAndQuery">URL absolute path and query for which to get the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> is null.</exception>
+            <remarks>
+            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
+            <c>offset</c> and <c>maxrecords</c>.
+            </remarks>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNodeName(System.String,System.String)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.NormalizeUrlPathTrailingSlash(System.String)">
             <summary>
-            Sets node name.
+            Normalizes URL by removing trailing slash from the end of the URL path. The URL must be normalized in order to be compatible with the way the
+            <see cref="P:System.ServiceModel.OperationContext.IncomingMessageHeaders"/> represents path. 
             </summary>
-            <param name="id">Node ID</param>
-            <param name="name">New name</param>
+            <param name="pathAndQuery">URL path and query to normalize.</param>
+            <returns>URL which does not contain a trailing slash.</returns>
+            <remarks>
+            Normalizes URL paths like <c>/RESTService.svc/cms.query/?domain=mydomain</c> to <c>/RESTService.svc/cms.query?domain=mydomain</c> by trimming the trailing path slash.
+            </remarks>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.SetSwitchCaseName(System.String,System.String,System.String)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.IsUrlPathAndQueryHashValidInternal(System.String,System.String)">
             <summary>
-            Sets switch case name.
+            Tests whether hash computed for <paramref name="pathAndQuery"/> matches <paramref name="expectedHash"/>.
+            Validates hash expiration query parameter <c>hashExpirationUtc</c> if provided.
             </summary>
-            <param name="nodeId">Node ID</param>
-            <param name="caseId">Switch case ID</param>
-            <param name="name">New name</param>
+            <param name="pathAndQuery">URL absolute path and query for which to compute the hash (resolved virtual path and query string originating from <see cref="M:CMS.WebServices.BaseRESTService.RewriteRESTUrl(System.String,System.String,System.String,System.String)"/>
+            or <see cref="P:System.Uri.PathAndQuery"/> of the request being validated).</param>
+            <param name="expectedHash">Hash to perform the computed hash matching against.</param>
+            <returns>Return true if <paramref name="pathAndQuery"/> produces the same hash as <paramref name="expectedHash"/> prescribes. Otherwise returns false.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="pathAndQuery"/> or <paramref name="expectedHash"/> is null.</exception>
+            <remarks>
+            The produced hash is invariant of the <paramref name="pathAndQuery"/> trailing slash and optional query string parameters
+            <c>offset</c> and <c>maxrecords</c>.
+            </remarks>
+            <seealso cref="M:CMS.WebServices.RESTServiceHelper.GetUrlPathAndQueryHash(System.String)"/>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.SetNoteContent(System.String,System.String)">
+        <member name="M:CMS.WebServices.RESTServiceHelper.TryParseRestUrlPathInternal(System.String,System.String@,System.String@)">
             <summary>
-            Sets content of a note.
+            Tries to parse an absolute URL of a REST service endpoint and splits the absolute path to absolute path prefix and relative REST path.
             </summary>
-            <param name="nodeId">Node ID.</param>
-            <param name="noteContent">Content of the note to be set.</param>
+            <param name="absoluteUrl">Absolute URL identifying REST service endpoint.</param>
+            <param name="absolutePathPrefix">When this method returns, contains absolute path prefix of the absolute path (the path portion preceding '/rest'). Contains null if parsing fails.</param>
+            <param name="relativeRestPath">When this method returns, contains relative path within the REST endpoint (e.g. '/rest/all'). Contains null if parsing fails.</param>
+            <returns>Returns true upon successful parsing, otherwise false.</returns>
+            <example>
+            Parses a URL in format <c>http://example.com/web/virtual/path/rest/om.activitytype?format=xml</c> to <c>/web/virtual/path</c> prefix and <c>/rest/om.activitytype</c> REST path.
+            </example>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateConnection(System.String,System.String,System.String)">
+        <member name="T:CMS.WebServices.ServiceCookieHelper">
             <summary>
-            Creates a new connection between selected nodes.
+            Cookie helper methods for WCF Service.
             </summary>
-            <param name="startNodeId">Start node ID</param>
-            <param name="endNodeId">End node ID</param>
-            <param name="sourcePointGuid">Source point GUID</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveConnection(System.String)">
+        <member name="P:CMS.WebServices.ServiceCookieHelper.Instance">
             <summary>
-            Deletes selected connection.
+            Singleton Instance of the cookie helper.
             </summary>
-            <param name="connectionId">Connection ID</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.EditConnectionStart(System.String,System.String,System.String)">
+        <member name="P:CMS.WebServices.ServiceCookieHelper.RequestCookies">
             <summary>
-            Moves connection start to specified node.
+            Response cookies collection.
             </summary>
-            <param name="connectionId">Connection ID</param>
-            <param name="startNodeId">New start node ID</param>
-            <param name="sourcePointGuid">New source point GUID</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.EditConnectionEnd(System.String,System.String)">
+        <member name="M:CMS.WebServices.ServiceCookieHelper.GetValue(System.String)">
             <summary>
-            Moves connection end to selected node.
+            Gets the value of the given cookie.
             </summary>
-            <param name="connectionId">Connection ID</param>
-            <param name="endNodeId">End node ID</param>
+            <param name="cookieName">Name of the cookie</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.AddSwitchCase(System.String)">
+        <member name="P:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#Item(System.String)">
             <summary>
-            Adds switch case to multi-choice node.
+            Gets or sets the value of the column.
             </summary>
-            <param name="nodeId">Node ID</param>
+            <param name="columnName">Column name</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveSwitchCase(System.String,System.String)">
+        <member name="M:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#GetValue(System.String)">
             <summary>
-            Removes switch case from multi-choice node.
+            Gets the value from cookie.
             </summary>
-            <param name="nodeId">Node ID</param>
-            <param name="caseId">Case ID</param>
+            <param name="cookieName">Cookie name</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateNodeOnConnections(System.String,System.String,System.String,System.Int32,System.Int32,System.Collections.Generic.List{System.String})">
+        <member name="M:CMS.WebServices.ServiceCookieHelper.CMS#Base#ISimpleDataContainer#SetValue(System.String,System.Object)">
             <summary>
-            Creates new node of specified type.
+            Not implemented.
             </summary>
-            <param name="type">Node type</param>
-            <param name="actionId">Action type</param>
-            <param name="parentId">Parent ID</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
-            <param name="splitConnectionsIDs">Connections new node should be attached on</param>
+            <param name="cookieName">Cookie name</param>
+            <param name="value">New value</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.CreateNode(System.String,System.String,System.String,System.Int32,System.Int32)">
+        <member name="P:CMS.WebServices.ServiceCookieHelper.ColumnNames">
             <summary>
-            Creates new node of specified type.
+            All the cookie names.
             </summary>
-            <param name="type">Node type</param>
-            <param name="actionId">Action type</param>
-            <param name="parentId">Workflow ID</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.RemoveNode(System.String)">
+        <member name="M:CMS.WebServices.ServiceCookieHelper.TryGetValue(System.String,System.Object@)">
             <summary>
-            Removes specified node and all its connections.
+            Returns value of column.
             </summary>
-            <param name="nodeId">Node ID</param>
+            <param name="columnName">Column name</param>
+            <param name="value">Returns the value</param>
+            <returns>Returns true if the operation was successful (the value was present)</returns>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.DuplicateNode(System.String,System.Int32,System.Int32)">
+        <member name="M:CMS.WebServices.ServiceCookieHelper.ContainsColumn(System.String)">
             <summary>
-            Duplicates a node.
+            Returns true if the object contains specified column.
             </summary>
-            <param name="nodeId">ID of node that should be duplicated.</param>
-            <param name="x">Horizontal position of the duplicate.</param>
-            <param name="y">Vertical position of the duplicate.</param>
+            <param name="columnName">Column name</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetData(System.String)">
+        <member name="T:CMS.WebServices.ServiceQueryHelper">
             <summary>
-            Gets data for action step with given <paramref name="actionId"/>
+            QueryString helper methods for WCF Service.
             </summary>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetEventLogSource">
+        <member name="P:CMS.WebServices.ServiceQueryHelper.Instance">
             <summary>
-            Gets event log source
+            Singleton Instance of the service query helper.
             </summary>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.IsAuthorized">
+        <member name="P:CMS.WebServices.ServiceQueryHelper.Item(System.String)">
             <summary>
-            Check user permissions.
+            Gets or sets the value of the column.
             </summary>
+            <param name="columnName">Column name</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.DeleteNode(System.Int32)">
+        <member name="M:CMS.WebServices.ServiceQueryHelper.GetValue(System.String)">
             <summary>
-            Deletes node with dependencies check
+            Gets the value from QueryString.
             </summary>
-            <param name="id">Node ID</param>
+            <param name="key">QueryString key</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse(System.String)">
+        <member name="M:CMS.WebServices.ServiceQueryHelper.SetValue(System.String,System.Object)">
             <summary>
-            Returns ServiceResponse with BadRequest type
+            Not implemented.
             </summary>
-            <param name="message">Error message</param>
+            <param name="key">QueryString key</param>
+            <param name="value">New value</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse``1(System.String)">
+        <member name="P:CMS.WebServices.ServiceQueryHelper.ColumnNames">
             <summary>
-            Returns generic ServiceResponse with BadRequest type
+            Column names.
             </summary>
-            <typeparam name="TData">Response generic type</typeparam>
-            <param name="message">Error message</param>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetBadRequestResponse``1(System.String,``0)">
+        <member name="M:CMS.WebServices.ServiceQueryHelper.TryGetValue(System.String,System.Object@)">
             <summary>
-            Returns generic ServiceResponse with BadRequest type
+            Returns value of column.
             </summary>
-            <typeparam name="TData">Response generic type</typeparam>
-            <param name="message">Error message</param>
-            <param name="data">Response data</param>
+            <param name="columnName">Column name</param>
+            <param name="value">Returns the value</param>
+            <returns>Returns true if the operation was successful (the value was present)</returns>
         </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNotFoundResponse">
+        <member name="M:CMS.WebServices.ServiceQueryHelper.ContainsColumn(System.String)">
             <summary>
-            Returns ServiceResponse with NotFound type
+            Returns true if the object contains specified column.
             </summary>
-        </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.GetNotFoundResponse``1">
-            <summary>
-            Returns generic ServiceResponse with NotFound type
-            </summary>
-            <typeparam name="TData">Response generic type</typeparam>
-        </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.CanDeleteStep(CMS.WorkflowEngine.WorkflowStepInfo)">
-            <summary>
-            Returns true if given step can be deleted.
-            </summary>
-            <param name="step">Workflow step</param>
-        </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.UpdateResourceStringTranslation(System.String,System.String)">
-            <summary>
-            Update resource string with given translation
-            </summary>
-            <param name="key">resource string key</param>
-            <param name="translation">resource translation</param>
-        </member>
-        <member name="M:CMS.WebServices.WorkflowDesignerService.IsNodeTypeAllowed(CMS.DataEngine.WorkflowStepTypeEnum)">
-            <summary>
-            Determines whether node of given <paramref name="nodeType"/> can be created.
-            </summary>
-        </member>
-        <member name="T:CMS.WebServices.ServiceResponse">
-            <summary>
-            Service general response.
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceResponse.StatusCode">
-            <summary>
-            Status code
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceResponse.StatusMessage">
-            <summary>
-            Status message
-            </summary>
-        </member>
-        <member name="P:CMS.WebServices.ServiceResponse.ScreenLockInterval">
-            <summary>
-            ScreenLock interval
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse.#ctor(CMS.WebServices.ResponseStatusEnum)">
-            <summary>
-            Simple parametric constructor
-            </summary>
-            <param name="statusCode">Status code</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse.#ctor(CMS.WebServices.ResponseStatusEnum,System.String)">
-            <summary>
-            Parametric constructor
-            </summary>
-            <param name="statusCode">Status code</param>
-            <param name="statusMessage">Status message</param>
-        </member>
-        <member name="T:CMS.WebServices.ServiceResponse`1">
-            <summary>
-            Generic service response
-            </summary>
-            <typeparam name="TData">Type of payload</typeparam>
-        </member>
-        <member name="P:CMS.WebServices.ServiceResponse`1.Data">
-            <summary>
-            Payload
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ServiceResponse)">
-            <summary>
-            Copy constructor
-            </summary>
-            <param name="nonGeneric">Source</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(`0)">
-            <summary>
-            Parametric constructor for OK cases
-            </summary>
-            <param name="data">Data of response</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum)">
-            <summary>
-            Parametric constructor for status response only
-            </summary>
-            <param name="statusCode">Status code</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum,System.String)">
-            <summary>
-            Parametric constructor for error cases
-            </summary>
-            <param name="statusCode">Status code</param>
-            <param name="statusMessage">Status message</param>
-        </member>
-        <member name="M:CMS.WebServices.ServiceResponse`1.#ctor(CMS.WebServices.ResponseStatusEnum,System.String,`0)">
-            <summary>
-            Parametric constructor for error cases
-            </summary>
-            <param name="statusCode">Status code</param>
-            <param name="statusMessage">Status message</param>
-            <param name="data">Data of response</param>
-        </member>
-        <member name="T:CMS.WebServices.ResponseStatusEnum">
-            <summary>
-            Service response codes
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.None">
-            <summary>
-            Default value
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.OK">
-            <summary>
-            OK
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.BadRequest">
-            <summary>
-            Bad request
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.Unauthorized">
-            <summary>
-            Unauthorized
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.NotFound">
-            <summary>
-            Not found
-            </summary>
-        </member>
-        <member name="F:CMS.WebServices.ResponseStatusEnum.InternalError">
-            <summary>
-            Internal error
-            </summary>
-        </member>
-        <member name="T:CMS.WebServices.IGraphService">
-            <summary>
-            Graph service contract.
-            </summary>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.GetNode(System.String)">
-            <summary>
-            Get node specification for refresh purpose.
-            </summary>
-            <param name="id">Node ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.SetNodePosition(System.String,System.Int32,System.Int32)">
-            <summary>
-            Sets new position to specified node.
-            </summary>
-            <param name="id">Node ID</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.SetNodeName(System.String,System.String)">
-            <summary>
-            Sets node name.
-            </summary>
-            <param name="id">Node ID</param>
-            <param name="name">New name</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.SetSwitchCaseName(System.String,System.String,System.String)">
-            <summary>
-            Sets switch case name.
-            </summary>
-            <param name="nodeId">Node ID</param>
-            <param name="caseId">Switch case ID</param>
-            <param name="name">New name</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.SetNoteContent(System.String,System.String)">
-            <summary>
-            Sets content of a note.
-            </summary>
-            <param name="nodeId">Node ID.</param>
-            <param name="noteContent">Content of the note to be set.</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.CreateConnection(System.String,System.String,System.String)">
-            <summary>
-            Creates a new connection between specified nodes.
-            </summary>
-            <param name="startNodeId">Start node ID</param>
-            <param name="endNodeId">End node ID</param>
-            <param name="sourcePointGuid">Source point GUID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.RemoveConnection(System.String)">
-            <summary>
-            Deletes specified connection.
-            </summary>
-            <param name="connectionId">Connection ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.EditConnectionStart(System.String,System.String,System.String)">
-            <summary>
-            Moves connection start to specified node.
-            </summary>
-            <param name="connectionId">Connection ID</param>
-            <param name="startNodeId">New start node ID</param>
-            <param name="sourcePointGuid">New source point GUID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.EditConnectionEnd(System.String,System.String)">
-            <summary>
-            Moves connection end to specified node.
-            </summary>
-            <param name="connectionId">Connection ID</param>
-            <param name="endNodeId">End node ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.AddSwitchCase(System.String)">
-            <summary>
-            Adds switch case to multi-choice node.
-            </summary>
-            <param name="nodeId">Node ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.RemoveSwitchCase(System.String,System.String)">
-            <summary>
-            Removes switch case from multi-choice node.
-            </summary>
-            <param name="nodeId">Node ID</param>
-            <param name="caseId">Case ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.CreateNode(System.String,System.String,System.String,System.Int32,System.Int32)">
-            <summary>
-            Creates new node of specified type.
-            </summary>
-            <param name="type">Node type</param>
-            <param name="actionId">Action type</param>
-            <param name="parentId">Parent ID</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.CreateNodeOnConnections(System.String,System.String,System.String,System.Int32,System.Int32,System.Collections.Generic.List{System.String})">
-            <summary>
-            Creates new node of specified type.
-            </summary>
-            <param name="type">Node type</param>
-            <param name="actionId">Action type</param>
-            <param name="parentId">Parent ID</param>
-            <param name="x">X-coordinate</param>
-            <param name="y">Y-coordinate</param>
-            <param name="splitConnectionsIDs">Connections new node should be attached on</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.RemoveNode(System.String)">
-            <summary>
-            Removes specified node and all its connections.
-            </summary>
-            <param name="nodeId">Node ID</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.DuplicateNode(System.String,System.Int32,System.Int32)">
-            <summary>
-            Duplicates a node.
-            </summary>
-            <param name="nodeId">ID of node that should be duplicated.</param>
-            <param name="x">Horizontal position of the duplicate.</param>
-            <param name="y">Vertical position of the duplicate.</param>
-        </member>
-        <member name="M:CMS.WebServices.IGraphService.GetData(System.String)">
-            <summary>
-            Gets data for action step with given <paramref name="actionId"/>.
-            </summary>
+            <param name="columnName">Column name</param>
         </member>
     </members>
 </doc>

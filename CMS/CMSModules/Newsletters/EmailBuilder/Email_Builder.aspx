@@ -65,7 +65,7 @@
             <div class="header-actions-container">
                 <cms:HeaderActions ID="headerActions" runat="server" UseSmallIcons="true" PanelCssClass="header-actions-main" />
             </div>
-            <iframe id="builderIframe" runat="server" name="builderIframe" clientidmode="Static" enableviewstate="false" />
+            <iframe id="builderIframe" runat="server" name="builderIframe" clientidmode="Static" enableviewstate="false" sandbox="allow-same-origin" />
         </div>
     </div>
     <div class="widget-properties">

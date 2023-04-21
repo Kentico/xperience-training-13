@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Web.UI;
 
-using CMS.Base;
 using CMS.Base.Web.UI;
 using CMS.Core;
 using CMS.Helpers;
@@ -10,8 +10,11 @@ using CMS.SiteProvider;
 using CMS.UIControls;
 
 
-public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_Tabs_Media : CMSPage
+public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_Tabs_Media : CMSPage, ICallbackEventHandler
 {
+    private const string UI_LAYOUT_KEY = nameof(CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertImageOrMedia_Tabs_Media);
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (QueryHelper.ValidateHash("hash"))
@@ -68,6 +71,34 @@ public partial class CMSModules_MediaLibrary_FormControls_LiveSelectors_InsertIm
         else
         {
             linkMedia.StopProcessing = true;
+        }
+
+        linkMedia.UILayoutKey = UI_LAYOUT_KEY;
+    }
+
+
+    string ICallbackEventHandler.GetCallbackResult()
+    {
+        return null;
+    }
+
+
+    void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+    {
+        var parsed = eventArgument.Split(new[] { UILayoutHelper.DELIMITER });
+        if (parsed.Length == 2 && String.Equals(UILayoutHelper.WIDTH_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (int.TryParse(parsed[1], out var width))
+            {
+                UILayoutHelper.SetLayoutWidth(UI_LAYOUT_KEY, width);
+            }
+        }
+        else if (parsed.Length == 2 && String.Equals(UILayoutHelper.COLLAPSED_ARGUMENT, parsed[0], StringComparison.OrdinalIgnoreCase))
+        {
+            if (bool.TryParse(parsed[1], out var value))
+            {
+                UILayoutHelper.SetVerticalResizerCollapsed(UI_LAYOUT_KEY, value);
+            }
         }
     }
 }
