@@ -18,7 +18,6 @@ using MedioClinic.Components.Widgets;
 using MedioClinic.Controllers;
 using MedioClinic.Models;
 using MedioClinic.PageTemplates;
-using MedioClinic.Personalization;
 
 [assembly: RegisterPageTemplate(
     ComponentIdentifiers.BasicPageTemplate,
@@ -141,55 +140,3 @@ using MedioClinic.Personalization;
     AllowCache = true,
     Description = "File download widget",
     IconClass = "icon-arrow-down-line")]
-
-[assembly: RegisterPersonalizationConditionType(
-    ComponentIdentifiers.IsInPersonaCondition, 
-    typeof(IsInPersonaConditionType), 
-    "{$" + ComponentIdentifiers.IsInPersonaCondition + ".Title$}", 
-    ControllerType = typeof(IsInPersonaController), 
-    Description = "{$" + ComponentIdentifiers.IsInPersonaCondition + ".Description$}",
-    IconClass = "icon-app-personas")]
-
-[assembly: RegisterPersonalizationConditionType(
-    ComponentIdentifiers.ComesFromBigUsCityCondition,
-    typeof(ComesFromBigUsCityConditionType),
-    "{$" + ComponentIdentifiers.ComesFromBigUsCityCondition + ".Title$}",
-    ControllerType = typeof(ComesFromBigUsCityController),
-    Description = "{$" + ComponentIdentifiers.ComesFromBigUsCityCondition + ".Description$}",
-    IconClass = "icon-app-personas")]
-
-[assembly: RegisterFormComponent(
-    ComponentIdentifiers.ColorSelectionFormComponent,
-    typeof(ColorSelection),
-    "{$" + ComponentIdentifiers.ColorSelectionFormComponent + ".Title$}",
-    IsAvailableInFormBuilderEditor = false,
-    ViewName = "~/Components/FormComponents/_ColorSelection.cshtml",
-    Description = "{$" + ComponentIdentifiers.ColorSelectionFormComponent + ".Description$}",
-    IconClass = "icon-menu")]
-
-[assembly: RegisterWidget(
-    ComponentIdentifiers.ButtonWidget,
-    "{$" + ComponentIdentifiers.ButtonWidget + ".Title$}",
-    typeof(ButtonProperties),
-    customViewName: "~/Components/Widgets/_Button.cshtml",
-    AllowCache = true,
-    Description = "{$" + ComponentIdentifiers.ButtonWidget + ".Description$}",
-    IconClass = "icon-square-dashed-line")]
-
-//[assembly: RegisterFormComponent(
-//    ComponentIdentifiers.NewsletterSelectionFormComponent,
-//    typeof(NewsletterSelection),
-//    "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Title$}",
-//    IsAvailableInFormBuilderEditor = true,
-//    ViewName = "~/Components/FormComponents/_NewsletterSelection.cshtml",
-//    Description = "{$" + ComponentIdentifiers.NewsletterSelectionFormComponent + ".Description$}",
-//    IconClass = "icon-messages")]
-
-//[assembly: RegisterWidget(
-//    ComponentIdentifiers.NewsletterSubscriptionWidget,
-//    typeof(NewsletterSubscriptionViewComponent),
-//    "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Title$}",
-//    typeof(NewsletterSubscriptionProperties),
-//    AllowCache = true,
-//    Description = "{$" + ComponentIdentifiers.NewsletterSubscriptionWidget + ".Description$}",
-//    IconClass = "icon-messages")]

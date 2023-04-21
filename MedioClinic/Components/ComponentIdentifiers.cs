@@ -49,14 +49,6 @@ namespace MedioClinic.Components
 
         public const string FileDownloadWidget = WidgetPrefix + "FileDownload";
 
-        public const string IsInPersonaCondition = PersonalizationConditionPrefix + "IsInPersona";
-
-        public const string ComesFromBigUsCityCondition = PersonalizationConditionPrefix + "ComesFromBigUsCity";
-
-        public const string ColorSelectionFormComponent = FormComponentPrefix + "ColorSelection";
-
-        public const string ButtonWidget = WidgetPrefix + "Button";
-
         public const string NewsletterSelectionFormComponent = FormComponentPrefix + "NewsletterSelection";
 
         public const string NewsletterSubscriptionWidget = WidgetPrefix + "NewsletterSubscription";

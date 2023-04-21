@@ -69,15 +69,4 @@ document.addEventListener("DOMContentLoaded", function () {
         return section;
     };
 
-    /**
-     * Logs an A/B test conversion to a specified URL.
-     * @param {string} abTestConversionLoggerUrl The URL of the logging action method.
-     */
-    medioClinic.logAbTestConversion = function (abTestConversionLoggerUrl) {
-        let xmlHttpReq = new XMLHttpRequest();
-        xmlHttpReq.open("POST", abTestConversionLoggerUrl, true);
-        xmlHttpReq.send(null);
-        return true;
-    };
-
 }(window.medioClinic = window.medioClinic || {}));
