@@ -22,18 +22,6 @@ namespace MedioClinic.Customizations.Admin.CMSModules.Macros
         {
             base.OnInit();
 
-            var comesFromBigUsCityMetadata = new MacroRuleMetadata(ContactInfoMethods.ComesFromBigUsCityName,
-                                                 new ComesFromBigUsCityTranslator(),
-                                                 new List<string>(0),
-                                                 new List<string>
-                                                 {
-                                                     nameof(ContactInfo.ContactCountryID),
-                                                     nameof(ContactInfo.ContactStateID),
-                                                     nameof(ContactInfo.ContactCity)
-                                                 });
-
-            MacroRuleMetadataContainer.RegisterMetadata(comesFromBigUsCityMetadata);
-
             var clickedLinkInEmailInLastDaysMetadata = new MacroRuleMetadata(ContactInfoMethods.ContactHasClickedLinkInEmailInLastDaysName,
                                      new ContactHasClickedLinkInEmailInLastDaysTranslator(),
                                      new List<string>
