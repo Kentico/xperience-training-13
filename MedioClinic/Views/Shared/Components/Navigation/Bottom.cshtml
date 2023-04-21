@@ -6,6 +6,7 @@
     var childItems = Model?.ChildItems;
     var outputCacheEnabled = false;
     var cacheDependencyKeys = NavigationRepository.NavigationEnabledTypeDependencies?.ToArray();
+    var noAreaSwitch = new { Area = string.Empty };
 }
 
 <cache expires-sliding="@TimeSpan.FromMinutes(5)" vary-by-culture="true" enabled="@outputCacheEnabled">
@@ -19,7 +20,7 @@
                 <partial name="_ListItemWithLink" model="@(item.RelativeUrl, item.Name, "white-text")" />
             }
         }
-        <partial name="_ListItemWithLink" model="@(Url.Action("Index", "Privacy"), StringLocalizer["OnlineMarketing.Privacy"]?.Value, "white-text")" />
-        <partial name="_ListItemWithLink" model="@(Url.Action("Index", "Communications"), StringLocalizer["MedioClinic.CommunicationPreferences.Title"]?.Value, "white-text")" />
+        <partial name="_ListItemWithLink" model="@(Url.Action("Index", "Privacy", noAreaSwitch), StringLocalizer["OnlineMarketing.Privacy"]?.Value, "white-text")" />
+        <partial name="_ListItemWithLink" model="@(Url.Action("Index", "Communications", noAreaSwitch), StringLocalizer["MedioClinic.CommunicationPreferences.Title"]?.Value, "white-text")" />
     </ul>
 </cache>
