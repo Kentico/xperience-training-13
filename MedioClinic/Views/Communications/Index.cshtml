@@ -1,0 +1,44 @@
+﻿@using XperienceAdapter.Models
+@model PageViewModel<NewsletterPreferenceViewModel>
+@inject IStringLocalizer<SharedResource> StringLocalizer
+
+<main class="row">
+    <div class="container section">
+        <form asp-action="@nameof(MedioClinic.Controllers.CommunicationsController.Index)" asp-controller="Communications" asp-antiforgery="true">
+            <partial name="~/Views/Shared/_UserMessage.cshtml" for="UserMessage" />
+            <h1>@Html.DisplayFor(m => m.Metadata.Title)</h1>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">
+                        @StringLocalizer["MedioClinic.CommunicationPreferences.MyContactDetails"]
+                    </span>
+                    @Html.MedioClinicInputFor(m => m.Data.FirstName)
+                    @Html.MedioClinicInputFor(m => m.Data.LastName)
+                    @Html.MedioClinicInputFor(m => m.Data.EmailViewModel)
+                    @Html.ValidationMessageFor(m => m.Data.EmailViewModel.Email)
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">@StringLocalizer["MedioClinic.CommunicationPreferences.MyConsent"]</span>
+                    <p>
+                        <label>
+                            @Html.CheckBoxFor(m => m.Data.ConsentAgreed)
+                            <span>@Html.DisplayFor(m => m.Data.ConsentShortText)</span>
+                        </label>
+                    </p>
+                    @Html.HiddenFor(m => m.Data.ConsentShortText)
+                    @Html.ValidationMessageFor(m => m.Data.ConsentAgreed)
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">@StringLocalizer["MedioClinic.CommunicationPreferences.MyNewsletters"]</span>
+                    <p>@StringLocalizer["MedioClinic.CommunicationPreferences.SelectNewsletters"]</p>
+                    @Html.DisplayFor(m => m.Data.Newsletters)
+                </div>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit">@StringLocalizer["General.Update"]</button>
+        </form>
+    </div>
+</main>

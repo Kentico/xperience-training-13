@@ -22,7 +22,7 @@ namespace MedioClinic.Controllers
     {
         private readonly IPageRepository<NamePerexText, CMS.DocumentEngine.Types.MedioClinic.NamePerexText> _pageRepository;
 
-        private IExceptionHandlerPathFeature ExceptionHandlerPathFeature => HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        private IStatusCodeReExecuteFeature StatusCodeReExecuteFeature => HttpContext.Features.Get<IStatusCodeReExecuteFeature>()!;
 
         public ErrorController(
             ILogger<ErrorController> logger,
@@ -36,11 +36,11 @@ namespace MedioClinic.Controllers
 
         public IActionResult Index(int code)
         {
-            var metadata = new MedioClinic.Models.PageMetadata();
+            var metadata = new PageMetadata();
 
             if (code == 404)
             {
-                _logger.LogError($"Not found: {ExceptionHandlerPathFeature?.Path}");
+                _logger.LogWarning($"Not found: {StatusCodeReExecuteFeature?.OriginalPath}");
 
                 var notFoundPage = _pageRepository.GetPagesInCurrentCulture(
                     filter => filter
@@ -53,13 +53,11 @@ namespace MedioClinic.Controllers
                     includeAttachments: false)
                         .FirstOrDefault();
 
-                metadata.Title = notFoundPage.Name;
+                metadata.Title = notFoundPage?.Name;
                 var viewModel = GetPageViewModel(metadata, notFoundPage);
 
                 return View("NotFound", viewModel);
             }
-
-            _logger.LogError(ExceptionHandlerPathFeature?.Error, string.Empty);
 
             return StatusCode(code);
         }

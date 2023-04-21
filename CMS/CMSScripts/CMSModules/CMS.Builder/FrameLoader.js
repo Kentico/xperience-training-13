@@ -4,8 +4,17 @@
 cmsdefine(["CMS.Builder/Constants", "CMS/EventHub"], function (constants, hub) {
 
     var getMvcFrameAuthenticatedEventName = function (url) {
-        var urlObj = new URL(url);
-        var host = urlObj.host;
+        var host = "";
+
+        try {
+            var urlObj = new URL(url);
+            host = urlObj.host;
+        }
+        catch (e) {
+            // Relative URLs indicate an admin page to be displayed.
+            // Return an event name for administration domain.
+            host = location.host;
+        }
 
         return constants.MVC_FRAME_AUTHENTICATED_EVENT_NAME_PREFIX + host;
     }

@@ -27,7 +27,7 @@ namespace MedioClinic.Customizations.Macros
 
             if (!macroRuleInstance.MacroRuleName.Equals(ContactInfoMethods.ComesFromBigUsCityName, StringComparison.Ordinal))
             {
-                throw new ArgumentException($"[{nameof(ComesFromBigUsCityTranslator)}.{nameof(ComesFromBigUsCityTranslator.Translate)}]: Only macro rule instances of type {nameof(ContactInfoMethods.ComesFromBigUsCity)} can be translated.");
+                throw new ArgumentException($"[{nameof(ComesFromBigUsCityTranslator)}.{nameof(ComesFromBigUsCityTranslator.Translate)}]: Only macro rule instances of type {ContactInfoMethods.ComesFromBigUsCityName} can be translated.");
             }
 
             var bigUsCityRepository = Service.Resolve<IBigUsCityRepository>();

@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="CMSModules_MediaLibrary_Controls_MediaLibrary_MediaFileEdit"
-     Codebehind="MediaFileEdit.ascx.cs" %>
+    CodeBehind="MediaFileEdit.ascx.cs" %>
 <%@ Register Src="~/CMSInlineControls/MediaControl.ascx" TagPrefix="cms" TagName="MediaPreview" %>
 <%@ Register Src="~/CMSInlineControls/ImageControl.ascx" TagPrefix="cms" TagName="ImagePreview" %>
 <%@ Register Src="~/CMSModules/MediaLibrary/Controls/MediaLibrary/MediaFileUpload.ascx"
@@ -10,6 +10,13 @@
     TagPrefix="cms" %>
 <%@ Register Src="~/CMSAdminControls/UI/PageElements/HeaderActions.ascx" TagName="HeaderActions"
     TagPrefix="cms" %>
+<%@ Register Src="~/CMSAdminControls/UI/UniGrid/UniGrid.ascx" TagName="UniGrid"
+    TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/MediaLibrary/Controls/MediaLibrary/MediaFileUsage.ascx" TagName="FileUsage" 
+    TagPrefix="cms" %>
+<%@ Register Namespace="CMS.UIControls.UniGridConfig" TagPrefix="ug" Assembly="CMS.UIControls" %>
+
+
 <cms:JQueryTabContainer ID="pnlTabs" runat="server" CssClass="Dialog_Tabs">
     <cms:JQueryTab ID="tabGeneral" runat="server">
         <ContentTemplate>
@@ -255,6 +262,24 @@
                         <cms:VersionList ID="objectVersionList" runat="server" />
                         <asp:Button ID="btnHidden" runat="server" CssClass="HiddenButton" EnableViewState="false"
                             OnClick="btnHidden_Click" />
+                    </asp:Panel>
+                </ContentTemplate>
+            </cms:CMSUpdatePanel>
+        </ContentTemplate>
+    </cms:JQueryTab>
+    <cms:JQueryTab ID="tabUsage" runat="server" Visible="True">
+        <ContentTemplate>
+            <cms:CMSUpdatePanel ID="pnlUpdateUsage" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:Panel ID="pnlTabUsage" CssClass="MediaLibraryCustomTab PageContent no-shadow-interact" runat="server">
+                        <h4 class="no-bottom-margin">
+                            <%= GetString("medialibrary.dependencytracker.header")%>
+                            <cms:CMSAccessibleButton IconOnly="true" ID="btnShowUsageDialog" IconCssClass="icon-arrow-right-top-square" 
+                                runat="server" UseSubmitBehavior="false" />
+                        </h4>
+                        <div class="content-block-25"><asp:Label ID="lblUsageInfoMessage" runat="server" /></div>
+                        <cms:FileUsage ID="fileUsage" runat="server" />
+                        <asp:Button ID="btnUsageLoad" runat="server" CssClass="HiddenButton" EnableViewState="false" />
                     </asp:Panel>
                 </ContentTemplate>
             </cms:CMSUpdatePanel>

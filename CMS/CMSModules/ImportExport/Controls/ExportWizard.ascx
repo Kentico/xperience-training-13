@@ -1,6 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="CMSModules_ImportExport_Controls_ExportWizard"
      Codebehind="ExportWizard.ascx.cs" %>
 <%@ Register Src="~/CMSAdminControls/Wizard/Header.ascx" TagName="WizardHeader" TagPrefix="cms" %>
+<%@ Register Src="~/CMSModules/ImportExport/Controls/ExportSettingsPanel.ascx" TagName="ExportSettingsPanel"
+    TagPrefix="cms"%>
 <%@ Register Src="~/CMSModules/ImportExport/Controls/ExportPanel.ascx" TagName="ExportPanel"
     TagPrefix="cms" %>
 <%@ Register Src="~/CMSModules/ImportExport/Controls/ExportConfiguration.ascx" TagName="ExportConfiguration"
@@ -77,7 +79,8 @@
                                 <div id="buttonsDiv" class="WizardButtons">
                                     <cms:LocalizedButton UseSubmitBehavior="True" ID="StepPreviousButton" runat="server"
                                         CommandName="MovePrevious" ResourceString="ExportSiteSettings.PreviousStep" ButtonStyle="Primary"
-                                        CausesValidation="false" EnableViewState="false" RenderScript="true" /><cms:LocalizedButton
+                                        CausesValidation="false" EnableViewState="false" RenderScript="true" />
+                                    <cms:LocalizedButton
                                             UseSubmitBehavior="True" ID="StepNextButton" runat="server" CommandName="MoveNext"
                                             ResourceString="general.next" ButtonStyle="Primary" OnClientClick="return exNextStepAction();"
                                             EnableViewState="false" RenderScript="true" />
@@ -106,6 +109,14 @@
                                     EnableViewState="true">
                                     <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px">
                                         <cms:ExportConfiguration ID="configExport" ShortID="c" runat="server" />
+                                    </div>
+                                </asp:WizardStep>
+                                <asp:WizardStep ID="wzdStepExportSettings" runat="server" AllowReturn="False" StepType="Step"
+                                    EnableViewState="true">
+                                    <div class="GlobalWizardStep" style="height: <%=PanelHeight%>px; padding: 0px;">
+                                        <div class="WizardBorder">
+                                            <cms:ExportSettingsPanel ID="pnlExportSettings" ShortID="r" runat="server" />
+                                        </div>
                                     </div>
                                 </asp:WizardStep>
                                 <asp:WizardStep ID="wzdStepSelectionPanel" runat="server" AllowReturn="False" StepType="Step"

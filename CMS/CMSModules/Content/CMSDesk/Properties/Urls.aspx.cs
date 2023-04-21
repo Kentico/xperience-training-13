@@ -351,6 +351,7 @@ public partial class CMSModules_Content_CMSDesk_Properties_Urls : CMSPropertiesP
         if (mOpenUrlActions.TryGetValue(altUrlId, out CMSGridActionButton button))
         {
             var escapedUrl = Uri.EscapeUriString(url);
+
             button.OnClientClick = $"window.open(\"{escapedUrl}\"); return false;";
         }
     }

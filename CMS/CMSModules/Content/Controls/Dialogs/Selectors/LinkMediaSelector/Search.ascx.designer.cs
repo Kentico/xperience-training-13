@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSelector_Search {
-    
+public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSelector_Search
+{
+
     /// <summary>
     /// ltlScript control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Literal ltlScript;
-    
+
     /// <summary>
     /// pnlDialogSearch control.
     /// </summary>
@@ -28,16 +29,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel pnlDialogSearch;
-    
-    /// <summary>
-    /// lblSearchByName control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblSearchByName;
-    
+
     /// <summary>
     /// txtSearchByName control.
     /// </summary>
@@ -46,7 +38,7 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtSearchByName;
-    
+
     /// <summary>
     /// btnSearch control.
     /// </summary>

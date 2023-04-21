@@ -313,6 +313,8 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
         }
     }
 
+    public bool Enabled { get; set; } = true;
+
     #endregion
 
 
@@ -331,6 +333,11 @@ public partial class CMSModules_Content_Controls_Dialogs_Selectors_LinkMediaSele
                 menuView.Visible = false;
                 Visible = false;
             }
+
+            NewFile.Enabled = Enabled;
+            btnParent.Enabled = Enabled;
+            btnPrepareForImport.Enabled = Enabled;
+
         }
         else
         {

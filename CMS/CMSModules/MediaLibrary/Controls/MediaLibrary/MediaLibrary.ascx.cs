@@ -45,6 +45,17 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
 
     private const string MEDIA_LIBRARY_FOLDER = "~/CMSModules/MediaLibrary/";
 
+
+    /// <summary>
+    /// Gets or sets list of files from the currently selected folder.
+    /// </summary>
+    private Dictionary<string, DataRow> fileList;
+
+    /// <summary>
+    /// Gets or sets list of files from the currently selected folder by GUID.
+    /// </summary>
+    private Dictionary<Guid, DataRow> fileListGUID;
+
     #endregion
 
 
@@ -382,6 +393,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         set
         {
             hdnLastSearchedValue.Value = value;
+            mediaView.IsInSearchMode = !string.IsNullOrEmpty(LastSearchedValue);
+            fileEdit.IsInSearchMode = !string.IsNullOrEmpty(LastSearchedValue);
             pnlUpdateViewHidden.Update();
         }
     }
@@ -501,16 +514,6 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
 
 
     /// <summary>
-    /// Gets or sets list of files from the currently selected folder.
-    /// </summary>
-    private Hashtable FileList
-    {
-        get;
-        set;
-    }
-
-
-    /// <summary>
     /// Gets or sets direction in which data should be ordered.
     /// </summary>
     private string SortDirection
@@ -587,6 +590,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         }
     }
 
+
+    /// <summary>
+    /// Key to retrieve layout width.
+    /// </summary>
+    public string UILayoutKey { get; internal set; }
+
     #endregion
 
 
@@ -631,14 +640,21 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             {
                 IsFullListingMode = (rootHasMore || IsFullListingMode);
 
-                string closeLink = String.Format("<span class=\"ListingClose\" style=\"cursor: pointer;\" onclick=\"SetAction('closelisting', ''); RaiseHiddenPostBack(); return false;\">{0}</span>", GetString("general.close"));
-                string docNamePath = String.Format("<span class=\"ListingPath\">{0}</span>", GetFullFilePath(LastFolderPath));
-
-                string listingMsg = string.Format(GetString("media.libraryui.listingInfo"), docNamePath, closeLink);
-                mediaView.DisplayListingInfo(listingMsg);
+                string closeLink = string.Format("<span class=\"ListingClose\" style=\"cursor: pointer;\" onclick=\"SetAction('closelisting', ''); RaiseHiddenPostBack(); return false;\">{0}</span>", GetString("general.close"));
+                
+                if (string.IsNullOrEmpty(LastSearchedValue))
+                {
+                    string docNamePath = string.Format("<span class=\"ListingPath\">{0}</span>", GetFullFilePath(LastFolderPath));
+                    string listingMsg = string.Format(GetString("media.libraryui.listingInfo"), docNamePath, closeLink);
+                    mediaView.DisplayListingInfo(listingMsg);
+                } else
+                {
+                    string listingMsg = string.Format(GetString("media.libraryui.listingInfo.search"), closeLink);
+                    mediaView.DisplayListingInfo(listingMsg);
+                }
             }
 
-            menuElem.ShowParentButton = (IsFullListingMode && (LastFolderPath != string.Empty));
+            menuElem.ShowParentButton = IsFullListingMode && LastFolderPath != string.Empty && (string.IsNullOrEmpty(LastSearchedValue) || IsCopyMoveLinkDialog);
             pnlUpdateMenu.Update();
 
             // Simulate library root selection
@@ -646,6 +662,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             {
                 string path = GetFullFilePath(LastFolderPath);
                 HandleFolderAction(path, false, false, !IsCopyMoveLinkDialog, true);
+            }
+
+            if (mediaView.Visible && !string.IsNullOrEmpty(LastSearchedValue) && !IsCopyMoveLinkDialog)
+            {
+                ScriptHelper.RegisterStartupScript(Page, typeof(string), "MediaLibrary_TreeDeselectAfterSearch", ScriptHelper.GetScript("DeselectCurrentFolder && DeselectCurrentFolder();"));
+                ScriptHelper.RegisterStartupScript(Page, typeof(string), "MediaLibrary_UploadDisableAfterSearch", ScriptHelper.GetScript("DisableNewFileBtn && DisableNewFileBtn();"));
             }
 
             // Pre-load edit folder control when loading - applied only when displaying in administration
@@ -678,12 +700,45 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             }
         }
 
+        if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
+        {
+            var width = UILayoutHelper.GetLayoutWidth(UILayoutKey);
+            if (width.HasValue)
+            {
+                pnlLeftContent.Attributes["style"] = $"width: {width}px";
+                pnlTreeArea.Attributes["style"] = $"width: {width}px";
+                pnlRightContent.Attributes["style"] = $"margin-left: {width}px";
+                resizer.Attributes["style"] = $"left: {width}px";
+            }
+
+            var collapsed = UILayoutHelper.IsVerticalResizerCollapsed(UILayoutKey);
+            if (collapsed == true)
+            {
+                var existingClass = resizerV.Attributes["class"];
+                existingClass += " ResizerDown";
+                resizerV.Attributes["class"] = existingClass;
+            }
+        }
+
+        if (mediaView.IsInSearchMode)
+        {
+            menuElem.FileSystemActionsEnabled = false;
+            folderActions.FileSystemActionsEnabled = false;
+            folderActions.CopyEnabled = false;
+            folderActions.MoveEnabled = false;
+            folderActions.AddEnabled = false;
+            folderActions.DeleteEnabled = false;
+        }
+
         base.OnPreRender(e);
     }
 
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        ScriptHelper.RegisterJQuery(Page);
+        ScriptHelper.RegisterJQueryUI(Page);
+
         if (!StopProcessing)
         {
             InitializeDesignScripts();
@@ -693,6 +748,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             {
                 InitializeControl();
             }
+            LastSearchedValue = hdnLastSearchedValue.Value;
         }
         else
         {
@@ -889,23 +945,26 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 if (!IsCopyMoveLinkDialog)
                 {
                     // Get only imported files if required
-                    if (DisplayOnlyImportedFiles)
+                    if (DisplayOnlyImportedFiles || !string.IsNullOrEmpty(searchText))
                     {
                         string normFolderPath = Path.EnsureForwardSlashes(LastFolderPath).Trim('/');
                         normFolderPath = SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(normFolderPath));
 
                         // Create WHERE condition
-                        string where = String.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{1}_%/%' AND FileLibraryID = {2}", (String.IsNullOrEmpty(normFolderPath) ? string.Empty : normFolderPath + "/"), normFolderPath, LibraryID);
-
+                        string where;
                         if (!string.IsNullOrEmpty(searchText))
                         {
-                            where += String.Format(" AND (FileName LIKE N'%{0}%')", SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(searchText)));
+                            where = string.Format("FileLibraryID = {0} AND ((FileName LIKE N'%{1}%') OR (FileExtension LIKE N'%{1}%') OR (FileTitle LIKE N'%{1}%') OR (FileDescription LIKE N'%{1}%'))", LibraryID, SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(searchText)));
+                        }
+                        else
+                        {
+                            where = string.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{1}_%/%' AND FileLibraryID = {2}", (String.IsNullOrEmpty(normFolderPath) ? string.Empty : normFolderPath + "/"), normFolderPath, LibraryID);
                         }
 
-                        const string columns = "(FileName + FileExtension) as CompletFileName, FileID, FileName, FileGUID, FilePath, FileExtension, FileExtension as Extension, FileImageWidth, FileImageHeight, FileTitle, FileSize, FileModifiedWhen, FileModifiedWhen as Modified, FileSiteID, FileDescription";
+                        const string columns = "(FileName + FileExtension) as CompletFileName, FileID, FileName, FileGUID, FilePath, FilePath, FileExtension, FileExtension as Extension, FileImageWidth, FileImageHeight, FileTitle, FileSize, FileModifiedWhen, FileModifiedWhen as Modified, FileSiteID, FileDescription, FileLibraryID";
 
                         // Get all files from current folder and pass it to the media view control
-                        var query = MediaFileInfoProvider.GetMediaFiles(where, orderBy, -1, columns);
+                        var query = MediaFileInfoProvider.GetMediaFiles(where, orderBy, columns: columns);
 
                         if (IsFullListingMode)
                         {
@@ -927,15 +986,10 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                     {
                         try
                         {
-                            string where = string.Empty;
-                            if (!string.IsNullOrEmpty(searchText))
-                            {
-                                where = String.Format("FileName LIKE '%{0}%'", SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(searchText)));
-                            }
 
                             string path = GetCurrentPath();
 
-                            result = GetFileSystemDataSource(path, where);
+                            result = GetFileSystemDataSource(path, string.Empty);
                             totalRecords = !DataHelper.DataSourceIsEmpty(result) ? result.Tables[0].Rows.Count : 0;
                         }
                         catch (Exception ex)
@@ -950,7 +1004,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 }
 
                 // If folders should be displayed as well include them in the DataSet
-                if (IsFullListingMode || IsCopyMoveLinkDialog)
+                if ((IsFullListingMode && string.IsNullOrEmpty(searchText)) || IsCopyMoveLinkDialog)
                 {
                     // Add folder
                     totalRecords += IncludeFolders(result, searchText);
@@ -1044,12 +1098,9 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             {
                 ds.Tables.Remove("files");
             }
-            else
+            else if (ds.Tables.Contains("table"))
             {
-                if (ds.Tables.Contains("table"))
-                {
-                    ds.Tables.Remove("table");
-                }
+                ds.Tables.Remove("table");
             }
             ds.Tables.Add(sortedResult);
         }
@@ -1164,6 +1215,12 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 {
                     string path = Path.EnsureForwardSlashes(filePath);
                     string where = String.Format("(FileLibraryID = {0}) AND (FilePath = N'{1}')", LibraryID, path.TrimStart('/').Replace("'", "''"));
+
+
+                    if (!string.IsNullOrEmpty(LastSearchedValue))
+                    {
+                        where = string.Format($"(FileID = N'{SqlHelper.EscapeQuotes(argTable["fileid"].ToString())}')");
+                    }
 
                     // Try to get file from DB
                     using (DataSet ds = MediaFileInfoProvider.GetMediaFiles(where))
@@ -1282,16 +1339,15 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         string setAction = "function SetAction(action, argument) {                                              " +
                            "    var hdnAction = document.getElementById('" + hdnAction.ClientID + "');     " +
                            "    var hdnArgument = document.getElementById('" + hdnArgument.ClientID + "'); " +
-                           @"    if ((hdnAction != null) && (hdnArgument != null)) {                             
+                           @"    if ((hdnAction != null) && (hdnArgument != null)) {    
                                    if (action != null) {                                                       
                                        hdnAction.value = action;                                               
                                    }                                                                           
                                    if (argument != null) {                                                     
                                        hdnArgument.value = argument;                                           
                                    }                                                                           
-                               }                                                                               
-                            }                                                                                   
-                                                                                                               
+                               }
+                            }                                                
                             function SelectRootFolder() {                                                       
                                 var rootFolder = document.getElementById('0');                                  
                                 if(rootFolder != null) {                                                        
@@ -1515,6 +1571,8 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     private void HandleSearchAction(string argument)
     {
         LastSearchedValue = argument;
+        mediaView.ResetPageIndex();
+        
         FolderPath = LastFolderPath;
 
         // Load new data filtered by searched text and reload view control's content
@@ -1738,8 +1796,16 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         if (!string.IsNullOrEmpty(argument))
         {
             string filePath = CreateFilePath(argument);
+            MediaFileInfo mfi;
+            if (Guid.TryParse(argument, out Guid guid))
+            {
+                mfi = Service.Resolve<IMediaFileInfoProvider>().Get(guid, LibraryInfo.LibrarySiteID);
+            }
+            else
+            {
+                mfi = MediaFileInfoProvider.GetMediaFileInfo(LibrarySiteInfo.SiteName, filePath, LibraryInfo.LibraryFolder);
+            }
 
-            MediaFileInfo mfi = MediaFileInfoProvider.GetMediaFileInfo(LibrarySiteInfo.SiteName, filePath, LibraryInfo.LibraryFolder);
             if (mfi != null)
             {
                 LastEditFileGuid = mfi.FileGUID;
@@ -1859,7 +1925,17 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         {
             if (!string.IsNullOrEmpty(argument))
             {
-                string filePath = CreateFilePath(argument);
+                string filePath;
+                bool isByGuid = false;
+                if (!Guid.TryParse(argument, out Guid _))
+                {
+                    filePath = CreateFilePath(argument);
+                } 
+                else
+                {
+                    isByGuid = true;
+                    filePath = argument;
+                }
 
                 var deletedMediaFile = PerformDeleteMediaFile(filePath);
 
@@ -1877,12 +1953,17 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 // Reload folder content
                 string path = GetFullFilePath(LastFolderPath);
 
-                SelectTreePath(path, !DisplayFilesCount);
+                if (isByGuid)
+                {
+                    LastFolderPath = string.Empty;
+                    path = LastFolderPath;
+                }
 
+                SelectTreePath(path, !DisplayFilesCount);
                 HandleFolderAction(path, DisplayFilesCount);
 
                 // If deleted item was currently selected one
-                if (ItemToColorize == EnsureFileName(Path.GetFileName(filePath)))
+                if (ItemToColorize == EnsureFileName(Path.GetFileName(filePath)) || isByGuid)
                 {
                     DisplayFolderProperties();
                 }
@@ -1896,23 +1977,35 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         }
     }
 
-
-    private MediaFileInfo PerformDeleteMediaFile(string filePath)
+    /// <summary>
+    /// Performs the deletion of the media file specified
+    /// </summary>
+    /// <param name="fileData">File path or GUID of the file.</param>
+    private MediaFileInfo PerformDeleteMediaFile(string fileData)
     {
         MediaFileInfo deletedMediaFile = null;
         try
         {
-            // Delete media file
-            deletedMediaFile = MediaFileInfoProvider.GetMediaFileInfo(LibraryID, filePath);
-            if (deletedMediaFile != null)
+            if (Guid.TryParse(fileData, out Guid fileGuid))
             {
-                // Delete media file info and file
+                deletedMediaFile = Service.Resolve<IMediaFileInfoProvider>().Get(fileGuid, LibrarySiteInfo.SiteID);
                 MediaFileInfo.Provider.Delete(deletedMediaFile);
             }
             else
             {
-                // Delete file
-                MediaFileInfoProvider.DeleteMediaFile(LibrarySiteInfo.SiteID, LibraryID, filePath);
+                deletedMediaFile = MediaFileInfoProvider.GetMediaFileInfo(LibraryID, fileData);
+
+                // Delete media file
+                if (deletedMediaFile != null)
+                {
+                    // Delete media file info and file
+                    MediaFileInfo.Provider.Delete(deletedMediaFile);
+                }
+                else
+                {
+                    // Delete file
+                    MediaFileInfoProvider.DeleteMediaFile(LibrarySiteInfo.SiteID, LibraryID, fileData);
+                }
             }
         }
         catch (Exception ex)
@@ -2101,66 +2194,87 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
 
 
     /// <summary>
-    /// Returns true if file information is not in database.
+    /// Returns dataRow if the file is database after search.
     /// </summary>
-    /// <param name="fileName">File name</param>
+    /// <param name="guid">GUID of file to search</param>
+    private DataRow FileIsNotInDatabase(Guid guid)
+    {
+        if (guid == Guid.Empty)
+        {
+            return null;
+        }
+
+        string where = string.Format("FileLibraryID = {0} AND ((FileName LIKE N'%{1}%') OR (FileExtension LIKE N'%{1}%') OR (FileTitle LIKE N'%{1}%') OR (FileDescription LIKE N'%{1}%'))", LibraryID, SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastSearchedValue)));
+        PopulateFileList(where, mediaFileInfo => mediaFileInfo.FileGUID, ref fileListGUID);
+
+        if (fileListGUID == null)
+        {
+            throw new NullReferenceException($"{nameof(fileListGUID)} is null after populated!");
+        }
+
+        return fileListGUID.TryGetValue(guid, out DataRow dataRow) ? dataRow : null;
+    }
+
+
+    /// <summary>
+    /// Returns dataRow if the file is database.
+    /// </summary>
+    /// <param name="fileName">File name of the file (including extension and path)</param>
     private DataRow FileIsNotInDatabase(string fileName)
     {
-        if (FileList == null)
+        if (fileName is null)
         {
-            string where = String.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{0}_%/%' AND FileLibraryID = {1}", Path.EnsureForwardSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'), LibraryID);
+            throw new ArgumentNullException(nameof(fileName));
+        }
 
-            if (!string.IsNullOrEmpty(LastSearchedValue))
-            {
-                // Search using name and extension
-                var name = Path.GetFileNameWithoutExtension(LastSearchedValue);
-                var extension = Path.GetExtension(LastSearchedValue);
-                // If there is no extension use the same search expression for the extension as well
-                if (string.IsNullOrEmpty(extension))
-                {
-                    extension = name;
-                }
+        // Get all files from current folder
+        string where = string.Format("FilePath LIKE N'{0}%' AND FilePath NOT LIKE N'{0}_%/%' AND FileLibraryID = {1}", Path.EnsureForwardSlashes(SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(LastFolderPath))).Trim('/'), LibraryID);
+        PopulateFileList(where, mediaFileInfo => mediaFileInfo.FilePath.ToString().ToLowerCSafe(), ref fileList);
 
-                where += " AND ((FileName LIKE N'%" + SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(name)) + "%') OR (FileExtension LIKE N'%" + SqlHelper.EscapeLikeText(SqlHelper.EscapeQuotes(extension)) + "%'))";
-            }
+        if (fileList == null)
+        {
+            throw new NullReferenceException($"{nameof(fileList)} is null after populated!");
+        }
 
-            const string columns = "FileID, FilePath, FileGUID, FileName, FileExtension, FileImageWidth, FileImageHeight, FileTitle, FileSize, FileLibraryID, FileSiteID, FileDescription";
+        DataRow dataRow;
 
-            // Get all files from current folder
-            DataSet ds = MediaFileInfoProvider.GetMediaFiles(where, "FileName", 0, columns);
+        if (string.IsNullOrEmpty(LastFolderPath))
+        {
+            return fileList.TryGetValue(fileName.ToLowerCSafe(), out dataRow) ? dataRow : null;
+        }
+
+        string filePath = Path.EnsureForwardSlashes(LastFolderPath).Trim('/') + "/" + fileName;
+
+        return fileList.TryGetValue(filePath.ToLowerCSafe(), out dataRow) ? dataRow : null;
+    }
+
+
+    /// <summary>
+    /// Internal method for the <see cref="FileIsNotInDatabase(Guid)"/> and <see cref="FileIsNotInDatabase(string)"/> methods.
+    /// </summary>
+    /// <param name="where">Where condition to make first query to database by</param>
+    /// <param name="byColumn">Return value should be the key</param>
+    /// <param name="fileTable">Reference to the fileTable (not) containing the data.</param>
+    private void PopulateFileList<TDictionaryKey>(string where, Func<MediaFileInfo, TDictionaryKey> byColumn, ref Dictionary<TDictionaryKey, DataRow> fileTable)
+    {
+        if (byColumn == null)
+        {
+            throw new ArgumentNullException(nameof(byColumn));
+        }
+
+        if (fileTable == null)
+        {
+            DataSet ds = MediaFileInfoProvider.GetMediaFiles(where, orderBy: "FileName");
             if (ds != null)
             {
-                FileList = new Hashtable();
+                fileTable = new Dictionary<TDictionaryKey, DataRow>();
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
-                    // Allow case insensitive decisioning
-                    FileList[row["FilePath"].ToString().ToLowerCSafe()] = row;
+                    var rowName = byColumn.Invoke(new MediaFileInfo(row));
+                    fileTable[rowName] = row;
                 }
             }
         }
-
-        if (FileList != null)
-        {
-            if (String.IsNullOrEmpty(LastFolderPath))
-            {
-                fileName = fileName.ToLowerCSafe();
-                if (FileList.Contains(fileName))
-                {
-                    return (FileList[fileName] as DataRow);
-                }
-            }
-            else
-            {
-                string filePath = Path.EnsureForwardSlashes(LastFolderPath).Trim('/') + "/" + fileName;
-                filePath = filePath.ToLowerCSafe();
-                if (FileList.Contains(filePath))
-                {
-                    return (FileList[filePath] as DataRow);
-                }
-            }
-        }
-
-        return null;
     }
 
     #endregion
@@ -2293,7 +2407,13 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 HandleFolderDelete(LastFolderPath);
                 DisplayFolderProperties();
                 break;
-
+            case "selectroot":
+                if (LibraryInfo != null)
+                {
+                    ResetSearchFilter();
+                    HandleFolderAction(LibraryInfo?.LibraryFolder, false);
+                }
+                break;
             case "newfolder":
                 argument = argument.Replace('|', '/').Replace("//", "/").TrimEnd('.');
                 ResetSearchFilter();
@@ -2547,8 +2667,13 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
         switch (type.ToLowerCSafe())
         {
             case "fileisnotindatabase":
-                string fileName = ValidationHelper.GetString(parameter, "");
-                return FileIsNotInDatabase(fileName);
+                string fileData = ValidationHelper.GetString(parameter, "");
+                if (Guid.TryParse(fileData, out Guid guid))
+                {
+                    return FileIsNotInDatabase(guid);
+                }
+
+                return FileIsNotInDatabase(fileData);
 
             case "siteidrequired":
                 return LibrarySiteInfo.SiteID;
@@ -2584,7 +2709,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
                 folderActions.Update();
                 break;
             default:
-                ItemToColorize = EnsureFileName((string)actionArgument);
+                ItemToColorize = string.IsNullOrEmpty(LastSearchedValue) ? EnsureFileName((string)actionArgument) : (string)actionArgument;
                 break;
         }
     }
@@ -3048,7 +3173,9 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
     private void ResetSearchFilter()
     {
         mediaView.ResetSearch();
+        mediaView.ResetPageIndex();
         LastSearchedValue = string.Empty;
+        
     }
 
 
@@ -3142,7 +3269,7 @@ public partial class CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary 
             {
                 BulkDeleteFiles(fileNames, out displayFolderProperties);
             }
-            FileList = null;
+            fileList = null;
             // Reset data source, so that it gets reloaded with fresh data later
             fileSystemDataSource.InvalidateLoadedData();
             // Reload data

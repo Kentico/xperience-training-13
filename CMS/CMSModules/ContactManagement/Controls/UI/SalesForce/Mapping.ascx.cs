@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using CMS.Base.Web.UI;
@@ -84,8 +85,11 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
         }
         else
         {
-            ItemRepeater.DataSource = mMapping.Items;
+            // Although a field is customized, a mapping could remain in the database. Remove these items from the repeater
+            var codeMappedFields = LeadReplicationHelper.GetCustomizedFields();
+            ItemRepeater.DataSource = mMapping.Items.Where(m => !codeMappedFields.Contains(m.AttributeName, StringComparer.OrdinalIgnoreCase));
             ItemRepeater.DataBind();
+
             if (String.IsNullOrEmpty(mMapping.ExternalIdentifierAttributeName))
             {
                 MessageControl.InnerHtml = GetString("sf.noexternalidentifierattribute");
@@ -100,6 +104,12 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
             if (!Enabled)
             {
                 ContainerControl.Attributes.Add("class", "Gray");
+            }
+
+            if (codeMappedFields.Any())
+            {
+                CustomCodeRepeater.DataSource = codeMappedFields;
+                CustomCodeRepeater.DataBind();
             }
         }
     }
@@ -118,6 +128,8 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
                 return GetString("sf.sourcetype.metafield");
             case MappingItemSourceTypeEnum.PicklistEntry:
                 return GetString("sf.sourcetype.picklistentry");
+            case MappingItemSourceTypeEnum.Macro:
+                return GetString("sf.sourcetype.macro");
         }
 
         return String.Empty;

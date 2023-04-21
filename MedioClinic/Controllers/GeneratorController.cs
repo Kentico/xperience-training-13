@@ -12,6 +12,8 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using Org.BouncyCastle.Asn1.Crmf;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +32,10 @@ namespace MedioClinic.Controllers
 
         private const string FormDataFilePath = GeneratorDataPath + "FormData.csv";
 
+        private const string SubscriberFilePath = GeneratorDataPath + "NewsletterSubscribers.csv";
+
+        private const string LinkClickFilePath = GeneratorDataPath + "NewsletterLinkClicks.csv";
+
         private const string AllergyTestCenterPagePath = "/Landing-pages/Allergy-test-center-partner-program";
 
         private const string FormCodename = "AllergyTestCenterApplication";
@@ -41,6 +47,10 @@ namespace MedioClinic.Controllers
         private const string FormDataGenerated = "The form data has been generated.";
 
         private const string AbTestConversionsGenerated = "The A/B test conversions have been generated.";
+
+        private const string SubscribersGenerated = "The newsletter subscribers have been generated.";
+
+        private const string LinkClicksGenerated = "The newsletter opens and link clicks have been generated.";
 
         private readonly IWebHostEnvironment _environment;
 
@@ -123,6 +133,39 @@ namespace MedioClinic.Controllers
             }
 
             return DefaultView(AbTestConversionsGenerated);
+        }
+
+        // POST: Generator/GenerateEmailStatistics
+        [HttpPost]
+        public IActionResult GenerateEmailStatistics()
+        {
+            var subscriberPath = $"{_environment.ContentRootPath}{SubscriberFilePath}";
+            var linkClickPath = $"{_environment.ContentRootPath}{LinkClickFilePath}";
+            List<string> successfullSaves = default!;
+
+            try
+            {
+                successfullSaves = _generator.GenerateNewsletterSubscribers(subscriberPath);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return ErrorMessage(ex);
+            }
+
+            try
+            {
+                _generator.GenerateNewsletterOpensAndLinkClicks(linkClickPath, successfullSaves);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return ErrorMessage(ex);
+            }
+
+            return DefaultView($"{SubscribersGenerated}\n{LinkClicksGenerated}");
         }
 
         private IActionResult GenerateData(Action<string> generatorAction, string csvFileName, string successMessage)

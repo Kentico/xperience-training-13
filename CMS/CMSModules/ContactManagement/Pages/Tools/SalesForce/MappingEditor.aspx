@@ -72,14 +72,30 @@
         $cmsj(document).ready(function () {
             var displayWarnings = function (comboElement) {
                 comboElement = $cmsj(comboElement);
-                comboElement.parent().parent().find("i").hide().filter(".Warning" + comboElement.val()).show();
+                var warnings = comboElement.parent().parent().find("i");
+                var sanitizedValue = comboElement.val();
+                if (!!sanitizedValue) {
+                    sanitizedValue = sanitizedValue.replace(/[^a-zA-Z0-9_-]/g, "");
+                };
+                warnings.hide();
+                warnings.filter(".Warning" + sanitizedValue).show();
+                warnings.filter(".SyncWarning" + sanitizedValue).show();
+                warnings.filter("[data-is-customized='True']").show();
+            };
+            var toggleMacroEditor = function (comboElement) {
+                comboElement = $cmsj(comboElement);
+                var shouldDisplay = comboElement.val() === "_MACRO_";
+                var container = comboElement.parent().parent().find(".macro-source-input-container");
+                $cmsj(container).toggle(!!shouldDisplay);
             };
             var comboElements = $cmsj("[id*='SourceDropDownList']");
             comboElements.each(function (index, comboElement) {
                 displayWarnings(comboElement);
+                toggleMacroEditor(comboElement);
             });
             comboElements.change(function (e) {
                 displayWarnings(e.target);
+                toggleMacroEditor(e.target);
             });
         });
 

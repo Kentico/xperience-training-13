@@ -39,6 +39,8 @@ using MedioClinic.Extensions;
 using MedioClinic.Models;
 using MedioClinic.Areas.Identity.ModelBinders;
 using MedioClinic.PageTemplates;
+using Kentico.Newsletters.Web.Mvc;
+using Kentico.Scheduler.Web.Mvc;
 
 namespace MedioClinic
 {
@@ -46,7 +48,7 @@ namespace MedioClinic
     {
         private const string AuthCookieName = "MedioClinic.Authentication";
 
-        private const string ConventionalRoutingControllers = "Error|Privacy|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
+        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile|Generator|Privacy|Communications";
 
         public IConfiguration Configuration { get; }
 
@@ -73,11 +75,11 @@ namespace MedioClinic
             {
                 features.UsePageBuilder();
                 features.UseActivityTracking();
-                // features.UseABTesting();
+                features.UseABTesting();
                 features.UseWebAnalytics();
-                // features.UseEmailTracking();
+                features.UseEmailTracking();
                 // features.UseCampaignLogger();
-                // features.UseScheduler();
+                features.UseScheduler();
                 features.UsePageRouting(new PageRoutingOptions { CultureCodeRouteValuesKey = "culture" });
             });
 
@@ -208,7 +210,6 @@ namespace MedioClinic
                     {
                         controller = ConventionalRoutingControllers
                     });
-
 
                 endpoints.MapDefaultControllerRoute();
             });

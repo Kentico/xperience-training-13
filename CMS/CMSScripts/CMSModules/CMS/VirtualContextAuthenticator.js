@@ -34,6 +34,12 @@ cmsdefine(["CMS/EventHub", "CMS.Builder/Constants", 'CMS.Builder/FrameLoader'], 
                     var mvcFrameAuthenticatedEventName = frameLoader.getMvcFrameAuthenticatedEventName(frameUrl);
                     // Let the admin application know that the MVC authentication process for a specific culture has completed
                     hub.publish(mvcFrameAuthenticatedEventName);
+
+                    // In some cases an admin page can be displayed in the builder/preview frame. (No preview informational page)
+                    // Since the builder/preview frame uses the FrameLoader for loading it's content,
+                    // the admin page must publish it's loading event with administration domain.
+                    var mvcAdminFrameAuthenticatedEventName = frameLoader.getMvcFrameAuthenticatedEventName(window.location.origin);
+                    hub.publish(mvcAdminFrameAuthenticatedEventName);
                 }
             }, { once: true });
 

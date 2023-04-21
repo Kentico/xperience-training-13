@@ -1,0 +1,86 @@
+﻿@using MedioClinic.Controllers
+@using MedioClinic.Components
+@model MedioClinic.Components.Widgets.NewsletterSubscriptionModel
+@inject IStringLocalizer<SharedResource> StringLocalizer
+
+@functions {
+    string GetSubscriptionUrl() =>
+            Url.Kentico().AuthenticateUrlRaw(Url.Action(nameof(CommunicationsController.SubscribeToNewsletter), "Communications"));
+}
+
+@{
+    var elementId = Guid.NewGuid().ToString().Substring(0, 8);
+    var formElementId = $"newsletter-form-{elementId}";
+    var emailInputId = $"email-{elementId}";
+    var firstNameInputId = $"first-name-{elementId}";
+    var lastNameInputId = $"last-name-{elementId}";
+    var consentCheckboxId = $"consent-checkbox-{elementId}";
+    var thankyouElementId = $"newsletter-thankyou-{elementId}";
+    var titleResourceKey = "OnlineMarketing.SubscribeTo";
+    var confirmSubscriptionResourceKey = "OnlineMarketing.ConfirmSubscription";
+    var subscribeResourceKey = "OnlineMarketing.Subscribe";
+    var buttonClickLiteral = $"window.medioClinic.newsletterSubscriptionWidget.subscribe('{GetSubscriptionUrl()}', '{Model.NewsletterGuid}', '{Model.ContactGuid}', '{Model.ContactEmail}', '{elementId}');";
+}
+
+@{
+    if (Model.NewsletterGuid.HasValue && !string.IsNullOrEmpty(Model?.ThankYouMessageResourceKey))
+    {
+        <section class="card">
+            <div id="@Html.Raw(formElementId)">
+                <div class="card-content">
+                    <span class="card-title">@StringLocalizer.GetString(titleResourceKey, Model.NewsletterDisplayName!)</span>
+                    <div class="mc-error-messages"></div>
+
+                    @if (!Model.ContactGuid.HasValue || string.IsNullOrEmpty(Model.ContactEmail))
+                    {
+                        <div class="row input-field">
+                            <input id="@Html.Raw(emailInputId)" placeholder="@StringLocalizer["General.EmailAddress"]" type="email" />
+                        </div>
+                    }
+
+                    @if (string.IsNullOrWhiteSpace(Model.ContactFirstName) || string.IsNullOrWhiteSpace(Model.ContactLastName))
+                    {
+                        <div class="row input-field">
+                            <input id="@Html.Raw(firstNameInputId)" placeholder="@StringLocalizer["General.FirstName"]" type="text" value="@Model.ContactFirstName" />
+                        </div>
+                        <div class="row input-field">
+                            <input id="@Html.Raw(lastNameInputId)" placeholder="@StringLocalizer["General.LastName"]" type="text" value="@Model.ContactLastName" />
+                        </div>
+                    }
+
+                    @if (!Model.ConsentIsAgreed)
+                    {
+                        <div class="row input-field">
+                            <p>
+                                <label>
+                                    <input id="@Html.Raw(consentCheckboxId)" type="checkbox" />
+                                    <span>@Html.DisplayFor(m => m.ConsentShortText)</span>
+                                </label>
+                            </p>
+                        </div>
+                    }
+
+                </div>
+                <div class="card-action">
+                    <a class="waves-effect waves-light btn-large" href="#" onclick="@Html.Raw(buttonClickLiteral)">
+                        @StringLocalizer[subscribeResourceKey]
+                    </a>
+                </div>
+            </div>
+            <div id="@Html.Raw(thankyouElementId)" class="widget-newsletter-subscription-thankyou">
+                <div class="card-content">
+                    <p>
+                        @StringLocalizer.GetString(Model.ThankYouMessageResourceKey, Model.NewsletterDisplayName!)
+                    </p>
+
+                    @if (Model.RequireDoubleOptIn)
+                    {
+                        <p>
+                            @StringLocalizer[confirmSubscriptionResourceKey]
+                        </p>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+}
