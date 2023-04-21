@@ -9,8 +9,9 @@
 
 
 
-public partial class CMSModules_System_System_Email {
-    
+public partial class CMSModules_System_System_Email
+{
+
     /// <summary>
     /// lblServer control.
     /// </summary>
@@ -19,7 +20,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblServer;
-    
+
     /// <summary>
     /// txtServer control.
     /// </summary>
@@ -28,7 +29,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtServer;
-    
+
     /// <summary>
     /// rfvServer control.
     /// </summary>
@@ -37,7 +38,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvServer;
-    
+
     /// <summary>
     /// lblUserName control.
     /// </summary>
@@ -46,7 +47,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblUserName;
-    
+
     /// <summary>
     /// txtUserName control.
     /// </summary>
@@ -55,7 +56,79 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtUserName;
-    
+
+    /// <summary>
+    /// pnlUpdateAuthenticationType control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlUpdateAuthenticationType;
+
+    /// <summary>
+    /// lblAuthenticationType control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblAuthenticationType;
+
+    /// <summary>
+    /// rbAuthenticationType control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSFormControls_System_EnumSelector rbAuthenticationType;
+
+    /// <summary>
+    /// pnlAuthentication control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.CMSUpdatePanel pnlAuthentication;
+
+    /// <summary>
+    /// plcOAuth control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcOAuth;
+
+    /// <summary>
+    /// lblOAuthCredentials control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMS.Base.Web.UI.LocalizedLabel lblOAuthCredentials;
+
+    /// <summary>
+    /// selOAuthCredentials control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::CMSAdminControls_UI_UniSelector_UniSelector selOAuthCredentials;
+
+    /// <summary>
+    /// plcBasic control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.PlaceHolder plcBasic;
+
     /// <summary>
     /// lblPassword control.
     /// </summary>
@@ -64,7 +137,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblPassword;
-    
+
     /// <summary>
     /// txtPassword control.
     /// </summary>
@@ -73,25 +146,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtPassword;
-    
-    /// <summary>
-    /// lblSSL control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.LocalizedLabel lblSSL;
-    
-    /// <summary>
-    /// chkSSL control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSCheckBox chkSSL;
-    
+
     /// <summary>
     /// lblFrom control.
     /// </summary>
@@ -100,7 +155,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblFrom;
-    
+
     /// <summary>
     /// txtFrom control.
     /// </summary>
@@ -109,7 +164,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Inputs_EmailInput txtFrom;
-    
+
     /// <summary>
     /// rfvFrom control.
     /// </summary>
@@ -118,7 +173,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvFrom;
-    
+
     /// <summary>
     /// lblTo control.
     /// </summary>
@@ -127,7 +182,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblTo;
-    
+
     /// <summary>
     /// txtTo control.
     /// </summary>
@@ -136,7 +191,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMSFormControls_Inputs_EmailInput txtTo;
-    
+
     /// <summary>
     /// rfvTo control.
     /// </summary>
@@ -145,7 +200,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSRequiredFieldValidator rfvTo;
-    
+
     /// <summary>
     /// lblSubject control.
     /// </summary>
@@ -154,7 +209,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblSubject;
-    
+
     /// <summary>
     /// txtSubject control.
     /// </summary>
@@ -163,7 +218,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextBox txtSubject;
-    
+
     /// <summary>
     /// lblText control.
     /// </summary>
@@ -172,7 +227,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblText;
-    
+
     /// <summary>
     /// txtText control.
     /// </summary>
@@ -181,7 +236,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.CMSTextArea txtText;
-    
+
     /// <summary>
     /// lblAttachment control.
     /// </summary>
@@ -190,7 +245,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.LocalizedLabel lblAttachment;
-    
+
     /// <summary>
     /// FileUploader control.
     /// </summary>
@@ -199,7 +254,7 @@ public partial class CMSModules_System_System_Email {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::CMS.Base.Web.UI.Uploader FileUploader;
-    
+
     /// <summary>
     /// btnSend control.
     /// </summary>

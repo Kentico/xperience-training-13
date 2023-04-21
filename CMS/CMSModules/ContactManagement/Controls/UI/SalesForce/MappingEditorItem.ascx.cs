@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using CMS.Base;
 using CMS.Base.Web.UI;
+using CMS.ContactManagement;
 using CMS.FormEngine;
 using CMS.Helpers;
 using CMS.MacroEngine;
@@ -17,6 +18,13 @@ using CMS.SalesForce;
 /// </summary>
 public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_MappingEditorItem : AbstractUserControl
 {
+    #region "Private members"
+
+    private const string MACRO_SOURCE_VALUE = "_MACRO_";
+    private readonly CMSRegex cssClassRegex = new CMSRegex("[^a-zA-Z0-9_-]");
+
+    #endregion
+
     #region "Public properties"
 
     /// <summary>
@@ -130,9 +138,18 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
         InitializeFields();
         InitializeMetaFields();
         InitializePicklistEntries();
+        InitializeMacros();
+        InitializeSynchronizationWarning();
+        AppendMacroCompatibilityWarnings();
         ChooseDefaultSource();
         AttributeLabel.Text = HTMLHelper.HTMLEncode(EntityAttributeModel.Label);
         AttributeLabel.ToolTip = EntityAttributeModel.HelpText;
+
+        if (LeadReplicationHelper.GetCustomizedFields().Contains(EntityAttributeModel.Name, StringComparer.OrdinalIgnoreCase))
+        {
+            SourceDropDownList.Enabled = false;
+            SourceDropDownList.ToolTipResourceString = "sf.mapping.customizedfield";
+        }
     }
 
     #endregion
@@ -159,6 +176,23 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
         }
     }
 
+    private void InitializeMacros()
+    {
+        MacroResolver resolver = MacroContext.CurrentResolver.CreateChild();
+        resolver.SetNamedSourceData("Contact", new ContactInfo());
+        MacroSourceInput.Resolver = resolver;
+        MacroSourceInput.Editor.Language = LanguageEnum.Text;
+        if (SourceMappingItem != null && SourceMappingItem.SourceType == MappingItemSourceTypeEnum.Macro)
+        {
+            MacroSourceInput.Text = SourceMappingItem.SourceName;
+        }
+
+        // Add macro option to source drop-down
+        SourceDropDownList.Items.Add(new ListItem {
+            Text = GetString("sf.macrosource.selecttext"),
+            Value = MACRO_SOURCE_VALUE
+        });
+    }
 
     private void InitializeMetaFields()
     {
@@ -209,6 +243,17 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
     }
 
 
+    private void InitializeSynchronizationWarning()
+    {
+        HtmlGenericControl image = new HtmlGenericControl("i");
+        image.Attributes["class"] = $"form-control-icon validation-warning icon-rotate-double-right SyncWarning{MACRO_SOURCE_VALUE}";
+        image.Attributes["data-is-customized"] = LeadReplicationHelper.GetCustomizedFields().Contains(EntityAttributeModel.Name, StringComparer.OrdinalIgnoreCase).ToString();
+        ScriptHelper.AppendTooltip(image, GetString("sf.mapping.synchronizationwarning"), "help", 0, false);
+        image.Style.Add("display", "none");
+        WarningPlaceHolder.Controls.Add(image);
+    }
+
+
     private void ChooseDefaultSource()
     {
         if (SourceMappingItem != null)
@@ -224,6 +269,9 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
                 case MappingItemSourceTypeEnum.PicklistEntry:
                     SourceDropDownList.SelectedValue = String.Format("PicklistEntry-{0}", SourceMappingItem.SourceName);
                     break;
+                case MappingItemSourceTypeEnum.Macro:
+                    SourceDropDownList.SelectedValue = MACRO_SOURCE_VALUE;
+                    break;
             }
         }
     }
@@ -236,11 +284,35 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
             string tooltip = GetCompatibilityWarningsHtml(warnings);
 
             HtmlGenericControl image = new HtmlGenericControl("i");
-            image.Attributes["class"] = "form-control-icon validation-warning icon-exclamation-triangle " + String.Format("Warning{0}", name);
+            image.Attributes["class"] = "form-control-icon validation-warning icon-exclamation-triangle " + String.Format("Warning{0}", cssClassRegex.Replace(name, String.Empty));
             ScriptHelper.AppendTooltip(image, tooltip, "help", 0, false);
             image.Style.Add("display", "none");
             WarningPlaceHolder.Controls.Add(image);
         }
+    }
+
+
+    private void AppendMacroCompatibilityWarnings()
+    {
+        List<string> warnings = new List<string>();
+        if (EntityAttributeModel.GetType() != typeof(EntityStringAttributeModel))
+        {
+            warnings.Add(ResHelper.GetStringFormat("sf.attributecompatibility.requiresmacroconversion", EntityAttributeModel.Type));
+        }
+        if (!EntityAttributeModel.IsCreatable)
+        {
+            warnings.Add(ResHelper.GetString("sf.attributecompatibility.notcreatable"));
+        }
+        if (!EntityAttributeModel.IsUpdateable)
+        {
+            warnings.Add(ResHelper.GetString("sf.attributecompatibility.notupdateable"));
+        }
+        if (!EntityAttributeModel.IsNullable && !EntityAttributeModel.HasDefaultValue && !EntityAttributeModel.IsCalculated)
+        {
+            warnings.Add(ResHelper.GetString("sf.attributecompatibility.required"));
+        }
+
+        AppendCompatibilityWarnings(MACRO_SOURCE_VALUE, warnings);
     }
 
 
@@ -273,7 +345,11 @@ public partial class CMSModules_ContactManagement_Controls_UI_SalesForce_Mapping
         string name = SourceDropDownList.SelectedValue;
         if (!String.IsNullOrEmpty(name))
         {
-            if (name.StartsWithCSafe("Field-"))
+            if (name.Equals(MACRO_SOURCE_VALUE, StringComparison.OrdinalIgnoreCase))
+            {
+                return new MappingItem(EntityAttributeModel, MacroSourceInput.Text, GetString("sf.macrosource.sourcelabel"), MappingItemSourceTypeEnum.Macro);
+            }
+            else if (name.StartsWithCSafe("Field-"))
             {
                 name = name.Remove(0, "Field-".Length);
                 FormFieldInfo fieldInfo = FormInfo.GetFormField(name);

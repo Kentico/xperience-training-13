@@ -82,7 +82,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::CMS.Base.Web.UI.CMSButton btnToggleState;
+    protected global::CMS.Base.Web.UI.CMSMoreOptionsButton btnToggleState;
 
     /// <summary>
     /// btnMoreOptions control.

@@ -379,29 +379,10 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
         // Check permissions for specified action
         CheckActionPermissions(action);
 
-        // Set constraint for contact relations only
-        var where = new WhereCondition()
-            .WhereEquals("ContactGroupMemberType", 0)
-            .WhereEquals("ContactGroupMemberContactGroupID", cgi.ContactGroupID);
-
-        switch (what)
-        {
-            case What.All:
-                var contactIds = ContactInfo.Provider.Get()
-                    .Where(gridElem.WhereClause)
-                    .AsIDQuery();
-                where.WhereIn("ContactGroupMemberRelatedID", contactIds);
-                break;
-
-            case What.Selected:
-                where.WhereIn("ContactGroupMemberRelatedID", gridElem.SelectedItems);
-                break;
-        }
-
         switch (action)
         {
             case Action.Remove:
-                RemoveContacts(what, where);
+                RemoveContacts(what);
                 break;
 
             case Action.ChangeStatus:
@@ -418,7 +399,7 @@ public partial class CMSModules_ContactManagement_Controls_UI_ContactGroup_Conta
                     return;
                 }
 
-                StartNewProcess(what, where);
+                StartNewProcess(what);
                 break;
             }
 
@@ -490,70 +471,100 @@ Refresh();
     }
 
 
-    private void RemoveContacts(What what, IWhereCondition where)
+    private void RemoveContacts(What what)
     {
-        ContactGroupMemberInfoProvider.DeleteContactGroupMembers(where.ToString(true), cgi.ContactGroupID, false, false);
+        ObjectQuery<ContactGroupMemberInfo> membersQuery = null;
+        string confirmationMessage = null;
 
         switch (what)
         {
             case What.All:
-                ShowConfirmation(GetString("om.contact.massaction.removedall"));
+                membersQuery = GetCurrentGroupMembersWithFilterQuery();
+                confirmationMessage = GetString("om.contact.massaction.removedall");
                 break;
 
             case What.Selected:
-                ShowConfirmation(GetString("om.contact.massaction.removed"));
+                membersQuery = GetCurrentGroupSelectedMembersQuery();
+                confirmationMessage = GetString("om.contact.massaction.removed");
                 break;
         }
+
+        ContactGroupMemberInfoProvider.DeleteContactGroupMembers(membersQuery.Expand(membersQuery.WhereCondition), cgi.ContactGroupID, false, false);
+        ShowConfirmation(confirmationMessage);
+    }
+
+
+    private ObjectQuery<ContactGroupMemberInfo> GetCurrentGroupMembersQuery()
+    {
+        return ContactGroupMemberInfo.Provider.Get()
+                            .WhereEquals("ContactGroupMemberType", 0)
+                            .WhereEquals("ContactGroupMemberContactGroupID", cgi.ContactGroupID);
+    }
+
+
+    private ObjectQuery<ContactGroupMemberInfo> GetCurrentGroupMembersWithFilterQuery()
+    {
+        var membersQuery = GetCurrentGroupMembersQuery();
+
+        // Apply current unigrid filter
+        if (!String.IsNullOrEmpty(gridElem.WhereClause))
+        {
+            var contactIds = ContactInfo.Provider.Get()
+                                    .Where(gridElem.WhereClause)
+                                    .AsIDQuery();
+            membersQuery.WhereIn("ContactGroupMemberRelatedID", contactIds);
+        }
+
+        return membersQuery;
+    }
+
+
+    private ObjectQuery<ContactGroupMemberInfo> GetCurrentGroupSelectedMembersQuery()
+    {
+        return GetCurrentGroupMembersQuery().WhereIn("ContactGroupMemberRelatedID", gridElem.SelectedItems);
     }
 
 
     private void ChangeStatus(What what)
     {
         int statusId = ValidationHelper.GetInteger(hdnIdentifier.Value, -1);
-        string where = null;
+        ObjectQuery<ContactInfo> contactsQuery = null;
 
         switch (what)
         {
             case What.All:
-                {
-                    where = SqlHelper.AddWhereCondition(gridElem.WhereCondition, gridElem.WhereClause);
-                    where = "ContactID IN (SELECT ContactGroupMemberRelatedID FROM OM_ContactGroupMember WHERE " + where + ")";
-                }
+                contactsQuery = GetCurrentGroupContactsWithFilterQuery();
                 break;
-
             case What.Selected:
-                where = SqlHelper.GetWhereCondition<int>("ContactID", gridElem.SelectedItems, false);
+                contactsQuery = GetCurrentGroupSelectedContactsQuery();
                 break;
         }
 
-        ContactInfoProvider.UpdateContactStatus(statusId, where);
-
+        ContactInfoProvider.UpdateContactStatus(statusId, contactsQuery.Expand(contactsQuery.WhereCondition));
+        
         ShowConfirmation(GetString("om.contact.massaction.statuschanged"));
     }
 
 
-    private void StartNewProcess(What what, IWhereCondition where)
+    private void StartNewProcess(What what)
     {
         try
         {
-            string error = String.Empty;
+            ObjectQuery<ContactInfo> contactsQuery = null;
             int processId = ValidationHelper.GetInteger(hdnIdentifier.Value, 0);
 
             switch (what)
             {
                 case What.All:
-                    // Get selected IDs based on where condition
-                    var contactIdsQuery = ContactGroupMemberInfo.Provider.Get().Where(where).Column("ContactGroupMemberRelatedID");
-                    var contactsQuery = ContactInfo.Provider.Get().WhereIn("ContactId", contactIdsQuery);
-                    error = ExecuteProcess(processId, contactsQuery);
+                    contactsQuery = GetCurrentGroupContactsWithFilterQuery();
                     break;
 
                 case What.Selected:
-                    var contactIds = gridElem.SelectedItems;
-                    var query = ContactInfo.Provider.Get().WhereIn("ContactId", contactIds);
-                    error = ExecuteProcess(processId, query);
+                    contactsQuery = GetCurrentGroupSelectedContactsQuery();
                     break;
             }
+
+            var error = ExecuteProcess(processId, contactsQuery);
 
             if (String.IsNullOrEmpty(error))
             {
@@ -569,6 +580,23 @@ Refresh();
         {
             LogAndShowError("Automation", "STARTPROCESS", ex);
         }
+    }
+
+
+    private ObjectQuery<ContactInfo> GetCurrentGroupContactsWithFilterQuery()
+    {
+        var contactIds = GetCurrentGroupMembersQuery().Column("ContactGroupMemberRelatedID");
+
+        return ContactInfo.Provider.Get()
+                    // Apply current unigrid filter
+                    .Where(gridElem.WhereClause)
+                    .WhereIn("ContactId", contactIds);
+    }
+
+
+    private ObjectQuery<ContactInfo> GetCurrentGroupSelectedContactsQuery()
+    {
+        return ContactInfo.Provider.Get().WhereIn("ContactID", gridElem.SelectedItems);
     }
 
 

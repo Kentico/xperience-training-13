@@ -97,27 +97,82 @@
           <Trim>False</Trim>
         </settings>
       </field>
+      <field allowempty="true" column="ServerAuthenticationType" columnsize="50" columntype="text" dependsonanotherfield="true" guid="040826ee-b601-4d84-b38d-aad86453fda2" hasdependingfields="true" system="true" visible="true">
+        <properties>
+          <defaultvalue>basic</defaultvalue>
+          <fieldcaption>{$smtpserver.authenticationtype$}</fieldcaption>
+          <visiblemacro ismacro="true">
+            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)da2b35d854f72be65eba2c3549bd303b028995202194adc5a48e629dd39d2e9b%}]]>
+          </visiblemacro>
+        </properties>
+        <settings>
+          <AssemblyName>CMS.EmailEngine</AssemblyName>
+          <controlname>EnumSelector</controlname>
+          <DisplayType>1</DisplayType>
+          <Sort>False</Sort>
+          <TypeName>CMS.EmailEngine.EmailServerAuthenticationType</TypeName>
+          <UseStringRepresentation>True</UseStringRepresentation>
+        </settings>
+      </field>
       <field allowempty="true" column="ServerPassword" columnsize="200" columntype="text" dependsonanotherfield="true" guid="3e6aa6f0-4b4c-4ddd-8ef3-5266c26c8b4b" spellcheck="false" system="true" visible="true">
         <properties>
           <fieldcaption>{$general.password$}</fieldcaption>
           <visiblemacro ismacro="true">
-            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)da2b35d854f72be65eba2c3549bd303b028995202194adc5a48e629dd39d2e9b%}]]>
+            <![CDATA[{%ServerDeliveryMethod.Value == 0 && ServerAuthenticationType == "basic"|(identity)GlobalAdministrator|(hash)d66b6d82e6226388cb44758d989883ac81bfe8e4dbf7e5fccc22b353470fa7d7%}]]>
           </visiblemacro>
         </properties>
         <settings>
           <controlname>encryptedpassword</controlname>
         </settings>
       </field>
-      <field column="ServerUseSSL" columntype="boolean" dependsonanotherfield="true" guid="73f0a42d-78ad-4d62-981a-403f29295f56" system="true" visible="true">
+      <field allowempty="true" column="ServerOAuthCredentials" columntype="guid" dependsonanotherfield="true" guid="c13da517-d1c4-41a5-8247-978889d1f18c" system="true" visible="true">
         <properties>
-          <defaultvalue>False</defaultvalue>
-          <fieldcaption>{$system_email.ssl$}</fieldcaption>
+          <fieldcaption>{$smtpserver.oauthcredentials$}</fieldcaption>
           <visiblemacro ismacro="true">
-            <![CDATA[{%ServerDeliveryMethod.Value == 0|(identity)GlobalAdministrator|(hash)da2b35d854f72be65eba2c3549bd303b028995202194adc5a48e629dd39d2e9b%}]]>
+            <![CDATA[{%ServerDeliveryMethod.Value == 0 && ServerAuthenticationType == "oauth"|(identity)GlobalAdministrator|(hash)522c35fb13521f17bd7351191e46ac415aa98b5512470aa8358263f6974f31e3%}]]>
           </visiblemacro>
         </properties>
         <settings>
-          <controlname>checkboxcontrol</controlname>
+          <AddGlobalObjectNamePrefix>False</AddGlobalObjectNamePrefix>
+          <AddGlobalObjectSuffix>False</AddGlobalObjectSuffix>
+          <AllowAll>False</AllowAll>
+          <AllowDefault>False</AllowDefault>
+          <AllowEditTextBox>False</AllowEditTextBox>
+          <AllowEmpty>False</AllowEmpty>
+          <controlname>EmailOAuthCredentialsSelector</controlname>
+          <DialogWindowName>SelectionDialog</DialogWindowName>
+          <DisplayNameFormat>
+            <![CDATA[{%EmailOAuthCredentialsDisplayName%} ({%EmailOAuthCredentialsProviderClass%})]]>
+          </DisplayNameFormat>
+          <EditDialogWindowHeight>700</EditDialogWindowHeight>
+          <EditDialogWindowOpenInFullscreen>False</EditDialogWindowOpenInFullscreen>
+          <EditDialogWindowWidth>1000</EditDialogWindowWidth>
+          <EditWindowName>EditWindow</EditWindowName>
+          <EncodeOutput>True</EncodeOutput>
+          <GlobalObjectSuffix ismacro="true">{$general.global$}</GlobalObjectSuffix>
+          <ItemsPerPage>25</ItemsPerPage>
+          <LocalizeItems>True</LocalizeItems>
+          <MaxDisplayedItems>25</MaxDisplayedItems>
+          <MaxDisplayedTotalItems>50</MaxDisplayedTotalItems>
+          <OrderBy>
+            <![CDATA[EmailOAuthCredentialsProviderClass, EmailOAuthCredentialsDisplayName]]>
+          </OrderBy>
+          <RemoveMultipleCommas>False</RemoveMultipleCommas>
+          <ReturnColumnName>EmailOAuthCredentialsGUID</ReturnColumnName>
+          <ReturnColumnType>id</ReturnColumnType>
+          <SelectionMode>0</SelectionMode>
+          <UseDefaultNameFilter>True</UseDefaultNameFilter>
+          <ValuesSeparator>;</ValuesSeparator>
+        </settings>
+      </field>
+      <field column="ServerUseSSL" columntype="boolean" guid="73f0a42d-78ad-4d62-981a-403f29295f56" system="true">
+        <properties>
+          <defaultvalue>False</defaultvalue>
+          <fieldcaption>{$system_email.ssl$}</fieldcaption>
+          <visiblemacro ismacro="true">{%false%}</visiblemacro>
+        </properties>
+        <settings>
+          <controlname>CheckBoxControl</controlname>
         </settings>
       </field>
       <field allowempty="true" column="ServerPickupDirectory" columnsize="450" columntype="text" dependsonanotherfield="true" guid="d2ad7ad5-69c1-4be3-9a8f-e02493778a94" spellcheck="false" system="true" visible="true">

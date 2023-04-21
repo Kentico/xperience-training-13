@@ -1134,6 +1134,9 @@ public partial class CMSModules_AdminControls_Controls_Class_FieldEditor_FieldEd
         {
             foreach (ListItem li in lstAttributes.Items)
             {
+                // Add tooltip on hover
+                li.Attributes["Title"] = li.Text;
+
                 // Mark category item with different color
                 string cssClass;
                 if (li.Value.StartsWith(categPreffix, StringComparison.OrdinalIgnoreCase))

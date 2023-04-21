@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true"
-    Inherits="CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary"  Codebehind="MediaLibrary.ascx.cs" %>
+    Inherits="CMSModules_MediaLibrary_Controls_MediaLibrary_MediaLibrary" CodeBehind="MediaLibrary.ascx.cs" %>
 <%@ Register Src="~/CMSModules/MediaLibrary/Controls/MediaLibrary/MediaLibraryTree.ascx"
     TagName="LibraryTree" TagPrefix="cms" %>
 <%@ Register Src="~/CMSModules/MediaLibrary/Controls/MediaLibrary/FolderActions/FolderActions.ascx"
@@ -18,6 +18,69 @@
     TagName="MultipleImport" TagPrefix="cms" %>
 <%@ Register Src="~/CMSModules/MediaLibrary/Controls/MediaLibrary/FolderActions/CopyMoveFolder.ascx"
     TagName="CopyMove" TagPrefix="cms" %>
+
+<script type="text/javascript" language="javascript">
+    //<![CDATA[
+    $cmsj(function () {
+        $cmsj("#separator").draggable({
+            axis: "x",
+            cursor: "ew-resize",
+            drag: function (event, ui) {
+                const halfScreen = window.screen.width / 2;
+                const minWidth = 300;
+
+                var separator = $cmsj(ui.helper[0]);
+                var leftOffset = separator.offset().left;
+
+                if (leftOffset + ui.position.left > halfScreen) {
+                    ui.offset.left = halfScreen;
+                    ui.position.left = halfScreen - leftOffset;
+
+                    return;
+                }
+
+                if (leftOffset + ui.position.left < minWidth) {
+                    ui.offset.left = minWidth;
+                    ui.position.left = minWidth - leftOffset;
+
+                    return;
+                }
+
+                var resizer = $cmsj('#' + '<%=resizer.ClientID%>')
+
+                resizer.css("left", ui.offset.left);
+            },
+            stop: function (event, ui) {
+                var separator = $cmsj(ui.helper[0]);
+                var resizer = $cmsj('#' + '<%=resizer.ClientID%>')
+
+                $cmsj('#' + '<%=pnlLeftContent.ClientID%>').width(ui.offset.left);
+                $cmsj('#' + '<%=pnlTreeArea.ClientID%>').width(ui.offset.left);
+                $cmsj('#' + '<%=pnlRightContent.ClientID%>').css("margin-left", ui.offset.left)
+
+                resizer.css("left", ui.offset.left);
+                separator.css("inset", "");
+
+                WebForm_DoCallback('<%=Page.ClientID%>', 'width|' + ui.offset.left, null, null, null);
+            }
+        });
+
+        var verticalResizer = $cmsj('#' + '<%=resizerV.ClientID%>');
+
+        verticalResizer.click(function () {
+            var value = $cmsj(this).hasClass("ResizerDown");
+            WebForm_DoCallback('<%=Page.ClientID%>', 'collapsed|' + value, null, null, null);
+        });
+
+        // copied from DialogHelper.js as the background is not handled by css styles
+        if (verticalResizer.hasClass('ResizerDown')) {
+            var backgroundImage = verticalResizer.css('background-image');
+            backgroundImage = backgroundImage.replace(/maximize/i, 'minimize');
+            verticalResizer.css('background-image', backgroundImage);
+        }
+    });
+    //]]>
+</script>
 
 <div class="Hidden HiddenButton">
     <cms:CMSUpdatePanel ID="pnlUpdateHidden" runat="server">
@@ -50,13 +113,13 @@
                     </cms:CMSUpdatePanel>
                 </div>
             </asp:Panel>
-            <div class="DialogResizerH">
+            <div id="resizer" runat="server" class="DialogResizerH">
                 <div class="DialogResizerArrowH">
                     &nbsp;
                 </div>
             </div>
         </asp:Panel>
-        <div class="DialogTreeAreaSeparator">
+        <div id="separator" class="DialogTreeAreaSeparator Resizable">
         </div>
         <asp:Panel ID="pnlRightContent" runat="server" CssClass="DialogRightBlock">
             <cms:CMSUpdatePanel ID="pnlUpdateMenu" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
@@ -93,12 +156,13 @@
                     </div>
                     <div id="divDialogResizer" class="DialogResizerVLine" runat="server" enableviewstate="false">
                         <div class="DialogResizerV">
-                            <div class="DialogResizerArrowV">
+                            <div id="resizerV" runat="server" class="DialogResizerArrowV">
                                 &nbsp;
                             </div>
                         </div>
                     </div>
-                    <div id="divDialogProperties" class="DialogProperties MediaProperties" runat="server">
+
+                    <div id="divDialogProperties" class="DialogProperties media-properties media-library-properties" runat="server">
                         <cms:CMSUpdatePanel ID="pnlUpdateProperties" runat="server" UpdateMode="Conditional"
                             ChildrenAsTriggers="false">
                             <ContentTemplate>

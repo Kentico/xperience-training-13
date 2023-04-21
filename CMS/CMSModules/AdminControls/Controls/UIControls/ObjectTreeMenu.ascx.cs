@@ -1,18 +1,14 @@
 ﻿using System;
-
-using CMS.PortalEngine;
-
 using System.Web.UI;
 
 using CMS.Base.Web.UI;
 using CMS.Helpers;
+using CMS.PortalEngine;
 using CMS.UIControls;
 
 
 public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu : CMSAbstractUIWebpart
 {
-    #region "Properties"
-
     /// <summary>
     /// Indicates whether use max node limit stored in settings.
     /// </summary>
@@ -27,7 +23,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu
             SetValue("UseMaxNodeLimit", value);
         }
     }
-    
+
 
     /// <summary>
     /// Maximum tree nodes shown under parent node - this value can be ignored if UseMaxNodeLimit set to false.
@@ -36,7 +32,7 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu
     {
         get
         {
-            return  GetIntContextValue("MaxTreeNodes", -1);
+            return GetIntContextValue("MaxTreeNodes", -1);
         }
         set
         {
@@ -60,10 +56,6 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu
         }
     }
 
-    #endregion
-
-
-    #region "Methods"
 
     /// <summary>
     /// Content loaded event handler.
@@ -77,6 +69,29 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu
         paneContentTMain.Src = ResolveUrl("~/CMSPages/Blank.aspx");
 
         base.OnContentLoaded();
+    }
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        var page = ControlsHelper.GetParentControl<CMSUIPage>(this);
+
+        if (page?.UILayoutKey != null)
+        {
+            layoutElem.OnResizeEndScript = ScriptHelper.GetLayoutResizeScript(paneTree, page);
+            layoutElem.MaxSize = "50%";
+
+            if (!RequestHelper.IsPostBack() && !RequestHelper.IsCallback())
+            {
+                var width = UILayoutHelper.GetLayoutWidth(page.UILayoutKey);
+                if (width.HasValue)
+                {
+                    paneTree.Size = width.ToString();
+                }
+            }
+        }
+
+        base.OnInit(e);
     }
 
 
@@ -96,6 +111,4 @@ public partial class CMSModules_AdminControls_Controls_UIControls_ObjectTreeMenu
 
         ScriptHelper.HideVerticalTabs(Page);
     }
-
-    #endregion
 }

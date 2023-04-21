@@ -16,6 +16,9 @@
                 ensureUiHeader();
 
                 if ($uiHeader.length > 0) {
+                    if ($(this).hasClass('no-shadow-interact')) {
+                        return;
+                    }
                     // Set or remove shadow according to scrolled element position
                     if ($(this).scrollTop() > 0) {
                         toggleShadowInternal(this, true);

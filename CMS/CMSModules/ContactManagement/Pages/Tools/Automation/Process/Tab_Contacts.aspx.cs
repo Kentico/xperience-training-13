@@ -15,7 +15,7 @@ using CMS.Modules;
 using CMS.UIControls;
 using CMS.WorkflowEngine;
 
-[Security(Resource = ModuleName.ONLINEMARKETING, UIElements = "EditProcess;EditProcessContacts")]
+[Security(Resource = ModuleName.ONLINEMARKETING, UIElements = "EditProcess")]
 [EditedObject(WorkflowInfo.OBJECT_TYPE, "processid")]
 public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process_Tab_Contacts : CMSAutomationPage
 {
@@ -194,7 +194,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         ucSelector.UniSelector.DialogButton.ResourceString = "om.contact.general.additems";
 
         // Check permissions
-        if (WorkflowStepInfoProvider.CanUserStartAutomationProcess(CurrentUser, CurrentSiteName) && Process.WorkflowEnabled)
+        if (WorkflowStepInfoProvider.CanUserStartAutomationProcess(CurrentUser, CurrentSiteName) && Process.IsEnabled())
         {
             ucSelector.UniSelector.OnItemsSelected += UniSelector_OnItemsSelected;
             ucSelector.Enabled = true;
@@ -204,7 +204,7 @@ public partial class CMSModules_ContactManagement_Pages_Tools_Automation_Process
         else
         {
             ucSelector.Enabled = false;
-            ucSelector.UniSelector.DialogButton.ToolTipResourceString = Process.WorkflowEnabled ? "general.nopermission" : "autoMenu.DisabledStateDesc";
+            ucSelector.UniSelector.DialogButton.ToolTipResourceString = Process.IsEnabled() ? "general.nopermission" : "autoMenu.DisabledStateDesc";
         }
     }
 

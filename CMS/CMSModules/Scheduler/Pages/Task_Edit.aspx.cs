@@ -272,6 +272,10 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
             {
                 // create new item -> insert
                 TaskInfo = new TaskInfo { TaskSiteID = SiteID };
+                if (!developmentMode)
+                {
+                    TaskInfo.TaskAllowExternalService = true;
+                }
             }
 
             var availability = (TaskAvailabilityEnum)ValidationHelper.GetInteger(rbTaskAvailability.Value, 0);
@@ -357,8 +361,8 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
 
     private void InitExternalServiceRelatedControls()
     {
-        var allowExternalService = TaskInfo?.TaskAllowExternalService ?? developmentMode;
         var runsInAdministration = (TaskAvailabilityEnum)ValidationHelper.GetInteger(rbTaskAvailability.Value, 0) == TaskAvailabilityEnum.Administration;
+        var allowExternalService = TaskInfo?.TaskAllowExternalService ?? runsInAdministration;
 
         // "Allow external service" for new tasks in development mode is TRUE by default
         chkTaskAllowExternalService.Checked = allowExternalService;
@@ -366,6 +370,6 @@ public partial class CMSModules_Scheduler_Pages_Task_Edit : CMSScheduledTasksPag
         chkTaskUseExternalService.Checked = TaskInfo?.TaskUseExternalService ?? false;
 
         plcAllowExternalService.Visible = runsInAdministration && developmentMode;
-        plcUseExternalService.Visible = runsInAdministration && (developmentMode || (!developmentMode && allowExternalService));
+        plcUseExternalService.Visible = runsInAdministration && (developmentMode || allowExternalService);
     }
 }
