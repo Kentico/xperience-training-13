@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using Common.Configuration;
 
+using Kentico.Content.Web.Mvc;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -23,6 +25,14 @@ namespace MedioClinic.Controllers
         {
         }
 
-        public async Task<IActionResult> Index() => View();
+        public async Task<IActionResult> Index()
+        {
+            var metadata = new Models.PageMetadata
+            {
+                Title = "Form test",
+            };
+
+            return View(GetPageViewModel(metadata));
+        }
     }
 }
